@@ -1,0 +1,15 @@
+<div class='row'>
+  <div class='content-list span6'>
+    <ul>
+      {{#each model as |w|}}
+        <li>
+          {{#link-to "adminWizard" w.name}}{{w.name}}{{/link-to}}
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+
+  <div class="span13">
+    {{outlet}}
+  </div>
+</div>

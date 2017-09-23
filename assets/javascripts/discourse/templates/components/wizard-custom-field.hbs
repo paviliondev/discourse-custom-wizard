@@ -1,0 +1,25 @@
+<div for={{field.id}}>
+  <div>
+    <span>{{i18n 'admin.wizard.field.label'}}</span>
+    {{text-field name="label" value=field.label}}
+  </div>
+  <div>
+    <span>{{i18n 'admin.wizard.field.description'}}</span>
+    {{text-field name="description" value=field.description}}
+  </div>
+  <div>
+    <span>{{i18n 'admin.wizard.field.type'}}</span>
+    {{combo-box value=field.type content=fieldTypes}}
+  </div>
+  {{#if isDropdown}}
+    <span>{{i18n 'admin.wizard.field.choices_label'}}</span>
+    {{#each field.choices as |c|}}
+      {{input type='text' value=c}}
+    {{/each}}
+    {{d-button action='addChoice' label='admin.wizard.field.add_choice'}}
+  {{/if}}
+  <div>
+    <span>{{i18n 'admin.wizard.field.required'}}</span>
+    {{input type='checkbox' checked=field.required}}
+  </div>
+</div>

@@ -1,0 +1,31 @@
+en:
+  admin_js:
+    admin:
+      wizard:
+        label: "Wizards"
+        new: "New"
+        custom_label: "Custom"
+        name: "Name"
+        name_placeholder: "name of the wizard"
+        add_step: "Add Step"
+        remove_step: "Remove Step"
+        save: "Save Wizard"
+        remove: "Delete Wizard"
+        step:
+          title: "Step Title"
+          title_placeholder: "This will appear at the top of the step"
+          banner: "Step Banner"
+          banner_placeholder: "This image will appear under the title"
+          description: "Step Description"
+          description_placeholder: "This will appear underneath the title and / or title"
+          add_field: "Add Field"
+          add_action: "Add Action"
+        field:
+          label: "Field Name"
+          description: "Field Description"
+          type: "Field Type"
+          choices_label: "Dropdown Choices"
+          add_choice: "Add Choice"
+          required: "Field Required"
+        action:
+          email: "Email"

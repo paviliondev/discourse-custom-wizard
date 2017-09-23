@@ -1,0 +1,17 @@
+{{combo-box value=action.data content=stepFields valueAttribute='id' nameProperty='label'}}
+{{combo-box value=action.target content=targets}}
+{{#if isTopic}}
+  {{category-select-box value=action.target.category_id tabindex="3"}}
+{{/if}}
+{{#if isEmail}}
+  <span>{{i18n 'admin.wizard.action.email'}}</span>
+  {{input type='text' value=action.target.email}}
+{{/if}}
+{{#if isProfile}}
+  <span>{{i18n 'admin.wizard.action.email'}}</span>
+  {{combo-box value=action.target.profile_field content=profileFields}}
+{{/if}}
+{{#if isBadge}}
+  <span>{{i18n 'admin.wizard.action.badge'}}</span>
+  {{combo-box value=action.target.badge content=badges}}
+{{/if}}

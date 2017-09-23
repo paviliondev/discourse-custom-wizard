@@ -1,0 +1,30 @@
+<div>
+  <label for="title">{{i18n 'admin.wizard.step.title'}}</label>
+  {{text-field name="title" value=step.title placeholderKey="admin.wizard.step.title_placeholder"}}
+</div>
+
+<div>
+  <label for="banner">{{i18n 'admin.wizard.step.banner'}}</label>
+  {{input name="banner" value=step.banner placeholderKey="admin.wizard.step.banner_placeholder"}}
+</div>
+
+<div>
+  <label for="description">{{i18n 'admin.wizard.step.description'}}</label>
+  {{input name="description" value=step.description placeholderKey="admin.wizard.step.description_placeholder"}}
+</div>
+
+{{#each step.fields as |f|}}
+  {{wizard-custom-field field=f}}
+{{/each}}
+
+{{d-button action='addField' label='admin.wizard.step.add_field'}}
+
+{{#each step.actions as |a|}}
+  {{wizard-custom-action action=a stepFields=step.fields}}
+{{/each}}
+
+{{#if allowAddAction}}
+  {{d-button action='addAction' label='admin.wizard.step.add_action'}}
+{{/if}}
+
+{{d-button action='removeStep' label='admin.wizard.remove_step'}}
