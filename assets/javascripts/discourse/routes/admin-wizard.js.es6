@@ -4,14 +4,14 @@ export default Discourse.Route.extend({
   model(params) {
     if (params.name === 'new') {
       this.set('new', true);
-      return CustomWizard.create();
+      return CustomWizard.create({ name: '', steps: []});
     }
 
     this.set('new', false);
 
-    const wizard = this.modelFor('admin-wizards-custom').findBy('name', params.name );
+    const wizard = this.modelFor('admin-wizards-custom').findBy('dasherizedName', params.name );
 
-    if (!wizard) { return this.transitionTo('adminWizardsCustom.index'); }
+    if (!wizard) return this.transitionTo('adminWizardsCustom.index');
 
     return wizard;
   },

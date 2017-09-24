@@ -7,42 +7,35 @@ class CustomWizard::AdminController < ::ApplicationController
   end
 
   def save
-    params.require(:name)
-    params.permit(:steps)
+    params.require(:wizard)
 
-    wizard = { name: params[:name] }
+    wizard = ::JSON.parse(params[:wizard])
 
-    wizard['steps'] = params[:steps] if params[:steps]
+    wizard["id"] = SecureRandom.hex(8) if !wizard["id"]
 
-    key = params[:name].downcase
-
-    PluginStore.set('custom_wizards', key, wizard)
+    PluginStore.set('custom_wizards', wizard["id"], wizard)
 
     render json: success_json
   end
 
   def remove
-    params.require(:name)
+    params.require(:id)
 
-    key = params[:name].downcase
-
-    PluginStore.remove('custom_wizards', key)
+    PluginStore.remove('custom_wizards', params[:id])
 
     render json: success_json
   end
 
   def find
-    params.require(:name)
+    params.require(:id)
 
-    key = params[:name].downcase
-
-    wizard = PluginStore.get('custom_wizards', key)
+    wizard = PluginStore.get('custom_wizards', params[:id])
 
     render json: success_json.merge(wizard: wizard)
   end
 
   def all
-    rows = PluginStoreRow.where(plugin_name: 'custom_wizards')
+    rows = PluginStoreRow.where(plugin_name: 'custom_wizards').order(:id)
 
     wizards = rows ? [*rows].map do |r|
       CustomWizard::Wizard.new(r.value)

@@ -4,7 +4,8 @@ class CustomWizard::Wizard
 
   def initialize(data)
     parsed = ::JSON.parse(data)
+    @id = parsed['id']
     @name = parsed['name']
-    @steps = JSON.parse(parsed['steps'])
+    @steps = parsed['steps']
   end
 end

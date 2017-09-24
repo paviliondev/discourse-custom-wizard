@@ -7,8 +7,6 @@ en:
         custom_label: "Custom"
         name: "Name"
         name_placeholder: "name of the wizard"
-        add_step: "Add Step"
-        remove_step: "Remove Step"
         save: "Save Wizard"
         remove: "Delete Wizard"
         step:
@@ -18,6 +16,8 @@ en:
           banner_placeholder: "This image will appear under the title"
           description: "Step Description"
           description_placeholder: "This will appear underneath the title and / or title"
+          add: "Add Step"
+          remove: "Remove Step"
           add_field: "Add Field"
           add_action: "Add Action"
         field:
@@ -27,5 +27,6 @@ en:
           choices_label: "Dropdown Choices"
           add_choice: "Add Choice"
           required: "Field Required"
+          remove: "Remove Field"
         action:
           email: "Email"

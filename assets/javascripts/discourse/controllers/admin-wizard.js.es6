@@ -7,7 +7,7 @@ export default Ember.Controller.extend({
     },
 
     remove() {
-      this.get('model').destroy().then(() => {
+      this.get('model').remove().then(() => {
         this.transitionToRoute('adminWizardsCustom');
       });
     },
@@ -19,8 +19,8 @@ export default Ember.Controller.extend({
       });
     },
 
-    removeStep(name) {
-      this.get('model.steps').findBy('name', name);
+    removeStep(step) {
+      this.get('model.steps').removeObject(step);
     }
   }
 });

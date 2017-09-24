@@ -3,7 +3,7 @@
     <ul>
       {{#each model as |w|}}
         <li>
-          {{#link-to "adminWizard" w.name}}{{w.name}}{{/link-to}}
+          {{#link-to "adminWizard" w.dasherizedName}}{{w.name}}{{/link-to}}
         </li>
       {{/each}}
     </ul>

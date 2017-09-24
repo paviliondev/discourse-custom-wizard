@@ -14,7 +14,7 @@
   {{#if isDropdown}}
     <span>{{i18n 'admin.wizard.field.choices_label'}}</span>
     {{#each field.choices as |c|}}
-      {{input type='text' value=c}}
+      {{input type='text' value=c.label}}
     {{/each}}
     {{d-button action='addChoice' label='admin.wizard.field.add_choice'}}
   {{/if}}

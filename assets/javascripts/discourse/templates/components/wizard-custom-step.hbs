@@ -15,6 +15,7 @@
 
 {{#each step.fields as |f|}}
   {{wizard-custom-field field=f}}
+  {{d-button action='removeField' actionParam=f label="admin.wizard.field.remove"}}
 {{/each}}
 
 {{d-button action='addField' label='admin.wizard.step.add_field'}}
@@ -26,5 +27,3 @@
 {{#if allowAddAction}}
   {{d-button action='addAction' label='admin.wizard.step.add_action'}}
 {{/if}}
-
-{{d-button action='removeStep' label='admin.wizard.remove_step'}}

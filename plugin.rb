@@ -18,9 +18,9 @@ after_initialize do
     get 'custom' => 'admin#index'
     get 'custom/new' => 'admin#index'
     get 'custom/all' => "admin#all"
-    get 'custom/:name' => "admin#find"
-    put 'custom/:name' => "admin#save"
-    delete 'custom/:name' => "admin#remove"
+    get 'custom/:id' => "admin#find"
+    put 'custom/save' => "admin#save"
+    delete 'custom/remove' => "admin#remove"
   end
 
   require_dependency 'admin_constraint'

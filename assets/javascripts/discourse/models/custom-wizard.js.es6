@@ -1,20 +1,36 @@
 import { ajax } from 'discourse/lib/ajax';
+import { default as computed } from 'ember-addons/ember-computed-decorators';
 
 const CustomWizard = Discourse.Model.extend({
   steps: Ember.A(),
 
+  @computed('name')
+  dasherizedName(name) {
+    return Ember.String.dasherize(name);
+  },
+
   save() {
-    const steps = JSON.stringify(this.get('steps').toArray());
-    return ajax(`/admin/wizards/custom/${this.get('name')}`, {
+    const wizard = {
+      id: this.get('id'),
+      steps: this.get('steps').toArray(),
+      name: this.get('name')
+    };
+
+    return ajax(`/admin/wizards/custom/save`, {
       type: 'PUT',
-      data: { steps }
+      data: {
+        wizard: JSON.stringify(wizard)
+      }
     });
   },
 
-  destroy() {
-    return ajax(`/admin/wizards/custom/${this.get('name')}`, {
-      type: 'DELETE'
-    });
+  remove() {
+    return ajax(`/admin/wizards/custom/remove`, {
+      type: 'DELETE',
+      data: {
+        id: this.get('id')
+      }
+    }).then(() => this.destroy());
   }
 });
 
@@ -31,6 +47,7 @@ CustomWizard.reopenClass({
 
     steps.forEach((s) => {
       s.fields = Ember.A(s.fields);
+      s.fields.forEach((f) => f.choices = Ember.A(f.choices));
       s.actions = Ember.A(s.actions);
     });
 
