@@ -9,7 +9,7 @@ export default Discourse.Route.extend({
 
     this.set('new', false);
 
-    const wizard = this.modelFor('admin-wizards-custom').findBy('dasherizedName', params.name );
+    const wizard = this.modelFor('admin-wizards-custom').findBy('dasherizedName', params.name);
 
     if (!wizard) return this.transitionTo('adminWizardsCustom.index');
 
