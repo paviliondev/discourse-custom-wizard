@@ -1,11 +1,12 @@
 class CustomWizard::Wizard
 
-  attr_reader :name, :steps
+  attr_reader :id, :name, :steps, :custom
 
   def initialize(data)
-    parsed = ::JSON.parse(data)
-    @id = parsed['id']
-    @name = parsed['name']
-    @steps = parsed['steps']
+    data = data.is_a?(String) ? ::JSON.parse(data) : data
+    @id = data['id']
+    @name = data['name']
+    @steps = data['steps']
+    @custom = true
   end
 end

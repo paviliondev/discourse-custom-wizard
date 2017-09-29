@@ -2,15 +2,13 @@ import CustomWizard from '../models/custom-wizard';
 
 export default Discourse.Route.extend({
   model(params) {
-    if (params.name === 'new') {
+    if (params.wizard_id === 'new') {
       this.set('new', true);
-      return CustomWizard.create({ name: '', steps: []});
+      return CustomWizard.create();
     }
-
     this.set('new', false);
 
-    const wizard = this.modelFor('admin-wizards-custom').findBy('dasherizedName', params.name);
-
+    const wizard = this.modelFor('admin-wizards-custom').findBy('id', params.wizard_id);
     if (!wizard) return this.transitionTo('adminWizardsCustom.index');
 
     return wizard;

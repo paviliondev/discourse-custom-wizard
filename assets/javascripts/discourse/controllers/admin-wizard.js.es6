@@ -13,10 +13,10 @@ export default Ember.Controller.extend({
     },
 
     addStep() {
-      this.get('model.steps').pushObject({
+      this.get('model.steps').pushObject(Ember.Object.create({
         fields: Ember.A(),
         actions: Ember.A()
-      });
+      }));
     },
 
     removeStep(step) {

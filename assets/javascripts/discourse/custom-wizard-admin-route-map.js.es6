@@ -3,7 +3,7 @@ export default {
   map() {
     this.route('adminWizards', { path: '/wizards', resetNamespace: true }, function() {
       this.route('adminWizardsCustom', { path: '/custom', resetNamespace: true }, function() {
-        this.route('adminWizard', { path: '/:name', resetNamespace: true });
+        this.route('adminWizard', { path: '/:wizard_id', resetNamespace: true });
       });
     });
   }

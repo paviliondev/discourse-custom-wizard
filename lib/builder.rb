@@ -1,31 +1,27 @@
 class CustomWizard::Builder
-  def initialize(user, wizard_name)
-    rows = PluginStoreRow.where(plugin_name: 'custom_wizards')
-    return if !rows
-
-    [*rows].each do |r|
-      wizard = CustomWizard::Wizard.new(r.value)
-      @template = wizard if wizard.name.dasherize.downcase == wizard_name
-    end
-
+  def initialize(user, wizard_id)
+    data = PluginStore.get('custom_wizard', wizard_id)
+    @custom_wizard = CustomWizard::Wizard.new(data)
     @wizard = Wizard.new(user)
+    @wizard.id = wizard_id
   end
 
   def build
-    @template.steps.each do |s|
-      @wizard.append_step(s['title']) do |step|
-
+    @custom_wizard.steps.each do |s|
+      @wizard.append_step(s['id']) do |step|
+        step.title = s['title'] if s['title']
         step.banner = s['banner'] if s['banner']
 
         s['fields'].each do |f|
           field = step.add_field(id: f['id'],
                                  type: f['type'],
-                                 required: f['required'],
-                                 value: f['value'])
+                                 label: f['label'],
+                                 description: f['description'],
+                                 required: f['required'])
 
           if f['type'] == 'dropdown'
             f['choices'].each do |c|
-              field.add_choice(c)
+              field.add_choice(c['id'], label: c['label'])
             end
           end
         end

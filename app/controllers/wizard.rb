@@ -6,7 +6,7 @@ class CustomWizard::WizardController < ::ApplicationController
   def index
     respond_to do |format|
       format.json do
-        wizard = CustomWizard::Builder.new(current_user, params[:name]).build
+        wizard = CustomWizard::Builder.new(current_user, params[:wizard_id]).build
         render_serialized(wizard, WizardSerializer)
       end
       format.html {}

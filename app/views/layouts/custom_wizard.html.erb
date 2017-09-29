@@ -1,5 +1,6 @@
 <html>
   <head>
+    <link href="<%= Discourse.base_uri %>/plugins/discourse-custom-wizard/desktop.css" media="all" rel="stylesheet" data-target="desktop" type="text/css" />
     <%= discourse_stylesheet_link_tag :wizard, theme_key: nil %>
     <%= preload_script "ember_jquery" %>
     <%= preload_script "wizard-vendor" %>
@@ -16,12 +17,12 @@
     <title><%= t 'custom_wizard.title' %></title>
   </head>
 
-  <body class='wizard'>
-    <div id='wizard-main'></div>
+  <body class='custom-wizard'>
+    <div id='custom-wizard-main'></div>
 
     <script>
       (function() {
-        var wizard = require('wizard/wizard').default.create();
+        var wizard = require('discourse/plugins/discourse-custom-wizard/wizard/custom-wizard').default.create();
         wizard.start();
       })();
     </script>

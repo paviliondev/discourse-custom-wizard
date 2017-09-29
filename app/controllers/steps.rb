@@ -1,9 +1,9 @@
-class StepsController < ApplicationController
-  before_filter :ensure_logged_in
+class CustomWizard::StepsController < ApplicationController
+  before_action :ensure_logged_in
 
   def update
     wizard = CustomWizard::Builder.new(current_user, params[:wizard_id]).build
-    updater = wizard.create_updater(params[:id], params[:fields])
+    updater = wizard.create_updater(params[:step_id], params[:fields])
     updater.update
 
     if updater.success?
@@ -18,5 +18,4 @@ class StepsController < ApplicationController
       render json: { errors: errors }, status: 422
     end
   end
-
 end
