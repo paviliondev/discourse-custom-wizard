@@ -17,8 +17,6 @@ export function findCustomWizard(wizardId) {
       return stepObj;
     });
 
-    console.log(wizard)
-
     return CustomWizard.create(wizard);
   });
 };

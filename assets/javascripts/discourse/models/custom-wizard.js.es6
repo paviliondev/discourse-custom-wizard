@@ -29,6 +29,13 @@ const CustomWizard = Discourse.Model.extend({
       const fields = s.get('fields');
       fields.forEach((f) => {
         f.set('id', Ember.String.dasherize(f.get('label')));
+
+        if (f.get('type') === 'dropdown') {
+          const choices = f.get('choices');
+          choices.forEach((c) => {
+            c.set('id', c.get('label'));
+          });
+        }
         step['fields'].push(f);
       });
 
@@ -42,7 +49,8 @@ const CustomWizard = Discourse.Model.extend({
 
     const id = this.get('id');
     const name = this.get('name');
-    let wizard = { id, name, steps };
+    const save_submissions = this.get('save_submissions');
+    let wizard = { id, name, save_submissions, steps };
 
     const existingId = this.get('existingId');
     if (existingId && existingId !== id) {
@@ -76,6 +84,14 @@ CustomWizard.reopenClass({
     });
   },
 
+  findAllSubmissions() {
+    return ajax("/admin/wizards/submissions/all", {
+      type: "GET"
+    }).then(result => {
+      return result.submissions;
+    });
+  },
+
   create(w) {
     const wizard = this._super.apply(this);
 
@@ -83,20 +99,24 @@ CustomWizard.reopenClass({
     let props = { steps };
 
     if (w) {
-      props['id'] = w.id; props['name'] = w.name;
+      props['id'] = w.id;
+      props['name'] = w.name;
 
       if (w.steps) {
         w.steps.forEach((s) => {
           let fields = Ember.A();
 
           s.fields.forEach((f) => {
+            let field = Ember.Object.create(f);
             let choices = Ember.A();
 
             f.choices.forEach((c) => {
               choices.pushObject(Ember.Object.create(c));
             });
 
-            fields.pushObject(Ember.Object.create(f));
+            field.set('choices', choices);
+
+            fields.pushObject(field);
           });
 
           let actions = Ember.A();
@@ -112,7 +132,9 @@ CustomWizard.reopenClass({
             actions
           }));
         });
-      }
+      };
+    } else {
+      props['save_submissions'] = true;
     };
 
     wizard.setProperties(props);

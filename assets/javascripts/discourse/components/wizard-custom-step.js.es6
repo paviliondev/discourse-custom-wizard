@@ -17,6 +17,10 @@ export default Ember.Component.extend({
 
     removeField(field) {
       this.get('step.fields').removeObject(field);
+    },
+
+    removeAction(action) {
+      this.get('step.actions').removeObject(action);
     }
   }
 });

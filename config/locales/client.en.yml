@@ -5,8 +5,10 @@ en:
         label: "Wizards"
         new: "New"
         custom_label: "Custom"
+        submissions_label: "Submissions"
         name: "Name"
         name_placeholder: "name of the wizard"
+        save_submissions: "Save wizard submissions"
         save: "Save Wizard"
         remove: "Delete Wizard"
         step:
@@ -18,15 +20,31 @@ en:
           description_placeholder: "This will appear underneath the title and / or title"
           add: "Add Step"
           remove: "Remove Step"
-          add_field: "Add Field"
-          add_action: "Add Action"
         field:
+          add: "Add Field"
+          remove: "Remove Field"
           label: "Field Name"
           description: "Field Description"
           type: "Field Type"
           choices_label: "Dropdown Choices"
           add_choice: "Add Choice"
           required: "Field Required"
-          remove: "Remove Field"
         action:
-          email: "Email"
+          add: "Add Action"
+          remove: "Remove Action"
+          source: "Source"
+          send_message:
+            label: "Send Message"
+            title: "Message Title"
+            post: "Message Post"
+            recipient: "Message Recipient"
+          create_topic:
+            label: "Create Topic"
+            title: "Topic Title"
+            post: "Topic Post"
+            category: "Topic Category"
+          update_profile:
+            label: "Update Profile"
+            field: "Profile Field"
+          save_input:
+            label: "Save Input"

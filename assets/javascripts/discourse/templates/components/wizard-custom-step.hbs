@@ -14,16 +14,17 @@
 </div>
 
 {{#each step.fields as |f|}}
-  {{wizard-custom-field field=f}}
+  {{wizard-custom-field field=f types=fieldTypes}}
   {{d-button action='removeField' actionParam=f label="admin.wizard.field.remove"}}
 {{/each}}
 
-{{d-button action='addField' label='admin.wizard.step.add_field'}}
+{{d-button action='addField' label='admin.wizard.field.add'}}
 
 {{#each step.actions as |a|}}
   {{wizard-custom-action action=a stepFields=step.fields}}
+  {{d-button action='removeAction' actionParam=a label="admin.wizard.action.remove"}}
 {{/each}}
 
 {{#if allowAddAction}}
-  {{d-button action='addAction' label='admin.wizard.step.add_action'}}
+  {{d-button action='addAction' label='admin.wizard.action.add'}}
 {{/if}}

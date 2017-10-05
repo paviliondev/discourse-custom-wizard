@@ -1,4 +1,5 @@
 import CustomWizard from '../models/custom-wizard';
+import { ajax } from 'discourse/lib/ajax';
 
 export default Discourse.Route.extend({
   model(params) {
@@ -12,6 +13,11 @@ export default Discourse.Route.extend({
     if (!wizard) return this.transitionTo('adminWizardsCustom.index');
 
     return wizard;
+  },
+
+  afterModel(model) {
+    return ajax('/admin/wizards/field-types')
+      .then((result) => model.set('fieldTypes', result.types));
   },
 
   setupController(controller, model) {

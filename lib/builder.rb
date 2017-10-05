@@ -1,9 +1,24 @@
 class CustomWizard::Builder
+
   def initialize(user, wizard_id)
     data = PluginStore.get('custom_wizard', wizard_id)
     @custom_wizard = CustomWizard::Wizard.new(data)
     @wizard = Wizard.new(user)
     @wizard.id = wizard_id
+    @wizard.save_submissions = data['save_submissions']
+  end
+
+  def self.sorted_handlers
+    @sorted_handlers ||= []
+  end
+
+  def self.step_handlers
+    sorted_handlers.map { |h| { wizard_id: h[:wizard_id], block: h[:block] } }
+  end
+
+  def self.add_step_handler(priority = 0, wizard_id, &block)
+    sorted_handlers << { priority: priority, wizard_id: wizard_id, block: block }
+    @sorted_handlers.sort_by! { |h| -h[:priority] }
   end
 
   def build
@@ -27,8 +42,73 @@ class CustomWizard::Builder
         end
 
         step.on_update do |updater|
-          puts "UPDATER: #{updater}"
-          ## do stuff
+
+          @updater = updater
+          input = updater.fields
+          user = @wizard.user
+
+          if @wizard.save_submissions
+            store_key = @wizard.id
+            submissions = Array.wrap(PluginStore.get("custom_wizard_submissions", store_key))
+            submission = {}
+
+            if submissions.last && submissions.last['completed'] === false
+              submission = submissions.last
+              submissions.pop(1)
+            end
+
+            submission['user_id'] = @wizard.user.id
+            submission['completed'] = updater.step.next.nil?
+
+            input.each do |key, value|
+              submission[key] = value
+            end
+
+            submissions.push(submission)
+
+            PluginStore.set('custom_wizard_submissions', store_key, submissions)
+          end
+
+          if s['actions'] && s['actions'].length
+            s['actions'].each do |a|
+              if a['type'] === 'create_topic'
+                creator = PostCreator.new(user,
+                                title: input[a['title']],
+                                raw: input[a['post']],
+                                category: a['category_id'],
+                                skip_validations: true)
+
+                post = creator.create
+                if creator.errors.present?
+                  raise StandardError, creator.errors.full_messages.join(" ")
+                end
+
+                updater.result = { topic_id: post.topic.id }
+              end
+
+              if a['type'] === 'send_message'
+                creator = PostCreator.new(user,
+                                title: input[a['title']],
+                                raw: input[a['post']],
+                                archetype: Archetype.private_message,
+                                target_usernames: a['username'])
+
+                post = creator.create
+
+                if creator.errors.present?
+                  raise StandardError, creator.errors.full_messages.join(" ")
+                end
+
+                updater.result = { topic_id: post.topic.id }
+              end
+            end
+          end
+
+          CustomWizard::Builder.step_handlers.each do |handler|
+            if handler[:wizard_id] == @wizard.id
+              handler[:block].call(self)
+            end
+          end
         end
       end
     end

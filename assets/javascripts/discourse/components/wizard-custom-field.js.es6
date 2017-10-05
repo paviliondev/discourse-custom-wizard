@@ -2,7 +2,6 @@ import { observes } from 'ember-addons/ember-computed-decorators';
 
 export default Ember.Component.extend({
   classNames: 'wizard-custom-field',
-  fieldTypes: ['dropdown', 'image', 'radio', 'text', 'textarea'],
   isDropdown: Ember.computed.equal('field.type', 'dropdown'),
 
   init() {

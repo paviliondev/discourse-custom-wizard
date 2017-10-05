@@ -1,5 +1,5 @@
 # name: discourse-custom-wizard
-# about: Allows the admins to create custom user input forms
+# about: Create custom wizards
 # version: 0.1
 # authors: Angus McLeod
 
@@ -37,24 +37,44 @@ after_initialize do
     end
 
     scope module: 'custom_wizard', constraints: AdminConstraint.new do
+      get 'admin/wizards' => 'admin#index'
+      get 'admin/wizards/field-types' => 'admin#field_types'
       get 'admin/wizards/custom' => 'admin#index'
       get 'admin/wizards/custom/new' => 'admin#index'
-      get 'admin/wizards/custom/all' => 'admin#all'
-      get 'admin/wizards/custom/:wizard_id' => 'admin#find'
+      get 'admin/wizards/custom/all' => 'admin#custom_wizards'
+      get 'admin/wizards/custom/:wizard_id' => 'admin#find_wizard'
       put 'admin/wizards/custom/save' => 'admin#save'
       delete 'admin/wizards/custom/remove' => 'admin#remove'
+      get 'admin/wizards/submissions' => 'admin#index'
+      get 'admin/wizards/submissions/all' => 'admin#submissions'
+      get 'admin/wizards/submissions/:wizard_id' => 'admin#find_submissions'
+    end
+  end
+
+  class CustomWizard::FieldTypes
+    def self.all
+      @types ||= ['dropdown', 'image', 'radio', 'text', 'textarea']
+    end
+
+    def self.add(type)
+      all.push(*type)
     end
   end
 
   class ::Wizard
-    attr_accessor :id
+    attr_accessor :id, :save_submissions
   end
 
   class ::Wizard::Step
     attr_accessor :title
   end
 
-  ::Wizard::Field.class_eval do
+  class ::Wizard::StepUpdater
+    attr_accessor :result, :step
+  end
+
+  require_dependency 'wizard/field'
+  Wizard::Field.class_eval do
     attr_reader :label, :description
 
     def initialize(attrs)
@@ -84,7 +104,6 @@ after_initialize do
 
   ::WizardFieldSerializer.class_eval do
     def label
-      puts "LABEL: #{object.label}"
       if object.label
         object.label
       else

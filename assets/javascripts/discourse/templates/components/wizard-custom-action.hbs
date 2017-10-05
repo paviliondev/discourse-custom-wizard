@@ -1,17 +1,26 @@
-{{combo-box value=action.data content=stepFields valueAttribute='id' nameProperty='label'}}
-{{combo-box value=action.target content=targets}}
-{{#if isTopic}}
-  {{category-select-box value=action.target.category_id tabindex="3"}}
+{{combo-box value=action.type content=types}}
+{{#if createTopic}}
+  <label>{{i18n "admin.wizard.action.create_topic.category"}}</label>
+  {{category-select-box value=action.category_id}}
+  <label>{{i18n "admin.wizard.action.create_topic.title"}}</label>
+  {{combo-box value=action.title content=stepFields nameProperty="label"}}
+  <label>{{i18n "admin.wizard.action.create_topic.post"}}</label>
+  {{combo-box value=action.post content=stepFields nameProperty="label"}}
 {{/if}}
-{{#if isEmail}}
-  <span>{{i18n 'admin.wizard.action.email'}}</span>
-  {{input type='text' value=action.target.email}}
+{{#if sendMessage}}
+  <label>{{i18n "admin.wizard.action.send_message.title"}}</label>
+  {{combo-box value=action.title content=stepFields nameProperty="label"}}
+  <label>{{i18n "admin.wizard.action.send_message.post"}}</label>
+  {{combo-box value=action.post content=stepFields nameProperty="label"}}
+  <label>{{i18n "admin.wizard.action.send_message.recipient"}}</label>
+  {{user-selector single="true"
+                  includeMentionableGroups="true"
+                  usernames=action.username
+                  allowedUsers="true"}}
 {{/if}}
-{{#if isProfile}}
-  <span>{{i18n 'admin.wizard.action.email'}}</span>
-  {{combo-box value=action.target.profile_field content=profileFields}}
-{{/if}}
-{{#if isBadge}}
-  <span>{{i18n 'admin.wizard.action.badge'}}</span>
-  {{combo-box value=action.target.badge content=badges}}
+{{#if updateProfile}}
+  <label>{{i18n "admin.wizard.action.source"}}</label>
+  {{combo-box value=action.source content=stepFields nameProperty="label"}}
+  <label>{{i18n "admin.wizard.action.profile_field"}}</label>
+  {{combo-box value=action.profile_field content=profileFields}}
 {{/if}}

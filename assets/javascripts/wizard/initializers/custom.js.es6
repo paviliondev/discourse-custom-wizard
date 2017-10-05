@@ -1,9 +1,8 @@
-
 export default {
   name: 'custom-routes',
 
-  initialize(container, app) {
-    if (app.get('rootElement') !== '#custom-wizard-main') return;
+  initialize(app) {
+    if (app.constructor.name !== 'Class' || app.get('rootElement') !== '#custom-wizard-main') return;
 
     const WizardApplicationRoute = requirejs('wizard/routes/application').default;
     const findCustomWizard = requirejs('discourse/plugins/discourse-custom-wizard/wizard/models/custom').findCustomWizard;
@@ -11,6 +10,8 @@ export default {
     const ajax = requirejs('wizard/lib/ajax').ajax;
     const StepRoute = requirejs('wizard/routes/step').default;
     const StepModel = requirejs('wizard/models/step').default;
+    const WizardStep = requirejs('wizard/components/wizard-step').default;
+    const getUrl = requirejs('discourse-common/lib/get-url').default;
 
     Router.map(function() {
       this.route('custom', { path: '/custom/:id' }, function() {
@@ -60,6 +61,29 @@ export default {
       afterModel(model) {
         const wizard = this.modelFor('application');
         return model.set("wizardId", wizard.id);
+      }
+    });
+
+    WizardStep.reopen({
+      advance() {
+        this.set('saving', true);
+        this.get('step').save()
+          .then(response => {
+            if (this.get('finalStep')) {
+              document.location = getUrl("/");
+            } else {
+              this.sendAction('goNext', response);
+            }
+          })
+          .catch(() => this.animateInvalidFields())
+          .finally(() => this.set('saving', false));
+      },
+
+      actions: {
+        quit() {
+          this.set('finalStep', true);
+          this.send('nextStep');
+        }
       }
     });
   }

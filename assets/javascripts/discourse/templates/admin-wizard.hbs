@@ -4,9 +4,14 @@
     {{text-field name="name" value=model.name placeholderKey="admin.wizard.name_placeholder"}}
   </div>
 
+  <div>
+    {{input type='checkbox' checked=model.save_submissions}}
+    <span for="save">{{i18n 'admin.wizard.save_submissions'}}</span>
+  </div>
+
   {{#if model.steps}}
     {{#each model.steps as |s|}}
-      {{wizard-custom-step step=s}}
+      {{wizard-custom-step step=s fieldTypes=model.fieldTypes}}
       {{d-button action='removeStep' actionParam=s label='admin.wizard.step.remove'}}
     {{/each}}
   {{/if}}

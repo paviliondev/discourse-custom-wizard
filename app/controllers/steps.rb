@@ -7,7 +7,8 @@ class CustomWizard::StepsController < ApplicationController
     updater.update
 
     if updater.success?
-      result = { success: 'OK' }
+      result = success_json
+      result.merge!(updater.result) if updater.result
       result[:refresh_required] = true if updater.refresh_required?
       render json: result
     else
