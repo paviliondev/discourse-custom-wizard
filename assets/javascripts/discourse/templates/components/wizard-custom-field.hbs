@@ -1,25 +1,51 @@
-<div for={{field.id}}>
-  <div>
-    <span>{{i18n 'admin.wizard.field.label'}}</span>
-    {{text-field name="label" value=field.label}}
+<div class="setting">
+  <div class="setting-label">
+    <h3>{{i18n 'admin.wizard.field.label'}}</h3>
   </div>
-  <div>
-    <span>{{i18n 'admin.wizard.field.description'}}</span>
-    {{text-field name="description" value=field.description}}
-  </div>
-  <div>
-    <span>{{i18n 'admin.wizard.field.type'}}</span>
-    {{combo-box value=field.type content=types}}
-  </div>
-  {{#if isDropdown}}
-    <span>{{i18n 'admin.wizard.field.choices_label'}}</span>
-    {{#each field.choices as |c|}}
-      {{wizard-custom-choice choice=c}}
-    {{/each}}
-    {{d-button action='addChoice' label='admin.wizard.field.add_choice'}}
-  {{/if}}
-  <div>
-    <span>{{i18n 'admin.wizard.field.required'}}</span>
-    {{input type='checkbox' checked=field.required}}
+  <div class="setting-value">
+    {{input name="label" value=field.label}}
   </div>
 </div>
+
+<div class="setting">
+  <div class="setting-label">
+    <h3>{{i18n 'admin.wizard.field.description'}}</h3>
+  </div>
+  <div class="setting-value">
+    {{textarea name="description" value=field.description}}
+  </div>
+</div>
+
+<div class="setting">
+  <div class="setting-label">
+    <h3>{{i18n 'admin.wizard.field.type'}}</h3>
+  </div>
+  <div class="setting-value">
+    {{combo-box value=field.type content=types}}
+  </div>
+</div>
+
+<div class="setting">
+  <div class="setting-label">
+    <h3>{{i18n 'admin.wizard.field.required'}}</h3>
+  </div>
+  <div class="setting-value">
+    {{input type='checkbox' checked=field.required}}
+    <span>{{i18n 'admin.wizard.field.required_label'}}</span>
+  </div>
+</div>
+
+{{#if isDropdown}}
+  <div class="wizard-dropdown-choices">
+    <div class="wizard-header small">
+      {{i18n 'admin.wizard.field.choices_label'}}
+    </div>
+    {{#each dropdownChoices as |c|}}
+      <span class='wizard-dropdown-choice'>
+        {{input type='text' value=c.label}}
+      </span>
+      {{d-button action='removeChoice' actionParam=c icon='times'}}
+    {{/each}}
+    {{d-button action='addChoice' label='admin.wizard.add' icon='plus'}}
+  </div>
+{{/if}}

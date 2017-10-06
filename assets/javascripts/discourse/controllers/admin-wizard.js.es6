@@ -1,8 +1,37 @@
+import { default as computed } from 'ember-addons/ember-computed-decorators';
+
 export default Ember.Controller.extend({
+
+  @computed('model.steps.[]', 'currentStep')
+  stepLinks(steps, currentStep) {
+    return steps.map((s) => {
+      if (s) {
+        let link = {
+          id: s.get('id'),
+          title: s.get('title')
+        };
+
+        let classes = 'btn';
+        if (currentStep && s.get('id') === currentStep.get('id')) {
+          classes += ' btn-primary';
+        };
+
+        link['classes'] = classes;
+
+        return link;
+      }
+    });
+  },
+
+  @computed('model.id')
+  wizardUrl(wizardId) {
+    return window.location.origin + '/wizard/custom/' + wizardId;
+  },
+
   actions: {
     save() {
       this.get('model').save().then(() => {
-        this.transitionToRoute('adminWizardsCustom');
+        this.send("refreshRoute");
       });
     },
 
@@ -13,14 +42,27 @@ export default Ember.Controller.extend({
     },
 
     addStep() {
-      this.get('model.steps').pushObject(Ember.Object.create({
+      const steps = this.get('model.steps');
+      const newNum = steps.length + 1;
+      const step = Ember.Object.create({
         fields: Ember.A(),
-        actions: Ember.A()
-      }));
+        actions: Ember.A(),
+        title: `Step ${newNum}`,
+        id: `step-${newNum}`
+      });
+
+      steps.pushObject(step);
+      this.set('currentStep', step);
     },
 
-    removeStep(step) {
-      this.get('model.steps').removeObject(step);
+    removeStep(stepId) {
+      const steps = this.get('model.steps');
+      steps.removeObject(steps.findBy('id', stepId));
+    },
+
+    changeStep(stepId) {
+      const steps = this.get('model.steps');
+      this.set('currentStep', steps.findBy('id', stepId));
     }
   }
 });

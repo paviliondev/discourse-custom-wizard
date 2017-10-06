@@ -5,6 +5,12 @@ export default Discourse.Route.extend({
     return CustomWizard.findAllSubmissions();
   },
 
+  afterModel(model, transition) {
+    if (transition.intent.name !== 'adminWizardSubmissions' && model.length > 0) {
+      this.transitionTo('adminWizardSubmissions', model[0].id);
+    }
+  },
+
   setupController(controller, model){
     controller.set("model", model);
   }

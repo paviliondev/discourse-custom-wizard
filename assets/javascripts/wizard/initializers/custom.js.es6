@@ -65,6 +65,17 @@ export default {
     });
 
     WizardStep.reopen({
+      bannerImage: function() {
+        const src = this.get('step.banner');
+        if (!src) return;
+
+        if (src.indexOf('/uploads/') > -1) {
+          return getUrl(src);
+        } else {
+          return getUrl(`/images/wizard/${src}`);
+        };
+      }.property('step.banner'),
+
       advance() {
         this.set('saving', true);
         this.get('step').save()

@@ -21,7 +21,15 @@ export default Discourse.Route.extend({
   },
 
   setupController(controller, model) {
-    controller.set("new", this.get('new'));
-    controller.set("model", model);
+    let props = { new: this.get('new'), model };
+    const steps = model.get('steps');
+    if (steps[0]) props['currentStep'] = steps[0];
+    controller.setProperties(props);
+  },
+
+  actions: {
+    refreshRoute() {
+      this.refresh();
+    }
   }
 });

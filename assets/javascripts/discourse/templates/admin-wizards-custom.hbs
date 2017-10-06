@@ -7,9 +7,14 @@
         </li>
       {{/each}}
     </ul>
+    <div class="new-wizard">
+      {{#link-to 'adminWizard' 'new' class="btn"}}
+        {{d-icon "plus"}} {{i18n 'admin.wizard.new'}}
+      {{/link-to}}
+    </div>
   </div>
 
-  <div class="span13">
+  <div class="content">
     {{outlet}}
   </div>
 </div>

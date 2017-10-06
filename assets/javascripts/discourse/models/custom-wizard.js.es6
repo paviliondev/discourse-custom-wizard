@@ -8,9 +8,7 @@ const CustomWizard = Discourse.Model.extend({
   },
 
   @computed('name')
-  id(name) {
-    return name ? Ember.String.dasherize(name) : null;
-  },
+  id: (name) => name ? Ember.String.dasherize(name) : null,
 
   save() {
     const stepsObj = this.get('steps');
@@ -36,11 +34,12 @@ const CustomWizard = Discourse.Model.extend({
             c.set('id', c.get('label'));
           });
         }
+
         step['fields'].push(f);
       });
 
       s.actions.forEach((a) => {
-        a['id'] = Ember.String.dasherize(a.label);
+        a.set('id', Ember.String.dasherize(a.get('label')));
         step['actions'].push(a);
       });
 
@@ -128,6 +127,7 @@ CustomWizard.reopenClass({
             id: s.id,
             title: s.title,
             description: s.description,
+            banner: s.banner,
             fields,
             actions
           }));

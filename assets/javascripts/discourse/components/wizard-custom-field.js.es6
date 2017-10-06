@@ -1,9 +1,11 @@
-import { observes } from 'ember-addons/ember-computed-decorators';
+import { default as computed, on, observes } from 'ember-addons/ember-computed-decorators';
 
 export default Ember.Component.extend({
   classNames: 'wizard-custom-field',
   isDropdown: Ember.computed.equal('field.type', 'dropdown'),
 
+  @on('init')
+  @observes('field.id')
   init() {
     this._super(...arguments);
 
@@ -12,15 +14,16 @@ export default Ember.Component.extend({
     }
   },
 
-  @observes('field.label')
-  setFieldId() {
-    const label = this.get('field.label');
-    this.set('field.id', Ember.String.underscore(label));
-  },
+  @computed('field.choices.[]')
+  dropdownChoices: choices => choices,
 
   actions: {
     addChoice() {
       this.get('field.choices').pushObject(Ember.Object.create());
+    },
+
+    removeChoice(c) {
+      this.get('field.choices').removeObject(c);
     }
   }
 });
