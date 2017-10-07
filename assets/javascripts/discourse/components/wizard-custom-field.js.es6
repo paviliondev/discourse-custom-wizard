@@ -8,7 +8,6 @@ export default Ember.Component.extend({
   @observes('field.id')
   init() {
     this._super(...arguments);
-
     if (!this.get('field.choices')) {
       this.set('field.choices', Ember.A());
     }

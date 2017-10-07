@@ -6,23 +6,25 @@ export default Ember.Component.extend({
   currentAction: null,
 
   @on('init')
-  @observes('step.id')
+  @observes('step')
   setup() {
     this._super(...arguments);
-    const fields = this.get('step.fields');
-    const actions = this.get('step.actions');
+    const fields = this.get('step.fields') || [];
+    const actions = this.get('step.actions') || [];
     this.set('currentField', fields[0]);
     this.set('currentAction', actions[0]);
   },
 
   @computed('step.fields.[]', 'currentField')
   fieldLinks(fields, current) {
+    if (!fields) return;
+
     return fields.map((f) => {
       if (f) {
-        let link = {
-          id: f.get('id'),
-          label: f.get('label')
-        };
+        const id = f.get('id');
+        const label = f.get('label');
+
+        let link = { id, label: label || id };
 
         let classes = 'btn';
         if (current && f.get('id') === current.get('id')) {
@@ -38,12 +40,14 @@ export default Ember.Component.extend({
 
   @computed('step.actions.[]', 'currentAction')
   actionLinks(actions, current) {
+    if (!actions) return;
+
     return actions.map((a) => {
       if (a) {
-        let link = {
-          id: a.get('id'),
-          label: a.get('label')
-        };
+        const id = a.get('id');
+        const label = a.get('label');
+
+        let link = { id, label: label || id };
 
         let classes = 'btn';
         if (current && a.get('id') === current.get('id')) {
@@ -62,7 +66,7 @@ export default Ember.Component.extend({
       const fields = this.get('step.fields');
       const newNum = fields.length + 1;
       const field = Ember.Object.create({
-        id: `field-${newNum}`, label: `Field ${newNum}`
+        id: `field-${newNum}`
       });
       fields.pushObject(field);
       this.set('currentField', field);
@@ -72,7 +76,7 @@ export default Ember.Component.extend({
       const actions = this.get('step.actions');
       const newNum = actions.length + 1;
       const action = Ember.Object.create({
-        id: `action-${newNum}`, label: `Action ${newNum}`
+        id: `action-${newNum}`
       });
       actions.pushObject(action);
       this.set('currentAction', action);

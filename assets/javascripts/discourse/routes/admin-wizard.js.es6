@@ -4,12 +4,12 @@ import { ajax } from 'discourse/lib/ajax';
 export default Discourse.Route.extend({
   model(params) {
     if (params.wizard_id === 'new') {
-      this.set('new', true);
+      this.set('newWizard', true);
       return CustomWizard.create();
     }
-    this.set('new', false);
+    this.set('newWizard', false);
 
-    const wizard = this.modelFor('admin-wizards-custom').findBy('id', params.wizard_id);
+    const wizard = this.modelFor('admin-wizards-custom').findBy('id', params.wizard_id.underscore());
     if (!wizard) return this.transitionTo('adminWizardsCustom.index');
 
     return wizard;
@@ -21,14 +21,17 @@ export default Discourse.Route.extend({
   },
 
   setupController(controller, model) {
-    let props = { new: this.get('new'), model };
-    const steps = model.get('steps');
-    if (steps[0]) props['currentStep'] = steps[0];
-    controller.setProperties(props);
+    const newWizard = this.get('newWizard');
+    const steps = model.get('steps') || [];
+    controller.setProperties({
+      newWizard,
+      model,
+      currentStep: steps[0]
+    });
   },
 
   actions: {
-    refreshRoute() {
+    refreshWizard() {
       this.refresh();
     }
   }

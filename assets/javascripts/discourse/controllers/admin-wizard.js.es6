@@ -6,13 +6,13 @@ export default Ember.Controller.extend({
   stepLinks(steps, currentStep) {
     return steps.map((s) => {
       if (s) {
-        let link = {
-          id: s.get('id'),
-          title: s.get('title')
-        };
+        const id = s.get('id');
+        const title = s.get('title');
+
+        let link = { id, title: title || id };
 
         let classes = 'btn';
-        if (currentStep && s.get('id') === currentStep.get('id')) {
+        if (currentStep && id === currentStep.get('id')) {
           classes += ' btn-primary';
         };
 
@@ -23,21 +23,25 @@ export default Ember.Controller.extend({
     });
   },
 
-  @computed('model.id')
+  @computed('model.id', 'model.name')
   wizardUrl(wizardId) {
-    return window.location.origin + '/wizard/custom/' + wizardId;
+    return window.location.origin + '/wizard/custom/' + Ember.String.dasherize(wizardId);
   },
 
   actions: {
     save() {
       this.get('model').save().then(() => {
-        this.send("refreshRoute");
+        if (this.get('newWizard')) {
+          this.send("refreshAllWizards");
+        } else {
+          this.send("refreshWizard");
+        }
       });
     },
 
     remove() {
       this.get('model').remove().then(() => {
-        this.transitionToRoute('adminWizardsCustom');
+        this.send("refreshAllWizards");
       });
     },
 
@@ -47,10 +51,8 @@ export default Ember.Controller.extend({
       const step = Ember.Object.create({
         fields: Ember.A(),
         actions: Ember.A(),
-        title: `Step ${newNum}`,
         id: `step-${newNum}`
       });
-
       steps.pushObject(step);
       this.set('currentStep', step);
     },
@@ -58,6 +60,7 @@ export default Ember.Controller.extend({
     removeStep(stepId) {
       const steps = this.get('model.steps');
       steps.removeObject(steps.findBy('id', stepId));
+      this.set('currentStep', steps[steps.length - 1]);
     },
 
     changeStep(stepId) {

@@ -2,7 +2,7 @@ class CustomWizard::StepsController < ApplicationController
   before_action :ensure_logged_in
 
   def update
-    wizard = CustomWizard::Builder.new(current_user, params[:wizard_id]).build
+    wizard = CustomWizard::Builder.new(current_user, params[:wizard_id].underscore).build
     updater = wizard.create_updater(params[:step_id], params[:fields])
     updater.update
 

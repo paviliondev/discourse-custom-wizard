@@ -3,6 +3,11 @@
   float: left;
 }
 
+.wizard-list {
+  float: left;
+  width: 250px;
+}
+
 .new-wizard {
   margin-top: 15px;
 }
@@ -34,15 +39,15 @@
     min-width: 49%;
 
     .setting-label {
-      width: 20%;
+      width: 90px;
+    }
+
+    .setting-value span {
+      font-size: 0.929em;
     }
 
     &.full {
       width: 100%;
-
-      .setting-label {
-        width: 75px;
-      }
     }
   }
 }

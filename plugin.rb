@@ -62,11 +62,11 @@ after_initialize do
   end
 
   class ::Wizard
-    attr_accessor :id, :save_submissions
+    attr_accessor :id, :background, :save_submissions
   end
 
   class ::Wizard::Step
-    attr_accessor :title
+    attr_accessor :title, :description, :translation_key
   end
 
   class ::Wizard::StepUpdater
@@ -75,7 +75,7 @@ after_initialize do
 
   require_dependency 'wizard/field'
   Wizard::Field.class_eval do
-    attr_reader :label, :description
+    attr_reader :label, :description, :translation_key
 
     def initialize(attrs)
       attrs = attrs || {}
@@ -85,38 +85,49 @@ after_initialize do
       @required = !!attrs[:required]
       @label = attrs[:label]
       @description = attrs[:description]
+      @translation_key = attrs[:translation_key]
       @value = attrs[:value]
       @choices = []
     end
   end
 
-  add_to_serializer(:wizard, :id) { object.id }
+  ::WizardSerializer.class_eval do
+    attributes :id, :background
+
+    def id
+      object.id
+    end
+
+    def background
+      object.background
+    end
+
+    def include_start?
+      object.start
+    end
+  end
 
   ::WizardStepSerializer.class_eval do
     def title
-      if object.title
-        object.title
-      else
-        I18n.t("#{i18n_key}.title", default: '')
-      end
+      return object.title if object.title
+      I18n.t("#{object.translation_key || i18n_key}.title", default: '')
+    end
+
+    def description
+      return object.description if object.description
+      I18n.t("#{object.translation_key || i18n_key}.description", default: '')
     end
   end
 
   ::WizardFieldSerializer.class_eval do
     def label
-      if object.label
-        object.label
-      else
-        I18n.t("#{i18n_key}.label", default: '')
-      end
+      return object.label if object.label
+      I18n.t("#{object.translation_key || i18n_key}.label", default: '')
     end
 
     def description
-      if object.description
-        object.description
-      else
-        I18n.t("#{i18n_key}.description", default: '')
-      end
+      return object.description if object.description
+      I18n.t("#{object.translation_key || i18n_key}.description", default: '')
     end
   end
 end

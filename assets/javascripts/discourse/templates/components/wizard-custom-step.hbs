@@ -1,5 +1,14 @@
 <div class="setting">
   <div class="setting-label">
+    <h3>{{i18n 'admin.wizard.translation'}}</h3>
+  </div>
+  <div class="setting-value">
+    {{input name="translation_key" value=step.translation_key placeholderKey="admin.wizard.step.translation_placeholder"}}
+  </div>
+</div>
+
+<div class="setting">
+  <div class="setting-label">
     <h3>{{i18n 'admin.wizard.step.title'}}</h3>
   </div>
   <div class="setting-value">
@@ -21,7 +30,7 @@
     <h3>{{i18n 'admin.wizard.step.description'}}</h3>
   </div>
   <div class="setting-value">
-    {{textarea name="description" value=step.description placeholderKey="admin.wizard.step.description_placeholder"}}
+    {{textarea name="description" value=step.description placeholder=(i18n "admin.wizard.step.description_placeholder")}}
   </div>
 </div>
 

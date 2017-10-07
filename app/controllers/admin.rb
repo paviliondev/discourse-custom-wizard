@@ -44,7 +44,7 @@ class CustomWizard::AdminController < ::ApplicationController
   def find_wizard
     params.require(:wizard_id)
 
-    wizard = PluginStore.get('custom_wizard', params[:wizard_id])
+    wizard = PluginStore.get('custom_wizard', params[:wizard_id].underscore)
 
     render json: success_json.merge(wizard: wizard)
   end
@@ -60,7 +60,7 @@ class CustomWizard::AdminController < ::ApplicationController
   def find_submissions
     params.require(:wizard_id)
 
-    wizard = PluginStore.get('custom_wizard_submissions', params[:wizard_id])
+    wizard = PluginStore.get('custom_wizard_submissions', params[:wizard_id].underscore)
 
     render json: success_json.merge(submissions: submissions)
   end

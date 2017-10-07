@@ -35,6 +35,11 @@ export default {
       },
 
       setupController(controller, model) {
+        console.log(model)
+        Ember.run.scheduleOnce('afterRender', this, function(){
+          $('body.custom-wizard').css('background', model.get('background'));
+        });
+
         controller.setProperties({
           customWizard: true,
           siteInfo: model.get('siteInfo')
@@ -59,6 +64,10 @@ export default {
 
     StepRoute.reopen({
       afterModel(model) {
+        if (!model) {
+          return document.location = getUrl("/");
+        }
+
         const wizard = this.modelFor('application');
         return model.set("wizardId", wizard.id);
       }
@@ -69,7 +78,7 @@ export default {
         const src = this.get('step.banner');
         if (!src) return;
 
-        if (src.indexOf('/uploads/') > -1) {
+        if (src.indexOf('/uploads/') > -1 || src.indexOf('/images/') > -1) {
           return getUrl(src);
         } else {
           return getUrl(`/images/wizard/${src}`);

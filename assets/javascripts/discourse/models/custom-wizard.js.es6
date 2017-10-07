@@ -1,37 +1,57 @@
-import { default as computed } from 'ember-addons/ember-computed-decorators';
+import { observes, on } from 'ember-addons/ember-computed-decorators';
 import { ajax } from 'discourse/lib/ajax';
 
 const CustomWizard = Discourse.Model.extend({
-  init() {
+  @on('init')
+  setup() {
     const id = this.get('id');
     if (id) this.set('existingId', id);
   },
 
-  @computed('name')
-  id: (name) => name ? Ember.String.dasherize(name) : null,
+  @observes('name')
+  updateId() {
+    const name = this.get('name');
+    this.set('id', name.underscore());
+  },
 
   save() {
     const stepsObj = this.get('steps');
     let steps = [];
 
     stepsObj.forEach((s) => {
+
+      if (!s.title && !s.translation_key) return;
+
       let step = {
-        id: Ember.String.dasherize(s.title),
-        title: s.title,
-        banner: s.banner,
-        description: s.description,
+        id: (s.title || s.translation_key.split('.').pop()).underscore(),
         fields: [],
         actions: []
       };
 
+      if (s.title) step['title'] = s.title;
+      if (s.translation_key) step['translation_key'] = s.translation_key;
+      if (s.banner) step['banner'] = s.banner;
+      if (s.description) step['description'] = s.description;
+
       const fields = s.get('fields');
       fields.forEach((f) => {
-        f.set('id', Ember.String.dasherize(f.get('label')));
+        const fl = f.get('label');
+        const fkey = f.get('translation_key');
+
+        if (!fl && !fkey) return;
+
+        f.set('id', (fl || fkey.split('.').pop()).underscore());
 
         if (f.get('type') === 'dropdown') {
           const choices = f.get('choices');
+
           choices.forEach((c) => {
-            c.set('id', c.get('label'));
+            const cl = c.get('label');
+            const ckey = c.get('translation_key');
+
+            if (!cl && !ckey) return;
+
+            c.set('id', (cl || ckey.split('.').pop()).underscore());
           });
         }
 
@@ -39,7 +59,9 @@ const CustomWizard = Discourse.Model.extend({
       });
 
       s.actions.forEach((a) => {
-        a.set('id', Ember.String.dasherize(a.get('label')));
+        const al = a.get('label');
+        if (!al) return;
+        a.set('id', al.underscore());
         step['actions'].push(a);
       });
 
@@ -48,8 +70,9 @@ const CustomWizard = Discourse.Model.extend({
 
     const id = this.get('id');
     const name = this.get('name');
+    const background = this.get('background');
     const save_submissions = this.get('save_submissions');
-    let wizard = { id, name, save_submissions, steps };
+    let wizard = { id, name, background, save_submissions, steps };
 
     const existingId = this.get('existingId');
     if (existingId && existingId !== id) {
@@ -93,13 +116,13 @@ CustomWizard.reopenClass({
 
   create(w) {
     const wizard = this._super.apply(this);
-
     let steps = Ember.A();
     let props = { steps };
 
     if (w) {
       props['id'] = w.id;
       props['name'] = w.name;
+      props['background'] = w.background;
 
       if (w.steps) {
         w.steps.forEach((s) => {
@@ -125,6 +148,7 @@ CustomWizard.reopenClass({
 
           steps.pushObject(Ember.Object.create({
             id: s.id,
+            translation_key: s.translation_key,
             title: s.title,
             description: s.description,
             banner: s.banner,
@@ -134,7 +158,11 @@ CustomWizard.reopenClass({
         });
       };
     } else {
+      props['id'] = '';
+      props['name'] = '';
+      props['background'] = '';
       props['save_submissions'] = true;
+      props['steps'] = Ember.A();
     };
 
     wizard.setProperties(props);

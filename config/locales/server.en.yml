@@ -1,3 +1,11 @@
 en:
   custom_wizard:
     title: "Wizard"
+
+  new_wizard:
+    step_1:
+      title: "Translated title"
+      description: "Translated description"
+      field_1:
+        label: "Translated field title"
+        description: "Translated field description"

@@ -6,6 +6,7 @@ class CustomWizard::Builder
     @wizard = Wizard.new(user)
     @wizard.id = wizard_id
     @wizard.save_submissions = data['save_submissions']
+    @wizard.background = data["background"]
   end
 
   def self.sorted_handlers
@@ -25,14 +26,22 @@ class CustomWizard::Builder
     @custom_wizard.steps.each do |s|
       @wizard.append_step(s['id']) do |step|
         step.title = s['title'] if s['title']
+        step.description = s['description'] if s['description']
         step.banner = s['banner'] if s['banner']
+        step.translation_key = s['translation_key'] if s['translation_key']
 
         s['fields'].each do |f|
-          field = step.add_field(id: f['id'],
-                                 type: f['type'],
-                                 label: f['label'],
-                                 description: f['description'],
-                                 required: f['required'])
+          params = {
+            id: f['id'],
+            type: f['type'],
+            required: f['required']
+          }
+
+          params[:label] = f['label'] if f['label']
+          params[:description] = f['description'] if f['description']
+          params[:translation_key] = f['translation_key'] if f['translation_key']
+
+          field = step.add_field(params)
 
           if f['type'] == 'dropdown'
             f['choices'].each do |c|

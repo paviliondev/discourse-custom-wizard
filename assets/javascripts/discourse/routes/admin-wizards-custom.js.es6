@@ -5,10 +5,11 @@ export default Discourse.Route.extend({
     return CustomWizard.findAll();
   },
 
-  afterModel(model, transition) {
-    if (transition.intent.name !== 'adminWizard' && model.length > 0) {
-      this.transitionTo('adminWizard', model[0].id);
-    }
+  afterModel(model) {
+    const transitionToWizard = this.get('transitionToWizard');
+    if (transitionToWizard === 'last' && model.length) {
+      this.transitionTo('adminWizard', model[model.length - 1].id);
+    };
   },
 
   setupController(controller, model){
@@ -16,10 +17,9 @@ export default Discourse.Route.extend({
   },
 
   actions: {
-    willTransition(transition) {
-      if (transition.intent.name === 'adminWizardsCustom') {
-        this.refresh();
-      }
+    refreshAllWizards() {
+      this.set('transitionToWizard', 'last');
+      this.refresh();
     }
   }
 });

@@ -6,10 +6,19 @@
 
   <div class="setting">
     <div class="setting-label">
+      <h3>{{i18n 'admin.wizard.background'}}</h3>
+    </div>
+    <div class="setting-value">
+      {{input name="background" value=model.background placeholderKey="admin.wizard.background_placeholder"}}
+    </div>
+  </div>
+
+  <div class="setting">
+    <div class="setting-label">
       <h3>{{i18n 'admin.wizard.name'}}</h3>
     </div>
     <div class="setting-value">
-      {{text-field name="name" value=model.name placeholderKey="admin.wizard.name_placeholder"}}
+      {{input name="name" value=model.name placeholderKey="admin.wizard.name_placeholder"}}
     </div>
   </div>
 
@@ -39,11 +48,13 @@
     {{d-button action='addStep' label='admin.wizard.add' icon='plus'}}
   </div>
 
-  {{wizard-custom-step step=currentStep fieldTypes=model.fieldTypes}}
+  {{#if currentStep}}
+    {{wizard-custom-step step=currentStep fieldTypes=model.fieldTypes}}
+  {{/if}}
 
   <div class='buttons'>
     <button {{action "save"}} disabled={{disableSave}} class='btn btn-primary'>{{i18n 'admin.wizard.save'}}</button>
-    {{#unless new}}
+    {{#unless newWizard}}
       <button {{action "remove"}} class='btn btn-danger'>{{d-icon "trash-o"}}{{i18n 'admin.wizard.remove'}}</button>
     {{/unless}}
     <span class="saving {{unless savingStatus 'hidden'}}">{{savingStatus}}</span>
