@@ -18,6 +18,7 @@ en:
         add: "Add"
         url: "Url"
         translation: "Translation"
+
         step:
           header: "Steps"
           title: "Title"
@@ -27,6 +28,7 @@ en:
           description: "Description"
           description_placeholder: "Overrides description translation"
           translation_placeholder: "Translation key for step"
+
         field:
           header: "Fields"
           label: "Label"
@@ -37,6 +39,7 @@ en:
           required: "Required"
           required_label: "Field is Required"
           translation_placeholder: "Translation key for field"
+
         action:
           header: "Actions"
           label: "Label"
@@ -56,3 +59,8 @@ en:
             field: "Profile Field"
           save_input:
             label: "Save Input"
+
+  wizard_js:
+    wizard:
+      validation:
+        too_short: "Post must be at least {{min}} characters"

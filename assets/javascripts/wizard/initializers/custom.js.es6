@@ -12,6 +12,7 @@ export default {
     const StepModel = requirejs('wizard/models/step').default;
     const WizardStep = requirejs('wizard/components/wizard-step').default;
     const getUrl = requirejs('discourse-common/lib/get-url').default;
+    const FieldModel = requirejs('wizard/models/wizard-field').default;
 
     Router.map(function() {
       this.route('custom', { path: '/custom/:id' }, function() {
@@ -26,16 +27,23 @@ export default {
       },
 
       afterModel(model) {
-        return ajax({
-          url: `/site/basic-info`,
-          type: 'GET',
-        }).then((result) => {
-          return model.set('siteInfo', result);
+        return Ember.RSVP.hash({
+          info: ajax({
+            url: `/site/basic-info`,
+            type: 'GET',
+          }).then((result) => {
+            return model.set('siteInfo', result);
+          }),
+          settings: ajax({
+            url: `/site/settings`,
+            type: 'GET',
+          }).then((result) => {
+            Object.assign(Wizard.SiteSettings, result);
+          })
         });
       },
 
       setupController(controller, model) {
-        console.log(model)
         Ember.run.scheduleOnce('afterRender', this, function(){
           $('body.custom-wizard').css('background', model.get('background'));
         });
@@ -104,6 +112,26 @@ export default {
           this.set('finalStep', true);
           this.send('nextStep');
         }
+      }
+    });
+
+    FieldModel.reopen({
+      check() {
+        let valid = this.get('valid');
+
+        if (!this.get('required')) {
+          this.setValid(true);
+          return true;
+        }
+
+        if (!this.get('customValidation')) {
+          const val = this.get('value');
+          valid = val && val.length > 0;
+
+          this.setValid(valid);
+        }
+
+        return valid;
       }
     });
   }

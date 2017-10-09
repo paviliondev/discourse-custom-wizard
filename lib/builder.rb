@@ -56,7 +56,7 @@ class CustomWizard::Builder
           input = updater.fields
           user = @wizard.user
 
-          if @wizard.save_submissions
+          if @wizard.save_submissions && input
             store_key = @wizard.id
             submissions = Array.wrap(PluginStore.get("custom_wizard_submissions", store_key))
             submission = {}

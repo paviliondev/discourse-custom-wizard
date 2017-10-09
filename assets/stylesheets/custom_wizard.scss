@@ -81,3 +81,8 @@
   display: inline-block;
   overflow: scroll;
 }
+
+.wizard-field-composer textarea {
+  width: 100%;
+  min-height: 150px;
+}

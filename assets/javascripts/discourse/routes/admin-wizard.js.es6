@@ -6,7 +6,7 @@ export default Discourse.Route.extend({
     if (params.wizard_id === 'new') {
       this.set('newWizard', true);
       return CustomWizard.create();
-    }
+    };
     this.set('newWizard', false);
 
     const wizard = this.modelFor('admin-wizards-custom').findBy('id', params.wizard_id.underscore());

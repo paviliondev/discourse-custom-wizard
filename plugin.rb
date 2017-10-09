@@ -18,6 +18,7 @@ after_initialize do
   end
 
   load File.expand_path('../lib/builder.rb', __FILE__)
+  load File.expand_path('../lib/field.rb', __FILE__)
   load File.expand_path('../lib/wizard.rb', __FILE__)
   load File.expand_path('../app/controllers/wizard.rb', __FILE__)
   load File.expand_path('../app/controllers/steps.rb', __FILE__)
@@ -48,16 +49,6 @@ after_initialize do
       get 'admin/wizards/submissions' => 'admin#index'
       get 'admin/wizards/submissions/all' => 'admin#submissions'
       get 'admin/wizards/submissions/:wizard_id' => 'admin#find_submissions'
-    end
-  end
-
-  class CustomWizard::FieldTypes
-    def self.all
-      @types ||= ['dropdown', 'image', 'radio', 'text', 'textarea']
-    end
-
-    def self.add(type)
-      all.push(*type)
     end
   end
 

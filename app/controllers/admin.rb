@@ -7,7 +7,7 @@ class CustomWizard::AdminController < ::ApplicationController
   end
 
   def field_types
-    render json: { types: CustomWizard::FieldTypes.all }
+    render json: { types: CustomWizard::Field.types }
   end
 
   def save

@@ -2,14 +2,18 @@
   <head>
     <link href="<%= Discourse.base_uri %>/plugins/discourse-custom-wizard/desktop.css" media="all" rel="stylesheet" data-target="desktop" type="text/css" />
     <%= discourse_stylesheet_link_tag :wizard, theme_key: nil %>
+    <%= discourse_stylesheet_link_tag(mobile_view? ? :mobile : :desktop) %>
     <%= preload_script "ember_jquery" %>
     <%= preload_script "wizard-vendor" %>
     <%= preload_script "wizard-application" %>
     <%= preload_script "wizard-custom" %>
+    <%= preload_script "wizard-plugin" %>
     <%= preload_script "locales/#{I18n.locale}" %>
     <%= render partial: "common/special_font_face" %>
     <script src="<%= Discourse.base_uri %>/extra-locales/wizard"></script>
     <%= csrf_meta_tags %>
+
+    <%= server_plugin_outlet "custom_wizard" %>
 
     <meta name="discourse-base-uri" content="<%= Discourse.base_uri %>">
 

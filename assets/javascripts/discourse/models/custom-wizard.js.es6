@@ -123,6 +123,7 @@ CustomWizard.reopenClass({
       props['id'] = w.id;
       props['name'] = w.name;
       props['background'] = w.background;
+      props['save_submissions'] = w.save_submissions;
 
       if (w.steps) {
         w.steps.forEach((s) => {
