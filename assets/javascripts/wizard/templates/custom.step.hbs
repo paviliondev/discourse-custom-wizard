@@ -1,1 +1,9 @@
-{{wizard-step step=step wizard=wizard goNext="goNext" goBack="goBack"}}
+<div class="step-message {{stepMessage.state}}">
+  {{stepMessage.text}}
+</div>
+{{wizard-step step=step
+              wizard=wizard
+              goNext="goNext"
+              goBack="goBack"
+              finished="finished"
+              showMessage="showMessage"}}

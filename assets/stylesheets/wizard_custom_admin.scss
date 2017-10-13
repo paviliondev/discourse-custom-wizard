@@ -13,15 +13,17 @@
 }
 
 .wizard-header {
-  font-size: 1.3em;
+  font-size: 1.4em;
   margin-bottom: 15px;
 
   &.medium {
-    font-size: 1.1em;
+    font-size: 1.2em;
   }
 
   &.small {
-    font-size: 0.97em;
+    font-size: 1em;
+    text-decoration: underline;
+    margin-bottom: 5px;
   }
 }
 
@@ -36,7 +38,7 @@
   .setting {
     display: inline-block;
     vertical-align: top;
-    min-width: 49%;
+    width: 49%;
 
     .setting-label {
       width: 90px;
@@ -49,6 +51,22 @@
     &.full {
       width: 100%;
     }
+
+    label {
+      margin: 5px 0;
+    }
+  }
+
+  .buttons .error {
+    color: $danger;
+
+    .fa {
+      margin-right: 5px;
+    }
+  }
+
+  .buttons .remove {
+    float: right;
   }
 }
 
@@ -60,19 +78,49 @@
   }
 }
 
+.wizard-column-contents {
+  position: relative;
+}
+
 .wizard-custom-step {
   display: inline-block;
-  width: 100%;
   margin-bottom: 20px;
   padding: 15px;
   background-color: dark-light-diff($primary, $secondary, 96%, -65%);
 }
 
-.wizard-dropdown-choices {
-  margin-bottom: 25px;
+.step-message {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 0;
+  line-height: 0;
+  text-align: center;
+  transition: all .2s;
+
+  &.success {
+    height: 60px;
+    line-height: 60px;
+    background-color: $success;
+    color: $secondary;
+  }
+
+  &.error {
+    height: 60px;
+    line-height: 60px;
+    background-color: $danger;
+    color: $secondary;
+  }
 }
 
-.wizard-dropdown-choice {
+.wizard-dropdown-choices {
+  padding: 15px 15px 0 15px;
+  margin-bottom: 20px;
+  background-color: $secondary;
+}
+
+.setting .custom-input {
   display: inline-block;
 }
 

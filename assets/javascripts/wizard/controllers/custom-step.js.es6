@@ -7,7 +7,7 @@ export default StepController.extend({
       const next = this.get('step.next');
       if (response.refresh_required) {
         const id = this.get('wizard.id');
-        document.location = getUrl(`/wizard/custom/${id}/steps/${next}`);
+        document.location = getUrl(`/w/${id}/steps/${next}`);
       } else {
         this.transitionToRoute('custom.step', next);
       }
@@ -15,6 +15,10 @@ export default StepController.extend({
 
     goBack() {
       this.transitionToRoute('custom.step', this.get('step.previous'));
+    },
+
+    showMessage(message) {
+      this.set('stepMessage', message);
     }
   }
 });

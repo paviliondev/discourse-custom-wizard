@@ -15,20 +15,7 @@ class CustomWizard::AdminController < ::ApplicationController
 
     wizard = ::JSON.parse(params[:wizard])
 
-    saved = false
-    if wizard["existing_id"] && rows = PluginStoreRow.where(plugin_name: 'custom_wizard').order(:id)
-      rows.each do |r, i|
-        wizard = CustomWizard::Wizard.new(r.value)
-        if wizard.id = wizard["existing_id"]
-          r.update_all(key: wizard['id'], value: wizard)
-          saved = true
-        end
-      end
-    end
-
-    unless saved
-      PluginStore.set('custom_wizard', wizard["id"], wizard)
-    end
+    PluginStore.set('custom_wizard', wizard["id"], wizard)
 
     render json: success_json
   end

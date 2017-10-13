@@ -7,8 +7,9 @@ export default Discourse.Route.extend({
 
   afterModel(model) {
     const transitionToWizard = this.get('transitionToWizard');
-    if (transitionToWizard === 'last' && model.length) {
-      this.transitionTo('adminWizard', model[model.length - 1].id);
+    if (transitionToWizard && model.length) {
+      this.set('transitionToWizard', null);
+      this.transitionTo('adminWizard', transitionToWizard);
     };
   },
 

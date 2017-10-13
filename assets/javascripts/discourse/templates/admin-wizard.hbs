@@ -6,10 +6,10 @@
 
   <div class="setting">
     <div class="setting-label">
-      <h3>{{i18n 'admin.wizard.background'}}</h3>
+      <h3>{{i18n 'admin.wizard.id'}}</h3>
     </div>
     <div class="setting-value">
-      {{input name="background" value=model.background placeholderKey="admin.wizard.background_placeholder"}}
+      {{input name="name" value=model.id placeholderKey="admin.wizard.id_placeholder" disabled=model.existingId}}
     </div>
   </div>
 
@@ -24,11 +24,30 @@
 
   <div class="setting">
     <div class="setting-label">
+      <h3>{{i18n 'admin.wizard.background'}}</h3>
+    </div>
+    <div class="setting-value">
+      {{input name="background" value=model.background placeholderKey="admin.wizard.background_placeholder"}}
+    </div>
+  </div>
+
+  <div class="setting">
+    <div class="setting-label">
       <h3>{{i18n 'admin.wizard.save_submissions'}}</h3>
     </div>
     <div class="setting-value">
       {{input type='checkbox' checked=model.save_submissions}}
       <span for="save">{{i18n 'admin.wizard.save_submissions_label'}}</span>
+    </div>
+  </div>
+
+  <div class="setting full">
+    <div class="setting-label">
+      <h3>{{i18n 'admin.wizard.multiple_submissions'}}</h3>
+    </div>
+    <div class="setting-value">
+      {{input type='checkbox' checked=model.multiple_submissions}}
+      <span for="save">{{i18n 'admin.wizard.multiple_submissions_label'}}</span>
     </div>
   </div>
 
@@ -55,8 +74,11 @@
   <div class='buttons'>
     <button {{action "save"}} disabled={{disableSave}} class='btn btn-primary'>{{i18n 'admin.wizard.save'}}</button>
     {{#unless newWizard}}
-      <button {{action "remove"}} class='btn btn-danger'>{{d-icon "trash-o"}}{{i18n 'admin.wizard.remove'}}</button>
+      <button {{action "remove"}} class='btn btn-danger remove'>{{d-icon "trash-o"}}{{i18n 'admin.wizard.remove'}}</button>
     {{/unless}}
-    <span class="saving {{unless savingStatus 'hidden'}}">{{savingStatus}}</span>
+    {{conditional-loading-spinner condition=saving size='small'}}
+    {{#if error}}
+      <span class="error">{{d-icon "times"}}{{error}}</span>
+    {{/if}}
   </div>
 </div>

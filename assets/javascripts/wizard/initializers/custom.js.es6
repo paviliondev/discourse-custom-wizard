@@ -4,80 +4,27 @@ export default {
   initialize(app) {
     if (app.constructor.name !== 'Class' || app.get('rootElement') !== '#custom-wizard-main') return;
 
-    const WizardApplicationRoute = requirejs('wizard/routes/application').default;
-    const findCustomWizard = requirejs('discourse/plugins/discourse-custom-wizard/wizard/models/custom').findCustomWizard;
     const Router = requirejs('wizard/router').default;
+    const ApplicationRoute = requirejs('wizard/routes/application').default;
     const ajax = requirejs('wizard/lib/ajax').ajax;
-    const StepRoute = requirejs('wizard/routes/step').default;
     const StepModel = requirejs('wizard/models/step').default;
     const WizardStep = requirejs('wizard/components/wizard-step').default;
     const getUrl = requirejs('discourse-common/lib/get-url').default;
     const FieldModel = requirejs('wizard/models/wizard-field').default;
 
+    Router.reopen({
+      rootURL: getUrl('/w/')
+    });
+
     Router.map(function() {
-      this.route('custom', { path: '/custom/:id' }, function() {
+      this.route('custom', { path: '/:wizard_id' }, function() {
         this.route('step', { path: '/steps/:step_id' });
       });
     });
 
-    WizardApplicationRoute.reopen({
-      model() {
-        const customParams = this.paramsFor('custom');
-        return findCustomWizard(customParams.id);
-      },
-
-      afterModel(model) {
-        return Ember.RSVP.hash({
-          info: ajax({
-            url: `/site/basic-info`,
-            type: 'GET',
-          }).then((result) => {
-            return model.set('siteInfo', result);
-          }),
-          settings: ajax({
-            url: `/site/settings`,
-            type: 'GET',
-          }).then((result) => {
-            Object.assign(Wizard.SiteSettings, result);
-          })
-        });
-      },
-
-      setupController(controller, model) {
-        Ember.run.scheduleOnce('afterRender', this, function(){
-          $('body.custom-wizard').css('background', model.get('background'));
-        });
-
-        controller.setProperties({
-          customWizard: true,
-          siteInfo: model.get('siteInfo')
-        });
-      }
-    });
-
-    StepModel.reopen({
-      save() {
-        const fields = {};
-        this.get('fields').forEach(f => fields[f.id] = f.value);
-        return ajax({
-          url: `/wizard/custom/${this.get('wizardId')}/steps/${this.get('id')}`,
-          type: 'PUT',
-          data: { fields }
-        }).catch(response => {
-          response.responseJSON.errors.forEach(err => this.fieldError(err.field, err.description));
-          throw response;
-        });
-      }
-    });
-
-    StepRoute.reopen({
-      afterModel(model) {
-        if (!model) {
-          return document.location = getUrl("/");
-        }
-
-        const wizard = this.modelFor('application');
-        return model.set("wizardId", wizard.id);
+    ApplicationRoute.reopen({
+      redirect() {
+        this.transitionTo('custom');
       }
     });
 
@@ -93,12 +40,17 @@ export default {
         };
       }.property('step.banner'),
 
+      handleMessage: function() {
+        const message = this.get('step.message');
+        this.sendAction('showMessage', message);
+      }.observes('step.message'),
+
       advance() {
         this.set('saving', true);
         this.get('step').save()
           .then(response => {
             if (this.get('finalStep')) {
-              document.location = getUrl("/");
+              this.sendAction('finished', response);
             } else {
               this.sendAction('goNext', response);
             }
@@ -111,7 +63,58 @@ export default {
         quit() {
           this.set('finalStep', true);
           this.send('nextStep');
+        },
+
+        showMessage(message) {
+          this.sendAction('showMessage', message);
         }
+      }
+    });
+
+    StepModel.reopen({
+      save() {
+        const wizardId = this.get('wizardId');
+        const fields = {};
+        this.get('fields').forEach(f => fields[f.id] = f.value);
+        return ajax({
+          url: `/w/${wizardId}/steps/${this.get('id')}`,
+          type: 'PUT',
+          data: { fields }
+        }).catch(response => {
+          if (response && response.responseJSON && response.responseJSON.errors) {
+            let wizardErrors = [];
+            response.responseJSON.errors.forEach(err => {
+              if (err.field === wizardId) {
+                wizardErrors.push(err.description);
+              } else if (err.field) {
+                this.fieldError(err.field, err.description);
+              } else if (err) {
+                wizardErrors.push(err);
+              }
+            });
+            if (wizardErrors.length) {
+              this.handleWizardError(wizardErrors.join('\n'));
+            }
+            throw response;
+          }
+
+          if (response && response.responseText) {
+            const responseText = response.responseText;
+            const start = responseText.indexOf('>') + 1;
+            const end = responseText.indexOf('plugins');
+            const message = responseText.substring(start, end);
+            this.handleWizardError(message);
+            throw message;
+          }
+        });
+      },
+
+      handleWizardError(message) {
+        this.set('message', {
+          state: 'error',
+          text: message
+        });
+        Ember.run.later(() => this.set('message', null), 6000);
       }
     });
 

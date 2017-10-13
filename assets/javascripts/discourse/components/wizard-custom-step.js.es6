@@ -7,15 +7,15 @@ export default Ember.Component.extend({
 
   @on('init')
   @observes('step')
-  setup() {
-    this._super(...arguments);
+  setCurrent() {
+    this.set('existingId', this.get('step.id'));
     const fields = this.get('step.fields') || [];
     const actions = this.get('step.actions') || [];
     this.set('currentField', fields[0]);
     this.set('currentAction', actions[0]);
   },
 
-  @computed('step.fields.[]', 'currentField')
+  @computed('step.fields.@each.id', 'currentField')
   fieldLinks(fields, current) {
     if (!fields) return;
 
@@ -24,7 +24,7 @@ export default Ember.Component.extend({
         const id = f.get('id');
         const label = f.get('label');
 
-        let link = { id, label: label || id };
+        let link = { id, label: label || id || 'new' };
 
         let classes = 'btn';
         if (current && f.get('id') === current.get('id')) {
@@ -38,7 +38,7 @@ export default Ember.Component.extend({
     });
   },
 
-  @computed('step.actions.[]', 'currentAction')
+  @computed('step.actions.@each.id', 'currentAction')
   actionLinks(actions, current) {
     if (!actions) return;
 
@@ -47,7 +47,7 @@ export default Ember.Component.extend({
         const id = a.get('id');
         const label = a.get('label');
 
-        let link = { id, label: label || id };
+        let link = { id, label: label || id || 'new' };
 
         let classes = 'btn';
         if (current && a.get('id') === current.get('id')) {
@@ -64,20 +64,14 @@ export default Ember.Component.extend({
   actions: {
     addField() {
       const fields = this.get('step.fields');
-      const newNum = fields.length + 1;
-      const field = Ember.Object.create({
-        id: `field-${newNum}`
-      });
+      const field = Ember.Object.create();
       fields.pushObject(field);
       this.set('currentField', field);
     },
 
     addAction() {
       const actions = this.get('step.actions');
-      const newNum = actions.length + 1;
-      const action = Ember.Object.create({
-        id: `action-${newNum}`
-      });
+      const action = Ember.Object.create();
       actions.pushObject(action);
       this.set('currentAction', action);
     },

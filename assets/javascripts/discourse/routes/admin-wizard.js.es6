@@ -2,15 +2,30 @@ import CustomWizard from '../models/custom-wizard';
 import { ajax } from 'discourse/lib/ajax';
 
 export default Discourse.Route.extend({
+  beforeModel() {
+    const param = this.paramsFor('adminWizard').wizard_id;
+    const wizards = this.modelFor('admin-wizards-custom');
+
+    if (wizards.length && (param === 'first' || param === 'last')) {
+      const wizard = wizards.get(`${param}Object`);
+      if (wizard) {
+        this.transitionTo('adminWizard', wizard.id.dasherize());
+      }
+    }
+  },
+
   model(params) {
-    if (params.wizard_id === 'new') {
+    const wizardId = params.wizard_id;
+
+    if (wizardId === 'new') {
       this.set('newWizard', true);
       return CustomWizard.create();
     };
     this.set('newWizard', false);
 
-    const wizard = this.modelFor('admin-wizards-custom').findBy('id', params.wizard_id.underscore());
-    if (!wizard) return this.transitionTo('adminWizardsCustom.index');
+    const wizard = this.modelFor('admin-wizards-custom').findBy('id', wizardId.underscore());
+
+    if (!wizard) return this.transitionTo('adminWizard', 'new');
 
     return wizard;
   },

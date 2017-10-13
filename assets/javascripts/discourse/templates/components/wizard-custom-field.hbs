@@ -1,9 +1,18 @@
 <div class="setting">
   <div class="setting-label">
-    <h3>{{i18n 'admin.wizard.translation'}}</h3>
+    <h3>{{i18n 'admin.wizard.id'}}</h3>
   </div>
   <div class="setting-value">
-    {{input name="translation_key" value=field.translation_key placeholderKey="admin.wizard.field.translation_placeholder"}}
+    {{input name="id" value=field.id placeholderKey="admin.wizard.id_placeholder" disabled=existingId}}
+  </div>
+</div>
+
+<div class="setting">
+  <div class="setting-label">
+    <h3>{{i18n 'admin.wizard.key'}}</h3>
+  </div>
+  <div class="setting-value">
+    {{input name="key" value=field.key placeholderKey="admin.wizard.key_placeholder"}}
   </div>
 </div>
 
@@ -12,7 +21,7 @@
     <h3>{{i18n 'admin.wizard.field.label'}}</h3>
   </div>
   <div class="setting-value">
-    {{input name="label" value=field.label}}
+    {{input name="label" value=field.label placeholder=(i18n "admin.wizard.custom_text_placeholder")}}
   </div>
 </div>
 
@@ -21,13 +30,13 @@
     <h3>{{i18n 'admin.wizard.field.description'}}</h3>
   </div>
   <div class="setting-value">
-    {{textarea name="description" value=field.description}}
+    {{textarea name="description" value=field.description placeholder=(i18n "admin.wizard.custom_text_placeholder")}}
   </div>
 </div>
 
 <div class="setting">
   <div class="setting-label">
-    <h3>{{i18n 'admin.wizard.field.type'}}</h3>
+    <h3>{{i18n 'admin.wizard.type'}}</h3>
   </div>
   <div class="setting-value">
     {{combo-box value=field.type content=types}}
@@ -44,17 +53,57 @@
   </div>
 </div>
 
+{{#if isInput}}
+  <div class="setting">
+    <div class="setting-label">
+      <h3>{{i18n 'admin.wizard.field.min_length'}}</h3>
+    </div>
+    <div class="setting-value">
+      {{input type="number" name="min_length" value=field.min_length placeholder=(i18n 'admin.wizard.field.min_length_placeholder')}}
+    </div>
+  </div>
+{{/if}}
+
 {{#if isDropdown}}
   <div class="wizard-dropdown-choices">
-    <div class="wizard-header small">
+    <div class="wizard-header medium">
       {{i18n 'admin.wizard.field.choices_label'}}
     </div>
-    {{#each dropdownChoices as |c|}}
-      <span class='wizard-dropdown-choice'>
-        {{input type='text' value=c.label}}
-      </span>
-      {{d-button action='removeChoice' actionParam=c icon='times'}}
-    {{/each}}
-    {{d-button action='addChoice' label='admin.wizard.add' icon='plus'}}
+    <div class="setting">
+      <div class="wizard-header small">
+        {{i18n 'admin.wizard.field.choices_translation'}}
+      </div>
+      <div class="setting-value">
+        {{input name="key" value=field.choices_key placeholderKey="admin.wizard.key_placeholder"}}
+      </div>
+    </div>
+    <div class="setting full">
+      <div class="wizard-header small">
+        {{i18n 'admin.wizard.field.choices_preset.label'}}
+      </div>
+      {{combo-box value=field.choices_preset content=presetChoices none='admin.wizard.field.choices_preset.none'}}
+      <label>{{i18n 'admin.wizard.field.choices_preset.filter'}}</label>
+      {{#each presetFilters as |f|}}
+        <span class='custom-input'>
+          {{input type="text" value=f.key placeholder=(i18n 'admin.wizard.field.choices_preset.key')}}
+          {{input type="text" value=f.value placeholder=(i18n 'admin.wizard.field.choices_preset.value')}}
+        </span>
+        {{d-button action='removeFilter' actionParam=f icon='times'}}
+      {{/each}}
+      <div>{{d-button action='addFilter' label='admin.wizard.add' icon='plus'}}</div>
+    </div>
+    <div class="setting full">
+      <div class="wizard-header small">
+        {{i18n 'admin.wizard.field.choices_custom'}}
+      </div>
+      {{#each dropdownChoices as |c|}}
+        <span class='custom-input'>
+          {{input type='text' value=c.value placeholder=(i18n 'admin.wizard.field.choice.value')}}
+          {{input type='text' value=c.label placeholder=(i18n 'admin.wizard.field.choice.label')}}
+        </span>
+        {{d-button action='removeChoice' actionParam=c icon='times'}}
+      {{/each}}
+      <div>{{d-button action='addChoice' label='admin.wizard.add' icon='plus'}}</div>
+    </div>
   </div>
 {{/if}}

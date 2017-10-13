@@ -1,12 +1,17 @@
 class CustomWizard::Builder
 
+  attr_accessor :wizard, :updater, :submission
+
   def initialize(user, wizard_id)
     data = PluginStore.get('custom_wizard', wizard_id)
     @custom_wizard = CustomWizard::Wizard.new(data)
-    @wizard = Wizard.new(user)
-    @wizard.id = wizard_id
-    @wizard.save_submissions = data['save_submissions']
-    @wizard.background = data["background"]
+    @wizard = Wizard.new(user,
+      id: wizard_id,
+      save_submissions: data['save_submissions'],
+      multiple_submissions: data['multiple_submissions'],
+      background: data["background"],
+      custom: true
+    )
   end
 
   def self.sorted_handlers
@@ -23,99 +28,152 @@ class CustomWizard::Builder
   end
 
   def build
-    @custom_wizard.steps.each do |s|
-      @wizard.append_step(s['id']) do |step|
-        step.title = s['title'] if s['title']
-        step.description = s['description'] if s['description']
-        step.banner = s['banner'] if s['banner']
-        step.translation_key = s['translation_key'] if s['translation_key']
+    unless (@wizard.completed? && !@custom_wizard.respond_to?(:multiple_submissions)) ||
+           !@custom_wizard.steps
+      @custom_wizard.steps.each do |s|
+        @wizard.append_step(s['id']) do |step|
+          step.title = s['title'] if s['title']
+          step.description = s['description'] if s['description']
+          step.banner = s['banner'] if s['banner']
+          step.key = s['key'] if s['key']
 
-        s['fields'].each do |f|
-          params = {
-            id: f['id'],
-            type: f['type'],
-            required: f['required']
-          }
+          if s['fields'] && s['fields'].length
+            s['fields'].each do |f|
+              params = {
+                id: f['id'],
+                type: f['type'],
+                required: f['required']
+              }
 
-          params[:label] = f['label'] if f['label']
-          params[:description] = f['description'] if f['description']
-          params[:translation_key] = f['translation_key'] if f['translation_key']
+              params[:label] = f['label'] if f['label']
+              params[:description] = f['description'] if f['description']
+              params[:key] = f['key'] if f['key']
 
-          field = step.add_field(params)
-
-          if f['type'] == 'dropdown'
-            f['choices'].each do |c|
-              field.add_choice(c['id'], label: c['label'])
-            end
-          end
-        end
-
-        step.on_update do |updater|
-
-          @updater = updater
-          input = updater.fields
-          user = @wizard.user
-
-          if @wizard.save_submissions && input
-            store_key = @wizard.id
-            submissions = Array.wrap(PluginStore.get("custom_wizard_submissions", store_key))
-            submission = {}
-
-            if submissions.last && submissions.last['completed'] === false
-              submission = submissions.last
-              submissions.pop(1)
-            end
-
-            submission['user_id'] = @wizard.user.id
-            submission['completed'] = updater.step.next.nil?
-
-            input.each do |key, value|
-              submission[key] = value
-            end
-
-            submissions.push(submission)
-
-            PluginStore.set('custom_wizard_submissions', store_key, submissions)
-          end
-
-          if s['actions'] && s['actions'].length
-            s['actions'].each do |a|
-              if a['type'] === 'create_topic'
-                creator = PostCreator.new(user,
-                                title: input[a['title']],
-                                raw: input[a['post']],
-                                category: a['category_id'],
-                                skip_validations: true)
-
-                post = creator.create
-                if creator.errors.present?
-                  raise StandardError, creator.errors.full_messages.join(" ")
-                end
-
-                updater.result = { topic_id: post.topic.id }
+              submissions = Array.wrap(PluginStore.get("custom_wizard_submissions", @wizard.id))
+              if submissions.last && submissions.last['completed'] === false
+                @submission = submissions.last
+                params[:value] = @submission[f['id']] if @submission[f['id']]
               end
 
-              if a['type'] === 'send_message'
-                creator = PostCreator.new(user,
-                                title: input[a['title']],
-                                raw: input[a['post']],
-                                archetype: Archetype.private_message,
-                                target_usernames: a['username'])
+              field = step.add_field(params)
 
-                post = creator.create
+              if f['type'] === 'dropdown'
+                if f['choices'] && f['choices'].length > 0
+                  f['choices'].each do |c|
+                    field.add_choice(c['value'], label: c['label'])
+                  end
+                elsif f['choices_key'] && f['choices_key'].length > 0
+                  choices = I18n.t(f['choices_key'])
+                  if choices.is_a?(Hash)
+                    choices.each do |k, v|
+                      field.add_choice(k, label: v)
+                    end
+                  end
+                elsif f['choices_preset'] && f['choices_preset'].length > 0
+                  objects = []
 
-                if creator.errors.present?
-                  raise StandardError, creator.errors.full_messages.join(" ")
+                  if f['choices_preset'] === 'categories'
+                    objects = Site.new(Guardian.new(@wizard.user)).categories
+                  end
+
+                  if f['choices_filters'] && f['choices_filters'].length > 0
+                    f['choices_filters'].each do |f|
+                      objects.reject! { |o| o[f['key']] != f['value'] }
+                    end
+                  end
+
+                  if objects.length > 0
+                    objects.each do |o|
+                      field.add_choice(o.id, label: o.name)
+                    end
+                  end
                 end
-
-                updater.result = { topic_id: post.topic.id }
               end
             end
           end
 
-          CustomWizard::Builder.step_handlers.each do |handler|
-            if handler[:wizard_id] == @wizard.id
-              handler[:block].call(self)
+          step.on_update do |updater|
+            @updater = updater
+            input = updater.fields
+            user = @wizard.user
+
+            if s['fields'] && s['fields'].length
+              s['fields'].each do |f|
+                value = input[f['id']]
+                min_length = f['min_length']
+                if min_length && value.is_a?(String) && value.length < min_length.to_i
+                  label = f['label'] || I18n.t("#{f['key']}.label")
+                  updater.errors.add(f['id'].to_s, I18n.t('wizard.field.too_short', label: label, min: min_length.to_i))
+                end
+              end
+            end
+
+            next if updater.errors.any?
+
+            CustomWizard::Builder.step_handlers.each do |handler|
+              if handler[:wizard_id] == @wizard.id
+                handler[:block].call(self)
+              end
+            end
+
+            next if updater.errors.any?
+
+            if s['actions'] && s['actions'].length
+              s['actions'].each do |a|
+                if a['type'] === 'create_topic'
+                  creator = PostCreator.new(user,
+                                  title: input[a['title']],
+                                  raw: input[a['post']],
+                                  category: a['category_id'],
+                                  skip_validations: true)
+
+                  post = creator.create
+                  if creator.errors.present?
+                    updater.errors.add(:create_topic, creator.errors.full_messages.join(" "))
+                  else
+                    updater.result = { topic_id: post.topic.id }
+                  end
+                end
+
+                if a['type'] === 'send_message'
+                  creator = PostCreator.new(user,
+                                  title: input[a['title']],
+                                  raw: input[a['post']],
+                                  archetype: Archetype.private_message,
+                                  target_usernames: a['username'])
+
+                  post = creator.create
+
+                  if creator.errors.present?
+                    updater.errors.add(:send_message, creator.errors.full_messages.join(" "))
+                  else
+                    updater.result = { topic_id: post.topic.id }
+                  end
+                end
+              end
+            end
+
+            if @wizard.save_submissions && updater.errors.empty?
+              store_key = @wizard.id
+              submissions = Array.wrap(PluginStore.get("custom_wizard_submissions", store_key))
+              submission = {}
+
+              if submissions.last && submissions.last['completed'] === false
+                submission = submissions.last
+                submissions.pop(1)
+              end
+
+              submission['user_id'] = @wizard.user.id
+              submission['completed'] = updater.step.next.nil?
+
+              if input
+                input.each do |key, value|
+                  submission[key] = value
+                end
+              end
+
+              submissions.push(submission)
+              PluginStore.set('custom_wizard_submissions', store_key, submissions)
             end
           end
         end

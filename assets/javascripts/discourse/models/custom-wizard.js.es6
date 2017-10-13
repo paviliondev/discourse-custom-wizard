@@ -1,90 +1,90 @@
-import { observes, on } from 'ember-addons/ember-computed-decorators';
 import { ajax } from 'discourse/lib/ajax';
 
 const CustomWizard = Discourse.Model.extend({
-  @on('init')
-  setup() {
-    const id = this.get('id');
-    if (id) this.set('existingId', id);
-  },
-
-  @observes('name')
-  updateId() {
-    const name = this.get('name');
-    this.set('id', name.underscore());
-  },
-
   save() {
-    const stepsObj = this.get('steps');
+    return new Ember.RSVP.Promise((resolve, reject) => {
+      const id = this.get('id');
+      if (!id || !id.underscore()) reject('id_required');
+
+      let wizard = { id: id.underscore() };
+
+      const steps = this.get('steps');
+      if (steps.length) wizard['steps'] = this.buildSteps(steps, reject);
+
+      const name = this.get('name');
+      if (name) wizard['name'] = name;
+
+      const background = this.get('background');
+      if (background) wizard['background'] = background;
+
+      const save_submissions = this.get('save_submissions');
+      if (save_submissions) wizard['save_submissions'] = save_submissions;
+
+      const multiple_submissions = this.get('multiple_submissions');
+      if (multiple_submissions) wizard['multiple_submissions'] = multiple_submissions;
+
+      ajax("/admin/wizards/custom/save", {
+        type: 'PUT',
+        data: {
+          wizard: JSON.stringify(wizard)
+        }
+      }).then((result) => resolve(result));
+    });
+  },
+
+  buildSteps(stepsObj, reject) {
     let steps = [];
 
-    stepsObj.forEach((s) => {
+    stepsObj.some((s) => {
+      if (!s.id || !s.id.underscore()) reject('id_required');
 
-      if (!s.title && !s.translation_key) return;
-
-      let step = {
-        id: (s.title || s.translation_key.split('.').pop()).underscore(),
-        fields: [],
-        actions: []
-      };
+      let step = { id: s.id.underscore() };
 
       if (s.title) step['title'] = s.title;
-      if (s.translation_key) step['translation_key'] = s.translation_key;
+      if (s.key) step['key'] = s.key;
       if (s.banner) step['banner'] = s.banner;
       if (s.description) step['description'] = s.description;
 
       const fields = s.get('fields');
-      fields.forEach((f) => {
-        const fl = f.get('label');
-        const fkey = f.get('translation_key');
+      if (fields.length) {
+        step['fields'] = [];
 
-        if (!fl && !fkey) return;
+        fields.some((f) => {
+          let id = f.get('id');
 
-        f.set('id', (fl || fkey.split('.').pop()).underscore());
+          if (!id || !id.underscore()) reject('id_required');
+          f.set('id', id.underscore());
 
-        if (f.get('type') === 'dropdown') {
-          const choices = f.get('choices');
+          if (f.get('type') === 'dropdown') {
+            const choices = f.get('choices');
+            if (choices && choices.length < 1 && !f.get('choices_key') && !f.get('choices_categories')) {
+              reject('field.need_choices');
+            }
+          }
 
-          choices.forEach((c) => {
-            const cl = c.get('label');
-            const ckey = c.get('translation_key');
+          step['fields'].push(f);
+        });
+      }
 
-            if (!cl && !ckey) return;
+      const actions = s.actions;
+      if (actions.length) {
+        step['actions'] = [];
 
-            c.set('id', (cl || ckey.split('.').pop()).underscore());
-          });
-        }
+        actions.some((a) => {
+          let id = a.get('id');
+          if (!id || !id.underscore()) reject('id_required');
 
-        step['fields'].push(f);
-      });
+          a.set('id', id.underscore());
 
-      s.actions.forEach((a) => {
-        const al = a.get('label');
-        if (!al) return;
-        a.set('id', al.underscore());
-        step['actions'].push(a);
-      });
+          step['actions'].push(a);
+        });
+
+      }
 
       steps.push(step);
     });
 
-    const id = this.get('id');
-    const name = this.get('name');
-    const background = this.get('background');
-    const save_submissions = this.get('save_submissions');
-    let wizard = { id, name, background, save_submissions, steps };
-
-    const existingId = this.get('existingId');
-    if (existingId && existingId !== id) {
-      wizard['existing_id'] = existingId;
-    };
-
-    return ajax("/admin/wizards/custom/save", {
-      type: 'PUT',
-      data: {
-        wizard: JSON.stringify(wizard)
-      }
-    });
+    return steps;
   },
 
   remove() {
@@ -121,35 +121,49 @@ CustomWizard.reopenClass({
 
     if (w) {
       props['id'] = w.id;
+      props['existingId'] = true;
       props['name'] = w.name;
       props['background'] = w.background;
       props['save_submissions'] = w.save_submissions;
+      props['multiple_submissions'] = w.multiple_submissions;
 
-      if (w.steps) {
+      if (w.steps && w.steps.length) {
         w.steps.forEach((s) => {
-          let fields = Ember.A();
+          // clean empty strings
+          Object.keys(s).forEach((key) => (s[key] === '') && delete s[key]);
 
-          s.fields.forEach((f) => {
-            let field = Ember.Object.create(f);
-            let choices = Ember.A();
+          let fields =  Ember.A();
 
-            f.choices.forEach((c) => {
-              choices.pushObject(Ember.Object.create(c));
+          if (s.fields && s.fields.length) {
+            s.fields.forEach((f) => {
+              Object.keys(f).forEach((key) => (f[key] === '') && delete f[key]);
+
+              let field = Ember.Object.create(f);
+
+              if (f.choices) {
+                let choices = Ember.A();
+
+                f.choices.forEach((c) => {
+                  choices.pushObject(Ember.Object.create(c));
+                });
+
+                field.set('choices', choices);
+              }
+
+              fields.pushObject(field);
             });
-
-            field.set('choices', choices);
-
-            fields.pushObject(field);
-          });
+          }
 
           let actions = Ember.A();
-          s.actions.forEach((a) => {
-            actions.pushObject(Ember.Object.create(a));
-          });
+          if (s.actions && s.actions.length) {
+            s.actions.forEach((a) => {
+              actions.pushObject(Ember.Object.create(a));
+            });
+          }
 
           steps.pushObject(Ember.Object.create({
             id: s.id,
-            translation_key: s.translation_key,
+            key: s.key,
             title: s.title,
             description: s.description,
             banner: s.banner,
@@ -163,6 +177,7 @@ CustomWizard.reopenClass({
       props['name'] = '';
       props['background'] = '';
       props['save_submissions'] = true;
+      props['multiple_submissions'] = false;
       props['steps'] = Ember.A();
     };
 

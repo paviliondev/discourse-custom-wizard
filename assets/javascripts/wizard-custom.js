@@ -1,5 +1,4 @@
 //= require ./wizard/custom-wizard
-//= require_tree ./wizard/components
 //= require_tree ./wizard/controllers
 //= require_tree ./wizard/helpers
 //= require_tree ./wizard/initializers

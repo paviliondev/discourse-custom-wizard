@@ -1,15 +1,14 @@
 import { default as computed } from 'ember-addons/ember-computed-decorators';
 
 export default Ember.Controller.extend({
-
-  @computed('model.steps.[]', 'currentStep')
+  @computed('model.steps.@each.id', 'currentStep')
   stepLinks(steps, currentStep) {
     return steps.map((s) => {
       if (s) {
         const id = s.get('id');
         const title = s.get('title');
 
-        let link = { id, title: title || id };
+        let link = { id, title: title || id || 'new' };
 
         let classes = 'btn';
         if (currentStep && id === currentStep.get('id')) {
@@ -25,17 +24,27 @@ export default Ember.Controller.extend({
 
   @computed('model.id', 'model.name')
   wizardUrl(wizardId) {
-    return window.location.origin + '/wizard/custom/' + Ember.String.dasherize(wizardId);
+    return window.location.origin + '/w/' + Ember.String.dasherize(wizardId);
   },
 
   actions: {
     save() {
-      this.get('model').save().then(() => {
+      this.setProperties({
+        saving: true,
+        error: null
+      });
+      const wizard = this.get('model');
+      wizard.save().then(() => {
+        this.set('saving', false);
         if (this.get('newWizard')) {
           this.send("refreshAllWizards");
         } else {
           this.send("refreshWizard");
         }
+      }).catch((error) => {
+        this.set('saving', false);
+        this.set('error', I18n.t(`admin.wizard.error.${error}`));
+        Ember.run.later(() => this.set('error', null), 10000);
       });
     },
 
@@ -47,11 +56,9 @@ export default Ember.Controller.extend({
 
     addStep() {
       const steps = this.get('model.steps');
-      const newNum = steps.length + 1;
       const step = Ember.Object.create({
         fields: Ember.A(),
-        actions: Ember.A(),
-        id: `step-${newNum}`
+        actions: Ember.A()
       });
       steps.pushObject(step);
       this.set('currentStep', step);

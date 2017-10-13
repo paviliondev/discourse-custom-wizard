@@ -9,13 +9,16 @@ const CustomWizard = Ember.Object.extend({
 });
 
 export function findCustomWizard(wizardId) {
-  return ajax({ url: `/wizard/custom/${wizardId}` }).then(result => {
+  return ajax({ url: `/w/${wizardId}` }).then(result => {
     const wizard = result.wizard;
-    wizard.steps = wizard.steps.map(step => {
-      const stepObj = Step.create(step);
-      stepObj.fields = stepObj.fields.map(f => WizardField.create(f));
-      return stepObj;
-    });
+
+    if (!wizard.completed) {
+      wizard.steps = wizard.steps.map(step => {
+        const stepObj = Step.create(step);
+        stepObj.fields = stepObj.fields.map(f => WizardField.create(f));
+        return stepObj;
+      });
+    }
 
     return CustomWizard.create(wizard);
   });
