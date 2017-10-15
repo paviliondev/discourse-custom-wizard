@@ -39,7 +39,7 @@ class CustomWizard::AdminController < ::ApplicationController
   def custom_wizards
     rows = PluginStoreRow.where(plugin_name: 'custom_wizard').order(:id)
 
-    wizards = [*rows].map { |r| CustomWizard::Wizard.new(r.value) }
+    wizards = [*rows].map { |r| CustomWizard::Template.new(r.value) }
 
     render json: success_json.merge(wizards: wizards)
   end

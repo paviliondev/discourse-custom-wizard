@@ -4,6 +4,7 @@ class CustomWizard::WizardController < ::ApplicationController
   end
 
   def index
+    puts "USING PROPER CONTROLLER"
     respond_to do |format|
       format.json do
         wizard = CustomWizard::Builder.new(current_user, params[:wizard_id].underscore).build

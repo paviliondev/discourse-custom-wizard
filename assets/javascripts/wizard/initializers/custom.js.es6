@@ -25,7 +25,9 @@ export default {
     ApplicationRoute.reopen({
       redirect() {
         this.transitionTo('custom');
-      }
+      },
+
+      model() {}
     });
 
     WizardStep.reopen({

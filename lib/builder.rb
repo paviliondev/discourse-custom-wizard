@@ -4,13 +4,12 @@ class CustomWizard::Builder
 
   def initialize(user, wizard_id)
     data = PluginStore.get('custom_wizard', wizard_id)
-    @custom_wizard = CustomWizard::Wizard.new(data)
-    @wizard = Wizard.new(user,
+    @template = CustomWizard::Template.new(data)
+    @wizard = CustomWizard::Wizard.new(user,
       id: wizard_id,
       save_submissions: data['save_submissions'],
       multiple_submissions: data['multiple_submissions'],
-      background: data["background"],
-      custom: true
+      background: data["background"]
     )
   end
 
@@ -28,9 +27,9 @@ class CustomWizard::Builder
   end
 
   def build
-    unless (@wizard.completed? && !@custom_wizard.respond_to?(:multiple_submissions)) ||
-           !@custom_wizard.steps
-      @custom_wizard.steps.each do |s|
+    unless (@wizard.completed? && !@template.respond_to?(:multiple_submissions)) ||
+           !@template.steps
+      @template.steps.each do |s|
         @wizard.append_step(s['id']) do |step|
           step.title = s['title'] if s['title']
           step.description = s['description'] if s['description']
@@ -179,6 +178,8 @@ class CustomWizard::Builder
         end
       end
     end
+
+    puts "BUILDER: #{@wizard.respond_to?(:multiple_submissions)}"
 
     @wizard
   end
