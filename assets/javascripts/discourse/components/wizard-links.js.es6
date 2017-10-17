@@ -34,8 +34,9 @@ export default Ember.Component.extend({
     return items.map((item) => {
       if (item) {
         const id = item.get('id');
-        const label = item.get('label') || item.get('title');
-        let link = { id, label: label || id };
+        const type = this.get('type');
+        const label = type === 'action' ? id : (item.get('label') || item.get('title') || id);
+        let link = { id, label };
 
         let classes = 'btn';
         if (current && item.get('id') === current.get('id')) {
@@ -52,8 +53,8 @@ export default Ember.Component.extend({
   actions: {
     add() {
       const items = this.get('items');
-      const newId = `step_${items.length + 1}`;
       const type = this.get('type');
+      const newId = `${type}_${items.length + 1}`;
       let params = { id: newId, isNew: true };
 
       if (type === 'step') {
@@ -64,6 +65,7 @@ export default Ember.Component.extend({
       const newItem = Ember.Object.create(params);
       items.pushObject(newItem);
       this.set('current', newItem);
+      this.sendAction('isNew');
     },
 
     change(itemId) {

@@ -12,6 +12,7 @@ class CustomWizard::Builder
       background: data["background"],
       name: data["name"]
     )
+    @submissions = Array.wrap(PluginStore.get("custom_wizard_submissions", wizard_id))
   end
 
   def self.sorted_handlers
@@ -49,10 +50,9 @@ class CustomWizard::Builder
               params[:description] = f['description'] if f['description']
               params[:key] = f['key'] if f['key']
 
-              submissions = Array.wrap(PluginStore.get("custom_wizard_submissions", @wizard.id))
-              if submissions.last && submissions.last['completed'] === false
-                @submission = submissions.last
-                params[:value] = @submission[f['id']] if @submission[f['id']]
+              if @submissions.last && @submissions.last['completed'] === false
+                submission = @submissions.last
+                params[:value] = submission[f['id']] if submission[f['id']]
               end
 
               field = step.add_field(params)
@@ -94,12 +94,13 @@ class CustomWizard::Builder
 
           step.on_update do |updater|
             @updater = updater
-            input = updater.fields
+            submission = @submissions.last || {}
+            step_input = updater.fields || {}
             user = @wizard.user
 
             if s['fields'] && s['fields'].length
               s['fields'].each do |f|
-                value = input[f['id']]
+                value = step_input[f['id']]
                 min_length = f['min_length']
                 if min_length && value.is_a?(String) && value.length < min_length.to_i
                   label = f['label'] || I18n.t("#{f['key']}.label")
@@ -121,17 +122,43 @@ class CustomWizard::Builder
             if s['actions'] && s['actions'].length
               s['actions'].each do |a|
                 if a['type'] === 'create_topic'
-                  title = input[a['title']]
-                  post = input[a['post']]
+                  title = submission[a['title']]
+                  post = submission[a['post']]
 
-                  if title && post
+                  if title
                     params = {
                       title: title,
                       raw: post,
                       skip_validations: true
                     }
                     params[:category] = a['category_id'] if a['category_id']
-                    params[:featured_link] = input[a['featured_link']] if input[a['featured_link']]
+
+                    topic_custom_fields = {}
+
+                    if a['add_fields']
+                      a['add_fields'].each do |f|
+                        value = submission[f['value']]
+                        key = f['key']
+
+                        if key.include?('custom_fields')
+                          keyArr = key.split('.')
+
+                          if keyArr.length === 3
+                            custom_key = keyArr.last
+                            type = keyArr.first
+
+                            if type === 'topic'
+                              topic_custom_fields[custom_key] = value
+                            elsif type === 'post'
+                              params[:custom_fields] ||= {}
+                              params[:custom_fields][custom_key.to_sym] = value
+                            end
+                          end
+                        else
+                          params[key.to_sym] = value
+                        end
+                      end
+                    end
 
                     creator = PostCreator.new(user, params)
                     post = creator.create
@@ -139,14 +166,20 @@ class CustomWizard::Builder
                     if creator.errors.present?
                       updater.errors.add(:create_topic, creator.errors.full_messages.join(" "))
                     else
+                      if topic_custom_fields.present?
+                        topic_custom_fields.each do |k, v|
+                          post.topic.custom_fields[k] = v
+                        end
+                        post.topic.save_custom_fields(true)
+                      end
                       updater.result = { topic_id: post.topic.id }
                     end
                   end
                 end
 
                 if a['type'] === 'send_message'
-                  title = input[a['title']]
-                  post = input[a['post']]
+                  title = submission[a['title']]
+                  post = submission[a['post']]
 
                   if title && post
                     creator = PostCreator.new(user,
@@ -160,49 +193,41 @@ class CustomWizard::Builder
                     if creator.errors.present?
                       updater.errors.add(:send_message, creator.errors.full_messages.join(" "))
                     else
-                      updater.result = { topic_id: post.topic.id }
+                      updater.result = { topic_id: post.topic_id }
                     end
                   end
                 end
 
                 if a['type'] === 'update_profile' && a['profile_updates'].length
-                  updater = UserUpdater.new(user, user)
-                  attributes = a['profile_updates'].map do |pu|
-                    { pu['profile_field'].to_sym => input[pu['wizard_field']] }
+                  user_updater = UserUpdater.new(user, user)
+                  attributes = {}
+                  a['profile_updates'].each do |pu|
+                    attributes[pu['key'].to_sym] = submission[pu['value']]
                   end
-                  updater.update(attributes)
+                  user_updater.update(attributes) if attributes.present?
                 end
               end
             end
 
             if @wizard.save_submissions && updater.errors.empty?
-              store_key = @wizard.id
-              submissions = Array.wrap(PluginStore.get("custom_wizard_submissions", store_key))
-              submission = {}
-
-              if submissions.last && submissions.last['completed'] === false
-                submission = submissions.last
-                submissions.pop(1)
-              end
+              @submissions.pop(1) if submission && submission['completed'] === false
 
               submission['user_id'] = @wizard.user.id
               submission['completed'] = updater.step.next.nil?
 
-              if input
-                input.each do |key, value|
+              if step_input
+                step_input.each do |key, value|
                   submission[key] = value
                 end
               end
 
-              submissions.push(submission)
-              PluginStore.set('custom_wizard_submissions', store_key, submissions)
+              @submissions.push(submission)
+              PluginStore.set('custom_wizard_submissions', @wizard.id, @submissions)
             end
           end
         end
       end
     end
-
-    puts "BUILDER: #{@wizard.respond_to?(:multiple_submissions)}"
 
     @wizard
   end

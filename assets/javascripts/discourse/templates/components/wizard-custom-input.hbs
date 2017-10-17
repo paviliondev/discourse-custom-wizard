@@ -1,0 +1,16 @@
+{{#each inputs as |in|}}
+  <span class='custom-input'>
+    {{#if keyContent}}
+      {{combo-box value=in.key content=keyContent nameProperty="label" none=noneKey}}
+    {{else}}
+      {{input type="text" value=in.key placeholder=(i18n 'admin.wizard.key')}}
+    {{/if}}
+    {{#if valueContent}}
+      {{combo-box value=in.value content=valueContent nameProperty="label" none=noneValue}}
+    {{else}}
+      {{input type="text" value=in.value placeholder=(i18n 'admin.wizard.value')}}
+    {{/if}}
+  </span>
+  {{d-button action='remove' actionParam=in icon='times'}}
+{{/each}}
+<div>{{d-button action='add' label='admin.wizard.add' icon='plus'}}</div>

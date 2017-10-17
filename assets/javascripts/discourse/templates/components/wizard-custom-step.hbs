@@ -43,7 +43,7 @@
   </div>
 </div>
 
-{{wizard-links type="field" current=currentField itesm=step.fields}}
+{{wizard-links type="field" current=currentField items=step.fields}}
 {{#if currentField}}
   {{wizard-custom-field field=currentField types=fieldTypes removeField="removeField"}}
 {{/if}}

@@ -20,11 +20,13 @@ en:
         add: "Add"
         url: "Url"
         key: "Key"
+        value: "Value"
         id: "Id"
         id_placeholder: "Underscored. Cannot be changed."
         key_placeholder: "Translation key"
         custom_text_placeholder: "Overrides translation"
         type: "Type"
+        none: "Make a selection"
         error:
           name_required: "Wizards must have a name."
           steps_required: "Wizards must have at least one step."
@@ -47,11 +49,8 @@ en:
           choices_custom: "Custom"
           choices_preset:
             label: "Preset"
-            none: "Select a data type"
             categories: "Categories"
             filter: "Filter"
-            key: "Key"
-            value: "Value"
           choice:
             value: "Value"
             label: "Label"
@@ -71,7 +70,7 @@ en:
           create_topic:
             label: "Create Topic"
             category: "Category"
-            featured_link: "Featured Link"
+            add_fields: "Add Fields"
           update_profile:
             label: "Update Profile"
             wizard_field: "Wizard Field"
@@ -80,3 +79,33 @@ en:
   wizard_js:
     wizard:
       completed: "You have completed this wizard."
+      location:
+        name:
+          title: "Name (optional)"
+          desc: "e.g. P. Sherman Dentist"
+        street:
+          title: "Number and Street"
+          desc: "e.g. 42 Wallaby Way"
+        postalcode:
+          title: "Postal Code (Zip)"
+          desc: "e.g. 2548"
+        city:
+          title: "City, Town or Village"
+          desc: "e.g. Sydney"
+        country_code:
+          title: "Country"
+          placeholder: "Select a Country"
+        query:
+          title: "Address"
+          desc: "e.g. 42 Wallaby Way, Sydney."
+        geo:
+          desc: "Locations provided by {{provider}}"
+          btn:
+            label: "Find Location"
+          results: "Locations"
+          no_results: "No results. Please double check the spelling."
+          show_map: "Show Map"
+        validation:
+          city: "Please enter a city or town."
+          countrycode: "Please enter a country."
+          geo_location: "Search and select a result."

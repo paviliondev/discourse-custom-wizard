@@ -1,6 +1,5 @@
 import { findCustomWizard } from '../models/custom';
 import { ajax } from 'wizard/lib/ajax';
-import { getUrl } from 'discourse-common/lib/get-url';
 
 export default Ember.Route.extend({
   model(params) {
@@ -25,13 +24,5 @@ export default Ember.Route.extend({
       customWizard: true,
       logoUrl: Wizard.SiteSettings.logo_small_url
     });
-  },
-
-  actions: {
-    finished(result) {
-      let url = "/";
-      if (result.topic_id) url += `t/${result.topic_id}`;
-      document.location.replace(getUrl(url));
-    }
   }
 });

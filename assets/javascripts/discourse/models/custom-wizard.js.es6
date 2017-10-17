@@ -62,6 +62,8 @@ const CustomWizard = Discourse.Model.extend({
             }
           }
 
+          delete f.isNew;
+
           step['fields'].push(f);
         });
       }
@@ -75,6 +77,8 @@ const CustomWizard = Discourse.Model.extend({
           if (!id || !id.underscore()) reject('id_required');
 
           a.set('id', id.underscore());
+
+          delete a.isNew;
 
           step['actions'].push(a);
         });
@@ -138,7 +142,8 @@ CustomWizard.reopenClass({
             s.fields.forEach((f) => {
               Object.keys(f).forEach((key) => (f[key] === '') && delete f[key]);
 
-              let field = Ember.Object.create(f);
+              const fieldParams = { isNew: false };
+              let field = Ember.Object.create(Object.assign(f, fieldParams));
 
               if (f.choices) {
                 let choices = Ember.A();
@@ -157,7 +162,9 @@ CustomWizard.reopenClass({
           let actions = Ember.A();
           if (s.actions && s.actions.length) {
             s.actions.forEach((a) => {
-              actions.pushObject(Ember.Object.create(a));
+              const actionParams = { isNew: false };
+              const action = Ember.Object.create(Object.assign(a, actionParams));
+              actions.pushObject(action);
             });
           }
 
@@ -168,7 +175,8 @@ CustomWizard.reopenClass({
             description: s.description,
             banner: s.banner,
             fields,
-            actions
+            actions,
+            isNew: false
           }));
         });
       };
