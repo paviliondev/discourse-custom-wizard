@@ -9,7 +9,8 @@ class CustomWizard::Builder
       id: wizard_id,
       save_submissions: data['save_submissions'],
       multiple_submissions: data['multiple_submissions'],
-      background: data["background"]
+      background: data["background"],
+      name: data["name"]
     )
   end
 
@@ -120,34 +121,56 @@ class CustomWizard::Builder
             if s['actions'] && s['actions'].length
               s['actions'].each do |a|
                 if a['type'] === 'create_topic'
-                  creator = PostCreator.new(user,
-                                  title: input[a['title']],
-                                  raw: input[a['post']],
-                                  category: a['category_id'],
-                                  skip_validations: true)
+                  title = input[a['title']]
+                  post = input[a['post']]
 
-                  post = creator.create
-                  if creator.errors.present?
-                    updater.errors.add(:create_topic, creator.errors.full_messages.join(" "))
-                  else
-                    updater.result = { topic_id: post.topic.id }
+                  if title && post
+                    params = {
+                      title: title,
+                      raw: post,
+                      skip_validations: true
+                    }
+                    params[:category] = a['category_id'] if a['category_id']
+                    params[:featured_link] = input[a['featured_link']] if input[a['featured_link']]
+
+                    creator = PostCreator.new(user, params)
+                    post = creator.create
+
+                    if creator.errors.present?
+                      updater.errors.add(:create_topic, creator.errors.full_messages.join(" "))
+                    else
+                      updater.result = { topic_id: post.topic.id }
+                    end
                   end
                 end
 
                 if a['type'] === 'send_message'
-                  creator = PostCreator.new(user,
-                                  title: input[a['title']],
-                                  raw: input[a['post']],
-                                  archetype: Archetype.private_message,
-                                  target_usernames: a['username'])
+                  title = input[a['title']]
+                  post = input[a['post']]
 
-                  post = creator.create
+                  if title && post
+                    creator = PostCreator.new(user,
+                                    title: title,
+                                    raw: post,
+                                    archetype: Archetype.private_message,
+                                    target_usernames: a['username'])
 
-                  if creator.errors.present?
-                    updater.errors.add(:send_message, creator.errors.full_messages.join(" "))
-                  else
-                    updater.result = { topic_id: post.topic.id }
+                    post = creator.create
+
+                    if creator.errors.present?
+                      updater.errors.add(:send_message, creator.errors.full_messages.join(" "))
+                    else
+                      updater.result = { topic_id: post.topic.id }
+                    end
                   end
+                end
+
+                if a['type'] === 'update_profile' && a['profile_updates'].length
+                  updater = UserUpdater.new(user, user)
+                  attributes = a['profile_updates'].map do |pu|
+                    { pu['profile_field'].to_sym => input[pu['wizard_field']] }
+                  end
+                  updater.update(attributes)
                 end
               end
             end

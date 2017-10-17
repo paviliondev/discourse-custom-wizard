@@ -1,6 +1,6 @@
 <div class="setting">
   <div class="setting-label">
-    <h3>{{i18n "admin.wizard.action.id"}}</h3>
+    <h3>{{i18n "admin.wizard.id"}}</h3>
   </div>
   <div class="setting-value">
     {{input value=action.id placeholderKey='admin.wizard.id_placeholder' disabled=existingId}}
@@ -16,7 +16,6 @@
   </div>
 </div>
 
-
 {{#if createTopic}}
   <div class="setting">
     <div class="setting-label">
@@ -29,19 +28,28 @@
 
   <div class="setting">
     <div class="setting-label">
-      <h3>{{i18n "admin.wizard.action.create_topic.title"}}</h3>
+      <h3>{{i18n "admin.wizard.action.title"}}</h3>
     </div>
     <div class="setting-value">
-      {{combo-box value=action.title content=stepFields nameProperty="label"}}
+      {{combo-box value=action.title content=wizardFields nameProperty="label" none='admin.wizard.action.none'}}
     </div>
   </div>
 
   <div class="setting">
     <div class="setting-label">
-      <h3>{{i18n "admin.wizard.action.create_topic.post"}}</h3>
+      <h3>{{i18n "admin.wizard.action.post"}}</h3>
     </div>
     <div class="setting-value">
-      {{combo-box value=action.post content=stepFields nameProperty="label"}}
+      {{combo-box value=action.post content=wizardFields nameProperty="label" none='admin.wizard.action.none'}}
+    </div>
+  </div>
+
+  <div class="setting">
+    <div class="setting-label">
+      <h3>{{i18n "admin.wizard.action.create_topic.featured_link"}}</h3>
+    </div>
+    <div class="setting-value">
+      {{combo-box value=action.featured_link content=wizardFields none='admin.wizard.action.none'}}
     </div>
   </div>
 {{/if}}
@@ -49,20 +57,22 @@
 {{#if sendMessage}}
   <div class="setting">
     <div class="setting-label">
-      <h3>{{i18n "admin.wizard.action.send_message.title"}}</h3>
+      <h3>{{i18n "admin.wizard.action.title"}}</h3>
     </div>
     <div class="setting-value">
-      {{combo-box value=action.title content=stepFields nameProperty="label"}}
+      {{combo-box value=action.title content=wizardFields none='admin.wizard.action.none'}}
     </div>
   </div>
+
   <div class="setting">
     <div class="setting-label">
-      <h3>{{i18n "admin.wizard.action.send_message.post"}}</h3>
+      <h3>{{i18n "admin.wizard.action.post"}}</h3>
     </div>
     <div class="setting-value">
-      {{combo-box value=action.post content=stepFields nameProperty="label"}}
+      {{combo-box value=action.post content=wizardFields none='admin.wizard.action.none'}}
     </div>
   </div>
+
   <div class="setting">
     <div class="setting-label">
       <h3>{{i18n "admin.wizard.action.send_message.recipient"}}</h3>
@@ -77,20 +87,14 @@
 {{/if}}
 
 {{#if updateProfile}}
-  <div class="setting">
-    <div class="setting-label">
-      <h3>{{i18n "admin.wizard.action.source"}}</h3>
-    </div>
-    <div class="setting-value">
-      {{combo-box value=action.source content=stepFields nameProperty="label"}}
-    </div>
-  </div>
-  <div class="setting">
-    <div class="setting-label">
-      <h3>{{i18n "admin.wizard.action.profile_field"}}</h3>
-    </div>
-    <div class="setting-value">
-      {{combo-box value=action.profile_field content=profileFields}}
-    </div>
+  <div class="setting full">
+    {{#each profileUpdates as |pu|}}
+      <span class='custom-input'>
+        {{combo-box value=pu.wizard_field content=wizardFields none='admin.wizard.action.update_profile.wizard_field'}}
+        {{combo-box value=pu.profile_field content=profileFields none='admin.wizard.action.update_profile.profile_field'}}
+      </span>
+      {{d-button action='removeProfileUpdate' actionParam=f icon='times'}}
+    {{/each}}
+    <div>{{d-button action='addProfileUpdate' label='admin.wizard.add' icon='plus'}}</div>
   </div>
 {{/if}}

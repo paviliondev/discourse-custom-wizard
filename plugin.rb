@@ -6,16 +6,16 @@
 register_asset 'stylesheets/wizard_custom_admin.scss'
 
 config = Rails.application.config
-config.assets.paths << Rails.root.join("plugins", "discourse-custom-wizard", "assets", "javascripts")
-config.assets.paths << Rails.root.join("plugins", "discourse-custom-wizard", "assets", "stylesheets", "wizard")
+config.assets.paths << Rails.root.join('plugins', 'discourse-custom-wizard', 'assets', 'javascripts')
+config.assets.paths << Rails.root.join('plugins', 'discourse-custom-wizard', 'assets', 'stylesheets', 'wizard')
 
 after_initialize do
   UserHistory.actions[:custom_wizard_step] = 100
 
-  require_dependency "application_controller"
+  require_dependency 'application_controller'
   module ::CustomWizard
     class Engine < ::Rails::Engine
-      engine_name "custom_wizard"
+      engine_name 'custom_wizard'
       isolate_namespace CustomWizard
     end
   end

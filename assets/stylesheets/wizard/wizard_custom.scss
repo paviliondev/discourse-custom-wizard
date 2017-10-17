@@ -3,6 +3,16 @@
 
   .wizard-step-description {
     line-height: 1.7;
+
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    i {
+      margin-right: 7px;
+    }
   }
 
   .wizard-column .wizard-step-banner {
@@ -32,6 +42,31 @@
 
   .wizard-column .wizard-field .input-area {
     margin: 0.5em 0;
+  }
+}
+
+.step-message {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 0;
+  line-height: 0;
+  text-align: center;
+  transition: all .2s;
+
+  &.success {
+    height: 60px;
+    line-height: 60px;
+    background-color: #009900;
+    color: #ffffff;
+  }
+
+  &.error {
+    height: 60px;
+    line-height: 60px;
+    background-color: #e45735;
+    color: #ffffff;
   }
 }
 

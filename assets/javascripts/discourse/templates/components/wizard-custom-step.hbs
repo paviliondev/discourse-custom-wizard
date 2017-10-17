@@ -3,7 +3,7 @@
     <h3>{{i18n 'admin.wizard.id'}}</h3>
   </div>
   <div class="setting-value">
-    {{input name="id" value=step.id placeholderKey="admin.wizard.id_placeholder" disabled=existingId}}
+    {{input name="id" value=step.id placeholderKey="admin.wizard.id_placeholder" disabled=disableId}}
   </div>
 </div>
 
@@ -43,28 +43,12 @@
   </div>
 </div>
 
-<div class="wizard-links">
-  <div class="wizard-header medium">{{i18n 'admin.wizard.field.header'}}</div>
-  {{#each fieldLinks as |f|}}
-    {{d-button action="changeField" actionParam=f.id translatedLabel=f.label class=f.classes}}
-    {{d-button action='removeField' actionParam=f.id icon='times' class='remove'}}
-  {{/each}}
-  {{d-button action='addField' label='admin.wizard.add' icon='plus'}}
-</div>
-
+{{wizard-links type="field" current=currentField itesm=step.fields}}
 {{#if currentField}}
   {{wizard-custom-field field=currentField types=fieldTypes removeField="removeField"}}
 {{/if}}
 
-<div class="wizard-links">
-  <div class="wizard-header medium">{{i18n 'admin.wizard.action.header'}}</div>
-  {{#each actionLinks as |a|}}
-    {{d-button action="changeAction" actionParam=a.id translatedLabel=a.label class=a.classes}}
-    {{d-button action='removeAction' actionParam=a.id icon='times' class='remove'}}
-  {{/each}}
-  {{d-button action='addAction' label='admin.wizard.add' icon='plus'}}
-</div>
-
+{{wizard-links type="action" current=currentAction items=step.actions}}
 {{#if currentAction}}
-  {{wizard-custom-action action=currentAction stepFields=step.fields removeAction="removeAction"}}
+  {{wizard-custom-action action=currentAction steps=steps removeAction="removeAction"}}
 {{/if}}

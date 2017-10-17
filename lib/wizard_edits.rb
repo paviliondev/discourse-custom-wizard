@@ -30,8 +30,16 @@ end
     object.id
   end
 
+  def include_id?
+    object.respond_to?(:id)
+  end
+
   def background
     object.background
+  end
+
+  def include_background?
+    object.respond_to?(:background)
   end
 
   def completed
@@ -39,7 +47,7 @@ end
   end
 
   def include_completed?
-    object.completed? && !object.multiple_submissions && !scope.current_user.admin?
+    object.completed? && !object.respond_to?(:multiple_submissions) && !scope.current_user.admin?
   end
 
   def include_start?

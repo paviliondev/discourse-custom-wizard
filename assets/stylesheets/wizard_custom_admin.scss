@@ -73,8 +73,27 @@
 .wizard-links {
   margin-bottom: 20px;
 
-  .remove {
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: inline-block;
+
+    li {
+      display: inline-block;
+      margin-bottom: 7px;
+      margin-right: 7px;
+    }
+  }
+
+  .sortable-placeholder {
+    height: 30px;
+    width: 100px;
+    display: inline-block;
+    vertical-align: top;
+    background-color: $primary-low;
     margin-right: 10px;
+    margin-left: 3px;
   }
 }
 
@@ -87,31 +106,6 @@
   margin-bottom: 20px;
   padding: 15px;
   background-color: dark-light-diff($primary, $secondary, 96%, -65%);
-}
-
-.step-message {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 0;
-  line-height: 0;
-  text-align: center;
-  transition: all .2s;
-
-  &.success {
-    height: 60px;
-    line-height: 60px;
-    background-color: $success;
-    color: $secondary;
-  }
-
-  &.error {
-    height: 60px;
-    line-height: 60px;
-    background-color: $danger;
-    color: $secondary;
-  }
 }
 
 .wizard-dropdown-choices {

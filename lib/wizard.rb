@@ -6,13 +6,14 @@ require_dependency 'wizard/builder'
 class CustomWizard::Wizard
 
   attr_reader :steps, :user
-  attr_accessor :id, :background, :save_submissions, :multiple_submissions
+  attr_accessor :id, :name, :background, :save_submissions, :multiple_submissions
 
   def initialize(user, attrs = {})
     @steps = []
     @user = user
     @first_step = nil
     @id = attrs[:id] if attrs[:id]
+    @name = attrs[:name] if attrs[:name]
     @save_submissions = attrs[:save_submissions] if attrs[:save_submissions]
     @multiple_submissions = attrs[:multiple_submissions] if attrs[:multiple_submissions]
     @background = attrs[:background] if attrs[:background]

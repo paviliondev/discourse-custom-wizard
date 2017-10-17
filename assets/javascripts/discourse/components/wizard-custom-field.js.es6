@@ -7,7 +7,7 @@ export default Ember.Component.extend({
   @on('init')
   @observes('field')
   setup() {
-    this.set('existingId', this.get('field.id'));
+    if (!this.get('isNew')) this.set('existingId', this.get('field.id'));
   },
 
   @computed('field.type')

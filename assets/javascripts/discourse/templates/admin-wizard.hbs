@@ -58,17 +58,9 @@
     <a href="{{wizardUrl}}" target="_blank">{{wizardUrl}}</a>
   </div>
 
-  <div class="wizard-links">
-    <div class="wizard-header">{{i18n 'admin.wizard.step.header'}}</div>
-    {{#each stepLinks as |s|}}
-      {{d-button action="changeStep" actionParam=s.id translatedLabel=s.title class=s.classes}}
-      {{d-button action="removeStep" actionParam=s.id icon='times' class='remove'}}
-    {{/each}}
-    {{d-button action='addStep' label='admin.wizard.add' icon='plus'}}
-  </div>
-
+  {{wizard-links type="step" current=currentStep items=model.steps}}
   {{#if currentStep}}
-    {{wizard-custom-step step=currentStep fieldTypes=model.fieldTypes}}
+    {{wizard-custom-step step=currentStep steps=model.steps fieldTypes=model.fieldTypes}}
   {{/if}}
 
   <div class='buttons'>

@@ -1,0 +1,12 @@
+<div class="wizard-links {{type}}">
+  <div class="wizard-header medium">{{i18n header}}</div>
+  <ul>
+    {{#each links as |l|}}
+      <li data-id='{{l.id}}'>
+        {{d-button action="change" actionParam=l.id translatedLabel=l.label class=l.classes}}
+        {{d-button action='remove' actionParam=l.id icon='times' class='remove'}}
+      </li>
+    {{/each}}
+  </ul>
+  {{d-button action='add' label='admin.wizard.add' icon='plus'}}
+</div>

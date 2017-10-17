@@ -61,21 +61,21 @@ en:
           min_length_placeholder: "Minimum length in characters"
         action:
           header: "Actions"
+          include: "Include Fields"
+          title: "Title"
+          post: "Post"
+          none: "Select a field"
           send_message:
             label: "Send Message"
-            title: "Title"
-            post: "Post"
             recipient: "Recipient"
           create_topic:
             label: "Create Topic"
-            title: "Title"
-            post: "Post"
             category: "Category"
+            featured_link: "Featured Link"
           update_profile:
             label: "Update Profile"
-            field: "Profile Field"
-          save_input:
-            label: "Save Input"
+            wizard_field: "Wizard Field"
+            profile_field: "Profile Field"
 
   wizard_js:
     wizard:
