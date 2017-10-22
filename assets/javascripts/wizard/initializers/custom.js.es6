@@ -18,6 +18,7 @@ export default {
 
     Router.map(function() {
       this.route('custom', { path: '/:wizard_id' }, function() {
+        this.route('steps');
         this.route('step', { path: '/steps/:step_id' });
       });
     });

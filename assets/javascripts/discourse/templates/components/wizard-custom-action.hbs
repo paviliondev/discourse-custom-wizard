@@ -13,6 +13,7 @@
   </div>
   <div class="setting-value">
     {{combo-box value=action.type content=types}}
+    <label>*{{i18n 'admin.wizard.action.requires_save'}}</label>
   </div>
 </div>
 
@@ -45,7 +46,7 @@
   </div>
 
   <div class="setting full">
-    <label>{{i18n "admin.wizard.action.create_topic.add_fields"}}</label>
+    <label>{{i18n "admin.wizard.action.add_fields" type='Topic'}}</label>
     {{wizard-custom-input inputs=action.add_fields valueContent=wizardFields noneValue='admin.wizard.action.none'}}
   </div>
 {{/if}}
@@ -80,10 +81,16 @@
                       allowedUsers="true"}}
     </div>
   </div>
+
+  <div class="setting full">
+    <label>{{i18n "admin.wizard.action.add_fields" type='Message'}}</label>
+    {{wizard-custom-input inputs=action.add_fields valueContent=wizardFields noneValue='admin.wizard.action.none'}}
+  </div>
 {{/if}}
 
 {{#if updateProfile}}
   <div class="setting full">
+    <label>{{i18n "admin.wizard.action.add_fields" type='Profile'}}</label>
     {{wizard-custom-input inputs=action.profile_updates
                           valueContent=profileFields
                           keyContent=wizardFields

@@ -5,14 +5,19 @@ class CustomWizard::WizardController < ::ApplicationController
 
   def wizard_page_title
     wizard = PluginStore.get('custom_wizard', params[:wizard_id].underscore)
-    wizard['name'] || wizard['id']
+    wizard ? (wizard['name'] || wizard['id']) : I18n.t('wizard.custom_title')
   end
 
   def index
     respond_to do |format|
       format.json do
-        wizard = CustomWizard::Builder.new(current_user, params[:wizard_id].underscore).build
-        render_serialized(wizard, WizardSerializer)
+        template = CustomWizard::Builder.new(current_user, params[:wizard_id].underscore)
+        if template.wizard.present?
+          wizard = template.build
+          render_serialized(wizard, WizardSerializer)
+        else
+          render json: { error: I18n.t('wizard.none') }
+        end
       end
       format.html {}
     end

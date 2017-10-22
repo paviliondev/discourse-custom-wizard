@@ -1,6 +1,8 @@
+import CustomWizard from '../models/custom-wizard';
+
 export default Discourse.Route.extend({
   model(params) {
-    return this.modelFor('admin-wizards-submissions').findBy('id', params.wizard_id);
+    return CustomWizard.submissions(params.wizard_id);
   },
 
   setupController(controller, model) {

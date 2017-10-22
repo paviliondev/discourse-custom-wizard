@@ -46,9 +46,10 @@ class CustomWizard::Wizard
   def start
     completed = ::UserHistory.where(
       acting_user_id: @user.id,
-      action: ::UserHistory.actions[:custom_wizard_step]
-    ).where(context: @steps.map(&:id))
-      .uniq.pluck(:context)
+      action: ::UserHistory.actions[:custom_wizard_step],
+      context: @id,
+      subject: @steps.map(&:id)
+    ).uniq.pluck(:subject)
 
     @steps.each do |s|
       return s unless completed.include?(s.id)
@@ -62,9 +63,10 @@ class CustomWizard::Wizard
 
     completed = ::UserHistory.where(
       acting_user_id: @user.id,
-      action: ::UserHistory.actions[:custom_wizard_step]
-    ).where(context: steps)
-      .distinct.order(:context).pluck(:context)
+      action: ::UserHistory.actions[:custom_wizard_step],
+      context: @id,
+      subject: steps
+    ).distinct.order(:subject).pluck(:subject)
 
     steps.sort == completed
   end

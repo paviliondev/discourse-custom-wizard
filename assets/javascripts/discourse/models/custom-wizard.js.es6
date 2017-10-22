@@ -102,7 +102,7 @@ const CustomWizard = Discourse.Model.extend({
 });
 
 CustomWizard.reopenClass({
-  findAll() {
+  all() {
     return ajax("/admin/wizards/custom/all", {
       type: 'GET'
     }).then(result => {
@@ -110,8 +110,8 @@ CustomWizard.reopenClass({
     });
   },
 
-  findAllSubmissions() {
-    return ajax("/admin/wizards/submissions/all", {
+  submissions(wizardId) {
+    return ajax(`/admin/wizards/submissions/${wizardId}`, {
       type: "GET"
     }).then(result => {
       return result.submissions;

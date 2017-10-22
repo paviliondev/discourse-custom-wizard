@@ -1,5 +1,11 @@
 import { default as computed } from 'ember-addons/ember-computed-decorators';
 
+const ACTION_TYPES = [
+  { id: 'create_topic', name: 'create_topic *' },
+  { id: 'update_profile', name: 'update_profile *' },
+  { id: 'send_message', name: 'send_message *' }
+];
+
 const PROFILE_FIELDS = [
   'name',
   'email',
@@ -19,7 +25,7 @@ const PROFILE_FIELDS = [
 
 export default Ember.Component.extend({
   classNames: 'wizard-custom-action',
-  types: ['create_topic', 'update_profile', 'send_message'],
+  types: ACTION_TYPES,
   profileFields: PROFILE_FIELDS,
   createTopic: Ember.computed.equal('action.type', 'create_topic'),
   updateProfile: Ember.computed.equal('action.type', 'update_profile'),

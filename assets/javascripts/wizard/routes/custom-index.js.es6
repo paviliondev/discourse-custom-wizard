@@ -1,10 +1,13 @@
 export default Ember.Route.extend({
   beforeModel() {
     const appModel = this.modelFor('custom');
-    if (appModel.completed) {
-      this.set('completed', true);
-    } else if (appModel.start) {
-      this.replaceWith('custom.step', appModel.start);
+
+    if (appModel) {
+      if (appModel.completed) {
+        this.set('completed', true);
+      } else if (appModel.start) {
+        this.replaceWith('custom.step', appModel.start);
+      }
     }
   },
 

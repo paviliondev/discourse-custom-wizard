@@ -1,9 +1,12 @@
 class CustomWizard::Builder
 
-  attr_accessor :wizard, :updater, :submission
+  attr_accessor :wizard, :updater, :submissions
 
   def initialize(user, wizard_id)
     data = PluginStore.get('custom_wizard', wizard_id)
+
+    return if data.blank?
+
     @template = CustomWizard::Template.new(data)
     @wizard = CustomWizard::Wizard.new(user,
       id: wizard_id,
@@ -12,7 +15,7 @@ class CustomWizard::Builder
       background: data["background"],
       name: data["name"]
     )
-    @submissions = Array.wrap(PluginStore.get("custom_wizard_submissions", wizard_id))
+    @submissions = Array.wrap(PluginStore.get("#{wizard_id}_submissions", user.id))
   end
 
   def self.sorted_handlers
@@ -121,7 +124,7 @@ class CustomWizard::Builder
 
             if s['actions'] && s['actions'].length
               s['actions'].each do |a|
-                if a['type'] === 'create_topic'
+                if a['type'] === 'create_topic' && submission
                   title = submission[a['title']]
                   post = submission[a['post']]
 
@@ -177,7 +180,7 @@ class CustomWizard::Builder
                   end
                 end
 
-                if a['type'] === 'send_message'
+                if a['type'] === 'send_message' && submission
                   title = submission[a['title']]
                   post = submission[a['post']]
 
@@ -198,7 +201,7 @@ class CustomWizard::Builder
                   end
                 end
 
-                if a['type'] === 'update_profile' && a['profile_updates'].length
+                if a['type'] === 'update_profile' && a['profile_updates'].length && submission
                   user_updater = UserUpdater.new(user, user)
                   attributes = {}
                   a['profile_updates'].each do |pu|
@@ -222,7 +225,7 @@ class CustomWizard::Builder
               end
 
               @submissions.push(submission)
-              PluginStore.set('custom_wizard_submissions', @wizard.id, @submissions)
+              PluginStore.set("#{@wizard.id}_submissions", @wizard.user.id, @submissions)
             end
           end
         end

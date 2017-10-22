@@ -44,27 +44,13 @@ class CustomWizard::AdminController < ::ApplicationController
     render json: success_json.merge(wizards: wizards)
   end
 
-  def find_submissions
+  def submissions
     params.require(:wizard_id)
 
-    wizard = PluginStore.get('custom_wizard_submissions', params[:wizard_id].underscore)
+    rows = PluginStoreRow.where(plugin_name: "#{params[:wizard_id]}_submissions").order(:id)
+
+    submissions = [*rows].map { |r| ::JSON.parse(r.value) }
 
     render json: success_json.merge(submissions: submissions)
-  end
-
-  def submissions
-    rows = PluginStoreRow.where(plugin_name: 'custom_wizard_submissions').order(:id)
-
-    all = [*rows].map do |r|
-      wizard = PluginStore.get('custom_wizard', r.key)
-      name = wizard ? wizard['name'] : r.key
-      {
-        id: r.key,
-        name: name,
-        submissions: ::JSON.parse(r.value)
-      }
-    end
-
-    render json: success_json.merge(submissions: all)
   end
 end

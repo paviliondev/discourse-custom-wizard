@@ -12,6 +12,8 @@ export function findCustomWizard(wizardId) {
   return ajax({ url: `/w/${wizardId}` }).then(result => {
     const wizard = result.wizard;
 
+    if (!wizard) return null;
+
     if (!wizard.completed) {
       wizard.steps = wizard.steps.map(step => {
         const stepObj = Step.create(step);

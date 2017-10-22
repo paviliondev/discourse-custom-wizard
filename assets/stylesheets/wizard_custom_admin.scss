@@ -44,8 +44,14 @@
       width: 90px;
     }
 
-    .setting-value span {
-      font-size: 0.929em;
+    .setting-value {
+      label {
+        font-size: 0.85em;
+      }
+
+      span {
+        font-size: 0.929em;
+      }
     }
 
     &.full {

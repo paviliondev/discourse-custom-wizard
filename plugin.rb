@@ -10,7 +10,7 @@ config.assets.paths << Rails.root.join('plugins', 'discourse-custom-wizard', 'as
 config.assets.paths << Rails.root.join('plugins', 'discourse-custom-wizard', 'assets', 'stylesheets', 'wizard')
 
 after_initialize do
-  UserHistory.actions[:custom_wizard_step] = 100
+  UserHistory.actions[:custom_wizard_step] = 1000
 
   require_dependency 'application_controller'
   module ::CustomWizard
@@ -22,7 +22,7 @@ after_initialize do
 
   CustomWizard::Engine.routes.draw do
     get ':wizard_id' => 'wizard#index'
-    get ':wizard_id/steps' => 'steps#index'
+    get ':wizard_id/steps' => 'wizard#index'
     get ':wizard_id/steps/:step_id' => 'wizard#index'
     put ':wizard_id/steps/:step_id' => 'steps#update'
   end
@@ -41,8 +41,7 @@ after_initialize do
       put 'admin/wizards/custom/save' => 'admin#save'
       delete 'admin/wizards/custom/remove' => 'admin#remove'
       get 'admin/wizards/submissions' => 'admin#index'
-      get 'admin/wizards/submissions/all' => 'admin#submissions'
-      get 'admin/wizards/submissions/:wizard_id' => 'admin#find_submissions'
+      get 'admin/wizards/submissions/:wizard_id' => 'admin#submissions'
     end
   end
 

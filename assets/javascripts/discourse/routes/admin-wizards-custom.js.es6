@@ -2,7 +2,7 @@ import CustomWizard from '../models/custom-wizard';
 
 export default Discourse.Route.extend({
   model() {
-    return CustomWizard.findAll();
+    return CustomWizard.all();
   },
 
   afterModel(model) {

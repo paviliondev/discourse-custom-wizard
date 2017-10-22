@@ -16,8 +16,9 @@ export default Ember.Route.extend({
   },
 
   setupController(controller, model) {
+    const background = model ? model.get('background') : 'AliceBlue';
     Ember.run.scheduleOnce('afterRender', this, function(){
-      $('body.custom-wizard').css('background', model.get('background'));
+      $('body.custom-wizard').css('background', background);
     });
 
     controller.setProperties({

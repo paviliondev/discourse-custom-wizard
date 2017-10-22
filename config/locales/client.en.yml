@@ -64,48 +64,53 @@ en:
           title: "Title"
           post: "Post"
           none: "Select a field"
+          requires_save: "Requires 'Save' to be turned on."
+          add_fields: "Add Fields To {{type}}"
           send_message:
             label: "Send Message"
             recipient: "Recipient"
           create_topic:
             label: "Create Topic"
             category: "Category"
-            add_fields: "Add Fields"
           update_profile:
             label: "Update Profile"
             wizard_field: "Wizard Field"
             profile_field: "Profile Field"
 
   wizard_js:
+    location:
+      name:
+        title: "Name (optional)"
+        desc: "e.g. P. Sherman Dentist"
+      street:
+        title: "Number and Street"
+        desc: "e.g. 42 Wallaby Way"
+      postalcode:
+        title: "Postal Code (Zip)"
+        desc: "e.g. 2548"
+      city:
+        title: "City, Town or Village"
+        desc: "e.g. Sydney"
+      country_code:
+        title: "Country"
+        placeholder: "Select a Country"
+      query:
+        title: "Address"
+        desc: "e.g. 42 Wallaby Way, Sydney."
+      geo:
+        desc: "Locations provided by {{provider}}"
+        btn:
+          label: "Find Location"
+        results: "Locations"
+        no_results: "No results. Please double check the spelling."
+        show_map: "Show Map"
+      validation:
+        city: "Please enter a city or town."
+        countrycode: "Please enter a country."
+        geo_location: "Search and select a result."
+
+    select_box:
+      filter_placeholder: "Search..."
+
     wizard:
       completed: "You have completed this wizard."
-      location:
-        name:
-          title: "Name (optional)"
-          desc: "e.g. P. Sherman Dentist"
-        street:
-          title: "Number and Street"
-          desc: "e.g. 42 Wallaby Way"
-        postalcode:
-          title: "Postal Code (Zip)"
-          desc: "e.g. 2548"
-        city:
-          title: "City, Town or Village"
-          desc: "e.g. Sydney"
-        country_code:
-          title: "Country"
-          placeholder: "Select a Country"
-        query:
-          title: "Address"
-          desc: "e.g. 42 Wallaby Way, Sydney."
-        geo:
-          desc: "Locations provided by {{provider}}"
-          btn:
-            label: "Find Location"
-          results: "Locations"
-          no_results: "No results. Please double check the spelling."
-          show_map: "Show Map"
-        validation:
-          city: "Please enter a city or town."
-          countrycode: "Please enter a country."
-          geo_location: "Search and select a result."

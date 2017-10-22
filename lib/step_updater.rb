@@ -16,6 +16,7 @@ class CustomWizard::StepUpdater
 
     if success?
       UserHistory.create(action: UserHistory.actions[:custom_wizard_step],
+                         acting_user_id: @current_user.id,
                          context: @wizard.id,
                          subject: @step.id)
     end
