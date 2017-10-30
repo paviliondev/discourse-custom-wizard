@@ -66,30 +66,35 @@
 
 {{#if isDropdown}}
   <div class="wizard-dropdown-choices">
-    <div class="wizard-header medium">
+    <div class="wizard-header small underline">
       {{i18n 'admin.wizard.field.choices_label'}}
     </div>
-    <div class="setting">
+
+    {{combo-box value=choicesType content=choicesTypes none="admin.wizard.field.choices_type"}}
+
+    {{#if choicesTranslation}}
       <div class="wizard-header small">
         {{i18n 'admin.wizard.field.choices_translation'}}
       </div>
-      <div class="setting-value">
-        {{input name="key" value=field.choices_key placeholderKey="admin.wizard.key_placeholder"}}
-      </div>
-    </div>
-    <div class="setting full">
+      {{input name="key" value=field.choices_key placeholderKey="admin.wizard.key_placeholder"}}
+    {{/if}}
+
+    {{#if choicesPreset}}
       <div class="wizard-header small">
         {{i18n 'admin.wizard.field.choices_preset.label'}}
       </div>
       {{combo-box value=field.choices_preset content=presetChoices none='admin.wizard.none'}}
-      <label>{{i18n 'admin.wizard.field.choices_preset.filter'}}</label>
+      <div class="wizard-header small">
+        {{i18n 'admin.wizard.field.choices_preset.filter'}}
+      </div>
       {{wizard-custom-input inputs=field.choices_filters}}
-    </div>
-    <div class="setting full">
+    {{/if}}
+
+    {{#if choicesCustom}}
       <div class="wizard-header small">
         {{i18n 'admin.wizard.field.choices_custom'}}
       </div>
       {{wizard-custom-input inputs=field.choices}}
-    </div>
+    {{/if}}
   </div>
 {{/if}}

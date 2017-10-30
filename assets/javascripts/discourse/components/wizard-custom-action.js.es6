@@ -1,9 +1,9 @@
 import { default as computed } from 'ember-addons/ember-computed-decorators';
 
 const ACTION_TYPES = [
-  { id: 'create_topic', name: 'create_topic *' },
-  { id: 'update_profile', name: 'update_profile *' },
-  { id: 'send_message', name: 'send_message *' }
+  { id: 'create_topic', name: 'Create Topic' },
+  { id: 'update_profile', name: 'Update Profile' },
+  { id: 'send_message', name: 'Send Message' }
 ];
 
 const PROFILE_FIELDS = [
@@ -18,7 +18,6 @@ const PROFILE_FIELDS = [
   'bio_raw',
   'location',
   'website',
-  'dismissed_banner_key',
   'profile_background',
   'card_background'
 ];
@@ -32,18 +31,28 @@ export default Ember.Component.extend({
   sendMessage: Ember.computed.equal('action.type', 'send_message'),
   disableId: Ember.computed.not('action.isNew'),
 
-  @computed('steps')
-  wizardFields(steps) {
+  @computed('currentStepId', 'wizard.save_submissions')
+  availableFields(currentStepId, saveSubmissions) {
+    const allSteps = this.get('wizard.steps');
+    let steps = allSteps;
     let fields = [];
+
+    if (!saveSubmissions) {
+      steps = [allSteps.findBy('id', currentStepId)];
+    }
+
     steps.forEach((s) => {
-      let stepFields = s.fields.map((f) => {
-        return Ember.Object.create({
-          id: f.id,
-          label: `${f.id} (${s.id})`
+      if (s.fields && s.fields.length > 0) {
+        let stepFields = s.fields.map((f) => {
+          return Ember.Object.create({
+            id: f.id,
+            label: `${f.id} (${s.id})`
+          });
         });
-      });
-      fields.push(...stepFields);
+        fields.push(...stepFields);
+      }
     });
+
     return fields;
   }
 });

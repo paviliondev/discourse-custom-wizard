@@ -60,7 +60,7 @@
 
   {{wizard-links type="step" current=currentStep items=model.steps}}
   {{#if currentStep}}
-    {{wizard-custom-step step=currentStep steps=model.steps fieldTypes=model.fieldTypes}}
+    {{wizard-custom-step step=currentStep wizard=model}}
   {{/if}}
 
   <div class='buttons'>

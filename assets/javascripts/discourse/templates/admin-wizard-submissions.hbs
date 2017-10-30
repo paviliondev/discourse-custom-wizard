@@ -1,11 +1,11 @@
 <div class="wizard-submissions">
   <table>
-    {{#each model.submissions as |s|}}
-      <tr>
-        {{#each-in s as |k v|}}
-          <th>{{k}}</th>
-        {{/each-in}}
-      </tr>
+    <tr>
+      {{#each fields as |f|}}
+        <th>{{f}}</th>
+      {{/each}}
+    </tr>
+    {{#each submissions as |s|}}
       <tr>
         {{#each-in s as |k v|}}
           <td>{{v}}</td>

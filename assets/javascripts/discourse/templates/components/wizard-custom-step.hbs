@@ -45,10 +45,12 @@
 
 {{wizard-links type="field" current=currentField items=step.fields}}
 {{#if currentField}}
-  {{wizard-custom-field field=currentField types=fieldTypes removeField="removeField"}}
+  {{wizard-custom-field field=currentField types=wizard.fieldTypes removeField="removeField"}}
 {{/if}}
 
 {{wizard-links type="action" current=currentAction items=step.actions}}
 {{#if currentAction}}
-  {{wizard-custom-action action=currentAction steps=steps removeAction="removeAction"}}
+  {{wizard-custom-action action=currentAction wizard=wizard removeAction="removeAction" currentStepId=step.id}}
 {{/if}}
+
+<label>{{i18n 'admin.wizard.action.available_fields'}}</label>

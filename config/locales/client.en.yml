@@ -27,12 +27,13 @@ en:
         custom_text_placeholder: "Overrides translation"
         type: "Type"
         none: "Make a selection"
+        select_field: "Wizard Field"
         error:
           name_required: "Wizards must have a name."
           steps_required: "Wizards must have at least one step."
-          id_required: "All Step, Fields and Actions need an Id"
+          id_required: "All wizards, steps, fields and actions need an id."
           field:
-            need_choices: "All dropdowns need a translated choices, custom choies or preset choices."
+            need_choices: "All dropdowns need choices."
             choices_label_empty: "Custom choice labels cannot be empty."
         step:
           header: "Steps"
@@ -44,13 +45,14 @@ en:
           header: "Fields"
           label: "Label"
           description: "Description"
-          choices_label: "Dropdown Choices (use one type)"
+          choices_label: "Dropdown Choices"
+          choices_type: "Choose a type"
           choices_translation: "Translation"
           choices_custom: "Custom"
           choices_preset:
             label: "Preset"
             categories: "Categories"
-            filter: "Filter"
+            filter: "Preset Filter"
           choice:
             value: "Value"
             label: "Label"
@@ -59,13 +61,13 @@ en:
           min_length: "Min Length"
           min_length_placeholder: "Minimum length in characters"
         action:
-          header: "Actions"
+          header: "Actions<sup>*</sup>"
           include: "Include Fields"
           title: "Title"
           post: "Post"
-          none: "Select a field"
-          requires_save: "Requires 'Save' to be turned on."
           add_fields: "Add Fields To {{type}}"
+          available_fields: "* If 'Save wizard submissions' is disabled, only the fields of the current step are available to the current step's actions."
+          topic_attr: "Topic Attribute"
           send_message:
             label: "Send Message"
             recipient: "Recipient"
@@ -74,7 +76,6 @@ en:
             category: "Category"
           update_profile:
             label: "Update Profile"
-            wizard_field: "Wizard Field"
             profile_field: "Profile Field"
 
   wizard_js:
@@ -105,7 +106,7 @@ en:
         no_results: "No results. Please double check the spelling."
         show_map: "Show Map"
       validation:
-        city: "Please enter a city or town."
+        city: "Please enter a city, town or village."
         countrycode: "Please enter a country."
         geo_location: "Search and select a result."
 

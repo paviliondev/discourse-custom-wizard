@@ -13,7 +13,6 @@
   </div>
   <div class="setting-value">
     {{combo-box value=action.type content=types}}
-    <label>*{{i18n 'admin.wizard.action.requires_save'}}</label>
   </div>
 </div>
 
@@ -23,7 +22,7 @@
       <h3>{{i18n "admin.wizard.action.create_topic.category"}}</h3>
     </div>
     <div class="setting-value">
-      {{category-select-box value=action.category_id}}
+      {{category-chooser value=action.category_id}}
     </div>
   </div>
 
@@ -32,7 +31,7 @@
       <h3>{{i18n "admin.wizard.action.title"}}</h3>
     </div>
     <div class="setting-value">
-      {{combo-box value=action.title content=wizardFields nameProperty="label" none='admin.wizard.action.none'}}
+      {{combo-box value=action.title content=availableFields nameProperty="label" none='admin.wizard.select_field'}}
     </div>
   </div>
 
@@ -41,13 +40,16 @@
       <h3>{{i18n "admin.wizard.action.post"}}</h3>
     </div>
     <div class="setting-value">
-      {{combo-box value=action.post content=wizardFields nameProperty="label" none='admin.wizard.action.none'}}
+      {{combo-box value=action.post content=availableFields nameProperty="label" none='admin.wizard.select_field'}}
     </div>
   </div>
 
   <div class="setting full">
     <label>{{i18n "admin.wizard.action.add_fields" type='Topic'}}</label>
-    {{wizard-custom-input inputs=action.add_fields valueContent=wizardFields noneValue='admin.wizard.action.none'}}
+    {{wizard-custom-input inputs=action.add_fields
+                          valueContent=availableFields
+                          inputKey='admin.wizard.action.topic_attr'
+                          noneValue='admin.wizard.select_field'}}
   </div>
 {{/if}}
 
@@ -57,7 +59,7 @@
       <h3>{{i18n "admin.wizard.action.title"}}</h3>
     </div>
     <div class="setting-value">
-      {{combo-box value=action.title content=wizardFields nameProperty='label' none='admin.wizard.action.none'}}
+      {{combo-box value=action.title content=availableFields nameProperty='label' none='admin.wizard.select_field'}}
     </div>
   </div>
 
@@ -66,7 +68,7 @@
       <h3>{{i18n "admin.wizard.action.post"}}</h3>
     </div>
     <div class="setting-value">
-      {{combo-box value=action.post content=wizardFields nameProperty='label' none='admin.wizard.action.none'}}
+      {{combo-box value=action.post content=availableFields nameProperty='label' none='admin.wizard.select_field'}}
     </div>
   </div>
 
@@ -84,7 +86,9 @@
 
   <div class="setting full">
     <label>{{i18n "admin.wizard.action.add_fields" type='Message'}}</label>
-    {{wizard-custom-input inputs=action.add_fields valueContent=wizardFields noneValue='admin.wizard.action.none'}}
+    {{wizard-custom-input inputs=action.add_fields
+                          keyContent=availableFields
+                          inputValue='admin.wizard.action.topic_attr'}}
   </div>
 {{/if}}
 
@@ -93,8 +97,7 @@
     <label>{{i18n "admin.wizard.action.add_fields" type='Profile'}}</label>
     {{wizard-custom-input inputs=action.profile_updates
                           valueContent=profileFields
-                          keyContent=wizardFields
-                          noneKey='admin.wizard.action.none'
-                          noneValue='admin.wizard.action.none'}}
+                          keyContent=availableFields
+                          noneValue='admin.wizard.action.update_profile.profile_field'}}
   </div>
 {{/if}}

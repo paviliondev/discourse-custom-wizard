@@ -20,9 +20,10 @@ export default Ember.Controller.extend({
         } else {
           this.send("refreshWizard");
         }
-      }).catch((error) => {
+      }).catch((result) => {
+        console.log(result)
         this.set('saving', false);
-        this.set('error', I18n.t(`admin.wizard.error.${error}`));
+        this.set('error', I18n.t(`admin.wizard.error.${result.error}`));
         Ember.run.later(() => this.set('error', null), 10000);
       });
     },

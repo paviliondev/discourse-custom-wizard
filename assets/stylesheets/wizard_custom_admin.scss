@@ -22,8 +22,11 @@
 
   &.small {
     font-size: 1em;
-    text-decoration: underline;
     margin-bottom: 5px;
+  }
+
+  &.underline {
+    text-decoration: underline;
   }
 }
 
@@ -61,6 +64,10 @@
     label {
       margin: 5px 0;
     }
+  }
+
+  .select-box-kit-header {
+    height: initial;
   }
 
   .buttons .error {
@@ -115,19 +122,40 @@
 }
 
 .wizard-dropdown-choices {
-  padding: 15px 15px 0 15px;
+  padding: 15px;
   margin-bottom: 20px;
   background-color: $secondary;
+
+  .wizard-header:not(.underline) {
+    margin-top: 15px;
+  }
 }
 
-.setting .custom-input {
-  display: inline-block;
+.custom-input {
+  margin: 5px 0;
+
+  > * {
+    margin-bottom: 0 !important;
+    margin-right: 5px;
+  }
+
+  .select-box-kit {
+    width: 150px !important;
+  }
 }
 
-.wizard-submissions {
+.setting .add-custom-input {
+  margin-top: 5px;
+}
+
+.admin-contents .wizard-submissions {
   padding: 0 20px;
   display: inline-block;
   overflow: scroll;
+
+  table {
+    margin-top: 0;
+  }
 }
 
 .wizard-field-composer textarea {

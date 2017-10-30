@@ -15,6 +15,54 @@ class CustomWizard::AdminController < ::ApplicationController
 
     wizard = ::JSON.parse(params[:wizard])
 
+    error = nil
+
+    if !wizard["id"] || wizard["id"].empty?
+      error = 'id_required'
+    elsif !wizard["name"] || wizard["name"].empty?
+      error = 'name_required'
+    elsif !wizard["steps"] || wizard["steps"].empty?
+      error = 'steps_required'
+    end
+
+    return render json: { error: error } if error
+
+    wizard["steps"].each do |s|
+      puts "HERE IS THE ID: #{s["id"]}"
+      if s["id"].blank?
+        error = 'id_required'
+        break
+      end
+
+      if s["fields"] && s["fields"].present?
+        s["fields"].each do |f|
+          if f["id"].blank?
+            error = 'id_required'
+            break
+          end
+
+          if f["type"] === 'dropdown'
+            choices = f["choices"]
+            if (!choices || choices.length < 1) && !f["choices_key"] && !f["choices_categories"]
+              error = 'field.need_choices'
+              break
+            end
+          end
+        end
+      end
+
+      if s["actions"] && s["actions"].present?
+        s["actions"].each do |a|
+          if a["id"].blank?
+            error = 'id_required'
+            break
+          end
+        end
+      end
+    end
+
+    return render json: { error: error } if error
+
     PluginStore.set('custom_wizard', wizard["id"], wizard)
 
     render json: success_json
@@ -49,7 +97,7 @@ class CustomWizard::AdminController < ::ApplicationController
 
     rows = PluginStoreRow.where(plugin_name: "#{params[:wizard_id]}_submissions").order(:id)
 
-    submissions = [*rows].map { |r| ::JSON.parse(r.value) }
+    submissions = [*rows].map { |r| ::JSON.parse(r.value) }.flatten
 
     render json: success_json.merge(submissions: submissions)
   end

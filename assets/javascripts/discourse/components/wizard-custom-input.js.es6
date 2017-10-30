@@ -1,6 +1,8 @@
 export default Ember.Component.extend({
-  noneKey: 'admin.wizard.none',
+  noneKey: 'admin.wizard.select_field',
   noneValue: 'admin.wizard.none',
+  inputKey: 'admin.wizard.key',
+  inputValue: 'admin.wizard.value',
 
   actions: {
     add() {

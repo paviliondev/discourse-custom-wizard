@@ -122,11 +122,13 @@ class CustomWizard::Builder
 
             next if updater.errors.any?
 
+            data = @wizard.save_submissions ? submission : step_input
+
             if s['actions'] && s['actions'].length
               s['actions'].each do |a|
-                if a['type'] === 'create_topic' && submission
-                  title = submission[a['title']]
-                  post = submission[a['post']]
+                if a['type'] === 'create_topic' && data
+                  title = data[a['title']]
+                  post = data[a['post']]
 
                   if title
                     params = {
@@ -140,7 +142,7 @@ class CustomWizard::Builder
 
                     if a['add_fields']
                       a['add_fields'].each do |f|
-                        value = submission[f['value']]
+                        value = data[f['value']]
                         key = f['key']
 
                         if key.include?('custom_fields')
@@ -180,9 +182,9 @@ class CustomWizard::Builder
                   end
                 end
 
-                if a['type'] === 'send_message' && submission
-                  title = submission[a['title']]
-                  post = submission[a['post']]
+                if a['type'] === 'send_message' && data
+                  title = data[a['title']]
+                  post = data[a['post']]
 
                   if title && post
                     creator = PostCreator.new(user,
@@ -201,11 +203,11 @@ class CustomWizard::Builder
                   end
                 end
 
-                if a['type'] === 'update_profile' && a['profile_updates'].length && submission
+                if a['type'] === 'update_profile' && a['profile_updates'].length && data
                   user_updater = UserUpdater.new(user, user)
                   attributes = {}
                   a['profile_updates'].each do |pu|
-                    attributes[pu['key'].to_sym] = submission[pu['value']]
+                    attributes[pu['key'].to_sym] = data[pu['value']]
                   end
                   user_updater.update(attributes) if attributes.present?
                 end

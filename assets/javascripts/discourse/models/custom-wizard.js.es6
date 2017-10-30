@@ -4,12 +4,24 @@ const CustomWizard = Discourse.Model.extend({
   save() {
     return new Ember.RSVP.Promise((resolve, reject) => {
       const id = this.get('id');
-      if (!id || !id.underscore()) reject('id_required');
+      if (!id || !id.underscore()) return reject({ error: 'id_required' });
 
       let wizard = { id: id.underscore() };
 
       const steps = this.get('steps');
-      if (steps.length) wizard['steps'] = this.buildSteps(steps, reject);
+      if (steps.length > 0)  {
+        const stepsResult = this.buildSteps(steps);
+        console.log(stepsResult)
+        if (stepsResult.error) {
+          reject({ error: stepsResult.error })
+        } else {
+          wizard['steps'] = stepsResult;
+        }
+      }
+
+      if (steps.length < 1 || !wizard['steps'] || wizard['steps'].length < 1) {
+        return reject({ error: 'steps_required' });
+      }
 
       const name = this.get('name');
       if (name) wizard['name'] = name;
@@ -28,15 +40,26 @@ const CustomWizard = Discourse.Model.extend({
         data: {
           wizard: JSON.stringify(wizard)
         }
-      }).then((result) => resolve(result));
+      }).then((result) => {
+        console.log(result)
+        if (result.error) {
+          reject(result);
+        } else {
+          resolve(result);
+        }
+      });
     });
   },
 
-  buildSteps(stepsObj, reject) {
+  buildSteps(stepsObj) {
     let steps = [];
+    let error = null;
 
     stepsObj.some((s) => {
-      if (!s.id || !s.id.underscore()) reject('id_required');
+      if (!s.id || !s.id.underscore()) {
+        error = 'id_required';
+        return;
+      };
 
       let step = { id: s.id.underscore() };
 
@@ -50,22 +73,31 @@ const CustomWizard = Discourse.Model.extend({
         step['fields'] = [];
 
         fields.some((f) => {
-          let id = f.get('id');
+          let id = f.id;
 
-          if (!id || !id.underscore()) reject('id_required');
+          if (!id || !id.underscore()) {
+            error = 'id_required';
+            return;
+          }
           f.set('id', id.underscore());
 
-          if (f.get('type') === 'dropdown') {
-            const choices = f.get('choices');
-            if (choices && choices.length < 1 && !f.get('choices_key') && !f.get('choices_categories')) {
-              reject('field.need_choices');
-            }
+          if (f.label === '') delete f.label;
+          if (f.description === '') delete f.description;
+
+          if (f.type === 'dropdown') {
+            const choices = f.choices;
+            //if ((!choices || choices.length < 1) && !f.choices_key && !f.choices_categories) {
+              //error = 'field.need_choices';
+              //return;
+            //}
           }
 
           delete f.isNew;
 
           step['fields'].push(f);
         });
+
+        if (error) return;
       }
 
       const actions = s.actions;
@@ -74,7 +106,10 @@ const CustomWizard = Discourse.Model.extend({
 
         actions.some((a) => {
           let id = a.get('id');
-          if (!id || !id.underscore()) reject('id_required');
+          if (!id || !id.underscore()) {
+            error = 'id_required';
+            return;
+          }
 
           a.set('id', id.underscore());
 
@@ -83,12 +118,17 @@ const CustomWizard = Discourse.Model.extend({
           step['actions'].push(a);
         });
 
+        if (error) return;
       }
 
       steps.push(step);
     });
 
-    return steps;
+    if (error) {
+      return { error };
+    } else {
+      return { steps };
+    };
   },
 
   remove() {
