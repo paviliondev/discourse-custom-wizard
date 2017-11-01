@@ -32,6 +32,12 @@ export default {
     });
 
     WizardStep.reopen({
+      showQuitButton: function() {
+        const index = this.get('step.index');
+        const required = this.get('wizard.required');
+        return index === 0 && !required;
+      }.property('step.index', 'wizard.required'),
+
       bannerImage: function() {
         const src = this.get('step.banner');
         if (!src) return;
@@ -53,7 +59,7 @@ export default {
         this.get('step').save()
           .then(response => {
             if (this.get('finalStep')) {
-              this.sendAction('finished', response);
+              this.get('wizard').finished(response);
             } else {
               this.sendAction('goNext', response);
             }
@@ -64,8 +70,12 @@ export default {
 
       actions: {
         quit() {
-          this.set('finalStep', true);
-          this.send('nextStep');
+          if ($(event.target).hasClass('quit')) {
+            this.get('wizard').skip();
+          } else {
+            this.set('finalStep', true);
+            this.send('nextStep');
+          };
         },
 
         showMessage(message) {

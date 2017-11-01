@@ -1,5 +1,16 @@
 import { ajax } from 'discourse/lib/ajax';
 
+const wizardProperties = [
+  'name',
+  'background',
+  'save_submissions',
+  'multiple_submissions',
+  'after_signup',
+  'after_time',
+  'after_time_scheduled',
+  'required'
+];
+
 const CustomWizard = Discourse.Model.extend({
   save() {
     return new Ember.RSVP.Promise((resolve, reject) => {
@@ -8,14 +19,22 @@ const CustomWizard = Discourse.Model.extend({
 
       let wizard = { id: id.underscore() };
 
+      wizardProperties.forEach((p) => {
+        const value = this.get(p);
+        if (value) wizard[p] = value;
+      });
+
+      if (wizard['after_time'] && wizard['after_time_scheduled']) {
+        return reject({ error: 'after_time_need_time' });
+      };
+
       const steps = this.get('steps');
       if (steps.length > 0)  {
         const stepsResult = this.buildSteps(steps);
-        console.log(stepsResult)
         if (stepsResult.error) {
-          reject({ error: stepsResult.error })
+          reject({ error: stepsResult.error });
         } else {
-          wizard['steps'] = stepsResult;
+          wizard['steps'] = stepsResult.steps;
         }
       }
 
@@ -23,25 +42,12 @@ const CustomWizard = Discourse.Model.extend({
         return reject({ error: 'steps_required' });
       }
 
-      const name = this.get('name');
-      if (name) wizard['name'] = name;
-
-      const background = this.get('background');
-      if (background) wizard['background'] = background;
-
-      const save_submissions = this.get('save_submissions');
-      if (save_submissions) wizard['save_submissions'] = save_submissions;
-
-      const multiple_submissions = this.get('multiple_submissions');
-      if (multiple_submissions) wizard['multiple_submissions'] = multiple_submissions;
-
       ajax("/admin/wizards/custom/save", {
         type: 'PUT',
         data: {
           wizard: JSON.stringify(wizard)
         }
       }).then((result) => {
-        console.log(result)
         if (result.error) {
           reject(result);
         } else {
@@ -86,10 +92,10 @@ const CustomWizard = Discourse.Model.extend({
 
           if (f.type === 'dropdown') {
             const choices = f.choices;
-            //if ((!choices || choices.length < 1) && !f.choices_key && !f.choices_categories) {
-              //error = 'field.need_choices';
-              //return;
-            //}
+            if ((!choices || choices.length < 1) && !f.choices_key && !f.choices_categories) {
+              error = 'field.need_choices';
+              return;
+            }
           }
 
           delete f.isNew;
@@ -166,10 +172,10 @@ CustomWizard.reopenClass({
     if (w) {
       props['id'] = w.id;
       props['existingId'] = true;
-      props['name'] = w.name;
-      props['background'] = w.background;
-      props['save_submissions'] = w.save_submissions;
-      props['multiple_submissions'] = w.multiple_submissions;
+
+      wizardProperties.forEach((p) => {
+        props[p] = w[p];
+      });
 
       if (w.steps && w.steps.length) {
         w.steps.forEach((s) => {
@@ -226,6 +232,9 @@ CustomWizard.reopenClass({
       props['background'] = '';
       props['save_submissions'] = true;
       props['multiple_submissions'] = false;
+      props['after_signup'] = false;
+      props['after_time'] = false;
+      props['required'] = false;
       props['steps'] = Ember.A();
     };
 

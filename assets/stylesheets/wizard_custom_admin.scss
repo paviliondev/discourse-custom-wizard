@@ -55,6 +55,11 @@
       span {
         font-size: 0.929em;
       }
+
+      button {
+        margin-top: 5px;
+        display: block;
+      }
     }
 
     &.full {
@@ -161,4 +166,55 @@
 .wizard-field-composer textarea {
   width: 100%;
   min-height: 150px;
+}
+
+.next-session-time-modal {
+  text-align: center;
+
+  .date-time-card {
+    width: 270px;
+    padding: 10px 20px;
+    text-align: left;
+  }
+
+  .modal-date-time-set{
+    padding-top: 3px;
+    padding-bottom: 4px;
+    display: flex;
+    flex-direction: row;
+
+    .modal-date-area{
+      order: 1;
+    }
+
+    .modal-time-area{
+      order: 2;
+      margin-left: 10px;
+
+      .modal-time{
+        width: 127px;
+      }
+    }
+  }
+
+  .ui-timepicker-input {
+    width: 119px;
+    text-align: center;
+  }
+
+  .date-picker{
+     width: 121px;
+  }
+
+  .pika-single {
+    position: relative !important;
+
+    .pika-lendar {
+      border: 1px solid #eee;
+      padding: 14px;
+      margin: 0;
+      float: none;
+      width: auto;
+    }
+  }
 }

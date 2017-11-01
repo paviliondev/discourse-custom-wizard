@@ -4,6 +4,8 @@
 # authors: Angus McLeod
 
 register_asset 'stylesheets/wizard_custom_admin.scss'
+register_asset 'lib/jquery.timepicker.min.js'
+register_asset 'lib/jquery.timepicker.scss'
 
 config = Rails.application.config
 config.assets.paths << Rails.root.join('plugins', 'discourse-custom-wizard', 'assets', 'javascripts')
@@ -22,6 +24,7 @@ after_initialize do
 
   CustomWizard::Engine.routes.draw do
     get ':wizard_id' => 'wizard#index'
+    put ':wizard_id/skip' => 'wizard#skip'
     get ':wizard_id/steps' => 'wizard#index'
     get ':wizard_id/steps/:step_id' => 'wizard#index'
     put ':wizard_id/steps/:step_id' => 'steps#update'
@@ -45,6 +48,8 @@ after_initialize do
     end
   end
 
+  load File.expand_path('../jobs/clear_after_time_wizard.rb', __FILE__)
+  load File.expand_path('../jobs/set_after_time_wizard.rb', __FILE__)
   load File.expand_path('../lib/builder.rb', __FILE__)
   load File.expand_path('../lib/field.rb', __FILE__)
   load File.expand_path('../lib/step_updater.rb', __FILE__)
@@ -54,4 +59,50 @@ after_initialize do
   load File.expand_path('../controllers/wizard.rb', __FILE__)
   load File.expand_path('../controllers/steps.rb', __FILE__)
   load File.expand_path('../controllers/admin.rb', __FILE__)
+
+  ::UsersController.class_eval do
+    def wizard_path
+      if custom_wizard_redirect = $redis.get('custom_wizard_redirect')
+        "#{Discourse.base_url}/w/#{custom_wizard_redirect}"
+      else
+        "#{Discourse.base_url}/wizard"
+      end
+    end
+  end
+
+  module InvitesControllerCustomWizard
+    def path(url)
+      if Wizard.user_requires_completion?(@user)
+        wizard_path = $redis.get('custom_wizard_redirect')
+        unless url === '/'
+          PluginStore.set("#{wizard_path.underscore}_submissions", @user.id, [{ redirect_to: url }])
+        end
+        url = "/w/#{wizard_path}"
+      end
+      super(url)
+    end
+
+    private def post_process_invite(user)
+      super(user)
+      @user = user
+    end
+  end
+
+  require_dependency 'invites_controller'
+  class ::InvitesController
+    prepend InvitesControllerCustomWizard
+  end
+
+  class ::ApplicationController
+    before_action :redirect_to_wizard_if_required, if: :current_user
+
+    def redirect_to_wizard_if_required
+      @wizard_id ||= current_user.custom_fields['redirect_to_wizard']
+      if @wizard_id && request.original_url !~ /w/ && request.original_url !~ /admin/
+        redirect_to "/w/#{@wizard_id}"
+      end
+    end
+  end
+
+  add_to_serializer(:current_user, :redirect_to_wizard) { object.custom_fields['redirect_to_wizard'] }
 end

@@ -1,5 +1,27 @@
+require_dependency 'wizard'
 require_dependency 'wizard/field'
 require_dependency 'wizard/step'
+
+::Wizard.class_eval do
+  def self.user_requires_completion?(user)
+    wizard_result = self.new(user).requires_completion?
+    return wizard_result if wizard_result
+
+    custom_redirect = nil
+
+    if user && wizard_id = CustomWizard::Wizard.after_signup
+      custom_redirect = wizard_id.dasherize
+
+      if CustomWizard::Wizard.new(user, id: wizard_id).completed?
+        custom_redirect = nil
+      end
+    end
+
+    $redis.set('custom_wizard_redirect', custom_redirect)
+
+    !!custom_redirect
+  end
+end
 
 ::Wizard::Field.class_eval do
   attr_reader :label, :description, :key, :min_length
@@ -24,7 +46,7 @@ class ::Wizard::Step
 end
 
 ::WizardSerializer.class_eval do
-  attributes :id, :background, :completed
+  attributes :id, :background, :completed, :required
 
   def id
     object.id
@@ -56,6 +78,10 @@ end
 
   def include_steps?
     !include_completed?
+  end
+
+  def required
+    object.required
   end
 end
 

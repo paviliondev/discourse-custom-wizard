@@ -17,18 +17,30 @@ class CustomWizard::AdminController < ::ApplicationController
 
     error = nil
 
-    if !wizard["id"] || wizard["id"].empty?
+    if wizard["id"].blank?
       error = 'id_required'
-    elsif !wizard["name"] || wizard["name"].empty?
+    elsif wizard["name"].blank?
       error = 'name_required'
-    elsif !wizard["steps"] || wizard["steps"].empty?
+    elsif wizard["steps"].blank?
       error = 'steps_required'
+    elsif wizard["after_time"]
+      if !wizard["after_time_scheduled"]
+        error = 'after_time_need_time'
+      else
+        after_time_scheduled = Time.parse(wizard["after_time_scheduled"]).utc
+        begin
+          if after_time_scheduled < Time.now.utc
+            error = 'after_time_invalid'
+          end
+        rescue ArgumentError
+          error = 'after_time_invalid'
+        end
+      end
     end
 
     return render json: { error: error } if error
 
     wizard["steps"].each do |s|
-      puts "HERE IS THE ID: #{s["id"]}"
       if s["id"].blank?
         error = 'id_required'
         break
@@ -63,6 +75,17 @@ class CustomWizard::AdminController < ::ApplicationController
 
     return render json: { error: error } if error
 
+    existing = PluginStore.get('custom_wizard', params[:id])
+
+    if wizard['after_time'] && after_time_scheduled != Time.parse(existing['after_time_scheduled']).utc
+      Jobs.cancel_scheduled_job(:set_after_time_wizard)
+      Jobs.enqueue_at(after_time_scheduled, :set_after_time_wizard, wizard_id: wizard['id'])
+    end
+
+    if existing['after_time'] && !wizard['after_time']
+      Jobs.enqueue(:clear_after_time_wizard, wizard_id: wizard['id'])
+    end
+
     PluginStore.set('custom_wizard', wizard["id"], wizard)
 
     render json: success_json
@@ -70,6 +93,12 @@ class CustomWizard::AdminController < ::ApplicationController
 
   def remove
     params.require(:id)
+
+    wizard = PluginStore.get('custom_wizard', params[:id])
+
+    if wizard['after_time']
+      Jobs.enqueue(:clear_after_time_wizard, wizard_id: wizard['id'])
+    end
 
     PluginStore.remove('custom_wizard', params[:id])
 

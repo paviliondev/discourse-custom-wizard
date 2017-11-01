@@ -19,14 +19,6 @@ export default StepController.extend({
 
     showMessage(message) {
       this.set('stepMessage', message);
-    },
-
-    finished(result) {
-      let url = "/";
-      if (result.topic_id) {
-        url += `t/${result.topic_id}`;
-      }
-      window.location.href = getUrl(url);
     }
   }
 });

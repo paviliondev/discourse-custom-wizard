@@ -9,7 +9,7 @@ export default Discourse.Route.extend({
   },
 
   setupController(controller, model) {
-    let fields = ['user_id', 'completed'];
+    let fields = ['user'];
 
     model.wizard.steps.forEach((s) => {
       if (s.fields) {

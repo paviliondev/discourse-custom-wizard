@@ -7,13 +7,16 @@ class CustomWizard::Builder
 
     return if data.blank?
 
-    @template = CustomWizard::Template.new(data)
+    @steps = data['steps']
     @wizard = CustomWizard::Wizard.new(user,
       id: wizard_id,
       save_submissions: data['save_submissions'],
       multiple_submissions: data['multiple_submissions'],
       background: data["background"],
-      name: data["name"]
+      name: data["name"],
+      after_time: data["after_time"],
+      after_signup: data["after_signup"],
+      required: data["required"]
     )
     @submissions = Array.wrap(PluginStore.get("#{wizard_id}_submissions", user.id))
   end
@@ -32,9 +35,9 @@ class CustomWizard::Builder
   end
 
   def build
-    unless (@wizard.completed? && !@template.respond_to?(:multiple_submissions)) ||
-           !@template.steps
-      @template.steps.each do |s|
+    unless (@wizard.completed? && !@wizard.respond_to?(:multiple_submissions)) ||
+           !@steps
+      @steps.each do |s|
         @wizard.append_step(s['id']) do |step|
           step.title = s['title'] if s['title']
           step.description = s['description'] if s['description']
@@ -53,7 +56,7 @@ class CustomWizard::Builder
               params[:description] = f['description'] if f['description']
               params[:key] = f['key'] if f['key']
 
-              if @submissions.last && @submissions.last['completed'] === false
+              if @submissions.last
                 submission = @submissions.last
                 params[:value] = submission[f['id']] if submission[f['id']]
               end
@@ -122,7 +125,14 @@ class CustomWizard::Builder
 
             next if updater.errors.any?
 
-            data = @wizard.save_submissions ? submission : step_input
+            if @wizard.save_submissions
+              data = submission
+            else
+              data = step_input
+
+              # Allow redirect to be passed to wizard that doesn't save submissions.
+              data['redirect_to'] = submission['redirect_to'] if submission['redirect_to']
+            end
 
             if s['actions'] && s['actions'].length
               s['actions'].each do |a|
@@ -177,7 +187,8 @@ class CustomWizard::Builder
                         end
                         post.topic.save_custom_fields(true)
                       end
-                      updater.result = { topic_id: post.topic.id }
+
+                      data['redirect_to'] = post.topic.url
                     end
                   end
                 end
@@ -198,7 +209,7 @@ class CustomWizard::Builder
                     if creator.errors.present?
                       updater.errors.add(:send_message, creator.errors.full_messages.join(" "))
                     else
-                      updater.result = { topic_id: post.topic_id }
+                      data['redirect_to'] = post.topic.url
                     end
                   end
                 end
@@ -214,20 +225,32 @@ class CustomWizard::Builder
               end
             end
 
+            if updater.errors.empty?
+              updater.result = { redirect_to: data['redirect_to'] }
+            end
+
             if @wizard.save_submissions && updater.errors.empty?
-              @submissions.pop(1) if submission && submission['completed'] === false
-
-              submission['user_id'] = @wizard.user.id
-              submission['completed'] = updater.step.next.nil?
-
               if step_input
                 step_input.each do |key, value|
-                  submission[key] = value
+                  data[key] = value
                 end
               end
 
-              @submissions.push(submission)
-              PluginStore.set("#{@wizard.id}_submissions", @wizard.user.id, @submissions)
+              if data.present?
+                @submissions.pop(1) if @wizard.unfinished?
+                @submissions.push(data)
+                PluginStore.set("#{@wizard.id}_submissions", @wizard.user.id, @submissions)
+              end
+            end
+
+            # Ensure there is no submission left over after the user has completed a wizard with save_submissions off
+            if !@wizard.save_submissions && updater.step.next.nil?
+              PluginStore.remove("#{@wizard.id}_submissions", @wizard.user.id)
+            end
+
+            if @wizard.after_time && updater.step.next.nil?
+              @wizard.user.custom_fields.delete('redirect_to_wizard');
+              @wizard.user.save_custom_fields(true)
             end
           end
         end

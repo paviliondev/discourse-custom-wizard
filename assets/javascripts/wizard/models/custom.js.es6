@@ -1,11 +1,28 @@
 import { default as computed } from 'ember-addons/ember-computed-decorators';
+import getUrl from 'discourse-common/lib/get-url';
 import WizardField from 'wizard/models/wizard-field';
 import { ajax } from 'wizard/lib/ajax';
 import Step from 'wizard/models/step';
 
 const CustomWizard = Ember.Object.extend({
   @computed('steps.length')
-  totalSteps: length => length
+  totalSteps: length => length,
+
+  skip() {
+    if (this.get('required')) return;
+    const id = this.get('id');
+    ajax({ url: `/w/${id}/skip`, type: 'PUT' }).then((result) => {
+      this.finished(result);
+    });
+  },
+
+  finished(result) {
+    let url = "/";
+    if (result.redirect_to) {
+      url = result.redirect_to;
+    }
+    window.location.href = getUrl(url);
+  }
 });
 
 export function findCustomWizard(wizardId) {

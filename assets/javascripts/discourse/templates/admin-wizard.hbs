@@ -41,13 +41,44 @@
     </div>
   </div>
 
-  <div class="setting full">
+  <div class="setting">
     <div class="setting-label">
       <h3>{{i18n 'admin.wizard.multiple_submissions'}}</h3>
     </div>
     <div class="setting-value">
       {{input type='checkbox' checked=model.multiple_submissions}}
       <span for="save">{{i18n 'admin.wizard.multiple_submissions_label'}}</span>
+    </div>
+  </div>
+
+  <div class="setting">
+    <div class="setting-label">
+      <h3>{{i18n 'admin.wizard.required'}}</h3>
+    </div>
+    <div class="setting-value">
+      {{input type='checkbox' checked=model.required}}
+      <span for="save">{{i18n 'admin.wizard.required_label'}}</span>
+    </div>
+  </div>
+
+  <div class="setting">
+    <div class="setting-label">
+      <h3>{{i18n 'admin.wizard.after_signup'}}</h3>
+    </div>
+    <div class="setting-value">
+      {{input type='checkbox' checked=model.after_signup}}
+      <span for="save">{{i18n 'admin.wizard.after_signup_label'}}</span>
+    </div>
+  </div>
+
+  <div class="setting">
+    <div class="setting-label">
+      <h3>{{i18n 'admin.wizard.after_time'}}</h3>
+    </div>
+    <div class="setting-value">
+      {{input type='checkbox' checked=model.after_time}}
+      <span for="save">{{i18n 'admin.wizard.after_time_label'}}</span>
+      {{d-button action='setNextSessionScheduled' translatedLabel=nextSessionScheduledLabel icon='calendar-o'}}
     </div>
   </div>
 
