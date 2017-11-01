@@ -98,7 +98,7 @@ after_initialize do
 
     def redirect_to_wizard_if_required
       @wizard_id ||= current_user.custom_fields['redirect_to_wizard']
-      if @wizard_id && request.original_url !~ /w/ && request.original_url !~ /admin/
+      if @wizard_id && request.referer !~ /w/ && request.referer !~ /admin/
         redirect_to "/w/#{@wizard_id}"
       end
     end

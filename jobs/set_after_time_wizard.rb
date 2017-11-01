@@ -1,5 +1,5 @@
 module Jobs
-  class SetNextSessionWizard < Jobs::Base
+  class SetAfterTimeWizard < Jobs::Base
     def execute(args)
       if PluginStoreRow.exists?(plugin_name: 'custom_wizard', key: args[:wizard_id])
         user_ids = []

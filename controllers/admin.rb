@@ -75,14 +75,18 @@ class CustomWizard::AdminController < ::ApplicationController
 
     return render json: { error: error } if error
 
-    existing = PluginStore.get('custom_wizard', params[:id])
+    existing = PluginStore.get('custom_wizard', wizard['id']) || {}
+    new_time = existing['after_time_scheduled'] ?
+               after_time_scheduled != Time.parse(existing['after_time_scheduled']).utc :
+               true
 
-    if wizard['after_time'] && after_time_scheduled != Time.parse(existing['after_time_scheduled']).utc
+    if wizard['after_time'] && new_time
       Jobs.cancel_scheduled_job(:set_after_time_wizard)
       Jobs.enqueue_at(after_time_scheduled, :set_after_time_wizard, wizard_id: wizard['id'])
     end
 
     if existing['after_time'] && !wizard['after_time']
+      Jobs.cancel_scheduled_job(:set_after_time_wizard)
       Jobs.enqueue(:clear_after_time_wizard, wizard_id: wizard['id'])
     end
 
@@ -97,6 +101,7 @@ class CustomWizard::AdminController < ::ApplicationController
     wizard = PluginStore.get('custom_wizard', params[:id])
 
     if wizard['after_time']
+      Jobs.cancel_scheduled_job(:set_after_time_wizard)
       Jobs.enqueue(:clear_after_time_wizard, wizard_id: wizard['id'])
     end
 
@@ -124,10 +129,14 @@ class CustomWizard::AdminController < ::ApplicationController
   def submissions
     params.require(:wizard_id)
 
-    rows = PluginStoreRow.where(plugin_name: "#{params[:wizard_id]}_submissions").order(:id)
+    rows = PluginStoreRow.where(plugin_name: "#{params[:wizard_id]}_submissions").order('id DESC')
 
-    submissions = [*rows].map { |r| ::JSON.parse(r.value) }.flatten
+    all_submissions = [*rows].map do |r|
+      submissions = ::JSON.parse(r.value)
+      username = User.find(r.key).username
+      submissions.map { |s| { username: username }.merge!(s) }
+    end.flatten
 
-    render json: success_json.merge(submissions: submissions)
+    render json: success_json.merge(submissions: all_submissions)
   end
 end

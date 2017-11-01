@@ -24,7 +24,7 @@ const CustomWizard = Discourse.Model.extend({
         if (value) wizard[p] = value;
       });
 
-      if (wizard['after_time'] && wizard['after_time_scheduled']) {
+      if (wizard['after_time'] && !wizard['after_time_scheduled']) {
         return reject({ error: 'after_time_need_time' });
       };
 

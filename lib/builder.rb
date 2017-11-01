@@ -103,6 +103,7 @@ class CustomWizard::Builder
             submission = @submissions.last || {}
             step_input = updater.fields || {}
             user = @wizard.user
+            final_step = updater.step.next.nil?
 
             if s['fields'] && s['fields'].length
               s['fields'].each do |f|
@@ -225,15 +226,15 @@ class CustomWizard::Builder
               end
             end
 
-            if updater.errors.empty?
-              updater.result = { redirect_to: data['redirect_to'] }
-            end
-
             if @wizard.save_submissions && updater.errors.empty?
               if step_input
                 step_input.each do |key, value|
                   data[key] = value
                 end
+              end
+
+              if final_step
+                data['submitted_at'] = Time.now.iso8601
               end
 
               if data.present?
@@ -244,13 +245,20 @@ class CustomWizard::Builder
             end
 
             # Ensure there is no submission left over after the user has completed a wizard with save_submissions off
-            if !@wizard.save_submissions && updater.step.next.nil?
+            if !@wizard.save_submissions && final_step
               PluginStore.remove("#{@wizard.id}_submissions", @wizard.user.id)
             end
 
-            if @wizard.after_time && updater.step.next.nil?
+            if @wizard.after_time && final_step
               @wizard.user.custom_fields.delete('redirect_to_wizard');
               @wizard.user.save_custom_fields(true)
+            end
+
+            if updater.errors.empty?
+              # If the user will be redirected to a new wizard send them there straight away
+              user_redirect = user.custom_fields['redirect_to_wizard']
+              redirect_to = user_redirect ? "/w/#{user_redirect}" : data['redirect_to']
+              updater.result = { redirect_to: redirect_to } if redirect_to
             end
           end
         end

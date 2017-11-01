@@ -1,5 +1,5 @@
 module Jobs
-  class ClearNextSessionWizard < Jobs::Base
+  class ClearAfterTimeWizard < Jobs::Base
     sidekiq_options queue: 'critical'
 
     def execute(args)
