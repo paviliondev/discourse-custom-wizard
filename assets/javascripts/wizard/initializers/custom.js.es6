@@ -2,6 +2,7 @@ export default {
   name: 'custom-routes',
 
   initialize(app) {
+    console.log('running initializer', app.constructor.name, app.get('rootElement'))
     if (app.constructor.name !== 'Class' || app.get('rootElement') !== '#custom-wizard-main') return;
 
     const Router = requirejs('wizard/router').default;
