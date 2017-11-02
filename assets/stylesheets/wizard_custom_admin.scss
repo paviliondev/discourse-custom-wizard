@@ -60,10 +60,28 @@
         margin-top: 5px;
         display: block;
       }
+
+      .d-editor {
+        width: 100%;
+
+        .d-editor-input {
+          height: 100px;
+        }
+
+        button {
+          margin: 0;
+        }
+      }
     }
 
     &.full {
       width: 100%;
+
+      .setting-value {
+        width: initial;
+        overflow: hidden;
+        float: none;
+      }
     }
 
     label {

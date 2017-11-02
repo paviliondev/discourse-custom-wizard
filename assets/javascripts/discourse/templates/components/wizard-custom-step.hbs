@@ -34,12 +34,12 @@
   </div>
 </div>
 
-<div class="setting">
+<div class="setting full">
   <div class="setting-label">
     <h3>{{i18n 'admin.wizard.step.description'}}</h3>
   </div>
   <div class="setting-value">
-    {{textarea name="description" value=step.description placeholder=(i18n "admin.wizard.custom_text_placeholder")}}
+    {{d-editor value=step.description placeholder="admin.wizard.custom_text_placeholder"}}
   </div>
 </div>
 

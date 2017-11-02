@@ -75,6 +75,12 @@ class CustomWizard::AdminController < ::ApplicationController
 
     return render json: { error: error } if error
 
+    ## end of error checks
+
+    wizard['steps'].each do |s|
+      s['description'] = PrettyText.cook(s['description']) if s['description']
+    end
+
     existing = PluginStore.get('custom_wizard', wizard['id']) || {}
     new_time = existing['after_time_scheduled'] ?
                after_time_scheduled != Time.parse(existing['after_time_scheduled']).utc :
