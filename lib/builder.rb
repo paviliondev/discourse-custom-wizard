@@ -100,14 +100,11 @@ class CustomWizard::Builder
 
           step.on_update do |updater|
             @updater = updater
-            submission = @submissions.last || {}
-            step_input = updater.fields || {}
             user = @wizard.user
-            final_step = updater.step.next.nil?
 
             if s['fields'] && s['fields'].length
               s['fields'].each do |f|
-                value = step_input[f['id']]
+                value = updater.fields[f['id']]
                 min_length = f['min_length']
                 if min_length && value.is_a?(String) && value.length < min_length.to_i
                   label = f['label'] || I18n.t("#{f['key']}.label")
@@ -126,13 +123,14 @@ class CustomWizard::Builder
 
             next if updater.errors.any?
 
-            if @wizard.save_submissions
-              data = submission
-            else
-              data = step_input
+            step_input = updater.fields.to_h
+            data = step_input
+            final_step = updater.step.next.nil?
 
-              # Allow redirect to be passed to wizard that doesn't save submissions.
-              data['redirect_to'] = submission['redirect_to'] if submission['redirect_to']
+            ## if the wizard has data from the previous steps make that accessible to the actions.
+            if @submissions && @submissions.last && !@submissions.last.key?("submitted_at")
+              submission = @submissions.last
+              data = submission.merge(data)
             end
 
             if s['actions'] && s['actions'].length
@@ -221,6 +219,7 @@ class CustomWizard::Builder
                   a['profile_updates'].each do |pu|
                     attributes[pu['value'].to_sym] = data[pu['key']]
                   end
+                  puts "UPDATING WITH: #{attributes}"
                   user_updater.update(attributes) if attributes.present?
                 end
               end

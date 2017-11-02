@@ -115,9 +115,24 @@ class CustomWizard::Wizard
     end
   end
 
+  def self.steps(wizard_id)
+    wizard = PluginStore.get('custom_wizard', wizard_id)
+    wizard ? wizard['steps'] : nil
+  end
+
   def self.step_ids(wizard_id)
-    data = PluginStore.get('custom_wizard', wizard_id)
-    steps = data['steps'] || []
-    steps.map { |s| s['id'] }.flatten.uniq
+    steps = self.steps(wizard_id)
+    steps.map { |s| s['id'] }.flatten.uniq if steps
+  end
+
+  def self.field_ids(wizard_id, step_id)
+    steps = self.steps(wizard_id)
+    return nil if !steps
+    step = steps.select { |s| s['id'] === step_id }.first
+    if step && fields = step['fields']
+      fields.map { |f| f['id'] }
+    else
+      nil
+    end
   end
 end

@@ -2,8 +2,11 @@ class CustomWizard::StepsController < ApplicationController
   before_action :ensure_logged_in
 
   def update
-    wizard = CustomWizard::Builder.new(current_user, params[:wizard_id].underscore).build
-    updater = wizard.create_updater(params[:step_id], params[:fields])
+    field_ids = CustomWizard::Wizard.field_ids(params[:wizard_id], params[:step_id])
+    permitted = params.permit(:step_id, :wizard_id, fields: field_ids.map(&:to_sym)) if field_ids.present?
+
+    wizard = CustomWizard::Builder.new(current_user, permitted[:wizard_id].underscore).build
+    updater = wizard.create_updater(permitted[:step_id], permitted[:fields])
     updater.update
 
     if updater.success?
