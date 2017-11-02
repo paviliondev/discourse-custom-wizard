@@ -76,7 +76,7 @@ class CustomWizard::Wizard
       acting_user_id: @user.id,
       action: ::UserHistory.actions[:custom_wizard_step],
       context: @id,
-    ).distinct.order(:updated_at).first
+    ).distinct.order('updated_at DESC').first
 
     if most_recent
       last_finished_step = most_recent.subject

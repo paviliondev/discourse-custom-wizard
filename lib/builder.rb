@@ -56,7 +56,7 @@ class CustomWizard::Builder
               params[:description] = f['description'] if f['description']
               params[:key] = f['key'] if f['key']
 
-              if @submissions.last
+              if @submissions.last && @wizard.unfinished?
                 submission = @submissions.last
                 params[:value] = submission[f['id']] if submission[f['id']]
               end
