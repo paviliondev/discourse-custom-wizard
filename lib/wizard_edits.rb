@@ -83,6 +83,10 @@ end
   def required
     object.required
   end
+
+  def include_required?
+    object.respond_to?(:required)
+  end
 end
 
 ::WizardStepSerializer.class_eval do
