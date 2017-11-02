@@ -2,9 +2,9 @@ export default {
   name: 'custom-routes',
 
   initialize(app) {
-    console.log('running custom initializer')
-    if (app.constructor.name !== 'Class' || typeof app.get !== 'function' ||
-        app.get('rootElement') !== '#custom-wizard-main') return;
+    if (window.location.pathname.indexOf('/w/') < 0) return;
+
+    console.log('running initializer')
 
     const Router = requirejs('wizard/router').default;
     const ApplicationRoute = requirejs('wizard/routes/application').default;
