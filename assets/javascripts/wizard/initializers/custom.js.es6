@@ -1,10 +1,8 @@
 export default {
   name: 'custom-routes',
 
-  initialize(app) {
+  initialize() {
     if (window.location.pathname.indexOf('/w/') < 0) return;
-
-    console.log('running initializer')
 
     const Router = requirejs('wizard/router').default;
     const ApplicationRoute = requirejs('wizard/routes/application').default;
@@ -24,8 +22,6 @@ export default {
         this.route('step', { path: '/steps/:step_id' });
       });
     });
-
-    console.log("added routes")
 
     ApplicationRoute.reopen({
       redirect() {
