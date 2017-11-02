@@ -2,8 +2,9 @@ export default {
   name: 'custom-routes',
 
   initialize(app) {
-    console.log('running initializer', app.constructor.name, app.get('rootElement'))
-    if (app.constructor.name !== 'Class' || app.get('rootElement') !== '#custom-wizard-main') return;
+    console.log('running custom initializer')
+    if (app.constructor.name !== 'Class' || typeof app.get !== 'function' ||
+        app.get('rootElement') !== '#custom-wizard-main') return;
 
     const Router = requirejs('wizard/router').default;
     const ApplicationRoute = requirejs('wizard/routes/application').default;
@@ -23,6 +24,8 @@ export default {
         this.route('step', { path: '/steps/:step_id' });
       });
     });
+
+    console.log("added routes")
 
     ApplicationRoute.reopen({
       redirect() {
