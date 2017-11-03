@@ -219,7 +219,6 @@ class CustomWizard::Builder
                   a['profile_updates'].each do |pu|
                     attributes[pu['value'].to_sym] = data[pu['key']]
                   end
-                  puts "UPDATING WITH: #{attributes}"
                   user_updater.update(attributes) if attributes.present?
                 end
               end
