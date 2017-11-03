@@ -78,7 +78,7 @@ class CustomWizard::AdminController < ::ApplicationController
     ## end of error checks
 
     wizard['steps'].each do |s|
-      s['description'] = PrettyText.cook(s['description']) if s['description']
+      s['description'] = PrettyText.cook(s['raw_description']) if s['raw_description']
     end
 
     existing = PluginStore.get('custom_wizard', wizard['id']) || {}

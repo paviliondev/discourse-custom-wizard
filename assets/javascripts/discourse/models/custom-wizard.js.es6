@@ -72,7 +72,7 @@ const CustomWizard = Discourse.Model.extend({
       if (s.title) step['title'] = s.title;
       if (s.key) step['key'] = s.key;
       if (s.banner) step['banner'] = s.banner;
-      if (s.description) step['description'] = s.description;
+      if (s.raw_description) step['raw_description'] = s.raw_description;
 
       const fields = s.get('fields');
       if (fields.length) {
@@ -218,7 +218,7 @@ CustomWizard.reopenClass({
             id: s.id,
             key: s.key,
             title: s.title,
-            description: s.description,
+            raw_description: s.raw_description,
             banner: s.banner,
             fields,
             actions,
