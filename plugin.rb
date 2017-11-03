@@ -110,6 +110,7 @@ after_initialize do
 
   add_to_serializer(:current_user, :redirect_to_wizard) { object.custom_fields['redirect_to_wizard'] }
 
+  ## TODO limit this to the first admin
   SiteSerializer.class_eval do
     def include_wizard_required?
       scope.is_admin? && Wizard.user_requires_completion?(scope.user)
