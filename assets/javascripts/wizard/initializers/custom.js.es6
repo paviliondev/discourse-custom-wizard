@@ -70,12 +70,12 @@ export default {
 
       actions: {
         quit() {
-          if ($(event.target).hasClass('quit')) {
-            this.get('wizard').skip();
-          } else {
-            this.set('finalStep', true);
-            this.send('nextStep');
-          };
+          this.get('wizard').skip();
+        },
+
+        done() {
+          this.set('finalStep', true);
+          this.send('nextStep');
         },
 
         showMessage(message) {
