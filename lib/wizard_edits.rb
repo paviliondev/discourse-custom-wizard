@@ -97,7 +97,7 @@ end
 
   def description
     return object.description if object.description
-    I18n.t("#{object.key || i18n_key}.description", default: '')
+    I18n.t("#{object.key || i18n_key}.description", default: '', base_url: Discourse.base_url)
   end
 end
 

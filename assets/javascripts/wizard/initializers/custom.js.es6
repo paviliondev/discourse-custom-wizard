@@ -42,7 +42,7 @@ export default {
         const src = this.get('step.banner');
         if (!src) return;
 
-        if (src.indexOf('/uploads/') > -1 || src.indexOf('/images/') > -1) {
+        if (src.indexOf('/uploads/') > -1 || src.indexOf('/plugins/') > -1) {
           return getUrl(src);
         } else {
           return getUrl(`/images/wizard/${src}`);

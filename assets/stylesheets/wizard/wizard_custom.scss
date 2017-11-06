@@ -13,11 +13,22 @@
     i {
       margin-right: 7px;
     }
+
+    img.large {
+      width: 250;
+      padding: 25px;;
+    }
+
+    img.small {
+      width: 120;
+      padding: 10px;
+    }
   }
 
   .wizard-column .wizard-step-banner {
     width: initial;
     max-width: 660px;
+    max-height: 300px;
   }
 
   .control-group {
