@@ -61,6 +61,22 @@ class CustomWizard::Builder
                 params[:value] = submission[f['id']] if submission[f['id']]
               end
 
+              if s['actions'].any?
+                profile_actions = s['actions'].select { |a| a['type'] === 'update_profile' }
+                if profile_actions.any?
+                  profile_actions.each do |action|
+                    if update = action['profile_updates'].select { |u| u['key'] === f['id'] }.first
+                      attribute = update['value']
+                      if UserProfile.column_names.include? attribute
+                        params[:value] = UserProfile.find_by(user_id: @wizard.user.id).send(attribute)
+                      elsif User.column_names.include? attribute
+                        params[:value] = User.find(@wizard.user.id).send(attribute)
+                      end
+                    end
+                  end
+                end
+              end
+
               field = step.add_field(params)
 
               if f['type'] === 'dropdown'
