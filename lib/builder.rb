@@ -61,7 +61,7 @@ class CustomWizard::Builder
                 params[:value] = submission[f['id']] if submission[f['id']]
               end
 
-              if s['actions'].any?
+              if s['actions'] && s['actions'].any?
                 profile_actions = s['actions'].select { |a| a['type'] === 'update_profile' }
                 if profile_actions.any?
                   profile_actions.each do |action|
