@@ -136,4 +136,9 @@ class CustomWizard::Wizard
       []
     end
   end
+
+  def self.add_wizard(json)
+    wizard = ::JSON.parse(json)
+    PluginStore.set('custom_wizard', wizard["id"], wizard)
+  end
 end
