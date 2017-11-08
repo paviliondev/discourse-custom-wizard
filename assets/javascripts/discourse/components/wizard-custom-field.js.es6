@@ -5,9 +5,9 @@ export default Ember.Component.extend({
   isDropdown: Ember.computed.equal('field.type', 'dropdown'),
   disableId: Ember.computed.not('field.isNew'),
   choicesTypes: ['translation', 'preset', 'custom'],
-  choicesTranslation: Ember.computed.equal('choicesType', 'translation'),
-  choicesPreset: Ember.computed.equal('choicesType', 'preset'),
-  choicesCustom: Ember.computed.equal('choicesType', 'custom'),
+  choicesTranslation: Ember.computed.equal('field.choices_type', 'translation'),
+  choicesPreset: Ember.computed.equal('field.choices_type', 'preset'),
+  choicesCustom: Ember.computed.equal('field.choices_type', 'custom'),
 
   @computed('field.type')
   isInput: (type) => type === 'text' || type === 'textarea',

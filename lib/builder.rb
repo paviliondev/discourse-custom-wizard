@@ -100,7 +100,14 @@ class CustomWizard::Builder
 
                   if f['choices_filters'] && f['choices_filters'].length > 0
                     f['choices_filters'].each do |f|
-                      objects.reject! { |o| o[f['key']] != f['value'] }
+                      objects.reject! do |o|
+                        prop = f['key']
+                        if prop.include? 'custom_fields'
+                          o.custom_fields[prop.split('.')[1]].to_s != f['value'].to_s
+                        else
+                          o[prop].to_s != f['value'].to_s
+                        end
+                      end
                     end
                   end
 

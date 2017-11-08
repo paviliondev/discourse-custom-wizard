@@ -51,18 +51,17 @@ class CustomWizard::Wizard
   end
 
   def start
-    completed = ::UserHistory.where(
-      acting_user_id: @user.id,
-      action: ::UserHistory.actions[:custom_wizard_step],
-      context: @id,
-      subject: @steps.map(&:id)
-    ).uniq.pluck(:subject)
-
-    @steps.each do |s|
-      return s unless completed.include?(s.id)
+    if unfinished?
+      step_id = ::UserHistory.where(
+        acting_user_id: @user.id,
+        action: ::UserHistory.actions[:custom_wizard_step],
+        context: @id,
+        subject: @steps.map(&:id)
+      ).order("created_at").last.subject
+      @steps.find { |s| s.id == step_id }
+    else
+      @first_step
     end
-
-    @first_step
   end
 
   def create_updater(step_id, fields)
