@@ -96,5 +96,10 @@
       </div>
       {{wizard-custom-input inputs=field.choices}}
     {{/if}}
+
+    <div class="wizard-header small">
+      {{i18n 'admin.wizard.field.dropdown_none'}}
+    </div>
+    {{input name="dropdown_none" value=field.dropdown_none placeholder=(i18n 'admin.wizard.field.dropdown_none_placeholder')}}
   </div>
 {{/if}}

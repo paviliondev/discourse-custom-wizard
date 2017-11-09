@@ -38,14 +38,22 @@
 
     {{#if showNextButton}}
       <button class='wizard-btn next primary' {{action "nextStep"}} disabled={{saving}} tabindex="10">
-        {{i18n "wizard.next"}}
-        {{d-icon "chevron-right"}}
+        {{#if saving}}
+          {{loading-spinner size='small'}}
+        {{else}}
+          {{i18n "wizard.next"}}
+          {{d-icon "chevron-right"}}
+        {{/if}}
       </button>
     {{/if}}
 
     {{#if showDoneButton}}
       <button class='wizard-btn done' {{action "done"}} disabled={{saving}} tabindex="10">
-        {{i18n "wizard.done"}}
+        {{#if saving}}
+          {{loading-spinner size='small'}}
+        {{else}}
+          {{i18n "wizard.done"}}
+        {{/if}}
       </button>
     {{/if}}
   </div>

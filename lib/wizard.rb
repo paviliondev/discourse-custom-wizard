@@ -58,7 +58,8 @@ class CustomWizard::Wizard
         context: @id,
         subject: @steps.map(&:id)
       ).order("created_at").last.subject
-      @steps.find { |s| s.id == step_id }
+      last_index = @steps.index { |s| s.id == step_id }
+      @steps[last_index + 1]
     else
       @first_step
     end

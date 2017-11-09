@@ -68,6 +68,11 @@
   .combo-box ul {
     padding: 0;
   }
+
+  .wizard-buttons > a, .wizard-buttons > button {
+    display: inline-block;
+    vertical-align: middle;
+  }
 }
 
 .step-message {

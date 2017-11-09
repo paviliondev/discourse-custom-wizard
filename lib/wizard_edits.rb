@@ -25,6 +25,7 @@ end
 
 ::Wizard::Field.class_eval do
   attr_reader :label, :description, :key, :min_length
+  attr_accessor :dropdown_none
 
   def initialize(attrs)
     attrs = attrs || {}
@@ -38,6 +39,7 @@ end
     @min_length = attrs[:min_length]
     @value = attrs[:value]
     @choices = []
+    @dropdown_none = attrs[:dropdown_none]
   end
 end
 
@@ -102,6 +104,8 @@ end
 end
 
 ::WizardFieldSerializer.class_eval do
+  attributes :dropdown_none
+
   def label
     return object.label if object.label
     I18n.t("#{object.key || i18n_key}.label", default: '')
@@ -114,5 +118,9 @@ end
 
   def placeholder
     I18n.t("#{object.key || i18n_key}.placeholder", default: '')
+  end
+
+  def dropdown_none
+    object.dropdown_none
   end
 end

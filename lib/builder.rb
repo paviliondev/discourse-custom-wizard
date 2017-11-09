@@ -80,6 +80,8 @@ class CustomWizard::Builder
               field = step.add_field(params)
 
               if f['type'] === 'dropdown'
+                field.dropdown_none = f['dropdown_none'] if f['dropdown_none']
+
                 if f['choices'] && f['choices'].length > 0
                   f['choices'].each do |c|
                     field.add_choice(c['value'], label: c['label'])

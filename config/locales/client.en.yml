@@ -60,6 +60,8 @@ en:
           header: "Fields"
           label: "Label"
           description: "Description"
+          dropdown_none: "None"
+          dropdown_none_placeholder: "Translation Key"
           choices_label: "Dropdown Choices"
           choices_type: "Choose a type"
           choices_translation: "Translation"
