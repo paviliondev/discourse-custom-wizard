@@ -51,13 +51,14 @@ class CustomWizard::Wizard
   end
 
   def start
-    if unfinished?
-      step_id = ::UserHistory.where(
+    if unfinished? && last_completed_step = ::UserHistory.where(
         acting_user_id: @user.id,
         action: ::UserHistory.actions[:custom_wizard_step],
         context: @id,
         subject: @steps.map(&:id)
-      ).order("created_at").last.subject
+      ).order("created_at").last
+
+      step_id = last_completed_step.subject
       last_index = @steps.index { |s| s.id == step_id }
       @steps[last_index + 1]
     else
