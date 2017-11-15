@@ -14,6 +14,10 @@
       margin-right: 7px;
     }
 
+    .image-container {
+      margin: 10px 0;
+    }
+
     img.large {
       width: 250;
       padding: 25px;;
@@ -184,5 +188,17 @@
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+
+// 3rd party styles TO BE REMOVED / REFACTORED
+
+#custom-wizard-main.place-petition {
+  .wizard-step.intro .image-container {
+    margin: 30px 0;
+
+    img {
+      padding: 20px 40px;
+    }
   }
 }

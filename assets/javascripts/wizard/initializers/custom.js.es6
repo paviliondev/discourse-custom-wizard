@@ -32,6 +32,8 @@ export default {
     });
 
     WizardStep.reopen({
+      classNameBindings: ['step.id'],
+
       showQuitButton: function() {
         const index = this.get('step.index');
         const required = this.get('wizard.required');
