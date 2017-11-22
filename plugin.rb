@@ -112,8 +112,20 @@ after_initialize do
 
   ## TODO limit this to the first admin
   SiteSerializer.class_eval do
+    attributes :complete_custom_wizard
+
     def include_wizard_required?
       scope.is_admin? && Wizard.user_requires_completion?(scope.user)
+    end
+
+    def complete_custom_wizard
+      if requires_completion = CustomWizard::Wizard.prompt_completion(scope.user)
+        requires_completion.map { |w| { name: w[:name], url: "/w/#{w[:id]}" } }
+      end
+    end
+
+    def include_complete_custom_wizard?
+      complete_custom_wizard.present?
     end
   end
 end

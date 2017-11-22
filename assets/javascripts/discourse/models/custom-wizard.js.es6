@@ -8,7 +8,8 @@ const wizardProperties = [
   'after_signup',
   'after_time',
   'after_time_scheduled',
-  'required'
+  'required',
+  'prompt_completion'
 ];
 
 const CustomWizard = Discourse.Model.extend({
@@ -235,6 +236,7 @@ CustomWizard.reopenClass({
       props['after_signup'] = false;
       props['after_time'] = false;
       props['required'] = false;
+      props['prompt_completion'] = false;
       props['steps'] = Ember.A();
     };
 

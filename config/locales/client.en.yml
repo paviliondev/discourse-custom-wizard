@@ -1,4 +1,7 @@
 en:
+  js:
+    wizard:
+      complete_custom: "Welcome to %{site_name}! Get started with <a href='%{wizard_url}' data-auto-route='true'>the %{wizard_name} wizard</a> ✨"
   admin_js:
     admin:
       wizard:
@@ -27,6 +30,8 @@ en:
           clear: "Clear"
         required: "Required"
         required_label: "Users cannot skip the wizard."
+        prompt_completion: "Prompt"
+        prompt_completion_label: "Prompt user to complete wizard."
         save: "Save Changes"
         remove: "Delete Wizard"
         header: "Wizard"

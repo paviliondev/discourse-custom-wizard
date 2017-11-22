@@ -13,7 +13,8 @@ class CustomWizard::Wizard
                 :multiple_submissions,
                 :after_time,
                 :after_signup,
-                :required
+                :required,
+                :prompt_completion
 
   def initialize(user, attrs = {})
     @steps = []
@@ -111,6 +112,22 @@ class CustomWizard::Wizard
     wizards = [*rows].select { |r| r.value['after_signup'] }
     if wizards.any?
       wizards.first.key
+    else
+      false
+    end
+  end
+
+  def self.prompt_completion(user)
+    rows = PluginStoreRow.where(plugin_name: 'custom_wizard')
+    wizards = [*rows].select { |r| r.value['prompt_completion'] }
+    if wizards.any?
+      wizards.reduce([]) do |result, w|
+        data = ::JSON.parse(w.value)
+        id = data['id']
+        name = data['name']
+        wizard = CustomWizard::Wizard.new(user, id: id, name: name)
+        result.push(id: id, name: name) if !wizard.completed?
+      end
     else
       false
     end

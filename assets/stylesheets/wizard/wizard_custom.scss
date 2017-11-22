@@ -1,6 +1,10 @@
 .custom-wizard {
   background-color: initial;
 
+  .wizard-step-contents {
+    position: relative;
+  }
+
   .wizard-step-description {
     line-height: 1.7;
 
@@ -15,7 +19,18 @@
     }
 
     .image-container {
-      margin: 10px 0;
+      margin: 30px 0;
+      padding: 0 40px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+
+      &.group {
+        padding: 0;
+        margin: 0;
+        width: 140px;
+        height: 140px;
+      }
     }
 
     img.large {
@@ -26,6 +41,29 @@
     img.small {
       width: 120;
       padding: 10px;
+    }
+
+    img.x-small {
+      width: 60px;
+      height: 60px;
+      padding: 3px;
+    }
+
+    label {
+      display: block;
+      text-align: center;
+    }
+
+    .tip {
+      position: absolute;
+      bottom: 0;
+      font-style: italic;
+
+      img {
+        width: 30px;
+        height: 30px;
+        vertical-align: middle;
+      }
     }
   }
 
@@ -88,6 +126,7 @@
   line-height: 0;
   text-align: center;
   transition: all .2s;
+  z-index: 2;
 
   &.success {
     height: 60px;
@@ -188,17 +227,5 @@
   }
   100% {
     transform: rotate(360deg);
-  }
-}
-
-// 3rd party styles TO BE REMOVED / REFACTORED
-
-#custom-wizard-main.place-petition {
-  .wizard-step.intro .image-container {
-    margin: 30px 0;
-
-    img {
-      padding: 20px 40px;
-    }
   }
 }
