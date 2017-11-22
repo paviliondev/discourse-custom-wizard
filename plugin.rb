@@ -119,7 +119,7 @@ after_initialize do
     end
 
     def complete_custom_wizard
-      if requires_completion = CustomWizard::Wizard.prompt_completion(scope.user)
+      if scope.user && requires_completion = CustomWizard::Wizard.prompt_completion(scope.user)
         requires_completion.map { |w| { name: w[:name], url: "/w/#{w[:id]}" } }
       end
     end
