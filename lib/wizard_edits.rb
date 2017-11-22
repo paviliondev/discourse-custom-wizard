@@ -71,9 +71,7 @@ end
   end
 
   def include_completed?
-    object.completed? &&
-    (!object.respond_to?(:multiple_submissions) || !object.multiple_submissions) &&
-    !scope.current_user.admin?
+    object.completed? && (!object.respond_to?(:multiple_submissions) || !object.multiple_submissions)
   end
 
   def include_start?
@@ -90,14 +88,6 @@ end
 
   def include_required?
     object.respond_to?(:required)
-  end
-
-  def prompt_completion
-    object.prompt_completion
-  end
-
-  def include_prompt_completion?
-    object.respond_to?(:prompt_completion)
   end
 end
 
