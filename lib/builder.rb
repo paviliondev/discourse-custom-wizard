@@ -178,7 +178,7 @@ class CustomWizard::Builder
                         value = data[f['value']]
                         key = f['key']
 
-                        if key.include?('custom_fields')
+                        if key && key.include?('custom_fields')
                           keyArr = key.split('.')
 
                           if keyArr.length === 3
