@@ -71,7 +71,7 @@ end
   end
 
   def include_completed?
-    object.completed? && !object.respond_to?(:multiple_submissions) && !scope.current_user.admin?
+    object.completed? && !object.multiple_submissions && !scope.current_user.admin?
   end
 
   def include_start?
