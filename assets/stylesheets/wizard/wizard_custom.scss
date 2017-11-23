@@ -221,6 +221,146 @@
   }
 }
 
+.user-selector-field.wizard-field {
+  div.ac-wrap div.item a.remove, .remove-link {
+    margin-left: 4px;
+    font-size: 11px;
+    line-height: 10px;
+    padding: 1.5px 1.5px 1.5px 2.5px;
+    border-radius: 12px;
+    width: 10px;
+    display: inline-block;
+    border: 1px solid #e9e9e9;
+
+    &:hover {
+      background-color: #f2ab9a;
+      border: 1px solid #ec8972;
+      text-decoration: none;
+      color: #e45735;
+    }
+  }
+
+  div.ac-wrap {
+    width: 98.5% !important;
+    overflow: auto;
+    max-height: 150px;
+    background-color: white;
+    border: 1px solid #e9e9e9;
+    padding: 5px 4px 1px 4px;
+
+    div.item {
+      float: left;
+      margin-bottom: 4px;
+      margin-right: 10px;
+
+      span {
+        height: 24px;
+        display: inline-block;
+        line-height: 20px;
+      }
+    }
+
+    .ac-collapsed-button {
+      float: left;
+      border-radius: 20px;
+      position: relative;
+      top: -2px;
+      margin-right: 10px;
+    }
+
+    input[type="text"] {
+      float: left;
+      margin-bottom: 4px;
+      height: 24px;
+      display: block;
+      border: 0;
+      padding: 0;
+      box-shadow: none;
+    }
+  }
+}
+
+img.avatar {
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+.autocomplete {
+  z-index: 999999;
+  position: absolute;
+  width: 240px;
+  background-color: white;
+  border: 1px solid #e9e9e9;
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      .d-users {
+        color: #333;
+        padding: 0 2px;
+      }
+
+      border-bottom: 1px solid #e9e9e9;
+
+      a {
+        padding: 5px;
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 14px;
+        text-decoration: none;
+
+        img {
+          margin-right: 5px;
+        }
+
+        span.username {
+          color: #000;
+          vertical-align: middle;
+        }
+
+        span.name {
+          font-size: 11px;
+          vertical-align: middle;
+        }
+
+        &.selected {
+          background-color: #d1f0ff;
+        }
+
+        &:hover {
+          background-color: #ffffa6;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}
+
+.checkbox-field {
+  display: inline-block;
+  width: 100%;
+
+  &> label {
+    float: left;
+  }
+
+  &> .input-area {
+    float: right;
+    margin: 0 20px !important;
+    padding: 10px 0;
+
+    input {
+      cursor: pointer;
+      transform: scale(1.3);
+    }
+  }
+}
+
 @keyframes rotate-forever {
   0% {
     transform: rotate(0deg);

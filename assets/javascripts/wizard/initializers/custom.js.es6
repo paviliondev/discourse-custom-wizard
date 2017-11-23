@@ -11,6 +11,12 @@ export default {
     const WizardStep = requirejs('wizard/components/wizard-step').default;
     const getUrl = requirejs('discourse-common/lib/get-url').default;
     const FieldModel = requirejs('wizard/models/wizard-field').default;
+    const autocomplete = requirejs('discourse/lib/autocomplete').default;
+
+    $.fn.autocomplete = autocomplete;
+
+    // this is for discourse/lib/utilities.avatarImg;
+    Discourse.getURLWithCDN = getUrl;
 
     Router.reopen({
       rootURL: getUrl('/w/')

@@ -5,8 +5,10 @@
     <%= preload_script "ember_jquery" %>
     <%= preload_script "wizard-vendor" %>
     <%= preload_script "wizard-application" %>
+    <%= preload_script "wizard-custom-lib" %>
     <%= preload_script "wizard-custom" %>
     <%= preload_script "wizard-plugin" %>
+    <%= preload_script "pretty-text-bundle" %>
     <%= preload_script "locales/#{I18n.locale}" %>
     <%= render partial: "common/special_font_face" %>
     <script src="<%= Discourse.base_uri %>/extra-locales/wizard"></script>
