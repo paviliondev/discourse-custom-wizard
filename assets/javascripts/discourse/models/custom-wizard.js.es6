@@ -86,6 +86,12 @@ const CustomWizard = Discourse.Model.extend({
             error = 'id_required';
             return;
           }
+
+          if (!f.type) {
+            error = 'type_required';
+            return;
+          }
+
           f.set('id', id.underscore());
 
           if (f.label === '') delete f.label;
@@ -97,6 +103,8 @@ const CustomWizard = Discourse.Model.extend({
               error = 'field.need_choices';
               return;
             }
+
+            if (f.dropdown_none === '') delete f.dropdown_none;
           }
 
           delete f.isNew;

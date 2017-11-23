@@ -50,6 +50,7 @@ en:
           name_required: "Wizards must have a name."
           steps_required: "Wizards must have at least one step."
           id_required: "All wizards, steps, fields and actions need an id."
+          type_required: "All fields need a type."
           after_time_need_time: "After time is enabled but no time is set."
           after_time_invalid: "After time is invalid."
           field:
@@ -62,6 +63,7 @@ en:
           banner_placeholder: "Image url"
           description: "Description"
         field:
+          type: "Choose a type"
           header: "Fields"
           label: "Label"
           description: "Description"

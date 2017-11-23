@@ -53,6 +53,11 @@ class CustomWizard::AdminController < ::ApplicationController
             break
           end
 
+          if f["type"].blank?
+            error = 'type_required'
+            break
+          end
+
           if f["type"] === 'dropdown'
             choices = f["choices"]
             if (!choices || choices.length < 1) && !f["choices_key"] && !f["choices_preset"]
