@@ -140,7 +140,7 @@ en:
         countrycode: "Please enter a country."
         geo_location: "Search and select a result."
 
-    select_box:
+    select_kit:
       filter_placeholder: "Search..."
 
     wizard:
