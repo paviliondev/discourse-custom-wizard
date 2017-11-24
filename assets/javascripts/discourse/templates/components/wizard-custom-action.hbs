@@ -40,12 +40,34 @@
       <h3>{{i18n "admin.wizard.action.post"}}</h3>
     </div>
     <div class="setting-value">
-      {{combo-box value=action.post content=availableFields nameProperty="label" none='admin.wizard.select_field'}}
+      {{combo-box value=action.post content=availableFields
+                                    nameProperty='label'
+                                    none='admin.wizard.select_field'
+                                    isDisabled=action.post_builder}}
+      <div>
+        {{input type='checkbox' checked=action.post_builder}}
+        <span>{{i18n 'admin.wizard.action.post_builder.checkbox'}}</span>
+      </div>
     </div>
   </div>
 
+  {{#if action.post_builder}}
+    <div class="setting full">
+      <div class="setting-label">
+        <h3>{{i18n 'admin.wizard.action.post_builder.label'}}</h3>
+      </div>
+      <div class="setting-value">
+        <label>{{i18n 'admin.wizard.action.post_builder.user_fields'}}{{builderUserFields}}</label>
+        <label>{{i18n 'admin.wizard.action.post_builder.wizard_fields'}}{{builderWizardFields}}</label>
+        {{d-editor value=action.post
+                   placeholder='admin.wizard.action.post_builder.placeholder'
+                   classNames='post-builder-editor'}}
+      </div>
+    </div>
+  {{/if}}
+
   <div class="setting full">
-    <label>{{i18n "admin.wizard.action.add_fields" type='Topic'}}</label>
+    <label>{{i18n 'admin.wizard.action.add_fields' type='Topic'}}</label>
     {{wizard-custom-input inputs=action.add_fields
                           valueContent=availableFields
                           inputKey='admin.wizard.action.topic_attr'
@@ -68,9 +90,31 @@
       <h3>{{i18n "admin.wizard.action.post"}}</h3>
     </div>
     <div class="setting-value">
-      {{combo-box value=action.post content=availableFields nameProperty='label' none='admin.wizard.select_field'}}
+      {{combo-box value=action.post content=availableFields
+                                    nameProperty='label'
+                                    none='admin.wizard.select_field'
+                                    isDisabled=action.post_builder}}
+      <div>
+        {{input type='checkbox' checked=action.post_builder}}
+        <span>{{i18n 'admin.wizard.action.post_builder.checkbox'}}</span>
+      </div>
     </div>
   </div>
+
+  {{#if action.post_builder}}
+    <div class="setting full">
+      <div class="setting-label">
+        <h3>{{i18n 'admin.wizard.action.post_builder.label'}}</h3>
+      </div>
+      <div class="setting-value">
+        <label>{{i18n 'admin.wizard.action.post_builder.user_fields'}}{{builderUserFields}}</label>
+        <label>{{i18n 'admin.wizard.action.post_builder.wizard_fields'}}{{builderWizardFields}}</label>
+        {{d-editor value=action.post
+                   placeholder='admin.wizard.action.post_builder.placeholder'
+                   classNames='post-builder-editor'}}
+      </div>
+    </div>
+  {{/if}}
 
   <div class="setting">
     <div class="setting-label">

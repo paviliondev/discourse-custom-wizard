@@ -8,18 +8,15 @@ const ACTION_TYPES = [
 
 const PROFILE_FIELDS = [
   'name',
-  'email',
-  'username',
-  'title',
   'date_of_birth',
-  'muted_usernames',
-  'theme_key',
+  'title',
   'locale',
-  'bio_raw',
   'location',
   'website',
+  'bio_raw',
   'profile_background',
-  'card_background'
+  'card_background',
+  'theme_key'
 ];
 
 export default Ember.Component.extend({
@@ -54,5 +51,17 @@ export default Ember.Component.extend({
     });
 
     return fields;
+  },
+
+  @computed('availableFields')
+  builderWizardFields(fields) {
+    return fields.map((f) => ` w{${f.id}}`);
+  },
+
+  @computed()
+  builderUserFields() {
+    const noThemeKey = PROFILE_FIELDS.filter((f) => f !== 'theme_key');
+    const fields = noThemeKey.concat(['email', 'username']);
+    return fields.map((f) => ` u{${f}}`);
   }
 });

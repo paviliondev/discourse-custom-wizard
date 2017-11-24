@@ -89,7 +89,7 @@ en:
           include: "Include Fields"
           title: "Title"
           post: "Post"
-          add_fields: "Add Fields To {{type}}"
+          add_fields: "{{type}} Fields"
           available_fields: "* If 'Save wizard submissions' is disabled, only the fields of the current step are available to the current step's actions."
           topic_attr: "Topic Attribute"
           send_message:
@@ -101,6 +101,12 @@ en:
           update_profile:
             label: "Update Profile"
             profile_field: "Profile Field"
+          post_builder:
+            checkbox: "Post Builder"
+            label: "Builder"
+            user_fields: "User Fields: "
+            wizard_fields: "Wizard Fields: "
+            placeholder: "Insert wizard fields using the field_id in w{}. Insert user fields using field key in u{}."
 
   wizard_js:
     location:

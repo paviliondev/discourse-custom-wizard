@@ -34,6 +34,29 @@ class CustomWizard::Builder
     @sorted_handlers.sort_by! { |h| -h[:priority] }
   end
 
+  USER_FIELDS = ['name', 'username', 'email', 'date_of_birth', 'title', 'locale']
+  PROFILE_FIELDS = ['location', 'website', 'bio_raw', 'profile_background', 'card_background']
+
+  def self.build_post(template, user, data)
+    post = template.gsub(/u\{(.*?)\}/) do |match|
+      result = ''
+
+      if USER_FIELDS.include?($1)
+        result = user.send($1)
+        if result.blank? && $1 === 'name'
+          result = user.send('username')
+        end
+      end
+
+      if PROFILE_FIELDS.include?($1)
+        result = user.user_profile.send($1)
+      end
+
+      result
+    end
+    post.gsub!(/w\{(.*?)\}/) { |match| data[$1.to_sym] }
+  end
+
   def build
     unless (@wizard.completed? && !@wizard.multiple_submissions) || !@steps
       @steps.each do |s|
@@ -161,7 +184,12 @@ class CustomWizard::Builder
               s['actions'].each do |a|
                 if a['type'] === 'create_topic' && data
                   title = data[a['title']]
-                  post = data[a['post']]
+
+                  if a['post_builder']
+                    post = CustomWizard::Builder.build_post(a['post'], user, data)
+                  else
+                    post = data[a['post']]
+                  end
 
                   if title
                     params = {
@@ -218,7 +246,12 @@ class CustomWizard::Builder
 
                 if a['type'] === 'send_message' && data
                   title = data[a['title']]
-                  post = data[a['post']]
+
+                  if a['post_builder']
+                    post = CustomWizard::Builder.build_post(a['post'], user, data)
+                  else
+                    post = data[a['post']]
+                  end
 
                   if title && post
                     creator = PostCreator.new(user,
