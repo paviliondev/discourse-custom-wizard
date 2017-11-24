@@ -40,18 +40,8 @@ class CustomWizard::Builder
   def self.build_post(template, user, data)
     post = template.gsub(/u\{(.*?)\}/) do |match|
       result = ''
-
-      if USER_FIELDS.include?($1)
-        result = user.send($1)
-        if result.blank? && $1 === 'name'
-          result = user.send('username')
-        end
-      end
-
-      if PROFILE_FIELDS.include?($1)
-        result = user.user_profile.send($1)
-      end
-
+      result = user.send($1) if USER_FIELDS.include?($1)
+      result = user.user_profile.send($1) if PROFILE_FIELDS.include?($1)
       result
     end
     post.gsub!(/w\{(.*?)\}/) { |match| data[$1.to_sym] }

@@ -1,7 +1,7 @@
 class CustomWizard::WizardController < ::ApplicationController
   prepend_view_path(Rails.root.join('plugins', 'discourse-custom-wizard', 'views'))
   layout 'wizard'
-  
+
   before_action :ensure_logged_in
   helper_method :wizard_page_title
 
