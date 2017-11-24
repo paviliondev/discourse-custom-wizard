@@ -186,7 +186,7 @@ class CustomWizard::Builder
                   title = data[a['title']]
 
                   if a['post_builder']
-                    post = CustomWizard::Builder.build_post(a['post'], user, data)
+                    post = CustomWizard::Builder.build_post(a['post_template'], user, data)
                   else
                     post = data[a['post']]
                   end
@@ -248,7 +248,7 @@ class CustomWizard::Builder
                   title = data[a['title']]
 
                   if a['post_builder']
-                    post = CustomWizard::Builder.build_post(a['post'], user, data)
+                    post = CustomWizard::Builder.build_post(a['post_template'], user, data)
                   else
                     post = data[a['post']]
                   end
