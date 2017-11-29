@@ -48,7 +48,7 @@ class ::Wizard::Step
 end
 
 ::WizardSerializer.class_eval do
-  attributes :id, :background, :completed, :required
+  attributes :id, :background, :completed, :required, :min_trust, :permitted
 
   def id
     object.id
@@ -72,6 +72,22 @@ end
 
   def include_completed?
     object.completed? && (!object.respond_to?(:multiple_submissions) || !object.multiple_submissions)
+  end
+
+  def min_trust
+    object.min_trust
+  end
+
+  def include_min_trust?
+    object.respond_to?(:min_trust)
+  end
+
+  def permitted
+    object.permitted?
+  end
+
+  def inlcude_permitted?
+    object.respond_to?(:permitted)
   end
 
   def include_start?

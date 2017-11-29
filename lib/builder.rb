@@ -16,7 +16,8 @@ class CustomWizard::Builder
       name: data["name"],
       after_time: data["after_time"],
       after_signup: data["after_signup"],
-      required: data["required"]
+      required: data["required"],
+      min_trust: data["min_trust"]
     )
     @submissions = Array.wrap(PluginStore.get("#{wizard_id}_submissions", user.id))
   end
@@ -48,7 +49,7 @@ class CustomWizard::Builder
   end
 
   def build
-    unless (@wizard.completed? && !@wizard.multiple_submissions) || !@steps
+    unless (@wizard.completed? && !@wizard.multiple_submissions) || !@steps || !@wizard.permitted?
       @steps.each do |s|
         @wizard.append_step(s['id']) do |step|
           step.title = s['title'] if s['title']

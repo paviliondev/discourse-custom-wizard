@@ -1,3 +1,7 @@
 {{#if completed}}
   {{i18n 'wizard.completed'}}
+{{else}}
+  {{#if notPermitted}}
+    {{i18n 'wizard.not_permitted' level=minTrust}}
+  {{/if}}
 {{/if}}

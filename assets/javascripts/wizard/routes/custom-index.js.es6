@@ -1,18 +1,23 @@
 export default Ember.Route.extend({
   beforeModel() {
     const appModel = this.modelFor('custom');
-
-    if (appModel) {
-      if (appModel.completed) {
-        this.set('completed', true);
-      } else if (appModel.start) {
-        this.replaceWith('custom.step', appModel.start);
-      }
+    if (appModel.permitted && !appModel.completed && appModel.start) {
+      this.replaceWith('custom.step', appModel.start);
     }
   },
 
-  setupController(controller) {
-    const completed = this.get('completed');
-    controller.set('completed', completed);
+  model() {
+    return this.modelFor('custom');
+  },
+
+  setupController(controller, model) {
+    const completed = model.get('completed');
+    const permitted = model.get('permitted');
+    const minTrust = model.get('min_trust');
+    controller.setProperties({
+      completed,
+      notPermitted: !permitted,
+      minTrust
+    });
   }
 });

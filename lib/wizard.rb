@@ -11,6 +11,7 @@ class CustomWizard::Wizard
                 :background,
                 :save_submissions,
                 :multiple_submissions,
+                :min_trust,
                 :after_time,
                 :after_signup,
                 :required,
@@ -105,6 +106,10 @@ class CustomWizard::Wizard
     completed = history.distinct.order(:subject).pluck(:subject)
 
     (steps - completed).empty?
+  end
+
+  def permitted?
+    user.staff? || user.trust_level.to_i >= min_trust.to_i
   end
 
   def self.after_signup

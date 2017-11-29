@@ -32,6 +32,8 @@ en:
         required_label: "Users cannot skip the wizard."
         prompt_completion: "Prompt"
         prompt_completion_label: "Prompt user to complete wizard."
+        min_trust: "Trust"
+        min_trust_label: "Trust level required to access wizard."
         save: "Save Changes"
         remove: "Delete Wizard"
         header: "Wizard"
@@ -145,3 +147,4 @@ en:
 
     wizard:
       completed: "You have completed this wizard."
+      not_permitted: "You need to be trust level {{level}} or higher to access this wizard."

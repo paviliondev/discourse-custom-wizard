@@ -3,6 +3,8 @@
 
   .wizard-step-contents {
     position: relative;
+    display: inline-block;
+    width: 100%;
   }
 
   .wizard-step-description {
@@ -19,7 +21,8 @@
     }
 
     .image-container {
-      padding: 0 40px;
+      padding: 0 20px;
+      margin: 60px 0;
       display: flex;
       justify-content: space-between;
       flex-wrap: wrap;
@@ -39,7 +42,7 @@
 
     img.small {
       width: 120;
-      padding: 10px;
+      padding: 10px 15px;
     }
 
     img.x-small {
@@ -57,6 +60,7 @@
       position: absolute;
       bottom: 0;
       font-style: italic;
+      margin-bottom: 20px;
 
       img {
         width: 30px;
@@ -94,7 +98,7 @@
 
   .wizard-step-form .wizard-btn {
     display: block;
-    margin: 10px 0;
+    margin: 20px 0;
   }
 
   .wizard-column .wizard-field .input-area {
