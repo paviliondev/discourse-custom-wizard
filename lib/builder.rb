@@ -174,7 +174,12 @@ class CustomWizard::Builder
             if s['actions'] && s['actions'].length
               s['actions'].each do |a|
                 if a['type'] === 'create_topic' && data
-                  title = data[a['title']]
+
+                  if a['custom_title']
+                    title = a['custom_title']
+                  else
+                    title = data[a['title']]
+                  end
 
                   if a['post_builder']
                     post = CustomWizard::Builder.build_post(a['post_template'], user, data)
@@ -188,13 +193,31 @@ class CustomWizard::Builder
                       raw: post,
                       skip_validations: true
                     }
-                    params[:category] = a['category_id'] if a['category_id']
+
+                    if a['custom_category_enabled'] &&
+                      !a['custom_category_wizard_field'] &&
+                      a['custom_category_user_field_key']
+                      if a['custom_category_user_field_key'].include?('custom_fields')
+                        field = a['custom_category_user_field_key'].split('.').last
+                        category_id = user.custom_fields[field]
+                      else
+                        category_id = user.send(a['custom_category_user_field_key'])
+                      end
+                    else
+                      category_id = a['category_id']
+                    end
+
+                    params[:category] = category_id
 
                     topic_custom_fields = {}
 
                     if a['add_fields']
                       a['add_fields'].each do |f|
-                        value = data[f['value']]
+                        if f['value_custom']
+                          value = f['value_custom']
+                        else
+                          value = data[f['value']]
+                        end
                         key = f['key']
 
                         if key && key.include?('custom_fields')

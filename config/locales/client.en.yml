@@ -47,7 +47,7 @@ en:
         custom_text_placeholder: "Overrides translation"
         type: "Type"
         none: "Make a selection"
-        select_field: "Wizard Field"
+        select_field: "Select Field"
         error:
           name_required: "Wizards must have a name."
           steps_required: "Wizards must have at least one step."
@@ -109,6 +109,11 @@ en:
             user_fields: "User Fields: "
             wizard_fields: "Wizard Fields: "
             placeholder: "Insert wizard fields using the field_id in w{}. Insert user fields using field key in u{}."
+          custom_title: "Custom Title"
+          custom_category:
+            label: "Custom Category"
+            wizard_field: "Wizard Field"
+            user_field: "User Field"
 
   wizard_js:
     location:

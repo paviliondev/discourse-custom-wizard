@@ -1,4 +1,4 @@
-import { default as computed } from 'ember-addons/ember-computed-decorators';
+import { default as computed, observes } from 'ember-addons/ember-computed-decorators';
 
 const ACTION_TYPES = [
   { id: 'create_topic', name: 'Create Topic' },
@@ -63,5 +63,17 @@ export default Ember.Component.extend({
     const noThemeKey = PROFILE_FIELDS.filter((f) => f !== 'theme_key');
     const fields = noThemeKey.concat(['email', 'username']);
     return fields.map((f) => ` u{${f}}`);
+  },
+
+  @observes('action.custom_category_wizard_field')
+  toggleCustomCategoryUserField() {
+    const wizard = this.get('action.custom_category_wizard_field');
+    if (wizard) this.set('action.custom_category_user_field', false);
+  },
+
+  @observes('action.custom_category_user_field')
+  toggleCustomCategoryWizardField() {
+    const user = this.get('action.custom_category_user_field');
+    if (user) this.set('action.custom_category_wizard_field', false);
   }
 });

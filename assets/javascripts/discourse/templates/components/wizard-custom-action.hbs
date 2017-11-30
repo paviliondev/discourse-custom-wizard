@@ -22,7 +22,32 @@
       <h3>{{i18n "admin.wizard.action.create_topic.category"}}</h3>
     </div>
     <div class="setting-value">
-      {{category-chooser value=action.category_id}}
+      {{category-chooser value=action.category_id isDisabled=action.custom_category_enabled}}
+      <div class="setting-gutter">
+        {{input type='checkbox' checked=action.custom_category_enabled}}
+        <span>{{i18n 'admin.wizard.action.custom_category.label'}}</span>
+        {{#if action.custom_category_enabled}}
+          <div class="custom-category">
+            <div>
+              {{input type='checkbox' checked=action.custom_category_wizard_field}}
+              <span>{{i18n 'admin.wizard.action.custom_category.wizard_field'}}</span>
+              {{#if action.custom_category_wizard_field}}
+                {{combo-box value=action.category_id
+                            content=availableFields
+                            nameProperty="label"
+                            none='admin.wizard.select_field'}}
+              {{/if}}
+            </div>
+            <div>
+              {{input type='checkbox' checked=action.custom_category_user_field}}
+              <span>{{i18n 'admin.wizard.action.custom_category.user_field'}}</span>
+              {{#if action.custom_category_user_field}}
+                {{input value=action.custom_category_user_field_key}}
+              {{/if}}
+            </div>
+          </div>
+        {{/if}}
+      </div>
     </div>
   </div>
 
@@ -31,7 +56,18 @@
       <h3>{{i18n "admin.wizard.action.title"}}</h3>
     </div>
     <div class="setting-value">
-      {{combo-box value=action.title content=availableFields nameProperty="label" none='admin.wizard.select_field'}}
+      {{combo-box value=action.title
+                  content=availableFields
+                  nameProperty="label"
+                  none='admin.wizard.select_field'
+                  isDisabled=action.custom_title_enabled}}
+      <div class="setting-gutter">
+        {{input type='checkbox' checked=action.custom_title_enabled}}
+        <span>{{i18n 'admin.wizard.action.custom_title'}}</span>
+        {{#if action.custom_title_enabled}}
+          {{input value=action.custom_title}}
+        {{/if}}
+      </div>
     </div>
   </div>
 
@@ -44,7 +80,7 @@
                                     nameProperty='label'
                                     none='admin.wizard.select_field'
                                     isDisabled=action.post_builder}}
-      <div>
+      <div class="setting-gutter">
         {{input type='checkbox' checked=action.post_builder}}
         <span>{{i18n 'admin.wizard.action.post_builder.checkbox'}}</span>
       </div>
@@ -71,7 +107,8 @@
     {{wizard-custom-input inputs=action.add_fields
                           valueContent=availableFields
                           inputKey='admin.wizard.action.topic_attr'
-                          noneValue='admin.wizard.select_field'}}
+                          noneValue='admin.wizard.select_field'
+                          optionalCustom=true}}
   </div>
 {{/if}}
 

@@ -6,7 +6,14 @@
       {{input type="text" value=in.key placeholder=(i18n inputKey)}}
     {{/if}}
     {{#if valueContent}}
-      {{combo-box value=in.value content=valueContent nameProperty="label" none=noneValue}}
+      {{combo-box value=in.value
+                  content=valueContent
+                  nameProperty="label"
+                  none=noneValue
+                  isDisabled=(if in.value_custom true false)}}
+      {{#if optionalCustom}}
+        {{input type="text" value=in.value_custom placeholder=(i18n inputValue)}}
+      {{/if}}
     {{else}}
       {{input type="text" value=in.value placeholder=(i18n inputValue)}}
     {{/if}}
