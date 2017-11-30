@@ -1,1 +1,3 @@
-{{nav-item route='adminWizards' label='admin.wizard.label'}}
+{{#if currentUser.admin}}
+  {{nav-item route='adminWizards' label='admin.wizard.label'}}
+{{/if}}
