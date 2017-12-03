@@ -2,6 +2,7 @@
   <head>
     <%= discourse_stylesheet_link_tag :wizard, theme_key: nil %>
     <%= stylesheet_link_tag "wizard_custom", media: "all", "data-turbolinks-track" => "reload" %>
+    <%= stylesheet_link_tag "wizard_custom_mobile", media: "all", "data-turbolinks-track" => "reload" if mobile_view?%>
     <%= preload_script "ember_jquery" %>
     <%= preload_script "wizard-vendor" %>
     <%= preload_script "wizard-application" %>

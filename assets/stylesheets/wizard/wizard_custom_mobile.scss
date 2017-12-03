@@ -1,0 +1,41 @@
+.custom-wizard {
+  .wizard-step-form {
+    .wizard-btn {
+      margin: 0;
+    }
+  }
+
+  .wizard-step-description {
+    .image-container {
+      margin: 20px 0;
+      padding: 0;
+    }
+
+    img.large {
+      width: 150px;
+      padding: 10px;
+    }
+
+    img.small {
+      width: 60px;
+      height: 60px;
+      padding: 10px;
+    }
+
+    .tip {
+      position: relative;
+      display: inline-block;
+      margin: 20px 0;
+    }
+  }
+
+  .control-group {
+    margin-right: 0;
+    margin-bottom: 20px;
+    width: 100%;
+  }
+
+  input, textarea {
+    border: 1px solid #919191;
+  }
+}

@@ -12,7 +12,13 @@ config.assets.paths << Rails.root.join('plugins', 'discourse-custom-wizard', 'as
 config.assets.paths << Rails.root.join('plugins', 'discourse-custom-wizard', 'assets', 'stylesheets', 'wizard')
 
 if Rails.env.production?
-  config.assets.precompile += %w{ wizard-custom-lib.js wizard-custom.js wizard-plugin.js stylesheets/wizard/wizard_custom.scss }
+  config.assets.precompile += %w{
+    wizard-custom-lib.js
+    wizard-custom.js
+    wizard-plugin.js
+    stylesheets/wizard/wizard_custom.scss
+    stylesheets/wizard/wizard_custom_mobile.scss
+  }
 end
 
 after_initialize do
