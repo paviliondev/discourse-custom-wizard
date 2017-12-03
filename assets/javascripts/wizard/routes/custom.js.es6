@@ -19,7 +19,9 @@ export default Ember.Route.extend({
     const background = model ? model.get('background') : 'AliceBlue';
     Ember.run.scheduleOnce('afterRender', this, function(){
       $('body.custom-wizard').css('background', background);
-      $('#custom-wizard-main').addClass(model.get('id').dasherize());
+      if (model) {
+        $('#custom-wizard-main').addClass(model.get('id').dasherize());
+      }
     });
 
     controller.setProperties({

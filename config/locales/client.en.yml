@@ -153,3 +153,4 @@ en:
     wizard:
       completed: "You have completed this wizard."
       not_permitted: "You need to be trust level {{level}} or higher to access this wizard."
+      none: "There is no wizard here."
