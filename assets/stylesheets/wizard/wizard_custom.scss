@@ -118,6 +118,10 @@
   .wizard-buttons > a, .wizard-buttons > button {
     display: inline-block;
     vertical-align: middle;
+
+    &.done {
+      min-width: 55px;
+    }
   }
 }
 
