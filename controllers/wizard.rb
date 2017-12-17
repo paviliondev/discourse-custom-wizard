@@ -4,10 +4,18 @@ class CustomWizard::WizardController < ::ApplicationController
 
   before_action :ensure_logged_in
   helper_method :wizard_page_title
+  helper_method :theme_key
+
+  def wizard
+    PluginStore.get('custom_wizard', params[:wizard_id].underscore)
+  end
 
   def wizard_page_title
-    wizard = PluginStore.get('custom_wizard', params[:wizard_id].underscore)
     wizard ? (wizard['name'] || wizard['id']) : I18n.t('wizard.custom_title')
+  end
+
+  def theme_key
+    wizard['theme_key']
   end
 
   def index

@@ -10,7 +10,8 @@ const wizardProperties = [
   'after_time_scheduled',
   'required',
   'prompt_completion',
-  'min_trust'
+  'min_trust',
+  'theme_key'
 ];
 
 const CustomWizard = Discourse.Model.extend({

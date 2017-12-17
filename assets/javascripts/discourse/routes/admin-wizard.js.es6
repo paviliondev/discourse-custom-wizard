@@ -31,8 +31,21 @@ export default Discourse.Route.extend({
   },
 
   afterModel(model) {
+    return Ember.RSVP.all([
+      this._getFieldTypes(model),
+      this._getThemes(model)
+    ]);
+  },
+
+  _getFieldTypes(model) {
     return ajax('/admin/wizards/field-types')
       .then((result) => model.set('fieldTypes', result.types));
+  },
+
+  _getThemes(model) {
+    return this.store.findAll('theme').then((result) => {
+      model.set('themes', result.content);
+    });
   },
 
   setupController(controller, model) {
