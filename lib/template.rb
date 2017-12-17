@@ -11,7 +11,8 @@ class CustomWizard::Template
               :after_signup,
               :after_time,
               :after_time_scheduled,
-              :required
+              :required,
+              :theme_key
 
   def initialize(data)
     data = data.is_a?(String) ? ::JSON.parse(data) : data
@@ -27,5 +28,6 @@ class CustomWizard::Template
     @after_time = data['after_time']
     @after_time_scheduled = data['after_time_scheduled']
     @required = data['required'] || false
+    @theme_key = data['theme_key']
   end
 end
