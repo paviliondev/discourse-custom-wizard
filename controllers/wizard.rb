@@ -15,7 +15,7 @@ class CustomWizard::WizardController < ::ApplicationController
   end
 
   def theme_key
-    wizard['theme_key']
+    wizard ? wizard['theme_key'] : nil
   end
 
   def index
