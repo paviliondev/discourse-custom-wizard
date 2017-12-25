@@ -115,13 +115,13 @@
     padding: 0;
   }
 
-  .wizard-buttons > a, .wizard-buttons > button {
+  .wizard-buttons > a, .wizard-buttons > button, .spinner {
     display: inline-block;
     vertical-align: middle;
+  }
 
-    &.done {
-      min-width: 55px;
-    }
+  .spinner.small {
+    margin-right: 10px;
   }
 }
 

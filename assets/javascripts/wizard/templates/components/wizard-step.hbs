@@ -32,28 +32,24 @@
       <a href {{action "quit"}} class='action-link quit' tabindex="11">{{i18n "wizard.quit"}}</a>
     {{/if}}
 
-    {{#if showBackButton}}
-      <a href {{action "backStep"}} class='action-link back' tabindex="11">{{i18n "wizard.back"}}</a>
+    {{#if saving}}
+      {{loading-spinner size='small'}}
+    {{else}}
+      {{#if showBackButton}}
+        <a href {{action "backStep"}} class='action-link back' tabindex="11">{{i18n "wizard.back"}}</a>
+      {{/if}}
     {{/if}}
 
     {{#if showNextButton}}
       <button class='wizard-btn next primary' {{action "nextStep"}} disabled={{saving}} tabindex="10">
-        {{#if saving}}
-          {{loading-spinner size='small'}}
-        {{else}}
-          {{i18n "wizard.next"}}
-          {{d-icon "chevron-right"}}
-        {{/if}}
+        {{i18n "wizard.next"}}
+        {{d-icon "chevron-right"}}
       </button>
     {{/if}}
 
     {{#if showDoneButton}}
       <button class='wizard-btn done' {{action "done"}} disabled={{saving}} tabindex="10">
-        {{#if saving}}
-          {{loading-spinner size='small'}}
-        {{else}}
-          {{i18n "wizard.done"}}
-        {{/if}}
+        {{i18n "wizard.done"}}
       </button>
     {{/if}}
   </div>
