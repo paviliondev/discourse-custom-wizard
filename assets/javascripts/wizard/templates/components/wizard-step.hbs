@@ -28,13 +28,12 @@
   </div>
 
   <div class='wizard-buttons'>
-    {{#if showQuitButton}}
-      <a href {{action "quit"}} class='action-link quit' tabindex="11">{{i18n "wizard.quit"}}</a>
-    {{/if}}
-
     {{#if saving}}
       {{loading-spinner size='small'}}
     {{else}}
+      {{#if showQuitButton}}
+        <a href {{action "quit"}} class='action-link quit' tabindex="11">{{i18n "wizard.quit"}}</a>
+      {{/if}}
       {{#if showBackButton}}
         <a href {{action "backStep"}} class='action-link back' tabindex="11">{{i18n "wizard.back"}}</a>
       {{/if}}
