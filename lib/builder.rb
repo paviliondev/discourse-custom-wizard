@@ -49,7 +49,7 @@ class CustomWizard::Builder
   end
 
   def build
-    unless (@wizard.completed? && !@wizard.multiple_submissions) || !@steps || !@wizard.permitted?
+    unless (@wizard.completed? && !@wizard.multiple_submissions && !@wizard.user.admin) || !@steps || !@wizard.permitted?
       @steps.each do |s|
         @wizard.append_step(s['id']) do |step|
           step.title = s['title'] if s['title']

@@ -71,7 +71,9 @@ end
   end
 
   def include_completed?
-    object.completed? && (!object.respond_to?(:multiple_submissions) || !object.multiple_submissions)
+    object.completed? &&
+    (!object.respond_to?(:multiple_submissions) || !object.multiple_submissions) &&
+    !scope.is_admin?
   end
 
   def min_trust
