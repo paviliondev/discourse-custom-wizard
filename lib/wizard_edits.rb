@@ -88,8 +88,8 @@ end
     object.permitted?
   end
 
-  def inlcude_permitted?
-    object.respond_to?(:permitted)
+  def include_permitted?
+    object.respond_to?(:permitted?)
   end
 
   def include_start?
