@@ -121,7 +121,7 @@ after_initialize do
     attributes :complete_custom_wizard
 
     def include_wizard_required?
-      scope.is_admin? && Wizard.user_requires_completion?(scope.user)
+      scope.is_admin? && Wizard.new(scope.user).requires_completion?
     end
 
     def complete_custom_wizard
