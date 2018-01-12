@@ -2,6 +2,7 @@
 # about: Create custom wizards
 # version: 0.1
 # authors: Angus McLeod
+# url: https://github.com/angusmcleod/discourse-custom-wizard
 
 register_asset 'stylesheets/wizard_custom_admin.scss'
 register_asset 'lib/jquery.timepicker.min.js'
