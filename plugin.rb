@@ -135,4 +135,6 @@ after_initialize do
       complete_custom_wizard.present?
     end
   end
+
+  DiscourseEvent.trigger(:custom_wizard_ready)
 end
