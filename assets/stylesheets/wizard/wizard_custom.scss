@@ -27,6 +27,16 @@
       justify-content: space-between;
       flex-wrap: wrap;
 
+      a {
+        cursor: pointer;
+      }
+
+      span {
+        display: block;
+        text-align: center;
+        max-width: 140px;
+      }
+
       &.group {
         padding: 0;
         margin: 0;
