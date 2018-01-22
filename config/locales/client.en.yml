@@ -146,7 +146,7 @@ en:
         show_map: "Show Map"
       validation:
         city: "Please enter a city, town or village."
-        countrycode: "Please enter a country."
+        countrycode: "Please select a country."
         geo_location: "Search and select a result."
 
     select_kit:
