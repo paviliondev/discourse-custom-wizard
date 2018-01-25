@@ -387,3 +387,17 @@ img.avatar {
     transform: rotate(360deg);
   }
 }
+
+.p-text {
+  &.bronze {
+    color: #cd7f32;
+  }
+
+  &.silver {
+    color: #c0c0c0;
+  }
+
+  &.gold {
+    color: rgb(231, 195, 0);
+  }
+}
