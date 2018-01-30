@@ -9,6 +9,7 @@ export default {
     const ajax = requirejs('wizard/lib/ajax').ajax;
     const StepModel = requirejs('wizard/models/step').default;
     const WizardStep = requirejs('wizard/components/wizard-step').default;
+    const WizardField = requirejs('wizard/components/wizard-field').default;
     const getUrl = requirejs('discourse-common/lib/get-url').default;
     const FieldModel = requirejs('wizard/models/wizard-field').default;
     const autocomplete = requirejs('discourse/lib/autocomplete').default;
@@ -137,6 +138,15 @@ export default {
         });
         Ember.run.later(() => this.set('message', null), 6000);
       }
+    });
+
+    WizardField.reopen({
+      inputComponentName: function() {
+        const type = this.get('field.type');
+        const id = this.get('field.id');
+        if (type === 'text-only') return false;
+        return (type === 'component') ? Ember.String.dasherize(id) : `wizard-field-${type}`;
+      }.property('field.type', 'field.id')
     });
 
     FieldModel.reopen({
