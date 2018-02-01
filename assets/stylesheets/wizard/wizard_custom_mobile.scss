@@ -38,4 +38,14 @@
   input, textarea {
     border: 1px solid #919191;
   }
+
+  .wizard-column {
+    .checkbox-field > label {
+      max-width: 80%;
+    }
+
+    .wizard-field .field-description img {
+      float: left;
+    }
+  }
 }

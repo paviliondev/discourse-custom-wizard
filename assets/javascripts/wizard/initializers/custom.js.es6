@@ -41,6 +41,10 @@ export default {
     WizardStep.reopen({
       classNameBindings: ['step.id'],
 
+      ensureStartsAtTop: function() {
+        window.scrollTo(0,0);
+      }.observes('step.id'),
+
       showQuitButton: function() {
         const index = this.get('step.index');
         const required = this.get('wizard.required');
