@@ -9,7 +9,6 @@
 //= require_tree ./wizard/templates
 
 //= require discourse/components/user-selector
-//= require discourse/components/text-field
 //= require discourse/helpers/user-avatar
 
 //= require lodash.js
