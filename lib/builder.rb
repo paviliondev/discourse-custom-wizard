@@ -80,7 +80,11 @@ class CustomWizard::Builder
                   profile_actions.each do |action|
                     if update = action['profile_updates'].select { |u| u['key'] === f['id'] }.first
                       attribute = update['value']
-                      if UserProfile.column_names.include? attribute
+                      custom_field = update['value_custom']
+                      if custom_field
+                        name = custom_field.split('.').try(:last) || nil
+                        params[:value] = UserCustomField.where(user_id: @wizard.user.id, name: name).pluck(:value)
+                      elsif UserProfile.column_names.include? attribute
                         params[:value] = UserProfile.find_by(user_id: @wizard.user.id).send(attribute)
                       elsif User.column_names.include? attribute
                         params[:value] = User.find(@wizard.user.id).send(attribute)
@@ -285,12 +289,33 @@ class CustomWizard::Builder
                 end
 
                 if a['type'] === 'update_profile' && a['profile_updates'].length && data
-                  user_updater = UserUpdater.new(user, user)
                   attributes = {}
+                  custom_fields = {}
+
                   a['profile_updates'].each do |pu|
-                    attributes[pu['value'].to_sym] = data[pu['key']]
+                    value = pu['value']
+                    custom_value = pu['value_custom']
+                    key = pu['key']
+
+                    if custom_value
+                      name = custom_value.split('.').try(:last) || nil
+                      custom_fields[name] = data[key]
+                    else
+                      attributes[value.to_sym] = data[key]
+                    end
                   end
-                  user_updater.update(attributes) if attributes.present?
+
+                  if custom_fields.present?
+                    custom_fields.each do |k, v|
+                      user.custom_fields[k] = v
+                    end
+                    user.save_custom_fields(true)
+                  end
+
+                  if attributes.present?
+                    user_updater = UserUpdater.new(user, user)
+                    user_updater.update(attributes)
+                  end
                 end
               end
             end
