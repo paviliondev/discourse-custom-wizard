@@ -41,6 +41,12 @@ export default {
     WizardStep.reopen({
       classNameBindings: ['step.id'],
 
+      animateInvalidFields() {
+        Ember.run.scheduleOnce('afterRender', () => {
+          $('.invalid input[type=text], .invalid textarea, .invalid input[type=checkbox]').wiggle(2, 100);
+        });
+      },
+
       ensureStartsAtTop: function() {
         window.scrollTo(0,0);
       }.observes('step.id'),
