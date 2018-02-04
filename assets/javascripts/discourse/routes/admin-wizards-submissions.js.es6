@@ -6,7 +6,7 @@ export default Discourse.Route.extend({
   },
 
   afterModel(model, transition) {
-    if (transition.intent.name !== 'adminWizardSubmissions' && model.length > 0) {
+    if (transition.intent.name !== 'adminWizardSubmissions' && model[0] && model[0].id) {
       this.transitionTo('adminWizardSubmissions', model[0].id);
     }
   },
