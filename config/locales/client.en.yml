@@ -105,6 +105,7 @@ en:
           update_profile:
             label: "Update Profile"
             profile_field: "Profile Field"
+            custom_field: "User Custom Field"
           post_builder:
             checkbox: "Post Builder"
             label: "Builder"

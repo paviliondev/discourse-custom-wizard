@@ -82,8 +82,7 @@ class CustomWizard::Builder
                       attribute = update['value']
                       custom_field = update['value_custom']
                       if custom_field
-                        name = custom_field.split('.').try(:last) || nil
-                        params[:value] = UserCustomField.where(user_id: @wizard.user.id, name: name).pluck(:value)
+                        params[:value] = UserCustomField.where(user_id: @wizard.user.id, name: custom_field).pluck(:value)
                       elsif UserProfile.column_names.include? attribute
                         params[:value] = UserProfile.find_by(user_id: @wizard.user.id).send(attribute)
                       elsif User.column_names.include? attribute
@@ -294,12 +293,11 @@ class CustomWizard::Builder
 
                   a['profile_updates'].each do |pu|
                     value = pu['value']
-                    custom_value = pu['value_custom']
+                    custom_field = pu['value_custom']
                     key = pu['key']
 
-                    if custom_value
-                      name = custom_value.split('.').try(:last) || nil
-                      custom_fields[name] = data[key]
+                    if custom_field
+                      custom_fields[custom_field] = data[key]
                     else
                       attributes[value.to_sym] = data[key]
                     end
