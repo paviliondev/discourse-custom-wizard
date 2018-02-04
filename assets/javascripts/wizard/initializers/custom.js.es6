@@ -153,7 +153,15 @@ export default {
       }.property('field.type', 'field.id')
     });
 
+    const StandardFields = ['text', 'textarea', 'dropdown', 'image', 'checkbox', 'user-selector', 'text-only'];
+
     FieldModel.reopen({
+      hasCustomCheck: false,
+
+      customCheck() {
+        return true;
+      },
+
       check() {
         let valid = this.get('valid');
 
@@ -162,12 +170,20 @@ export default {
           return true;
         }
 
-        if (!this.get('customValidation')) {
+        const hasCustomCheck = this.get('hasCustomCheck');
+        if (hasCustomCheck) {
+          valid = this.customCheck();
+        } else {
           const val = this.get('value');
-          valid = val && val.length > 0;
-
-          this.setValid(valid);
+          const type = this.get('type');
+          if (type === 'checkbox') {
+            valid = val;
+          } else if (StandardFields.indexOf(type) > -1) {
+            valid = val && val.length > 0;
+          }
         }
+
+        this.setValid(valid);
 
         return valid;
       }
