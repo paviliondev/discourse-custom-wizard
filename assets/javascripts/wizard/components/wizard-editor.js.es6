@@ -44,8 +44,7 @@ class Toolbar {
     this.groups = [
       {group: 'fontStyles', buttons: []},
       {group: 'insertions', buttons: []},
-      {group: 'extras', buttons: []},
-      {group: 'mobileExtras', buttons: []}
+      {group: 'extras', buttons: []}
     ];
 
     this.addButton({
