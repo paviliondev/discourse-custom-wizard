@@ -18,6 +18,8 @@ if Rails.env.production?
     wizard-custom.js
     wizard-plugin.js
     stylesheets/wizard/wizard_custom.scss
+    stylesheets/wizard/wizard_composer.scss
+    stylesheets/wizard/wizard_variables.scss
     stylesheets/wizard/wizard_custom_mobile.scss
   }
 end

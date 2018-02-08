@@ -159,7 +159,7 @@ export default {
       }.property('field.type', 'field.id')
     });
 
-    const StandardFields = ['text', 'textarea', 'dropdown', 'image', 'checkbox', 'user-selector', 'text-only'];
+    const StandardFields = ['text', 'textarea', 'dropdown', 'image', 'checkbox', 'user-selector', 'text-only', 'composer'];
 
     FieldModel.reopen({
       hasCustomCheck: false,
