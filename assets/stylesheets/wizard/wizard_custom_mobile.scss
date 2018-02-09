@@ -31,6 +31,11 @@
     }
   }
 
+  .wizard-step-banner {
+    max-height: 200px !important;
+    width: initial !important;
+  }
+
   .control-group {
     margin-right: 0;
     margin-bottom: 20px;
@@ -46,22 +51,16 @@
       max-width: 80%;
     }
 
-    .wizard-field {
-      label[for="tip"] .field-description {
-        display: flex;
-        align-items: center;
+    .wizard-field .field-description {
+      display: flex;
+      align-items: center;
 
-        img {
-          float: none;
-        }
-
-        i {
-          flex: 1;
-        }
+      img {
+        float: none;
       }
 
-      .field-description img {
-        float: left;
+      i, span {
+        flex: 1;
       }
     }
   }
