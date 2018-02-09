@@ -47,8 +47,17 @@
     }
 
     .wizard-field {
-      label[for="tip"] img {
-        float: none;
+      label[for="tip"] .field-description {
+        display: flex;
+        align-items: center;
+
+        img {
+          float: none;
+        }
+
+        i {
+          flex: 1;
+        }
       }
 
       .field-description img {
