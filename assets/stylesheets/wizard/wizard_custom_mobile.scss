@@ -46,8 +46,14 @@
       max-width: 80%;
     }
 
-    .wizard-field .field-description img {
-      float: left;
+    .wizard-field {
+      label[for="tip"] img {
+        float: none;
+      }
+
+      .field-description img {
+        float: left;
+      }
     }
   }
 }
