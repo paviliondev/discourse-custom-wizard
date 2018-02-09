@@ -32,7 +32,7 @@
   }
 
   .wizard-step-banner {
-    max-height: 200px !important;
+    max-height: 250px !important;
     width: initial !important;
   }
 
@@ -48,7 +48,7 @@
 
   .wizard-column {
     .checkbox-field > label {
-      max-width: 80%;
+      max-width: calc(100% - 53px);
     }
 
     .wizard-field .field-description {
