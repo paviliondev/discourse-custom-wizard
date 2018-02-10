@@ -46,22 +46,16 @@
     border: 1px solid #919191;
   }
 
-  .wizard-column {
-    .checkbox-field > label {
-      max-width: calc(100% - 53px);
+  .wizard-column .wizard-field .field-description {
+    display: flex;
+    align-items: center;
+
+    img {
+      float: none;
     }
 
-    .wizard-field .field-description {
-      display: flex;
-      align-items: center;
-
-      img {
-        float: none;
-      }
-
-      i, span {
-        flex: 1;
-      }
+    i, span {
+      flex: 1;
     }
   }
 }

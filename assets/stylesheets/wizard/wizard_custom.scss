@@ -363,10 +363,11 @@ img.avatar {
 }
 
 .wizard-column .checkbox-field {
-  float: left;
+  display: flex;
 
   &> label {
-    float: right;
+    order: 1;
+    flex: 1;
 
     .field-description {
       margin-top: 0;
@@ -374,7 +375,7 @@ img.avatar {
   }
 
   &> .input-area {
-    float: left;
+    order: 0;
     margin: 15px 20px !important;
 
     input {
