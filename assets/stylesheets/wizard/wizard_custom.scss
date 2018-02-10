@@ -16,7 +16,8 @@
 
   .wizard-step-description {
     line-height: 1.7;
-    margin: 1em 0;
+    margin-top: 0;
+    margin-bottom: 1em;
     flex: 0;
 
     i {
@@ -112,8 +113,11 @@
 
   .wizard-column .wizard-step-banner {
     width: initial;
-    max-height: 300px;
     margin-bottom: 0;
+
+    img {
+      max-height: 300px;
+    }
   }
 
   .control-group {
