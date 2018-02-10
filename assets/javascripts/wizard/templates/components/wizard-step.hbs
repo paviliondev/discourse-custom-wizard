@@ -8,7 +8,9 @@
   {{/if}}
 
   {{#if bannerImage}}
-    <img src={{bannerImage}} class="wizard-step-banner">
+    <div class="wizard-step-banner">
+      <img src={{bannerImage}}>
+    </div>
   {{/if}}
 
   {{#wizard-step-form step=step}}

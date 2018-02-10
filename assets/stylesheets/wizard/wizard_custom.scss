@@ -5,13 +5,19 @@
 
   .wizard-step-contents {
     position: relative;
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
     width: 100%;
+  }
+
+  .wizard-step-title {
+    flex: 0;
   }
 
   .wizard-step-description {
     line-height: 1.7;
     margin: 1em 0;
+    flex: 0;
 
     i {
       margin-right: 7px;
@@ -67,25 +73,45 @@
     .inline-list > * {
       display: inline-block;
     }
+  }
 
-    .tip {
-      position: absolute;
-      bottom: 0;
-      font-style: italic;
-      margin-bottom: 20px;
+  .wizard-step-form {
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .wizard-field {
+    margin-bottom: 1em;
+
+    &.tip {
+      margin-top: auto;
+    }
+
+    .field-label {
+      font-weight: 400;
+    }
+
+    .field-description {
+      color: #333;
 
       img {
-        width: 30px;
-        height: 30px;
+        width: 40px;
+        height: 40px;
         vertical-align: middle;
-        padding-bottom: 5px;
+        padding-bottom: 10px;
+        margin-right: 10px;
+      }
+
+      input {
+        margin: 0 5px;
       }
     }
   }
 
   .wizard-column .wizard-step-banner {
     width: initial;
-    max-width: 660px;
     max-height: 300px;
     margin-bottom: 0;
   }
@@ -385,31 +411,6 @@ img.avatar {
   }
 }
 
-.wizard-column .wizard-field {
-  clear: both;
-  margin-bottom: 1em;
-
-  .field-label {
-    font-weight: 400;
-  }
-
-  .field-description {
-    color: #333;
-
-    img {
-      width: 40px;
-      height: 40px;
-      vertical-align: middle;
-      padding-bottom: 10px;
-      margin-right: 15px;
-    }
-
-    input {
-      margin: 0 5px;
-    }
-  }
-}
-
 .checkbox-field.invalid .input-area {
   padding: 3px;
   border: 4px solid red;
@@ -436,8 +437,4 @@ img.avatar {
   &.gold {
     color: rgb(231, 195, 0);
   }
-}
-
-.textarea-field textarea {
-  height: 19em;
 }

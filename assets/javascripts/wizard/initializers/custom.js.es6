@@ -151,6 +151,8 @@ export default {
     });
 
     WizardField.reopen({
+      classNameBindings: ['field.id'],
+
       inputComponentName: function() {
         const type = this.get('field.type');
         const id = this.get('field.id');
