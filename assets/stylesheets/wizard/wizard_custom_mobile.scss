@@ -38,17 +38,4 @@
   input, textarea {
     border: 1px solid #919191;
   }
-
-  .wizard-column .wizard-field .field-description {
-    display: flex;
-    align-items: center;
-
-    img {
-      float: none;
-    }
-
-    i, span {
-      flex: 1;
-    }
-  }
 }

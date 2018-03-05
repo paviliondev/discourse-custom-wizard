@@ -13,6 +13,7 @@ export default {
     const getUrl = requirejs('discourse-common/lib/get-url').default;
     const FieldModel = requirejs('wizard/models/wizard-field').default;
     const autocomplete = requirejs('discourse/lib/autocomplete').default;
+    const cook = requirejs('discourse/plugins/discourse-custom-wizard/wizard/lib/text-lite').cook;
 
     $.fn.autocomplete = autocomplete;
 
@@ -56,6 +57,10 @@ export default {
         const required = this.get('wizard.required');
         return index === 0 && !required;
       }.property('step.index', 'wizard.required'),
+
+      cookedDescription: function() {
+        return cook(this.get('step.description'));
+      }.property('step.description'),
 
       bannerImage: function() {
         const src = this.get('step.banner');
@@ -152,6 +157,10 @@ export default {
 
     WizardField.reopen({
       classNameBindings: ['field.id'],
+
+      cookedDescription: function() {
+        return cook(this.get('field.description'));
+      }.property('field.description'),
 
       inputComponentName: function() {
         const type = this.get('field.type');

@@ -67,6 +67,7 @@ class CustomWizard::Builder
 
               params[:label] = f['label'] if f['label']
               params[:description] = f['description'] if f['description']
+              params[:image] = f['image'] if f['image']
               params[:key] = f['key'] if f['key']
 
               if @submissions.last && @wizard.unfinished?

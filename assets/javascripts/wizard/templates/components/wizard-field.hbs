@@ -3,8 +3,12 @@
     <span class='label-value'>{{field.label}}</span>
   {{/if}}
 
+  {{#if field.image}}
+    <div class="field-image"><img src="{{field.image}}"></div>
+  {{/if}}
+
   {{#if field.description}}
-    <div class='field-description'>{{{field.description}}}</div>
+    <div class='field-description'>{{cookedDescription}}</div>
   {{/if}}
 </label>
 

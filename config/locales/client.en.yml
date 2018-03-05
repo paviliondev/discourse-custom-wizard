@@ -71,6 +71,8 @@ en:
           header: "Fields"
           label: "Label"
           description: "Description"
+          image: "Image"
+          image_placeholder: "Image url"
           dropdown_none: "None"
           dropdown_none_placeholder: "Translation Key"
           choices_label: "Dropdown Choices"
@@ -159,8 +161,8 @@ en:
       none: "There is no wizard here."
 
     wizard_composer:
-      show_preview: "Show Preview"
-      hide_preview: "Hide Preview"
+      show_preview: "Show Post Preview"
+      hide_preview: "Hide Post Preview"
       quote_post_title: "Quote whole post"
       bold_label: "B"
       bold_title: "Strong"

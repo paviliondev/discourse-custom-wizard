@@ -24,7 +24,7 @@ require_dependency 'wizard/step'
 end
 
 ::Wizard::Field.class_eval do
-  attr_reader :label, :description, :key, :min_length
+  attr_reader :label, :description, :image, :key, :min_length
   attr_accessor :dropdown_none
 
   def initialize(attrs)
@@ -35,6 +35,7 @@ end
     @required = !!attrs[:required]
     @label = attrs[:label]
     @description = attrs[:description]
+    @image = attrs[:image]
     @key = attrs[:key]
     @min_length = attrs[:min_length]
     @value = attrs[:value]
@@ -122,7 +123,7 @@ end
 end
 
 ::WizardFieldSerializer.class_eval do
-  attributes :dropdown_none
+  attributes :dropdown_none, :image
 
   def label
     return object.label if object.label
@@ -132,6 +133,14 @@ end
   def description
     return object.description if object.description
     I18n.t("#{object.key || i18n_key}.description", default: '', base_url: Discourse.base_url)
+  end
+
+  def image
+    object.image
+  end
+
+  def include_image?
+    object.image.present?
   end
 
   def placeholder
