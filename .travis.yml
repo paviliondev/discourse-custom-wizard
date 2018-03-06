@@ -5,6 +5,7 @@ services:
 
 before_install:
   - plugin_name=${PWD##*/} && echo $plugin_name
+  - chmod -R 777 .
 
 after_success:
   - pip install virtualenv
