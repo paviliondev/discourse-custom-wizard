@@ -1,3 +1,5 @@
+/* eslint no-undef: 0 */
+
 import computed from "ember-addons/ember-computed-decorators";
 import { siteDir, isRTL, isLTR } from "discourse/lib/text-direction";
 

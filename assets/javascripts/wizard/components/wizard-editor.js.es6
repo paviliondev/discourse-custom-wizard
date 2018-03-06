@@ -1,3 +1,4 @@
+/* eslint no-undef: 0 */
 /*global Mousetrap:true */
 import { default as computed, on, observes } from 'ember-addons/ember-computed-decorators';
 import { cookAsync } from '../lib/text-lite';
@@ -38,7 +39,7 @@ const isInside = (text, regex) => {
 
 class Toolbar {
 
-  constructor(site) {
+  constructor() {
     this.shortcuts = {};
 
     this.groups = [
