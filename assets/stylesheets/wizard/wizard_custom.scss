@@ -12,6 +12,12 @@
     min-height: initial;
   }
 
+  img.emoji {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+  }
+
   .wizard-step-title {
     flex: 0;
   }
@@ -23,6 +29,10 @@
       line-height: 1.7;
       margin-top: 0;
       margin-bottom: 0;
+
+      img {
+        @extend img.emoji;
+      }
     }
 
     i {
@@ -185,12 +195,6 @@
 
   .wizard-column .wizard-field .input-area {
     margin: 0.5em 0;
-  }
-
-  img.emoji {
-    width: 20px;
-    height: 20px;
-    vertical-align: middle;
   }
 
   .combo-box ul {
