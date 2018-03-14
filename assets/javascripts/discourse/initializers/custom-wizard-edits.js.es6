@@ -1,4 +1,5 @@
 import { withPluginApi } from 'discourse/lib/plugin-api';
+import DiscourseURL from 'discourse/lib/url';
 
 export default {
   name: 'custom-wizard-edits',
@@ -21,5 +22,13 @@ export default {
         }
       });
     });
+
+    const existing = DiscourseURL.routeTo;
+    DiscourseURL.routeTo = function(path, opts) {
+      if (path.indexOf('/w/') > -1) {
+        return window.location = path;
+      }
+      return existing.apply(this, [path, opts]);
+    };
   }
 };
