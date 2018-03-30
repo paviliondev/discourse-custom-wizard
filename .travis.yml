@@ -1,10 +1,16 @@
-install: skip
-script: skip
 sudo: required
-after_success:
-  - pip install virtualenv
-  - virtualenv ~/env
-  - source ~/env/bin/activate
-  - pip install transifex-client
-  - sudo echo $'[https://www.transifex.com]\nhostname = https://www.transifex.com\nusername = '"$TRANSIFEX_USER"$'\npassword = '"$TRANSIFEX_PASSWORD"$'\ntoken = '"$TRANSIFEX_API_TOKEN"$'\n' > ~/.transifexrc
-  - tx push -s
+services:
+  - docker
+
+before_install:
+  - plugin_name=${PWD##*/} && echo $plugin_name
+
+script:
+  - >
+    docker run
+    -e "COMMIT_HASH=origin/tests-passed"
+    -e "SKIP_CORE=1"
+    -e "SKIP_LINT=1"
+    -e SINGLE_PLUGIN=$plugin_name
+    -v $(pwd):/var/www/discourse/plugins/$plugin_name
+    discourse/discourse_test:release
