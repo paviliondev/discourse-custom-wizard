@@ -2,15 +2,15 @@
   {{#if field.label}}
     <span class='label-value'>{{field.label}}</span>
   {{/if}}
-
-  {{#if field.image}}
-    <div class="field-image"><img src="{{field.image}}"></div>
-  {{/if}}
-
-  {{#if field.description}}
-    <div class='field-description'>{{cookedDescription}}</div>
-  {{/if}}
 </label>
+
+{{#if field.image}}
+  <div class="field-image"><img src="{{field.image}}"></div>
+{{/if}}
+
+{{#if field.description}}
+  <div class='field-description'>{{cookedDescription}}</div>
+{{/if}}
 
 {{#if inputComponentName}}
   <div class='input-area'>
