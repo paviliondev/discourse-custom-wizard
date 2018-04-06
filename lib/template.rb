@@ -29,5 +29,10 @@ class CustomWizard::Template
     @after_time_scheduled = data['after_time_scheduled']
     @required = data['required'] || false
     @theme_key = data['theme_key']
+
+    if data['theme']
+      theme = Theme.find_by(name: data['theme'])
+      @theme_key = theme.key if theme
+    end
   end
 end

@@ -7,15 +7,15 @@ class CustomWizard::WizardController < ::ApplicationController
   helper_method :theme_key
 
   def wizard
-    PluginStore.get('custom_wizard', params[:wizard_id].underscore)
+    CustomWizard::Template.new(PluginStore.get('custom_wizard', params[:wizard_id].underscore))
   end
 
   def wizard_page_title
-    wizard ? (wizard['name'] || wizard['id']) : I18n.t('wizard.custom_title')
+    wizard ? (wizard.name || wizard.id) : I18n.t('wizard.custom_title')
   end
 
   def theme_key
-    wizard ? wizard['theme_key'] : nil
+    wizard ? wizard.theme_key : nil
   end
 
   def index
