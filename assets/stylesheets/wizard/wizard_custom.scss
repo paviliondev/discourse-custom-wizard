@@ -37,6 +37,10 @@
       margin-right: 7px;
     }
 
+    ul li {
+      margin: 10px 0;
+    }
+
     .image-container {
       padding: 0 20px;
       margin: 50px 0;
@@ -167,7 +171,6 @@
 
     &> .field-description {
       margin-top: 0;
-      margin-left: 10px;
       order: 2;
     }
   }

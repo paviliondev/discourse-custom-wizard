@@ -161,8 +161,8 @@ en:
       none: "There is no wizard here."
 
     wizard_composer:
-      show_preview: "Show Post Preview"
-      hide_preview: "Hide Post Preview"
+      show_preview: "Preview Your Post"
+      hide_preview: "Hide Preview"
       quote_post_title: "Quote whole post"
       bold_label: "B"
       bold_title: "Strong"

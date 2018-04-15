@@ -182,12 +182,6 @@ export default Ember.Component.extend({
   _mouseTrap: null,
   showPreview: false,
 
-  @computed('placeholder')
-  placeholderTranslated(placeholder) {
-    if (placeholder) return I18n.t(placeholder);
-    return null;
-  },
-
   _readyNow() {
     this.set('ready', true);
 

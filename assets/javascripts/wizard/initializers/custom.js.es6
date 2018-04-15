@@ -66,7 +66,8 @@ export default {
         const src = this.get('step.banner');
         if (!src) return;
 
-        if (src.indexOf('/uploads/') > -1 || src.indexOf('/plugins/') > -1) {
+        const localPaths = ['uploads', 'plugins', 'images'];
+        if (localPaths.indexOf(src.split('/')[1]) > -1) {
           return getUrl(src);
         } else {
           return getUrl(`/images/wizard/${src}`);

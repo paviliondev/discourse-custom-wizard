@@ -46,15 +46,15 @@
 
 .d-editor-textarea-wrapper,
 .d-editor-preview-wrapper {
+  background-color: $secondary;
+  border: 1px solid #919191;
   flex: 1;
 }
 
 .d-editor-textarea-wrapper {
   display: flex;
   flex-direction: column;
-  background-color: $secondary;
   position: relative;
-  border: 1px solid #919191;
 
   textarea {
     background: transparent;
