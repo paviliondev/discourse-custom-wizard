@@ -92,12 +92,12 @@ class CustomWizard::AdminController < ::ApplicationController
                true
 
     if wizard['after_time'] && new_time
-      Jobs.cancel_scheduled_job(:set_after_time_wizard)
+      Jobs.cancel_scheduled_job(:set_after_time_wizard, wizard_id: wizard['id'])
       Jobs.enqueue_at(after_time_scheduled, :set_after_time_wizard, wizard_id: wizard['id'])
     end
 
     if existing['after_time'] && !wizard['after_time']
-      Jobs.cancel_scheduled_job(:set_after_time_wizard)
+      Jobs.cancel_scheduled_job(:set_after_time_wizard, wizard_id: wizard['id'])
       Jobs.enqueue(:clear_after_time_wizard, wizard_id: wizard['id'])
     end
 
