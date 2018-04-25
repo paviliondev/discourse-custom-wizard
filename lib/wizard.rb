@@ -132,6 +132,7 @@ class CustomWizard::Wizard
         name = data['name']
         wizard = CustomWizard::Wizard.new(user, id: id, name: name)
         result.push(id: id, name: name) if !wizard.completed?
+        result
       end
     else
       false
