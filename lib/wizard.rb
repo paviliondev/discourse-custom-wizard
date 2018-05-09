@@ -13,6 +13,7 @@ class CustomWizard::Wizard
                 :multiple_submissions,
                 :min_trust,
                 :after_time,
+                :after_time_scheduled,
                 :after_signup,
                 :required,
                 :prompt_completion
@@ -99,8 +100,8 @@ class CustomWizard::Wizard
       context: @id
     )
 
-    if @completed_after
-      history.where("updated_at > ?", @completed_after)
+    if @after_time
+      history = history.where("updated_at > ?", @after_time_scheduled)
     end
 
     completed = history.distinct.order(:subject).pluck(:subject)
@@ -164,5 +165,9 @@ class CustomWizard::Wizard
   def self.add_wizard(json)
     wizard = ::JSON.parse(json)
     PluginStore.set('custom_wizard', wizard["id"], wizard)
+  end
+
+  def self.set_redirect(user, wizard_id, url)
+    PluginStore.set("#{wizard_id}_submissions", user.id, [{ redirect_to: url }])
   end
 end

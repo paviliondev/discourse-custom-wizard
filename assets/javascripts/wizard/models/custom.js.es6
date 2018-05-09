@@ -9,10 +9,16 @@ const CustomWizard = Ember.Object.extend({
   totalSteps: length => length,
 
   skip() {
-    if (this.get('required')) return;
+    if (this.get('required') && (!this.get('completed') && this.get('permitted'))) return;
     const id = this.get('id');
-    ajax({ url: `/w/${id}/skip`, type: 'PUT' }).then((result) => {
-      this.finished(result);
+    CustomWizard.skip(id);
+  }
+});
+
+CustomWizard.reopenClass({
+  skip(wizardId) {
+    ajax({ url: `/w/${wizardId}/skip`, type: 'PUT' }).then((result) => {
+      CustomWizard.finished(result);
     });
   },
 
@@ -23,7 +29,7 @@ const CustomWizard = Ember.Object.extend({
     }
     window.location.href = getUrl(url);
   }
-});
+})
 
 export function findCustomWizard(wizardId) {
   return ajax({ url: `/w/${wizardId}` }).then(result => {

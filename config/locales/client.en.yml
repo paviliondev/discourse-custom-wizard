@@ -159,6 +159,7 @@ en:
       completed: "You have completed this wizard."
       not_permitted: "You need to be trust level {{level}} or higher to access this wizard."
       none: "There is no wizard here."
+      return_to_site: "Return to {{siteName}}"
 
     wizard_composer:
       show_preview: "Preview Your Post"

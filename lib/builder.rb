@@ -8,17 +8,7 @@ class CustomWizard::Builder
     return if data.blank?
 
     @steps = data['steps']
-    @wizard = CustomWizard::Wizard.new(user,
-      id: wizard_id,
-      save_submissions: data['save_submissions'],
-      multiple_submissions: data['multiple_submissions'],
-      background: data["background"],
-      name: data["name"],
-      after_time: data["after_time"],
-      after_signup: data["after_signup"],
-      required: data["required"],
-      min_trust: data["min_trust"]
-    )
+    @wizard = CustomWizard::Wizard.new(user, data)
     @submissions = Array.wrap(PluginStore.get("#{wizard_id}_submissions", user.id))
   end
 

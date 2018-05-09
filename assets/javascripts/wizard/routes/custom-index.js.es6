@@ -15,10 +15,13 @@ export default Ember.Route.extend({
       const completed = model.get('completed');
       const permitted = model.get('permitted');
       const minTrust = model.get('min_trust');
+      const wizardId = model.get('id');
+
       controller.setProperties({
         completed,
         notPermitted: !permitted,
-        minTrust
+        minTrust,
+        wizardId
       });
     } else {
       controller.set('noWizard', true);

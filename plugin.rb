@@ -88,7 +88,7 @@ after_initialize do
       if Wizard.user_requires_completion?(@user)
         wizard_path = $redis.get('custom_wizard_redirect')
         unless url === '/'
-          PluginStore.set("#{wizard_path.underscore}_submissions", @user.id, [{ redirect_to: url }])
+          CustomWizard::Wizard.set_redirect(@user, wizard_id, url)
         end
         url = "/w/#{wizard_path}"
       end
@@ -112,6 +112,7 @@ after_initialize do
     def redirect_to_wizard_if_required
       @wizard_id ||= current_user.custom_fields['redirect_to_wizard']
       if @wizard_id && request.referer !~ /w/ && request.referer !~ /admin/
+        CustomWizard::Wizard.set_redirect(current_user, @wizard_id, request.referer)
         redirect_to "/w/#{@wizard_id}"
       end
     end

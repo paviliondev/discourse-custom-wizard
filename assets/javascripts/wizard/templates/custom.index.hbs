@@ -1,10 +1,10 @@
 {{#if completed}}
-  {{i18n 'wizard.completed'}}
+  {{wizard-no-access text=(i18n 'wizard.completed') wizardId=wizardId}}
 {{else}}
   {{#if notPermitted}}
-    {{i18n 'wizard.not_permitted' level=minTrust}}
+    {{wizard-no-access text=(i18n 'wizard.completed' level=minTrust) wizardId=wizardId}}
   {{/if}}
   {{#if noWizard}}
-    {{i18n 'wizard.none'}}
+    {{wizard-no-access text=(i18n 'wizard.none') wizardId=wizardId}}
   {{/if}}
 {{/if}}

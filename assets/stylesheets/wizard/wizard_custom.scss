@@ -1,5 +1,11 @@
 @import 'wizard_variables';
 
+.no-access-gutter {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
 .custom-wizard {
   background-color: initial;
   font-size: 1.1em;

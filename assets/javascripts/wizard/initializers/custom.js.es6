@@ -8,6 +8,7 @@ export default {
     const ApplicationRoute = requirejs('wizard/routes/application').default;
     const ajax = requirejs('wizard/lib/ajax').ajax;
     const StepModel = requirejs('wizard/models/step').default;
+    const CustomWizard = requirejs('discourse/plugins/discourse-custom-wizard/wizard/models/custom').default;
     const WizardStep = requirejs('wizard/components/wizard-step').default;
     const WizardField = requirejs('wizard/components/wizard-field').default;
     const getUrl = requirejs('discourse-common/lib/get-url').default;
@@ -84,7 +85,7 @@ export default {
         this.get('step').save()
           .then(response => {
             if (this.get('finalStep')) {
-              this.get('wizard').finished(response);
+              CustomWizard.finished(response);
             } else {
               this.sendAction('goNext', response);
             }

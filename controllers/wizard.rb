@@ -22,6 +22,7 @@ class CustomWizard::WizardController < ::ApplicationController
     respond_to do |format|
       format.json do
         builder = CustomWizard::Builder.new(current_user, params[:wizard_id].underscore)
+
         if builder.wizard.present?
           wizard = builder.build
           render_serialized(wizard, WizardSerializer)
@@ -35,15 +36,18 @@ class CustomWizard::WizardController < ::ApplicationController
 
   ## clean up if user skips wizard
   def skip
+    params.require(:wizard_id)
+
     wizard_id = params[:wizard_id]
 
-    wizard = PluginStore.get('custom_wizard', wizard_id.underscore)
+    user = current_user
+    wizard_data = PluginStore.get('custom_wizard', wizard_id.underscore)
+    wizard = CustomWizard::Wizard.new(user, wizard_data)
 
-    if wizard['required']
+    if wizard.required && !wizard.completed? && wizard.permitted?
       return render json: { error: I18n.t('wizard.no_skip') }
     end
 
-    user = current_user
     result = success_json
     submission = Array.wrap(PluginStore.get("#{wizard_id}_submissions", user.id)).last
 
@@ -51,8 +55,8 @@ class CustomWizard::WizardController < ::ApplicationController
       result.merge!(redirect_to: submission['redirect_to'])
     end
 
-    if submission && !wizard['save_submissions']
-      PluginStore.remove("#{wizard['id']}_submissions", user.id)
+    if submission && !wizard.save_submissions
+      PluginStore.remove("#{wizard_id}_submissions", user.id)
     end
 
     if user.custom_fields['redirect_to_wizard'] === wizard_id
