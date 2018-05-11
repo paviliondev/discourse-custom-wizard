@@ -16,6 +16,9 @@ class CustomWizard::Template
 
   def initialize(data)
     data = data.is_a?(String) ? ::JSON.parse(data) : data
+
+    return nil if data.blank?
+
     @id = data['id']
     @name = data['name']
     @steps = data['steps']
