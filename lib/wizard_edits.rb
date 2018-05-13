@@ -42,7 +42,7 @@ end
   end
 
   def label
-    @label ||= PrettyText.cook(@attrs[:label], keep_emoji_images: true)
+    @label ||= PrettyText.cook(@attrs[:label])
   end
 end
 
@@ -56,7 +56,7 @@ end
   end
 
   def label
-    @label ||= PrettyText.cook(@opts[:label], keep_emoji_images: true)
+    @label ||= PrettyText.cook(@opts[:label])
   end
 end
 
