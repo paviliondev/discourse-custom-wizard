@@ -91,7 +91,7 @@ class CustomWizard::Builder
 
                 if f['choices'] && f['choices'].length > 0
                   f['choices'].each do |c|
-                    field.add_choice(c['value'], label: c['label'])
+                    field.add_choice(c['key'], label: c['value'])
                   end
                 elsif f['choices_key'] && f['choices_key'].length > 0
                   choices = I18n.t(f['choices_key'])

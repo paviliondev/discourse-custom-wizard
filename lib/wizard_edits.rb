@@ -44,6 +44,20 @@ end
   end
 end
 
+::Wizard::Choice.class_eval do
+  def initialize(id, opts)
+    @id = id
+    @opts = opts
+    @data = opts[:data]
+    @extra_label = opts[:extra_label]
+    @icon = opts[:icon]
+  end
+
+  def label
+    @label ||= PrettyText.cook(@opts[:label], keep_emoji_images: true, postProcessTag: '<div>')
+  end
+end
+
 class ::Wizard::Step
   attr_accessor :title, :description, :key
 end

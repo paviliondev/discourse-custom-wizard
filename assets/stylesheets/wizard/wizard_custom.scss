@@ -215,6 +215,10 @@
 
   .combo-box ul {
     padding: 0;
+
+    li p {
+      margin: 0;
+    }
   }
 
   .wizard-buttons > a, .wizard-buttons > button, .spinner {
