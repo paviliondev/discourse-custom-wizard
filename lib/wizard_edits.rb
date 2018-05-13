@@ -28,12 +28,10 @@ end
   attr_accessor :dropdown_none
 
   def initialize(attrs)
-    attrs = attrs || {}
-
+    @attrs = attrs || {}
     @id = attrs[:id]
     @type = attrs[:type]
     @required = !!attrs[:required]
-    @label = attrs[:label]
     @description = attrs[:description]
     @image = attrs[:image]
     @key = attrs[:key]
@@ -41,6 +39,10 @@ end
     @value = attrs[:value]
     @choices = []
     @dropdown_none = attrs[:dropdown_none]
+  end
+
+  def label
+    @label ||= PrettyText.cook(@attrs[:label], keep_emoji_images: true)
   end
 end
 
@@ -54,7 +56,7 @@ end
   end
 
   def label
-    @label ||= PrettyText.cook(@opts[:label], keep_emoji_images: true, postProcessTag: '<div>')
+    @label ||= PrettyText.cook(@opts[:label], keep_emoji_images: true)
   end
 end
 

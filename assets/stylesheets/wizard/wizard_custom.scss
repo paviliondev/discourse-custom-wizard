@@ -125,8 +125,12 @@
       flex-flow: wrap;
       align-items: center;
 
-      .field-label {
+      .label-value {
         width: 100%;
+
+        p {
+          margin: 0;
+        }
       }
 
       .field-image {
