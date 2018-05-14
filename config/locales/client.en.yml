@@ -162,8 +162,8 @@ en:
       return_to_site: "Return to {{siteName}}"
 
     wizard_composer:
-      show_preview: "Preview Your Post"
-      hide_preview: "Hide Preview"
+      show_preview: "Preview Post"
+      hide_preview: "Edit Post"
       quote_post_title: "Quote whole post"
       bold_label: "B"
       bold_title: "Strong"

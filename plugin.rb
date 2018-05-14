@@ -86,11 +86,13 @@ after_initialize do
   module InvitesControllerCustomWizard
     def path(url)
       if Wizard.user_requires_completion?(@user)
-        wizard_path = $redis.get('custom_wizard_redirect')
+        wizard_id = $redis.get('custom_wizard_redirect')
+
         unless url === '/'
           CustomWizard::Wizard.set_redirect(@user, wizard_id, url)
         end
-        url = "/w/#{wizard_path}"
+
+        url = "/w/#{wizard_id}"
       end
       super(url)
     end
