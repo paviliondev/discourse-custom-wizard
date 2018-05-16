@@ -217,10 +217,12 @@
     margin: 0.5em 0;
   }
 
-  .combo-box ul {
-    padding: 0;
+  .combo-box {
+    ul {
+      padding: 0;
+    }
 
-    li p {
+    p {
       margin: 0;
     }
   }
