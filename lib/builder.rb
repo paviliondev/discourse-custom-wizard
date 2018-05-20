@@ -28,105 +28,29 @@ class CustomWizard::Builder
   USER_FIELDS = ['name', 'username', 'email', 'date_of_birth', 'title', 'locale']
   PROFILE_FIELDS = ['location', 'website', 'bio_raw', 'profile_background', 'card_background']
 
-  def self.build_post(template, user, data)
-    post = template.gsub(/u\{(.*?)\}/) do |match|
+  def self.fill_placeholders(string, user, data)
+    result = string.gsub(/u\{(.*?)\}/) do |match|
       result = ''
       result = user.send($1) if USER_FIELDS.include?($1)
       result = user.user_profile.send($1) if PROFILE_FIELDS.include?($1)
       result
     end
-    post.gsub!(/w\{(.*?)\}/) { |match| data[$1.to_sym] }
+
+    result.gsub!(/w\{(.*?)\}/) { |match| data[$1.to_sym] }
   end
 
   def build
     unless (@wizard.completed? && !@wizard.multiple_submissions && !@wizard.user.admin) || !@steps || !@wizard.permitted?
-      @steps.each do |s|
-        @wizard.append_step(s['id']) do |step|
-          step.title = s['title'] if s['title']
-          step.description = s['description'] if s['description']
-          step.banner = s['banner'] if s['banner']
-          step.key = s['key'] if s['key']
+      @steps.each do |step_template|
+        @wizard.append_step(step_template['id']) do |step|
+          step.title = step_template['title'] if step_template['title']
+          step.description = step_template['description'] if step_template['description']
+          step.banner = step_template['banner'] if step_template['banner']
+          step.key = step_template['key'] if step_template['key']
 
-          if s['fields'] && s['fields'].length
-            s['fields'].each do |f|
-              params = {
-                id: f['id'],
-                type: f['type'],
-                required: f['required']
-              }
-
-              params[:label] = f['label'] if f['label']
-              params[:description] = f['description'] if f['description']
-              params[:image] = f['image'] if f['image']
-              params[:key] = f['key'] if f['key']
-
-              if @submissions.last && @wizard.unfinished?
-                submission = @submissions.last
-                params[:value] = submission[f['id']] if submission[f['id']]
-              end
-
-              if s['actions'] && s['actions'].any?
-                profile_actions = s['actions'].select { |a| a['type'] === 'update_profile' }
-                if profile_actions.any?
-                  profile_actions.each do |action|
-                    if update = action['profile_updates'].select { |u| u['key'] === f['id'] }.first
-                      attribute = update['value']
-                      custom_field = update['value_custom']
-                      if custom_field
-                        params[:value] = UserCustomField.where(user_id: @wizard.user.id, name: custom_field).pluck(:value)
-                      elsif UserProfile.column_names.include? attribute
-                        params[:value] = UserProfile.find_by(user_id: @wizard.user.id).send(attribute)
-                      elsif User.column_names.include? attribute
-                        params[:value] = User.find(@wizard.user.id).send(attribute)
-                      end
-                    end
-                  end
-                end
-              end
-
-              field = step.add_field(params)
-
-              if f['type'] === 'dropdown'
-                field.dropdown_none = f['dropdown_none'] if f['dropdown_none']
-
-                if f['choices'] && f['choices'].length > 0
-                  f['choices'].each do |c|
-                    field.add_choice(c['key'], label: c['value'])
-                  end
-                elsif f['choices_key'] && f['choices_key'].length > 0
-                  choices = I18n.t(f['choices_key'])
-                  if choices.is_a?(Hash)
-                    choices.each do |k, v|
-                      field.add_choice(k, label: v)
-                    end
-                  end
-                elsif f['choices_preset'] && f['choices_preset'].length > 0
-                  objects = []
-
-                  if f['choices_preset'] === 'categories'
-                    objects = Site.new(Guardian.new(@wizard.user)).categories
-                  end
-
-                  if f['choices_filters'] && f['choices_filters'].length > 0
-                    f['choices_filters'].each do |f|
-                      objects.reject! do |o|
-                        prop = f['key']
-                        if prop.include? 'custom_fields'
-                          o.custom_fields[prop.split('.')[1]].to_s != f['value'].to_s
-                        else
-                          o[prop].to_s != f['value'].to_s
-                        end
-                      end
-                    end
-                  end
-
-                  if objects.length > 0
-                    objects.each do |o|
-                      field.add_choice(o.id, label: o.name)
-                    end
-                  end
-                end
-              end
+          if step_template['fields'] && step_template['fields'].length
+            step_template['fields'].each do |field_template|
+              append_field(step, step_template, field_template)
             end
           end
 
@@ -134,8 +58,8 @@ class CustomWizard::Builder
             @updater = updater
             user = @wizard.user
 
-            if s['fields'] && s['fields'].length
-              s['fields'].each do |field|
+            if step_template['fields'] && step_template['fields'].length
+              step_template['fields'].each do |field|
                 validate_field(field, updater)
               end
             end
@@ -158,8 +82,8 @@ class CustomWizard::Builder
               data = submission.merge(data)
             end
 
-            if s['actions'] && s['actions'].length && data
-              s['actions'].each do |action|
+            if step_template['actions'] && step_template['actions'].length && data
+              step_template['actions'].each do |action|
                 self.send(action['type'].to_sym, user, action, data)
               end
             end
@@ -190,6 +114,99 @@ class CustomWizard::Builder
     @wizard
   end
 
+  def append_field(step, step_template, field_template)
+    params = {
+      id: field_template['id'],
+      type: field_template['type'],
+      required: field_template['required']
+    }
+
+    params[:label] = field_template['label'] if field_template['label']
+    params[:description] = field_template['description'] if field_template['description']
+    params[:image] = field_template['image'] if field_template['image']
+    params[:key] = field_template['key'] if field_template['key']
+
+    ## Load previously submitted values
+    if @submissions.last && @wizard.unfinished?
+      submission = @submissions.last
+      params[:value] = submission[field_template['id']] if submission[field_template['id']]
+    end
+
+    ## If a field updates a profile field, load the current value
+    if step_template['actions'] && step_template['actions'].any?
+      profile_actions = step_template['actions'].select { |a| a['type'] === 'update_profile' }
+
+      if profile_actions.any?
+        profile_actions.each do |action|
+          if update = action['profile_updates'].select { |u| u['key'] === field_template['id'] }.first
+            params[:value] = prefill_profile_field(update)
+          end
+        end
+      end
+    end
+
+    field = step.add_field(params)
+
+    if field_template['type'] === 'dropdown'
+      build_dropdown_list(field, field_template)
+    end
+  end
+
+  def prefill_profile_field(update)
+    attribute = update['value']
+    custom_field = update['value_custom']
+
+    if custom_field
+      UserCustomField.where(user_id: @wizard.user.id, name: custom_field).pluck(:value)
+    elsif UserProfile.column_names.include? attribute
+      UserProfile.find_by(user_id: @wizard.user.id).send(attribute)
+    elsif User.column_names.include? attribute
+      User.find(@wizard.user.id).send(attribute)
+    end
+  end
+
+  def build_dropdown_list(field, field_template)
+    field.dropdown_none = field_template['dropdown_none'] if field_template['dropdown_none']
+
+    if field_template['choices'] && field_template['choices'].length > 0
+      field_template['choices'].each do |c|
+        field.add_choice(c['key'], label: c['value'])
+      end
+    elsif field_template['choices_key'] && field_template['choices_key'].length > 0
+      choices = I18n.t(field_template['choices_key'])
+
+      if choices.is_a?(Hash)
+        choices.each { |k, v| field.add_choice(k, label: v) }
+      end
+    elsif field_template['choices_preset'] && field_template['choices_preset'].length > 0
+      objects = []
+
+      if field_template['choices_preset'] === 'categories'
+        objects = Site.new(Guardian.new(@wizard.user)).categories
+      end
+
+      if field_template['choices_filters'] && field_template['choices_filters'].length > 0
+        field_template['choices_filters'].each do |f|
+          objects.reject! do |o|
+            prop = field_template['key']
+
+            if prop.include? 'custom_fields'
+              o.custom_fields[prop.split('.')[1]].to_s != field_template['value'].to_s
+            else
+              o[prop].to_s != field_template['value'].to_s
+            end
+          end
+        end
+      end
+
+      if objects.length > 0
+        objects.each do |o|
+          field.add_choice(o.id, label: o.name)
+        end
+      end
+    end
+  end
+
   def validate_field(field, updater)
     value = updater.fields[field['id']]
     min_length = field['min_length']
@@ -208,7 +225,7 @@ class CustomWizard::Builder
     end
 
     if action['post_builder']
-      post = CustomWizard::Builder.build_post(action['post_template'], user, data)
+      post = CustomWizard::Builder.fill_placeholders(action['post_template'], user, data)
     else
       post = data[action['post']]
     end
@@ -289,7 +306,7 @@ class CustomWizard::Builder
     title = data[action['title']]
 
     if action['post_builder']
-      post = CustomWizard::Builder.build_post(action['post_template'], user, data)
+      post = CustomWizard::Builder.fill_placeholders(action['post_template'], user, data)
     else
       post = data[action['post']]
     end
