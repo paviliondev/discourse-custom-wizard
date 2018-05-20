@@ -135,13 +135,8 @@ class CustomWizard::Builder
             user = @wizard.user
 
             if s['fields'] && s['fields'].length
-              s['fields'].each do |f|
-                value = updater.fields[f['id']]
-                min_length = f['min_length']
-                if min_length && value.is_a?(String) && value.length < min_length.to_i
-                  label = f['label'] || I18n.t("#{f['key']}.label")
-                  updater.errors.add(f['id'].to_s, I18n.t('wizard.field.too_short', label: label, min: min_length.to_i))
-                end
+              s['fields'].each do |field|
+                validate_field(field, updater)
               end
             end
 
@@ -155,9 +150,7 @@ class CustomWizard::Builder
 
             next if updater.errors.any?
 
-            step_input = updater.fields.to_h
-            data = step_input
-            final_step = updater.step.next.nil?
+            data = updater.fields.to_h
 
             ## if the wizard has data from the previous steps make that accessible to the actions.
             if @submissions && @submissions.last && !@submissions.last.key?("submitted_at")
@@ -165,170 +158,17 @@ class CustomWizard::Builder
               data = submission.merge(data)
             end
 
-            if s['actions'] && s['actions'].length
-              s['actions'].each do |a|
-                if a['type'] === 'create_topic' && data
-
-                  if a['custom_title']
-                    title = a['custom_title']
-                  else
-                    title = data[a['title']]
-                  end
-
-                  if a['post_builder']
-                    post = CustomWizard::Builder.build_post(a['post_template'], user, data)
-                  else
-                    post = data[a['post']]
-                  end
-
-                  if title
-                    params = {
-                      title: title,
-                      raw: post,
-                      skip_validations: true
-                    }
-
-                    if a['custom_category_enabled'] &&
-                      !a['custom_category_wizard_field'] &&
-                      a['custom_category_user_field_key']
-                      if a['custom_category_user_field_key'].include?('custom_fields')
-                        field = a['custom_category_user_field_key'].split('.').last
-                        category_id = user.custom_fields[field]
-                      else
-                        category_id = user.send(a['custom_category_user_field_key'])
-                      end
-                    else
-                      category_id = a['category_id']
-                    end
-
-                    params[:category] = category_id
-
-                    topic_custom_fields = {}
-
-                    if a['add_fields']
-                      a['add_fields'].each do |f|
-                        if f['value_custom']
-                          value = f['value_custom']
-                        else
-                          value = data[f['value']]
-                        end
-                        key = f['key']
-
-                        if key && key.include?('custom_fields')
-                          keyArr = key.split('.')
-
-                          if keyArr.length === 3
-                            custom_key = keyArr.last
-                            type = keyArr.first
-
-                            if type === 'topic'
-                              topic_custom_fields[custom_key] = value
-                            elsif type === 'post'
-                              params[:custom_fields] ||= {}
-                              params[:custom_fields][custom_key.to_sym] = value
-                            end
-                          end
-                        else
-                          params[key.to_sym] = value
-                        end
-                      end
-                    end
-
-                    creator = PostCreator.new(user, params)
-                    post = creator.create
-
-                    if creator.errors.present?
-                      updater.errors.add(:create_topic, creator.errors.full_messages.join(" "))
-                    else
-                      if topic_custom_fields.present?
-                        topic_custom_fields.each do |k, v|
-                          post.topic.custom_fields[k] = v
-                        end
-                        post.topic.save_custom_fields(true)
-                      end
-
-                      data['redirect_to'] = post.topic.url
-                    end
-                  end
-                end
-
-                if a['type'] === 'send_message' && data
-                  title = data[a['title']]
-
-                  if a['post_builder']
-                    post = CustomWizard::Builder.build_post(a['post_template'], user, data)
-                  else
-                    post = data[a['post']]
-                  end
-
-                  if title && post
-                    creator = PostCreator.new(user,
-                                    title: title,
-                                    raw: post,
-                                    archetype: Archetype.private_message,
-                                    target_usernames: a['username'])
-
-                    post = creator.create
-
-                    if creator.errors.present?
-                      updater.errors.add(:send_message, creator.errors.full_messages.join(" "))
-                    else
-                      data['redirect_to'] = post.topic.url
-                    end
-                  end
-                end
-
-                if a['type'] === 'update_profile' && a['profile_updates'].length && data
-                  attributes = {}
-                  custom_fields = {}
-
-                  a['profile_updates'].each do |pu|
-                    value = pu['value']
-                    custom_field = pu['value_custom']
-                    key = pu['key']
-
-                    if custom_field
-                      custom_fields[custom_field] = data[key]
-                    else
-                      attributes[value.to_sym] = data[key]
-                    end
-                  end
-
-                  if custom_fields.present?
-                    custom_fields.each do |k, v|
-                      user.custom_fields[k] = v
-                    end
-                    user.save_custom_fields(true)
-                  end
-
-                  if attributes.present?
-                    user_updater = UserUpdater.new(user, user)
-                    user_updater.update(attributes)
-                  end
-                end
+            if s['actions'] && s['actions'].length && data
+              s['actions'].each do |action|
+                self.send(action['type'].to_sym, user, action, data)
               end
             end
+
+            final_step = updater.step.next.nil?
 
             if @wizard.save_submissions && updater.errors.empty?
-              if step_input
-                step_input.each do |key, value|
-                  data[key] = value
-                end
-              end
-
-              if final_step
-                data['submitted_at'] = Time.now.iso8601
-              end
-
-              if data.present?
-                @submissions.pop(1) if @wizard.unfinished?
-                @submissions.push(data)
-                PluginStore.set("#{@wizard.id}_submissions", @wizard.user.id, @submissions)
-              end
-            end
-
-            # Ensure there is no submission left over after the user has completed a wizard with save_submissions off
-            if !@wizard.save_submissions && final_step
+              save_submissions(data, final_step)
+            elsif final_step
               PluginStore.remove("#{@wizard.id}_submissions", @wizard.user.id)
             end
 
@@ -338,7 +178,6 @@ class CustomWizard::Builder
             end
 
             if updater.errors.empty?
-              # If the user will be redirected to a new wizard send them there straight away
               user_redirect = user.custom_fields['redirect_to_wizard']
               redirect_to = user_redirect ? "/w/#{user_redirect}" : data['redirect_to']
               updater.result = { redirect_to: redirect_to } if redirect_to
@@ -349,5 +188,168 @@ class CustomWizard::Builder
     end
 
     @wizard
+  end
+
+  def validate_field(field, updater)
+    value = updater.fields[field['id']]
+    min_length = field['min_length']
+
+    if min_length && value.is_a?(String) && value.length < min_length.to_i
+      label = field['label'] || I18n.t("#{field['key']}.label")
+      updater.errors.add(field['id'].to_s, I18n.t('wizard.field.too_short', label: label, min: min_length.to_i))
+    end
+  end
+
+  def create_topic(user, action, data)
+    if action['custom_title']
+      title = action['custom_title']
+    else
+      title = data[action['title']]
+    end
+
+    if action['post_builder']
+      post = CustomWizard::Builder.build_post(action['post_template'], user, data)
+    else
+      post = data[action['post']]
+    end
+
+    if title
+      params = {
+        title: title,
+        raw: post,
+        skip_validations: true
+      }
+
+      if action['custom_category_enabled'] &&
+        !action['custom_category_wizard_field'] &&
+        action['custom_category_user_field_key']
+
+        if action['custom_category_user_field_key'].include?('custom_fields')
+          field = action['custom_category_user_field_key'].split('.').last
+          category_id = user.custom_fields[field]
+        else
+          category_id = user.send(action['custom_category_user_field_key'])
+        end
+      else
+        category_id = action['category_id']
+      end
+
+      params[:category] = category_id
+
+      topic_custom_fields = {}
+
+      if action['add_fields']
+        action['add_fields'].each do |field|
+          if field['value_custom']
+            value = field['value_custom']
+          else
+            value = data[field['value']]
+          end
+          key = field['key']
+
+          if key && key.include?('custom_fields')
+            keyArr = key.split('.')
+
+            if keyArr.length === 3
+              custom_key = keyArr.last
+              type = keyArr.first
+
+              if type === 'topic'
+                topic_custom_fields[custom_key] = value
+              elsif type === 'post'
+                params[:custom_fields] ||= {}
+                params[:custom_fields][custom_key.to_sym] = value
+              end
+            end
+          else
+            params[key.to_sym] = value
+          end
+        end
+      end
+
+      creator = PostCreator.new(user, params)
+      post = creator.create
+
+      if creator.errors.present?
+        updater.errors.add(:create_topic, creator.errors.full_messages.join(" "))
+      else
+        if topic_custom_fields.present?
+          topic_custom_fields.each do |k, v|
+            post.topic.custom_fields[k] = v
+          end
+          post.topic.save_custom_fields(true)
+        end
+
+        data['redirect_to'] = post.topic.url
+      end
+    end
+  end
+
+  def send_message(user, action, data)
+    title = data[action['title']]
+
+    if action['post_builder']
+      post = CustomWizard::Builder.build_post(action['post_template'], user, data)
+    else
+      post = data[action['post']]
+    end
+
+    if title && post
+      creator = PostCreator.new(user,
+        title: title,
+        raw: post,
+        archetype: Archetype.private_message,
+        target_usernames: action['username']
+      )
+
+      post = creator.create
+
+      if creator.errors.present?
+        updater.errors.add(:send_message, creator.errors.full_messages.join(" "))
+      else
+        data['redirect_to'] = post.topic.url
+      end
+    end
+  end
+
+  def update_profile(user, action, data)
+    return unless action['profile_updates'].length
+
+    attributes = {}
+    custom_fields = {}
+
+    action['profile_updates'].each do |pu|
+      value = pu['value']
+      custom_field = pu['value_custom']
+      key = pu['key']
+
+      if custom_field
+        custom_fields[custom_field] = data[key]
+      else
+        attributes[value.to_sym] = data[key]
+      end
+    end
+
+    if custom_fields.present?
+      custom_fields.each { |k, v| user.custom_fields[k] = v }
+      user.save_custom_fields(true)
+    end
+
+    if attributes.present?
+      user_updater = UserUpdater.new(user, user)
+      user_updater.update(attributes)
+    end
+  end
+
+  def save_submissions(data, final_step)
+    if final_step
+      data['submitted_at'] = Time.now.iso8601
+    end
+
+    if data.present?
+      @submissions.pop(1) if @wizard.unfinished?
+      @submissions.push(data)
+      PluginStore.set("#{@wizard.id}_submissions", @wizard.user.id, @submissions)
+    end
   end
 end
