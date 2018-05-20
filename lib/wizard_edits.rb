@@ -142,12 +142,12 @@ end
   attributes :dropdown_none, :image
 
   def label
-    return object.label if object.label
+    return object.label if object.label.present?
     I18n.t("#{object.key || i18n_key}.label", default: '')
   end
 
   def description
-    return object.description if object.description
+    return object.description if object.description.present?
     I18n.t("#{object.key || i18n_key}.description", default: '', base_url: Discourse.base_url)
   end
 
