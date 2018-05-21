@@ -188,12 +188,10 @@ class CustomWizard::Builder
       if field_template['choices_filters'] && field_template['choices_filters'].length > 0
         field_template['choices_filters'].each do |f|
           objects.reject! do |o|
-            prop = field_template['key']
-
-            if prop.include? 'custom_fields'
-              o.custom_fields[prop.split('.')[1]].to_s != field_template['value'].to_s
+            if f['key'].include? 'custom_fields'
+              o.custom_fields[f['key'].split('.')[1]].to_s != f['value'].to_s
             else
-              o[prop].to_s != field_template['value'].to_s
+              o[prop].to_s != f['value'].to_s
             end
           end
         end
