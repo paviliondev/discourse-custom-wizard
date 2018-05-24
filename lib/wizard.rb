@@ -168,6 +168,6 @@ class CustomWizard::Wizard
   end
 
   def self.set_redirect(user, wizard_id, url)
-    PluginStore.set("#{wizard_id}_submissions", user.id, [{ redirect_to: url }])
+    PluginStore.set("#{wizard_id.underscore}_submissions", user.id, [{ redirect_to: url }])
   end
 end
