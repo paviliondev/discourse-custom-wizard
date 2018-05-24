@@ -10,7 +10,16 @@ require_dependency 'wizard/step'
     custom_redirect = nil
 
     if user && wizard_id = CustomWizard::Wizard.after_signup
-      custom_redirect = wizard_id.dasherize
+      custom_redirect = wizard_id
+
+      wizard = CustomWizard::Wizard.new(user, id: wizard_id)
+
+      data = PluginStore.get('custom_wizard', wizard_id)
+
+      if data['required']
+        user.custom_fields['redirect_to_wizard'] = wizard_id
+        user.save_custom_fields(true)
+      end
 
       if CustomWizard::Wizard.new(user, id: wizard_id).completed?
         custom_redirect = nil
