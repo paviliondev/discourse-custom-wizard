@@ -5,3 +5,6 @@ en:
       too_short: "%{label} must be at least %{min} characters"
     none: "We couldn't find a wizard at that address."
     no_skip: "Wizard can't be skipped"
+
+  site_settings:
+    wizard_redirect_exclude_paths: "Routes excluded from wizard redirects."

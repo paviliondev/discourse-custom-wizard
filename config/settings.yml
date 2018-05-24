@@ -1,0 +1,7 @@
+plugins:
+  wizard_redirect_exclude_paths:
+    client: true
+    type: list
+    default: 'admin'
+    choices:
+      - admin
