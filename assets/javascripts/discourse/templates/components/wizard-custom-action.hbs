@@ -104,11 +104,11 @@
 
   <div class="setting full">
     <label>{{i18n 'admin.wizard.action.add_fields' type='Topic'}}</label>
-    {{wizard-custom-input inputs=action.add_fields
-                          valueContent=availableFields
-                          inputKey='admin.wizard.action.topic_attr'
-                          noneValue='admin.wizard.select_field'
-                          optionalCustom=true}}
+    {{wizard-custom-inputs inputs=action.add_fields
+                           valueContent=availableFields
+                           inputKey='admin.wizard.action.topic_attr'
+                           noneValue='admin.wizard.select_field'
+                           allowCustomField=true}}
   </div>
 {{/if}}
 
@@ -167,20 +167,20 @@
 
   <div class="setting full">
     <label>{{i18n "admin.wizard.action.add_fields" type='Message'}}</label>
-    {{wizard-custom-input inputs=action.add_fields
-                          keyContent=availableFields
-                          inputValue='admin.wizard.action.topic_attr'}}
+    {{wizard-custom-inputs inputs=action.add_fields
+                           keyContent=availableFields
+                           valuePlaceholder='admin.wizard.action.topic_attr'}}
   </div>
 {{/if}}
 
 {{#if updateProfile}}
   <div class="setting full">
     <label>{{i18n "admin.wizard.action.add_fields" type='Profile'}}</label>
-    {{wizard-custom-input inputs=action.profile_updates
-                          valueContent=profileFields
-                          keyContent=availableFields
-                          noneValue='admin.wizard.action.update_profile.profile_field'
-                          optionalCustom=true
-                          inputValue='admin.wizard.action.update_profile.custom_field'}}      
+    {{wizard-custom-inputs inputs=action.profile_updates
+                           valueContent=profileFields
+                           keyContent=availableFields
+                           noneValue='admin.wizard.action.update_profile.profile_field'
+                           allowCustomField=true
+                           allowUserField=true}}
   </div>
 {{/if}}

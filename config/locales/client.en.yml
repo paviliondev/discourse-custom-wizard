@@ -2,6 +2,7 @@ en:
   js:
     wizard:
       complete_custom: "Welcome to %{site_name}! Get started with <a href='%{wizard_url}' data-auto-route='true'>the %{wizard_name} wizard</a> ✨"
+
   admin_js:
     admin:
       wizard:
@@ -42,11 +43,14 @@ en:
         add: "Add"
         url: "Url"
         key: "Key"
+        or: "Or"
         value: "Value"
         id: "Id"
         id_placeholder: "Underscored. Cannot be changed."
         key_placeholder: "Translation key"
         custom_text_placeholder: "Overrides translation"
+        custom_field_placeholder: "Custom Field"
+        user_field_placeholder: "User Field"
         type: "Type"
         none: "Make a selection"
         select_field: "Select Field"
@@ -107,7 +111,6 @@ en:
           update_profile:
             label: "Update Profile"
             profile_field: "Profile Field"
-            custom_field: "User Custom Field"
           post_builder:
             checkbox: "Post Builder"
             label: "Builder"
@@ -130,7 +133,10 @@ en:
         desc: "e.g. 42 Wallaby Way"
       postalcode:
         title: "Postal Code (Zip)"
-        desc: "e.g. 2548"
+        desc: "e.g. 2090"
+      neighbourhood:
+        title: "Neighbourhood"
+        desc: "e.g. Cremorne Point"
       city:
         title: "City, Town or Village"
         desc: "e.g. Sydney"
@@ -148,6 +154,7 @@ en:
         no_results: "No results. Please double check the spelling."
         show_map: "Show Map"
       validation:
+        neighbourhood: "Please enter a neighbourhood."
         city: "Please enter a city, town or village."
         countrycode: "Please select a country."
         geo_location: "Search and select a result."

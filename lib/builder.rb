@@ -96,14 +96,13 @@ class CustomWizard::Builder
               PluginStore.remove("#{@wizard.id}_submissions", @wizard.user.id)
             end
 
-            if @wizard.after_time && final_step
+            if final_step && @wizard.id === @wizard.user.custom_fields['redirect_to_wizard']
               @wizard.user.custom_fields.delete('redirect_to_wizard');
               @wizard.user.save_custom_fields(true)
             end
 
             if updater.errors.empty?
-              user_redirect = user.custom_fields['redirect_to_wizard']
-              redirect_to = user_redirect ? "/w/#{user_redirect}" : data['redirect_to']
+              redirect_to = data['redirect_to']
               updater.result = { redirect_to: redirect_to } if redirect_to
             end
           end
@@ -155,9 +154,10 @@ class CustomWizard::Builder
   def prefill_profile_field(update)
     attribute = update['value']
     custom_field = update['value_custom']
+    user_field = update['user_field']
 
-    if custom_field
-      UserCustomField.where(user_id: @wizard.user.id, name: custom_field).pluck(:value)
+    if user_field || custom_field
+      UserCustomField.where(user_id: @wizard.user.id, name: user_field || custom_field).pluck(:value)
     elsif UserProfile.column_names.include? attribute
       UserProfile.find_by(user_id: @wizard.user.id).send(attribute)
     elsif User.column_names.include? attribute
@@ -336,10 +336,11 @@ class CustomWizard::Builder
     action['profile_updates'].each do |pu|
       value = pu['value']
       custom_field = pu['value_custom']
+      user_field = pu['user_field']
       key = pu['key']
 
-      if custom_field
-        custom_fields[custom_field] = data[key]
+      if user_field || custom_field
+        custom_fields[user_field || custom_field] = data[key]
       else
         attributes[value.to_sym] = data[key]
       end

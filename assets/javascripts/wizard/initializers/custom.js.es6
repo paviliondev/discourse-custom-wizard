@@ -66,13 +66,7 @@ export default {
       bannerImage: function() {
         const src = this.get('step.banner');
         if (!src) return;
-
-        const localPaths = ['uploads', 'plugins', 'images'];
-        if (localPaths.indexOf(src.split('/')[1]) > -1) {
-          return getUrl(src);
-        } else {
-          return getUrl(`/images/wizard/${src}`);
-        };
+        return getUrl(src);
       }.property('step.banner'),
 
       handleMessage: function() {
@@ -114,7 +108,13 @@ export default {
       save() {
         const wizardId = this.get('wizardId');
         const fields = {};
-        this.get('fields').forEach(f => fields[f.id] = f.value);
+
+        this.get('fields').forEach(f => {
+          if (f.type !== 'text-only') {
+            fields[f.id] = f.value;
+          }
+        });
+
         return ajax({
           url: `/w/${wizardId}/steps/${this.get('id')}`,
           type: 'PUT',

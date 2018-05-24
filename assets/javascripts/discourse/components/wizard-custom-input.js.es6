@@ -1,19 +1,36 @@
+import { default as computed, on, observes } from 'ember-addons/ember-computed-decorators';
+import { getOwner } from 'discourse-common/lib/get-owner';
+
+const fieldNotPresent = (f) => { return f == null || f === undefined };
+
 export default Ember.Component.extend({
+  classNames: 'custom-input',
   noneKey: 'admin.wizard.select_field',
   noneValue: 'admin.wizard.none',
   inputKey: 'admin.wizard.key',
   inputValue: 'admin.wizard.value',
+  customDisabled: Ember.computed.alias('input.user_field'),
 
-  actions: {
-    add() {
-      if (!this.get('inputs')) {
-        this.set('inputs', Ember.A());
-      }
-      this.get('inputs').pushObject(Ember.Object.create());
-    },
+  @computed('input.value_custom', 'input.user_field')
+  valueDisabled(custom, user) {
+    return Boolean(custom || user);
+  },
 
-    remove(input) {
-      this.get('inputs').removeObject(input);
+  @on('init')
+  setupUserFields() {
+    const allowUserField = this.get('allowUserField');
+    if (allowUserField) {
+      const store = getOwner(this).lookup('store:main');
+      store.findAll('user-field').then((result) => {
+        if (result && result.content && result.content.length) {
+          this.set('userFields', result.content.map((f) => {
+            return {
+              id: `user_field_${f.id}`,
+              name: f.name
+            }
+          }));
+        }
+      });
     }
   }
 });

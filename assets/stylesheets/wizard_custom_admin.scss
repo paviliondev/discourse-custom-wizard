@@ -44,7 +44,7 @@
     width: 49%;
 
     .setting-label {
-      width: 90px;
+      width: 20%;
     }
 
     .setting-value {
@@ -76,6 +76,10 @@
 
     &.full {
       width: 100%;
+
+      .setting-label {
+        width: 10%;
+      }
 
       .setting-value {
         width: initial;
@@ -164,15 +168,26 @@
 }
 
 .custom-input {
+  display: flex;
   margin: 5px 0;
 
-  > * {
-    margin-bottom: 0 !important;
-    margin-right: 5px;
+  .d-icon {
+    margin: 0 auto;
+    text-align: center;
   }
 
-  .select-box-kit {
-    width: 150px !important;
+  input[disabled] {
+    background-color: $primary-low;
+    border-color: #ddd;
+  }
+
+  .select-kit {
+    width: 232px !important;
+  }
+
+  .remove {
+    margin: 0 auto;
+    align-self: flex-start;
   }
 }
 
@@ -248,4 +263,37 @@
 
 .post-builder-editor {
   min-height: 220px;
+}
+
+.text-divider {
+  display: block;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  margin: 5px 0;
+
+  > span {
+    position: relative;
+    display: inline-block;
+  }
+
+  > span:before,
+  > span:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 9999px;
+    height: 1px;
+    background: $tertiary;
+  }
+
+  > span:before {
+    right: 100%;
+    margin-right: 15px;
+  }
+
+  > span:after {
+    left: 100%;
+    margin-left: 15px;
+  }
 }
