@@ -5,3 +5,4 @@ plugins:
     default: 'admin'
     choices:
       - admin
+      - privacy
