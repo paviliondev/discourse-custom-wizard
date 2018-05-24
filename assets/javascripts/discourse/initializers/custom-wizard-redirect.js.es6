@@ -20,7 +20,9 @@ export default {
           const redirectToWizard = this.get('currentUser.redirect_to_wizard');
           const excludedPaths = Discourse.SiteSettings.wizard_redirect_exclude_paths.split('|').concat(['loading']);
 
-          if (redirectToWizard && excludedPaths.indexOf(this.routeName) === -1) {
+          if (redirectToWizard && (!transition.intent.name || !excludedPaths.find((p) => {
+            return transition.intent.name.indexOf(p) > -1;
+          }))) {
             transition.abort();
             window.location = '/w/' + redirectToWizard.dasherize();
           }
