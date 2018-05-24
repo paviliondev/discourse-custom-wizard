@@ -76,7 +76,7 @@ after_initialize do
   ::UsersController.class_eval do
     def wizard_path
       if custom_wizard_redirect = $redis.get('custom_wizard_redirect')
-        "#{Discourse.base_url}/w/#{custom_wizard_redirect}"
+        "#{Discourse.base_url}/w/#{custom_wizard_redirect.dasherize}"
       else
         "#{Discourse.base_url}/wizard"
       end
@@ -92,7 +92,7 @@ after_initialize do
           CustomWizard::Wizard.set_redirect(@user, wizard_id, url)
         end
 
-        url = "/w/#{wizard_id}"
+        url = "/w/#{wizard_id.dasherize}"
       end
       super(url)
     end
@@ -113,9 +113,12 @@ after_initialize do
 
     def redirect_to_wizard_if_required
       @wizard_id ||= current_user.custom_fields['redirect_to_wizard']
-      if @wizard_id && request.referer !~ /w/ && request.referer !~ /admin/
-        CustomWizard::Wizard.set_redirect(current_user, @wizard_id, request.referer)
-        redirect_to "/w/#{@wizard_id}"
+      @excluded_routes ||= SiteSetting.wizard_redirect_exclude_paths.split('|') + ['/w/']
+      url = request.referer || request.original_url
+
+      if @wizard_id && request.format === 'text/html' && !@excluded_routes.any? { |str| /#{str}/ =~ url }
+        CustomWizard::Wizard.set_redirect(current_user, @wizard_id, request.referer) if request.referer !~ /\/w\//
+        redirect_to "/w/#{@wizard_id.dasherize}"
       end
     end
   end
