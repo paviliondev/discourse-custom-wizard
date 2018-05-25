@@ -347,8 +347,7 @@ class CustomWizard::Builder
     end
 
     if custom_fields.present?
-      custom_fields.each { |k, v| user.custom_fields[k] = v }
-      user.save_custom_fields(true)
+      attributes[:custom_fields] = custom_fields
     end
 
     if attributes.present?
