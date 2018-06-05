@@ -88,11 +88,10 @@ after_initialize do
       if Wizard.user_requires_completion?(@user)
         wizard_id = $redis.get('custom_wizard_redirect')
 
-        unless url === '/'
+        if wizard_id && url != '/'
           CustomWizard::Wizard.set_redirect(@user, wizard_id, url)
+          url = "/w/#{wizard_id.dasherize}"
         end
-
-        url = "/w/#{wizard_id.dasherize}"
       end
       super(url)
     end
@@ -116,8 +115,11 @@ after_initialize do
       @excluded_routes ||= SiteSetting.wizard_redirect_exclude_paths.split('|') + ['/w/']
       url = request.referer || request.original_url
 
-      if @wizard_id && request.format === 'text/html' && !@excluded_routes.any? { |str| /#{str}/ =~ url }
-        CustomWizard::Wizard.set_redirect(current_user, @wizard_id, request.referer) if request.referer !~ /\/w\//
+      if request.format === 'text/html' && !@excluded_routes.any? { |str| /#{str}/ =~ url } && @wizard_id
+        if request.referer !~ /\/w\// && request.referer !~ /\/invites\//
+          CustomWizard::Wizard.set_redirect(current_user, @wizard_id, request.referer)
+        end
+
         redirect_to "/w/#{@wizard_id.dasherize}"
       end
     end
@@ -141,6 +143,13 @@ after_initialize do
 
     def include_complete_custom_wizard?
       complete_custom_wizard.present?
+    end
+  end
+
+  DiscourseEvent.on(:user_approved) do |user|
+    if wizard_id = CustomWizard::Wizard.after_signup
+      user.custom_fields['redirect_to_wizard'] = wizard_id
+      user.save_custom_fields(true)
     end
   end
 
