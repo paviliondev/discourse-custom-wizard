@@ -60,7 +60,7 @@ class CustomWizard::Builder
 
             if step_template['fields'] && step_template['fields'].length
               step_template['fields'].each do |field|
-                validate_field(field, updater)
+                validate_field(field, updater) if field['type'] != 'text-only'
               end
             end
 
@@ -255,29 +255,27 @@ class CustomWizard::Builder
 
       if action['add_fields']
         action['add_fields'].each do |field|
-          if field['value_custom']
-            value = field['value_custom']
-          else
-            value = data[field['value']]
-          end
+          value = field['value_custom'] ? field['value_custom'] : data[field['value']]
           key = field['key']
 
-          if key && key.include?('custom_fields')
-            keyArr = key.split('.')
+          if key && value
+            if key.include?('custom_fields')
+              keyArr = key.split('.')
 
-            if keyArr.length === 3
-              custom_key = keyArr.last
-              type = keyArr.first
+              if keyArr.length === 3
+                custom_key = keyArr.last
+                type = keyArr.first
 
-              if type === 'topic'
-                topic_custom_fields[custom_key] = value
-              elsif type === 'post'
-                params[:custom_fields] ||= {}
-                params[:custom_fields][custom_key.to_sym] = value
+                if type === 'topic'
+                  topic_custom_fields[custom_key] = value
+                elsif type === 'post'
+                  params[:custom_fields] ||= {}
+                  params[:custom_fields][custom_key.to_sym] = value
+                end
               end
+            else
+              params[key.to_sym] = value
             end
-          else
-            params[key.to_sym] = value
           end
         end
       end
