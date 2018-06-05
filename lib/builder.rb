@@ -258,7 +258,7 @@ class CustomWizard::Builder
           value = field['value_custom'] ? field['value_custom'] : data[field['value']]
           key = field['key']
 
-          if key && value
+          if key && value != nil
             if key.include?('custom_fields')
               keyArr = key.split('.')
 
