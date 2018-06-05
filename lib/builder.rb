@@ -213,6 +213,11 @@ class CustomWizard::Builder
       label = field['label'] || I18n.t("#{field['key']}.label")
       updater.errors.add(field['id'].to_s, I18n.t('wizard.field.too_short', label: label, min: min_length.to_i))
     end
+
+    ## ensure all checkboxes are booleans
+    if field['type'] === 'checkbox'
+      updater.fields[field['id']] = value == true
+    end
   end
 
   def create_topic(user, action, data)
