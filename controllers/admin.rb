@@ -17,6 +17,8 @@ class CustomWizard::AdminController < ::ApplicationController
 
     existing = PluginStore.get('custom_wizard', wizard['id']) || {}
 
+    new_time = false
+
     error = nil
 
     if wizard["id"].blank?
@@ -30,8 +32,13 @@ class CustomWizard::AdminController < ::ApplicationController
         error = 'after_time_need_time'
       else
         after_time_scheduled = Time.parse(wizard["after_time_scheduled"]).utc
+
+        new_time = existing['after_time_scheduled'] ?
+                   after_time_scheduled != Time.parse(existing['after_time_scheduled']).utc :
+                   true
+
         begin
-          if after_time_scheduled < Time.now.utc
+          if new_time && after_time_scheduled < Time.now.utc
             error = 'after_time_invalid'
           end
         rescue ArgumentError
@@ -87,10 +94,6 @@ class CustomWizard::AdminController < ::ApplicationController
     wizard['steps'].each do |s|
       s['description'] = PrettyText.cook(s['raw_description']) if s['raw_description']
     end
-
-    new_time = existing['after_time_scheduled'] ?
-               after_time_scheduled != Time.parse(existing['after_time_scheduled']).utc :
-               true
 
     if wizard['after_time'] && new_time
       Jobs.cancel_scheduled_job(:set_after_time_wizard, wizard_id: wizard['id'])
