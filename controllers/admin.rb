@@ -15,6 +15,8 @@ class CustomWizard::AdminController < ::ApplicationController
 
     wizard = ::JSON.parse(params[:wizard])
 
+    existing = PluginStore.get('custom_wizard', wizard['id']) || {}
+
     error = nil
 
     if wizard["id"].blank?
@@ -24,7 +26,7 @@ class CustomWizard::AdminController < ::ApplicationController
     elsif wizard["steps"].blank?
       error = 'steps_required'
     elsif wizard["after_time"]
-      if !wizard["after_time_scheduled"]
+      if !wizard["after_time_scheduled"] && !existing["after_time_scheduled"]
         error = 'after_time_need_time'
       else
         after_time_scheduled = Time.parse(wizard["after_time_scheduled"]).utc
@@ -86,7 +88,6 @@ class CustomWizard::AdminController < ::ApplicationController
       s['description'] = PrettyText.cook(s['raw_description']) if s['raw_description']
     end
 
-    existing = PluginStore.get('custom_wizard', wizard['id']) || {}
     new_time = existing['after_time_scheduled'] ?
                after_time_scheduled != Time.parse(existing['after_time_scheduled']).utc :
                true
@@ -101,7 +102,7 @@ class CustomWizard::AdminController < ::ApplicationController
       Jobs.enqueue(:clear_after_time_wizard, wizard_id: wizard['id'])
     end
 
-    PluginStore.set('custom_wizard', wizard["id"], wizard)
+    PluginStore.set('custom_wizard', wizard["id"], existing.merge(wizard))
 
     render json: success_json
   end
