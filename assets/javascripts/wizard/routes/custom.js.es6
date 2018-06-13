@@ -13,7 +13,7 @@ export default Ember.Route.extend({
       url: `/site/settings`,
       type: 'GET',
     }).then((result) => {
-      Object.assign(Wizard.SiteSettings, result);
+      $.extend(Wizard.SiteSettings, result);
     });
   },
 

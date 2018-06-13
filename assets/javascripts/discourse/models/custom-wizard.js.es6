@@ -200,7 +200,7 @@ CustomWizard.reopenClass({
               Object.keys(f).forEach((key) => (f[key] === '') && delete f[key]);
 
               const fieldParams = { isNew: false };
-              let field = Ember.Object.create(Object.assign(f, fieldParams));
+              let field = Ember.Object.create($.extend(f, fieldParams));
 
               if (f.choices) {
                 let choices = Ember.A();
@@ -220,7 +220,7 @@ CustomWizard.reopenClass({
           if (s.actions && s.actions.length) {
             s.actions.forEach((a) => {
               const actionParams = { isNew: false };
-              const action = Ember.Object.create(Object.assign(a, actionParams));
+              const action = Ember.Object.create($.extend(a, actionParams));
               actions.pushObject(action);
             });
           }
