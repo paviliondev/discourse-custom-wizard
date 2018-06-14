@@ -20,6 +20,10 @@
     <script src="<%= Discourse.base_uri %>/extra-locales/wizard"></script>
     <%= csrf_meta_tags %>
 
+    <%- unless customization_disabled? %>
+      <%= raw theme_lookup("head_tag") %>
+    <%- end %>
+
     <%= server_plugin_outlet "custom_wizard" %>
 
     <meta name="discourse_theme_key" content="<%= theme_key %>">
@@ -31,6 +35,10 @@
 
   <body class='custom-wizard'>
     <div id='custom-wizard-main'></div>
+
+    <%- unless customization_disabled? %>
+      <%= raw theme_lookup("body_tag") %>
+    <%- end %>
 
     <script>
       (function() {
