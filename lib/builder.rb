@@ -216,7 +216,7 @@ class CustomWizard::Builder
 
     ## ensure all checkboxes are booleans
     if field['type'] === 'checkbox'
-      updater.fields[field['id']] = value == true
+      updater.fields[field['id']] = value == 'true'
     end
   end
 
