@@ -126,7 +126,7 @@ class CustomWizard::Builder
     params[:key] = field_template['key'] if field_template['key']
 
     ## Load previously submitted values
-    if @submissions.last && @wizard.unfinished?
+    if @submissions.last && !@submissions.last.key?("submitted_at")
       submission = @submissions.last
       params[:value] = submission[field_template['id']] if submission[field_template['id']]
     end
