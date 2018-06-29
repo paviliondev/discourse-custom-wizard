@@ -148,7 +148,13 @@ class CustomWizard::AdminController < ::ApplicationController
 
     all_submissions = [*rows].map do |r|
       submissions = ::JSON.parse(r.value)
-      username = User.find(r.key).username
+
+      if user = User.find_by(id: r.key)
+        username = user.username
+      else
+        username = I18n.t('admin.wizard.submissions.no_user', id: r.key)
+      end
+
       submissions.map { |s| { username: username }.merge!(s.except("redirect_to")) }
     end.flatten
 

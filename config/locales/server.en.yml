@@ -1,4 +1,9 @@
 en:
+  admin:
+    wizard:
+      submissions:
+        no_user: "deleted (id: %{id})"
+
   wizard:
     custom_title: "Wizard"
     field:
