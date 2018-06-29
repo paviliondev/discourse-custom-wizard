@@ -1,7 +1,5 @@
-import { default as computed, on, observes } from 'ember-addons/ember-computed-decorators';
+import { default as computed, on } from 'ember-addons/ember-computed-decorators';
 import { getOwner } from 'discourse-common/lib/get-owner';
-
-const fieldNotPresent = (f) => { return f == null || f === undefined };
 
 export default Ember.Component.extend({
   classNames: 'custom-input',
@@ -27,7 +25,7 @@ export default Ember.Component.extend({
             return {
               id: `user_field_${f.id}`,
               name: f.name
-            }
+            };
           }));
         }
       });
