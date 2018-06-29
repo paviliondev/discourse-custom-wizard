@@ -144,7 +144,11 @@ class CustomWizard::Builder
       end
     end
 
-    field = step.add_field(params)
+    if field_template['type'] === 'checkbox'
+      params[:value] = standardise_boolean(params[:value])
+    end
+
+    step.add_field(params)
 
     if field_template['type'] === 'dropdown'
       build_dropdown_list(field, field_template)
@@ -216,8 +220,12 @@ class CustomWizard::Builder
 
     ## ensure all checkboxes are booleans
     if field['type'] === 'checkbox'
-      updater.fields[field['id']] = value == 'true'
+      updater.fields[field['id']] = standardise_boolean(value)
     end
+  end
+
+  def standardise_boolean(value)
+    !!HasCustomFields::Helpers::CUSTOM_FIELD_TRUE.include?(value)
   end
 
   def create_topic(user, action, data)
