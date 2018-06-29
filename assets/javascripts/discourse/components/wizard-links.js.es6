@@ -1,11 +1,15 @@
-import { default as computed } from 'ember-addons/ember-computed-decorators';
+import { default as computed, on, observes } from 'ember-addons/ember-computed-decorators';
 
 export default Ember.Component.extend({
   classNames: 'wizard-links',
   items: Ember.A(),
 
+  @on('didInsertElement')
+  @observes('links.@each')
   didInsertElement() {
-    this.applySortable();
+    Ember.run.scheduleOnce('afterRender', () => {
+      this.applySortable();
+    });
   },
 
   applySortable() {
