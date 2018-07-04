@@ -148,7 +148,7 @@ class CustomWizard::Builder
       params[:value] = standardise_boolean(params[:value])
     end
 
-    step.add_field(params)
+    field = step.add_field(params)
 
     if field_template['type'] === 'dropdown'
       build_dropdown_list(field, field_template)
