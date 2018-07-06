@@ -105,7 +105,7 @@ class CustomWizard::AdminController < ::ApplicationController
       Jobs.enqueue(:clear_after_time_wizard, wizard_id: wizard['id'])
     end
 
-    PluginStore.set('custom_wizard', wizard["id"], existing.merge(wizard))
+    PluginStore.set('custom_wizard', wizard["id"], wizard)
 
     render json: success_json
   end
