@@ -3,11 +3,13 @@ module Jobs
     def execute(args)
       if CustomWizard::Wizard.find(args[:wizard_id])
         user_ids = []
-        User.human_users.each do |u|
-          u.custom_fields['redirect_to_wizard'] = args[:wizard_id]
-          u.save_custom_fields(true)
-          user_ids.push(u.id)
+
+        User.human_users.each do |user|
+          if CustomWizard::Wizard.set_wizard_redirect(user, args[:wizard_id])
+            user_ids.push(user.id)
+          end
         end
+
         MessageBus.publish "/redirect_to_wizard", args[:wizard_id], user_ids: user_ids
       end
     end

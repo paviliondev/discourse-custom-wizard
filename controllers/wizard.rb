@@ -41,8 +41,8 @@ class CustomWizard::WizardController < ::ApplicationController
     wizard_id = params[:wizard_id]
 
     user = current_user
-    wizard_data = PluginStore.get('custom_wizard', wizard_id.underscore)
-    wizard = CustomWizard::Wizard.new(user, wizard_data)
+    wizard_template = PluginStore.get('custom_wizard', wizard_id.underscore)
+    wizard = CustomWizard::Wizard.new(user, wizard_template)
 
     if wizard.required && !wizard.completed? && wizard.permitted?
       return render json: { error: I18n.t('wizard.no_skip') }

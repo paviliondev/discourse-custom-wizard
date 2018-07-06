@@ -168,10 +168,25 @@ class CustomWizard::Wizard
   end
 
   def self.find(wizard_id)
-    PluginStoreRow.find_by(plugin_name: 'custom_wizard', key: wizard_id)
+    PluginStore.get('custom_wizard', wizard_id)
   end
 
-  def self.set_redirect(user, wizard_id, url)
+  def self.create(user, wizard_id)
+    CustomWizard::Wizard.new(user, self.find(wizard_id).to_h)
+  end
+
+  def self.set_submission_redirect(user, wizard_id, url)
     PluginStore.set("#{wizard_id.underscore}_submissions", user.id, [{ redirect_to: url }])
+  end
+
+  def self.set_wizard_redirect(user, wizard_id)
+    wizard = CustomWizard::Wizard.create(user, wizard_id)
+
+    if wizard.permitted?
+      user.custom_fields['redirect_to_wizard'] = wizard_id
+      user.save_custom_fields(true)
+    else
+      false
+    end
   end
 end

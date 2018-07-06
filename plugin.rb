@@ -75,7 +75,7 @@ after_initialize do
 
   ::UsersController.class_eval do
     def wizard_path
-      if custom_wizard_redirect = $redis.get('custom_wizard_redirect')
+      if custom_wizard_redirect = current_user.custom_fields['redirect_to_wizard']
         "#{Discourse.base_url}/w/#{custom_wizard_redirect.dasherize}"
       else
         "#{Discourse.base_url}/wizard"
@@ -86,10 +86,10 @@ after_initialize do
   module InvitesControllerCustomWizard
     def path(url)
       if Wizard.user_requires_completion?(@user)
-        wizard_id = $redis.get('custom_wizard_redirect')
+        wizard_id = @user.custom_fields['custom_wizard_redirect']
 
         if wizard_id && url != '/'
-          CustomWizard::Wizard.set_redirect(@user, wizard_id, url)
+          CustomWizard::Wizard.set_submission_redirect(@user, wizard_id, url)
           url = "/w/#{wizard_id.dasherize}"
         end
       end
@@ -111,16 +111,16 @@ after_initialize do
     before_action :redirect_to_wizard_if_required, if: :current_user
 
     def redirect_to_wizard_if_required
-      @wizard_id ||= current_user.custom_fields['redirect_to_wizard']
+      wizard_id = current_user.custom_fields['redirect_to_wizard']
       @excluded_routes ||= SiteSetting.wizard_redirect_exclude_paths.split('|') + ['/w/']
       url = request.referer || request.original_url
 
-      if request.format === 'text/html' && !@excluded_routes.any? { |str| /#{str}/ =~ url } && @wizard_id
+      if request.format === 'text/html' && !@excluded_routes.any? { |str| /#{str}/ =~ url } && wizard_id
         if request.referer !~ /\/w\// && request.referer !~ /\/invites\//
-          CustomWizard::Wizard.set_redirect(current_user, @wizard_id, request.referer)
+          CustomWizard::Wizard.set_submission_redirect(current_user, wizard_id, request.referer)
         end
 
-        redirect_to "/w/#{@wizard_id.dasherize}"
+        redirect_to "/w/#{wizard_id.dasherize}"
       end
     end
   end
@@ -148,8 +148,7 @@ after_initialize do
 
   DiscourseEvent.on(:user_approved) do |user|
     if wizard_id = CustomWizard::Wizard.after_signup
-      user.custom_fields['redirect_to_wizard'] = wizard_id
-      user.save_custom_fields(true)
+      CustomWizard::Wizard.set_wizard_redirect(user, wizard_id)
     end
   end
 
