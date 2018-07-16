@@ -16,7 +16,7 @@ const PROFILE_FIELDS = [
   'bio_raw',
   'profile_background',
   'card_background',
-  'theme_key'
+  'theme_id'
 ];
 
 export default Ember.Component.extend({
@@ -60,8 +60,8 @@ export default Ember.Component.extend({
 
   @computed()
   builderUserFields() {
-    const noThemeKey = PROFILE_FIELDS.filter((f) => f !== 'theme_key');
-    const fields = noThemeKey.concat(['email', 'username']);
+    const noTheme = PROFILE_FIELDS.filter((f) => f !== 'theme_id');
+    const fields = noTheme.concat(['email', 'username']);
     return fields.map((f) => ` u{${f}}`);
   },
 
