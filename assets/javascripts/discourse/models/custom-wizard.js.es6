@@ -11,7 +11,7 @@ const wizardProperties = [
   'required',
   'prompt_completion',
   'min_trust',
-  'theme_key'
+  'theme_id'
 ];
 
 const CustomWizard = Discourse.Model.extend({

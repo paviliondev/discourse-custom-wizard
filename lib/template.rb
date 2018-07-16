@@ -12,7 +12,7 @@ class CustomWizard::Template
               :after_time,
               :after_time_scheduled,
               :required,
-              :theme_key
+              :theme_id
 
   def initialize(data)
     data = data.is_a?(String) ? ::JSON.parse(data) : data
@@ -31,11 +31,11 @@ class CustomWizard::Template
     @after_time = data['after_time']
     @after_time_scheduled = data['after_time_scheduled']
     @required = data['required'] || false
-    @theme_key = data['theme_key']
+    @theme_id = data['theme_id']
 
     if data['theme']
       theme = Theme.find_by(name: data['theme'])
-      @theme_key = theme.key if theme
+      @theme_id = theme.id if theme
     end
   end
 end
