@@ -1,0 +1,15 @@
+[main]
+host = https://www.transifex.com
+
+[discourse-custom-wizard.client-en-yml]
+file_filter = config/locales/client.<lang>.yml
+minimum_perc = 0
+source_file = config/locales/client.en.yml
+source_lang = en
+type = YML
+
+[discourse-custom-wizard.server-en-yml]
+file_filter = config/locales/server.<lang>.yml
+source_file = config/locales/server.en.yml
+source_lang = en
+type = YML
