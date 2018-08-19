@@ -25,6 +25,19 @@ class CustomWizard::Builder
     @sorted_handlers.sort_by! { |h| -h[:priority] }
   end
 
+  def self.sorted_field_validators
+    @sorted_field_validators ||= []
+  end
+
+  def self.field_validators
+    sorted_field_validators.map { |h| { type: h[:type], block: h[:block] } }
+  end
+
+  def self.add_field_validator(priority = 0, type, &block)
+    sorted_field_validators << { priority: priority, type: type, block: block }
+    @sorted_field_validators.sort_by! { |h| -h[:priority] }
+  end
+
   USER_FIELDS = ['name', 'username', 'email', 'date_of_birth', 'title', 'locale']
   PROFILE_FIELDS = ['location', 'website', 'bio_raw', 'profile_background', 'card_background']
 
@@ -60,7 +73,7 @@ class CustomWizard::Builder
 
             if step_template['fields'] && step_template['fields'].length
               step_template['fields'].each do |field|
-                validate_field(field, updater) if field['type'] != 'text-only'
+                validate_field(field, updater, step_template) if field['type'] != 'text-only'
               end
             end
 
@@ -209,7 +222,7 @@ class CustomWizard::Builder
     end
   end
 
-  def validate_field(field, updater)
+  def validate_field(field, updater, step_template)
     value = updater.fields[field['id']]
     min_length = field['min_length']
 
@@ -221,6 +234,12 @@ class CustomWizard::Builder
     ## ensure all checkboxes are booleans
     if field['type'] === 'checkbox'
       updater.fields[field['id']] = standardise_boolean(value)
+    end
+
+    CustomWizard::Builder.field_validators.each do |validator|
+      if field['type'] === validator[:type]
+        validator[:block].call(field, updater, step_template)
+      end
     end
   end
 
