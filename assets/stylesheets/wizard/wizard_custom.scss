@@ -288,7 +288,7 @@
     padding: 0;
     margin: 0;
     list-style: none;
-    height: 95px;
+    height: 200px;
     overflow: scroll;
   }
 
@@ -297,6 +297,8 @@
     cursor: pointer;
     background-color: #fff;
     display: flex;
+    border-top: 1px solid #e9e9e9;
+    border-bottom: 1px solid #e9e9e9;
 
     &:hover, &.selected {
       background-color: #eee;

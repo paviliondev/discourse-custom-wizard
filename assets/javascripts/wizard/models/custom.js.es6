@@ -29,7 +29,7 @@ CustomWizard.reopenClass({
     }
     window.location.href = getUrl(url);
   }
-})
+});
 
 export function findCustomWizard(wizardId) {
   return ajax({ url: `/w/${wizardId}` }).then(result => {
