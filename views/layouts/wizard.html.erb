@@ -5,7 +5,7 @@
     <%= stylesheet_link_tag "wizard_composer", media: "all", "data-turbolinks-track" => "reload" %>
     <%= stylesheet_link_tag "wizard_variables", media: "all", "data-turbolinks-track" => "reload" %>
     <%= stylesheet_link_tag "wizard_custom_mobile", media: "all", "data-turbolinks-track" => "reload" if mobile_view?%>
-    <%- if theme_id %>
+    <%- if theme_ids %>
       <%= discourse_stylesheet_link_tag (mobile_view? ? :mobile_theme : :desktop_theme) %>
     <%- end %>
     <%= preload_script "ember_jquery" %>
@@ -26,7 +26,7 @@
 
     <%= server_plugin_outlet "custom_wizard" %>
 
-    <meta name="discourse_theme_id" content="<%= theme_id %>">
+    <meta name="discourse_theme_ids" content="<%= theme_ids&.join(",") %>">
     <meta name="discourse-base-uri" content="<%= Discourse.base_uri %>">
 
     <%= render partial: "layouts/head" %>
