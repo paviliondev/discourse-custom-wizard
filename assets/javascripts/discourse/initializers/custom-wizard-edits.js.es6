@@ -25,7 +25,7 @@ export default {
 
     const existing = DiscourseURL.routeTo;
     DiscourseURL.routeTo = function(path, opts) {
-      if (path.indexOf('/w/') > -1) {
+      if (path && path.indexOf('/w/') > -1) {
         return window.location = path;
       }
       return existing.apply(this, [path, opts]);
