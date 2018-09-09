@@ -1,7 +1,3 @@
-{{#if field.value}}
-  {{component previewComponent field=field fieldClass=fieldClass wizard=wizard}}
-{{/if}}
-
 <label class="wizard-btn wizard-btn-upload {{if uploading 'disabled'}}">
   {{#if uploading}}
     {{i18n "wizard.uploading"}}
