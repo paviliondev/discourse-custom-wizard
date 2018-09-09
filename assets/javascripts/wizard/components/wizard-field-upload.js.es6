@@ -7,13 +7,6 @@ export default Ember.Component.extend({
   classNames: ["wizard-image-row"],
   uploading: false,
 
-  @computed("field.id")
-  previewComponent(id) {
-    const componentName = `image-preview-${Ember.String.dasherize(id)}`;
-    const exists = getOwner(this).lookup(`component:${componentName}`);
-    return exists ? componentName : "wizard-image-preview";
-  },
-
   didInsertElement() {
     this._super();
 
