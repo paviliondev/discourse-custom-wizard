@@ -218,6 +218,25 @@
     margin: 0;
   }
 
+  .wizard-field-upload {
+    .wizard-btn-upload-file {
+      display: inline-block;
+      position: relative;
+      cursor: pointer;
+
+      input {
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+      }
+    }
+
+    .filename {
+      margin-left: 10px;
+    }
+  }
+
   .wizard-column .wizard-field .input-area {
     margin: 0.5em 0;
   }
