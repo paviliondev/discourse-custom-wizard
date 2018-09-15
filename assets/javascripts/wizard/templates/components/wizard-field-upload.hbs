@@ -1,0 +1,16 @@
+<label class="wizard-btn wizard-btn-upload-file {{if uploading 'disabled'}}">
+  {{#if uploading}}
+    {{i18n "wizard.uploading"}}
+  {{else}}
+    {{i18n "wizard.upload"}}
+    {{d-icon "upload"}}
+  {{/if}}
+
+  <input disabled={{uploading}} type="file" accept="image/*,application/pdf" style="visibility: hidden; position: absolute;" />
+</label>
+
+{{#if field.value}}
+  <a href="{{field.value.url}}" class="filename">
+    {{field.value.original_filename}}
+  </a>
+{{/if}}
