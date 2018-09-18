@@ -102,6 +102,16 @@
     </div>
   {{/if}}
 
+  <div class="setting">
+    <div class="setting-label">
+      <h3>{{i18n "admin.wizard.action.skip_redirect.label"}}</h3>
+    </div>
+    <div class="setting-value">
+      {{input type='checkbox' checked=action.skip_redirect}}
+      <span>{{i18n 'admin.wizard.action.skip_redirect.description' type='topic'}}</span>
+    </div>
+  </div>
+
   <div class="setting full">
     <label>{{i18n 'admin.wizard.action.add_fields' type='Topic'}}</label>
     {{wizard-custom-inputs inputs=action.add_fields
@@ -162,6 +172,16 @@
                       includeMentionableGroups="true"
                       usernames=action.username
                       allowedUsers="true"}}
+    </div>
+  </div>
+
+  <div class="setting">
+    <div class="setting-label">
+      <h3>{{i18n "admin.wizard.action.skip_redirect.label"}}</h3>
+    </div>
+    <div class="setting-value">
+      {{input type='checkbox' checked=action.skip_redirect}}
+      <span>{{i18n 'admin.wizard.action.skip_redirect.description' type='message'}}</span>
     </div>
   </div>
 

@@ -325,7 +325,9 @@ class CustomWizard::Builder
           post.topic.save_custom_fields(true)
         end
 
-        data['redirect_to'] = post.topic.url
+        unless action['skip_redirect']
+          data['redirect_to'] = post.topic.url
+        end
       end
     end
   end
@@ -352,7 +354,9 @@ class CustomWizard::Builder
       if creator.errors.present?
         updater.errors.add(:send_message, creator.errors.full_messages.join(" "))
       else
-        data['redirect_to'] = post.topic.url
+        unless action['skip_redirect']
+          data['redirect_to'] = post.topic.url
+        end
       end
     end
   end

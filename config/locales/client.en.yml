@@ -102,6 +102,9 @@ en:
           add_fields: "{{type}} Fields"
           available_fields: "* If 'Save wizard submissions' is disabled, only the fields of the current step are available to the current step's actions."
           topic_attr: "Topic Attribute"
+          skip_redirect:
+            label: "Skip Redirect"
+            description: "Don't redirect the user to this {{type}} after the wizard completes"
           send_message:
             label: "Send Message"
             recipient: "Recipient"
