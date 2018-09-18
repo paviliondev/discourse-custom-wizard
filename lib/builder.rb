@@ -249,7 +249,7 @@ class CustomWizard::Builder
 
   def create_topic(user, action, data)
     if action['custom_title']
-      title = action['custom_title']
+      title = CustomWizard::Builder.fill_placeholders(action['custom_title'], user, data)
     else
       title = data[action['title']]
     end
