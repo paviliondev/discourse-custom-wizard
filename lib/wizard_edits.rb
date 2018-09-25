@@ -9,7 +9,7 @@ require_dependency 'wizard/step'
 
     custom_redirect = false
 
-    if user && wizard_id = CustomWizard::Wizard.after_signup
+    if user && user.first_seen_at.blank? && wizard_id = CustomWizard::Wizard.after_signup
       wizard = CustomWizard::Wizard.create(user, wizard_id)
 
       if !wizard.completed? && wizard.permitted?
