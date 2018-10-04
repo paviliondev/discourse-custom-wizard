@@ -1,0 +1,15 @@
+fr:
+  admin:
+    wizard:
+      submissions:
+        no_user: "supprimé (id : %{id})"
+
+  wizard:
+    custom_title: "Assistant"
+    field:
+      too_short: "%{label} doit compter au-moins %{min} caractères"
+    none: "Aucun assistant n'est disponible à cette adresse."
+    no_skip: "Cet assistant ne peut pas être ignoré"
+
+  site_settings:
+    wizard_redirect_exclude_paths: "Routes exclues des redirections de l'assistant."

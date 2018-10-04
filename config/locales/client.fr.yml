@@ -1,0 +1,206 @@
+fr:
+  js:
+    wizard:
+      complete_custom: "Bienvenu·e sur %{site_name} ! Commençons avec <a href='%{wizard_url}' data-auto-route='true'>l'assistant %{wizard_name}</a> ✨"
+
+  admin_js:
+    admin:
+      wizard:
+        label: "Assistants"
+        new: "Nouveau"
+        custom_label: "Personnalisé"
+        submissions_label: "Contributions"
+        name: "Nom"
+        name_placeholder: "nom de l'assistant"
+        background: "Fond d'écran"
+        background_placeholder: "Propriété CSS du fond"
+        save_submissions: "Enregistrer"
+        save_submissions_label: "Conserver les soumissions à l'assistant."
+        multiple_submissions: "Multiple"
+        multiple_submissions_label: "Autoriser plusieurs contributions par utilisatrice."
+        after_signup: "Après l'inscription"
+        after_signup_label: "Les utilisatrices sont redirigées vers l'assistant après leur inscription."
+        after_time: "Après un délai"
+        after_time_label: "Les utilisatrices sont redirigées vers l'assistant après la date de départ jusqu'à la finalisation de l'assistant ou son renvoi."
+        after_time_time_label: "Date de début"
+        after_time_modal:
+          title: "Date de début de l'assistant"
+          date: "Date"
+          time: "Heure"
+          done: "Établir l'heure"
+          clear: "Effacer"
+        required: "Requis"
+        required_label: "Les utilisatrices doivent compléter l'assistant."
+        prompt_completion: "Invitation"
+        prompt_completion_label: "Inviter l'utilisatrice à compléter l'assistant."
+        min_trust: "Confiance"
+        min_trust_label: "Niveau de confiance requis pour accéder à l'assistant."
+        theme_id: "Thème"
+        no_theme: "Choisir un thème (optionnel)"
+        save: "Sauvegarder"
+        remove: "Supprimer l'assistant"
+        header: "Assistant"
+        add: "Ajouter"
+        url: "URL"
+        key: "Clé"
+        or: "Ou"
+        value: "Valeur"
+        id: "Id"
+        id_placeholder: "Utilise des tirets-bas (_). Ne peut être modifié."
+        key_placeholder: "Clé de traduction"
+        custom_text_placeholder: "Remplace la traduction"
+        custom_field_placeholder: "Champ personnalisé"
+        user_field_placeholder: "Champ utilisateur"
+        type: "Type"
+        none: "Faire une sélection"
+        select_field: "Choisir un champ"
+        error:
+          name_required: "Les assistants doivent porter un nom."
+          steps_required: "Les assistants doivent comporter au-moins une étape."
+          id_required: "Tous les assistants, étapes, champs et actions ont besoin d'un identifiant."
+          type_required: "Tous les champs ont besoin d'un type."
+          after_time_need_time: "Le délai est activé mais aucune heure n'est établie."
+          after_time_invalid: "Le délai est invalide."
+          field:
+            need_choices: "Tous les menus déroulants ont besoin d'options."
+            choices_label_empty: "Les étiquettes pour le choix personnalisé ne peuvent être vides."
+        step:
+          header: "Étapes"
+          title: "Titre"
+          banner: "Bannière"
+          banner_placeholder: "URL de l'image"
+          description: "Description"
+        field:
+          type: "Choisir un type"
+          header: "Champs"
+          label: "Étiquette"
+          description: "Description"
+          image: "Image"
+          image_placeholder: "URL de l'image"
+          dropdown_none: "Aucun"
+          dropdown_none_placeholder: "Clé de traduction"
+          choices_label: "Options du menu déroulant"
+          choices_type: "Choisir un type"
+          choices_translation: "Traduction"
+          choices_custom: "Personnalisé"
+          choices_preset:
+            label: "Prédéfini"
+            categories: "Catégories"
+            filter: "Filtre prédéfini"
+          choice:
+            value: "Valeur"
+            label: "Étiquette"
+          required: "Requis"
+          required_label: "Le champ est obligatoire"
+          min_length: "Longueur min."
+          min_length_placeholder: "Longueur minimale en nombre de caractères"
+        action:
+          header: "Actions <sup>*</sup>"
+          include: "Inclure les champs"
+          title: "Titre"
+          post: "Message"
+          add_fields: "Champs {{type}}"
+          available_fields: "* Si 'Conserver les soumissions à l'assistant' est inactif, seuls les champs de l'étape courante sont disponibles pour les actions de cette étape."
+          topic_attr: "Attribut du sujet"
+          send_message:
+            label: "Envoyer un message"
+            recipient: "Destinataire"
+          create_topic:
+            label: "Créer un sujet"
+            category: "Catégorie"
+          update_profile:
+            label: "Mettre à jour le profil"
+            profile_field: "Champ du profil"
+          post_builder:
+            checkbox: "Générateur de message"
+            label: "Générateur"
+            user_fields: "Champs utilisateurs : "
+            wizard_fields: "Champs de l'assistant : "
+            placeholder: "Insérer les champs de l'assistant en utilisant l'identifiant du champ dans w{}. Insérer les champs utilisateurs en utilisant la clé du champ dans u{}."
+          custom_title: "Titre personnalisé"
+          custom_category:
+            label: "Catégorie personnalisée"
+            wizard_field: "Champ de l'assistant"
+            user_field: "Champ utilisateur"
+
+  wizard_js:
+    location:
+      name:
+        title: "Nom (optionnel)"
+        desc: "par ex. : O. de Gouges, dramaturge"
+      street:
+        title: "N° et rue"
+        desc: "par ex.: 1 Place André Malraux"
+      postalcode:
+        title: "code postal"
+        desc: "par ex. : 75001"
+      neighbourhood:
+        title: "Quartier"
+        desc: "par ex. : Palais Royal"
+      city:
+        title: "Ville ou village"
+        desc: "par ex. : Paris"
+      country_code:
+        title: "Pays"
+        placeholder: "Choisir un pays"
+      query:
+        title: "Adresse"
+        desc: "par ex. : 1 Place André Malraux, Paris."
+      geo:
+        desc: "Géolocalisations produites par {{provider}}"
+        btn:
+          label: "Établir la localisation"
+        results: "Localisations"
+        no_results: "Aucun résultat. Merci de vérifier l'orthographe."
+        show_map: "Montrer la carte"
+      validation:
+        neighbourhood: "Merci de saisir un quartier."
+        city: "Merci de saisir le nom d'une commune."
+        countrycode: "Merci de choisir un pays."
+        geo_location: "Chercher et sélectionner un résultat."
+
+    select_kit:
+      filter_placeholder: "Chercher..."
+
+    wizard:
+      completed: "Vous en avez terminé avec cet assistant."
+      not_permitted: "Vous devez obtenir un niveau de confiance à {{level}} ou plus pour accéder à cet assistant."
+      none: "Il n'y a pas d'assistant ici."
+      return_to_site: "Retourner à {{siteName}}"
+
+    wizard_composer:
+      show_preview: "Prévisualiser le message"
+      hide_preview: "Modifier le message"
+      quote_post_title: "Citer l'ensemble du message"
+      bold_label: "B"
+      bold_title: "Gras"
+      bold_text: "texte gras"
+      italic_label: "I"
+      italic_title: "Italique"
+      italic_text: "texte en italique"
+      link_title: "Hyperlien"
+      link_description: "saisir la description du lien ici"
+      link_dialog_title: "Insérer un hyperlien"
+      link_optional_text: "titre optionnel"
+      link_url_placeholder: "http://example.com"
+      quote_title: "Citation"
+      quote_text: "blockquote"
+      blockquote_text: "insérer un bloc de citation"
+      code_title: "Texte préformaté"
+      code_text: "indenter le texte préformaté de 4 espaces"
+      paste_code_text: "taper ou coller du code ici"
+      upload_title: "Joindre un fichier"
+      upload_description: "saisir la description du téléchargement ici"
+      olist_title: "Liste numérotée"
+      ulist_title: "Liste de points"
+      list_item: "Élément de la liste"
+      toggle_direction: "Changer de direction"
+      help: "Aide à l'édition en Markdown"
+      collapse: "réduire le panneau d'édition"
+      abandon: "fermer l'éditeur et abandonner le brouillon"
+      modal_ok: "OK"
+      modal_cancel: "Annuler"
+      cant_send_pm: "Pardon, vous ne pouvez envoyer de message à %{username}."
+      yourself_confirm:
+        title: "Avez-vous oublié d'ajouter des destinataires ?"
+        body: "Pour l'instant ce message n'est envoyé qu'à vous !"
