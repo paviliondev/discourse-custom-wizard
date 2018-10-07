@@ -50,6 +50,7 @@ en:
         key_placeholder: "Translation key"
         custom_text_placeholder: "Overrides translation"
         custom_field_placeholder: "Custom Field"
+        custom_value_placeholder: "Custom Value"
         user_field_placeholder: "User Field"
         type: "Type"
         none: "Make a selection"
