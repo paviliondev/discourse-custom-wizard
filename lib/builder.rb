@@ -287,7 +287,7 @@ class CustomWizard::Builder
 
       if action['add_fields']
         action['add_fields'].each do |field|
-          value = field['value_custom'] ? field['value_custom'] : data[field['value']]
+          value = field['value_custom'].present? ? field['value_custom'] : data[field['value']]
           key = field['key']
 
           if key && (value.present? || value === false)
