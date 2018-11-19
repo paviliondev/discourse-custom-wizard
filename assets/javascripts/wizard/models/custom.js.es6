@@ -32,7 +32,7 @@ CustomWizard.reopenClass({
 });
 
 export function findCustomWizard(wizardId) {
-  return ajax({ url: `/w/${wizardId}`, dataType: 'json' }).then(result => {
+  return ajax({ url: `/w/${wizardId}`, cache: false, dataType: 'json' }).then(result => {
     const wizard = result.wizard;
 
     if (!wizard) return null;
