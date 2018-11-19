@@ -514,3 +514,17 @@ img.avatar {
     color: rgb(231, 195, 0);
   }
 }
+
+/* IE11 hacks */
+@media all and (-ms-high-contrast:none)
+{
+  .custom-wizard {
+    div.wizard-step-contents {
+      display: block;
+    }
+
+    div.wizard-progress {
+      visibility: hidden;
+    }
+  }
+}
