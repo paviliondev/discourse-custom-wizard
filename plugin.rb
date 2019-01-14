@@ -24,6 +24,8 @@ if Rails.env.production?
   }
 end
 
+register_svg_icon "calendar-o" if respond_to?(:register_svg_icon)
+
 after_initialize do
   UserHistory.actions[:custom_wizard_step] = 1000
 
