@@ -52,8 +52,11 @@ class CustomWizard::Builder
     result.gsub!(/w\{(.*?)\}/) { |match| data[$1.to_sym] }
   end
 
-  def build
+  def build(build_opts = {})
     unless (@wizard.completed? && !@wizard.multiple_submissions && !@wizard.user.admin) || !@steps || !@wizard.permitted?
+
+      reset_submissions if build_opts[:reset]
+
       @steps.each do |step_template|
         @wizard.append_step(step_template['id']) do |step|
           step.title = step_template['title'] if step_template['title']
@@ -63,7 +66,7 @@ class CustomWizard::Builder
 
           if step_template['fields'] && step_template['fields'].length
             step_template['fields'].each do |field_template|
-              append_field(step, step_template, field_template)
+              append_field(step, step_template, field_template, build_opts)
             end
           end
 
@@ -126,7 +129,7 @@ class CustomWizard::Builder
     @wizard
   end
 
-  def append_field(step, step_template, field_template)
+  def append_field(step, step_template, field_template, build_opts)
     params = {
       id: field_template['id'],
       type: field_template['type'],
@@ -139,7 +142,7 @@ class CustomWizard::Builder
     params[:key] = field_template['key'] if field_template['key']
 
     ## Load previously submitted values
-    if @submissions.last && !@submissions.last.key?("submitted_at")
+    if !build_opts[:reset] && @submissions.last && !@submissions.last.key?("submitted_at")
       submission = @submissions.last
       params[:value] = submission[field_template['id']] if submission[field_template['id']]
     end
@@ -400,5 +403,11 @@ class CustomWizard::Builder
       @submissions.push(data)
       PluginStore.set("#{@wizard.id}_submissions", @wizard.user.id, @submissions)
     end
+  end
+
+  def reset_submissions
+    @submissions.pop(1) if @wizard.unfinished?
+    PluginStore.set("#{@wizard.id}_submissions", @wizard.user.id, @submissions)
+    @wizard.reset
   end
 end

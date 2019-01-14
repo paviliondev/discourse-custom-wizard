@@ -82,7 +82,9 @@ class CustomWizard::Wizard
       context: @id,
     ).distinct.order('updated_at DESC').first
 
-    if most_recent
+    if most_recent.subject == "reset"
+      false
+    elsif most_recent
       last_finished_step = most_recent.subject
       last_step = CustomWizard::Wizard.step_ids(@id).last
       last_finished_step != last_step
@@ -111,6 +113,15 @@ class CustomWizard::Wizard
 
   def permitted?
     user.staff? || user.trust_level.to_i >= min_trust.to_i
+  end
+
+  def reset
+    ::UserHistory.create(
+      action: ::UserHistory.actions[:custom_wizard_step],
+      acting_user_id: @user.id,
+      context: @id,
+      subject: "reset"
+    )
   end
 
   def self.after_signup
