@@ -39,11 +39,6 @@
       <%= raw theme_lookup("body_tag") %>
     <%- end %>
 
-    <script>
-      (function() {
-        var wizard = require('discourse/plugins/discourse-custom-wizard/wizard/custom-wizard').default.create();
-        wizard.start();
-      })();
-    </script>
+    <%= preload_script 'custom-wizard-start' %>
   </body>
 </html>
