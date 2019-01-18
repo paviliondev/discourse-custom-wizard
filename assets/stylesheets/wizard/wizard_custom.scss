@@ -112,6 +112,7 @@
     flex: auto;
     display: flex;
     flex-direction: column;
+    max-height: 500px;
     width: 100%;
   }
 
@@ -188,7 +189,8 @@
   .control-group {
     display: inline-block;
     vertical-align: top;
-    margin-right: 20px;
+    margin-right: 10px;
+    margin-bottom: 20px;
 
     .controls {
       margin: 5px 0;
@@ -206,6 +208,10 @@
 
     ul {
       padding: 0;
+    }
+
+    .select-kit {
+      min-width: 200px;
     }
   }
 

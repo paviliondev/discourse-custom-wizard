@@ -160,6 +160,7 @@ en:
       validation:
         neighbourhood: "Please enter a neighbourhood."
         city: "Please enter a city, town or village."
+        street: "Please enter a Number and Street."
         countrycode: "Please select a country."
         geo_location: "Search and select a result."
 

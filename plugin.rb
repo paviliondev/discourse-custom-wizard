@@ -17,7 +17,7 @@ if Rails.env.production?
     wizard-custom-lib.js
     wizard-custom.js
     wizard-plugin.js
-    wizard-start.js
+    wizard-custom-start.js
     stylesheets/wizard/wizard_custom.scss
     stylesheets/wizard/wizard_composer.scss
     stylesheets/wizard/wizard_variables.scss
