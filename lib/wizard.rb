@@ -82,7 +82,7 @@ class CustomWizard::Wizard
       context: @id,
     ).distinct.order('updated_at DESC').first
 
-    if most_recent.subject == "reset"
+    if most_recent && most_recent.subject == "reset"
       false
     elsif most_recent
       last_finished_step = most_recent.subject
