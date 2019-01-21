@@ -112,7 +112,6 @@
     flex: auto;
     display: flex;
     flex-direction: column;
-    max-height: 500px;
     width: 100%;
   }
 
@@ -519,6 +518,75 @@ img.avatar {
   &.gold {
     color: rgb(231, 195, 0);
   }
+}
+
+.ac-wrap {
+  box-sizing: border-box;
+  position: relative;
+  width: auto !important;
+
+  .ac-loading {
+    position: absolute;
+    top: 7px;
+    right: 5px;
+  }
+
+  .item {
+    line-height: 1.6;
+  }
+
+  .autocomplete {
+    width: inherit;
+    left: 0 !important;
+    width: 100%;
+    top: 30px !important;
+    box-sizing: border-box;
+
+    li, .no-results {
+      padding: 10px;
+    }
+
+    ul > label {
+      color: #919191;
+      margin: 5px 0;
+      padding: 0 5px;
+      font-size: 80%;
+      line-height: 1.4em;
+
+      a {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.ac-form-result {
+  cursor: pointer;
+  background-color: $secondary;
+  display: flex;
+
+  &:hover, &.selected {
+    background-color: $tertiary;
+    color: white;
+
+    label {
+      color: white;
+    }
+  }
+
+  label {
+    flex: 1 1 auto;
+    margin-bottom: 0;
+    cursor: pointer;
+  }
+
+  i {
+    margin-right: 5px;
+  }
+}
+
+.location-selector-container {
+  width: 350px;
 }
 
 /* IE11 hacks */
