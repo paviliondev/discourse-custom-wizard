@@ -229,7 +229,7 @@ class CustomWizard::Builder
     value = updater.fields[field['id']]
     min_length = field['min_length']
 
-    if min_length && value.is_a?(String) && value.length < min_length.to_i
+    if min_length && value.is_a?(String) && value.strip.length < min_length.to_i
       label = field['label'] || I18n.t("#{field['key']}.label")
       updater.errors.add(field['id'].to_s, I18n.t('wizard.field.too_short', label: label, min: min_length.to_i))
     end
