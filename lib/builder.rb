@@ -49,7 +49,7 @@ class CustomWizard::Builder
       result
     end
 
-    result.gsub!(/w\{(.*?)\}/) { |match| data[$1.to_sym] }
+    result.gsub(/w\{(.*?)\}/) { |match| data[$1.to_sym] }
   end
 
   def build(build_opts = {})
