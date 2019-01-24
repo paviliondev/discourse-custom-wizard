@@ -586,8 +586,98 @@ img.avatar {
   }
 }
 
+/* Location Specific Styles */
+
 .location-selector-container {
   width: 350px;
+}
+
+.location-form {
+  display: flex;
+
+  .title {
+    font-weight: 700;
+  }
+
+  .address {
+    padding-right: 20px;
+  }
+
+  .coordinates {
+    .control-group {
+      display: block;
+
+      .controls {
+        display: flex;
+        width: 100%;
+
+        input {
+          width: 100px;
+        }
+      }
+
+      .icon {
+        margin-left: 10px;
+        display: inline-block;
+      }
+    }
+
+    .icon img {
+      max-width: 30px;
+    }
+  }
+
+  .address + .coordinates {
+    border-left: 1px solid #eee;
+    padding-left: 20px;
+  }
+}
+
+.location-form-instructions {
+  color: #919191;
+  margin: 5px 0;
+  font-size: 80%;
+  line-height: 1.4em;
+
+  a {
+    text-decoration: underline;
+  }
+}
+
+.location-form, .add-location {
+  overflow: visible;
+
+  .control-group {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 20px;
+    margin-top: 10px;
+
+    .instructions {
+      @extend .location-form-instructions;
+    }
+  }
+
+  .location-search {
+    display: block;
+    margin: 15px 0;
+  }
+
+  .geo-map {
+    height: 400px;
+  }
+}
+
+.add-location + .modal-footer .clear {
+  margin: 5px 10px;
+}
+
+input.input-location, div.input-location {
+  max-height: 150px;
+  background-color: $secondary;
+  box-shadow: none;
+  box-sizing: border-box;
+  margin: 0;
 }
 
 /* IE11 hacks */

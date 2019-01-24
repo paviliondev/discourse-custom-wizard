@@ -144,6 +144,13 @@ en:
       city:
         title: "City, Town or Village"
         desc: "e.g. Sydney"
+      coordinates: "Coordinates"
+      lat:
+        title: "Latitude"
+        desc: "e.g. -31.9456702"
+      lon:
+        title: "Longitude"
+        desc: "e.g. 115.8626477"
       country_code:
         title: "Country"
         placeholder: "Select a Country"
@@ -163,6 +170,7 @@ en:
         street: "Please enter a Number and Street."
         postalcode: "Please enter a Postal Code (Zip)."
         countrycode: "Please select a country."
+        coordinates: "Please complete the set of coordinates."
         geo_location: "Search and select a result."
 
     select_kit:
