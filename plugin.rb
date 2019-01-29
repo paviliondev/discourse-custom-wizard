@@ -18,6 +18,7 @@ if Rails.env.production?
     wizard-custom.js
     wizard-plugin.js
     wizard-custom-start.js
+    wizard-raw-templates.js.erb
     stylesheets/wizard/wizard_custom.scss
     stylesheets/wizard/wizard_composer.scss
     stylesheets/wizard/wizard_variables.scss
