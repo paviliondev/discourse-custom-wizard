@@ -4,6 +4,8 @@ Discourse.unofficial_plugins.each do |plugin|
   plugin_name = plugin.metadata.name
   if require_plugin_assets = CustomWizard::Field.require_assets[plugin_name]
     plugin.each_globbed_asset do |f, is_dir|
+      next if f.include? "raw.hbs"
+
       if require_plugin_assets.any? { |dir| f.include?(dir) }
         if is_dir
           depend_on(f)
