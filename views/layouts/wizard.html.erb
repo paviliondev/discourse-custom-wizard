@@ -8,6 +8,7 @@
     <%- if theme_ids %>
       <%= discourse_stylesheet_link_tag (mobile_view? ? :mobile_theme : :desktop_theme) %>
     <%- end %>
+
     <%= preload_script "ember_jquery" %>
     <%= preload_script "wizard-vendor" %>
     <%= preload_script "wizard-application" %>
@@ -40,6 +41,12 @@
     <%- end %>
 
     <%= preload_script 'wizard-custom-start' %>
-    <%= preload_script 'wizard-raw-templates' %> 
+    <%= preload_script 'wizard-raw-templates' %>
+
+    <div id="svg-sprites" style="display:none;">
+      <div class="fontawesome">
+        <%= raw SvgSprite.bundle %>
+      </div>
+    </div>
   </body>
 </html>
