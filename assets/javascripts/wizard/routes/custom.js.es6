@@ -30,7 +30,7 @@ export default Ember.Route.extend({
 
     controller.setProperties({
       customWizard: true,
-      logoUrl: Wizard.SiteSettings.logo_small_url
+      logoUrl: Wizard.SiteSettings.logo_small
     });
   }
 });
