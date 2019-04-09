@@ -182,6 +182,10 @@ class CustomWizard::Wizard
     PluginStore.get('custom_wizard', wizard_id)
   end
 
+  def self.exists?(wizard_id)
+    PluginStoreRow.exists?(plugin_name: 'custom_wizard', key: wizard_id)
+  end
+
   def self.create(user, wizard_id)
     CustomWizard::Wizard.new(user, self.find(wizard_id).to_h)
   end

@@ -128,7 +128,9 @@ after_initialize do
           CustomWizard::Wizard.set_submission_redirect(current_user, wizard_id, request.referer)
         end
 
-        redirect_to "/w/#{wizard_id.dasherize}"
+        if CustomWizard::Wizard.exists?(wizard_id)
+          redirect_to "/w/#{wizard_id.dasherize}"
+        end
       end
     end
   end
