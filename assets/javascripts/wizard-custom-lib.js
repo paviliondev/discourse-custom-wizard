@@ -3,7 +3,6 @@
 //= require discourse/lib/offset-calculator
 //= require discourse/lib/lock-on
 //= require discourse/lib/text-direction
-//= require discourse/helpers/parse-html
 //= require discourse/lib/to-markdown
 //= require discourse/lib/load-script
 
