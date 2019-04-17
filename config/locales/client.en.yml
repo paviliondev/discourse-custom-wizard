@@ -79,7 +79,7 @@ en:
           image: "Image"
           image_placeholder: "Image url"
           dropdown_none: "None"
-          dropdown_none_placeholder: "Translation Key"
+          dropdown_none_placeholder: "Label"
           choices_label: "Dropdown Choices"
           choices_type: "Choose a type"
           choices_translation: "Translation"

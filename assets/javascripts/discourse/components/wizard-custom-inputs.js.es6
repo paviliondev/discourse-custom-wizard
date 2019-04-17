@@ -1,4 +1,6 @@
 export default Ember.Component.extend({
+  valuePlaceholder: 'admin.wizard.value',
+
   actions: {
     add() {
       if (!this.get('inputs')) {
