@@ -81,8 +81,7 @@ export default Ember.TextField.extend({
           includeGroups,
           allowedUsers,
           includeMentionableGroups,
-          includeMessageableGroups,
-          group: self.get("group")
+          includeMessageableGroups
         });
 
         return results;
