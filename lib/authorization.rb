@@ -10,7 +10,8 @@ class CustomWizard::Authorization
   end
 
   def self.set_authentication_protocol(service, protocol)
-    raise Discourse::InvalidParameters unless [BASIC_AUTH, OAUTH2_AUTH].include? protocol
+  # TODO: make error more informative
+    raise Discourse::InvalidParameters.new(:protocol) unless [BASIC_AUTH, OAUTH2_AUTH].include? protocol
       PluginStore.set(service, 'authentication_protocol', protocol)
   end
 
@@ -38,6 +39,22 @@ class CustomWizard::Authorization
     PluginStore.set(service, 'code', code)
   end
 
+  def self.username(service)
+    PluginStore.get(service,'username')
+  end
+
+  def self.set_username(service, username)
+    PluginStore.set(service, 'username', username)
+  end
+
+  def self.password(service)
+    PluginStore.get(service,'password')
+  end
+
+  def self.set_password(service, password)
+    PluginStore.set(service, 'password', password)
+  end
+
   def self.client_id(service)
     PluginStore.get(service,'client_id')
   end
@@ -60,6 +77,28 @@ class CustomWizard::Authorization
 
   def self.set_url(service, url)
     PluginStore.set(service, 'url', url)
+  end
+
+  def self.get_header_authorization_string(service)
+    # TODO: make error more informative, raise error if service not defined
+    protocol = authentication_protocol(service)
+    raise Discourse::InvalidParameters.new(:service) unless protocol.present?
+    raise Discourse::InvalidParameters.new(:protocol) unless [BASIC_AUTH, OAUTH2_AUTH].include? protocol
+
+    if protocol = BASIC_AUTH
+      # TODO: improve error reporting
+      username = username(service)
+      raise Discourse::InvalidParameters.new(:username) unless username.present?
+      password = password(service)
+      raise Discourse::InvalidParameters.new(:password) unless password.present?
+      authorization_string = (username + ":" + password).chomp
+      "Basic #{Base64.strict_encode64(authorization_string)}"
+    else
+    # must be OAUTH2
+    # TODO: make error more informative, raise error if there is no recorded access token
+      raise Discourse::InvalidParameters unless access_token[:token].present?
+      "Bearer #{access_token[:token]}"
+    end
   end
 
   def self.get_access_token(service)
