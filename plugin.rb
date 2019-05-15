@@ -77,6 +77,7 @@ after_initialize do
   load File.expand_path('../lib/template.rb', __FILE__)
   load File.expand_path('../lib/wizard.rb', __FILE__)
   load File.expand_path('../lib/wizard_edits.rb', __FILE__)
+  load File.expand_path('../lib/authorization.rb', __FILE__)
   load File.expand_path('../controllers/wizard.rb', __FILE__)
   load File.expand_path('../controllers/steps.rb', __FILE__)
   load File.expand_path('../controllers/admin.rb', __FILE__)
