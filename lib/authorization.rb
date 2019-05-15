@@ -10,7 +10,6 @@ class CustomWizard::Authorization
   end
 
   def self.set_authentication_protocol(service, protocol)
-  # TODO: make error more informative
     raise Discourse::InvalidParameters.new(:protocol) unless [BASIC_AUTH, OAUTH2_AUTH].include? protocol
       PluginStore.set(service, 'authentication_protocol', protocol)
   end
@@ -80,13 +79,11 @@ class CustomWizard::Authorization
   end
 
   def self.get_header_authorization_string(service)
-    # TODO: make error more informative, raise error if service not defined
     protocol = authentication_protocol(service)
     raise Discourse::InvalidParameters.new(:service) unless protocol.present?
     raise Discourse::InvalidParameters.new(:protocol) unless [BASIC_AUTH, OAUTH2_AUTH].include? protocol
 
     if protocol = BASIC_AUTH
-      # TODO: improve error reporting
       username = username(service)
       raise Discourse::InvalidParameters.new(:username) unless username.present?
       password = password(service)
@@ -94,10 +91,10 @@ class CustomWizard::Authorization
       authorization_string = (username + ":" + password).chomp
       "Basic #{Base64.strict_encode64(authorization_string)}"
     else
-    # must be OAUTH2
-    # TODO: make error more informative, raise error if there is no recorded access token
-      raise Discourse::InvalidParameters unless access_token[:token].present?
-      "Bearer #{access_token[:token]}"
+      # must be OAUTH2
+      access_token = access_token(service)
+      raise Discourse::InvalidParameters.new(access_token) unless access_token.present?
+      "Bearer #{access_token}"
     end
   end
 
