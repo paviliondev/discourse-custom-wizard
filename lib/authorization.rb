@@ -121,7 +121,7 @@ class CustomWizard::Authorization
   def self.refresh_access_token(service)
     body = {
       grant_type: 'refresh_token',
-      refresh_token: CustomWizard::Authorization.refresh_token
+      refresh_token: CustomWizard::Authorization.refresh_token(service)
     }
 
     authorization_string = CustomWizard::Authorization.client_id(service) + ':' + CustomWizard::Authorization.client_secret(service)
@@ -146,7 +146,11 @@ class CustomWizard::Authorization
     expires_at = Time.now + data['expires_in'].seconds
     refresh_at = expires_at.to_time - 2.hours
 
-    Jobs.enqueue_at(refresh_at, :refresh_api_access_token)
+    opts = {
+      service: service
+    }
+
+    Jobs.enqueue_at(refresh_at, :refresh_api_access_token, opts)
 
     CustomWizard::Authorization.set_access_token(
       service: service,
