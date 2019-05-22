@@ -49,6 +49,7 @@ after_initialize do
     get ':wizard_id/steps' => 'wizard#index'
     get ':wizard_id/steps/:step_id' => 'wizard#index'
     put ':wizard_id/steps/:step_id' => 'steps#update'
+    get 'authorization/callback' => "authorization#callback"
   end
 
   require_dependency 'admin_constraint'
@@ -81,6 +82,7 @@ after_initialize do
   load File.expand_path('../controllers/wizard.rb', __FILE__)
   load File.expand_path('../controllers/steps.rb', __FILE__)
   load File.expand_path('../controllers/admin.rb', __FILE__)
+  load File.expand_path('../controllers/authorization.rb', __FILE__)
 
   ::UsersController.class_eval do
     def wizard_path
