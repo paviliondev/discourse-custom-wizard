@@ -5,7 +5,10 @@ class CustomWizard::AuthorizationController < ::ApplicationController
                      :verify_authenticity_token
 
   def callback
-   # TODO: work out which service it relates to!
+
+   params.require(:service)
+   params.require(:code)
+
    CustomWizard::Authorization.set_code(service, params[:code])
    CustomWizard::Authorization.get_access_token(service)
   end
