@@ -49,12 +49,12 @@ after_initialize do
     get ':wizard_id/steps' => 'wizard#index'
     get ':wizard_id/steps/:step_id' => 'wizard#index'
     put ':wizard_id/steps/:step_id' => 'steps#update'
-    get 'authorization/callback' => "authorization#callback"
   end
 
   require_dependency 'admin_constraint'
   Discourse::Application.routes.append do
     mount ::CustomWizard::Engine, at: 'w'
+    post 'wizard/authorization/callback' => "custom_wizard/authorization#callback"
 
     scope module: 'custom_wizard', constraints: AdminConstraint.new do
       get 'admin/wizards' => 'admin#index'
@@ -67,11 +67,17 @@ after_initialize do
       delete 'admin/wizards/custom/remove' => 'admin#remove'
       get 'admin/wizards/submissions' => 'admin#index'
       get 'admin/wizards/submissions/:wizard_id' => 'admin#submissions'
+      get 'admin/wizards/apis' => 'admin_api#list'
+      get 'admin/wizards/apis/new' => 'admin_api#index'
+      get 'admin/wizards/apis/:service' => 'admin_api#find'
+      put 'admin/wizards/apis/:service/save' => 'admin_api#save'
+      get 'admin/wizards/apis/:service/redirect' => 'admin_api#redirect'
     end
   end
 
   load File.expand_path('../jobs/clear_after_time_wizard.rb', __FILE__)
   load File.expand_path('../jobs/set_after_time_wizard.rb', __FILE__)
+  load File.expand_path('../jobs/refresh_api_access_token.rb', __FILE__)
   load File.expand_path('../lib/builder.rb', __FILE__)
   load File.expand_path('../lib/field.rb', __FILE__)
   load File.expand_path('../lib/step_updater.rb', __FILE__)
@@ -82,7 +88,9 @@ after_initialize do
   load File.expand_path('../controllers/wizard.rb', __FILE__)
   load File.expand_path('../controllers/steps.rb', __FILE__)
   load File.expand_path('../controllers/admin.rb', __FILE__)
-  load File.expand_path('../controllers/authorization.rb', __FILE__)
+  load File.expand_path('../controllers/admin_api.rb', __FILE__)
+  load File.expand_path('../serializers/api_serializer.rb', __FILE__)
+  load File.expand_path('../serializers/api_list_item_serializer.rb', __FILE__)
 
   ::UsersController.class_eval do
     def wizard_path

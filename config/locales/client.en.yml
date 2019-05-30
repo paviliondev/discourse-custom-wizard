@@ -126,6 +126,25 @@ en:
             label: "Custom Category"
             wizard_field: "Wizard Field"
             user_field: "User Field"
+        api:
+          nav_label: 'APIs'
+          new: 'New Api'
+          service: 'Api Service'
+          redirect_uri: "Redirect Uri"
+          auth_type: 'Authorization Type'
+          auth_type_none: 'Select a type'
+          token_url: "Token Url"
+          auth_url: 'Authorization Url'
+          client_id: 'Client Id'
+          client_secret: 'Client Secret'
+          save: "Save"
+          authorize: 'Authorize'
+          authorized: 'Authorized'
+          not_authorized: "Not Authorized"
+          params: 'Params'
+          param_new: 'New Param'
+          param_key: 'Param Key'
+          param_value: 'Param Value'
 
   wizard_js:
     location:
