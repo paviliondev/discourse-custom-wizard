@@ -21,15 +21,23 @@ class CustomWizard::ApiController < ::ApplicationController
   end
 
   def save
+    byebug
     params.require(:service)
     service = params.permit(:service)
+    auth_data = params[:auth_params]
+    endpoints_data = params[:endpoints]
 
-    data[:auth_params] = JSON.parse(@auth_data[:auth_params]) if @auth_data[:auth_params]
+    service_auth_data = JSON.parse(auth_data) if !auth_data.nil?
+    service_endpoints = JSON.parse(endpoints_data) if !endpoints_data.nil?
 
-    CustomWizard::Api::Authorization.set(service, @auth_data)
+    if !service_auth_data.nil?
+      CustomWizard::Api::Authorization.set(service, service_auth_data)
+    end
 
-    @endpoint_data.each do |endpoint|
-      CustomWizard::Api::Endpoint.set(service, endpoint)
+    if !service_endpoints.nil?
+      service_endpoints.each do |endpoint|
+        CustomWizard::Api::Endpoint.set(service, endpoint)
+      end
     end
 
     render json: success_json.merge(
