@@ -47,7 +47,6 @@ export default Ember.Controller.extend({
     },
 
     save() {
-      debugger;
       const api = this.get('api');
       const service = api.service;
 
