@@ -11,6 +11,9 @@ export default Ember.Controller.extend({
 
   actions: {
     addParam() {
+      if (this.get('api.authParams') == undefined) {
+        this.set('api.authParams',[]);
+      };
       this.get('api.authParams').pushObject({});
     },
 
@@ -19,6 +22,9 @@ export default Ember.Controller.extend({
     },
 
     addEndpoint() {
+      if (this.get('api.endpoints') == undefined) {
+        this.set('api.endpoints',[]);
+      };
       this.get('api.endpoints').pushObject({});
     },
 
