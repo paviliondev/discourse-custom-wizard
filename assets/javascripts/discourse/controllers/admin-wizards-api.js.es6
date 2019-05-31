@@ -32,7 +32,7 @@ export default Ember.Controller.extend({
       let query = '?';
 
       if (authType === 'oauth') {
-        query += `client_id=${api.get('clientId')}&redirect_uri=${encodeURIComponent(api.get('redirectUri'))}&response_type=code`;
+        query += `client_id=${api.clientId}&redirect_uri=${encodeURIComponent(api.redirectUri)}&response_type=code`;
 
         if (authParams) {
           authParams.forEach(p => {
@@ -47,33 +47,36 @@ export default Ember.Controller.extend({
     },
 
     save() {
+      debugger;
       const api = this.get('api');
-      const service = api.get('service');
+      const service = api.service;
 
       let data = {};
 
-      data['auth_type'] = api.get('authType');
-      data['auth_url'] = api.get('authUrl');
+      data['auth_type'] = api.authType;
+      data['auth_url'] = api.authUrl;
 
       if (data.auth_type === 'oauth') {
-        data['client_id'] = api.get('clientId');
-        data['client_secret'] = api.get('clientSecret');
+        data['client_id'] = api.clientId;
+        data['client_secret'] = api.clientSecret;
 
-        let params = api.get('authParams');
+        let params = api.authParams;
 
         if (params) {
           data['auth_params'] = JSON.stringify(params);
         }
 
-        data['token_url'] = api.get('tokenUrl');
+        data['token_url'] = api.tokenUrl;
       } else {
-        data['username'] = api.get('username');
-        data['password'] = api.get('password');
+        data['username'] = api.username;
+        data['password'] = api.password;
       }
 
-      const endpoints = api.get('endpoints');
-      if (endpoints.length) {
-        data['endpoints'] = JSON.stringify(endpoints);
+      const endpoints = api.endpoints;
+      if (endpoints != undefined) {
+        if (endpoints.length) {
+          data['endpoints'] = JSON.stringify(endpoints);
+        }
       }
 
       this.set('savingApi', true);
