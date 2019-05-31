@@ -1,11 +1,29 @@
-<div class="wizard-api-authorization">
+<div class="wizard-api-header">
+  <div class="service">
+    {{input value=api.service placeholder=(i18n 'admin.wizard.api.service')}}
+  </div>
 
-  <div class="details">
+  <div class='buttons'>
+    {{#if savingApi}}
+      {{loading-spinner size="small"}}
+    {{/if}}
+    {{d-button label="admin.wizard.api.save" action="save" class="btn-primary"}}
+    {{d-button action="removeApi" label="admin.wizard.api.remove"}}
+  </div>
+</div>
+
+<div class="wizard-header">
+  {{i18n 'admin.wizard.api.auth'}}
+</div>
+
+<div class="wizard-api-authentication">
+  <div class="settings">
+
+    <div class="wizard-header medium">
+      {{i18n 'admin.wizard.api.auth_settings'}}
+    </div>
+
     <div class="control-group">
-      <label>{{i18n 'admin.wizard.api.service'}}</label>
-      <div class="controls">
-        {{input value=api.service}}
-      </div>
       <div class="control-label">
         <span>{{i18n 'admin.wizard.api.redirect_uri'}}</span>
         <span>{{api.redirectUri}}</span>
@@ -62,30 +80,26 @@
         </div>
       </div>
     {{/if}}
+
+    <div class="actions">
+      {{d-button label="admin.wizard.api.authorize" action="authorize"}}
+    </div>
   </div>
 
-  <div class='buttons'>
-    {{d-button label="admin.wizard.api.save" action="save"}}
-    {{#if savingApi}}
-      {{loading-spinner size="small"}}
-    {{/if}}
-  </div>
+  <div class="status">
+    <div class="wizard-header medium">
+      {{i18n 'admin.wizard.api.auth_status'}}
+    </div>
 
-  <div class='buttons'>
-    {{d-button label="admin.wizard.api.authorize" action="authorize"}}
-  </div>
-
-  <div class="authorization">
-    {{#if api.authorized}}
-      <span class="authorization-indicator authorized"></span>
-      <span>{{i18n "admin.wizard.api.authorized"}}</span>
-    {{else}}
-      <span class="authorization-indicator not-authorized"></span>
-      <span>{{i18n "admin.wizard.api.not_authorized"}}</span>
-    {{/if}}
-  </div>
-
-  <div class="keys">
+    <div class="authorization">
+      {{#if api.authorized}}
+        <span class="authorization-indicator authorized"></span>
+        <span>{{i18n "admin.wizard.api.authorized"}}</span>
+      {{else}}
+        <span class="authorization-indicator not-authorized"></span>
+        <span>{{i18n "admin.wizard.api.not_authorized"}}</span>
+      {{/if}}
+    </div>
     <div class="control-group">
       <label>Access Token:</label>
       <div class="controls">
@@ -120,5 +134,27 @@
         {{api.code}}
       </div>
     </div>
+  </div>
+</div>
+
+<div class="wizard-header">
+  {{i18n 'admin.wizard.api.endpoint.label'}}
+</div>
+
+<div class="wizard-api-endpoints">
+  {{d-button action='addEndpoint' label='admin.wizard.api.endpoint.add' icon='plus'}}
+
+  <div class="endpoint-list">
+    <ul>
+      {{#each api.endpoints as |endpoint|}}
+        <li>
+          <div class="endpoint">
+            {{combo-box content=endpointMethods value=endpoint.method none="admin.wizard.api.endpoint.method"}}
+            {{input value=endpoint.url placeholder=(i18n 'admin.wizard.api.endpoint.url') class='endpoint-url'}}
+            {{d-button action='removeEndpoint' actionParam=endpoint icon='times' class='remove-endpoint'}}
+          </div>
+        </li>
+      {{/each}}
+    </ul>
   </div>
 </div>

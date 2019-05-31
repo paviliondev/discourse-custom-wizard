@@ -10,6 +10,6 @@ export default Discourse.Route.extend({
   },
 
   setupController(controller, model){
-    controller.set("api", CustomWizardApi.create(model));
+    controller.set("api", model);
   }
 });

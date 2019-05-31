@@ -67,30 +67,35 @@ after_initialize do
       delete 'admin/wizards/custom/remove' => 'admin#remove'
       get 'admin/wizards/submissions' => 'admin#index'
       get 'admin/wizards/submissions/:wizard_id' => 'admin#submissions'
-      get 'admin/wizards/apis' => 'admin_api#list'
-      get 'admin/wizards/apis/new' => 'admin_api#index'
-      get 'admin/wizards/apis/:service' => 'admin_api#find'
-      put 'admin/wizards/apis/:service/save' => 'admin_api#save'
-      get 'admin/wizards/apis/:service/redirect' => 'admin_api#redirect'
+      get 'admin/wizards/apis' => 'api#list'
+      get 'admin/wizards/apis/new' => 'api#index'
+      get 'admin/wizards/apis/:service' => 'api#find'
+      put 'admin/wizards/apis/:service' => 'api#save'
+      get 'admin/wizards/apis/:service/redirect' => 'api#redirect'
     end
   end
 
   load File.expand_path('../jobs/clear_after_time_wizard.rb', __FILE__)
   load File.expand_path('../jobs/set_after_time_wizard.rb', __FILE__)
-  load File.expand_path('../jobs/refresh_api_access_token.rb', __FILE__)
   load File.expand_path('../lib/builder.rb', __FILE__)
   load File.expand_path('../lib/field.rb', __FILE__)
   load File.expand_path('../lib/step_updater.rb', __FILE__)
   load File.expand_path('../lib/template.rb', __FILE__)
   load File.expand_path('../lib/wizard.rb', __FILE__)
   load File.expand_path('../lib/wizard_edits.rb', __FILE__)
-  load File.expand_path('../lib/authorization.rb', __FILE__)
   load File.expand_path('../controllers/wizard.rb', __FILE__)
   load File.expand_path('../controllers/steps.rb', __FILE__)
   load File.expand_path('../controllers/admin.rb', __FILE__)
-  load File.expand_path('../controllers/admin_api.rb', __FILE__)
-  load File.expand_path('../serializers/api_serializer.rb', __FILE__)
-  load File.expand_path('../serializers/api_list_item_serializer.rb', __FILE__)
+
+  load File.expand_path('../jobs/refresh_api_access_token.rb', __FILE__)
+  load File.expand_path('../lib/api/api.rb', __FILE__)
+  load File.expand_path('../lib/api/authorization.rb', __FILE__)
+  load File.expand_path('../lib/api/endpoint.rb', __FILE__)
+  load File.expand_path('../controllers/api.rb', __FILE__)
+  load File.expand_path('../serializers/api/api_serializer.rb', __FILE__)
+  load File.expand_path('../serializers/api/authorization_serializer.rb', __FILE__)
+  load File.expand_path('../serializers/api/basic_api_serializer.rb', __FILE__)
+  load File.expand_path('../serializers/api/endpoint_serializer.rb', __FILE__)
 
   ::UsersController.class_eval do
     def wizard_path

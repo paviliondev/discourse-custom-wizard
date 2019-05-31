@@ -1,6 +1,5 @@
-class CustomWizard::ApiSerializer < ApplicationSerializer
-  attributes :service,
-             :auth_type,
+class CustomWizard::Api::AuthorizationSerializer < ApplicationSerializer
+  attributes :auth_type,
              :auth_url,
              :token_url,
              :client_id,

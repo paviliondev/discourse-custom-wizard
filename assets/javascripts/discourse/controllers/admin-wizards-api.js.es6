@@ -7,6 +7,7 @@ export default Ember.Controller.extend({
   notAuthorized: Ember.computed.not('api.authorized'),
   authorizationTypes: ['oauth', 'basic'],
   isOauth: Ember.computed.equal('api.authType', 'oauth'),
+  endpointMethods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
 
   actions: {
     addParam() {
@@ -15,6 +16,14 @@ export default Ember.Controller.extend({
 
     removeParam(param) {
       this.get('api.authParams').removeObject(param);
+    },
+
+    addEndpoint() {
+      this.get('api.endpoints').pushObject({});
+    },
+
+    removeEndpoint(endpoint) {
+      this.get('api.endpoints').removeObject(endpoint);
     },
 
     authorize() {
@@ -62,9 +71,14 @@ export default Ember.Controller.extend({
         data['password'] = api.get('password');
       }
 
+      const endpoints = api.get('endpoints');
+      if (endpoints.length) {
+        data['endpoints'] = JSON.stringify(endpoints);
+      }
+
       this.set('savingApi', true);
 
-      ajax(`/admin/wizards/apis/${service}/save`, {
+      ajax(`/admin/wizards/apis/${service}`, {
         type: 'PUT',
         data
       }).catch(popupAjaxError)

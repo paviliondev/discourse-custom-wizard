@@ -1,9 +1,7 @@
 require 'excon'
 
-class CustomWizard::Authorization
+class CustomWizard::Api::Authorization
   include ActiveModel::SerializerSupport
-
-  NGROK_URL = ''
 
   attr_accessor :authorized,
                 :service,
@@ -41,19 +39,14 @@ class CustomWizard::Authorization
       model.send "#{k}=", v if model.respond_to?(k)
     end
 
-    PluginStore.set("custom_wizard_#{service}", 'authorization', model.as_json)
+    PluginStore.set("custom_wizard_api_#{service}", 'authorization', model.as_json)
 
     self.get(service)
   end
 
   def self.get(service)
-    data = PluginStore.get("custom_wizard_#{service}", 'authorization')
+    data = PluginStore.get("custom_wizard_api_#{service}", 'authorization')
     self.new(service, data)
-  end
-
-  def self.list
-    PluginStoreRow.where("plugin_name LIKE 'custom_wizard_%' AND key = 'authorization'")
-      .map { |record| self.new(record['plugin_name'].split('_').last, record['value']) }
   end
 
   def self.get_header_authorization_string(service)
@@ -77,7 +70,7 @@ class CustomWizard::Authorization
   end
 
   def self.get_token(service)
-    authorization = CustomWizard::Authorization.get(service)
+    authorization = CustomWizard::Api::Authorization.get(service)
 
     body = {
       client_id: authorization.client_id,
@@ -99,7 +92,7 @@ class CustomWizard::Authorization
   end
 
   def self.refresh_token(service)
-    authorization = CustomWizard::Authorization.get(service)
+    authorization = CustomWizard::Api::Authorization.get(service)
 
     body = {
       grant_type: 'refresh_token',
@@ -136,7 +129,7 @@ class CustomWizard::Authorization
 
     Jobs.enqueue_at(refresh_at, :refresh_api_access_token, opts)
 
-    CustomWizard::Authorization.set(service,
+    CustomWizard::Api::Authorization.set(service,
       access_token: access_token,
       refresh_token: refresh_token,
       token_expires_at: expires_at,

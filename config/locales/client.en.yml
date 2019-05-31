@@ -129,6 +129,10 @@ en:
         api:
           nav_label: 'APIs'
           new: 'New Api'
+
+          auth: "Authentication"
+          auth_settings: "Settings"
+          auth_status: "Status"
           service: 'Api Service'
           redirect_uri: "Redirect Uri"
           auth_type: 'Authorization Type'
@@ -137,14 +141,24 @@ en:
           auth_url: 'Authorization Url'
           client_id: 'Client Id'
           client_secret: 'Client Secret'
-          save: "Save"
-          authorize: 'Authorize'
+
+          status: "Status"
           authorized: 'Authorized'
           not_authorized: "Not Authorized"
           params: 'Params'
           param_new: 'New Param'
           param_key: 'Param Key'
           param_value: 'Param Value'
+
+          remove: 'Delete'
+          authorize: 'Authorize'
+          save: "Save"
+
+          endpoint:
+            label: "Endpoints"
+            add: "Add Endpoint"
+            method: "Select a method"
+            url: "Enter a url"
 
   wizard_js:
     location:

@@ -12,21 +12,26 @@ const CustomWizardApi = Discourse.Model.extend({
 CustomWizardApi.reopenClass({
   create(params) {
     const api = this._super.apply(this);
+    const authorization = params.authorization;
+    const endpoints = params.endpoints;
+
     api.setProperties({
       service: params.service,
-      authType: params.auth_type,
-      authUrl: params.auth_url,
-      tokenUrl: params.token_url,
-      clientId: params.client_id,
-      clientSecret: params.client_secret,
-      authParams: Ember.A(params.auth_params),
-      authorized: params.authorized,
-      accessToken: params.access_token,
-      refreshToken: params.refresh_token,
-      code: params.code,
-      tokenExpiresAt: params.token_expires_at,
-      tokenRefreshAt: params.token_refresh_at
+      authType: authorization.auth_type,
+      authUrl: authorization.auth_url,
+      tokenUrl: authorization.token_url,
+      clientId: authorization.client_id,
+      clientSecret: authorization.client_secret,
+      authParams: Ember.A(authorization.auth_params),
+      authorized: authorization.authorized,
+      accessToken: authorization.access_token,
+      refreshToken: authorization.refresh_token,
+      code: authorization.code,
+      tokenExpiresAt: authorization.token_expires_at,
+      tokenRefreshAt: authorization.token_refresh_at,
+      endpoints: Ember.A(endpoints)
     });
+
     return api;
   },
 
@@ -34,7 +39,7 @@ CustomWizardApi.reopenClass({
     return ajax(`/admin/wizards/apis/${service}`, {
       type: 'GET'
     }).then(result => {
-      return result;
+      return CustomWizardApi.create(result);
     });
   },
 
