@@ -3,7 +3,7 @@ import CustomWizardApi from '../models/custom-wizard-api';
 export default Discourse.Route.extend({
   model(params) {
     if (params.service === 'new') {
-      return {};
+      return CustomWizardApi.create();
     } else {
       return CustomWizardApi.find(params.service);
     }

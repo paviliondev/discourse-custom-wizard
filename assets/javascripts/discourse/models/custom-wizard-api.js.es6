@@ -10,9 +10,9 @@ const CustomWizardApi = Discourse.Model.extend({
 });
 
 CustomWizardApi.reopenClass({
-  create(params) {
+  create(params = {}) {
     const api = this._super.apply(this);
-    const authorization = params.authorization;
+    const authorization = params.authorization || {};
     const endpoints = params.endpoints;
 
     api.setProperties({
