@@ -149,6 +149,8 @@ en:
             token_url: "Token url"
             client_id: 'Client id'
             client_secret: 'Client secret'
+            username: 'username'
+            password: 'password'
             params:
               label: 'Params'
               new: 'New param'

@@ -45,15 +45,17 @@
       {{i18n 'admin.wizard.api.auth.settings'}}
     </div>
 
-    {{#if api.name}}
-      <div class="control-group redirect-uri">
-        <div class="control-label">
-          <label>{{i18n 'admin.wizard.api.auth.redirect_uri'}}</label>
-          <div class="controls">
-            {{api.redirectUri}}
+    {{#if isOauth}}
+      {{#if api.name}}
+        <div class="control-group redirect-uri">
+          <div class="control-label">
+            <label>{{i18n 'admin.wizard.api.auth.redirect_uri'}}</label>
+            <div class="controls">
+              {{api.redirectUri}}
+            </div>
           </div>
         </div>
-      </div>
+      {{/if}}
     {{/if}}
 
     <div class="control-group auth-type">
@@ -63,21 +65,21 @@
       </div>
     </div>
 
-    <div class="control-group">
-      <label>{{i18n 'admin.wizard.api.auth.url'}}</label>
-      <div class="controls">
-        {{input value=api.authUrl}}
-      </div>
-    </div>
-
-    <div class="control-group">
-      <label>{{i18n 'admin.wizard.api.auth.token_url'}}</label>
-      <div class="controls">
-        {{input value=api.tokenUrl}}
-      </div>
-    </div>
-
     {{#if isOauth}}
+      <div class="control-group">
+        <label>{{i18n 'admin.wizard.api.auth.url'}}</label>
+        <div class="controls">
+          {{input value=api.authUrl}}
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label>{{i18n 'admin.wizard.api.auth.token_url'}}</label>
+        <div class="controls">
+          {{input value=api.tokenUrl}}
+        </div>
+      </div>
+
       <div class="control-group">
         <label>{{i18n 'admin.wizard.api.auth.client_id'}}</label>
         <div class="controls">
@@ -105,59 +107,75 @@
           {{d-button label='admin.wizard.api.auth.params.new' icon='plus' action='addParam'}}
         </div>
       </div>
+    {{else}}
+      <div class="control-group">
+        <label>{{i18n 'admin.wizard.api.auth.username'}}</label>
+        <div class="controls">
+          {{input value=api.username}}
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label>{{i18n 'admin.wizard.api.auth.password'}}</label>
+        <div class="controls">
+          {{input value=api.password}}
+        </div>
+      </div>
     {{/if}}
   </div>
 
-  <div class="status">
-    <div class="authorization">
-      {{#if api.authorized}}
-        <span class="authorization-indicator authorized"></span>
-        <span>{{i18n "admin.wizard.api.status.authorized"}}</span>
-      {{else}}
-        <span class="authorization-indicator not-authorized"></span>
-        <span>{{i18n "admin.wizard.api.status.not_authorized"}}</span>
-      {{/if}}
-    </div>
+  {{#if isOauth}}
+    <div class="status">
+      <div class="authorization">
+        {{#if api.authorized}}
+          <span class="authorization-indicator authorized"></span>
+          <span>{{i18n "admin.wizard.api.status.authorized"}}</span>
+        {{else}}
+          <span class="authorization-indicator not-authorized"></span>
+          <span>{{i18n "admin.wizard.api.status.not_authorized"}}</span>
+        {{/if}}
+      </div>
 
-    <div class="wizard-header medium">
-      {{i18n 'admin.wizard.api.status.label'}}
-    </div>
+      <div class="wizard-header medium">
+        {{i18n 'admin.wizard.api.status.label'}}
+      </div>
 
-    <div class="control-group">
-      <label>{{i18n 'admin.wizard.api.status.code'}}</label>
-      <div class="controls">
-        {{api.code}}
+      <div class="control-group">
+        <label>{{i18n 'admin.wizard.api.status.code'}}</label>
+        <div class="controls">
+          {{api.code}}
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label>{{i18n 'admin.wizard.api.status.access_token'}}</label>
+        <div class="controls">
+          {{api.accessToken}}
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label>{{i18n 'admin.wizard.api.status.refresh_token'}}</label>
+        <div class="controls">
+          {{api.refreshToken}}
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label>{{i18n 'admin.wizard.api.status.expires_at'}}</label>
+        <div class="controls">
+          {{api.tokenExpiresAt}}
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label>{{i18n 'admin.wizard.api.status.refresh_at'}}</label>
+        <div class="controls">
+          {{api.tokenRefreshAt}}
+        </div>
       </div>
     </div>
-
-    <div class="control-group">
-      <label>{{i18n 'admin.wizard.api.status.access_token'}}</label>
-      <div class="controls">
-        {{api.accessToken}}
-      </div>
-    </div>
-
-    <div class="control-group">
-      <label>{{i18n 'admin.wizard.api.status.refresh_token'}}</label>
-      <div class="controls">
-        {{api.refreshToken}}
-      </div>
-    </div>
-
-    <div class="control-group">
-      <label>{{i18n 'admin.wizard.api.status.expires_at'}}</label>
-      <div class="controls">
-        {{api.tokenExpiresAt}}
-      </div>
-    </div>
-
-    <div class="control-group">
-      <label>{{i18n 'admin.wizard.api.status.refresh_at'}}</label>
-      <div class="controls">
-        {{api.tokenRefreshAt}}
-      </div>
-    </div>
-  </div>
+  {{/if}}
 </div>
 
 <div class="wizard-header">

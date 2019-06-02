@@ -59,7 +59,7 @@ export default Ember.Controller.extend({
           });
         }
       } else {
-        // basic auth
+        // basic auth - no need to authorize separately
       }
 
       window.location.href = authUrl + query;
@@ -104,6 +104,7 @@ export default Ember.Controller.extend({
       }
 
       const endpoints = api.endpoints;
+      
       if (endpoints.length) {
         data['endpoints'] = JSON.stringify(endpoints);
       }

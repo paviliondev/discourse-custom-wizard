@@ -24,6 +24,8 @@ CustomWizardApi.reopenClass({
       tokenUrl: authorization.token_url,
       clientId: authorization.client_id,
       clientSecret: authorization.client_secret,
+      username: authorization.username,
+      password: authorization.password,
       authParams: Ember.A(authorization.auth_params),
       authorized: authorization.authorized,
       accessToken: authorization.access_token,
