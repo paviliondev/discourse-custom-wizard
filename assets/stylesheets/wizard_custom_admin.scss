@@ -308,12 +308,23 @@
   .content-list {
     margin-right: 20px;
   }
+
+  .new-api {
+    margin-top: 20px;
+  }
+
+  .metadata .title input {
+    width: 400px;
+  }
 }
 
 .wizard-api-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
+
+  &.page {
+    margin-bottom: 20px;
+  }
 }
 
 .wizard-api-authentication {
@@ -324,8 +335,37 @@
 
   .settings {
     border-right: 1px solid #333;
-    margin-right: 10px;
+    margin-right: 20px;
     padding-right: 20px;
+    width: 50%;
+    max-width: 50%;
+  }
+
+  .redirect-uri .controls {
+    word-break: break-all;
+  }
+
+  .auth-type .select-kit {
+    min-width: 210px;
+    width: 210px;
+    margin-bottom: 10px;
+  }
+
+  .status {
+    width: 50%;
+    max-width: 50%;
+
+    .wizard-header {
+      overflow: hidden;
+    }
+
+    .authorization {
+      float: right;
+    }
+
+    .control-group {
+      margin-bottom: 15px;
+    }
   }
 }
 

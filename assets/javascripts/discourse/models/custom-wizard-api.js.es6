@@ -2,10 +2,11 @@ import { ajax } from 'discourse/lib/ajax';
 import { default as computed } from 'ember-addons/ember-computed-decorators';
 
 const CustomWizardApi = Discourse.Model.extend({
-  @computed('service')
-  redirectUri(service) {
+  @computed('name')
+  redirectUri(name) {
+    let nameParam = name.toString().dasherize();
     const baseUrl = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '');
-    return baseUrl + `/admin/wizards/apis/${service}/redirect`;
+    return baseUrl + `/admin/wizards/apis/${nameParam}/redirect`;
   }
 });
 
@@ -16,7 +17,8 @@ CustomWizardApi.reopenClass({
     const endpoints = params.endpoints;
 
     api.setProperties({
-      service: params.service,
+      name: params.name,
+      title: params.title,
       authType: authorization.auth_type,
       authUrl: authorization.auth_url,
       tokenUrl: authorization.token_url,
@@ -29,14 +31,15 @@ CustomWizardApi.reopenClass({
       code: authorization.code,
       tokenExpiresAt: authorization.token_expires_at,
       tokenRefreshAt: authorization.token_refresh_at,
-      endpoints: Ember.A(endpoints)
+      endpoints: Ember.A(endpoints),
+      isNew: params.isNew
     });
 
     return api;
   },
 
-  find(service) {
-    return ajax(`/admin/wizards/apis/${service}`, {
+  find(name) {
+    return ajax(`/admin/wizards/apis/${name}`, {
       type: 'GET'
     }).then(result => {
       return CustomWizardApi.create(result);

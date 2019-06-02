@@ -1,11 +1,17 @@
 import CustomWizardApi from '../models/custom-wizard-api';
 
 export default Discourse.Route.extend({
+  queryParams: {
+    refresh_list: {
+      refreshModel: true
+    }
+  },
+
   model(params) {
-    if (params.service === 'new') {
-      return CustomWizardApi.create();
+    if (params.name === 'new') {
+      return CustomWizardApi.create({ isNew: true });
     } else {
-      return CustomWizardApi.find(params.service);
+      return CustomWizardApi.find(params.name);
     }
   },
 

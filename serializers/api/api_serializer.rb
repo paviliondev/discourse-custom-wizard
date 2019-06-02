@@ -1,19 +1,24 @@
 class CustomWizard::ApiSerializer < ApplicationSerializer
-  attributes :service,
+  attributes :name,
+             :title,
              :authorization,
              :endpoints
 
   def authorization
-    CustomWizard::Api::AuthorizationSerializer.new(
-      CustomWizard::Api::Authorization.get(object.service),
-      root: false
-    )
+    if authorization = CustomWizard::Api::Authorization.get(object.name)
+      CustomWizard::Api::AuthorizationSerializer.new(
+        authorization,
+        root: false
+      )
+    end
   end
 
   def endpoints
-   ActiveModel::ArraySerializer.new(
-     CustomWizard::Api::Endpoint.list,
-     each_serializer: CustomWizard::Api::EndpointSerializer
-   )
+    if endpoints = CustomWizard::Api::Endpoint.list
+      ActiveModel::ArraySerializer.new(
+       endpoints,
+       each_serializer: CustomWizard::Api::EndpointSerializer
+      )
+    end
   end
 end

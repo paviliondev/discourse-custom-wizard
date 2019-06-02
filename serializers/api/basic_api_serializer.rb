@@ -1,3 +1,3 @@
 class CustomWizard::BasicApiSerializer < ApplicationSerializer
-  attributes :service
+  attributes :name, :title
 end

@@ -9,7 +9,7 @@ export default {
         this.route('adminWizardSubmissions', { path: '/:wizard_id', resetNamespace: true });
       });
       this.route('adminWizardsApis', { path: '/apis', resetNamespace: true }, function() {
-        this.route('adminWizardsApi', { path: '/:service', resetNamespace: true });
+        this.route('adminWizardsApi', { path: '/:name', resetNamespace: true });
       });
     });
   }

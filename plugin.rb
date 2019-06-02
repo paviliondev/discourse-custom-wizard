@@ -69,9 +69,10 @@ after_initialize do
       get 'admin/wizards/submissions/:wizard_id' => 'admin#submissions'
       get 'admin/wizards/apis' => 'api#list'
       get 'admin/wizards/apis/new' => 'api#index'
-      get 'admin/wizards/apis/:service' => 'api#find'
-      put 'admin/wizards/apis/:service' => 'api#save'
-      get 'admin/wizards/apis/:service/redirect' => 'api#redirect'
+      get 'admin/wizards/apis/:name' => 'api#find'
+      put 'admin/wizards/apis/:name' => 'api#save'
+      delete 'admin/wizards/apis/:name' => 'api#remove'
+      get 'admin/wizards/apis/:name/redirect' => 'api#redirect'
     end
   end
 

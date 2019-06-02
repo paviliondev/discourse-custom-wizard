@@ -127,36 +127,47 @@ en:
             wizard_field: "Wizard Field"
             user_field: "User Field"
         api:
+          label: "API"
           nav_label: 'APIs'
           new: 'New Api'
-
-          auth: "Authentication"
-          auth_settings: "Settings"
-          auth_status: "Status"
-          service: 'Api Service'
-          redirect_uri: "Redirect Uri"
-          auth_type: 'Authorization Type'
-          auth_type_none: 'Select a type'
-          token_url: "Token Url"
-          auth_url: 'Authorization Url'
-          client_id: 'Client Id'
-          client_secret: 'Client Secret'
-
-          status: "Status"
-          authorized: 'Authorized'
-          not_authorized: "Not Authorized"
-          params: 'Params'
-          param_new: 'New Param'
-          param_key: 'Param Key'
-          param_value: 'Param Value'
-
+          name: "Name (can't be changed)"
+          name_placeholder: 'Underscored'
+          title: 'Title'
+          title_placeholder: 'Display name'
           remove: 'Delete'
-          authorize: 'Authorize'
           save: "Save"
+
+          auth:
+            label: "Authorization"
+            btn: 'Authorize'
+            settings: "Settings"
+            status: "Status"
+            redirect_uri: "Redirect url"
+            type: 'Type'
+            type_none: 'Select a type'
+            url: "Authorization url"
+            token_url: "Token url"
+            client_id: 'Client id'
+            client_secret: 'Client secret'
+            params:
+              label: 'Params'
+              new: 'New param'
+              key: 'key'
+              value: 'value'
+
+          status:
+            label: "Status"
+            authorized: 'Authorized'
+            not_authorized: "Not authorized"
+            code: "Code"
+            access_token: "Access token"
+            refresh_token: "Refresh token"
+            expires_at: "Expires at"
+            refresh_at: "Refresh at"
 
           endpoint:
             label: "Endpoints"
-            add: "Add Endpoint"
+            add: "Add endpoint"
             method: "Select a method"
             url: "Enter a url"
 

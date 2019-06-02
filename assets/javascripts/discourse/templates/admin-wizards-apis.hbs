@@ -3,7 +3,13 @@
     <ul>
       {{#each model as |api|}}
         <li>
-          {{#link-to "adminWizardsApi" api.service}}{{api.service}}{{/link-to}}
+          {{#link-to "adminWizardsApi" (dasherize api.name)}}
+            {{#if api.title}}
+              {{api.title}}
+            {{else}}
+              {{api.name}}
+            {{/if}}
+          {{/link-to}}
         </li>
       {{/each}}
     </ul>

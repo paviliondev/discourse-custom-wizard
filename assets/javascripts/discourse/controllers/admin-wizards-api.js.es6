@@ -1,13 +1,32 @@
 import { ajax } from 'discourse/lib/ajax';
 import { popupAjaxError } from 'discourse/lib/ajax-error';
 import CustomWizardApi from '../models/custom-wizard-api';
+import { default as computed, observes } from 'ember-addons/ember-computed-decorators';
+import DiscourseURL from 'discourse/lib/url';
 
 export default Ember.Controller.extend({
+  queryParams: ['refresh_list'],
   loadingSubscriptions: false,
   notAuthorized: Ember.computed.not('api.authorized'),
   authorizationTypes: ['oauth', 'basic'],
   isOauth: Ember.computed.equal('api.authType', 'oauth'),
   endpointMethods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
+  saveDisabled: Ember.computed.empty('api.name'),
+  showRemove: Ember.computed.not('isNew'),
+
+  @computed('saveDisabled', 'authType', 'authUrl')
+  authDisabled(saveDisabled, authType, authUrl) {
+    return saveDisabled || !authType || !authUrl;
+  },
+
+  @observes('api.title')
+  titleWatcher() {
+    const title = this.get('api.title');
+
+    if (this.get('originalTitle')) {
+      this.set('originalTitle', title);
+    }
+  },
 
   actions: {
     addParam() {
@@ -48,12 +67,25 @@ export default Ember.Controller.extend({
 
     save() {
       const api = this.get('api');
-      const service = api.service;
+      const name = api.name;
+      let refreshList = false;
 
-      let data = {};
+      if (!name ) return;
 
-      data['auth_type'] = api.authType;
-      data['auth_url'] = api.authUrl;
+      let data = {
+        title: api.title
+      };
+
+      if (this.get('isNew') || (api.title !== this.get('originalTitle'))) {
+        refreshList = true;
+      }
+
+      if (api.get('isNew')) {
+        data['new'] = true;
+      };
+
+      if (api.authType) data['auth_type'] = api.authType;
+      if (api.authUrl) data['auth_url'] = api.authUrl;
 
       if (data.auth_type === 'oauth') {
         data['client_id'] = api.clientId;
@@ -72,23 +104,43 @@ export default Ember.Controller.extend({
       }
 
       const endpoints = api.endpoints;
-      if (endpoints != undefined) {
-        if (endpoints.length) {
-          data['endpoints'] = JSON.stringify(endpoints);
-        }
+      if (endpoints.length) {
+        data['endpoints'] = JSON.stringify(endpoints);
       }
 
-      this.set('savingApi', true);
+      this.set('updating', true);
 
-      ajax(`/admin/wizards/apis/${service}`, {
+      ajax(`/admin/wizards/apis/${name.underscore()}`, {
         type: 'PUT',
         data
       }).catch(popupAjaxError)
         .then(result => {
           if (result.success) {
-            this.set('api', CustomWizardApi.create(result.api));
+            if (refreshList) {
+              this.transitionToRoute('adminWizardsApi', result.api.name.dasherize()).then(() => {
+                this.send('refreshModel');
+              });
+            } else {
+              this.set('api', CustomWizardApi.create(result.api));
+            }
           }
-        }).finally(() => this.set('savingApi', false));
+        }).finally(() => this.set('updating', false));
+    },
+
+    remove() {
+      const name = this.get('api.name');
+      if (!name) return;
+
+      this.set('updating', true);
+
+      ajax(`/admin/wizards/apis/${name.underscore()}`, {
+        type: 'DELETE'
+      }).catch(popupAjaxError)
+        .then(result => {
+          if (result.success) {
+            DiscourseURL.routeTo('/admin/wizards/apis?refresh=true');
+          }
+        }).finally(() => this.set('updating', false));
     }
   }
 });

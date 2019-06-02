@@ -1,7 +1,7 @@
 # Uncomment tests runner when tests are added.
 
 sudo: required
-#services:
+#names:
   #- docker
 
 before_install:
