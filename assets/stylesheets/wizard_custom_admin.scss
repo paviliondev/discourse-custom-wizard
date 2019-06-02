@@ -334,9 +334,6 @@
   margin-bottom: 20px;
 
   .settings {
-    border-right: 1px solid #333;
-    margin-right: 20px;
-    padding-right: 20px;
     width: 50%;
     max-width: 50%;
   }
@@ -352,6 +349,9 @@
   }
 
   .status {
+    border-left: 1px solid $primary;
+    margin-left: 20px;
+    padding-left: 20px;
     width: 50%;
     max-width: 50%;
 
@@ -384,6 +384,7 @@
 
   .endpoint {
     display: flex;
+    margin-top: 20px;
 
     .combo-box {
       width: 200px;

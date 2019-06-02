@@ -34,7 +34,12 @@
   </div>
 
   <div class="actions">
-    {{d-button label="admin.wizard.api.auth.btn" action="authorize" disabled=authDisabled class="btn-primary"}}
+    {{#if isOauth}}
+      {{d-button label="admin.wizard.api.auth.btn"
+                 action="authorize"
+                 disabled=authDisabled
+                 class="btn-primary"}}
+    {{/if}}
   </div>
 </div>
 
@@ -107,7 +112,9 @@
           {{d-button label='admin.wizard.api.auth.params.new' icon='plus' action='addParam'}}
         </div>
       </div>
-    {{else}}
+    {{/if}}
+
+    {{#if isBasicAuth}}
       <div class="control-group">
         <label>{{i18n 'admin.wizard.api.auth.username'}}</label>
         <div class="controls">

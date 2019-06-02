@@ -10,13 +10,18 @@ export default Ember.Controller.extend({
   notAuthorized: Ember.computed.not('api.authorized'),
   authorizationTypes: ['oauth', 'basic'],
   isOauth: Ember.computed.equal('api.authType', 'oauth'),
+  isBasicAuth: Ember.computed.equal('api.authType', 'basic'),
   endpointMethods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
-  saveDisabled: Ember.computed.empty('api.name'),
   showRemove: Ember.computed.not('isNew'),
 
-  @computed('saveDisabled', 'authType', 'authUrl')
+  @computed('saveDisabled', 'api.authType', 'api.authUrl')
   authDisabled(saveDisabled, authType, authUrl) {
     return saveDisabled || !authType || !authUrl;
+  },
+
+  @computed('api.name', 'api.authType')
+  saveDisabled(name, authType) {
+    return !name || !authType;
   },
 
   @observes('api.title')
@@ -48,18 +53,19 @@ export default Ember.Controller.extend({
     authorize() {
       const api = this.get('api');
       const { authType, authUrl, authParams } = api;
+
+      if (authType !== 'oauth') return;
+
       let query = '?';
 
-      if (authType === 'oauth') {
-        query += `client_id=${api.clientId}&redirect_uri=${encodeURIComponent(api.redirectUri)}&response_type=code`;
+      query += `client_id=${api.clientId}`;
+      query += `&redirect_uri=${encodeURIComponent(api.redirectUri)}`;
+      query += `&response_type=code`;
 
-        if (authParams) {
-          authParams.forEach(p => {
-            query += `&${p.key}=${encodeURIComponent(p.value)}`;
-          });
-        }
-      } else {
-        // basic auth - no need to authorize separately
+      if (authParams) {
+        authParams.forEach(p => {
+          query += `&${p.key}=${encodeURIComponent(p.value)}`;
+        });
       }
 
       window.location.href = authUrl + query;
@@ -68,15 +74,18 @@ export default Ember.Controller.extend({
     save() {
       const api = this.get('api');
       const name = api.name;
+      const authType = api.authType;
       let refreshList = false;
 
-      if (!name ) return;
+      if (!name || !authType) return;
 
       let data = {
-        title: api.title
+        auth_type: authType
       };
 
-      if (this.get('isNew') || (api.title !== this.get('originalTitle'))) {
+      if (api.title) data['title'] = api.title;
+
+      if (api.get('isNew') || (api.title !== this.get('originalTitle'))) {
         refreshList = true;
       }
 
@@ -84,10 +93,8 @@ export default Ember.Controller.extend({
         data['new'] = true;
       };
 
-      if (api.authType) data['auth_type'] = api.authType;
-      if (api.authUrl) data['auth_url'] = api.authUrl;
-
-      if (data.auth_type === 'oauth') {
+      if (authType === 'oauth') {
+        data['auth_url'] = api.authUrl;
         data['client_id'] = api.clientId;
         data['client_secret'] = api.clientSecret;
 
@@ -98,13 +105,13 @@ export default Ember.Controller.extend({
         }
 
         data['token_url'] = api.tokenUrl;
-      } else {
+      } else if (authType === 'basic') {
         data['username'] = api.username;
         data['password'] = api.password;
       }
 
       const endpoints = api.endpoints;
-      
+
       if (endpoints.length) {
         data['endpoints'] = JSON.stringify(endpoints);
       }
