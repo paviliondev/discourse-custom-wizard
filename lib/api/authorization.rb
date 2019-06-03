@@ -3,8 +3,8 @@ require 'excon'
 class CustomWizard::Api::Authorization
   include ActiveModel::SerializerSupport
 
-  attr_accessor :authorized,
-                :name,
+  attr_accessor :api_name,
+                :authorized,
                 :auth_type,
                 :auth_url,
                 :token_url,
@@ -19,15 +19,11 @@ class CustomWizard::Api::Authorization
                 :username,
                 :password
 
-  def initialize(name, data, opts = {})
-    unless opts[:data_only]
-      @name = name
-    end
+  def initialize(api_name, data={})
+    @api_name = api_name
 
-    if data = data.is_a?(String) ? ::JSON.parse(data) : data
-      data.each do |k, v|
-        self.send "#{k}=", v if self.respond_to?(k)
-      end
+    data.each do |k, v|
+      self.send "#{k}=", v if self.respond_to?(k)
     end
   end
 
@@ -35,25 +31,32 @@ class CustomWizard::Api::Authorization
     @authorized ||= @access_token && @token_expires_at.to_datetime > Time.now
   end
 
-  def self.set(name, data = {})
-    record = self.get(name, data_only: true)
+  def self.set(api_name, new_data = {})
+    data = self.get(api_name, data_only: true) || {}
 
-    data.each do |k, v|
-      record.send "#{k}=", v if record.respond_to?(k)
+    new_data.each do |k, v|
+      data[k.to_sym] = v
     end
 
-    PluginStore.set("custom_wizard_api_#{name}", 'authorization', record.as_json)
+    PluginStore.set("custom_wizard_api_#{api_name}", 'authorization', data)
 
-    self.get(name)
+    self.get(api_name)
   end
 
-  def self.get(name, opts = {})
-    data = PluginStore.get("custom_wizard_api_#{name}", 'authorization')
-    self.new(name, data, opts)
+  def self.get(api_name, opts = {})
+    if data = PluginStore.get("custom_wizard_api_#{api_name}", 'authorization')
+      if opts[:data_only]
+        data
+      else
+        self.new(api_name, data)
+      end
+    else
+      nil
+    end
   end
 
-  def self.remove(name)
-    PluginStore.remove("custom_wizard_api_#{name}", "authorization")
+  def self.remove(api_name)
+    PluginStore.remove("custom_wizard_api_#{api_name}", "authorization")
   end
 
   def self.get_header_authorization_string(name)

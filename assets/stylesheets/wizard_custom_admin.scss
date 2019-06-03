@@ -316,14 +316,33 @@
   .metadata .title input {
     width: 400px;
   }
+
+  .buttons {
+    text-align: right;
+    vertical-align: middle;
+
+    > .d-icon, > .spinner {
+      margin-right: 7px;
+    }
+
+    .error {
+      margin-top: 10px;
+      color: $danger;
+    }
+  }
 }
 
 .wizard-api-header {
-  display: flex;
-  justify-content: space-between;
-
   &.page {
     margin-bottom: 20px;
+  }
+
+  .buttons {
+    float: right;
+  }
+
+  .wizard-header {
+    overflow: hidden;
   }
 }
 
@@ -388,12 +407,18 @@
 
     .combo-box {
       width: 200px;
-      margin-right: 20px;
+      margin-right: 10px;
+      margin-top: -2px;
+      width: 150px;
+    }
+
+    input {
+      margin: 0;
+      margin-right: 10px;
     }
 
     .endpoint-url {
-      margin: 0;
-      width: 450px;
+      width: 300px;
     }
 
     .remove-endpoint {

@@ -46,7 +46,7 @@ class CustomWizard::ApiController < ::ApplicationController
 
     render json: success_json.merge(
       api: CustomWizard::ApiSerializer.new(
-        CustomWizard::Api.new(api_params[:name]),
+        CustomWizard::Api.get(api_params[:name]),
         root: false
       )
     )

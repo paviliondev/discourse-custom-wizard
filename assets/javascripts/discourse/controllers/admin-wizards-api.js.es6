@@ -1,8 +1,7 @@
 import { ajax } from 'discourse/lib/ajax';
 import { popupAjaxError } from 'discourse/lib/ajax-error';
 import CustomWizardApi from '../models/custom-wizard-api';
-import { default as computed, observes } from 'ember-addons/ember-computed-decorators';
-import DiscourseURL from 'discourse/lib/url';
+import { default as computed } from 'ember-addons/ember-computed-decorators';
 
 export default Ember.Controller.extend({
   queryParams: ['refresh_list'],
@@ -13,24 +12,16 @@ export default Ember.Controller.extend({
   isBasicAuth: Ember.computed.equal('api.authType', 'basic'),
   endpointMethods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
   showRemove: Ember.computed.not('isNew'),
+  responseIcon: null,
 
-  @computed('saveDisabled', 'api.authType', 'api.authUrl')
-  authDisabled(saveDisabled, authType, authUrl) {
-    return saveDisabled || !authType || !authUrl;
+  @computed('saveDisabled', 'api.authType', 'api.authUrl', 'api.clientId', 'api.clientSecret')
+  authDisabled(saveDisabled, authType, authUrl, clientId, clientSecret) {
+    return saveDisabled || !authType || !authUrl || !clientId || !clientSecret;
   },
 
   @computed('api.name', 'api.authType')
   saveDisabled(name, authType) {
     return !name || !authType;
-  },
-
-  @observes('api.title')
-  titleWatcher() {
-    const title = this.get('api.title');
-
-    if (this.get('originalTitle')) {
-      this.set('originalTitle', title);
-    }
   },
 
   actions: {
@@ -76,6 +67,7 @@ export default Ember.Controller.extend({
       const name = api.name;
       const authType = api.authType;
       let refreshList = false;
+      let error;
 
       if (!name || !authType) return;
 
@@ -85,7 +77,9 @@ export default Ember.Controller.extend({
 
       if (api.title) data['title'] = api.title;
 
-      if (api.get('isNew') || (api.title !== this.get('originalTitle'))) {
+      const originalTitle = this.get('api.originalTitle');
+      console.log(api, originalTitle);
+      if (api.get('isNew') || (originalTitle && (api.title !== originalTitle))) {
         refreshList = true;
       }
 
@@ -93,27 +87,45 @@ export default Ember.Controller.extend({
         data['new'] = true;
       };
 
+      let requiredParams;
+
       if (authType === 'oauth') {
-        data['auth_url'] = api.authUrl;
-        data['client_id'] = api.clientId;
-        data['client_secret'] = api.clientSecret;
-
-        let params = api.authParams;
-
-        if (params) {
-          data['auth_params'] = JSON.stringify(params);
-        }
-
-        data['token_url'] = api.tokenUrl;
+        requiredParams = ['authUrl', 'tokenUrl', 'clientId', 'clientSecret'];
       } else if (authType === 'basic') {
-        data['username'] = api.username;
-        data['password'] = api.password;
+        requiredParams = ['username', 'password'];
+      }
+
+      for (let rp of requiredParams) {
+        if (!api[rp]) {
+          let key = rp.replace('auth', '');
+          error = `${I18n.t(`admin.wizard.api.auth.${key.underscore()}`)} is required for ${authType}`;
+          break;
+        }
+        data[rp.underscore()] = api[rp];
+      }
+
+      const params = api.authParams;
+      if (params.length) {
+        data['auth_params'] = JSON.stringify(params);
       }
 
       const endpoints = api.endpoints;
-
       if (endpoints.length) {
+        for (let e of endpoints) {
+          if (!e.name) {
+            error = 'Every endpoint must have a name';
+            break;
+          }
+        }
         data['endpoints'] = JSON.stringify(endpoints);
+      }
+
+      if (error) {
+        this.set('error', error);
+        setTimeout(() => {
+          this.set('error', '');
+        }, 6000);
+        return;
       }
 
       this.set('updating', true);
@@ -130,7 +142,10 @@ export default Ember.Controller.extend({
               });
             } else {
               this.set('api', CustomWizardApi.create(result.api));
+              this.set('responseIcon', 'check');
             }
+          } else {
+            this.set('responseIcon', 'times');
           }
         }).finally(() => this.set('updating', false));
     },
@@ -146,7 +161,9 @@ export default Ember.Controller.extend({
       }).catch(popupAjaxError)
         .then(result => {
           if (result.success) {
-            DiscourseURL.routeTo('/admin/wizards/apis?refresh=true');
+            this.transitionToRoute('adminWizardsApis').then(() => {
+              this.send('refreshModel');
+            });
           }
         }).finally(() => this.set('updating', false));
     }

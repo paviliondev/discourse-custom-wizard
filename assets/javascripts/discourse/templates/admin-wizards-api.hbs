@@ -1,23 +1,11 @@
 <div class="wizard-api-header page">
-  <div class="metadata">
-    <div class="title">
-      <label>{{i18n 'admin.wizard.api.title'}}</label>
-      {{input value=api.title placeholder=(i18n 'admin.wizard.api.title_placeholder')}}
-    </div>
-
-    <div class="name">
-      {{#if api.isNew}}
-        <label>{{i18n 'admin.wizard.api.name'}}</label>
-        {{input value=api.name placeholder=(i18n 'admin.wizard.api.name_placeholder')}}
-      {{else}}
-        {{api.name}}
-      {{/if}}
-    </div>
-  </div>
-
   <div class='buttons'>
     {{#if updating}}
       {{loading-spinner size="small"}}
+    {{else}}
+      {{#if responseIcon}}
+        {{d-icon responseIcon}}
+      {{/if}}
     {{/if}}
 
     {{d-button label="admin.wizard.api.save" action="save" class="btn-primary" disabled=saveDisabled}}
@@ -25,21 +13,51 @@
     {{#if showRemove}}
       {{d-button action="remove" label="admin.wizard.api.remove"}}
     {{/if}}
+
+    {{#if error}}
+      <div class="error">
+        {{error}}
+      </div>
+    {{/if}}
+  </div>
+
+  <div class="wizard-header">
+    {{#if api.isNew}}
+      {{i18n 'admin.wizard.api.new'}}
+    {{else}}
+      {{api.title}}
+    {{/if}}
+  </div>
+
+  <div class="metadata">
+    <div class="title">
+      <label>{{i18n 'admin.wizard.api.title'}}</label>
+      {{input value=api.title placeholder=(i18n 'admin.wizard.api.title_placeholder')}}
+    </div>
+
+    <div class="name">
+      <label>{{i18n 'admin.wizard.api.name'}}</label>
+      {{#if api.isNew}}
+        {{input value=api.name placeholder=(i18n 'admin.wizard.api.name_placeholder')}}
+      {{else}}
+        {{api.name}}
+      {{/if}}
+    </div>
   </div>
 </div>
 
 <div class="wizard-api-header">
-  <div class="wizard-header">
-    {{i18n 'admin.wizard.api.auth.label'}}
-  </div>
-
-  <div class="actions">
+  <div class="buttons">
     {{#if isOauth}}
       {{d-button label="admin.wizard.api.auth.btn"
                  action="authorize"
                  disabled=authDisabled
                  class="btn-primary"}}
     {{/if}}
+  </div>
+
+  <div class="wizard-header">
+    {{i18n 'admin.wizard.api.auth.label'}}
   </div>
 </div>
 
@@ -198,9 +216,20 @@
         {{#each api.endpoints as |endpoint|}}
           <li>
             <div class="endpoint">
-              {{combo-box content=endpointMethods value=endpoint.method none="admin.wizard.api.endpoint.method"}}
-              {{input value=endpoint.url placeholder=(i18n 'admin.wizard.api.endpoint.url') class='endpoint-url'}}
-              {{d-button action='removeEndpoint' actionParam=endpoint icon='times' class='remove-endpoint'}}
+              <div class="endpoint-">
+                {{input value=endpoint.name
+                        placeholder=(i18n 'admin.wizard.api.endpoint.name')}}
+                {{combo-box content=endpointMethods
+                            value=endpoint.method
+                            none="admin.wizard.api.endpoint.method"}}
+                {{input value=endpoint.url
+                        placeholder=(i18n 'admin.wizard.api.endpoint.url')
+                        class='endpoint-url'}}
+                {{d-button action='removeEndpoint'
+                           actionParam=endpoint
+                           icon='times'
+                           class='remove-endpoint'}}
+              </div>
             </div>
           </li>
         {{/each}}

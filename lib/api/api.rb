@@ -6,7 +6,9 @@ class CustomWizard::Api
 
   def initialize(name, data={})
     @name = name
-    @title = data['title']
+    data.each do |k, v|
+      self.send "#{k}=", v if self.respond_to?(k)
+    end
   end
 
   def self.set(name, data)

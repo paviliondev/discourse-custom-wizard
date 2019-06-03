@@ -19,6 +19,7 @@ CustomWizardApi.reopenClass({
     api.setProperties({
       name: params.name,
       title: params.title,
+      originalTitle: params.title,
       authType: authorization.auth_type,
       authUrl: authorization.auth_url,
       tokenUrl: authorization.token_url,

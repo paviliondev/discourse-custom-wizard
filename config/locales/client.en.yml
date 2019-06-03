@@ -170,6 +170,7 @@ en:
           endpoint:
             label: "Endpoints"
             add: "Add endpoint"
+            name: "Endpoint name"
             method: "Select a method"
             url: "Enter a url"
 
