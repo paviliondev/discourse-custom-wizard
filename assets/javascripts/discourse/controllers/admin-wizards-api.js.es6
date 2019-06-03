@@ -78,7 +78,6 @@ export default Ember.Controller.extend({
       if (api.title) data['title'] = api.title;
 
       const originalTitle = this.get('api.originalTitle');
-      console.log(api, originalTitle);
       if (api.get('isNew') || (originalTitle && (api.title !== originalTitle))) {
         refreshList = true;
       }

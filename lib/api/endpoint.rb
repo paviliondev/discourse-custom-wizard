@@ -16,8 +16,13 @@ class CustomWizard::Api::Endpoint
   end
 
   def self.set(api_name, new_data)
-    data = new_data[:endpoint_id] ? self.get(api_name, new_data[:endpoint_id], data_only: true) : {}
-    endpoint_id = new_data[:endpoint_id] || SecureRandom.hex(3)
+    if new_data['id']
+      data = self.get(api_name, new_data['id'], data_only: true)
+      endpoint_id = new_data['id']
+    else
+      data = {}
+      endpoint_id = SecureRandom.hex(3)
+    end
 
     new_data.each do |k, v|
       data[k.to_sym] = v
@@ -32,11 +37,10 @@ class CustomWizard::Api::Endpoint
     return nil if !endpoint_id
 
     if data = PluginStore.get("custom_wizard_api_#{api_name}", "endpoint_#{endpoint_id}")
-      data[:id] = endpoint_id
-
       if opts[:data_only]
         data
       else
+        data[:id] = endpoint_id
         self.new(api_name, data)
       end
     else
@@ -48,13 +52,41 @@ class CustomWizard::Api::Endpoint
     PluginStoreRow.where("plugin_name = 'custom_wizard_api_#{api_name}' AND key LIKE 'endpoint_%'").destroy_all
   end
 
-  def self.list
-    PluginStoreRow.where("plugin_name LIKE 'custom_wizard_api_%' AND key LIKE 'endpoint_%'")
+  def self.list(api_name)
+    PluginStoreRow.where("plugin_name LIKE 'custom_wizard_api_#{api_name}' AND key LIKE 'endpoint_%'")
       .map do |record|
         api_name = record['plugin_name'].sub("custom_wizard_api_", "")
         data = ::JSON.parse(record['value'])
         data[:id] = record['key'].split('_').last
         self.new(api_name, data)
       end
+  end
+
+  def self.request(api_name, endpoint_id, body)
+    endpoint = self.get(api_name, endpoint_id)
+    auth = CustomWizard::Api::Authorization.get_header_authorization_string(api_name)
+
+    connection = Excon.new(
+      URI.parse(URI.encode(endpoint.url)).to_s,
+      :headers => {
+        "Authorization" => auth,
+        "Accept" => "application/json, */*",
+        "Content-Type" => "application/json"
+      }
+    )
+
+    params = {
+      method: endpoint.method
+    }
+
+    if body
+      body = JSON.generate(body)
+      body.delete! '\\'
+      params[:body] = body
+    end
+
+    response = connection.request(params)
+
+    JSON.parse(response.body)
   end
 end

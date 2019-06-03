@@ -393,6 +393,17 @@ class CustomWizard::Builder
     end
   end
 
+  def send_to_api(user, action, data)
+    api_body = CustomWizard::Builder.fill_placeholders(JSON.generate(JSON.parse(action['api_body'])), user, data)
+    result = CustomWizard::Api::Endpoint.request(action['api'], action['api_endpoint'], api_body)
+
+    if result['error']
+      updater.errors.add(:send_message, result['error'])
+    else
+      ## add validation callback
+    end
+  end
+
   def save_submissions(data, final_step)
     if final_step
       data['submitted_at'] = Time.now.iso8601

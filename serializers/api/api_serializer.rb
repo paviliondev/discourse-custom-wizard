@@ -14,7 +14,7 @@ class CustomWizard::ApiSerializer < ApplicationSerializer
   end
 
   def endpoints
-    if endpoints = CustomWizard::Api::Endpoint.list
+    if endpoints = CustomWizard::Api::Endpoint.list(object.name)
       ActiveModel::ArraySerializer.new(
        endpoints,
        each_serializer: CustomWizard::Api::EndpointSerializer

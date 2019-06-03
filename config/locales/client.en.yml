@@ -103,6 +103,8 @@ en:
           add_fields: "{{type}} Fields"
           available_fields: "* If 'Save wizard submissions' is disabled, only the fields of the current step are available to the current step's actions."
           topic_attr: "Topic Attribute"
+          interpolate_fields: "Insert wizard fields using the field_id in w{}. Insert user fields using field key in u{}."
+
           skip_redirect:
             label: "Skip Redirect"
             description: "Don't redirect the user to this {{type}} after the wizard completes"
@@ -120,12 +122,19 @@ en:
             label: "Builder"
             user_fields: "User Fields: "
             wizard_fields: "Wizard Fields: "
-            placeholder: "Insert wizard fields using the field_id in w{}. Insert user fields using field key in u{}."
           custom_title: "Custom Title"
           custom_category:
             label: "Custom Category"
             wizard_field: "Wizard Field"
             user_field: "User Field"
+          send_to_api:
+            label: "Send to API"
+            api: "API"
+            endpoint: "Endpoint"
+            select_an_api: "Select an API"
+            select_an_endpoint: "Select an endpoint"
+            body: "Request body JSON"
+
         api:
           label: "API"
           nav_label: 'APIs'

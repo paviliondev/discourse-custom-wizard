@@ -33,7 +33,8 @@ export default Discourse.Route.extend({
   afterModel(model) {
     return Ember.RSVP.all([
       this._getFieldTypes(model),
-      this._getThemes(model)
+      this._getThemes(model),
+      this._getApis(model)
     ]);
   },
 
@@ -46,6 +47,11 @@ export default Discourse.Route.extend({
     return this.store.findAll('theme').then((result) => {
       model.set('themes', result.content);
     });
+  },
+
+  _getApis(model) {
+    return ajax('/admin/wizards/apis')
+      .then((result) => model.set('apis', result));
   },
 
   setupController(controller, model) {

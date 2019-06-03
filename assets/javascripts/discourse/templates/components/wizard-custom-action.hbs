@@ -96,7 +96,7 @@
         <label>{{i18n 'admin.wizard.action.post_builder.user_fields'}}{{builderUserFields}}</label>
         <label>{{i18n 'admin.wizard.action.post_builder.wizard_fields'}}{{builderWizardFields}}</label>
         {{d-editor value=action.post_template
-                   placeholder='admin.wizard.action.post_builder.placeholder'
+                   placeholder='admin.wizard.action.interpolate_fields'
                    classNames='post-builder-editor'}}
       </div>
     </div>
@@ -157,7 +157,7 @@
         <label>{{i18n 'admin.wizard.action.post_builder.user_fields'}}{{builderUserFields}}</label>
         <label>{{i18n 'admin.wizard.action.post_builder.wizard_fields'}}{{builderWizardFields}}</label>
         {{d-editor value=action.post_template
-                   placeholder='admin.wizard.action.post_builder.placeholder'
+                   placeholder='admin.wizard.action.interpolate_fields'
                    classNames='post-builder-editor'}}
       </div>
     </div>
@@ -202,5 +202,43 @@
                            noneValue='admin.wizard.action.update_profile.profile_field'
                            allowCustomField=true
                            allowUserField=true}}
+  </div>
+{{/if}}
+
+{{#if sendToApi}}
+  <div class="setting">
+    <div class="setting-label">
+      <h3>{{i18n "admin.wizard.action.send_to_api.api"}}</h3>
+    </div>
+    <div class="setting-value">
+      {{combo-box value=action.api
+                  content=availableApis
+                  none='admin.wizard.action.send_to_api.select_an_api'
+                  isDisabled=action.custom_title_enabled}}
+    </div>
+  </div>
+
+  <div class="setting">
+    <div class="setting-label">
+      <h3>{{i18n "admin.wizard.action.send_to_api.endpoint"}}</h3>
+    </div>
+    <div class="setting-value">
+      {{combo-box value=action.api_endpoint
+                  content=availableEndpoints
+                  none='admin.wizard.action.send_to_api.select_an_endpoint'
+                  isDisabled=apiEmpty}}
+    </div>
+  </div>
+
+  <div class="setting api-body">
+    <div class="setting-label">
+      <h3>{{i18n "admin.wizard.action.send_to_api.body"}}</h3>
+    </div>
+    <div class="setting-value">
+      <label>{{i18n 'admin.wizard.action.post_builder.user_fields'}}{{builderUserFields}}</label>
+      <label>{{i18n 'admin.wizard.action.post_builder.wizard_fields'}}{{builderWizardFields}}</label>
+      {{textarea value=action.api_body
+                 placeholder=(i18n 'admin.wizard.action.interpolate_fields')}}
+    </div>
   </div>
 {{/if}}

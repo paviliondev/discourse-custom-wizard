@@ -3,7 +3,8 @@ import { default as computed, observes } from 'ember-addons/ember-computed-decor
 const ACTION_TYPES = [
   { id: 'create_topic', name: 'Create Topic' },
   { id: 'update_profile', name: 'Update Profile' },
-  { id: 'send_message', name: 'Send Message' }
+  { id: 'send_message', name: 'Send Message' },
+  { id: 'send_to_api', name: 'Send to API' }
 ];
 
 const PROFILE_FIELDS = [
@@ -26,6 +27,8 @@ export default Ember.Component.extend({
   createTopic: Ember.computed.equal('action.type', 'create_topic'),
   updateProfile: Ember.computed.equal('action.type', 'update_profile'),
   sendMessage: Ember.computed.equal('action.type', 'send_message'),
+  sendToApi: Ember.computed.equal('action.type', 'send_to_api'),
+  apiEmpty: Ember.computed.empty('action.api'),
   disableId: Ember.computed.not('action.isNew'),
 
   @computed('currentStepId', 'wizard.save_submissions')
@@ -75,5 +78,21 @@ export default Ember.Component.extend({
   toggleCustomCategoryWizardField() {
     const user = this.get('action.custom_category_user_field');
     if (user) this.set('action.custom_category_wizard_field', false);
+  },
+
+  @computed('wizard.apis')
+  availableApis(apis) {
+    return apis.map(a => {
+      return {
+        id: a.name,
+        name: a.title
+      };
+    });
+  },
+
+  @computed('wizard.apis', 'action.api')
+  availableEndpoints(apis, api) {
+    if (!api) return [];
+    return apis.find(a => a.name === api).endpoints;
   }
 });

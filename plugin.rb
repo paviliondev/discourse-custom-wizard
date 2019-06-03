@@ -97,6 +97,7 @@ after_initialize do
   load File.expand_path('../serializers/api/authorization_serializer.rb', __FILE__)
   load File.expand_path('../serializers/api/basic_api_serializer.rb', __FILE__)
   load File.expand_path('../serializers/api/endpoint_serializer.rb', __FILE__)
+  load File.expand_path('../serializers/api/basic_endpoint_serializer.rb', __FILE__)
 
   ::UsersController.class_eval do
     def wizard_path

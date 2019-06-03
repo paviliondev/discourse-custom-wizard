@@ -106,10 +106,10 @@ class CustomWizard::ApiController < ::ApplicationController
       :client_secret,
       :username,
       :password,
-      :params
+      :auth_params
     )
 
-    auth_data[:params] = JSON.parse(auth_data[:params]) if auth_data[:params].present?
+    auth_data[:auth_params] = JSON.parse(auth_data[:auth_params]) if auth_data[:auth_params].present?
 
     @auth_data ||= auth_data
   end

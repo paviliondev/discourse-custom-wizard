@@ -117,6 +117,23 @@
     margin-top: 5px;
     padding: 5px;
   }
+
+  .api-body {
+    width: 100%;
+
+    .setting-label {
+      max-width: 70px;
+    }
+
+    .setting-value {
+      width: calc(100% - 180px);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 150px;
+    }
+  }
 }
 
 .wizard-links {

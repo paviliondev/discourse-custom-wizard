@@ -32,6 +32,8 @@ class CustomWizard::Api::Authorization
   end
 
   def self.set(api_name, new_data = {})
+    api_name = api_name.underscore
+
     data = self.get(api_name, data_only: true) || {}
 
     new_data.each do |k, v|
@@ -44,6 +46,8 @@ class CustomWizard::Api::Authorization
   end
 
   def self.get(api_name, opts = {})
+    api_name = api_name.underscore
+
     if data = PluginStore.get("custom_wizard_api_#{api_name}", 'authorization')
       if opts[:data_only]
         data
@@ -60,22 +64,16 @@ class CustomWizard::Api::Authorization
   end
 
   def self.get_header_authorization_string(name)
-    protocol = authentication_protocol(name)
-    raise Discourse::InvalidParameters.new(:name) unless protocol.present?
-    raise Discourse::InvalidParameters.new(:protocol) unless [BASIC_AUTH, OAUTH2_AUTH].include? protocol
+    auth = CustomWizard::Api::Authorization.get(name)
+    raise Discourse::InvalidParameters.new(:name) unless auth.present?
 
-    if protocol = BASIC_AUTH
-      username = username(name)
-      raise Discourse::InvalidParameters.new(:username) unless username.present?
-      password = password(name)
-      raise Discourse::InvalidParameters.new(:password) unless password.present?
-      authorization_string = (username + ":" + password).chomp
-      "Basic #{Base64.strict_encode64(authorization_string)}"
+    if auth.auth_type === "basic"
+      raise Discourse::InvalidParameters.new(:username) unless auth.username.present?
+      raise Discourse::InvalidParameters.new(:password) unless auth.password.present?
+      "Basic #{Base64.strict_encode64((auth.username + ":" + auth.password).chomp)}"
     else
-      # must be OAUTH2
-      access_token = access_token(name)
-      raise Discourse::InvalidParameters.new(access_token) unless access_token.present?
-      "Bearer #{access_token}"
+      raise Discourse::InvalidParameters.new(auth.access_token) unless auth.access_token.present?
+      "Bearer #{auth.access_token}"
     end
   end
 
