@@ -157,7 +157,12 @@
 ////
 
 .d-editor {
-  max-height: 250px;
+  min-height: 200px;
+
+  .d-editor-input {
+    resize: vertical;
+    flex: initial;
+  }
 }
 
 .d-editor-modal.hidden {
