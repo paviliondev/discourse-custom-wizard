@@ -309,6 +309,7 @@ class CustomWizard::Builder
                 end
               end
             else
+              value = [value] if key === 'tags'
               params[key.to_sym] = value
             end
           end
