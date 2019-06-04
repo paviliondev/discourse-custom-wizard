@@ -394,7 +394,18 @@ class CustomWizard::Builder
   end
 
   def send_to_api(user, action, data)
-    api_body = CustomWizard::Builder.fill_placeholders(JSON.generate(JSON.parse(action['api_body'])), user, data)
+
+    api_body = nil
+
+    if action['api_body'] != ""
+      begin
+        api_body_parsed = JSON.parse(action['api_body'])
+      rescue
+        raise Discourse::InvalidParameters, "Invalid API body definition: #{action['api_body']} for #{action['title']}"
+      end
+      api_body = CustomWizard::Builder.fill_placeholders(JSON.generate(api_body_parsed), user, data)
+    end
+
     result = CustomWizard::Api::Endpoint.request(action['api'], action['api_endpoint'], api_body)
 
     if result['error']
