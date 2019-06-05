@@ -59,6 +59,7 @@ en:
           name_required: "Wizards must have a name."
           steps_required: "Wizards must have at least one step."
           id_required: "All wizards, steps, fields and actions need an id."
+          invalid_api_body: "Request body JSON needs to be a valid JSON."
           type_required: "All fields need a type."
           after_time_need_time: "After time is enabled but no time is set."
           after_time_invalid: "After time is invalid."

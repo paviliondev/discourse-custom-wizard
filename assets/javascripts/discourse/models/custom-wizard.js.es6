@@ -17,6 +17,7 @@ const wizardProperties = [
 const CustomWizard = Discourse.Model.extend({
   save() {
     return new Ember.RSVP.Promise((resolve, reject) => {
+
       const id = this.get('id');
       if (!id || !id.underscore()) return reject({ error: 'id_required' });
 
@@ -126,6 +127,16 @@ const CustomWizard = Discourse.Model.extend({
           if (!id || !id.underscore()) {
             error = 'id_required';
             return;
+          }
+          //check if api_body is valid JSON
+          let api_body = a.get('api_body');
+          if (api_body != '') {
+            try {
+              JSON.parse(api_body);
+            } catch (e) {
+              error = 'invalid_api_body';
+              return;
+            }
           }
 
           a.set('id', id.underscore());

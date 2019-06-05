@@ -85,8 +85,11 @@ class CustomWizard::Api::Endpoint
       params[:body] = body
     end
 
-    response = connection.request(params)
-
-    JSON.parse(response.body)
+    begin
+      response = connection.request(params)
+      return JSON.parse(response.body)
+    rescue
+      return JSON.parse "[{\"error\":\"API request failed\"}]"
+    end
   end
 end

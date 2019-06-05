@@ -408,8 +408,8 @@ class CustomWizard::Builder
 
     result = CustomWizard::Api::Endpoint.request(action['api'], action['api_endpoint'], api_body)
 
-    if result['error']
-      updater.errors.add(:send_message, result['error'])
+    if result[0].has_key? 'error'
+      updater.errors.add(:send_message, result[0]['error'])
     else
       ## add validation callback
     end
