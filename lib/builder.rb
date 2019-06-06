@@ -400,7 +400,7 @@ class CustomWizard::Builder
     if action['api_body'] != ""
       begin
         api_body_parsed = JSON.parse(action['api_body'])
-      rescue
+      rescue JSON::ParserError
         raise Discourse::InvalidParameters, "Invalid API body definition: #{action['api_body']} for #{action['title']}"
       end
       api_body = CustomWizard::Builder.fill_placeholders(JSON.generate(api_body_parsed), user, data)
@@ -408,8 +408,9 @@ class CustomWizard::Builder
 
     result = CustomWizard::Api::Endpoint.request(action['api'], action['api_endpoint'], api_body)
 
-    if result[0].has_key? 'error'
-      updater.errors.add(:send_message, result[0]['error'])
+    if error = result['error'] || (result[0] && result[0]['error'])
+      error = error['message'] || error
+      updater.errors.add(:send_to_api, error)
     else
       ## add validation callback
     end
