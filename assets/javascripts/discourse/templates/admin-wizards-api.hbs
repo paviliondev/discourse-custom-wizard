@@ -237,3 +237,29 @@
     </div>
   {{/if}}
 </div>
+
+<div class="wizard-header">
+  {{i18n 'admin.wizard.api.log.label'}}
+  {{d-button action='clearLogs'
+             icon='trash-alt'
+             class='clear-logs'}}
+</div>
+
+<div class="wizard-api-log">
+    <div class="log-list">
+      <table class="wizard-api-log-table">
+        <th>Datetime</th>
+        <th>Status</th>
+        <th>Endpoint</th>
+        <th>Error</th>
+        {{#each api.log as |logentry|}}
+          <tr>
+            <td>{{logentry.time}}</td>
+            <td>{{logentry.status}}</td>
+            <td>{{logentry.endpoint_url}}</td>
+            <td>{{logentry.error}}</td>
+          </tr>
+        {{/each}}
+      </table>
+    </div>
+</div>

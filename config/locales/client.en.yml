@@ -184,6 +184,9 @@ en:
             method: "Select a method"
             url: "Enter a url"
 
+          log:
+            label: "Logs"
+
   wizard_js:
     location:
       name:

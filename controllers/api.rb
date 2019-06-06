@@ -57,8 +57,14 @@ class CustomWizard::ApiController < ::ApplicationController
       CustomWizard::Api.remove(api_params[:name])
       CustomWizard::Api::Authorization.remove(api_params[:name])
       CustomWizard::Api::Endpoint.remove(api_params[:name])
+      CustomWizard::Api::LogEntry.clear(api_params[:name])
     end
 
+    render json: success_json
+  end
+
+  def clearlogs
+    CustomWizard::Api::LogEntry.clear(api_params[:name])
     render json: success_json
   end
 

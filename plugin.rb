@@ -72,6 +72,7 @@ after_initialize do
       get 'admin/wizards/apis/:name' => 'api#find'
       put 'admin/wizards/apis/:name' => 'api#save'
       delete 'admin/wizards/apis/:name' => 'api#remove'
+      delete 'admin/wizards/apis/logs/:name' => 'api#clearlogs'
       get 'admin/wizards/apis/:name/redirect' => 'api#redirect'
     end
   end
@@ -92,12 +93,14 @@ after_initialize do
   load File.expand_path('../lib/api/api.rb', __FILE__)
   load File.expand_path('../lib/api/authorization.rb', __FILE__)
   load File.expand_path('../lib/api/endpoint.rb', __FILE__)
+  load File.expand_path('../lib/api/logentry.rb', __FILE__)
   load File.expand_path('../controllers/api.rb', __FILE__)
   load File.expand_path('../serializers/api/api_serializer.rb', __FILE__)
   load File.expand_path('../serializers/api/authorization_serializer.rb', __FILE__)
   load File.expand_path('../serializers/api/basic_api_serializer.rb', __FILE__)
   load File.expand_path('../serializers/api/endpoint_serializer.rb', __FILE__)
   load File.expand_path('../serializers/api/basic_endpoint_serializer.rb', __FILE__)
+  load File.expand_path('../serializers/api/log_serializer.rb', __FILE__)
 
   ::UsersController.class_eval do
     def wizard_path

@@ -165,6 +165,19 @@ export default Ember.Controller.extend({
             });
           }
         }).finally(() => this.set('updating', false));
+    },
+
+    clearLogs() {
+      ajax(`/admin/wizards/apis/logs/${name.underscore()}`, {
+        type: 'DELETE'
+      }).catch(popupAjaxError)
+        .then(result => {
+          if (result.success) {
+            this.transitionToRoute('adminWizardsApis').then(() => {
+              this.send('refreshModel');
+            });
+          }
+        }).finally(() => this.set('updating', false));
     }
   }
 });

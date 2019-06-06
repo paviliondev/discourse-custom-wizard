@@ -35,7 +35,8 @@ CustomWizardApi.reopenClass({
       tokenExpiresAt: authorization.token_expires_at,
       tokenRefreshAt: authorization.token_refresh_at,
       endpoints: Ember.A(endpoints),
-      isNew: params.isNew
+      isNew: params.isNew,
+      log: params.log
     });
 
     return api;

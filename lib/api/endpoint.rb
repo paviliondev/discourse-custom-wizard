@@ -87,8 +87,13 @@ class CustomWizard::Api::Endpoint
 
     begin
       response = connection.request(params)
+      log_params = {time: Time.now, status: 'SUCCESS', endpoint_url: endpoint.url, error: ""}
+      CustomWizard::Api::LogEntry.set(api_name, log_params)
       return JSON.parse(response.body)
     rescue
+      # TODO: improve error detail
+      log_params = {time: Time.now, status: 'FAILURE', endpoint_url: endpoint.url, error: "API request failed"}
+      CustomWizard::Api::LogEntry.set(api_name, log_params)
       return JSON.parse "[{\"error\":\"API request failed\"}]"
     end
   end
