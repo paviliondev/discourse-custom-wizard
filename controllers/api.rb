@@ -63,6 +63,21 @@ class CustomWizard::ApiController < ::ApplicationController
     render json: success_json
   end
 
+  def authorize
+    result = CustomWizard::Api::Authorization.get_token(api_params[:name])
+
+    if result['error']
+      render json: failed_json.merge(message: result['error_description'] || result['error'])
+    else
+      render json: success_json.merge(
+        api: CustomWizard::ApiSerializer.new(
+          CustomWizard::Api.get(api_params[:name]),
+          root: false
+        )
+      )
+    end
+  end
+
   def clearlogs
     CustomWizard::Api::LogEntry.clear(api_params[:name])
     render json: success_json

@@ -74,6 +74,7 @@ after_initialize do
       delete 'admin/wizards/apis/:name' => 'api#remove'
       delete 'admin/wizards/apis/logs/:name' => 'api#clearlogs'
       get 'admin/wizards/apis/:name/redirect' => 'api#redirect'
+      get 'admin/wizards/apis/:name/authorize' => 'api#authorize'
     end
   end
 

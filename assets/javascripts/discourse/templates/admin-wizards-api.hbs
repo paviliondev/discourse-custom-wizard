@@ -49,6 +49,13 @@
 <div class="wizard-api-header">
   <div class="buttons">
     {{#if isOauth}}
+      {{#if authorizing}}
+        {{loading-spinner size="small"}}
+      {{else}}
+        {{#if authErrorMessage}}
+          <span>{{authErrorMessage}}</span>
+        {{/if}}
+      {{/if}}
       {{d-button label="admin.wizard.api.auth.btn"
                  action="authorize"
                  disabled=authDisabled
@@ -68,17 +75,15 @@
       {{i18n 'admin.wizard.api.auth.settings'}}
     </div>
 
-    {{#if isOauth}}
-      {{#if api.name}}
-        <div class="control-group redirect-uri">
-          <div class="control-label">
-            <label>{{i18n 'admin.wizard.api.auth.redirect_uri'}}</label>
-            <div class="controls">
-              {{api.redirectUri}}
-            </div>
+    {{#if showRedirectUri}}
+      <div class="control-group redirect-uri">
+        <div class="control-label">
+          <label>{{i18n 'admin.wizard.api.auth.redirect_uri'}}</label>
+          <div class="controls">
+            {{api.redirectUri}}
           </div>
         </div>
-      {{/if}}
+      </div>
     {{/if}}
 
     <div class="control-group auth-type">
@@ -89,12 +94,14 @@
     </div>
 
     {{#if isOauth}}
-      <div class="control-group">
-        <label>{{i18n 'admin.wizard.api.auth.url'}}</label>
-        <div class="controls">
-          {{input value=api.authUrl}}
+      {{#if threeLeggedOauth}}
+        <div class="control-group">
+          <label>{{i18n 'admin.wizard.api.auth.url'}}</label>
+          <div class="controls">
+            {{input value=api.authUrl}}
+          </div>
         </div>
-      </div>
+      {{/if}}
 
       <div class="control-group">
         <label>{{i18n 'admin.wizard.api.auth.token_url'}}</label>
@@ -165,12 +172,14 @@
         {{i18n 'admin.wizard.api.status.label'}}
       </div>
 
-      <div class="control-group">
-        <label>{{i18n 'admin.wizard.api.status.code'}}</label>
-        <div class="controls">
-          {{api.code}}
+      {{#if threeLeggedOauth}}
+        <div class="control-group">
+          <label>{{i18n 'admin.wizard.api.status.code'}}</label>
+          <div class="controls">
+            {{api.code}}
+          </div>
         </div>
-      </div>
+      {{/if}}
 
       <div class="control-group">
         <label>{{i18n 'admin.wizard.api.status.access_token'}}</label>
@@ -179,12 +188,14 @@
         </div>
       </div>
 
-      <div class="control-group">
-        <label>{{i18n 'admin.wizard.api.status.refresh_token'}}</label>
-        <div class="controls">
-          {{api.refreshToken}}
+      {{#if threeLeggedOauth}}
+        <div class="control-group">
+          <label>{{i18n 'admin.wizard.api.status.refresh_token'}}</label>
+          <div class="controls">
+            {{api.refreshToken}}
+          </div>
         </div>
-      </div>
+      {{/if}}
 
       <div class="control-group">
         <label>{{i18n 'admin.wizard.api.status.expires_at'}}</label>

@@ -77,71 +77,68 @@ class CustomWizard::Api::Authorization
     end
   end
 
-  def self.get_token(name)
+  def self.get_token(name, opts = {})
     authorization = CustomWizard::Api::Authorization.get(name)
+    type = authorization.auth_type
 
-    body = {
-      client_id: authorization.client_id,
-      client_secret: authorization.client_secret,
-      code: authorization.code,
-      grant_type: 'authorization_code',
-      redirect_uri: Discourse.base_url + "/admin/wizards/apis/#{name}/redirect"
-    }
+    body = {}
 
-    result = Excon.post(
+    if opts[:refresh] && type === 'oauth_3'
+      body['grant_type'] = 'refresh_token'
+    elsif type === 'oauth_2'
+      body['grant_type'] = 'client_credentials'
+    elsif type === 'oauth_3'
+      body['grant_type'] = 'authorization_code'
+    end
+
+    unless opts[:refresh]
+      body['client_id'] = authorization.client_id
+      body['client_secret'] = authorization.client_secret
+    end
+
+    if type === 'oauth_3'
+      body['code'] = authorization.code
+      body['redirect_uri'] = Discourse.base_url + "/admin/wizards/apis/#{name}/redirect"
+    end
+
+    connection = Excon.new(
       authorization.token_url,
       :headers => {
         "Content-Type" => "application/x-www-form-urlencoded"
       },
-      :body => URI.encode_www_form(body)
+      :method => 'GET',
+      :query => URI.encode_www_form(body)
     )
 
-    self.handle_token_result(name, result)
-  end
-
-  def self.refresh_token(name)
-    authorization = CustomWizard::Api::Authorization.get(name)
-
-    body = {
-      grant_type: 'refresh_token',
-      refresh_token: authorization.refresh_token
-    }
-
-    authorization_string = authorization.client_id + ':' + authorization.client_secret
-
-    result = Excon.post(
-      authorization.token_url,
-      :headers => {
-        "Content-Type" => "application/x-www-form-urlencoded",
-        "Authorization" => "Basic #{Base64.strict_encode64(authorization_string)}"
-      },
-      :body => URI.encode_www_form(body)
-    )
+    result = connection.request()
 
     self.handle_token_result(name, result)
   end
 
   def self.handle_token_result(name, result)
-    data = JSON.parse(result.body)
+    result_data = JSON.parse(result.body)
 
-    return false if (data['error'])
+    if result_data['error']
+      return result_data
+    end
 
-    access_token = data['access_token']
-    refresh_token = data['refresh_token']
-    expires_at = Time.now + data['expires_in'].seconds
-    refresh_at = expires_at.to_time - 2.hours
+    data = {}
 
-    opts = {
-      name: name
-    }
+    data['access_token'] = result_data['access_token']
+    data['refresh_token'] = result_data['refresh_token'] if result_data['refresh_token']
+    data['token_type'] = result_data['token_type'] if result_data['token_type']
 
-    Jobs.enqueue_at(refresh_at, :refresh_api_access_token, opts)
+    if result_data['expires_in']
+      data['token_expires_at'] = Time.now + result_data['expires_in'].seconds
+      data['token_refresh_at'] = data['token_expires_at'].to_time - 10.minutes
 
-    CustomWizard::Api::Authorization.set(name,
-      access_token: access_token,
-      refresh_token: refresh_token,
-      token_expires_at: expires_at,
-      token_refresh_at: refresh_at
-    )
+      opts = {
+        name: name
+      }
+
+      Jobs.enqueue_at(data['token_refresh_at'], :refresh_api_access_token, opts)
+    end
+
+    CustomWizard::Api::Authorization.set(name, data)
   end
 end

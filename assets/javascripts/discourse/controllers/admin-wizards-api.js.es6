@@ -7,22 +7,33 @@ export default Ember.Controller.extend({
   queryParams: ['refresh_list'],
   loadingSubscriptions: false,
   notAuthorized: Ember.computed.not('api.authorized'),
-  authorizationTypes: ['oauth', 'basic'],
-  isOauth: Ember.computed.equal('api.authType', 'oauth'),
-  isBasicAuth: Ember.computed.equal('api.authType', 'basic'),
   endpointMethods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
   showRemove: Ember.computed.not('isNew'),
+  showRedirectUri: Ember.computed.and('threeLeggedOauth', 'api.name'),
   responseIcon: null,
 
-  @computed('saveDisabled', 'api.authType', 'api.authUrl', 'api.clientId', 'api.clientSecret')
-  authDisabled(saveDisabled, authType, authUrl, clientId, clientSecret) {
-    return saveDisabled || !authType || !authUrl || !clientId || !clientSecret;
+  @computed('saveDisabled', 'api.authType', 'api.authUrl', 'api.tokenUrl', 'api.clientId', 'api.clientSecret', 'threeLeggedOauth')
+  authDisabled(saveDisabled, authType, authUrl, tokenUrl, clientId, clientSecret, threeLeggedOauth) {
+    if (saveDisabled || !authType || !tokenUrl || !clientId || !clientSecret) return true;
+    if (threeLeggedOauth) return !authUrl;
+    return false;
   },
 
   @computed('api.name', 'api.authType')
   saveDisabled(name, authType) {
     return !name || !authType;
   },
+
+  authorizationTypes: ['basic', 'oauth_2', 'oauth_3'],
+  isBasicAuth: Ember.computed.equal('api.authType', 'basic'),
+
+  @computed('api.authType')
+  isOauth(authType) {
+    return authType && authType.indexOf('oauth') > -1;
+  },
+
+  twoLeggedOauth: Ember.computed.equal('api.authType', 'oauth_2'),
+  threeLeggedOauth: Ember.computed.equal('api.authType', 'oauth_3'),
 
   actions: {
     addParam() {
@@ -43,23 +54,40 @@ export default Ember.Controller.extend({
 
     authorize() {
       const api = this.get('api');
-      const { authType, authUrl, authParams } = api;
+      const { name, authType, authUrl, authParams } = api;
 
-      if (authType !== 'oauth') return;
+      this.set('authErrorMessage', '');
 
-      let query = '?';
+      if (authType === 'oauth_2') {
+        this.set('authorizing', true);
+        ajax(`/admin/wizards/apis/${name.underscore()}/authorize`).catch(popupAjaxError)
+          .then(result => {
+            if (result.success) {
+              this.set('api', CustomWizardApi.create(result.api));
+            } else if (result.failed && result.message) {
+              this.set('authErrorMessage', result.message);
+            } else {
+              this.set('authErrorMessage', 'Authorization Failed');
+            }
+            setTimeout(() => {
+              this.set('authErrorMessage', '');
+            }, 6000);
+          }).finally(() => this.set('authorizing', false));
+      } else if (authType === 'oauth_3') {
+        let query = '?';
 
-      query += `client_id=${api.clientId}`;
-      query += `&redirect_uri=${encodeURIComponent(api.redirectUri)}`;
-      query += `&response_type=code`;
+        query += `client_id=${api.clientId}`;
+        query += `&redirect_uri=${encodeURIComponent(api.redirectUri)}`;
+        query += `&response_type=code`;
 
-      if (authParams) {
-        authParams.forEach(p => {
-          query += `&${p.key}=${encodeURIComponent(p.value)}`;
-        });
+        if (authParams) {
+          authParams.forEach(p => {
+            query += `&${p.key}=${encodeURIComponent(p.value)}`;
+          });
+        }
+
+        window.location.href = authUrl + query;
       }
-
-      window.location.href = authUrl + query;
     },
 
     save() {
@@ -88,10 +116,12 @@ export default Ember.Controller.extend({
 
       let requiredParams;
 
-      if (authType === 'oauth') {
-        requiredParams = ['authUrl', 'tokenUrl', 'clientId', 'clientSecret'];
-      } else if (authType === 'basic') {
+      if (authType === 'basic') {
         requiredParams = ['username', 'password'];
+      } else if (authType === 'oauth_2') {
+        requiredParams = ['tokenUrl', 'clientId', 'clientSecret'];
+      } else if (authType === 'oauth_3') {
+        requiredParams = ['authUrl', 'tokenUrl', 'clientId', 'clientSecret'];
       }
 
       for (let rp of requiredParams) {
