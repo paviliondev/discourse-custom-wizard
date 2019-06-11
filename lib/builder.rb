@@ -227,7 +227,11 @@ class CustomWizard::Builder
 
   def validate_field(field, updater, step_template)
     value = updater.fields[field['id']]
-    min_length = field['min_length']
+    min_length = false
+
+    if is_text_type(field)
+      min_length = field['min_length']
+    end
 
     if min_length && value.is_a?(String) && value.strip.length < min_length.to_i
       label = field['label'] || I18n.t("#{field['key']}.label")
@@ -244,6 +248,10 @@ class CustomWizard::Builder
         validator[:block].call(field, updater, step_template)
       end
     end
+  end
+
+  def is_text_type(field)
+    ['text', 'textarea'].include? field['type']
   end
 
   def standardise_boolean(value)
