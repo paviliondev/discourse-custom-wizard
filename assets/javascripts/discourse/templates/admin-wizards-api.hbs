@@ -8,10 +8,10 @@
       {{/if}}
     {{/if}}
 
-    {{d-button label="admin.wizard.api.save" action="save" class="btn-primary" disabled=saveDisabled}}
+    {{d-button label="admin.wizard.api.save" action=(action "save") class="btn-primary" disabled=saveDisabled}}
 
     {{#if showRemove}}
-      {{d-button action="remove" label="admin.wizard.api.remove"}}
+      {{d-button action=(action "remove") label="admin.wizard.api.remove"}}
     {{/if}}
 
     {{#if error}}
@@ -57,7 +57,7 @@
         {{/if}}
       {{/if}}
       {{d-button label="admin.wizard.api.auth.btn"
-                 action="authorize"
+                 action=(action "authorize")
                  disabled=authDisabled
                  class="btn-primary"}}
     {{/if}}
@@ -131,10 +131,10 @@
             <div class="param">
               {{input value=param.key placeholder=(i18n 'admin.wizard.api.auth.params.key')}}
               {{input value=param.value placeholder=(i18n 'admin.wizard.api.auth.params.value')}}
-              {{d-button action='removeParam' actionParam=param icon='times'}}
+              {{d-button action=(action "removeParam") actionParam=param icon='times'}}
             </div>
           {{/each}}
-          {{d-button label='admin.wizard.api.auth.params.new' icon='plus' action='addParam'}}
+          {{d-button label='admin.wizard.api.auth.params.new' icon='plus' action=(action "addParam")}}
         </div>
       </div>
     {{/if}}
@@ -219,7 +219,7 @@
 </div>
 
 <div class="wizard-api-endpoints">
-  {{d-button action='addEndpoint' label='admin.wizard.api.endpoint.add' icon='plus'}}
+  {{d-button action=(action "addEndpoint") label='admin.wizard.api.endpoint.add' icon='plus'}}
 
   {{#if api.endpoints}}
     <div class="endpoint-list">
@@ -236,7 +236,7 @@
                 {{input value=endpoint.url
                         placeholder=(i18n 'admin.wizard.api.endpoint.url')
                         class='endpoint-url'}}
-                {{d-button action='removeEndpoint'
+                {{d-button action=(action "removeEndpoint")
                            actionParam=endpoint
                            icon='times'
                            class='remove-endpoint'}}
@@ -251,7 +251,7 @@
 
 <div class="wizard-header">
   {{i18n 'admin.wizard.api.log.label'}}
-  {{d-button action='clearLogs'
+  {{d-button action=(action "clearLogs")
              icon='trash-alt'
              class='clear-logs'}}
 </div>

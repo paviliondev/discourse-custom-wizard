@@ -32,12 +32,19 @@ class CustomWizard::Api::Authorization
   end
 
   def self.set(api_name, new_data = {})
+
     api_name = api_name.underscore
 
     data = self.get(api_name, data_only: true) || {}
 
     new_data.each do |k, v|
       data[k.to_sym] = v
+    end
+
+    data.each do |k, v|
+      unless new_data.key?(k.to_s)
+        data.delete(k)
+      end
     end
 
     PluginStore.set("custom_wizard_api_#{api_name}", 'authorization', data)
