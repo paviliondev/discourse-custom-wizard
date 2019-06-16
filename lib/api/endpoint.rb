@@ -62,7 +62,7 @@ class CustomWizard::Api::Endpoint
       end
   end
 
-  def self.request(api_name, endpoint_id, body)
+  def self.request(user, api_name, endpoint_id, body)
     endpoint = self.get(api_name, endpoint_id)
     auth = CustomWizard::Api::Authorization.get_header_authorization_string(api_name)
 
@@ -87,12 +87,13 @@ class CustomWizard::Api::Endpoint
 
     begin
       response = connection.request(params)
-      log_params = {time: Time.now, status: 'SUCCESS', endpoint_url: endpoint.url, error: ""}
+      log_params = {time: Time.now, user_id: user.id, status: 'SUCCESS', url: endpoint.url, error: ""}
+
       CustomWizard::Api::LogEntry.set(api_name, log_params)
       return JSON.parse(response.body)
     rescue
       # TODO: improve error detail
-      log_params = {time: Time.now, status: 'FAILURE', endpoint_url: endpoint.url, error: "API request failed"}
+      log_params = {time: Time.now, user_id: user.id, status: 'FAILURE', url: endpoint.url, error: "API request failed"}
       CustomWizard::Api::LogEntry.set(api_name, log_params)
       return JSON.parse "[{\"error\":\"API request failed\"}]"
     end

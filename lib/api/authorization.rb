@@ -116,8 +116,14 @@ class CustomWizard::Api::Authorization
       :method => 'GET',
       :query => URI.encode_www_form(body)
     )
-
-    result = connection.request()
+    begin
+      result = connection.request()
+      log_params = {time: Time.now, user_id: 0, status: 'SUCCESS', url: token_url, error: ""}
+      CustomWizard::Api::LogEntry.set(name, log_params)
+    rescue
+      log_params = {time: Time.now, user_id: 0, status: 'FAILURE', url: token_url, error: "Token refresh request failed"}
+      CustomWizard::Api::LogEntry.set(name, log_params)
+    end
 
     self.handle_token_result(name, result)
   end

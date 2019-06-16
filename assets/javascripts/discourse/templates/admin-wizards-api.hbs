@@ -260,14 +260,20 @@
     <div class="log-list">
       <table class="wizard-api-log-table">
         <th>Datetime</th>
+        <th>User</th>
         <th>Status</th>
-        <th>Endpoint</th>
+        <th>URL</th>
         <th>Error</th>
         {{#each api.log as |logentry|}}
           <tr>
             <td>{{logentry.time}}</td>
+            <td class="user-image">
+              <div class="user-image-inner">
+                <a href="{{unbound logentry.userpath}}" data-user-card="{{unbound logentry.username}}">{{avatar logentry imageSize="large"}}</a>
+              </div>
+            </td>
             <td>{{logentry.status}}</td>
-            <td>{{logentry.endpoint_url}}</td>
+            <td>{{logentry.url}}</td>
             <td>{{logentry.error}}</td>
           </tr>
         {{/each}}

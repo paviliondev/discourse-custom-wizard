@@ -406,7 +406,7 @@ class CustomWizard::Builder
       api_body = CustomWizard::Builder.fill_placeholders(JSON.generate(api_body_parsed), user, data)
     end
 
-    result = CustomWizard::Api::Endpoint.request(action['api'], action['api_endpoint'], api_body)
+    result = CustomWizard::Api::Endpoint.request(user, action['api'], action['api_endpoint'], api_body)
 
     if error = result['error'] || (result[0] && result[0]['error'])
       error = error['message'] || error

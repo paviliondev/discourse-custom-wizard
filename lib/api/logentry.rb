@@ -3,9 +3,14 @@ class CustomWizard::Api::LogEntry
 
   attr_accessor :log_id,
                 :time,
+                :user_id,
                 :status,
-                :endpoint_url,
-                :error
+                :url,
+                :error,
+                :username,
+                :userpath,
+                :name,
+                :avatar_template
 
   def initialize(api_name, data={})
     @api_name = api_name
@@ -58,6 +63,12 @@ class CustomWizard::Api::LogEntry
         api_name = record['plugin_name'].sub("custom_wizard_api_", "")
         data = ::JSON.parse(record['value'])
         data[:log_id] = record['key'].split('_').last
+        this_user = User.find_by(id: data['user_id'])
+        data[:user_id] = this_user.id || nil
+        data[:username] = this_user.username || ""
+        data[:userpath] = "/u/#{this_user.username_lower}/activity"
+        data[:name] = this_user.name || ""
+        data[:avatar_template] = "/user_avatar/default/#{this_user.username_lower}/97/#{this_user.uploaded_avatar_id}.png"
         self.new(api_name, data)
       end
   end
