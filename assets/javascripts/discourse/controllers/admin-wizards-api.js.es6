@@ -198,6 +198,9 @@ export default Ember.Controller.extend({
     },
 
     clearLogs() {
+      const name = this.get('api.name');
+      if (!name) return;
+
       ajax(`/admin/wizards/apis/logs/${name.underscore()}`, {
         type: 'DELETE'
       }).catch(popupAjaxError)
