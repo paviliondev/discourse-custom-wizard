@@ -408,6 +408,7 @@
 .wizard-api-endpoints {
   background-color: $primary-very-low;
   padding: 20px;
+  margin-bottom: 20px;
 
   .endpoint-list {
     margin-top: 20px;
@@ -442,4 +443,10 @@
       margin-left: auto;
     }
   }
+}
+
+.wizard-api-log {
+  background-color: #f8f8f8;
+  padding: 20px;
+  margin-bottom: 20px;
 }
