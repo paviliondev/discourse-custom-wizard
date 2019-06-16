@@ -29,6 +29,7 @@ class CustomWizard::ApiController < ::ApplicationController
       CustomWizard::Api.set(api_params[:name], title: api_params[:title])
 
       if auth_data.present?
+        auth_data['auth_params'] = auth_data['auth_params'] || []
         CustomWizard::Api::Authorization.set(api_params[:name], auth_data)
       end
 
@@ -66,7 +67,7 @@ class CustomWizard::ApiController < ::ApplicationController
   def authorize
     result = CustomWizard::Api::Authorization.get_token(api_params[:name])
 
-    if result['error']
+    if result.instance_variable_defined?(:@error)
       render json: failed_json.merge(message: result['error_description'] || result['error'])
     else
       render json: success_json.merge(

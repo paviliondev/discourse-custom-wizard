@@ -41,12 +41,6 @@ class CustomWizard::Api::Authorization
       data[k.to_sym] = v
     end
 
-    data.each do |k, v|
-      unless new_data.key?(k.to_s)
-        data.delete(k)
-      end
-    end
-
     PluginStore.set("custom_wizard_api_#{api_name}", 'authorization', data)
 
     self.get(api_name)
@@ -118,10 +112,10 @@ class CustomWizard::Api::Authorization
     )
     begin
       result = connection.request()
-      log_params = {time: Time.now, user_id: 0, status: 'SUCCESS', url: token_url, error: ""}
+      log_params = {time: Time.now, user_id: 0, status: 'SUCCESS', url: authorization.token_url, error: ""}
       CustomWizard::Api::LogEntry.set(name, log_params)
-    rescue
-      log_params = {time: Time.now, user_id: 0, status: 'FAILURE', url: token_url, error: "Token refresh request failed"}
+    rescue SystemCallError => e
+      log_params = {time: Time.now, user_id: 0, status: 'FAILURE', url: authorization.token_url, error: "Token refresh request failed: #{e.inspect}"}
       CustomWizard::Api::LogEntry.set(name, log_params)
     end
 

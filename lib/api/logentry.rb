@@ -64,11 +64,19 @@ class CustomWizard::Api::LogEntry
         data = ::JSON.parse(record['value'])
         data[:log_id] = record['key'].split('_').last
         this_user = User.find_by(id: data['user_id'])
-        data[:user_id] = this_user.id || nil
-        data[:username] = this_user.username || ""
-        data[:userpath] = "/u/#{this_user.username_lower}/activity"
-        data[:name] = this_user.name || ""
-        data[:avatar_template] = "/user_avatar/default/#{this_user.username_lower}/97/#{this_user.uploaded_avatar_id}.png"
+        unless this_user.nil?
+          data[:user_id] = this_user.id || nil
+          data[:username] = this_user.username || ""
+          data[:userpath] = "/u/#{this_user.username_lower}/activity"
+          data[:name] = this_user.name || ""
+          data[:avatar_template] = "/user_avatar/default/#{this_user.username_lower}/97/#{this_user.uploaded_avatar_id}.png"
+        else
+          data[:user_id] = nil
+          data[:username] = ""
+          data[:userpath] = ""
+          data[:name] = ""
+          data[:avatar_template] = ""
+        end
         self.new(api_name, data)
       end
   end
