@@ -10,4 +10,4 @@ export default Ember.Component.extend({
       CustomWizard.skip(this.get('wizardId'));
     }
   }
-})
+});

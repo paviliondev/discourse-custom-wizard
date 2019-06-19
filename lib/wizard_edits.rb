@@ -64,7 +64,7 @@ class ::Wizard::Step
 end
 
 ::WizardSerializer.class_eval do
-  attributes :id, :background, :completed, :required, :min_trust, :permitted, :user
+  attributes :id, :name, :background, :completed, :required, :min_trust, :permitted, :user
 
   def id
     object.id
@@ -72,6 +72,10 @@ end
 
   def include_id?
     object.respond_to?(:id)
+  end
+
+  def name
+    object.name
   end
 
   def background

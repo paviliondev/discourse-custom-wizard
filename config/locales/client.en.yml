@@ -177,11 +177,11 @@ en:
       filter_placeholder: "Search..."
 
     wizard:
-      completed: "You have completed this wizard."
-      not_permitted: "You need to be trust level {{level}} or higher to access this wizard."
+      completed: "You have completed the {{name}} wizard."
+      not_permitted: "You need to be trust level {{level}} or higher to access the {{name}} wizard."
       none: "There is no wizard here."
       return_to_site: "Return to {{siteName}}"
-      requires_login: "You need to be logged in to access this wizard."
+      requires_login: "You need to be logged in to access the {{name}} wizard."
 
     wizard_composer:
       show_preview: "Preview Post"
