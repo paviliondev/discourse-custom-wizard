@@ -6,7 +6,7 @@ import { ajax } from 'wizard/lib/ajax';
 export default Ember.Route.extend({
   model(params) {
     let opts = {};
-    if (params.reset == 'true') opts['reset'] = true;
+    if (params.reset === 'true') opts['reset'] = true;
     return findCustomWizard(params.wizard_id, opts);
   },
 

@@ -2,14 +2,16 @@ class CustomWizard::Builder
 
   attr_accessor :wizard, :updater, :submissions
 
-  def initialize(user, wizard_id)
+  def initialize(user=nil, wizard_id)
     data = PluginStore.get('custom_wizard', wizard_id)
-
     return if data.blank?
 
     @steps = data['steps']
     @wizard = CustomWizard::Wizard.new(user, data)
-    @submissions = Array.wrap(PluginStore.get("#{wizard_id}_submissions", user.id))
+
+    if user
+      @submissions = Array.wrap(PluginStore.get("#{wizard_id}_submissions", user.id))
+    end
   end
 
   def self.sorted_handlers

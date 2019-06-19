@@ -18,7 +18,7 @@ class CustomWizard::Wizard
                 :required,
                 :prompt_completion
 
-  def initialize(user, attrs = {})
+  def initialize(user=nil, attrs = {})
     @steps = []
     @user = user
     @first_step = nil
@@ -54,6 +54,8 @@ class CustomWizard::Wizard
   end
 
   def start
+    return nil if !@user
+
     if unfinished? && last_completed_step = ::UserHistory.where(
         acting_user_id: @user.id,
         action: ::UserHistory.actions[:custom_wizard_step],
@@ -76,6 +78,8 @@ class CustomWizard::Wizard
   end
 
   def unfinished?
+    return nil if !@user
+
     most_recent = ::UserHistory.where(
       acting_user_id: @user.id,
       action: ::UserHistory.actions[:custom_wizard_step],
@@ -94,6 +98,8 @@ class CustomWizard::Wizard
   end
 
   def completed?
+    return nil if !@user
+
     steps = CustomWizard::Wizard.step_ids(@id)
 
     history = ::UserHistory.where(
@@ -112,7 +118,7 @@ class CustomWizard::Wizard
   end
 
   def permitted?
-    user.staff? || user.trust_level.to_i >= min_trust.to_i
+    user && (user.staff? || user.trust_level.to_i >= min_trust.to_i)
   end
 
   def reset

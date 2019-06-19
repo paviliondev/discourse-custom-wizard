@@ -181,6 +181,7 @@ en:
       not_permitted: "You need to be trust level {{level}} or higher to access this wizard."
       none: "There is no wizard here."
       return_to_site: "Return to {{siteName}}"
+      requires_login: "You need to be logged in to access this wizard."
 
     wizard_composer:
       show_preview: "Preview Post"
