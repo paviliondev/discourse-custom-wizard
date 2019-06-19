@@ -127,8 +127,8 @@ end
 
 ::WizardStepSerializer.class_eval do
   def title
-    return object.title if object.title
-    I18n.t("#{object.key || i18n_key}.title", default: '')
+    return PrettyText.cook(object.title) if object.title
+    PrettyText.cook(I18n.t("#{object.key || i18n_key}.title", default: ''))
   end
 
   def description
