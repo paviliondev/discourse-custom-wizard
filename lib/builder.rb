@@ -2,14 +2,16 @@ class CustomWizard::Builder
 
   attr_accessor :wizard, :updater, :submissions
 
-  def initialize(user, wizard_id)
+  def initialize(user=nil, wizard_id)
     data = PluginStore.get('custom_wizard', wizard_id)
-
     return if data.blank?
 
     @steps = data['steps']
     @wizard = CustomWizard::Wizard.new(user, data)
-    @submissions = Array.wrap(PluginStore.get("#{wizard_id}_submissions", user.id))
+
+    if user
+      @submissions = Array.wrap(PluginStore.get("#{wizard_id}_submissions", user.id))
+    end
   end
 
   def self.sorted_handlers
@@ -227,7 +229,11 @@ class CustomWizard::Builder
 
   def validate_field(field, updater, step_template)
     value = updater.fields[field['id']]
-    min_length = field['min_length']
+    min_length = false
+
+    if is_text_type(field)
+      min_length = field['min_length']
+    end
 
     if min_length && value.is_a?(String) && value.strip.length < min_length.to_i
       label = field['label'] || I18n.t("#{field['key']}.label")
@@ -244,6 +250,10 @@ class CustomWizard::Builder
         validator[:block].call(field, updater, step_template)
       end
     end
+  end
+
+  def is_text_type(field)
+    ['text', 'textarea'].include? field['type']
   end
 
   def standardise_boolean(value)
@@ -309,6 +319,7 @@ class CustomWizard::Builder
                 end
               end
             else
+              value = [value] if key === 'tags'
               params[key.to_sym] = value
             end
           end

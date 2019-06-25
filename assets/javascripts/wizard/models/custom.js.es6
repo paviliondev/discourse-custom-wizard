@@ -37,7 +37,6 @@ export function findCustomWizard(wizardId, opts = {}) {
 
   return ajax({ url, cache: false, dataType: 'json' }).then(result => {
     const wizard = result.wizard;
-
     if (!wizard) return null;
 
     if (!wizard.completed) {
