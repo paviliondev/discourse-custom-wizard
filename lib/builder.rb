@@ -202,9 +202,14 @@ class CustomWizard::Builder
       end
     elsif field_template['choices_preset'] && field_template['choices_preset'].length > 0
       objects = []
+      site = Site.new(Guardian.new(@wizard.user))
 
       if field_template['choices_preset'] === 'categories'
-        objects = Site.new(Guardian.new(@wizard.user)).categories
+        objects = site.categories
+      end
+
+      if field_template['choices_preset'] === 'groups'
+        objects = site.groups
       end
 
       if field_template['choices_filters'] && field_template['choices_filters'].length > 0
@@ -401,6 +406,17 @@ class CustomWizard::Builder
     if attributes.present?
       user_updater = UserUpdater.new(user, user)
       user_updater.update(attributes)
+    end
+  end
+
+  def add_to_group(user, action, data)
+    puts "GROUP NAME: #{data[action['group_id']]}"
+    if group_id = data[action['group_id']]
+      puts "GROUP: #{Group.find(group_id)}"
+      if group = Group.find(group_id)
+        puts "HERE IS THE GROUP: #{group.inspect}"
+        group.add(user)
+      end
     end
   end
 

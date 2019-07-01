@@ -204,3 +204,25 @@
                            allowUserField=true}}
   </div>
 {{/if}}
+
+{{#if addToGroup}}
+  <div class="setting">
+    <div class="setting-label">
+      <h3>{{i18n "admin.wizard.action.add_to_group.group_selection"}}</h3>
+    </div>
+    <div class="setting-value">
+      {{combo-box value=action.group_id
+                  content=availableFields
+                  nameProperty="label"
+                  none='admin.wizard.select_field'
+                  isDisabled=action.custom_group_enabled}}
+      <div class="setting-gutter">
+        {{input type='checkbox' checked=action.custom_group_enabled}}
+        <span>{{i18n 'admin.wizard.action.add_to_group.custom_group'}}</span>
+        {{#if action.custom_group_enabled}}
+          {{input value=action.group_id}}
+        {{/if}}
+      </div>
+    </div>
+  </div>
+{{/if}}

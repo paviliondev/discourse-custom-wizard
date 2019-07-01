@@ -15,7 +15,13 @@ export default Ember.Component.extend({
   @computed()
   presetChoices() {
     return [
-      { id: 'categories', name: I18n.t('admin.wizard.field.choices_preset.categories') }
+      {
+        id: 'categories',
+        name: I18n.t('admin.wizard.field.choices_preset.categories')
+      },{
+        id: 'groups',
+        name: I18n.t('admin.wizard.field.choices_preset.groups')
+      }
     ];
   },
 });

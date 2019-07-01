@@ -3,7 +3,8 @@ import { default as computed, observes } from 'ember-addons/ember-computed-decor
 const ACTION_TYPES = [
   { id: 'create_topic', name: 'Create Topic' },
   { id: 'update_profile', name: 'Update Profile' },
-  { id: 'send_message', name: 'Send Message' }
+  { id: 'send_message', name: 'Send Message' },
+  { id: 'add_to_group', name: 'Add to Group' }
 ];
 
 const PROFILE_FIELDS = [
@@ -26,6 +27,7 @@ export default Ember.Component.extend({
   createTopic: Ember.computed.equal('action.type', 'create_topic'),
   updateProfile: Ember.computed.equal('action.type', 'update_profile'),
   sendMessage: Ember.computed.equal('action.type', 'send_message'),
+  addToGroup: Ember.computed.equal('action.type', 'add_to_group'),
   disableId: Ember.computed.not('action.isNew'),
 
   @computed('currentStepId', 'wizard.save_submissions')
