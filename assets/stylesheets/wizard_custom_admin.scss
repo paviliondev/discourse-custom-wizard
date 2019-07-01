@@ -196,12 +196,12 @@
 }
 
 .admin-contents .wizard-submissions {
-  padding: 0 20px;
+  width: 100%;
   display: inline-block;
-  overflow: scroll;
-
   table {
     margin-top: 0;
+    display: inline-block;
+    overflow-x: scroll;
   }
 }
 
@@ -299,5 +299,5 @@
 }
 
 .wizard-step-contents{
-    height: unset !important;    
+    height: unset !important;
 }
