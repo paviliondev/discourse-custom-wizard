@@ -9,6 +9,7 @@ class CustomWizard::StepUpdater
     @step = step
     @refresh_required = false
     @fields = fields
+    @result = {}
   end
 
   def update

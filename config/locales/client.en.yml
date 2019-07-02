@@ -71,6 +71,16 @@ en:
           banner: "Banner"
           banner_placeholder: "Image url"
           description: "Description"
+          required_data:
+            label: "Required Data"
+            key: 'Submission key'
+            connector:
+              equals: "Equals"
+          permitted_params:
+            label: "Permitted Params"
+            key: 'Param'
+            value: 'Submission key'
+            connector: "Save as"
         field:
           type: "Choose a type"
           header: "Fields"
@@ -127,6 +137,10 @@ en:
             group: "Group"
             group_selection: "Group Selection"
             custom_group: "Custom Group"
+          route_to:
+            label: "Route To"
+            url: "Url"
+            code: "Code"
           custom_title: "Custom Title"
           custom_category:
             label: "Custom Category"

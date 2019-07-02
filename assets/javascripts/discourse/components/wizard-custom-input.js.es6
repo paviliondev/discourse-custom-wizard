@@ -5,6 +5,7 @@ export default Ember.Component.extend({
   classNames: 'custom-input',
   noneKey: 'admin.wizard.select_field',
   noneValue: 'admin.wizard.none',
+  connectorNone: 'admin.wizard.none',
   inputKey: 'admin.wizard.key',
   customDisabled: Ember.computed.alias('input.user_field'),
 

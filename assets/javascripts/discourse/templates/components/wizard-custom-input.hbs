@@ -6,7 +6,18 @@
   {{/if}}
 </div>
 
-{{d-icon 'arrow-right'}}
+<div class="connector">
+  {{#if connectorContent}}
+    {{combo-box value=input.connector
+                content=connectorContent
+                nameProperty="label"
+                none=connectorNone}}
+  {{/if}}
+
+  {{#if connectorKey}}
+    {{i18n connectorKey}}
+  {{/if}}
+</div>
 
 <div class="value">
   {{#if valueContent}}

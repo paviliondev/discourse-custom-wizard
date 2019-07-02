@@ -226,3 +226,22 @@
     </div>
   </div>
 {{/if}}
+
+{{#if routeTo}}
+  <div class="setting">
+    <div class="setting-label">
+      <h3>{{i18n "admin.wizard.action.route_to.url"}}</h3>
+    </div>
+    <div class="setting-value">
+      {{input value=action.url}}
+    </div>
+  </div>
+  <div class="setting">
+    <div class="setting-label">
+      <h3>{{i18n "admin.wizard.action.route_to.code"}}</h3>
+    </div>
+    <div class="setting-value">
+      {{input value=action.code}}
+    </div>
+  </div>
+{{/if}}

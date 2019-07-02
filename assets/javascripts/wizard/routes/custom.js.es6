@@ -4,10 +4,12 @@ import { findCustomWizard } from '../models/custom';
 import { ajax } from 'wizard/lib/ajax';
 
 export default Ember.Route.extend({
+  beforeModel(transition) {
+    this.set('queryParams', transition.intent.queryParams);
+  },
+
   model(params) {
-    let opts = {};
-    if (params.reset === 'true') opts['reset'] = true;
-    return findCustomWizard(params.wizard_id, opts);
+    return findCustomWizard(params.wizard_id, this.get('queryParams'));
   },
 
   afterModel() {

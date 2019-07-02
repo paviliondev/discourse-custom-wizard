@@ -60,7 +60,7 @@ end
 end
 
 class ::Wizard::Step
-  attr_accessor :title, :description, :key
+  attr_accessor :title, :description, :key, :permitted
 end
 
 ::WizardSerializer.class_eval do
@@ -134,6 +134,8 @@ end
 end
 
 ::WizardStepSerializer.class_eval do
+  attributes :permitted
+
   def title
     return PrettyText.cook(object.title) if object.title
     PrettyText.cook(I18n.t("#{object.key || i18n_key}.title", default: ''))
@@ -142,6 +144,10 @@ end
   def description
     return object.description if object.description
     PrettyText.cook(I18n.t("#{object.key || i18n_key}.description", default: '', base_url: Discourse.base_url))
+  end
+
+  def permitted
+    object.permitted
   end
 end
 

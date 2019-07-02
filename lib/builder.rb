@@ -51,10 +51,10 @@ class CustomWizard::Builder
       result
     end
 
-    result.gsub(/w\{(.*?)\}/) { |match| data[$1.to_sym] }
+    result = result.gsub(/w\{(.*?)\}/) { |match| data[$1.to_sym] }
   end
 
-  def build(build_opts = {})
+  def build(build_opts = {}, params = {})
     unless (@wizard.completed? && !@wizard.multiple_submissions && !@wizard.user.admin) || !@steps || !@wizard.permitted?
 
       reset_submissions if build_opts[:reset]
@@ -65,6 +65,36 @@ class CustomWizard::Builder
           step.description = step_template['description'] if step_template['description']
           step.banner = step_template['banner'] if step_template['banner']
           step.key = step_template['key'] if step_template['key']
+          step.permitted = true
+
+          if permitted_params = step_template['permitted_params']
+            permitted_data = {}
+
+            permitted_params.each do |param|
+              key = param['key'].to_sym
+              permitted_data[key] = params[key] if params[key]
+            end
+
+            if permitted_data.present?
+              current_data = @submissions.last || {}
+              save_submissions(current_data.merge(permitted_data), false)
+            end
+          end
+
+          if required_data = step_template['required_data']
+            if !@submissions.last && required_data.length
+              step.permitted = false
+              next
+            end
+
+            required_data.each do |rd|
+              if rd['connector'] === 'equals'
+                step.permitted = @submissions.last[rd['key']] == @submissions.last[rd['value']]
+              end
+            end
+
+            next if !step.permitted
+          end
 
           if step_template['fields'] && step_template['fields'].length
             step_template['fields'].each do |field_template|
@@ -120,8 +150,13 @@ class CustomWizard::Builder
             end
 
             if updater.errors.empty?
-              redirect_to = data['redirect_to']
-              updater.result = { redirect_to: redirect_to } if redirect_to
+              if route_to = data['route_to']
+                updater.result[:route_to] = route_to
+              end
+
+              if redirect_on_complete = data['redirect_on_complete']
+                updater.result[:redirect_on_complete] = redirect_on_complete
+              end
             end
           end
         end
@@ -345,7 +380,7 @@ class CustomWizard::Builder
         end
 
         unless action['skip_redirect']
-          data['redirect_to'] = post.topic.url
+          data['redirect_on_complete'] = post.topic.url
         end
       end
     end
@@ -374,7 +409,7 @@ class CustomWizard::Builder
         updater.errors.add(:send_message, creator.errors.full_messages.join(" "))
       else
         unless action['skip_redirect']
-          data['redirect_to'] = post.topic.url
+          data['redirect_on_complete'] = post.topic.url
         end
       end
     end
@@ -410,14 +445,20 @@ class CustomWizard::Builder
   end
 
   def add_to_group(user, action, data)
-    puts "GROUP NAME: #{data[action['group_id']]}"
     if group_id = data[action['group_id']]
-      puts "GROUP: #{Group.find(group_id)}"
       if group = Group.find(group_id)
-        puts "HERE IS THE GROUP: #{group.inspect}"
         group.add(user)
       end
     end
+  end
+
+  def route_to(user, action, data)
+    url = CustomWizard::Builder.fill_placeholders(action['url'], user, data)
+    if action['code']
+      data[action['code']] = SecureRandom.hex(8)
+      url += "&#{action['code']}=#{data[action['code']]}"
+    end
+    data['route_to'] = URI.encode(url)
   end
 
   def save_submissions(data, final_step)
