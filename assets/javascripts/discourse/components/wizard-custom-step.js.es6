@@ -29,7 +29,7 @@ export default Ember.Component.extend({
       if (a.type === 'route_to' && a.code) {
         content.push(Ember.Object.create({
           id: a.code,
-          label: "Route To Code"
+          label: "code (Route To)"
         }));
       }
     });
