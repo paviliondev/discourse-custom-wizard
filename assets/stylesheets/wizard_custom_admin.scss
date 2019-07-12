@@ -83,8 +83,13 @@
 
       .setting-value {
         width: initial;
-        overflow: hidden;
         float: none;
+        display: flex;
+
+        .custom-input .remove {
+          margin-left: 10px;
+          margin-top: 0;
+        }
       }
     }
 
@@ -186,11 +191,16 @@
 
 .custom-input {
   display: flex;
-  margin: 5px 0;
+  align-items: center;
+  margin-bottom: 10px;
 
   .d-icon {
     margin: 0 auto;
     text-align: center;
+  }
+
+  input {
+    margin: 0;
   }
 
   input[disabled] {
@@ -206,6 +216,10 @@
     margin: 0 auto;
     align-self: flex-start;
   }
+
+  .connector {
+    margin: 0 10px;
+  }
 }
 
 .setting .add-custom-input {
@@ -213,12 +227,12 @@
 }
 
 .admin-contents .wizard-submissions {
-  padding: 0 20px;
+  width: 100%;
   display: inline-block;
-  overflow: scroll;
-
   table {
     margin-top: 0;
+    display: inline-block;
+    overflow-x: scroll;
   }
 }
 
@@ -449,4 +463,8 @@
   background-color: #f8f8f8;
   padding: 20px;
   margin-bottom: 20px;
+}
+
+.wizard-step-contents{
+  height: unset !important;
 }

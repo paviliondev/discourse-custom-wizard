@@ -16,8 +16,13 @@ export default Ember.Route.extend({
       const permitted = model.get('permitted');
       const minTrust = model.get('min_trust');
       const wizardId = model.get('id');
+      const user = model.get('user');
+      const name = model.get('name');
 
       controller.setProperties({
+        requiresLogin: !user,
+        user,
+        name,
         completed,
         notPermitted: !permitted,
         minTrust,

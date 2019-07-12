@@ -71,6 +71,10 @@ export default {
         return index === 0 && !required;
       }.property('step.index', 'wizard.required'),
 
+      cookedTitle: function() {
+        return cook(this.get('step.title'));
+      }.property('step.title'),
+
       cookedDescription: function() {
         return cook(this.get('step.description'));
       }.property('step.description'),

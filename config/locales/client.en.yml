@@ -72,6 +72,16 @@ en:
           banner: "Banner"
           banner_placeholder: "Image url"
           description: "Description"
+          required_data:
+            label: "Required Data"
+            key: 'Submission key'
+            connector:
+              equals: "Equals"
+          permitted_params:
+            label: "Permitted Params"
+            key: 'Param'
+            value: 'Submission key'
+            connector: "Save as"
         field:
           type: "Choose a type"
           header: "Fields"
@@ -88,6 +98,7 @@ en:
           choices_preset:
             label: "Preset"
             categories: "Categories"
+            groups: "Groups"
             filter: "Preset Filter"
           choice:
             value: "Value"
@@ -123,6 +134,16 @@ en:
             label: "Builder"
             user_fields: "User Fields: "
             wizard_fields: "Wizard Fields: "
+            placeholder: "Insert wizard fields using the field_id in w{}. Insert user fields using field key in u{}."
+          add_to_group:
+            label: "Add to Group"
+            group: "Group"
+            group_selection: "Group Selection"
+            custom_group: "Custom Group"
+          route_to:
+            label: "Route To"
+            url: "Url"
+            code: "Code"
           custom_title: "Custom Title"
           custom_category:
             label: "Custom Category"
@@ -237,10 +258,11 @@ en:
       filter_placeholder: "Search..."
 
     wizard:
-      completed: "You have completed this wizard."
-      not_permitted: "You need to be trust level {{level}} or higher to access this wizard."
+      completed: "You have completed the {{name}} wizard."
+      not_permitted: "You need to be trust level {{level}} or higher to access the {{name}} wizard."
       none: "There is no wizard here."
       return_to_site: "Return to {{siteName}}"
+      requires_login: "You need to be logged in to access the {{name}} wizard."
 
     wizard_composer:
       show_preview: "Preview Post"

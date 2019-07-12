@@ -5,6 +5,8 @@ const ACTION_TYPES = [
   { id: 'update_profile', name: 'Update Profile' },
   { id: 'send_message', name: 'Send Message' },
   { id: 'send_to_api', name: 'Send to API' }
+  { id: 'add_to_group', name: 'Add to Group' },
+  { id: 'route_to', name: 'Route To' }
 ];
 
 const PROFILE_FIELDS = [
@@ -29,32 +31,9 @@ export default Ember.Component.extend({
   sendMessage: Ember.computed.equal('action.type', 'send_message'),
   sendToApi: Ember.computed.equal('action.type', 'send_to_api'),
   apiEmpty: Ember.computed.empty('action.api'),
+  addToGroup: Ember.computed.equal('action.type', 'add_to_group'),
+  routeTo: Ember.computed.equal('action.type', 'route_to'),
   disableId: Ember.computed.not('action.isNew'),
-
-  @computed('currentStepId', 'wizard.save_submissions')
-  availableFields(currentStepId, saveSubmissions) {
-    const allSteps = this.get('wizard.steps');
-    let steps = allSteps;
-    let fields = [];
-
-    if (!saveSubmissions) {
-      steps = [allSteps.findBy('id', currentStepId)];
-    }
-
-    steps.forEach((s) => {
-      if (s.fields && s.fields.length > 0) {
-        let stepFields = s.fields.map((f) => {
-          return Ember.Object.create({
-            id: f.id,
-            label: `${f.id} (${s.id})`
-          });
-        });
-        fields.push(...stepFields);
-      }
-    });
-
-    return fields;
-  },
 
   @computed('availableFields')
   builderWizardFields(fields) {

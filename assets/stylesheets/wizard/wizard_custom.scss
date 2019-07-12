@@ -293,6 +293,13 @@
     background-color: #e45735;
     color: #ffffff;
   }
+
+  &.not-permitted {
+    height: 60px;
+    line-height: 60px;
+    background-color: #e45735;
+    color: #ffffff;
+  }
 }
 
 .p-list-box {

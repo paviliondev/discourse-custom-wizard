@@ -15,9 +15,19 @@ export default Ember.Route.extend({
     return model.set("wizardId", this.modelFor('custom').id);
   },
 
-  setupController(controller, step) {
-    controller.setProperties({
-      step, wizard: this.modelFor('custom')
-    });
+  setupController(controller, model) {
+    let props = {
+      step: model,
+      wizard: this.modelFor('custom')
+    };
+
+    if (!model.permitted) {
+      props['stepMessage'] = {
+        state: 'not-permitted',
+        text: "You're not allowed to view this step."
+      };
+    }
+
+    controller.setProperties(props);
   }
 });

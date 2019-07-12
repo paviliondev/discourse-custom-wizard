@@ -1,4 +1,5 @@
 export default Ember.Component.extend({
+  classNames: 'custom-inputs',
   valuePlaceholder: 'admin.wizard.value',
 
   actions: {

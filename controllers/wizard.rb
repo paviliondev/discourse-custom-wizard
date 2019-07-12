@@ -2,7 +2,6 @@ class CustomWizard::WizardController < ::ApplicationController
   prepend_view_path(Rails.root.join('plugins', 'discourse-custom-wizard', 'views'))
   layout 'wizard'
 
-  requires_login
   helper_method :wizard_page_title
   helper_method :theme_ids
 
@@ -22,12 +21,11 @@ class CustomWizard::WizardController < ::ApplicationController
     respond_to do |format|
       format.json do
         builder = CustomWizard::Builder.new(current_user, params[:wizard_id].underscore)
-
         builder_opts = {}
         builder_opts[:reset] = params[:reset] if params[:reset]
 
         if builder.wizard.present?
-          wizard = builder.build(builder_opts)
+          wizard = builder.build(builder_opts, params)
           render_serialized(wizard, WizardSerializer)
         else
           render json: { error: I18n.t('wizard.none') }
@@ -52,19 +50,22 @@ class CustomWizard::WizardController < ::ApplicationController
     end
 
     result = success_json
-    submission = Array.wrap(PluginStore.get("#{wizard_id}_submissions", user.id)).last
 
-    if submission && submission['redirect_to']
-      result.merge!(redirect_to: submission['redirect_to'])
-    end
+    if user
+      submission = Array.wrap(PluginStore.get("#{wizard_id}_submissions", user.id)).last
 
-    if submission && !wizard.save_submissions
-      PluginStore.remove("#{wizard_id}_submissions", user.id)
-    end
+      if submission && submission['redirect_to']
+        result.merge!(redirect_to: submission['redirect_to'])
+      end
 
-    if user.custom_fields['redirect_to_wizard'] === wizard_id
-      user.custom_fields.delete('redirect_to_wizard')
-      user.save_custom_fields(true)
+      if submission && !wizard.save_submissions
+        PluginStore.remove("#{wizard_id}_submissions", user.id)
+      end
+
+      if user.custom_fields['redirect_to_wizard'] === wizard_id
+        user.custom_fields.delete('redirect_to_wizard')
+        user.save_custom_fields(true)
+      end
     end
 
     render json: result

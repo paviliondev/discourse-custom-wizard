@@ -24,20 +24,33 @@ CustomWizard.reopenClass({
 
   finished(result) {
     let url = "/";
-    if (result.redirect_to) {
-      url = result.redirect_to;
+    if (result.redirect_on_complete) {
+      url = result.redirect_on_complete;
     }
     window.location.href = getUrl(url);
   }
 });
 
-export function findCustomWizard(wizardId, opts = {}) {
+export function findCustomWizard(wizardId, params = {}) {
   let url = `/w/${wizardId}`;
-  if (opts.reset) url += '?reset=true';
+
+  let paramKeys = Object.keys(params).filter(k => {
+    if (k === 'wizard_id') return false;
+    return !!params[k];
+  });
+
+  if (paramKeys.length) {
+    url += '?';
+    paramKeys.forEach((k,i) => {
+      if (i > 0) {
+        url += '&';
+      }
+      url += `${k}=${params[k]}`;
+    });
+  }
 
   return ajax({ url, cache: false, dataType: 'json' }).then(result => {
     const wizard = result.wizard;
-
     if (!wizard) return null;
 
     if (!wizard.completed) {
