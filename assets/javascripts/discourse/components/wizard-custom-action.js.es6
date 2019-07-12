@@ -4,7 +4,7 @@ const ACTION_TYPES = [
   { id: 'create_topic', name: 'Create Topic' },
   { id: 'update_profile', name: 'Update Profile' },
   { id: 'send_message', name: 'Send Message' },
-  { id: 'send_to_api', name: 'Send to API' }
+  { id: 'send_to_api', name: 'Send to API' },
   { id: 'add_to_group', name: 'Add to Group' },
   { id: 'route_to', name: 'Route To' }
 ];
