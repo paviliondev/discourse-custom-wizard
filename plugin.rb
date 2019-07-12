@@ -54,6 +54,7 @@ after_initialize do
   require_dependency 'admin_constraint'
   Discourse::Application.routes.append do
     mount ::CustomWizard::Engine, at: 'w'
+    post 'wizard/authorization/callback' => "custom_wizard/authorization#callback"
 
     scope module: 'custom_wizard', constraints: AdminConstraint.new do
       get 'admin/wizards' => 'admin#index'
@@ -66,6 +67,14 @@ after_initialize do
       delete 'admin/wizards/custom/remove' => 'admin#remove'
       get 'admin/wizards/submissions' => 'admin#index'
       get 'admin/wizards/submissions/:wizard_id' => 'admin#submissions'
+      get 'admin/wizards/apis' => 'api#list'
+      get 'admin/wizards/apis/new' => 'api#index'
+      get 'admin/wizards/apis/:name' => 'api#find'
+      put 'admin/wizards/apis/:name' => 'api#save'
+      delete 'admin/wizards/apis/:name' => 'api#remove'
+      delete 'admin/wizards/apis/logs/:name' => 'api#clearlogs'
+      get 'admin/wizards/apis/:name/redirect' => 'api#redirect'
+      get 'admin/wizards/apis/:name/authorize' => 'api#authorize'
     end
   end
 
@@ -80,6 +89,19 @@ after_initialize do
   load File.expand_path('../controllers/wizard.rb', __FILE__)
   load File.expand_path('../controllers/steps.rb', __FILE__)
   load File.expand_path('../controllers/admin.rb', __FILE__)
+
+  load File.expand_path('../jobs/refresh_api_access_token.rb', __FILE__)
+  load File.expand_path('../lib/api/api.rb', __FILE__)
+  load File.expand_path('../lib/api/authorization.rb', __FILE__)
+  load File.expand_path('../lib/api/endpoint.rb', __FILE__)
+  load File.expand_path('../lib/api/logentry.rb', __FILE__)
+  load File.expand_path('../controllers/api.rb', __FILE__)
+  load File.expand_path('../serializers/api/api_serializer.rb', __FILE__)
+  load File.expand_path('../serializers/api/authorization_serializer.rb', __FILE__)
+  load File.expand_path('../serializers/api/basic_api_serializer.rb', __FILE__)
+  load File.expand_path('../serializers/api/endpoint_serializer.rb', __FILE__)
+  load File.expand_path('../serializers/api/basic_endpoint_serializer.rb', __FILE__)
+  load File.expand_path('../serializers/api/log_serializer.rb', __FILE__)
 
   ::UsersController.class_eval do
     def wizard_path

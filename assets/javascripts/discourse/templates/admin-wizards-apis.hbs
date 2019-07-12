@@ -1,0 +1,26 @@
+<div class='row'>
+  <div class='content-list wizard-list'>
+    <ul>
+      {{#each model as |api|}}
+        <li>
+          {{#link-to "adminWizardsApi" (dasherize api.name)}}
+            {{#if api.title}}
+              {{api.title}}
+            {{else}}
+              {{api.name}}
+            {{/if}}
+          {{/link-to}}
+        </li>
+      {{/each}}
+    </ul>
+    <div class="new-api">
+      {{#link-to 'adminWizardsApi' 'new' class="btn"}}
+        {{d-icon "plus"}} {{i18n 'admin.wizard.api.new'}}
+      {{/link-to}}
+    </div>
+  </div>
+
+  <div class="content">
+    {{outlet}}
+  </div>
+</div>

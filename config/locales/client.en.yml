@@ -59,6 +59,7 @@ en:
           name_required: "Wizards must have a name."
           steps_required: "Wizards must have at least one step."
           id_required: "All wizards, steps, fields and actions need an id."
+          invalid_api_body: "Request body JSON needs to be a valid JSON."
           type_required: "All fields need a type."
           after_time_need_time: "After time is enabled but no time is set."
           after_time_invalid: "After time is invalid."
@@ -114,6 +115,8 @@ en:
           add_fields: "{{type}} Fields"
           available_fields: "* If 'Save wizard submissions' is disabled, only the fields of the current step are available to the current step's actions."
           topic_attr: "Topic Attribute"
+          interpolate_fields: "Insert wizard fields using the field_id in w{}. Insert user fields using field key in u{}."
+
           skip_redirect:
             label: "Skip Redirect"
             description: "Don't redirect the user to this {{type}} after the wizard completes"
@@ -146,6 +149,64 @@ en:
             label: "Custom Category"
             wizard_field: "Wizard Field"
             user_field: "User Field"
+          send_to_api:
+            label: "Send to API"
+            api: "API"
+            endpoint: "Endpoint"
+            select_an_api: "Select an API"
+            select_an_endpoint: "Select an endpoint"
+            body: "Request body JSON"
+
+        api:
+          label: "API"
+          nav_label: 'APIs'
+          new: 'New Api'
+          name: "Name (can't be changed)"
+          name_placeholder: 'Underscored'
+          title: 'Title'
+          title_placeholder: 'Display name'
+          remove: 'Delete'
+          save: "Save"
+
+          auth:
+            label: "Authorization"
+            btn: 'Authorize'
+            settings: "Settings"
+            status: "Status"
+            redirect_uri: "Redirect url"
+            type: 'Type'
+            type_none: 'Select a type'
+            url: "Authorization url"
+            token_url: "Token url"
+            client_id: 'Client id'
+            client_secret: 'Client secret'
+            username: 'username'
+            password: 'password'
+            params:
+              label: 'Params'
+              new: 'New param'
+              key: 'key'
+              value: 'value'
+
+          status:
+            label: "Status"
+            authorized: 'Authorized'
+            not_authorized: "Not authorized"
+            code: "Code"
+            access_token: "Access token"
+            refresh_token: "Refresh token"
+            expires_at: "Expires at"
+            refresh_at: "Refresh at"
+
+          endpoint:
+            label: "Endpoints"
+            add: "Add endpoint"
+            name: "Endpoint name"
+            method: "Select a method"
+            url: "Enter a url"
+
+          log:
+            label: "Logs"
 
   wizard_js:
     location:

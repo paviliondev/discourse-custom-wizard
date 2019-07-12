@@ -122,6 +122,23 @@
     margin-top: 5px;
     padding: 5px;
   }
+
+  .api-body {
+    width: 100%;
+
+    .setting-label {
+      max-width: 70px;
+    }
+
+    .setting-value {
+      width: calc(100% - 180px);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 150px;
+    }
+  }
 }
 
 .wizard-links {
@@ -312,6 +329,142 @@
   }
 }
 
+.wizard-step-contents {
+  height: unset !important;
+}
+
+.admin-wizards-api {
+  margin-bottom: 40px;
+
+  .content-list {
+    margin-right: 20px;
+  }
+
+  .new-api {
+    margin-top: 20px;
+  }
+
+  .metadata .title input {
+    width: 400px;
+  }
+
+  .buttons {
+    text-align: right;
+    vertical-align: middle;
+
+    > .d-icon, > .spinner {
+      margin-right: 7px;
+    }
+
+    .error {
+      margin-top: 10px;
+      color: $danger;
+    }
+  }
+}
+
+.wizard-api-header {
+  &.page {
+    margin-bottom: 20px;
+  }
+
+  .buttons {
+    float: right;
+  }
+
+  .wizard-header {
+    overflow: hidden;
+  }
+}
+
+.wizard-api-authentication {
+  display: flex;
+  background-color: $primary-very-low;
+  padding: 20px;
+  margin-bottom: 20px;
+
+  .settings {
+    width: 50%;
+    max-width: 50%;
+  }
+
+  .redirect-uri .controls {
+    word-break: break-all;
+  }
+
+  .auth-type .select-kit {
+    min-width: 210px;
+    width: 210px;
+    margin-bottom: 10px;
+  }
+
+  .status {
+    border-left: 1px solid $primary;
+    margin-left: 20px;
+    padding-left: 20px;
+    width: 50%;
+    max-width: 50%;
+
+    .wizard-header {
+      overflow: hidden;
+    }
+
+    .authorization {
+      float: right;
+    }
+
+    .control-group {
+      margin-bottom: 15px;
+    }
+  }
+}
+
+.wizard-api-endpoints {
+  background-color: $primary-very-low;
+  padding: 20px;
+  margin-bottom: 20px;
+
+  .endpoint-list {
+    margin-top: 20px;
+
+    ul {
+      margin: 0;
+      list-style: none;
+    }
+  }
+
+  .endpoint {
+    display: flex;
+    margin-top: 20px;
+
+    .combo-box {
+      width: 200px;
+      margin-right: 10px;
+      margin-top: -2px;
+      width: 150px;
+    }
+
+    input {
+      margin: 0;
+      margin-right: 10px;
+    }
+
+    .endpoint-url {
+      width: 300px;
+    }
+
+    .remove-endpoint {
+      margin-left: auto;
+    }
+  }
+}
+
+.wizard-api-log {
+  background-color: #f8f8f8;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
 .wizard-step-contents{
-    height: unset !important;
+  height: unset !important;
 }

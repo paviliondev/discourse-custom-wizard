@@ -444,6 +444,28 @@ class CustomWizard::Builder
     end
   end
 
+  def send_to_api(user, action, data)
+    api_body = nil
+
+    if action['api_body'] != ""
+      begin
+        api_body_parsed = JSON.parse(action['api_body'])
+      rescue JSON::ParserError
+        raise Discourse::InvalidParameters, "Invalid API body definition: #{action['api_body']} for #{action['title']}"
+      end
+      api_body = CustomWizard::Builder.fill_placeholders(JSON.generate(api_body_parsed), user, data)
+    end
+
+    result = CustomWizard::Api::Endpoint.request(user, action['api'], action['api_endpoint'], api_body)
+
+    if error = result['error'] || (result[0] && result[0]['error'])
+      error = error['message'] || error
+      updater.errors.add(:send_to_api, error)
+    else
+      ## add validation callback
+    end
+  end
+  
   def add_to_group(user, action, data)
     if group_id = data[action['group_id']]
       if group = Group.find(group_id)
