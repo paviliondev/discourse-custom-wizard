@@ -1,3 +1,5 @@
+TagStruct = Struct.new(:id, :name)
+
 class CustomWizard::Builder
 
   attr_accessor :wizard, :updater, :submissions
@@ -237,7 +239,8 @@ class CustomWizard::Builder
       end
     elsif field_template['choices_preset'] && field_template['choices_preset'].length > 0
       objects = []
-      site = Site.new(Guardian.new(@wizard.user))
+      guardian = Guardian.new(@wizard.user)
+      site = Site.new(guardian)
 
       if field_template['choices_preset'] === 'categories'
         objects = site.categories
@@ -245,6 +248,10 @@ class CustomWizard::Builder
 
       if field_template['choices_preset'] === 'groups'
         objects = site.groups
+      end
+
+      if field_template['choices_preset'] === 'tags'
+        objects = Tag.top_tags(guardian: guardian).map { |tag| TagStruct.new(tag,tag) }
       end
 
       if field_template['choices_filters'] && field_template['choices_filters'].length > 0
@@ -465,7 +472,7 @@ class CustomWizard::Builder
       ## add validation callback
     end
   end
-  
+
   def add_to_group(user, action, data)
     if group_id = data[action['group_id']]
       if group = Group.find(group_id)

@@ -21,6 +21,9 @@ export default Ember.Component.extend({
       },{
         id: 'groups',
         name: I18n.t('admin.wizard.field.choices_preset.groups')
+      },{
+        id: 'tags',
+        name: I18n.t('admin.wizard.field.choices_preset.tags')
       }
     ];
   },

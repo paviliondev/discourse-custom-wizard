@@ -99,6 +99,7 @@ en:
             label: "Preset"
             categories: "Categories"
             groups: "Groups"
+            tags: "Tags"
             filter: "Preset Filter"
           choice:
             value: "Value"
