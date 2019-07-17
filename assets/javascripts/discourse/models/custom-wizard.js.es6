@@ -132,7 +132,7 @@ const CustomWizard = Discourse.Model.extend({
           }
           //check if api_body is valid JSON
           let api_body = a.get('api_body');
-          if (api_body != '') {
+          if (api_body) {
             try {
               JSON.parse(api_body);
             } catch (e) {
