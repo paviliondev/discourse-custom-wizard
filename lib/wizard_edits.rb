@@ -23,7 +23,7 @@ require_dependency 'wizard/step'
 end
 
 ::Wizard::Field.class_eval do
-  attr_reader :label, :description, :image, :key, :min_length
+  attr_reader :label, :description, :image, :key, :min_length, :file_types
   attr_accessor :dropdown_none
 
   def initialize(attrs)
@@ -38,6 +38,7 @@ end
     @value = attrs[:value]
     @choices = []
     @dropdown_none = attrs[:dropdown_none]
+    @file_types = attrs[:file_types]
   end
 
   def label
@@ -152,7 +153,7 @@ end
 end
 
 ::WizardFieldSerializer.class_eval do
-  attributes :dropdown_none, :image
+  attributes :dropdown_none, :image, :file_types
 
   def label
     return object.label if object.label.present?
@@ -178,5 +179,9 @@ end
 
   def dropdown_none
     object.dropdown_none
+  end
+
+  def file_types
+    object.file_types
   end
 end

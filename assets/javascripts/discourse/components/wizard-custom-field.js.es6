@@ -1,8 +1,9 @@
-import { default as computed } from 'ember-addons/ember-computed-decorators';
+import { default as computed, observes, on } from 'ember-addons/ember-computed-decorators';
 
 export default Ember.Component.extend({
   classNames: 'wizard-custom-field',
   isDropdown: Ember.computed.equal('field.type', 'dropdown'),
+  isUpload: Ember.computed.equal('field.type', 'upload'),
   disableId: Ember.computed.not('field.isNew'),
   choicesTypes: ['translation', 'preset', 'custom'],
   choicesTranslation: Ember.computed.equal('field.choices_type', 'translation'),
@@ -27,4 +28,12 @@ export default Ember.Component.extend({
       }
     ];
   },
+
+  @on('didInsertElement')
+  @observes('isUpload')
+  setupFileType() {
+    if (this.get('isUpload') && !this.get('field.file_types')) {
+      this.set('field.file_types', '.jpg,.png');
+    }
+  }
 });

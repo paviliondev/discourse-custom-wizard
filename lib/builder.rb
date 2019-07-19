@@ -203,6 +203,10 @@ class CustomWizard::Builder
       params[:value] = standardise_boolean(params[:value])
     end
 
+    if field_template['type'] === 'upload'
+      params[:file_types] = field_template['file_types']
+    end
+
     field = step.add_field(params)
 
     if field_template['type'] === 'dropdown'
