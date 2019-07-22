@@ -30,13 +30,12 @@
                 content=popupMenuOptions}}
             {{else}}
               <div>{{d.icon}}</div>
-              {{d-button
-                action=b.action
-                actionParam=b
-                translatedTitle=b.title
-                label=b.label
-                icon=b.icon
-                class=b.className}}
+              <button class='wizard-btn {{b.className}}' {{action b.action b}} title="{{b.title}}">
+                {{d-icon b.icon}}
+                {{#if b.label}}
+                  <span class="d-button-label">{{i18n b.label}}</span>
+                {{/if}}
+              </button>
             {{/if}}
           {{/each}}
 

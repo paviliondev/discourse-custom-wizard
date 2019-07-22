@@ -1,2 +1,4 @@
 {{wizard-editor showPreview=showPreview value=field.value placeholder=field.placeholder}}
-{{d-button class='wizard-btn primary' action='togglePreview' label=togglePreviewLabel}}
+<button class='wizard-btn primary' {{action 'togglePreview'}}>
+  <span class="d-button-label">{{i18n togglePreviewLabel}}</span>
+</button>
