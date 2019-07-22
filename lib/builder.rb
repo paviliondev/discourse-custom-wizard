@@ -434,7 +434,17 @@ class CustomWizard::Builder
 
     action['profile_updates'].each do |pu|
       value = pu['value']
-      custom_field = pu['value_custom']
+      custom_field = nil
+  
+      if pu['value_custom']
+        custom_parts = pu['value_custom'].split('.')
+        if custom_parts.length == 2 && custom_parts[0] == 'custom_field'
+          custom_field = custom_parts[1]
+        else
+          value = custom_parts[0]
+        end 
+      end
+      
       user_field = pu['user_field']
       key = pu['key']
 
