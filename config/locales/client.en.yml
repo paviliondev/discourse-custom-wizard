@@ -112,6 +112,7 @@ en:
           tag: "Tag"
           category: "Category"
           limit: "Limit"
+          property: "Property"
         action:
           header: "Actions<sup>*</sup>"
           include: "Include Fields"

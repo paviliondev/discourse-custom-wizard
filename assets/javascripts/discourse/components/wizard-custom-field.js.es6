@@ -4,11 +4,13 @@ export default Ember.Component.extend({
   classNames: 'wizard-custom-field',
   isDropdown: Ember.computed.equal('field.type', 'dropdown'),
   isUpload: Ember.computed.equal('field.type', 'upload'),
+  isCategory: Ember.computed.equal('field.type', 'category'),
   disableId: Ember.computed.not('field.isNew'),
   choicesTypes: ['translation', 'preset', 'custom'],
   choicesTranslation: Ember.computed.equal('field.choices_type', 'translation'),
   choicesPreset: Ember.computed.equal('field.choices_type', 'preset'),
   choicesCustom: Ember.computed.equal('field.choices_type', 'custom'),
+  categoryPropertyTypes: ['id', 'slug'],
 
   @computed('field.type')
   isInput: (type) => type === 'text' || type === 'textarea',

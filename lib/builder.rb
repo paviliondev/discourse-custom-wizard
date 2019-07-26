@@ -210,6 +210,10 @@ class CustomWizard::Builder
     if field_template['type'] === 'category' || field_template['type'] === 'tag'
       params[:limit] = field_template['limit']
     end
+    
+    if field_template['type'] === 'category'
+      params[:property] = field_template['property']
+    end
 
     field = step.add_field(params)
 

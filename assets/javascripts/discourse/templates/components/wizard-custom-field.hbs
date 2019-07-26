@@ -134,3 +134,14 @@
     </div>
   </div>
 {{/if}}
+
+{{#if isCategory}}
+  <div class="setting">
+    <div class="setting-label">
+      <h3>{{i18n 'admin.wizard.field.property'}}</h3>
+    </div>
+    <div class="setting-value">
+      {{combo-box content=categoryPropertyTypes value=field.property}}
+    </div>
+  </div>
+{{/if}}
