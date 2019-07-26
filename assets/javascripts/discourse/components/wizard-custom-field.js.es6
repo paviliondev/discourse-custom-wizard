@@ -13,6 +13,9 @@ export default Ember.Component.extend({
   @computed('field.type')
   isInput: (type) => type === 'text' || type === 'textarea',
 
+  @computed('field.type')
+  isCategoryOrTag: (type) => type === 'tag' || type === 'category',
+
   @computed()
   presetChoices() {
     return [
