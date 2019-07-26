@@ -23,7 +23,7 @@ require_dependency 'wizard/step'
 end
 
 ::Wizard::Field.class_eval do
-  attr_reader :label, :description, :image, :key, :min_length, :file_types, :limit
+  attr_reader :label, :description, :image, :key, :min_length, :file_types
   attr_accessor :dropdown_none
 
   def initialize(attrs)
@@ -39,7 +39,6 @@ end
     @choices = []
     @dropdown_none = attrs[:dropdown_none]
     @file_types = attrs[:file_types]
-    @limit = attrs[:limit]
   end
 
   def label
@@ -66,16 +65,7 @@ class ::Wizard::Step
 end
 
 ::WizardSerializer.class_eval do
-  attributes :id,
-             :name,
-             :background,
-             :completed,
-             :required,
-             :min_trust,
-             :permitted,
-             :user,
-             :categories,
-             :uncategorized_category_id
+  attributes :id, :name, :background, :completed, :required, :min_trust, :permitted, :user
 
   def id
     object.id
@@ -142,19 +132,6 @@ end
   def user
     object.user
   end
-  
-  def categories
-    begin
-      site = ::Site.new(scope)
-      ::ActiveModel::ArraySerializer.new(site.categories, each_serializer: BasicCategorySerializer)
-    rescue => e
-      puts "HERE IS THE ERROR: #{e.inspect}"
-    end
-  end
-  
-  def uncategorized_category_id
-    SiteSetting.uncategorized_category_id
-  end
 end
 
 ::WizardStepSerializer.class_eval do
@@ -176,7 +153,7 @@ end
 end
 
 ::WizardFieldSerializer.class_eval do
-  attributes :dropdown_none, :image, :file_types, :limit
+  attributes :dropdown_none, :image, :file_types
 
   def label
     return object.label if object.label.present?
@@ -206,9 +183,5 @@ end
 
   def file_types
     object.file_types
-  end
-  
-  def limit
-    object.limit
   end
 end

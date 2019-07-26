@@ -206,10 +206,6 @@ class CustomWizard::Builder
     if field_template['type'] === 'upload'
       params[:file_types] = field_template['file_types']
     end
-    
-    if field_template['type'] === 'category' || field_template['type'] === 'tag'
-      params[:limit] = field_template['limit']
-    end
 
     field = step.add_field(params)
 
@@ -357,7 +353,7 @@ class CustomWizard::Builder
         action['add_fields'].each do |field|
           value = field['value_custom'].present? ? field['value_custom'] : data[field['value']]
           key = field['key']
-          
+
           if key && (value.present? || value === false)
             if key.include?('custom_fields')
               keyArr = key.split('.')
@@ -451,7 +447,7 @@ class CustomWizard::Builder
       
       user_field = pu['user_field']
       key = pu['key']
-      
+
       if user_field || custom_field
         custom_fields[user_field || custom_field] = data[key]
       else

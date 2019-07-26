@@ -12,7 +12,7 @@ const CustomWizard = Ember.Object.extend({
     if (this.get('required') && (!this.get('completed') && this.get('permitted'))) return;
     const id = this.get('id');
     CustomWizard.skip(id);
-  },
+  }
 });
 
 CustomWizard.reopenClass({
@@ -59,36 +59,6 @@ export function findCustomWizard(wizardId, params = {}) {
         stepObj.fields = stepObj.fields.map(f => WizardField.create(f));
         return stepObj;
       });
-    }
-
-    if (wizard.categories) {
-      let subcatMap = {};
-      let categoriesById = {};
-      let categories = wizard.categories.map(c => {
-        if (c.parent_category_id) {
-          subcatMap[c.parent_category_id] =
-            subcatMap[c.parent_category_id] || [];
-          subcatMap[c.parent_category_id].push(c.id);
-        }
-        return (categoriesById[c.id] = Ember.Object.create(c));
-      });
-
-      // Associate the categories with their parents
-      categories.forEach(c => {
-        let subcategoryIds = subcatMap[c.get("id")];
-        if (subcategoryIds) {
-          c.set("subcategories", subcategoryIds.map(id => categoriesById[id]));
-        }
-        if (c.get("parent_category_id")) {
-          c.set("parentCategory", categoriesById[c.get("parent_category_id")]);
-        }
-      });
-
-      Discourse.Site.currentProp('categoriesList', categories);
-      Discourse.Site.currentProp('sortedCategories', categories);
-      Discourse.Site.currentProp('listByActivity', categories);
-      Discourse.Site.currentProp('categoriesById', categoriesById);
-      Discourse.Site.currentProp('uncategorized_category_id', wizard.uncategorized_category_id);
     }
 
     return CustomWizard.create(wizard);

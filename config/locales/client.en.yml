@@ -109,9 +109,6 @@ en:
           min_length: "Min Length"
           min_length_placeholder: "Minimum length in characters"
           file_types: "File Types"
-          tag: "Tag"
-          category: "Category"
-          limit: "Limit"
         action:
           header: "Actions<sup>*</sup>"
           include: "Include Fields"
@@ -260,17 +257,7 @@ en:
         geo_location: "Search and select a result."
 
     select_kit:
-      default_header_text: Select...
-      no_content: No matches found
-      filter_placeholder: Search...
-      filter_placeholder_with_any: Search or create...
-      create: "Create: '{{content}}'"
-      max_content_reached:
-        one: "You can only select {{count}} item."
-        other: "You can only select {{count}} items."
-      min_content_not_reached:
-        one: "Select at least {{count}} item."
-        other: "Select at least {{count}} items."
+      filter_placeholder: "Search..."
 
     wizard:
       completed: "You have completed the {{name}} wizard."
