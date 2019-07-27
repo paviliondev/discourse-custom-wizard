@@ -21,6 +21,12 @@ export default StepController.extend({
 
     showMessage(message) {
       this.set('stepMessage', message);
+    },
+
+    resetWizard() {
+      const id = this.get('wizard.id');
+      const stepId = this.get('step.id');
+      window.location.href = getUrl(`/w/${id}/steps/${stepId}?reset=true`);
     }
   }
 });

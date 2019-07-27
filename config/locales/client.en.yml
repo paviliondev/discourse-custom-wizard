@@ -77,6 +77,7 @@ en:
             key: 'Submission key'
             connector:
               equals: "Equals"
+            not_permitted_message: "Message shown when required data not present"
           permitted_params:
             label: "Permitted Params"
             key: 'Param'
@@ -279,6 +280,8 @@ en:
       none: "There is no wizard here."
       return_to_site: "Return to {{siteName}}"
       requires_login: "You need to be logged in to access the {{name}} wizard."
+      reset: "Reset this wizard."
+      step_not_permitted: "You're not allowed to view this step."
 
     wizard_composer:
       show_preview: "Preview Post"

@@ -94,8 +94,11 @@ class CustomWizard::Builder
                 step.permitted = @submissions.last[rd['key']] == @submissions.last[rd['value']]
               end
             end
-
-            next if !step.permitted
+            
+            if !step.permitted
+              step.permitted_message = step_template['required_data_message'] if step_template['required_data_message']
+              next
+            end
           end
 
           if step_template['fields'] && step_template['fields'].length

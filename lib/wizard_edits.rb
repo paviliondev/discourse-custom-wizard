@@ -63,7 +63,7 @@ end
 end
 
 class ::Wizard::Step
-  attr_accessor :title, :description, :key, :permitted
+  attr_accessor :title, :description, :key, :permitted, :permitted_message
 end
 
 ::WizardSerializer.class_eval do
@@ -159,7 +159,7 @@ end
 end
 
 ::WizardStepSerializer.class_eval do
-  attributes :permitted
+  attributes :permitted, :permitted_message
 
   def title
     return PrettyText.cook(object.title) if object.title
@@ -173,6 +173,10 @@ end
 
   def permitted
     object.permitted
+  end
+  
+  def permitted_message
+    object.permitted_message
   end
 end
 

@@ -43,7 +43,7 @@
   </div>
 </div>
 
-<div class="setting full">
+<div class="setting required-data full">
   <div class="setting-label">
     <h3>{{i18n 'admin.wizard.step.required_data.label'}}</h3>
   </div>
@@ -52,6 +52,12 @@
                            inputKey='admin.wizard.step.required_data.key'
                            valueContent=requiredContent
                            connectorContent=requiredConnectorContent}}
+    {{#if step.required_data}}
+      <div class="required-data-message">
+        <label>{{i18n 'admin.wizard.step.required_data.not_permitted_message'}}</label>
+        {{input value=step.required_data_message}}
+      </div>
+    {{/if}}
   </div>
 </div>
 

@@ -24,8 +24,11 @@ export default Ember.Route.extend({
     if (!model.permitted) {
       props['stepMessage'] = {
         state: 'not-permitted',
-        text: "You're not allowed to view this step."
+        text: model.permitted_message || I18n.t('wizard.step_not_permitted')
       };
+      if (model.index > 0) {
+        props['showReset'] = true;
+      }
     }
 
     controller.setProperties(props);

@@ -1,5 +1,12 @@
 <div class="step-message {{stepMessage.state}}">
-  {{stepMessage.text}}
+  <div class="text">
+    {{stepMessage.text}}
+  </div>
+  {{#if showReset}}
+    <a class="reset-wizard" {{action "resetWizard"}}>
+      {{i18n 'wizard.reset'}}
+    </a>
+  {{/if}}
 </div>
 {{#if step.permitted}}
   {{wizard-step step=step

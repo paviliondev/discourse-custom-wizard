@@ -78,6 +78,7 @@ const CustomWizard = Discourse.Model.extend({
       if (s.banner) step['banner'] = s.banner;
       if (s.raw_description) step['raw_description'] = s.raw_description;
       if (s.required_data) step['required_data'] = s.required_data;
+      if (s.required_data_message) step['required_data_message'] = s.required_data_message;
       if (s.permitted_params) step['permitted_params'] = s.permitted_params;
 
       const fields = s.get('fields');
@@ -245,6 +246,7 @@ CustomWizard.reopenClass({
             raw_description: s.raw_description,
             banner: s.banner,
             required_data: s.required_data,
+            required_data_message: s.required_data_message,
             permitted_params: s.permitted_params,
             fields,
             actions,

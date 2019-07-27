@@ -222,6 +222,14 @@
   }
 }
 
+.required-data .setting-value {
+  flex-flow: wrap;
+  
+  .custom-inputs {
+    margin-bottom: 20px;
+  }
+}
+
 .setting .add-custom-input {
   margin-top: 5px;
 }
