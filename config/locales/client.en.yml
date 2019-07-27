@@ -215,6 +215,11 @@ en:
           log:
             label: "Logs"
 
+        transfer:
+          nav_label: "Transfer"
+          export: "Export"
+          import: "Import"
+
   wizard_js:
     location:
       name:

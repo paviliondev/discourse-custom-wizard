@@ -75,6 +75,10 @@ after_initialize do
       delete 'admin/wizards/apis/logs/:name' => 'api#clearlogs'
       get 'admin/wizards/apis/:name/redirect' => 'api#redirect'
       get 'admin/wizards/apis/:name/authorize' => 'api#authorize'
+      #transfer code
+      get 'admin/wizards/transfer' =>'transfer#index'
+      get 'admin/wizards/transfer/export' => 'transfer#export'
+      post 'admin/wizards/transfer/import' => 'transfer#import'
     end
   end
 
@@ -89,6 +93,8 @@ after_initialize do
   load File.expand_path('../controllers/wizard.rb', __FILE__)
   load File.expand_path('../controllers/steps.rb', __FILE__)
   load File.expand_path('../controllers/admin.rb', __FILE__)
+  #transfer code
+  load File.expand_path('../controllers/transfer.rb',__FILE__)
 
   load File.expand_path('../jobs/refresh_api_access_token.rb', __FILE__)
   load File.expand_path('../lib/api/api.rb', __FILE__)
