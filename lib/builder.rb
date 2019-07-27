@@ -107,13 +107,13 @@ class CustomWizard::Builder
           step.on_update do |updater|
             @updater = updater
             user = @wizard.user
-
+            
             if step_template['fields'] && step_template['fields'].length
               step_template['fields'].each do |field|
                 validate_field(field, updater, step_template) if field['type'] != 'text-only'
               end
             end
-
+            
             next if updater.errors.any?
 
             CustomWizard::Builder.step_handlers.each do |handler|
@@ -131,7 +131,7 @@ class CustomWizard::Builder
               submission = @submissions.last
               data = submission.merge(data)
             end
-
+            
             if step_template['actions'] && step_template['actions'].length && data
               step_template['actions'].each do |action|
                 self.send(action['type'].to_sym, user, action, data)
@@ -331,7 +331,7 @@ class CustomWizard::Builder
     else
       post = data[action['post']]
     end
-
+    
     if title
       params = {
         title: title,
@@ -339,22 +339,23 @@ class CustomWizard::Builder
         skip_validations: true
       }
 
-      if action['custom_category_enabled'] &&
-        !action['custom_category_wizard_field'] &&
-        action['custom_category_user_field_key']
-
-        if action['custom_category_user_field_key'].include?('custom_fields')
-          field = action['custom_category_user_field_key'].split('.').last
-          category_id = user.custom_fields[field]
-        else
-          category_id = user.send(action['custom_category_user_field_key'])
+      if action['custom_category_enabled']
+        if action['custom_category_wizard_field']
+          category_id = data[action['category_id']]
+        elsif action['custom_category_user_field_key']
+          if action['custom_category_user_field_key'].include?('custom_fields')
+            field = action['custom_category_user_field_key'].split('.').last
+            category_id = user.custom_fields[field]
+          else
+            category_id = user.send(action['custom_category_user_field_key'])
+          end
         end
       else
         category_id = action['category_id']
       end
 
       params[:category] = category_id
-
+      
       topic_custom_fields = {}
 
       if action['add_fields']
@@ -378,7 +379,7 @@ class CustomWizard::Builder
                 end
               end
             else
-              value = [value] if key === 'tags'
+              value = [*value] if key === 'tags'
               params[key.to_sym] = value
             end
           end
