@@ -6,7 +6,7 @@ export default Ember.Controller.extend({
     this._super();
     this.set('selected', new Set());
     this.set('filePath', []);
-    // this.setProperties({selected:[]})
+
 
   },
 
@@ -14,10 +14,8 @@ export default Ember.Controller.extend({
   actions: {
 
     checkChanged(event) {
-      // return true;
-      // console.log(event.target.checked)
 
-      let selected = this.get('selected')
+      let selected = this.get('selected');
 
 
       if (event.target.checked) {
@@ -28,71 +26,68 @@ export default Ember.Controller.extend({
       } else if (!event.target.checked) {
         selected.delete(event.target.id)
       }
-      console.log(selected)
+      console.log(selected);
       this.set('selected', selected)
-
-      // console.log(this.get('selected'))
 
 
     },
 
 
     export() {
-      let wizards = this.get('selected')
-      let url = Discourse.BaseUrl
-      let route = '/admin/wizards/transfer/export'
-      url += route + '?'
+      let wizards = this.get('selected');
+      let url = Discourse.BaseUrl;
+      let route = '/admin/wizards/transfer/export';
+      url += route + '?';
 
       wizards.forEach((wizard) => {
         let step = 'wizards[]=' + wizard;
-        step += '&'
+        step += '&';
         url += step
-      })
+      });
 
       location.href = url;
 
       console.log(url)
-      // return ajax('/admin/wizards/transfer/export', {
-      //   type: "POST",
-      //   data: {
-      //     wizards: wizards
-      //   }
-      //
-      // })
-
 
     },
 
     setFilePath(event) {
-      console.log(event.target.files[0])
+      console.log(event.target.files[0]);
 
-      this.set('filePath', event.target.files[0])
+      // 512 kb is the max file size
+      let maxFileSize = 512 * 1024;
+
+      if (maxFileSize < event.target.files[0].size) {
+        this.set('fileError', 'The file size is too big')
+      } else {
+
+        this.set('filePath', event.target.files[0])
+
+      }
 
     }
 
     ,
     import() {
-      let fileReader = new FileReader();
-      fileReader.onload = function () {
-        let upload = {'fileJson': fileReader.result};
-        // ajax('admin/wizard/transfer/import');
-        console.log(fileReader.result)
-        //ajax call
 
-        ajax('/admin/wizards/transfer/import',{
-          type: 'POST' ,
-          data:upload ,
+      let $formData = new FormData();
+      $formData.append('file', this.get('filePath'));
+      console.log($formData);
 
-        }).then(result=>{
-          if(result.error){
-            console.log(result.error)
+      ajax('/admin/wizards/transfer/import', {
+        type: 'POST',
+        data: $formData,
+        processData: false,
+        contentType: false,
 
-          }else{
-            alert('wizards imported successfully')
-          }
-        })
-      }
-      fileReader.readAsText(this.get('filePath'))
+      }).then(result => {
+        if (result.error) {
+          alert(result.error)
+
+        } else {
+          alert(result.success)
+        }
+      })
 
     }
 
