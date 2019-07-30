@@ -12,8 +12,7 @@ export default {
         this.route('adminWizardsApi', { path: '/:name', resetNamespace: true });
       });
 
-      this.route('adminWizardsTransfer',{path:'/transfer', resetNamespace:true});
-
+      this.route('adminWizardsTransfer', { path: '/transfer', resetNamespace: true });
 
     });
   }

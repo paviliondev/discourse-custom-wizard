@@ -1,34 +1,55 @@
-<h3>Select Wizards to export</h3>
-{{log this}}
+<h2>Export</h2>
 
-<form {{action 'export' wizards on="submit"}} class="form">
-  <ul>
-    {{#each model as |w|}}
+<ul class="wizard-list-select">
+  {{#each model as |w|}}
 
-      <li style="list-style-type: none;">
-        {{input type="checkbox" id=(dasherize w.id) change=(action 'checkChanged')}}
+    <li style="list-style-type: none;">
+      {{input type="checkbox" id=(dasherize w.id) change=(action 'checkChanged')}}
 
-        {{#link-to "adminWizard" (dasherize w.id)}}{{w.name}}{{/link-to}}
-      </li>
-    {{/each}}
+      {{#link-to "adminWizard" (dasherize w.id)}}{{w.name}}{{/link-to}}
+    </li>
+  {{/each}}
 
-  </ul>
-  {{!--  <button type='submit' class='btn btn-primary'>--}}
-  {{!--    {{ i18n 'admin.wizard.transfer.export' }}--}}
-  {{!--  </button>--}}
-  {{d-button label="admin.wizard.transfer.export" action=(action "export")}}
+</ul>
+
+{{d-button id="export-button" class="btn btn-primary side" label="admin.wizard.transfer.export"
+           action=(action "export")}}
 
 
-</form>
 
-{{input id='file_url' type="file" change=(action "setFilePath")}}
-<br />
-<br />
-{{d-button label="admin.wizard.transfer.import" action=(action "import")}}
+<h2>Import</h2>
+{{input id='file_url'  type="file" change=(action "setFilePath")}}
 
-{{!--{{resumable-upload--}}
-{{!--  target="transfer/import"--}}
-{{!--  success=(action "jsonSuccess")--}}
-{{!--  error=(action "jsonError")--}}
-{{!--  uploadText="Import"--}}
+
+
+{{d-button id="import-button" class="btn btn-primary side" label="admin.wizard.transfer.import"
+           action=(action "import")}}
+
+{{#if this.noneSelected}}
+  <p>{{this.noneSelected}}</p>
+{{/if}}
+
+{{#if this.noFile}}
+  <p>{{this.noFile}}</p>
+{{/if}}
+{{#if this.fileError}}
+  <p>{{this.fileError}}</p>
+{{/if}}
+
+{{#if this.error}}
+  <p>{{this.error}}</p>
+{{/if}}
+
+{{#if this.success_ids}}
+  {{#each this.success_ids as |id|}}
+    <p>Wizard: {{id}} saved successfully</p>
+  {{/each}}
+{{/if}}
+
+{{#if this.failure_ids}}
+  {{#each this.failure_ids as |id|}}
+    <p>Wizard: {{id}} could not be saved</p>
+  {{/each}}
+{{/if}}
+
 

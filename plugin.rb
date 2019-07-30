@@ -5,12 +5,14 @@
 # url: https://github.com/angusmcleod/discourse-custom-wizard
 
 register_asset 'stylesheets/wizard_custom_admin.scss'
+register_asset 'stylesheets/wizard/wizard_transfer.scss'
 register_asset 'lib/jquery.timepicker.min.js'
 register_asset 'lib/jquery.timepicker.scss'
 
 config = Rails.application.config
 config.assets.paths << Rails.root.join('plugins', 'discourse-custom-wizard', 'assets', 'javascripts')
 config.assets.paths << Rails.root.join('plugins', 'discourse-custom-wizard', 'assets', 'stylesheets', 'wizard')
+
 
 if Rails.env.production?
   config.assets.precompile += %w{
@@ -76,7 +78,7 @@ after_initialize do
       get 'admin/wizards/apis/:name/redirect' => 'api#redirect'
       get 'admin/wizards/apis/:name/authorize' => 'api#authorize'
       #transfer code
-      get 'admin/wizards/transfer' =>'transfer#index'
+      get 'admin/wizards/transfer' => 'transfer#index'
       get 'admin/wizards/transfer/export' => 'transfer#export'
       post 'admin/wizards/transfer/import' => 'transfer#import'
     end
@@ -94,7 +96,7 @@ after_initialize do
   load File.expand_path('../controllers/steps.rb', __FILE__)
   load File.expand_path('../controllers/admin.rb', __FILE__)
   #transfer code
-  load File.expand_path('../controllers/transfer.rb',__FILE__)
+  load File.expand_path('../controllers/transfer.rb', __FILE__)
 
   load File.expand_path('../jobs/refresh_api_access_token.rb', __FILE__)
   load File.expand_path('../lib/api/api.rb', __FILE__)
@@ -151,7 +153,7 @@ after_initialize do
       @excluded_routes ||= SiteSetting.wizard_redirect_exclude_paths.split('|') + ['/w/']
       url = request.referer || request.original_url
 
-      if request.format === 'text/html' && !@excluded_routes.any? { |str| /#{str}/ =~ url } && wizard_id
+      if request.format === 'text/html' && !@excluded_routes.any? {|str| /#{str}/ =~ url} && wizard_id
         if request.referer !~ /\/w\// && request.referer !~ /\/invites\//
           CustomWizard::Wizard.set_submission_redirect(current_user, wizard_id, request.referer)
         end
@@ -163,7 +165,7 @@ after_initialize do
     end
   end
 
-  add_to_serializer(:current_user, :redirect_to_wizard) { object.custom_fields['redirect_to_wizard'] }
+  add_to_serializer(:current_user, :redirect_to_wizard) {object.custom_fields['redirect_to_wizard']}
 
   ## TODO limit this to the first admin
   SiteSerializer.class_eval do
@@ -175,7 +177,7 @@ after_initialize do
 
     def complete_custom_wizard
       if scope.user && requires_completion = CustomWizard::Wizard.prompt_completion(scope.user)
-        requires_completion.map { |w| { name: w[:name], url: "/w/#{w[:id]}" } }
+        requires_completion.map {|w| {name: w[:name], url: "/w/#{w[:id]}"}}
       end
     end
 
