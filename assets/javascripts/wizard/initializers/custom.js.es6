@@ -204,7 +204,18 @@ export default {
       }.property('field.type', 'field.id')
     });
 
-    const StandardFieldValidation = ['text', 'textarea', 'dropdown', 'tag', 'category', 'image', 'checkbox', 'user-selector', 'text-only', 'composer'];
+    const StandardFieldValidation = [
+      'text',
+      'textarea',
+      'dropdown',
+      'tag',
+      'category',
+      'image',
+      'checkbox',
+      'user-selector',
+      'text-only',
+      'composer'
+    ];
 
     FieldModel.reopen({
       hasCustomCheck: false,
@@ -230,7 +241,7 @@ export default {
           if (type === 'checkbox') {
             valid = val;
           } else if (StandardFieldValidation.indexOf(type) > -1) {
-            valid = val && val.length > 0;
+            valid = val && String(val).length > 0;
           }
         }
 
