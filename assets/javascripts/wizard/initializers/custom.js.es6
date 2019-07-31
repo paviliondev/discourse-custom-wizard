@@ -73,7 +73,7 @@ export default {
 
       animateInvalidFields() {
         Ember.run.scheduleOnce('afterRender', () => {
-          $('.invalid input[type=text], .invalid textarea, .invalid input[type=checkbox]').wiggle(2, 100);
+          $('.invalid input[type=text], .invalid textarea, .invalid input[type=checkbox], .invalid .select-kit').wiggle(2, 100);
         });
       },
 
@@ -209,9 +209,7 @@ export default {
       'textarea',
       'dropdown',
       'tag',
-      'category',
       'image',
-      'checkbox',
       'user-selector',
       'text-only',
       'composer'
@@ -240,10 +238,13 @@ export default {
           const type = this.get('type');
           if (type === 'checkbox') {
             valid = val;
+          } else if (type === 'category') {
+            valid = val && val.toString().length > 0;
           } else if (StandardFieldValidation.indexOf(type) > -1) {
-            valid = val && String(val).length > 0;
+            valid = val && val.length > 0;
           }
         }
+
 
         this.setValid(valid);
 

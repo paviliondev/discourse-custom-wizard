@@ -508,9 +508,13 @@ img.avatar {
   }
 }
 
-.checkbox-field.invalid .input-area {
-  padding: 3px;
-  border: 4px solid red;
+.wizard-field {
+  &.invalid{
+    textarea, input[type=text], input[type=checkbox], .select-kit {
+      padding: 3px;
+      border: 4px solid red;
+    }
+  }
 }
 
 @keyframes rotate-forever {
