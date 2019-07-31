@@ -17,6 +17,7 @@
     width: 100%;
     min-height: initial;
     height: initial;
+    margin-bottom: 10px;
   }
 
   img.emoji {
@@ -27,6 +28,10 @@
 
   .wizard-step-title {
     flex: 0;
+    
+    p {
+      margin: 0.5em 0;
+    }
   }
 
   .wizard-step-description {
