@@ -1,11 +1,11 @@
 <html>
   <head>
     <%= discourse_stylesheet_link_tag :wizard, theme_id: nil %>
-    <%= stylesheet_link_tag "wizard_custom", media: "all", "data-turbolinks-track" => "reload" %>
-    <%= stylesheet_link_tag "wizard_composer", media: "all", "data-turbolinks-track" => "reload" %>
-    <%= stylesheet_link_tag "wizard_variables", media: "all", "data-turbolinks-track" => "reload" %>
-    <%= stylesheet_link_tag "wizard_badges", media: "all", "data-turbolinks-track" => "reload" %>
-    <%= stylesheet_link_tag "wizard_custom_mobile", media: "all", "data-turbolinks-track" => "reload" if mobile_view?%>
+    <%= stylesheet_link_tag "wizard_custom" %>
+    <%= stylesheet_link_tag "wizard_composer" %>
+    <%= stylesheet_link_tag "wizard_variables" %>
+    <%= stylesheet_link_tag "wizard_badges" %>
+    <%= stylesheet_link_tag "wizard_custom_mobile" %>
     <%- if theme_ids %>
       <%= discourse_stylesheet_link_tag (mobile_view? ? :mobile_theme : :desktop_theme) %>
     <%- end %>

@@ -1,8 +1,5 @@
 @import 'wizard_variables';
 
-// Category badges
-// --------------------------------------------------
-
 .badge-wrapper {
   font-size: $font-down-1;
   font-weight: bold;
@@ -26,8 +23,6 @@
     }
   }
 
-  // ----- Bullet
-
   &.bullet {
     margin-right: 12px;
     span.badge-category {
@@ -47,7 +42,6 @@
       display: inline-block;
     }
     .badge-category-parent-bg {
-      // Subcategories
       width: 5px;
       margin-right: 0;
       + .badge-category-bg {
@@ -58,8 +52,6 @@
       color: $primary-medium;
     }
   }
-
-  // ----- Box
 
   &.box {
     margin-right: 5px;
@@ -78,7 +70,6 @@
       }
 
       &.badge-category-parent-bg {
-        // Subcategories
         width: calc(100% - 5px);
         & + .badge-category-bg {
           left: 5px;
@@ -98,8 +89,6 @@
     }
   }
 
-  // ----- Bar
-
   &.bar {
     margin-right: 5px;
 
@@ -116,7 +105,6 @@
 
     .badge-category-parent-bg,
     .badge-category-bg {
-      // Subcategories
       display: inline-block;
       padding: 0 1px;
 
@@ -126,16 +114,11 @@
     }
   }
 
-  // ----- No category style
-
   &.none {
     color: $primary-high;
     margin-right: 5px;
   }
 }
-
-// Category badge dropdown
-// --------------------------------------------------
 
 .list-controls {
   .category-breadcrumb {
