@@ -10,6 +10,15 @@ en:
       too_short: "%{label} must be at least %{min} characters"
     none: "We couldn't find a wizard at that address."
     no_skip: "Wizard can't be skipped"
+    export:
+      error:
+        select_one: "Please select atleast one wizard"
+    import:
+      error:
+        no_file: "No file selected"
+        file_large: "File too large"
+        invalid_json: "File is not a valid json file"
+        no_valid_wizards: "File doesn't contain any valid wizards"
 
   site_settings:
     wizard_redirect_exclude_paths: "Routes excluded from wizard redirects."

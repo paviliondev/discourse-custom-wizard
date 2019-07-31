@@ -10,7 +10,7 @@ class CustomWizard::TransferController < ::ApplicationController
     wizards = params['wizards']
     wizard_objects = []
     if wizards.nil?
-      render json: {error: 'Please select atleast one wizard'}
+      render json: {error: I18n.t('wizard.export.error.select_one')}
       return
     end
 
@@ -33,17 +33,19 @@ class CustomWizard::TransferController < ::ApplicationController
   def import
     file = File.read(params['file'].tempfile)
     if file.nil?
-      render json: {error: "No file selected"}
+      render json: {error: I18n.t('wizard.import.error.no_file')}
       return
     end
     fileSize = file.size
     maxFileSize = 512 * 1024
     if maxFileSize < fileSize
-      render json: {error: "File too large"}
+      render json: {error: I18n.t('wizard.import.error.file_large')}
+      return
     end
 
     unless is_json file
-      render json: {error: "File is not a valid json file"}
+      render json: {error: I18n.t('wizard.import.error.invalid_json')}
+      return
     end
 
     jsonObject = JSON.parse file
@@ -64,7 +66,7 @@ class CustomWizard::TransferController < ::ApplicationController
     end
 
     if countValid == 0
-      render json: {error: "File doesn't contain any valid wizards"}
+      render json: {error: I18n.t('wizard.import.error.no_valid_wizards')}
     else
       render json: {success: success_ids, failed: failed_ids}
     end
