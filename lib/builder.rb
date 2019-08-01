@@ -53,7 +53,13 @@ class CustomWizard::Builder
       result
     end
 
-    result = result.gsub(/w\{(.*?)\}/) { |match| data[$1.to_sym] }
+    result.gsub(/w\{(.*?)\}/) { |match| recurse(data, [*$1.split('.')]) }
+  end
+  
+  def self.recurse(data, keys)
+    k = keys.shift
+    result = data[k]
+    keys.empty? ? result : self.recurse(result, keys)
   end
 
   def build(build_opts = {}, params = {})
