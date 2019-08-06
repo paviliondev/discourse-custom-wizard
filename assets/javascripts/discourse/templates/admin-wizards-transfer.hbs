@@ -28,7 +28,7 @@
 
   {{#if this.success_ids}}
     {{#each this.success_ids as |id|}}
-      <p>{{i18n "admin.wizard.transfer.import.success"}}</p>
+      <p>{{i18n "admin.wizard.transfer.import.success" id=id}}</p>
     {{/each}}
   {{/if}}
 
