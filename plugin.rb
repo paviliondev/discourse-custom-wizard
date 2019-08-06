@@ -5,7 +5,6 @@
 # url: https://github.com/angusmcleod/discourse-custom-wizard
 
 register_asset 'stylesheets/wizard_custom_admin.scss'
-register_asset 'stylesheets/wizard/wizard_transfer.scss'
 register_asset 'lib/jquery.timepicker.min.js'
 register_asset 'lib/jquery.timepicker.scss'
 

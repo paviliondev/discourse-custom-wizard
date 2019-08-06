@@ -217,8 +217,15 @@ en:
 
         transfer:
           nav_label: "Transfer"
-          export: "Export"
-          import: "Import"
+          export:
+            label: "Export"
+            noneSelected: "Please select atleast one wizard"
+          import:
+            label: "Import"
+            success: "Wizard: {{id}} saved successfully"
+            failure: "Wizard: {{id}} could not be saved"
+            noFile: "Please choose a file to import"
+            fileSizeError: "The file size is too big"
 
   wizard_js:
     location:

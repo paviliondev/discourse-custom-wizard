@@ -9,6 +9,7 @@ class CustomWizard::TransferController < ::ApplicationController
   def export
     wizards = params['wizards']
     wizard_objects = []
+
     if wizards.nil?
       render json: {error: I18n.t('wizard.export.error.select_one')}
       return
@@ -19,7 +20,6 @@ class CustomWizard::TransferController < ::ApplicationController
     end
 
     send_data wizard_objects.to_json, type: "application/json", disposition: 'attachment', filename: 'wizards.json'
-
   end
 
   def is_json(string)
@@ -32,12 +32,15 @@ class CustomWizard::TransferController < ::ApplicationController
 
   def import
     file = File.read(params['file'].tempfile)
+
     if file.nil?
       render json: {error: I18n.t('wizard.import.error.no_file')}
       return
     end
+
     fileSize = file.size
     maxFileSize = 512 * 1024
+
     if maxFileSize < fileSize
       render json: {error: I18n.t('wizard.import.error.file_large')}
       return
@@ -49,7 +52,6 @@ class CustomWizard::TransferController < ::ApplicationController
     end
 
     jsonObject = JSON.parse file
-
     countValid = 0
     success_ids = []
     failed_ids = []
@@ -71,6 +73,4 @@ class CustomWizard::TransferController < ::ApplicationController
       render json: {success: success_ids, failed: failed_ids}
     end
   end
-
-
 end

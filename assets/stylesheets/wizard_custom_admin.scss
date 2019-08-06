@@ -224,11 +224,11 @@
 
 .required-data .setting-value {
   flex-flow: wrap;
-  
+
   .custom-inputs {
     margin-bottom: 20px;
   }
-  
+
   .required-data-message .label {
     margin-bottom: 5px;
   }
@@ -480,3 +480,22 @@
 .wizard-step-contents{
   height: unset !important;
 }
+
+// Tansfer tab
+#file_url {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.wizard-list-select {
+  list-style-type: none;
+}
+
+.wizard-action-buttons{
+  flex-direction: column;
+}
+
+.container{
+  margin-bottom: 20px;
+}
+

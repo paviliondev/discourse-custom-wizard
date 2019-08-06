@@ -1,4 +1,4 @@
-import {ajax} from 'discourse/lib/ajax';
+import { ajax } from 'discourse/lib/ajax';
 
 export default Ember.Controller.extend({
   init() {
@@ -7,16 +7,15 @@ export default Ember.Controller.extend({
     this.set('filePath', Ember.A());
   },
 
-
   actions: {
     checkChanged(event) {
+      this.set('noneSelected','')
       let selected = this.get('selected');
       if (event.target.checked) {
         selected.addObject(event.target.id)
       } else if (!event.target.checked) {
         selected.removeObject(event.target.id)
       }
-      console.log(selected);
       this.set('selected', selected)
     },
 
@@ -26,7 +25,7 @@ export default Ember.Controller.extend({
       let route = '/admin/wizards/transfer/export';
       url += route + '?';
       if (!wizards.length) {
-        this.set('noneSelected', "Please select atleast one wizard")
+        this.set('noneSelected', I18n.t("admin.wizard.transfer.export.noneSelected"))
       } else {
         this.set('noneSelected', '')
         wizards.forEach((wizard) => {
@@ -39,6 +38,7 @@ export default Ember.Controller.extend({
     },
 
     setFilePath(event) {
+      this.set('noFile', '')
       // 512 kb is the max file size
       let maxFileSize = 512 * 1024;
       if (event.target.files[0] === undefined) {
@@ -46,24 +46,22 @@ export default Ember.Controller.extend({
         return
       }
       if (maxFileSize < event.target.files[0].size) {
-        this.set('fileError', 'The file size is too big')
+        this.set('fileSizeError', I18n.t('admin.wizard.transfer.import.fileSizeError'))
       } else {
+        this.set('fileSizeError', '')
         // emptying the array as we allow only one file upload at a time
         this.get('filePath').length = 0
         // interestingly, this.get gives us the actual reference to the object so modifying it
         // actually modifies the actual value
         this.get('filePath').addObject(event.target.files[0])
-        console.log(this.get('filePath'))
       }
     },
 
     import() {
       let $formData = new FormData();
-      console.log(this.get('filePath'))
       if (this.get('filePath').length) {
         this.set('noFile', '')
         $formData.append('file', this.get('filePath')[0]);
-        console.log($formData);
         ajax('/admin/wizards/transfer/import', {
           type: 'POST',
           data: $formData,
@@ -78,7 +76,7 @@ export default Ember.Controller.extend({
           }
         })
       } else {
-        this.set('noFile', 'Please choose a file to export')
+        this.set('noFile',I18n.t("admin.wizard.transfer.import.noFile"))
       }
     }
   }
