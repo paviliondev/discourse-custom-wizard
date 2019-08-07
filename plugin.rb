@@ -12,6 +12,7 @@ config = Rails.application.config
 config.assets.paths << Rails.root.join('plugins', 'discourse-custom-wizard', 'assets', 'javascripts')
 config.assets.paths << Rails.root.join('plugins', 'discourse-custom-wizard', 'assets', 'stylesheets', 'wizard')
 
+
 if Rails.env.production?
   config.assets.precompile += %w{
     wizard-custom-lib.js
@@ -75,6 +76,10 @@ after_initialize do
       delete 'admin/wizards/apis/logs/:name' => 'api#clearlogs'
       get 'admin/wizards/apis/:name/redirect' => 'api#redirect'
       get 'admin/wizards/apis/:name/authorize' => 'api#authorize'
+      #transfer code
+      get 'admin/wizards/transfer' => 'transfer#index'
+      get 'admin/wizards/transfer/export' => 'transfer#export'
+      post 'admin/wizards/transfer/import' => 'transfer#import'
     end
   end
 
@@ -89,6 +94,8 @@ after_initialize do
   load File.expand_path('../controllers/wizard.rb', __FILE__)
   load File.expand_path('../controllers/steps.rb', __FILE__)
   load File.expand_path('../controllers/admin.rb', __FILE__)
+  #transfer code
+  load File.expand_path('../controllers/transfer.rb', __FILE__)
 
   load File.expand_path('../jobs/refresh_api_access_token.rb', __FILE__)
   load File.expand_path('../lib/api/api.rb', __FILE__)
@@ -145,7 +152,7 @@ after_initialize do
       @excluded_routes ||= SiteSetting.wizard_redirect_exclude_paths.split('|') + ['/w/']
       url = request.referer || request.original_url
 
-      if request.format === 'text/html' && !@excluded_routes.any? { |str| /#{str}/ =~ url } && wizard_id
+      if request.format === 'text/html' && !@excluded_routes.any? {|str| /#{str}/ =~ url} && wizard_id
         if request.referer !~ /\/w\// && request.referer !~ /\/invites\//
           CustomWizard::Wizard.set_submission_redirect(current_user, wizard_id, request.referer)
         end
@@ -157,7 +164,7 @@ after_initialize do
     end
   end
 
-  add_to_serializer(:current_user, :redirect_to_wizard) { object.custom_fields['redirect_to_wizard'] }
+  add_to_serializer(:current_user, :redirect_to_wizard) {object.custom_fields['redirect_to_wizard']}
 
   ## TODO limit this to the first admin
   SiteSerializer.class_eval do
@@ -169,7 +176,7 @@ after_initialize do
 
     def complete_custom_wizard
       if scope.user && requires_completion = CustomWizard::Wizard.prompt_completion(scope.user)
-        requires_completion.map { |w| { name: w[:name], url: "/w/#{w[:id]}" } }
+        requires_completion.map {|w| {name: w[:name], url: "/w/#{w[:id]}"}}
       end
     end
 

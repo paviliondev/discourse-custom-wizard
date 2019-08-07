@@ -215,6 +215,19 @@ en:
           log:
             label: "Logs"
 
+        transfer:
+          nav_label: "Transfer"
+          export:
+            label: "Export"
+            none_selected: "Please select atleast one wizard"
+          import:
+            label: "Import"
+            logs: "Import logs for {{fileName}}"
+            success: 'Wizard "{{id}}" saved successfully'
+            failure: 'Wizard "{{id}}" could not be saved'
+            no_file: "Please choose a file to import"
+            file_size_error: "The file must be JSON and 512kb or less"
+
   wizard_js:
     location:
       name:
