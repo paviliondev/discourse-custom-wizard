@@ -31,16 +31,17 @@
 
   <div class="controls">
     {{input id='file-url' type="file" change=(action "setFilePath")}}
-    {{d-button id="import-button"
-               class="btn btn-primary side"
-               label="admin.wizard.transfer.import.label"
-               action=(action "import")}}
     
     {{#if importMessage}}
       <div class="import-message">
         {{importMessage}}
       </div>
     {{/if}}
+    
+    {{d-button id="import-button"
+               class="btn btn-primary side"
+               label="admin.wizard.transfer.import.label"
+               action=(action "import")}}
   </div>
   
   {{#if hasLogs}}

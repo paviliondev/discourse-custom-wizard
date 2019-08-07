@@ -226,7 +226,7 @@ en:
             success: 'Wizard "{{id}}" saved successfully'
             failure: 'Wizard "{{id}}" could not be saved'
             no_file: "Please choose a file to import"
-            file_size_error: "The file size is too big"
+            file_size_error: "The file must be JSON and 512kb or less"
 
   wizard_js:
     location:

@@ -79,7 +79,11 @@ export default Ember.Controller.extend({
       }
 
       if (maxFileSize < event.target.files[0].size) {
-        this.set('importMessage', I18n.t('admin.wizard.transfer.import.file_size_error'));
+        this.setProperties({
+          importMessage: I18n.t('admin.wizard.transfer.import.file_size_error'),
+          filePath: null
+        });
+        $('#file-url').val('');
       } else {
         this.set('filePath', event.target.files[0]);
       }
@@ -99,7 +103,7 @@ export default Ember.Controller.extend({
           contentType: false,
         }).then(result => {
           if (result.error) {
-            this.set('error', result.error);
+            this.set('importMessage', result.error);
           } else {
             this.setProperties({
               successIds: result.success,
