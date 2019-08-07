@@ -1,0 +1,32 @@
+<h2>{{i18n 'admin.wizard.transfer.import.label'}}</h2>
+
+<div class="controls">
+  {{input id='file-url' type="file" change=(action "setFilePath")}}
+  
+  {{#if importMessage}}
+    <div class="import-message">
+      {{importMessage}}
+    </div>
+  {{/if}}
+  
+  {{d-button id="import-button"
+             class="btn btn-primary side"
+             label="admin.wizard.transfer.import.label"
+             action=(action "import")}}
+</div>
+
+{{#if hasLogs}}
+  <div class="import-logs">
+    <div class="title">
+      {{i18n 'admin.wizard.transfer.import.logs' fileName=fileName}}
+    </div>
+    
+    <ul>
+      {{#each logs as |l|}}
+        <li class="import-log">
+          {{i18n (concat 'admin.wizard.transfer.import.' l.type) id=l.id}}
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+{{/if}}
