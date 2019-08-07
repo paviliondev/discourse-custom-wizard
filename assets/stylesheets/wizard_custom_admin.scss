@@ -482,7 +482,12 @@
 }
 
 // Tansfer tab
-#file_url {
+
+.admin-wizards-transfer .admin-container .container {
+  padding-top: 20px;
+}
+
+#file-url {
   display: block;
   margin-bottom: 10px;
 }
@@ -491,11 +496,20 @@
   list-style-type: none;
 }
 
-.wizard-action-buttons{
+.wizard-action-buttons {
   flex-direction: column;
 }
 
-.container{
-  margin-bottom: 20px;
+.import-logs {
+  margin-top: 20px;
+  
+  .title {
+    font-weight: 800;
+    margin-bottom: 10px;
+  }
+  
+  ul {
+    list-style: none;
+  }
 }
 

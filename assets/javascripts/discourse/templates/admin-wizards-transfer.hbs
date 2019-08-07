@@ -1,44 +1,61 @@
 <div class="container export">
-<h2>{{i18n 'admin.wizard.transfer.export.label'}}</h2>
-<ul class="wizard-list-select">
-  {{#each model as |w|}}
-    <li>
-      {{input type="checkbox" id=(dasherize w.id) change=(action 'checkChanged')}}
-      {{#link-to "adminWizard" (dasherize w.id)}}{{w.name}}{{/link-to}}
-    </li>
-  {{/each}}
-</ul>
-  {{d-button id="export-button" class="btn btn-primary side" label="admin.wizard.transfer.export.label" action=(action "export")}}
-  {{#if this.noneSelected}}
-    <p>{{this.noneSelected}}</p>
+  <h2>{{i18n 'admin.wizard.transfer.export.label'}}</h2>
+  
+  <ul class="wizard-list-select">
+    {{#each model as |w|}}
+      <li>
+        {{input type="checkbox"
+                id=(dasherize w.id)
+                change=(action 'checkChanged')}}
+        {{#link-to "adminWizard" (dasherize w.id)}}
+          {{w.name}}
+        {{/link-to}}
+      </li>
+    {{/each}}
+  </ul>
+  
+  {{d-button id="export-button"
+             class="btn btn-primary side"
+             label="admin.wizard.transfer.export.label"
+             action=(action "export")}}
+  
+  {{#if exportMessage}}
+    <div class="export-message">
+      {{exportMessage}}
+    </div>
   {{/if}}
 </div>
 
 <div class="container import">
-<h2>{{i18n 'admin.wizard.transfer.import.label'}}</h2>
-{{input id='file_url'  type="file" change=(action "setFilePath")}}
-{{d-button id="import-button" class="btn btn-primary side" label="admin.wizard.transfer.import.label" action=(action "import")}}
-  {{#if this.noFile}}
-    <p>{{this.noFile}}</p>
-  {{/if}}
+  <h2>{{i18n 'admin.wizard.transfer.import.label'}}</h2>
 
-  {{#if this.fileSizeError}}
-    <p>{{this.fileSizeError}}</p>
-  {{/if}}
-
-  {{#if this.success_ids}}
-    {{#each this.success_ids as |id|}}
-      <p>{{i18n "admin.wizard.transfer.import.success" id=id}}</p>
-    {{/each}}
-  {{/if}}
-
-  {{#if this.failure_ids}}
-    {{#each this.failure_ids as |id|}}
-      <p>{{i18n "admin.wizard.transfer.import.failure" id=id}}</p>
-    {{/each}}
+  <div class="controls">
+    {{input id='file-url' type="file" change=(action "setFilePath")}}
+    {{d-button id="import-button"
+               class="btn btn-primary side"
+               label="admin.wizard.transfer.import.label"
+               action=(action "import")}}
+    
+    {{#if importMessage}}
+      <div class="import-message">
+        {{importMessage}}
+      </div>
+    {{/if}}
+  </div>
+  
+  {{#if hasLogs}}
+    <div class="import-logs">
+      <div class="title">
+        {{i18n 'admin.wizard.transfer.import.logs' fileName=fileName}}
+      </div>
+      
+      <ul>
+        {{#each logs as |l|}}
+          <li class="import-log">
+            {{i18n (concat 'admin.wizard.transfer.import.' l.type) id=l.id}}
+          </li>
+        {{/each}}
+      </ul>
+    </div>
   {{/if}}
 </div>
-{{!-- server side error--}}
-{{#if this.error}}
-  <p>{{this.error}}</p>
-{{/if}}
