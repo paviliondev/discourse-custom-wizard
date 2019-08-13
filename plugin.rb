@@ -101,7 +101,7 @@ after_initialize do
   load File.expand_path('../lib/api/api.rb', __FILE__)
   load File.expand_path('../lib/api/authorization.rb', __FILE__)
   load File.expand_path('../lib/api/endpoint.rb', __FILE__)
-  load File.expand_path('../lib/api/logentry.rb', __FILE__)
+  load File.expand_path('../lib/api/log_entry.rb', __FILE__)
   load File.expand_path('../controllers/api.rb', __FILE__)
   load File.expand_path('../serializers/api/api_serializer.rb', __FILE__)
   load File.expand_path('../serializers/api/authorization_serializer.rb', __FILE__)

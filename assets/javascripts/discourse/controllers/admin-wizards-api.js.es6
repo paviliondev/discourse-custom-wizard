@@ -11,6 +11,8 @@ export default Ember.Controller.extend({
   showRemove: Ember.computed.not('isNew'),
   showRedirectUri: Ember.computed.and('threeLeggedOauth', 'api.name'),
   responseIcon: null,
+  contentTypes: ['application/json', 'application/x-www-form-urlencoded'],
+  successCodes: [100, 101, 102, 200, 201, 202, 203, 204, 205, 206, 207, 208, 226, 300, 301, 302, 303, 303, 304, 305, 306, 307, 308],
 
   @computed('saveDisabled', 'api.authType', 'api.authUrl', 'api.tokenUrl', 'api.clientId', 'api.clientSecret', 'threeLeggedOauth')
   authDisabled(saveDisabled, authType, authUrl, tokenUrl, clientId, clientSecret, threeLeggedOauth) {
@@ -24,7 +26,7 @@ export default Ember.Controller.extend({
     return !name || !authType;
   },
 
-  authorizationTypes: ['basic', 'oauth_2', 'oauth_3'],
+  authorizationTypes: ['none', 'basic', 'oauth_2', 'oauth_3'],
   isBasicAuth: Ember.computed.equal('api.authType', 'basic'),
 
   @computed('api.authType')
@@ -124,13 +126,15 @@ export default Ember.Controller.extend({
         requiredParams = ['authUrl', 'tokenUrl', 'clientId', 'clientSecret'];
       }
 
-      for (let rp of requiredParams) {
-        if (!api[rp]) {
-          let key = rp.replace('auth', '');
-          error = `${I18n.t(`admin.wizard.api.auth.${key.underscore()}`)} is required for ${authType}`;
-          break;
+      if (requiredParams) {
+        for (let rp of requiredParams) {
+          if (!api[rp]) {
+            let key = rp.replace('auth', '');
+            error = `${I18n.t(`admin.wizard.api.auth.${key.underscore()}`)} is required for ${authType}`;
+            break;
+          }
+          data[rp.underscore()] = api[rp];
         }
-        data[rp.underscore()] = api[rp];
       }
 
       const params = api.authParams;

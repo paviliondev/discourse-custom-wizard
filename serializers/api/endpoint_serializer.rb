@@ -2,7 +2,9 @@ class CustomWizard::Api::EndpointSerializer < ApplicationSerializer
   attributes :id,
              :name,
              :method,
-             :url
+             :url,
+             :content_type,
+             :success_codes
 
   def method
     object.send('method')

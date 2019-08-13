@@ -228,18 +228,28 @@
           <li>
             <div class="endpoint">
               <div class="endpoint-">
-                {{input value=endpoint.name
-                        placeholder=(i18n 'admin.wizard.api.endpoint.name')}}
-                {{combo-box content=endpointMethods
-                            value=endpoint.method
-                            none="admin.wizard.api.endpoint.method"}}
-                {{input value=endpoint.url
-                        placeholder=(i18n 'admin.wizard.api.endpoint.url')
-                        class='endpoint-url'}}
-                {{d-button action=(action "removeEndpoint")
-                           actionParam=endpoint
-                           icon='times'
-                           class='remove-endpoint'}}
+                <div class="top">
+                  {{input value=endpoint.name
+                          placeholder=(i18n 'admin.wizard.api.endpoint.name')}}
+                  {{input value=endpoint.url
+                          placeholder=(i18n 'admin.wizard.api.endpoint.url')
+                          class='endpoint-url'}}
+                  {{d-button action=(action "removeEndpoint")
+                             actionParam=endpoint
+                             icon='times'
+                             class='remove-endpoint'}}
+                </div>
+                <div class="bottom">
+                  {{combo-box content=endpointMethods
+                              value=endpoint.method
+                              none="admin.wizard.api.endpoint.method"}}
+                  {{combo-box content=contentTypes
+                              value=endpoint.content_type
+                              none="admin.wizard.api.endpoint.content_type"}}
+                  {{multi-select content=successCodes
+                                 values=endpoint.success_codes
+                                 none="admin.wizard.api.endpoint.success_codes"}}
+                </div>
               </div>
             </div>
           </li>

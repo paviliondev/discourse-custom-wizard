@@ -211,6 +211,8 @@ en:
             name: "Endpoint name"
             method: "Select a method"
             url: "Enter a url"
+            content_type: "Select a content type"
+            success_codes: "Select success codes"
 
           log:
             label: "Logs"

@@ -492,7 +492,7 @@ class CustomWizard::Builder
       rescue JSON::ParserError
         raise Discourse::InvalidParameters, "Invalid API body definition: #{action['api_body']} for #{action['title']}"
       end
-      api_body = CustomWizard::Builder.fill_placeholders(JSON.generate(api_body_parsed), user, data)
+      api_body = JSON.parse(CustomWizard::Builder.fill_placeholders(JSON.generate(api_body_parsed), user, data))
     end
 
     result = CustomWizard::Api::Endpoint.request(user, action['api'], action['api_endpoint'], api_body)

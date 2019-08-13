@@ -5,7 +5,9 @@ class CustomWizard::Api::Endpoint
                 :name,
                 :api_name,
                 :method,
-                :url
+                :url,
+                :content_type,
+                :success_codes
 
   def initialize(api_name, data={})
     @api_name = api_name
@@ -62,40 +64,49 @@ class CustomWizard::Api::Endpoint
       end
   end
 
-  def self.request(user, api_name, endpoint_id, body)
+  def self.request(user = Discourse.system_user, api_name, endpoint_id, body)
     endpoint = self.get(api_name, endpoint_id)
-    auth = CustomWizard::Api::Authorization.get_header_authorization_string(api_name)
+    auth_string = CustomWizard::Api::Authorization.authorization_string(api_name)
+    content_type = endpoint.content_type
+    
+    headers = {}
+    headers["Authorization"] = auth_string if auth_string
+    headers["Content-Type"] = content_type if content_type
 
-    connection = Excon.new(
-      URI.parse(URI.encode(endpoint.url)).to_s,
-      :headers => {
-        "Authorization" => auth,
-        "Accept" => "application/json, */*",
-        "Content-Type" => "application/json"
-      }
-    )
+    connection = Excon.new(URI.parse(URI.encode(endpoint.url)).to_s, headers: headers)
 
-    params = {
-      method: endpoint.method
-    }
+    params = { method: endpoint.method }
 
     if body
-      body = JSON.generate(body)
-      body.delete! '\\'
+      if content_type === "application/json"
+        body = JSON.generate(body)
+      elsif content_type === "application/x-www-form-urlencoded"
+        body = URI.encode_www_form(body)
+      end  
+      
       params[:body] = body
     end
 
-    begin
-      response = connection.request(params)
-      log_params = {time: Time.now, user_id: user.id, status: 'SUCCESS', url: endpoint.url, error: ""}
+    response = connection.request(params)
+    
+    if endpoint.success_codes.include?(response.status)
+      begin
+        result = JSON.parse(response.body)
+      rescue JSON::ParserError
+        result = response.body
+      end
 
-      CustomWizard::Api::LogEntry.set(api_name, log_params)
-      return JSON.parse(response.body)
-    rescue
-      # TODO: improve error detail
-      log_params = {time: Time.now, user_id: user.id, status: 'FAILURE', url: endpoint.url, error: "API request failed"}
-      CustomWizard::Api::LogEntry.set(api_name, log_params)
-      return JSON.parse "[{\"error\":\"API request failed\"}]"
+      CustomWizard::Api::LogEntry.set(api_name, log_params(user, 'SUCCESS', endpoint.url))
+      
+      result
+    else
+      message = "API request failed"
+      CustomWizard::Api::LogEntry.set(api_name, log_params(user, 'FAIL', endpoint.url, message))
+      { error: message }
     end
+  end
+  
+  def self.log_params(user, status, url, message = "")
+    { time: Time.now, user_id: user.id, status: status, url: url, error: message }
   end
 end

@@ -64,7 +64,7 @@ class CustomWizard::Api::Authorization
     PluginStore.remove("custom_wizard_api_#{api_name}", "authorization")
   end
 
-  def self.get_header_authorization_string(name)
+  def self.authorization_string(name)
     auth = CustomWizard::Api::Authorization.get(name)
     raise Discourse::InvalidParameters.new(:name) unless auth.present?
 
@@ -72,9 +72,11 @@ class CustomWizard::Api::Authorization
       raise Discourse::InvalidParameters.new(:username) unless auth.username.present?
       raise Discourse::InvalidParameters.new(:password) unless auth.password.present?
       "Basic #{Base64.strict_encode64((auth.username + ":" + auth.password).chomp)}"
-    else
+    elsif ['oauth_3', 'oauth_2'].include?(auth.auth_type)
       raise Discourse::InvalidParameters.new(auth.access_token) unless auth.access_token.present?
       "Bearer #{auth.access_token}"
+    else
+      nil
     end
   end
 
