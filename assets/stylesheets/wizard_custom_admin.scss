@@ -241,10 +241,10 @@
 .admin-contents .wizard-submissions {
   width: 100%;
   display: inline-block;
+  
   table {
     margin-top: 0;
-    display: inline-block;
-    overflow-x: scroll;
+    position: absolute;
   }
 }
 
