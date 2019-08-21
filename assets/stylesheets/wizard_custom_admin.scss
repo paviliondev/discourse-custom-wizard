@@ -1,14 +1,3 @@
-@import "common/components/navs";
-
-.clearfix {
-  clear: both;
-}
-
-.wizards-nav-button {
-  @extend .nav-pills !optional;
-  float: left;
-}
-
 .wizard-list {
   float: left;
   width: 250px;
