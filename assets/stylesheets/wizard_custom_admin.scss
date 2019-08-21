@@ -1,5 +1,11 @@
+@import "common/components/navs";
+
+.clearfix {
+  clear: both;
+}
+
 .wizards-nav-button {
-  @extend .nav-pills;
+  @extend .nav-pills !optional;
   float: left;
 }
 
