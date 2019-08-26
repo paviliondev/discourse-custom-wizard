@@ -252,8 +252,14 @@
     }
   }
 
-  .wizard-column .wizard-field .input-area {
-    margin: 0.5em 0;
+  .wizard-column {
+    .wizard-field .input-area {
+      margin: 0.5em 0;
+    }
+
+    .wizard-column-contents h1 {
+      margin: 0
+    }
   }
 
   .combo-box {
