@@ -524,7 +524,7 @@ class CustomWizard::Builder
     
     if action['category_id']
       if category = Category.find(action['category_id'])
-        url += "&category=#{category.full_slug}"
+        url += "&category=#{category.full_slug('/')}"
       end
     end
     
