@@ -17,7 +17,7 @@
     <%= preload_script "wizard-plugin" %>
     <%= preload_script "pretty-text-bundle" %>
     <%= preload_script "locales/#{I18n.locale}" %>
-    <script src="<%= Discourse.base_uri %>/extra-locales/wizard"></script>
+    <script src="<%= ExtraLocalesController.url("wizard") %>"></script>
     <%= csrf_meta_tags %>
 
     <%- unless customization_disabled? %>
