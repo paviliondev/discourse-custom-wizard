@@ -80,6 +80,14 @@
         width: initial;
         float: none;
         display: flex;
+        
+        &.editor {
+          flex-flow: wrap;
+          
+          .d-editor {
+            margin-bottom: 5px;
+          }
+        }
 
         .custom-input .remove {
           margin-left: 10px;

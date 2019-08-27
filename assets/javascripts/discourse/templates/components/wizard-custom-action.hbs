@@ -16,41 +16,7 @@
   </div>
 </div>
 
-{{#if createTopic}}
-  <div class="setting">
-    <div class="setting-label">
-      <h3>{{i18n "admin.wizard.action.create_topic.category"}}</h3>
-    </div>
-    <div class="setting-value">
-      {{category-chooser value=action.category_id isDisabled=action.custom_category_enabled}}
-      <div class="setting-gutter">
-        {{input type='checkbox' checked=action.custom_category_enabled}}
-        <span>{{i18n 'admin.wizard.action.custom_category.label'}}</span>
-        {{#if action.custom_category_enabled}}
-          <div class="custom-category">
-            <div>
-              {{input type='checkbox' checked=action.custom_category_wizard_field}}
-              <span>{{i18n 'admin.wizard.action.custom_category.wizard_field'}}</span>
-              {{#if action.custom_category_wizard_field}}
-                {{combo-box value=action.category_id
-                            content=availableFields
-                            nameProperty="label"
-                            none='admin.wizard.select_field'}}
-              {{/if}}
-            </div>
-            <div>
-              {{input type='checkbox' checked=action.custom_category_user_field}}
-              <span>{{i18n 'admin.wizard.action.custom_category.user_field'}}</span>
-              {{#if action.custom_category_user_field}}
-                {{input value=action.custom_category_user_field_key}}
-              {{/if}}
-            </div>
-          </div>
-        {{/if}}
-      </div>
-    </div>
-  </div>
-
+{{#if basicTopicFields}}
   <div class="setting">
     <div class="setting-label">
       <h3>{{i18n "admin.wizard.action.title"}}</h3>
@@ -92,16 +58,68 @@
       <div class="setting-label">
         <h3>{{i18n 'admin.wizard.action.post_builder.label'}}</h3>
       </div>
-      <div class="setting-value">
-        <label>{{i18n 'admin.wizard.action.post_builder.user_fields'}}{{builderUserFields}}</label>
-        <label>{{i18n 'admin.wizard.action.post_builder.wizard_fields'}}{{builderWizardFields}}</label>
+      <div class="setting-value editor">
         {{d-editor value=action.post_template
                    placeholder='admin.wizard.action.interpolate_fields'
                    classNames='post-builder-editor'}}
+        <div>
+          <label>{{i18n 'admin.wizard.action.post_builder.user_fields'}}{{builderUserFields}}</label>
+          <label>{{i18n 'admin.wizard.action.post_builder.wizard_fields'}}{{builderWizardFields}}</label>
+        </div>
       </div>
     </div>
   {{/if}}
+{{/if}}
 
+{{#if publicTopicFields}}
+  <div class="setting">
+    <div class="setting-label">
+      <h3>{{i18n "admin.wizard.action.create_topic.category"}}</h3>
+    </div>
+    <div class="setting-value">
+      {{category-chooser value=action.category_id isDisabled=action.custom_category_enabled}}
+      <div class="setting-gutter">
+        {{input type='checkbox' checked=action.custom_category_enabled}}
+        <span>{{i18n 'admin.wizard.action.custom_category.label'}}</span>
+        {{#if action.custom_category_enabled}}
+          <div class="custom-category">
+            <div>
+              {{input type='checkbox' checked=action.custom_category_wizard_field}}
+              <span>{{i18n 'admin.wizard.action.custom_category.wizard_field'}}</span>
+              {{#if action.custom_category_wizard_field}}
+                {{combo-box value=action.category_id
+                            content=availableFields
+                            nameProperty="label"
+                            none='admin.wizard.select_field'}}
+              {{/if}}
+            </div>
+            <div>
+              {{input type='checkbox' checked=action.custom_category_user_field}}
+              <span>{{i18n 'admin.wizard.action.custom_category.user_field'}}</span>
+              {{#if action.custom_category_user_field}}
+                {{input value=action.custom_category_user_field_key}}
+              {{/if}}
+            </div>
+          </div>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+  
+  <div class="setting">
+    <div class="setting-label">
+      <h3>{{i18n "admin.wizard.action.create_topic.tags"}}</h3>
+    </div>
+    <div class="setting-value">
+      {{tag-chooser tags=action.tags
+                    filterable=true
+                    allowCreate=true
+                    isDisabled=action.custom_category_enabled}}
+    </div>
+  </div>
+{{/if}}
+
+{{#if newTopicFields}}
   <div class="setting">
     <div class="setting-label">
       <h3>{{i18n "admin.wizard.action.skip_redirect.label"}}</h3>
@@ -111,7 +129,9 @@
       <span>{{i18n 'admin.wizard.action.skip_redirect.description' type='topic'}}</span>
     </div>
   </div>
+{{/if}}
 
+{{#if createTopic}}
   <div class="setting full">
     <label>{{i18n 'admin.wizard.action.add_fields' type='Topic'}}</label>
     {{wizard-custom-inputs inputs=action.add_fields
@@ -125,46 +145,6 @@
 {{#if sendMessage}}
   <div class="setting">
     <div class="setting-label">
-      <h3>{{i18n "admin.wizard.action.title"}}</h3>
-    </div>
-    <div class="setting-value">
-      {{combo-box value=action.title content=availableFields nameProperty='label' none='admin.wizard.select_field'}}
-    </div>
-  </div>
-
-  <div class="setting">
-    <div class="setting-label">
-      <h3>{{i18n "admin.wizard.action.post"}}</h3>
-    </div>
-    <div class="setting-value">
-      {{combo-box value=action.post content=availableFields
-                                    nameProperty='label'
-                                    none='admin.wizard.select_field'
-                                    isDisabled=action.post_builder}}
-      <div>
-        {{input type='checkbox' checked=action.post_builder}}
-        <span>{{i18n 'admin.wizard.action.post_builder.checkbox'}}</span>
-      </div>
-    </div>
-  </div>
-
-  {{#if action.post_builder}}
-    <div class="setting full">
-      <div class="setting-label">
-        <h3>{{i18n 'admin.wizard.action.post_builder.label'}}</h3>
-      </div>
-      <div class="setting-value">
-        <label>{{i18n 'admin.wizard.action.post_builder.user_fields'}}{{builderUserFields}}</label>
-        <label>{{i18n 'admin.wizard.action.post_builder.wizard_fields'}}{{builderWizardFields}}</label>
-        {{d-editor value=action.post_template
-                   placeholder='admin.wizard.action.interpolate_fields'
-                   classNames='post-builder-editor'}}
-      </div>
-    </div>
-  {{/if}}
-
-  <div class="setting">
-    <div class="setting-label">
       <h3>{{i18n "admin.wizard.action.send_message.recipient"}}</h3>
     </div>
     <div class="setting-value">
@@ -172,16 +152,6 @@
                       includeMentionableGroups="true"
                       usernames=action.username
                       allowedUsers="true"}}
-    </div>
-  </div>
-
-  <div class="setting">
-    <div class="setting-label">
-      <h3>{{i18n "admin.wizard.action.skip_redirect.label"}}</h3>
-    </div>
-    <div class="setting-value">
-      {{input type='checkbox' checked=action.skip_redirect}}
-      <span>{{i18n 'admin.wizard.action.skip_redirect.description' type='message'}}</span>
     </div>
   </div>
 
@@ -282,4 +252,8 @@
       {{input value=action.code}}
     </div>
   </div>
+{{/if}}
+
+{{#if openComposer}}
+  
 {{/if}}

@@ -504,6 +504,36 @@ class CustomWizard::Builder
       ## add validation callback
     end
   end
+  
+  def open_composer(user, action, data)    
+    if action['custom_title_enabled']
+      title = CustomWizard::Builder.fill_placeholders(action['custom_title'], user, data)
+    else
+      title = data[action['title']]
+    end
+    
+    url = "/new-topic?title=#{title}"
+
+    if action['post_builder']
+      post = CustomWizard::Builder.fill_placeholders(action['post_template'], user, data)
+    else
+      post = data[action['post']]
+    end
+    
+    url += "&body=#{post}"
+    
+    if action['category_id']
+      if category = Category.find(action['category_id'])
+        url += "&category=#{category.full_slug}"
+      end
+    end
+    
+    if action['tags'].present?
+      url += "&tags=#{action['tags'].join(',')}"
+    end
+        
+    data['redirect_on_complete'] = Discourse.base_uri + URI.encode(url)
+  end
 
   def add_to_group(user, action, data)
     if group_id = data[action['group_id']]

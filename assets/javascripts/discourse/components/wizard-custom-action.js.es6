@@ -6,7 +6,8 @@ const ACTION_TYPES = [
   { id: 'send_message', name: 'Send Message' },
   { id: 'send_to_api', name: 'Send to API' },
   { id: 'add_to_group', name: 'Add to Group' },
-  { id: 'route_to', name: 'Route To' }
+  { id: 'route_to', name: 'Route To' },
+  { id: 'open_composer', name: 'Open Composer' }
 ];
 
 const PROFILE_FIELDS = [
@@ -34,6 +35,21 @@ export default Ember.Component.extend({
   addToGroup: Ember.computed.equal('action.type', 'add_to_group'),
   routeTo: Ember.computed.equal('action.type', 'route_to'),
   disableId: Ember.computed.not('action.isNew'),
+
+  @computed('action.type')
+  basicTopicFields(actionType) {
+    return ['create_topic', 'send_message', 'open_composer'].indexOf(actionType) > -1;
+  },
+
+  @computed('action.type')
+  publicTopicFields(actionType) {
+    return ['create_topic', 'open_composer'].indexOf(actionType) > -1;
+  },
+
+  @computed('action.type')
+  newTopicFields(actionType) {
+    return ['create_topic', 'send_message'].indexOf(actionType) > -1;
+  },
 
   @computed('availableFields')
   builderWizardFields(fields) {

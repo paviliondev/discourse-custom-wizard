@@ -133,6 +133,7 @@ en:
           create_topic:
             label: "Create Topic"
             category: "Category"
+            tags: "Tags"
           update_profile:
             label: "Update Profile"
             profile_field: "Profile Field"
