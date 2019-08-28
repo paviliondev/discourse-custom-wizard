@@ -5,8 +5,8 @@ export default StepController.extend({
   actions: {
     goNext(response) {
       const next = this.get('step.next');
-      if (response.route_to) {
-        window.location.href = response.route_to;
+      if (response.redirect_on_next) {
+        window.location.href = response.redirect_on_next;
       } else if (response.refresh_required) {
         const id = this.get('wizard.id');
         window.location.href = getUrl(`/w/${id}/steps/${next}`);

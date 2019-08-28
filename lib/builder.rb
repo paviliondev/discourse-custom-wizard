@@ -161,12 +161,10 @@ class CustomWizard::Builder
             end
 
             if updater.errors.empty?
-              if route_to = data['route_to']
-                updater.result[:route_to] = route_to
-              end
-
-              if redirect_on_complete = data['redirect_on_complete']
-                updater.result[:redirect_on_complete] = redirect_on_complete
+              if final_step
+                updater.result[:redirect_on_complete] = data['redirect_on_complete'] || data['route_to']
+              elsif route_to = data['route_to']
+                updater.result[:redirect_on_next] = route_to
               end
             end
           end
