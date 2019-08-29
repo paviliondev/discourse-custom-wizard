@@ -148,6 +148,10 @@ class CustomWizard::Builder
             end
 
             final_step = updater.step.next.nil?
+            
+            if route_to = data['route_to']
+              data.delete('route_to')
+            end
 
             if @wizard.save_submissions && updater.errors.empty?
               save_submissions(data, final_step)
@@ -162,8 +166,8 @@ class CustomWizard::Builder
 
             if updater.errors.empty?
               if final_step
-                updater.result[:redirect_on_complete] = data['route_to'] || data['redirect_on_complete']
-              elsif route_to = data['route_to']
+                updater.result[:redirect_on_complete] = route_to || data['redirect_on_complete']
+              elsif 
                 updater.result[:redirect_on_next] = route_to
               end
             end
