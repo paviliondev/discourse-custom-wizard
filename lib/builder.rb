@@ -167,7 +167,7 @@ class CustomWizard::Builder
             if updater.errors.empty?
               if final_step
                 updater.result[:redirect_on_complete] = route_to || data['redirect_on_complete']
-              elsif 
+              elsif route_to
                 updater.result[:redirect_on_next] = route_to
               end
             end
