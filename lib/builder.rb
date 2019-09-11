@@ -341,7 +341,7 @@ class CustomWizard::Builder
   end
 
   def standardise_boolean(value)
-    !!HasCustomFields::Helpers::CUSTOM_FIELD_TRUE.include?(value)
+    ActiveRecord::Type::Boolean.new.cast(value)
   end
 
   def create_topic(user, action, data)
