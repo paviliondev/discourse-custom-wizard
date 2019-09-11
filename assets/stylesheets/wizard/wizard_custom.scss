@@ -229,8 +229,27 @@
     margin: 20px 0;
   }
 
-  .wizard-image-row .wizard-btn-upload {
-    margin: 0;
+  .wizard-image-row {
+
+    .wizard-btn-upload {
+      margin: 0;
+    }
+
+  }
+
+  .wizard-image-preview  {
+    max-width: 200px;
+    max-height: 200px;
+    overflow: hidden;
+
+    img {
+      max-width:100%;
+      max-height:100%;
+    }
+  }
+
+  .wizard-select-value img {
+    vertical-align: middle;
   }
 
   .wizard-field-upload {
