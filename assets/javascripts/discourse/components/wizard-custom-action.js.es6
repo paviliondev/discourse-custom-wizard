@@ -12,6 +12,7 @@ const ACTION_TYPES = [
 
 const PROFILE_FIELDS = [
   'name',
+  'user_avatar',
   'date_of_birth',
   'title',
   'locale',

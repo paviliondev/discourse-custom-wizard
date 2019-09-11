@@ -476,12 +476,19 @@ class CustomWizard::Builder
         custom_fields[user_field || custom_field] = data[key]
       else
         updater_key = value
-        
         if ['profile_background', 'card_background'].include?(value)
           updater_key = "#{value}_upload_url"
         end
-        
         attributes[updater_key.to_sym] = data[key] if updater_key
+      end
+
+      if ['user_avatar'].include?(value)
+        this_upload_id = data[key][:id]
+        user.create_user_avatar unless user.user_avatar
+        user.user_avatar.custom_upload_id = this_upload_id
+        user.uploaded_avatar_id = this_upload_id
+        user.save!
+        user.user_avatar.save!
       end
     end
 

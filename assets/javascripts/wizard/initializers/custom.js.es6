@@ -256,6 +256,8 @@ export default {
             valid = val;
           } else if (type === 'category') {
             valid = val && val.toString().length > 0;
+          } else if (type === 'upload') {
+            valid = val && val.id > 0;
           } else if (StandardFieldValidation.indexOf(type) > -1) {
             valid = val && val.length > 0;
           }
