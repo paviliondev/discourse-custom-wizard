@@ -459,8 +459,8 @@ class CustomWizard::Builder
     action['profile_updates'].each do |pu|
       value = pu['value']
       custom_field = nil
-  
-      if pu['value_custom']
+        
+      if pu['value_custom'].present?
         custom_parts = pu['value_custom'].split('.')
         if custom_parts.length == 2 && custom_parts[0] == 'custom_field'
           custom_field = custom_parts[1]
@@ -475,14 +475,20 @@ class CustomWizard::Builder
       if user_field || custom_field
         custom_fields[user_field || custom_field] = data[key]
       else
-        attributes[value.to_sym] = data[key]
+        updater_key = value
+        
+        if ['profile_background', 'card_background'].include?(value)
+          updater_key = "#{value}_upload_url"
+        end
+        
+        attributes[updater_key.to_sym] = data[key] if updater_key
       end
     end
 
     if custom_fields.present?
       attributes[:custom_fields] = custom_fields
     end
-
+    
     if attributes.present?
       user_updater = UserUpdater.new(user, user)
       user_updater.update(attributes)
