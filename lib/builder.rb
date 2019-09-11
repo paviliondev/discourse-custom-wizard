@@ -53,7 +53,21 @@ class CustomWizard::Builder
       result
     end
 
-    result.gsub(/w\{(.*?)\}/) { |match| recurse(data, [*$1.split('.')]) }
+    result = result.gsub(/w\{(.*?)\}/) { |match| recurse(data, [*$1.split('.')]) }
+    
+    result.gsub(/v\{(.*?)\}/) do |match|
+      attrs = $1.split(':')
+      key = attrs.first
+      format = attrs.length > 1 ? attrs.last : nil
+      v = nil
+      
+      if key == 'time'
+        time_format = format.present? ? format : "%B %-d, %Y"
+        v = Time.now.strftime(time_format)
+      end
+      
+      v
+    end
   end
   
   def self.recurse(data, keys)
