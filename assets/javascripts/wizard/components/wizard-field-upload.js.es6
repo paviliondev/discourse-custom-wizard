@@ -31,7 +31,6 @@ export default Ember.Component.extend({
         "field.value": response.result,
         "uploading": false
       });
-      console.log (response.result);
       if (['jpg','jpeg','png','gif'].includes(response.result.extension)) {
         this.setProperties({
           "isImage": true
