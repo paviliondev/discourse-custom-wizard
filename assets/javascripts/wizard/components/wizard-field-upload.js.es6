@@ -4,6 +4,7 @@ import { getToken } from "wizard/lib/ajax";
 export default Ember.Component.extend({
   classNames: ["wizard-field-upload"],
   uploading: false,
+  isImage: false,
 
   didInsertElement() {
     this._super();
@@ -30,6 +31,12 @@ export default Ember.Component.extend({
         "field.value": response.result,
         "uploading": false
       });
+      console.log (response.result);
+      if (['jpg','jpeg','png','gif'].includes(response.result.extension)) {
+        this.setProperties({
+          "isImage": true
+        })
+      }
     });
 
     $upload.on("fileuploadfail", (e, response) => {
