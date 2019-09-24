@@ -104,7 +104,7 @@ class CustomWizard::Builder
           end
 
           if required_data = step_template['required_data']
-            if !@submissions.last && required_data.length
+            if !@submissions.last && required_data.present?
               step.permitted = false
               next
             end
