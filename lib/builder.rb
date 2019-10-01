@@ -423,6 +423,16 @@ class CustomWizard::Builder
 
   def send_message(user, action, data)
 
+    empty_data = false
+
+    data.each do |k, v|
+      if v.empty?
+        empty_data = true
+      end
+    end
+    # leave if there are any empty fields
+    return if empty_data
+
     unless action['custom_title_enabled']
       title = data[action['title']]
     else
