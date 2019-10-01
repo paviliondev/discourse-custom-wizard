@@ -185,7 +185,7 @@ class CustomWizard::Builder
       type: field_template['type'],
       required: field_template['required']
     }
-
+    
     params[:label] = field_template['label'] if field_template['label']
     params[:description] = field_template['description'] if field_template['description']
     params[:image] = field_template['image'] if field_template['image']
@@ -422,7 +422,12 @@ class CustomWizard::Builder
   end
 
   def send_message(user, action, data)
-    title = data[action['title']]
+
+    unless action['custom_title_enabled']
+      title = data[action['title']]
+    else
+      title = action['custom_title']
+    end
 
     if action['post_builder']
       post = CustomWizard::Builder.fill_placeholders(action['post_template'], user, data)
