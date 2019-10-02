@@ -364,22 +364,7 @@ class CustomWizard::Builder
         skip_validations: true
       }
 
-      if action['custom_category_enabled']
-        if action['custom_category_wizard_field']
-          category_id = data[action['category_id']]
-        elsif action['custom_category_user_field_key']
-          if action['custom_category_user_field_key'].include?('custom_fields')
-            field = action['custom_category_user_field_key'].split('.').last
-            category_id = user.custom_fields[field]
-          else
-            category_id = user.send(action['custom_category_user_field_key'])
-          end
-        end
-      else
-        category_id = action['category_id']
-      end
-
-      params[:category] = category_id
+      params[:category] = action_category_id(action, data)
       
       topic_custom_fields = {}
 
@@ -544,8 +529,8 @@ class CustomWizard::Builder
     
     url += "&body=#{post}"
     
-    if action['category_id']
-      if category = Category.find(action['category_id'])
+    if category_id = action_category_id(action, data)
+      if category = Category.find(category_id)
         url += "&category=#{category.full_slug('/')}"
       end
     end
@@ -590,5 +575,22 @@ class CustomWizard::Builder
     @submissions.pop(1) if @wizard.unfinished?
     PluginStore.set("#{@wizard.id}_submissions", @wizard.user.id, @submissions)
     @wizard.reset
+  end
+  
+  def action_category_id(action, data)
+    if action['custom_category_enabled']
+      if action['custom_category_wizard_field']
+        category_id = data[action['category_id']]
+      elsif action['custom_category_user_field_key']
+        if action['custom_category_user_field_key'].include?('custom_fields')
+          field = action['custom_category_user_field_key'].split('.').last
+          user.custom_fields[field]
+        else
+          user.send(action['custom_category_user_field_key'])
+        end
+      end
+    else
+      action['category_id']
+    end
   end
 end
