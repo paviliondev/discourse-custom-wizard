@@ -36,7 +36,6 @@ end
 after_initialize do
   UserHistory.actions[:custom_wizard_step] = 1000
 
-  require_dependency 'application_controller'
   module ::CustomWizard
     class Engine < ::Rails::Engine
       engine_name 'custom_wizard'
@@ -52,7 +51,6 @@ after_initialize do
     put ':wizard_id/steps/:step_id' => 'steps#update'
   end
 
-  require_dependency 'admin_constraint'
   Discourse::Application.routes.append do
     mount ::CustomWizard::Engine, at: 'w'
     post 'wizard/authorization/callback' => "custom_wizard/authorization#callback"
@@ -139,7 +137,6 @@ after_initialize do
     end
   end
 
-  require_dependency 'invites_controller'
   class ::InvitesController
     prepend InvitesControllerCustomWizard
   end

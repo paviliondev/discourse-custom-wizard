@@ -1,4 +1,4 @@
-class CustomWizard::Api::AuthorizationSerializer < ApplicationSerializer
+class CustomWizard::Api::AuthorizationSerializer < ::ApplicationSerializer
   attributes :auth_type,
              :auth_url,
              :token_url,

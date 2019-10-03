@@ -1,8 +1,3 @@
-require_dependency 'wizard/step'
-require_dependency 'wizard/field'
-require_dependency 'wizard/step_updater'
-require_dependency 'wizard/builder'
-
 class CustomWizard::Wizard
 
   attr_reader :steps, :user

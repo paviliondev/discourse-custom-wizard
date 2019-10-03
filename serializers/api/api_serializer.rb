@@ -1,4 +1,4 @@
-class CustomWizard::ApiSerializer < ApplicationSerializer
+class CustomWizard::ApiSerializer < ::ApplicationSerializer
   attributes :name,
              :title,
              :authorization,
