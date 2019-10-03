@@ -51,6 +51,7 @@ after_initialize do
     put ':wizard_id/steps/:step_id' => 'steps#update'
   end
 
+  require_dependency 'admin_constraint'
   Discourse::Application.routes.append do
     mount ::CustomWizard::Engine, at: 'w'
     post 'wizard/authorization/callback' => "custom_wizard/authorization#callback"
@@ -136,11 +137,13 @@ after_initialize do
       @user = user
     end
   end
-
+  
+  require_dependency 'invites_controller'
   class ::InvitesController
     prepend InvitesControllerCustomWizard
   end
-
+  
+  require_dependency 'application_controller'
   class ::ApplicationController
     before_action :redirect_to_wizard_if_required, if: :current_user
 

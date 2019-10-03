@@ -1,3 +1,7 @@
+require_dependency 'wizard'
+require_dependency 'wizard/field'
+require_dependency 'wizard/step'
+
 ::Wizard.class_eval do
   def self.user_requires_completion?(user)
     wizard_result = self.new(user).requires_completion?
