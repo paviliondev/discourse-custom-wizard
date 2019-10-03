@@ -366,6 +366,9 @@ class CustomWizard::Builder
 
       params[:category] = action_category_id(action, data)
       
+      tags = action['tags'] || []
+      params[:tags] = tags
+      
       topic_custom_fields = {}
 
       if action['add_fields']
@@ -389,7 +392,7 @@ class CustomWizard::Builder
                 end
               end
             else
-              value = [*value] if key === 'tags'
+              value = [*value] + tags if key === 'tags'
               params[key.to_sym] = value
             end
           end
