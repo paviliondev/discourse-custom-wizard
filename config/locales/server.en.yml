@@ -22,3 +22,4 @@ en:
 
   site_settings:
     wizard_redirect_exclude_paths: "Routes excluded from wizard redirects."
+    wizard_recognised_image_upload_formats: "File types which will result in upload displaying an image preview"

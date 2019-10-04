@@ -6,3 +6,9 @@ plugins:
     choices:
       - admin
       - privacy
+  wizard_recognised_image_upload_formats:
+    client: true
+    default: "jpg|jpeg|png|gif"
+    refresh: true
+    type: list
+    list_type: compact

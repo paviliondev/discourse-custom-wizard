@@ -433,10 +433,10 @@ class CustomWizard::Builder
     # leave if there are any empty fields
     return if empty_data
 
-    unless action['custom_title_enabled']
-      title = data[action['title']]
+    if action['custom_title_enabled']
+      title = CustomWizard::Builder.fill_placeholders(action['custom_title'], user, data)
     else
-      title = action['custom_title']
+      title = data[action['title']]
     end
 
     if action['post_builder']
