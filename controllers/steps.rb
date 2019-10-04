@@ -1,4 +1,4 @@
-class CustomWizard::StepsController < ApplicationController
+class CustomWizard::StepsController < ::ApplicationController
   before_action :ensure_logged_in
 
   def update

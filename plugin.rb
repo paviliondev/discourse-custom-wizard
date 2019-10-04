@@ -52,7 +52,6 @@ after_initialize do
     put ':wizard_id/steps/:step_id' => 'steps#update'
   end
 
-  require_dependency 'admin_constraint'
   Discourse::Application.routes.append do
     mount ::CustomWizard::Engine, at: 'w'
     post 'wizard/authorization/callback' => "custom_wizard/authorization#callback"
@@ -76,7 +75,6 @@ after_initialize do
       delete 'admin/wizards/apis/logs/:name' => 'api#clearlogs'
       get 'admin/wizards/apis/:name/redirect' => 'api#redirect'
       get 'admin/wizards/apis/:name/authorize' => 'api#authorize'
-      #transfer code
       get 'admin/wizards/transfer' => 'transfer#index'
       get 'admin/wizards/transfer/export' => 'transfer#export'
       post 'admin/wizards/transfer/import' => 'transfer#import'
@@ -140,7 +138,6 @@ after_initialize do
     end
   end
 
-  require_dependency 'invites_controller'
   class ::InvitesController
     prepend InvitesControllerCustomWizard
   end

@@ -89,6 +89,10 @@ end
   def name
     object.name
   end
+  
+  def include_name?
+    object.respond_to?(:name)
+  end
 
   def background
     object.background
