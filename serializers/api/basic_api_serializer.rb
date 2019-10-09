@@ -1,4 +1,4 @@
-class CustomWizard::BasicApiSerializer < ApplicationSerializer
+class CustomWizard::BasicApiSerializer < ::ApplicationSerializer
   attributes :name,
              :title,
              :endpoints

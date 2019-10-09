@@ -1,4 +1,4 @@
-class CustomWizard::Api::LogSerializer < ApplicationSerializer
+class CustomWizard::Api::LogSerializer < ::ApplicationSerializer
   attributes :log_id,
              :time,
              :status,

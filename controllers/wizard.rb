@@ -4,6 +4,12 @@ class CustomWizard::WizardController < ::ApplicationController
 
   helper_method :wizard_page_title
   helper_method :theme_ids
+  
+  before_action :handle_login_redirect, unless: :current_user
+
+  def handle_login_redirect
+    cookies[:destination_url] = "/w/#{params[:wizard_id]}"
+  end
 
   def wizard
     CustomWizard::Template.new(PluginStore.get('custom_wizard', params[:wizard_id].underscore))

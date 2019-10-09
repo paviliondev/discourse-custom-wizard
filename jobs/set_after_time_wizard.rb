@@ -1,5 +1,5 @@
 module Jobs
-  class SetAfterTimeWizard < Jobs::Base
+  class SetAfterTimeWizard < ::Jobs::Base
     def execute(args)
       if CustomWizard::Wizard.find(args[:wizard_id])
         user_ids = []

@@ -53,7 +53,21 @@ class CustomWizard::Builder
       result
     end
 
-    result.gsub(/w\{(.*?)\}/) { |match| recurse(data, [*$1.split('.')]) }
+    result = result.gsub(/w\{(.*?)\}/) { |match| recurse(data, [*$1.split('.')]) }
+    
+    result.gsub(/v\{(.*?)\}/) do |match|
+      attrs = $1.split(':')
+      key = attrs.first
+      format = attrs.length > 1 ? attrs.last : nil
+      v = nil
+      
+      if key == 'time'
+        time_format = format.present? ? format : "%B %-d, %Y"
+        v = Time.now.strftime(time_format)
+      end
+      
+      v
+    end
   end
   
   def self.recurse(data, keys)
@@ -90,7 +104,7 @@ class CustomWizard::Builder
           end
 
           if required_data = step_template['required_data']
-            if !@submissions.last && required_data.length
+            if !@submissions.last && required_data.present?
               step.permitted = false
               next
             end
@@ -331,7 +345,7 @@ class CustomWizard::Builder
   end
 
   def standardise_boolean(value)
-    !!HasCustomFields::Helpers::CUSTOM_FIELD_TRUE.include?(value)
+    ActiveRecord::Type::Boolean.new.cast(value)
   end
 
   def create_topic(user, action, data)
@@ -354,22 +368,10 @@ class CustomWizard::Builder
         skip_validations: true
       }
 
-      if action['custom_category_enabled']
-        if action['custom_category_wizard_field']
-          category_id = data[action['category_id']]
-        elsif action['custom_category_user_field_key']
-          if action['custom_category_user_field_key'].include?('custom_fields')
-            field = action['custom_category_user_field_key'].split('.').last
-            category_id = user.custom_fields[field]
-          else
-            category_id = user.send(action['custom_category_user_field_key'])
-          end
-        end
-      else
-        category_id = action['category_id']
-      end
-
-      params[:category] = category_id
+      params[:category] = action_category_id(action, data)
+      
+      tags = action['tags'] || []
+      params[:tags] = tags
       
       topic_custom_fields = {}
 
@@ -394,7 +396,7 @@ class CustomWizard::Builder
                 end
               end
             else
-              value = [*value] if key === 'tags'
+              value = [*value] + tags if key === 'tags'
               params[key.to_sym] = value
             end
           end
@@ -550,8 +552,8 @@ class CustomWizard::Builder
     
     url += "&body=#{post}"
     
-    if action['category_id']
-      if category = Category.find(action['category_id'])
+    if category_id = action_category_id(action, data)
+      if category = Category.find(category_id)
         url += "&category=#{category.full_slug('/')}"
       end
     end
@@ -596,5 +598,22 @@ class CustomWizard::Builder
     @submissions.pop(1) if @wizard.unfinished?
     PluginStore.set("#{@wizard.id}_submissions", @wizard.user.id, @submissions)
     @wizard.reset
+  end
+  
+  def action_category_id(action, data)
+    if action['custom_category_enabled']
+      if action['custom_category_wizard_field']
+        category_id = data[action['category_id']]
+      elsif action['custom_category_user_field_key']
+        if action['custom_category_user_field_key'].include?('custom_fields')
+          field = action['custom_category_user_field_key'].split('.').last
+          user.custom_fields[field]
+        else
+          user.send(action['custom_category_user_field_key'])
+        end
+      end
+    else
+      action['category_id']
+    end
   end
 end

@@ -15,6 +15,7 @@ config.assets.paths << Rails.root.join('plugins', 'discourse-custom-wizard', 'as
 
 if Rails.env.production?
   config.assets.precompile += %w{
+    wizard-custom-guest.js
     wizard-custom-lib.js
     wizard-custom.js
     wizard-plugin.js
@@ -36,7 +37,6 @@ end
 after_initialize do
   UserHistory.actions[:custom_wizard_step] = 1000
 
-  require_dependency 'application_controller'
   module ::CustomWizard
     class Engine < ::Rails::Engine
       engine_name 'custom_wizard'
@@ -137,11 +137,13 @@ after_initialize do
       @user = user
     end
   end
-
+  
+  require_dependency 'invites_controller'
   class ::InvitesController
     prepend InvitesControllerCustomWizard
   end
-
+  
+  require_dependency 'application_controller'
   class ::ApplicationController
     before_action :redirect_to_wizard_if_required, if: :current_user
 

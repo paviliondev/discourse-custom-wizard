@@ -40,8 +40,12 @@
       <%= raw theme_lookup("body_tag") %>
     <%- end %>
 
-    <%= preload_script 'wizard-custom-start' %>
-    <%= preload_script 'wizard-raw-templates' %>
+    <%- if current_user %>
+      <%= preload_script 'wizard-custom-start' %>
+      <%= preload_script 'wizard-raw-templates' %>
+    <%- else %>
+      <%= preload_script 'wizard-custom-guest' %>
+    <%- end %>
 
     <div id="svg-sprites" style="display:none;">
       <div class="fontawesome">
