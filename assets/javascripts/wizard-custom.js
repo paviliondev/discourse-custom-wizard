@@ -39,6 +39,5 @@
 //= require discourse/templates/components/conditional-loading-spinner
 //= require discourse/components/d-button
 //= require discourse/templates/components/d-button
-//= require discourse/components/d-editor-modal
 //= require lodash.js
 //= require mousetrap.js
