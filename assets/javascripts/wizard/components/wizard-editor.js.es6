@@ -68,8 +68,6 @@ class Toolbar {
       perform: e => e.applySurround('_', '_', 'italic_text')
     });
 
-    this.addButton({id: 'link', group: 'insertions', shortcut: 'K', action: 'showLinkModal'});
-
     this.addButton({
       id: 'quote',
       group: 'insertions',
@@ -175,9 +173,6 @@ class Toolbar {
 export default Ember.Component.extend({
   classNames: ['d-editor'],
   ready: false,
-  insertLinkHidden: true,
-  linkUrl: '',
-  linkText: '',
   lastSel: null,
   _mouseTrap: null,
   showPreview: false,
@@ -631,16 +626,6 @@ export default Ember.Component.extend({
       }
     },
 
-    showLinkModal() {
-      this._lastSel = this._getSelected();
-
-      if (this._lastSel) {
-        this.set("linkText", this._lastSel.value.trim());
-      }
-
-      this.set('insertLinkHidden', false);
-    },
-
     formatCode() {
       const sel = this._getSelected('', { lineVal: true });
       const selValue = sel.value;
@@ -669,29 +654,6 @@ export default Ember.Component.extend({
           return this._addText(sel, `${preNewline}\`\`\`\n${sel.value}\n\`\`\`${postNewline}`);
         }
       }
-    },
-
-    insertLink() {
-      const origLink = this.get('linkUrl');
-      const linkUrl = (origLink.indexOf('://') === -1) ? `http://${origLink}` : origLink;
-      const sel = this._lastSel;
-
-      if (Ember.isEmpty(linkUrl)) { return; }
-
-      const linkText = this.get('linkText') || '';
-      if (linkText.length) {
-        this._addText(sel, `[${linkText}](${linkUrl})`);
-      } else {
-        if (sel.value) {
-          this._addText(sel, `[${sel.value}](${linkUrl})`);
-        } else {
-          this._addText(sel, `[${origLink}](${linkUrl})`);
-          this._selectText(sel.start + 1, origLink.length);
-        }
-      }
-
-      this.set('linkUrl', '');
-      this.set('linkText', '');
     }
   }
 });
