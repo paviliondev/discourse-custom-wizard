@@ -1,8 +1,7 @@
 class CustomWizard::Flag
-    def initialize(id, name, value)
-        @id     = id
-        @name   = name
-        @value = value
+    def initialize(id, name)
+        @id = id
+        @name = name
     end
 
     def id
@@ -11,10 +10,6 @@ class CustomWizard::Flag
 
     def name
         @name
-    end
-
-    def value
-        @value
     end
 end
 
@@ -25,8 +20,10 @@ class CustomWizard::Flags
 
         flagscollection = []
 
-        raw_flags.map do |name, code| 
-            flagscollection << CustomWizard::Flag.new(name, name, code)
+        raw_flags.map do |name, pic| 
+            # This is super hacky.  Adding the trailing space actually stops search breaking in the dropdown! (and doesn't compromise the view!)
+            # Feeding just name, name will break search
+            flagscollection << CustomWizard::Flag.new(name, "#{name} ")
         end
 
         flagscollection
