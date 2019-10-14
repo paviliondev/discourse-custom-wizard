@@ -15,6 +15,7 @@ config.assets.paths << Rails.root.join('plugins', 'discourse-custom-wizard', 'as
 
 if Rails.env.production?
   config.assets.precompile += %w{
+    wizard-custom-guest.js
     wizard-custom-lib.js
     wizard-custom.js
     wizard-plugin.js
