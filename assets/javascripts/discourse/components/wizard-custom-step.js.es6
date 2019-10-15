@@ -63,7 +63,8 @@ export default Ember.Component.extend({
         let stepFields = s.fields.map((f) => {
           return Ember.Object.create({
             id: f.id,
-            label: `${f.id} (${s.id})`
+            label: `${f.id} (${s.id})`,
+            type: f.type
           });
         });
         fields.push(...stepFields);

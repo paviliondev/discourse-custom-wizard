@@ -88,7 +88,7 @@
               <span>{{i18n 'admin.wizard.action.custom_category.wizard_field'}}</span>
               {{#if action.custom_category_wizard_field}}
                 {{combo-box value=action.category_id
-                            content=availableFields
+                            content=categoryFields
                             nameProperty="label"
                             none='admin.wizard.select_field'}}
               {{/if}}
@@ -263,8 +263,4 @@
       {{input value=action.code}}
     </div>
   </div>
-{{/if}}
-
-{{#if openComposer}}
-  
 {{/if}}
