@@ -20,7 +20,7 @@ export default Ember.Component.extend({
 
   @computed()
   presetChoices() {
-    return [
+    let presets = [
       {
         id: 'categories',
         name: I18n.t('admin.wizard.field.choices_preset.categories')
@@ -32,6 +32,13 @@ export default Ember.Component.extend({
         name: I18n.t('admin.wizard.field.choices_preset.tags')
       }
     ];
+    if (Discourse.SiteSettings.nationalflag_enabled) {
+        presets.push({
+          id: 'flags',
+          name: I18n.t('admin.wizard.field.choices_preset.flags')
+        })
+    }
+    return presets;
   },
 
   @on('didInsertElement')

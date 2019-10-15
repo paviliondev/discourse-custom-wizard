@@ -229,8 +229,27 @@
     margin: 20px 0;
   }
 
-  .wizard-image-row .wizard-btn-upload {
-    margin: 0;
+  .wizard-image-row {
+
+    .wizard-btn-upload {
+      margin: 0;
+    }
+
+  }
+
+  .wizard-image-preview  {
+    max-width: 200px;
+    max-height: 200px;
+    overflow: hidden;
+
+    img {
+      max-width:100%;
+      max-height:100%;
+    }
+  }
+
+  .wizard-select-value img {
+    vertical-align: middle;
   }
 
   .wizard-field-upload {
@@ -415,8 +434,9 @@
 
   div.ac-wrap {
     width: 98.5% !important;
-    overflow: auto;
+    overflow: visible;
     max-height: 150px;
+    min-height: 34px;
     background-color: white;
     border: 1px solid #e9e9e9;
     padding: 5px 4px 1px 4px;

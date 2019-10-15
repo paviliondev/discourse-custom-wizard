@@ -101,6 +101,7 @@ en:
             categories: "Categories"
             groups: "Groups"
             tags: "Tags"
+            flags: "Flags"
             filter: "Preset Filter"
           choice:
             value: "Value"

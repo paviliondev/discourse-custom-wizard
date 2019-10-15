@@ -1,3 +1,5 @@
+import { default as computed } from 'ember-addons/ember-computed-decorators';
+
 export default {
   name: 'custom-routes',
 
@@ -16,6 +18,20 @@ export default {
     const autocomplete = requirejs('discourse/lib/autocomplete').default;
     const cook = requirejs('discourse/plugins/discourse-custom-wizard/wizard/lib/text-lite').cook;
     const Singleton = requirejs("discourse/mixins/singleton").default;
+    const WizardFieldDropdown = requirejs('wizard/components/wizard-field-dropdown').default;
+
+    WizardFieldDropdown.reopen({
+      tagName: 'span',
+      classNames: ['wizard-select-value'],
+
+      @computed
+      isFlagSelector() {
+          const field = this.get('field');
+          //TODO improve the way this detects a flag dropdown (currently it relies on the string 'Nation', e.g. 'Nationality' or 'National Flag' appearing in label)
+          return (field.label.includes('Nation')) ?  true :  false;
+      }
+    });
+
 
     // IE11 Polyfill - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries#Polyfill
     if (!Object.entries)
@@ -240,6 +256,8 @@ export default {
             valid = val;
           } else if (type === 'category') {
             valid = val && val.toString().length > 0;
+          } else if (type === 'upload') {
+            valid = val && val.id > 0;
           } else if (StandardFieldValidation.indexOf(type) > -1) {
             valid = val && val.length > 0;
           }

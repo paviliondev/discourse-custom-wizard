@@ -145,6 +145,17 @@
 {{#if sendMessage}}
   <div class="setting">
     <div class="setting-label">
+      <h3>{{i18n 'admin.wizard.required'}}</h3>
+    </div>
+    <div class="setting-value">
+      {{combo-box content=availableFields
+                  nameProperty='label'
+                  none='admin.wizard.select_field'
+                  value=action.required}}
+    </div>
+  </div>
+  <div class="setting">
+    <div class="setting-label">
       <h3>{{i18n "admin.wizard.action.send_message.recipient"}}</h3>
     </div>
     <div class="setting-value">

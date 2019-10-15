@@ -199,7 +199,7 @@ class CustomWizard::Builder
       type: field_template['type'],
       required: field_template['required']
     }
-
+    
     params[:label] = field_template['label'] if field_template['label']
     params[:description] = field_template['description'] if field_template['description']
     params[:image] = field_template['image'] if field_template['image']
@@ -289,6 +289,10 @@ class CustomWizard::Builder
 
       if field_template['choices_preset'] === 'tags'
         objects = Tag.top_tags(guardian: guardian).map { |tag| TagStruct.new(tag,tag) }
+      end
+
+      if field_template['choices_preset'] === 'flags'
+        objects = CustomWizard::Flags.list
       end
 
       if field_template['choices_filters'] && field_template['choices_filters'].length > 0
@@ -420,7 +424,16 @@ class CustomWizard::Builder
   end
 
   def send_message(user, action, data)
-    title = data[action['title']]
+
+    if action['required'].present? && data[action['required']].blank?
+      return
+    end
+    
+    if action['custom_title_enabled']
+      title = CustomWizard::Builder.fill_placeholders(action['custom_title'], user, data)
+    else
+      title = data[action['title']]
+    end
 
     if action['post_builder']
       post = CustomWizard::Builder.fill_placeholders(action['post_template'], user, data)
@@ -474,12 +487,19 @@ class CustomWizard::Builder
         custom_fields[user_field || custom_field] = data[key]
       else
         updater_key = value
-        
         if ['profile_background', 'card_background'].include?(value)
           updater_key = "#{value}_upload_url"
         end
-        
         attributes[updater_key.to_sym] = data[key] if updater_key
+      end
+
+      if ['user_avatar'].include?(value)
+        this_upload_id = data[key][:id]
+        user.create_user_avatar unless user.user_avatar
+        user.user_avatar.custom_upload_id = this_upload_id
+        user.uploaded_avatar_id = this_upload_id
+        user.save!
+        user.user_avatar.save!
       end
     end
 

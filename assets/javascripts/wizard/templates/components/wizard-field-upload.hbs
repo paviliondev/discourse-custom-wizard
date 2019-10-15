@@ -11,6 +11,10 @@
 
 {{#if field.value}}
   <a href="{{field.value.url}}" class="filename">
-    {{field.value.original_filename}}
+    {{#unless isImage}}
+      {{field.value.original_filename}}
+    {{else}}
+      <img src={{field.value.url}}  class="wizard-image-preview">
+    {{/unless}}
   </a>
 {{/if}}
