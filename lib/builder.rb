@@ -558,8 +558,8 @@ class CustomWizard::Builder
       end
     end
     
-    if action['tags'].present?
-      url += "&tags=#{action['tags'].join(',')}"
+    if tags = action_tags(action, data)
+      url += "&tags=#{tags.join(',')}"
     end
         
     data['redirect_on_complete'] = Discourse.base_uri + URI.encode(url)
@@ -603,7 +603,7 @@ class CustomWizard::Builder
   def action_category_id(action, data)
     if action['custom_category_enabled']
       if action['custom_category_wizard_field']
-        category_id = data[action['category_id']]
+        data[action['category_id']]
       elsif action['custom_category_user_field_key']
         if action['custom_category_user_field_key'].include?('custom_fields')
           field = action['custom_category_user_field_key'].split('.').last
@@ -614,6 +614,14 @@ class CustomWizard::Builder
       end
     else
       action['category_id']
+    end
+  end
+  
+  def action_tags(action, data)
+    if action['custom_tag_enabled']
+      data[action['custom_tag_field']]
+    else
+      action['tags']
     end
   end
 end

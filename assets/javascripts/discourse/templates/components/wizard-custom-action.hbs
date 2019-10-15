@@ -114,7 +114,19 @@
       {{tag-chooser tags=action.tags
                     filterable=true
                     allowCreate=true
-                    isDisabled=action.custom_category_enabled}}
+                    isDisabled=action.custom_tag_enabled}}
+      <div class="setting-gutter">
+        {{input type='checkbox' checked=action.custom_tag_enabled}}
+        <span>{{i18n 'admin.wizard.action.custom_tag.label'}}</span>
+        {{#if action.custom_tag_enabled}}
+          <div class="custom-tag">
+            {{combo-box value=action.custom_tag_field
+                        content=tagFields
+                        nameProperty="label"
+                        none='admin.wizard.select_field'}}
+          </div>
+        {{/if}}
+      </div>
     </div>
   </div>
 {{/if}}

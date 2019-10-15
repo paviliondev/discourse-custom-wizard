@@ -59,8 +59,12 @@ export default Ember.Component.extend({
   
   @computed('availableFields')
   categoryFields(fields) {
-    console.log(fields);
     return fields.filter(f => f.type == 'category');
+  },
+  
+  @computed('availableFields')
+  tagFields(fields) {
+    return fields.filter(f => f.type == 'tag');
   },
 
   @computed()
