@@ -28,8 +28,8 @@ export default {
       isFlagSelector() {
           const field = this.get('field');
           //TODO improve the way this detects a flag dropdown (currently it relies on the string 'Nation', e.g. 'Nationality' or 'National Flag' appearing in label)
-          return (field.label.includes(Discourse.SiteSettings.wizard_national_flags_label_cue)) ?  true :  false;
-      }
+            return  (typeof field.label !== 'undefined') ? (field.label.includes(Discourse.SiteSettings.wizard_national_flags_label_cue)) ?  true :  false : false;
+        }
     });
 
 
