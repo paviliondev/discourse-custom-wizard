@@ -253,7 +253,7 @@ class CustomWizard::Builder
     user_field = update['user_field']
 
     if user_field || custom_field
-      UserCustomField.where(user_id: @wizard.user.id, name: user_field || custom_field).pluck(:value)
+      UserCustomField.where(user_id: @wizard.user.id, name: user_field || custom_field).pluck(:value).first
     elsif UserProfile.column_names.include? attribute
       UserProfile.find_by(user_id: @wizard.user.id).send(attribute)
     elsif User.column_names.include? attribute
