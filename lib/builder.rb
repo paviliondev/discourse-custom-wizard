@@ -483,6 +483,8 @@ class CustomWizard::Builder
       user_field = pu['user_field']
       key = pu['key']
       
+      return if data[key].blank?
+
       if user_field || custom_field
         custom_fields[user_field || custom_field] = data[key]
       else
