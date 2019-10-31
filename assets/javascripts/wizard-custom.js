@@ -11,6 +11,7 @@
 //= require discourse/lib/page-visible
 //= require discourse/lib/logout
 //= require discourse/lib/render-tag
+//= require discourse/lib/notification-levels 
 
 //= require markdown-it-bundle
 //= require pretty-text/engines/discourse-markdown-it
