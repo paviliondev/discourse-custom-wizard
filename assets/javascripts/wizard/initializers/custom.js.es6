@@ -1,5 +1,4 @@
 import { default as computed } from 'ember-addons/ember-computed-decorators';
-import Singleton from "discourse/mixins/singleton";
 
 export default {
   name: 'custom-routes',
@@ -18,7 +17,7 @@ export default {
     const FieldModel = requirejs('wizard/models/wizard-field').default;
     const autocomplete = requirejs('discourse/lib/autocomplete').default;
     const cook = requirejs('discourse/plugins/discourse-custom-wizard/wizard/lib/text-lite').cook;
-    //const Singleton = requirejs("discourse/mixins/singleton").default;
+    const Singleton = requirejs("discourse/mixins/singleton").default;
     const WizardFieldDropdown = requirejs('wizard/components/wizard-field-dropdown').default;
 
     WizardFieldDropdown.reopen({
