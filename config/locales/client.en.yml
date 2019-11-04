@@ -160,6 +160,8 @@ en:
             label: "Custom Category"
             wizard_field: "Wizard Field"
             user_field: "User Field"
+          custom_tag:
+            label: "Custom Tag"
           send_to_api:
             label: "Send to API"
             api: "API"

@@ -56,6 +56,16 @@ export default Ember.Component.extend({
   builderWizardFields(fields) {
     return fields.map((f) => ` w{${f.id}}`);
   },
+  
+  @computed('availableFields')
+  categoryFields(fields) {
+    return fields.filter(f => f.type == 'category');
+  },
+  
+  @computed('availableFields')
+  tagFields(fields) {
+    return fields.filter(f => f.type == 'tag');
+  },
 
   @computed()
   builderUserFields() {
