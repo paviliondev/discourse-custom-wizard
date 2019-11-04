@@ -33,6 +33,8 @@ en:
         required_label: "Users cannot skip the wizard."
         prompt_completion: "Prompt"
         prompt_completion_label: "Prompt user to complete wizard."
+        restart_on_revisit: "Restart"
+        restart_on_revisit_label: "Restart the the wizard whenever the user revists, regardless of prior progress."
         min_trust: "Trust"
         min_trust_label: "Trust level required to access wizard."
         theme_id: "Theme"
