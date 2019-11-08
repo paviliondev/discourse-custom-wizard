@@ -10,6 +10,7 @@ const wizardProperties = [
   'after_time_scheduled',
   'required',
   'prompt_completion',
+  'restart_on_revisit',
   'min_trust',
   'theme_id'
 ];
@@ -264,6 +265,7 @@ CustomWizard.reopenClass({
       props['after_time'] = false;
       props['required'] = false;
       props['prompt_completion'] = false;
+      props['restart_on_revisit'] = false;
       props['min_trust'] = 0;
       props['steps'] = Ember.A();
     };

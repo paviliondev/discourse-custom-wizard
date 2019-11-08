@@ -16,7 +16,8 @@ class CustomWizard::Wizard
                 :after_time_scheduled,
                 :after_signup,
                 :required,
-                :prompt_completion
+                :prompt_completion,
+                :restart_on_revisit
 
   def initialize(user=nil, attrs = {})
     @steps = []
@@ -152,6 +153,16 @@ class CustomWizard::Wizard
         result.push(id: id, name: name) if !wizard.completed?
         result
       end
+    else
+      false
+    end
+  end
+
+  def self.restart_on_revisit
+    rows = PluginStoreRow.where(plugin_name: 'custom_wizard')
+    wizards = [*rows].select { |r| r.value['restart_on_revisit'] }
+    if wizards.any?
+      wizards.first.key
     else
       false
     end

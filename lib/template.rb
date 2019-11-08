@@ -26,6 +26,7 @@ class CustomWizard::Template
     @save_submissions = data['save_submissions'] || false
     @multiple_submissions = data['multiple_submissions'] || false
     @prompt_completion = data['prompt_completion'] || false
+    @restart_on_revist = data['restart_on_revist'] || false
     @min_trust = data['min_trust'] || 0
     @after_signup = data['after_signup']
     @after_time = data['after_time']
