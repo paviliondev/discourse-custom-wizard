@@ -191,20 +191,25 @@ after_initialize do
     end
   end
   
-  ## TODO: We shouldn't be overriding the entire method here. Make this more lightweight.
-  add_to_class(:extra_locales_controller, :show) do
-    bundle = params[:bundle]
-    
-    unless URI(request.referer).path.include? '/w/'
-      raise Discourse::InvalidAccess.new if bundle !~ /^(admin|wizard)$/ || !current_user&.staff?
-    end
+  module CustomWizardExtraLocalesController
+    def show
+      if request.referer && URI(request.referer).path.include?('/w/')
+        bundle = params[:bundle]
+          
+        if params[:v]&.size == 32
+          hash = ExtraLocalesController.bundle_js_hash(bundle)
+          immutable_for(1.year) if hash == params[:v]
+        end
 
-    if params[:v]&.size == 32
-      hash = ExtraLocalesController.bundle_js_hash(bundle)
-      immutable_for(24.hours) if hash == params[:v]
+        render plain: ExtraLocalesController.bundle_js(bundle), content_type: "application/javascript"
+      else
+        super
+      end
     end
-
-    render plain: ExtraLocalesController.bundle_js(bundle), content_type: "application/javascript"
+  end
+  
+  class ::ExtraLocalesController
+    prepend CustomWizardExtraLocalesController
   end
 
   DiscourseEvent.trigger(:custom_wizard_ready)
