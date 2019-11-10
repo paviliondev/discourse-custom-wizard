@@ -20,19 +20,6 @@ export default {
     const Singleton = requirejs("discourse/mixins/singleton").default;
     const WizardFieldDropdown = requirejs('wizard/components/wizard-field-dropdown').default;
 
-    WizardFieldDropdown.reopen({
-      tagName: 'span',
-      classNames: ['wizard-select-value'],
-
-      @computed
-      isFlagSelector() {
-          const field = this.get('field');
-          //TODO improve the way this detects a flag dropdown (currently it relies on the string 'Nation', e.g. 'Nationality' or 'National Flag' appearing in label)
-            return  (typeof field.label !== 'undefined') ? (field.label.includes(Discourse.SiteSettings.wizard_national_flags_label_cue)) ?  true :  false : false;
-        }
-    });
-
-
     // IE11 Polyfill - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries#Polyfill
     if (!Object.entries)
       Object.entries = function( obj ){
