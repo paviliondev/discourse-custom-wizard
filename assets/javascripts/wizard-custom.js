@@ -31,6 +31,7 @@
 //= require discourse/models/permission-type
 //= require discourse/models/rest
 //= require discourse/models/category
+//= require discourse/models/session
 //= require discourse/helpers/category-link
 //= require discourse/mixins/singleton
 
