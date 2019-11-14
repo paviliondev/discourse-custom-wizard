@@ -7,6 +7,7 @@ class CustomWizard::Template
               :save_submissions,
               :multiple_submissions,
               :prompt_completion,
+              :restart_on_revisit,
               :min_trust,
               :after_signup,
               :after_time,
