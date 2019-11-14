@@ -22,7 +22,7 @@ class CustomWizard::WizardController < ::ApplicationController
       format.json do
         builder = CustomWizard::Builder.new(current_user, params[:wizard_id].underscore)
         builder_opts = {}
-        builder_opts[:reset] = params[:reset] if params[:reset]
+        builder_opts[:reset] = params[:reset] || builder.wizard.restart_on_revisit
 
         if builder.wizard.present?
           wizard = builder.build(builder_opts, params)

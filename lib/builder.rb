@@ -78,8 +78,7 @@ class CustomWizard::Builder
 
   def build(build_opts = {}, params = {})
     unless (@wizard.completed? && !@wizard.multiple_submissions && !@wizard.user.admin) || !@steps || !@wizard.permitted?
-
-      reset_submissions if build_opts[:reset] || @wizard.restart_on_revisit
+      reset_submissions if build_opts[:reset]
 
       @steps.each do |step_template|
         @wizard.append_step(step_template['id']) do |step|
