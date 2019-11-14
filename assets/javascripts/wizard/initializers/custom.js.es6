@@ -19,6 +19,11 @@ export default {
     const cook = requirejs('discourse/plugins/discourse-custom-wizard/wizard/lib/text-lite').cook;
     const Singleton = requirejs("discourse/mixins/singleton").default;
     const WizardFieldDropdown = requirejs('wizard/components/wizard-field-dropdown').default;
+    const Store = requirejs("discourse/models/store").default;
+    
+    Discourse.__container__ = app.__container__;
+    Discourse.getURLWithCDN = getUrl;
+    Discourse.getURL = getUrl;
 
     WizardFieldDropdown.reopen({
       tagName: 'span',
@@ -52,19 +57,17 @@ export default {
     const siteSettings = Wizard.SiteSettings;
     app.register("site-settings:main", siteSettings, { instantiate: false });
     targets.forEach(t => app.inject(t, "siteSettings", "site-settings:main"));
-
+    
+    app.register("service:store", Store);
+    targets.forEach(t => app.inject(t, "store", "service:store"));
+    
     const site = Discourse.Site;
     app.register("site:main", site);
     targets.forEach(t => app.inject(t, "site", "site:main"));
-
+    
     site.reopenClass(Singleton);
     site.currentProp('can_create_tag', false);
-
-    // this is for discourse/lib/utilities.avatarImg;
-    Discourse.__container__ = app.__container__;
-    Discourse.getURLWithCDN = getUrl;
-    Discourse.getURL = getUrl;
-
+    
     Router.reopen({
       rootURL: getUrl('/w/')
     });

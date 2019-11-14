@@ -11,12 +11,15 @@
 //= require discourse/lib/page-visible
 //= require discourse/lib/logout
 //= require discourse/lib/render-tag
-//= require discourse/lib/notification-levels 
+//= require discourse/lib/notification-levels
+//= require discourse/lib/computed 
 
 //= require markdown-it-bundle
 //= require pretty-text/engines/discourse-markdown-it
 //= require pretty-text/engines/discourse-markdown/helpers
 //= require pretty-text/pretty-text
+//= require ember-addons/fmt
+//= require preload-store
 
 //= require ./wizard/custom-wizard
 //= require_tree ./wizard/components
@@ -29,9 +32,15 @@
 //= require_tree ./wizard/templates
 
 //= require discourse/models/permission-type
+//= require discourse/models/archetype
 //= require discourse/models/rest
+//= require discourse/models/site
 //= require discourse/models/category
 //= require discourse/models/session
+//= require discourse/models/post-action-type
+//= require discourse/models/trust-level
+//= require discourse/models/store
+//= require discourse/models/result-set
 //= require discourse/helpers/category-link
 //= require discourse/mixins/singleton
 
