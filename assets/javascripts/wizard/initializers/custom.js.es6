@@ -20,10 +20,14 @@ export default {
     const Singleton = requirejs("discourse/mixins/singleton").default;
     const WizardFieldDropdown = requirejs('wizard/components/wizard-field-dropdown').default;
     const Store = requirejs("discourse/models/store").default;
+    const registerRawHelpers = requirejs("discourse-common/lib/raw-handlebars-helpers").registerRawHelpers;
+    const RawHandlebars = requirejs("discourse-common/lib/raw-handlebars").default;
     
     Discourse.__container__ = app.__container__;
     Discourse.getURLWithCDN = getUrl;
     Discourse.getURL = getUrl;
+        
+    registerRawHelpers(RawHandlebars, Handlebars);
 
     WizardFieldDropdown.reopen({
       tagName: 'span',
@@ -64,6 +68,8 @@ export default {
     const site = Discourse.Site;
     app.register("site:main", site);
     targets.forEach(t => app.inject(t, "site", "site:main"));
+    
+    targets.forEach(t => app.inject(t, "appEvents", "service:app-events"));
     
     site.reopenClass(Singleton);
     site.currentProp('can_create_tag', false);
@@ -137,6 +143,9 @@ export default {
           })
           .catch(() => this.animateInvalidFields())
           .finally(() => this.set('saving', false));
+      },
+      
+      keyPress(key) {
       },
 
       actions: {

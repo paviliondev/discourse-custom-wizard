@@ -2,19 +2,29 @@
 result = ''
 Discourse.unofficial_plugins.each do |plugin|
   plugin_name = plugin.metadata.name
-  if require_plugin_assets = CustomWizard::Field.require_assets[plugin_name]
+  
+  if plugin_name == 'discourse-custom-wizard' || CustomWizard::Field.require_assets[plugin_name]
+    
+    files = []
+    
     plugin.each_globbed_asset do |f, is_dir|
-      if f.include? "raw.hbs"
-        name = File.basename(f, ".raw.hbs")
-        compiled = Barber::Precompiler.new().compile(File.read(f))
-        result << "
-          (function() {
-            if ('Wizard' in window) {
-              Wizard.RAW_TEMPLATES['javascripts/#{name}'] = requirejs('discourse-common/lib/raw-handlebars').template(#{compiled});
-            }
-          })();
-        "
-      end
+      files.push(f) if f.include? "raw.hbs"
+    end
+    
+    Dir.glob("#{Rails.root}/app/assets/javascripts/discourse/templates/*.raw.hbs").each do |f|
+      files.push(f)
+    end
+    
+    files.each do |f|
+      name = File.basename(f, ".raw.hbs")
+      compiled = Barber::Precompiler.new().compile(File.read(f))
+      result << "
+        (function() {
+          if ('Wizard' in window) {
+            Discourse.RAW_TEMPLATES['javascripts/#{name}'] = requirejs('discourse-common/lib/raw-handlebars').template(#{compiled});
+          }
+        })();
+      "
     end
   end
 end

@@ -44,6 +44,14 @@
   }
 }
 
+#reply-control.show-preview .d-editor-textarea-wrapper {
+  display: none;
+}
+
+.custom-wizard #reply-control .toggle-preview {
+  margin-top: 20px;
+}
+
 .d-editor-textarea-wrapper,
 .d-editor-preview-wrapper {
   background-color: $secondary;
@@ -132,6 +140,7 @@
 
 .d-editor-preview {
   height: auto;
+  padding: 10px;
 }
 
 .d-editor-plugin {
@@ -162,6 +171,10 @@
   .d-editor-input {
     resize: vertical;
     flex: initial;
+  }
+  
+  textarea {
+    min-height: calc(200px - 32px);
   }
 }
 
