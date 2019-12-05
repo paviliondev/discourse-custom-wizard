@@ -3,6 +3,8 @@ require_dependency 'wizard/field'
 require_dependency 'wizard/step_updater'
 require_dependency 'wizard/builder'
 
+UserHistory.actions[:custom_wizard_step] = 1000
+
 class CustomWizard::Wizard
 
   attr_reader :steps, :user

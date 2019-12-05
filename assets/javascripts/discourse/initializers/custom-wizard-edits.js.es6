@@ -3,7 +3,11 @@ import DiscourseURL from 'discourse/lib/url';
 
 export default {
   name: 'custom-wizard-edits',
-  initialize() {
+  initialize(container) {
+    const siteSettings = container.lookup('site-settings:main');
+    
+    if (!siteSettings.custom_wizard_enabled) return;
+    
     withPluginApi('0.8.12', api => {
       api.modifyClass('component:global-notice', {
         buildBuffer(buffer) {
