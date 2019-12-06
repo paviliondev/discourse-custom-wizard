@@ -28,6 +28,7 @@
 //= require_tree ./wizard/routes
 //= require_tree ./wizard/templates
 
+//= require discourse/models/login-method
 //= require discourse/models/permission-type
 //= require discourse/models/rest
 //= require discourse/models/category
