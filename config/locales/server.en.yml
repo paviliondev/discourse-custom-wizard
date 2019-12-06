@@ -23,4 +23,3 @@ en:
   site_settings:
     wizard_redirect_exclude_paths: "Routes excluded from wizard redirects."
     wizard_recognised_image_upload_formats: "File types which will result in upload displaying an image preview"
-    wizard_national_flags_label_cue: "The characters that must appear in the dropdown field label for it to show a flag"
