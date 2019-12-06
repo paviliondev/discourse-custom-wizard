@@ -1,6 +1,11 @@
 ## TODO limit this to the first admin
 module SiteSerializerCWX
-  attributes :complete_custom_wizard
+  extend ActiveSupport::Concern
+  
+  included do
+    attributes :complete_custom_wizard
+  end
+  
 
   def include_wizard_required?
     scope.is_admin? && Wizard.new(scope.user).requires_completion?

@@ -1,14 +1,18 @@
 module CustomWizardWizardSerializerExtension
-  attributes :id,
-             :name,
-             :background,
-             :completed,
-             :required,
-             :min_trust,
-             :permitted,
-             :user,
-             :categories,
-             :uncategorized_category_id
+  extend ActiveSupport::Concern
+  
+  included do
+    attributes :id,
+               :name,
+               :background,
+               :completed,
+               :required,
+               :min_trust,
+               :permitted,
+               :user,
+               :categories,
+               :uncategorized_category_id
+  end
 
   def id
     object.id

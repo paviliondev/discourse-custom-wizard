@@ -3,18 +3,30 @@
 require 'rails_helper'
 
 describe CustomWizard::Builder do
-  fab!(:user)  { Fabricate(:user) }
+  fab!(:user) { Fabricate(:user) }
+  fab!(:trusted_user) { Fabricate(:user, trust_level: 3)}
   
-  before do
-    @template = File.open(
+  let!(:template) do
+    JSON.parse(File.open(
       "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-    ).read
+    ).read)
+  end
+  
+  def build_wizard(t = template, u = user, build_opts = {}, params = {})
+    CustomWizard::Wizard.add_wizard(t)
+    CustomWizard::Builder.new(u, 'welcome').build(build_opts, params)
+  end
+  
+  def add_submission_data
+    PluginStore.set("welcome_submissions", user.id,
+      name: 'Angus',
+      website: 'https://thepavilion.io'
+    )
   end
   
   it "returns no steps when disabled" do
-    CustomWizard::Wizard.add_wizard(@template)
     SiteSetting.custom_wizard_enabled = false
-    wizard = CustomWizard::Builder.new(user, 'welcome').build
+    wizard = build_wizard
     expect(wizard.steps.length).to eq(0)
     expect(wizard.name).to eq('Welcome')
   end
@@ -24,38 +36,63 @@ describe CustomWizard::Builder do
       SiteSetting.custom_wizard_enabled = true
     end
     
-    it "returns steps when enabled" do
-      CustomWizard::Wizard.add_wizard(@template)
-      wizard = CustomWizard::Builder.new(user, 'welcome').build
-      expect(wizard.steps.length).to eq(2)
+    it "returns steps" do
+      expect(build_wizard.steps.length).to eq(2)
     end
     
-    it 'returns no steps if the multiple submissions are disabled and user has completed' do
-      @template['multiple_submissions'] = false
-      CustomWizard::Wizard.add_wizard(@template)
-      wizard = CustomWizard::Builder.new(user, 'welcome').build
-      expect(wizard.steps.length).to eq(0)
+    it 'returns no steps if the multiple submissions are disabled and user has completed it' do
+      history_params = {
+        action: UserHistory.actions[:custom_wizard_step],
+        acting_user_id: user.id,
+        context: template['id']
+      }
+      UserHistory.create!(history_params.merge(subject: template['steps'][0]['id']))
+      UserHistory.create!(history_params.merge(subject: template['steps'][1]['id']))      
+      
+      template["multiple_submissions"] = false
+      expect(build_wizard(template).steps.length).to eq(0)
     end
     
-    it 'returns nothing if the user is not permitted to see it' do
-    
+    it 'returns no steps if has min trust and user does not meet it' do
+      template["min_trust"] = 3
+      expect(build_wizard(template).steps.length).to eq(0)
     end
     
-    it 'returns a wizard with prefilled data if user has partially completed' do
+    it 'returns steps if it has min trust and user meets it' do
+      template["min_trust"] = 3
+      expect(build_wizard(template, trusted_user).steps.length).to eq(2)  
+    end
     
+    it 'returns a wizard with prefilled data if user has partially completed it' do
+      add_submission_data
+      wizard = build_wizard
+      expect(wizard.steps[0].fields.first.value).to eq('Angus')
+      expect(wizard.steps[1].fields.first.value).to eq('https://thepavilion.io')
     end
     
     it 'returns a wizard with no prefilled data if options include reset' do
-    
+      add_submission_data
+      wizard = build_wizard(template, user, reset: true)
+      expect(wizard.steps[0].fields.first.value).to eq(nil)
+      expect(wizard.steps[1].fields.first.value).to eq(nil)
     end
     
     context 'building steps' do
-      it 'returns step data correctly' do
-        
+      it 'returns step metadata' do
+        expect(build_wizard.steps[0].title).to eq('Welcome to Pavilion')
+        expect(build_wizard.steps[1].title).to eq('Tell us about you')
       end
       
       it 'saves permitted params' do
-      
+        template['steps'][0]['permitted_params'] = [
+          {
+            "key": "param_key",
+            "value": "submission_param_key"
+          }
+        ]
+        wizard = build_wizard(template, user, {}, param_key: 'param_value')
+        submissions = PluginStore.get("welcome_submissions", user.id)
+        expect(submissions.first['submission_param_key']).to eq('param_value')
       end
       
       it 'ensures required data is present' do

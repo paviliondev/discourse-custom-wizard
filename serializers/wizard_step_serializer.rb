@@ -1,5 +1,9 @@
 module CustomWizardWizardStepSerializerExtension
-  attributes :permitted, :permitted_message
+  extend ActiveSupport::Concern
+  
+  included do
+    attributes :permitted, :permitted_message
+  end
 
   def title
     return PrettyText.cook(object.title) if object.title

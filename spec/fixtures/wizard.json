@@ -8,24 +8,27 @@
   "theme_id": 4,
   "steps": [
     {
-      "id": "step_1",
+      "id": "welcome",
       "title": "Welcome to Pavilion",
       "raw_description": "Hey there, thanks for signing up.\n\nWe're Pavilion, an international freelancer cooperative that specialises in online communities.\n\nThis site is our own community, where we work with our clients, users of our open source work and our broader community.\n\n",
-      "description": "<p>Hey there, thanks for signing up.</p>\n<p>We’re Pavilion, an international freelancer cooperative that specialises in online communities.</p>\n<p>This site is our own community, where we work with our clients, users of our open source work and our broader community.</p>"
-    },
-    {
-      "id": "step_2",
-      "title": "Tell us about you",
-      "raw_description": "We'd like to know a little more about you. Add a your name and your website below. This will update your user profile.",
+      "description": "<p>Hey there, thanks for signing up.</p>\n<p>We’re Pavilion, an international freelancer cooperative that specialises in online communities.</p>\n<p>This site is our own community, where we work with our clients, users of our open source work and our broader community.</p>",
       "fields": [
         {
           "id": "name",
           "type": "text",
           "label": "Name",
           "required": true
-        },
+        }
+      ]
+    },
+    {
+      "id": "about_you",
+      "title": "Tell us about you",
+      "raw_description": "We'd like to know a little more about you. Add a your name and your website below. This will update your user profile.",
+      "description": "<p>We’d like to know a little more about you. Add a your name and your website below. This will update your user profile.</p>",
+      "fields": [
         {
-          "id": "field_3",
+          "id": "website",
           "label": "Website",
           "type": "text"
         }
@@ -40,13 +43,12 @@
               "value": "name"
             },
             {
-              "key": "field_3",
+              "key": "website",
               "value": "website"
             }
           ]
         }
-      ],
-      "description": "<p>We’d like to know a little more about you. Add a your name and your website below. This will update your user profile.</p>"
+      ]
     }
   ]
 }

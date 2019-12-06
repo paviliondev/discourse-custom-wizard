@@ -1,5 +1,9 @@
 module CustomWizardWizardFieldSerializerExtension
-  attributes :dropdown_none, :image, :file_types, :limit, :property
+  extend ActiveSupport::Concern
+  
+  included do
+    attributes :dropdown_none, :image, :file_types, :limit, :property
+  end
 
   def label
     return object.label if object.label.present?

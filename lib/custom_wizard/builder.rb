@@ -98,9 +98,10 @@ class CustomWizard::Builder
         if permitted_params = step_template['permitted_params']
           permitted_data = {}
 
-          permitted_params.each do |param|
-            key = param['key'].to_sym
-            permitted_data[key] = params[key] if params[key]
+          permitted_params.each do |p|
+            params_key = p['key'].to_sym
+            submission_key = p['value'].to_sym
+            permitted_data[submission_key] = params[params_key] if params[params_key]
           end
 
           if permitted_data.present?
@@ -215,7 +216,7 @@ class CustomWizard::Builder
       submission = @submissions.last
       params[:value] = submission[field_template['id']] if submission[field_template['id']]
     end
-
+    
     ## If a field updates a profile field, load the current value
     if step_template['actions'] && step_template['actions'].any?
       profile_actions = step_template['actions'].select { |a| a['type'] === 'update_profile' }
@@ -223,7 +224,7 @@ class CustomWizard::Builder
       if profile_actions.any?
         profile_actions.each do |action|
           if update = action['profile_updates'].select { |u| u['key'] === field_template['id'] }.first
-            params[:value] = prefill_profile_field(update)
+            params[:value] = prefill_profile_field(update) || params[:value]
           end
         end
       end
