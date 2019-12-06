@@ -32,6 +32,7 @@
 
 //= require discourse/mixins/singleton
 
+//= require discourse/models/login-method
 //= require discourse/models/permission-type
 //= require discourse/models/archetype
 //= require discourse/models/rest
