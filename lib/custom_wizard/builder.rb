@@ -297,10 +297,6 @@ class CustomWizard::Builder
         objects = Tag.top_tags(guardian: guardian).map { |tag| TagStruct.new(tag,tag) }
       end
 
-      if field_template['choices_preset'] === 'flags'
-        objects = CustomWizard::Flags.list
-      end
-
       if field_template['choices_filters'] && field_template['choices_filters'].length > 0
         field_template['choices_filters'].each do |f|
           objects.reject! do |o|

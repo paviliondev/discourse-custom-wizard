@@ -53,7 +53,6 @@ after_initialize do
     '../jobs/set_after_time_wizard.rb',
     '../lib/custom_wizard/builder.rb',
     '../lib/custom_wizard/field.rb',
-    '../lib/custom_wizard/flags.rb',
     '../lib/custom_wizard/step_updater.rb',
     '../lib/custom_wizard/template.rb',
     '../lib/custom_wizard/wizard.rb',

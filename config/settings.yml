@@ -13,6 +13,3 @@ plugins:
     refresh: true
     type: list
     list_type: compact
-  wizard_national_flags_label_cue:
-    client: true
-    default: "National"

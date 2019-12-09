@@ -32,12 +32,7 @@ export default Ember.Component.extend({
         name: I18n.t('admin.wizard.field.choices_preset.tags')
       }
     ];
-    if (Discourse.SiteSettings.nationalflag_enabled) {
-        presets.push({
-          id: 'flags',
-          name: I18n.t('admin.wizard.field.choices_preset.flags')
-        })
-    }
+    
     return presets;
   },
 
