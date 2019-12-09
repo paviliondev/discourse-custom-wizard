@@ -13,6 +13,8 @@ class CustomWizard::StepUpdater
   end
 
   def update
+    return false if !SiteSetting.custom_wizard_enabled
+    
     @step.updater.call(self) if @step.present? && @step.updater.present?
 
     if success?

@@ -161,7 +161,7 @@ class CustomWizard::Builder
             submission = @submissions.last
             data = submission.merge(data)
           end
-          
+                    
           if step_template['actions'] && step_template['actions'].length && data
             step_template['actions'].each do |action|
               self.send(action['type'].to_sym, user, action, data)
@@ -364,7 +364,7 @@ class CustomWizard::Builder
     else
       title = data[action['title']]
     end
-
+    
     if action['post_builder']
       post = CustomWizard::Builder.fill_placeholders(action['post_template'], user, data)
     else

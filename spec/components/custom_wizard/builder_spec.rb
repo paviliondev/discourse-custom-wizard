@@ -3,8 +3,9 @@
 require 'rails_helper'
 
 describe CustomWizard::Builder do
-  fab!(:user) { Fabricate(:user) }
-  fab!(:trusted_user) { Fabricate(:user, trust_level: 3)}
+  fab!(:user) { Fabricate(:user, username: 'angus') }
+  fab!(:trusted_user) { Fabricate(:user, trust_level: 3) }
+  fab!(:group) { Fabricate(:group) }
   
   let!(:template) do
     JSON.parse(File.open(
@@ -21,8 +22,8 @@ describe CustomWizard::Builder do
   let(:tag_field) {{"id": "tag","type": "tag","label": "Tag","limit": "2"}}
   let(:category_field) {{"id": "category","type": "category","limit": "1","label": "Category"}}
   let(:image_field) {{"id": "image","type": "image","label": "Image"}}
-  let(:text_field) {{"id": "text","type": "text","min_length": "12","label": "Text"}}
-  let(:textarea_field) {{"id": "textarea","type": "textarea","min_length": "40","label": "Textarea"}}
+  let(:text_field) {{"id": "text","type": "text","label": "Text"}}
+  let(:textarea_field) {{"id": "textarea","type": "textarea","label": "Textarea"}}
   let(:text_only_field) {{"id": "text_only","type": "text-only","label": "Text only"}}
   let(:upload_field) {{"id": "upload","type": "upload","file_types": ".jpg,.png,.pdf","label": "Upload"}}
   let(:user_selector_field) {{"id": "user_selector","type": "user-selector","label": "User selector"}}
@@ -31,6 +32,11 @@ describe CustomWizard::Builder do
   let(:dropdown_custom_field) {{"id": "dropdown_custom","type": "dropdown","choices_type": "custom","choices": [{"key": "option_1","value": "Option 1"},{"key": "option_2","value": "Option 2"}]}}
   let(:dropdown_translation_field) {{"id": "dropdown_translation","type": "dropdown","choices_type": "translation","choices_key": "key1.key2"}}
   let(:dropdown_categories_filtered_field) {{"id": "dropdown_categories_filtered_field","type": "dropdown","choices_type": "preset","choices_preset": "categories","choices_filters": [{"key": "slug","value": "staff"}]}}
+  let(:create_topic_action) {{"id":"create_topic","type":"create_topic","title":"text","post":"textarea"}}
+  let(:send_message_action) {{"id":"send_message","type":"send_message","title":"text","post":"textarea","username":"angus"}}
+  let(:route_to_action) {{"id":"route_to","type":"route_to","url":"https://google.com"}}
+  let(:open_composer_action) {{"id":"open_composer","type":"open_composer","title":"text","post":"textarea"}}
+  let(:add_to_group_action) {{"id":"add_to_group","type":"add_to_group","group_id":"dropdown_groups"}}
   
   def build_wizard(t = template, u = user, build_opts = {}, params = {})
     CustomWizard::Wizard.add_wizard(t)
@@ -48,11 +54,44 @@ describe CustomWizard::Builder do
     PluginStore.get("welcome_submissions", user.id)
   end
   
-  it "returns no steps when disabled" do
-    SiteSetting.custom_wizard_enabled = false
-    wizard = build_wizard
-    expect(wizard.steps.length).to eq(0)
-    expect(wizard.name).to eq('Welcome')
+  def run_update(t = template, step_id = nil, data = {})
+    wizard = build_wizard(t)
+    updater = wizard.create_updater(step_id || t['steps'][0]['id'], data)
+    updater.update
+    updater
+  end
+  
+  def send_message(extra_field = nil, extra_action_opts = {})
+    fields = [text_field, textarea_field]
+    
+    if extra_field
+      fields.push(extra_field)
+    end
+        
+    template['steps'][0]['fields'] = fields
+    template['steps'][0]["actions"] = [send_message_action.merge(extra_action_opts)]
+    
+    run_update(template, nil,
+      text: "Message Title",
+      textarea: "message body"
+    )
+  end
+  
+  context 'disabled' do
+    before do
+      SiteSetting.custom_wizard_enabled = false
+    end
+    
+    it "returns no steps" do
+      wizard = build_wizard
+      expect(wizard.steps.length).to eq(0)
+      expect(wizard.name).to eq('Welcome')
+    end
+    
+    it "doesn't save submissions" do
+      run_update(template, nil, name: 'Angus')
+      expect(get_submission_data.blank?).to eq(true)
+    end
   end
   
   context 'enabled' do
@@ -152,12 +191,15 @@ describe CustomWizard::Builder do
     end
     
     context 'on update' do
+      it 'saves submissions' do
+        run_update(template, nil, name: 'Angus')
+        expect(get_submission_data.first['name']).to eq('Angus')
+      end
+      
       context 'validation' do
         it 'applies min length' do
           template['steps'][0]['fields'][0]['min_length'] = 10
-          wizard = build_wizard(template, user)
-          updater = wizard.create_updater(template['steps'][0]['id'], name: 'short')
-          updater.update
+          updater = run_update(template, nil, name: 'short')
           expect(updater.errors.messages[:name].first).to eq(
             I18n.t('wizard.field.too_short', label: 'Name', min: 10)
           ) 
@@ -165,78 +207,162 @@ describe CustomWizard::Builder do
         
         it 'standardises boolean entries' do
           template['steps'][0]['fields'][0] = checkbox_field
-          wizard = build_wizard(template, user)
-          updater = wizard.create_updater(template['steps'][0]['id'], checkbox: 'false')
-          updater.update
-          submissions = get_submission_data
-          expect(submissions.first['checkbox']).to eq(false)
+          run_update(template, nil, checkbox: 'false')
+          expect(get_submission_data.first['checkbox']).to eq(false)
         end
         
         it 'requires required fields' do
-          wizard = build_wizard
-          updater = wizard.create_updater(template['steps'][0]['id'], other_field: 'other')
-          updater.update
-          expect(updater.errors.messages[:name].first).to eq(
+          template['steps'][0]['fields'][0]['required'] = true
+          expect(run_update(template).errors.messages[:name].first).to eq(
             I18n.t('wizard.field.required', label: 'Name')
           ) 
-        end
-        
-        context 'submisisons' do
-          it 'saves submissions' do
-          
-          end
-          
-          it "doesn't save submissions if disabled" do
-          
-          end
-        end
-      end
-      
-      context 'custom_step_handlers' do
-        it 'runs custom step handlers' do
-        
         end
       end
       
       context 'actions' do
-        it 'runs all actions attached to a step' do
-          
+        it 'runs actions attached to a step' do
+          run_update(template, template['steps'][1]['id'], name: "Gus")
+          expect(user.name).to eq('Gus')
         end
         
-        it 'interpolates wizard and user data correctly' do
-        
+        it 'interpolates user data correctly' do
+          user.name = "Angus"
+          user.save!
+          
+          expect(
+            CustomWizard::Builder.fill_placeholders(
+              "My name is u{name}",
+              user,
+              {}
+            )
+          ).to eq('My name is Angus')
         end
         
         it 'creates a topic' do
+          template['steps'][0]['fields'] = [text_field, textarea_field]
+          template['steps'][0]["actions"] = [create_topic_action]
+          updater = run_update(template, nil,
+            text: "Topic Title",
+            textarea: "topic body"
+          )
+          topic = Topic.where(title: "Topic Title")
+          
+          expect(topic.exists?).to eq(true)
+          expect(Post.where(
+            topic_id: topic.pluck(:id),
+            raw: "topic body"
+          ).exists?).to eq(true)
+        end
         
+        it 'creates a topic with a custom title' do
+          user.name = "Angus"
+          user.save!
+          
+          template['steps'][0]['fields'] = [text_field, textarea_field]
+          
+          create_topic_action['custom_title_enabled'] = true
+          create_topic_action['custom_title'] = "u{name}' Topic Title"
+          template['steps'][0]["actions"] = [create_topic_action]
+          
+          run_update(template, nil, textarea: "topic body")
+          
+          topic = Topic.where(title: "Angus' Topic Title")
+          
+          expect(topic.exists?).to eq(true)
+          expect(Post.where(
+            topic_id: topic.pluck(:id),
+            raw: "topic body"
+          ).exists?).to eq(true)
+        end
+        
+        it 'creates a topic with a custom post' do
+          user.name = "Angus"
+          user.save!
+          
+          template['steps'][0]['fields'] = [text_field, textarea_field]
+          
+          create_topic_action['post_builder'] = true
+          create_topic_action['post_template'] = "u{name}' w{textarea}"
+          template['steps'][0]["actions"] = [create_topic_action]
+          
+          run_update(template, nil,
+            text: "Topic Title",
+            textarea: "topic body"
+          )
+                    
+          topic = Topic.where(title: "Topic Title")
+          
+          expect(topic.exists?).to eq(true)
+          expect(Post.where(
+            topic_id: topic.pluck(:id),
+            raw: "Angus' topic body"
+          ).exists?).to eq(true)
         end
         
         it 'sends a message' do
-        
+          send_message
+          
+          topic = Topic.where(
+            archetype: Archetype.private_message,
+            title: "Message Title"
+          )
+          
+          expect(topic.exists?).to eq(true)
+          expect(
+            topic.first.topic_allowed_users.first.user.username
+          ).to eq('angus')
+          expect(Post.where(
+            topic_id: topic.pluck(:id),
+            raw: "message body"
+          ).exists?).to eq(true)
         end
         
         it 'doesnt sent a message if the required data is not present' do
-        
+          send_message(user_selector_field, required: "user_selector")
+          topic = Topic.where(
+            archetype: Archetype.private_message,
+            title: "Message Title"
+          )
+          expect(topic.exists?).to eq(false)
         end
         
         it 'updates a profile' do
-        
-        end
-        
-        it 'calls an api' do
-        
+          run_update(template, template['steps'][1]['id'], name: "Sally")
+          expect(user.name).to eq('Sally')
         end
         
         it 'opens a composer' do
-        
+          template['steps'][0]['fields'] = [text_field, textarea_field]
+          template['steps'][0]["actions"] = [open_composer_action]
+          
+          updater = run_update(template, nil,
+            text: "Topic Title",
+            textarea: "topic body"
+          )
+          
+          expect(updater.result.blank?).to eq(true)              
+          
+          updater = run_update(template, template['steps'][1]['id'])
+          
+          expect(updater.result[:redirect_on_complete]).to eq(
+            "/new-topic?title=Topic%20Title&body=topic%20body"
+          )
         end
         
-        it 'adds a user to a group' do
-        
+        it 'adds a user to a group' do          
+          template['steps'][0]['fields'] = [dropdown_groups_field]
+          template['steps'][0]["actions"] = [add_to_group_action]
+                    
+          updater = run_update(template, nil, dropdown_groups: group.id)
+          expect(group.users.first.username).to eq('angus')
         end
         
         it 're-routes a user' do
-          
+          template['steps'][0]["actions"] = [route_to_action]
+          updater = run_update(template, nil, {})
+          expect(updater.result[:redirect_on_next]).to eq(
+            "https://google.com"
+          )
         end
       end
     end

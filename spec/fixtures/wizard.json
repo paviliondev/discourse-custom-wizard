@@ -16,8 +16,7 @@
         {
           "id": "name",
           "type": "text",
-          "label": "Name",
-          "required": true
+          "label": "Name"
         }
       ]
     },
@@ -41,10 +40,6 @@
             {
               "key": "name",
               "value": "name"
-            },
-            {
-              "key": "website",
-              "value": "website"
             }
           ]
         }
