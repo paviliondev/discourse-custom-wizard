@@ -154,7 +154,7 @@ class CustomWizard::Builder
 
           next if updater.errors.any?
 
-          data = updater.fields.to_h
+          data = updater.fields
 
           ## if the wizard has data from the previous steps make that accessible to the actions.
           if @submissions && @submissions.last && !@submissions.last.key?("submitted_at")
@@ -324,13 +324,17 @@ class CustomWizard::Builder
   def validate_field(field, updater, step_template)
     value = updater.fields[field['id']]
     min_length = false
+    label = field['label'] || I18n.t("#{field['key']}.label")
+    
+    if field['required'] && !value
+      updater.errors.add(field['id'].to_s, I18n.t('wizard.field.required', label: label))
+    end
 
     if is_text_type(field)
       min_length = field['min_length']
     end
 
     if min_length && value.is_a?(String) && value.strip.length < min_length.to_i
-      label = field['label'] || I18n.t("#{field['key']}.label")
       updater.errors.add(field['id'].to_s, I18n.t('wizard.field.too_short', label: label, min: min_length.to_i))
     end
 

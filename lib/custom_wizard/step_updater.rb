@@ -8,7 +8,7 @@ class CustomWizard::StepUpdater
     @wizard = wizard
     @step = step
     @refresh_required = false
-    @fields = fields
+    @fields = fields.to_h.with_indifferent_access
     @result = {}
   end
 
