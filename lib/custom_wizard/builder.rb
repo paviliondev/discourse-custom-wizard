@@ -267,52 +267,58 @@ class CustomWizard::Builder
     end
   end
 
-  def build_dropdown_list(field, field_template)
-    field.dropdown_none = field_template['dropdown_none'] if field_template['dropdown_none']
+  def build_dropdown_list(field, template)
+    field.dropdown_none = template['dropdown_none'] if template['dropdown_none']
+    self.send("build_dropdown_#{template['choices_type']}", field, template)
+  end
+  
+  def build_dropdown_custom(field, template)
+    template['choices'].each do |c|
+      field.add_choice(c['key'], label: c['value'])
+    end
+  end
+  
+  def build_dropdown_translation(field, template)
+    choices = I18n.t(template['choices_key'])
 
-    if field_template['choices'] && field_template['choices'].length > 0
-      field_template['choices'].each do |c|
-        field.add_choice(c['key'], label: c['value'])
+    if choices.is_a?(Hash)
+      choices.each { |k, v| field.add_choice(k, label: v) }
+    end
+  end
+  
+  def build_dropdown_preset(field, template)
+    objects = []
+    guardian = Guardian.new(@wizard.user)
+    site = Site.new(guardian)
+        
+    case template['choices_preset']
+    when 'categories'
+      objects = site.categories
+    when 'groups'
+      objects = site.groups
+    when 'tags'
+      objects = Tag.top_tags(guardian: guardian).map do |tag|
+        TagStruct.new(tag,tag)
       end
-    elsif field_template['choices_key'] && field_template['choices_key'].length > 0
-      choices = I18n.t(field_template['choices_key'])
+    else
+      # do nothing
+    end
 
-      if choices.is_a?(Hash)
-        choices.each { |k, v| field.add_choice(k, label: v) }
-      end
-    elsif field_template['choices_preset'] && field_template['choices_preset'].length > 0
-      objects = []
-      guardian = Guardian.new(@wizard.user)
-      site = Site.new(guardian)
-
-      if field_template['choices_preset'] === 'categories'
-        objects = site.categories
-      end
-
-      if field_template['choices_preset'] === 'groups'
-        objects = site.groups
-      end
-
-      if field_template['choices_preset'] === 'tags'
-        objects = Tag.top_tags(guardian: guardian).map { |tag| TagStruct.new(tag,tag) }
-      end
-
-      if field_template['choices_filters'] && field_template['choices_filters'].length > 0
-        field_template['choices_filters'].each do |f|
-          objects.reject! do |o|
-            if f['key'].include? 'custom_fields'
-              o.custom_fields[f['key'].split('.')[1]].to_s != f['value'].to_s
-            else
-              o[prop].to_s != f['value'].to_s
-            end
+    if template['choices_filters'] && template['choices_filters'].length > 0
+      template['choices_filters'].each do |f|
+        objects.reject! do |o|
+          if f['key'].include? 'custom_fields'
+            o.custom_fields[f['key'].split('.')[1]].to_s != f['value'].to_s
+          else
+            o[f['key']].to_s != f['value'].to_s
           end
         end
       end
-
-      if objects.length > 0
-        objects.each do |o|
-          field.add_choice(o.id, label: o.name)
-        end
+    end
+  
+    if objects.length > 0
+      objects.each do |o|
+        field.add_choice(o.id, label: o.name)
       end
     end
   end

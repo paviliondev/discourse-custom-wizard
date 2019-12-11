@@ -5,6 +5,8 @@ require 'rails_helper'
 describe CustomWizard::Builder do
   fab!(:user) { Fabricate(:user, username: 'angus') }
   fab!(:trusted_user) { Fabricate(:user, trust_level: 3) }
+  fab!(:category1) { Fabricate(:category, name: 'cat1') }
+  fab!(:category2) { Fabricate(:category, name: 'cat2') }
   fab!(:group) { Fabricate(:group) }
   
   let!(:template) do
@@ -31,7 +33,7 @@ describe CustomWizard::Builder do
   let(:dropdown_tags_field) {{"id": "dropdown_tags","type": "dropdown","choices_type": "preset","choices_preset": "tags","label": "Dropdown Tags"}}
   let(:dropdown_custom_field) {{"id": "dropdown_custom","type": "dropdown","choices_type": "custom","choices": [{"key": "option_1","value": "Option 1"},{"key": "option_2","value": "Option 2"}]}}
   let(:dropdown_translation_field) {{"id": "dropdown_translation","type": "dropdown","choices_type": "translation","choices_key": "key1.key2"}}
-  let(:dropdown_categories_filtered_field) {{"id": "dropdown_categories_filtered_field","type": "dropdown","choices_type": "preset","choices_preset": "categories","choices_filters": [{"key": "slug","value": "staff"}]}}
+  let(:dropdown_categories_filtered_field) {{"id": "dropdown_categories_filtered_field","type": "dropdown","choices_type": "preset","choices_preset": "categories","choices_filters": [{"key": "slug","value": "cat2"}]}}
   let(:create_topic_action) {{"id":"create_topic","type":"create_topic","title":"text","post":"textarea"}}
   let(:send_message_action) {{"id":"send_message","type":"send_message","title":"text","post":"textarea","username":"angus"}}
   let(:route_to_action) {{"id":"route_to","type":"route_to","url":"https://google.com"}}
@@ -187,6 +189,22 @@ describe CustomWizard::Builder do
       it 'returns fields' do
         template['steps'][0]['fields'][1] = checkbox_field
         expect(build_wizard(template, user).steps[0].fields.length).to eq(2)
+      end
+      
+      it 'returns a preset dropdown' do
+        template['steps'][0]['fields'][0] = dropdown_categories_field
+        choices = build_wizard(template, user).steps[0].fields[0].choices
+        expect(choices.present?).to eq(true)
+        expect(choices.length).to eq(2)
+        expect(choices.first.label).to eq("<p>cat1</p>")
+      end
+      
+      it 'returns a filtered preset dropdown' do
+        template['steps'][0]['fields'][0] = dropdown_categories_filtered_field
+        choices = build_wizard(template, user).steps[0].fields[0].choices
+        expect(choices.present?).to eq(true)
+        expect(choices.length).to eq(1)
+        expect(choices.first.label).to eq("<p>cat2</p>")
       end
     end
     
