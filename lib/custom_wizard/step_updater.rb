@@ -8,11 +8,13 @@ class CustomWizard::StepUpdater
     @wizard = wizard
     @step = step
     @refresh_required = false
-    @fields = fields
+    @fields = fields.to_h.with_indifferent_access
     @result = {}
   end
 
   def update
+    return false if !SiteSetting.custom_wizard_enabled
+    
     @step.updater.call(self) if @step.present? && @step.updater.present?
 
     if success?

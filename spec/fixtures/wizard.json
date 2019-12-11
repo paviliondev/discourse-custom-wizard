@@ -1,0 +1,49 @@
+{
+  "id": "welcome",
+  "name": "Welcome",
+  "background": "#006da3",
+  "save_submissions": true,
+  "multiple_submissions": true,
+  "after_signup": true,
+  "theme_id": 4,
+  "steps": [
+    {
+      "id": "welcome",
+      "title": "Welcome to Pavilion",
+      "raw_description": "Hey there, thanks for signing up.\n\nWe're Pavilion, an international freelancer cooperative that specialises in online communities.\n\nThis site is our own community, where we work with our clients, users of our open source work and our broader community.\n\n",
+      "description": "<p>Hey there, thanks for signing up.</p>\n<p>We’re Pavilion, an international freelancer cooperative that specialises in online communities.</p>\n<p>This site is our own community, where we work with our clients, users of our open source work and our broader community.</p>",
+      "fields": [
+        {
+          "id": "name",
+          "type": "text",
+          "label": "Name"
+        }
+      ]
+    },
+    {
+      "id": "about_you",
+      "title": "Tell us about you",
+      "raw_description": "We'd like to know a little more about you. Add a your name and your website below. This will update your user profile.",
+      "description": "<p>We’d like to know a little more about you. Add a your name and your website below. This will update your user profile.</p>",
+      "fields": [
+        {
+          "id": "website",
+          "label": "Website",
+          "type": "text"
+        }
+      ],
+      "actions": [
+        {
+          "id": "update_profile",
+          "type": "update_profile",
+          "profile_updates": [
+            {
+              "key": "name",
+              "value": "name"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -3,6 +3,8 @@ require_dependency 'wizard/field'
 require_dependency 'wizard/step_updater'
 require_dependency 'wizard/builder'
 
+UserHistory.actions[:custom_wizard_step] = 1000
+
 class CustomWizard::Wizard
 
   attr_reader :steps, :user
@@ -190,8 +192,8 @@ class CustomWizard::Wizard
     end
   end
 
-  def self.add_wizard(json)
-    wizard = ::JSON.parse(json)
+  def self.add_wizard(obj)
+    wizard = obj.is_a?(String) ? ::JSON.parse(json) : obj
     PluginStore.set('custom_wizard', wizard["id"], wizard)
   end
 

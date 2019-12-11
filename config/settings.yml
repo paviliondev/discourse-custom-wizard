@@ -1,4 +1,5 @@
 plugins:
+  custom_wizard_enabled: true
   wizard_redirect_exclude_paths:
     client: true
     type: list
