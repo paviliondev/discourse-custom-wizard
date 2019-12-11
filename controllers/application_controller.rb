@@ -1,8 +1,10 @@
-module ApplicationControllerCWExtension
+module CustomWizardApplicationControllerExtension  
   extend ActiveSupport::Concern
   
-  included do
-    before_action :redirect_to_wizard_if_required, if: :current_user
+  def self.prepended(klass)
+    klass.class_eval do
+      before_action :redirect_to_wizard_if_required, if: :current_user
+    end
   end
 
   def redirect_to_wizard_if_required
@@ -23,5 +25,5 @@ module ApplicationControllerCWExtension
 end
 
 class ApplicationController
-  prepend ApplicationControllerCWExtension if SiteSetting.custom_wizard_enabled
+  prepend CustomWizardApplicationControllerExtension if SiteSetting.custom_wizard_enabled
 end

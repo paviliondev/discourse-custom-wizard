@@ -1,11 +1,12 @@
 ## TODO limit this to the first admin
-module SiteSerializerCWX
+module CustomWizardSiteSerializerExtension
   extend ActiveSupport::Concern
   
-  included do
-    attributes :complete_custom_wizard
+  def self.prepended(klass)
+    klass.class_eval do
+      attributes :complete_custom_wizard
+    end
   end
-  
 
   def include_wizard_required?
     scope.is_admin? && Wizard.new(scope.user).requires_completion?
@@ -23,5 +24,5 @@ module SiteSerializerCWX
 end
 
 class SiteSerializer
-  prepend SiteSerializerCWX if SiteSetting.custom_wizard_enabled
+  prepend CustomWizardSiteSerializerExtension if SiteSetting.custom_wizard_enabled
 end

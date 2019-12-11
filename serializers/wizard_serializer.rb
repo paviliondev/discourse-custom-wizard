@@ -1,19 +1,21 @@
-module CustomWizardWizardSerializerExtension
+module CustomWizardSerializerExtension
   extend ActiveSupport::Concern
   
-  included do
-    attributes :id,
-               :name,
-               :background,
-               :completed,
-               :required,
-               :min_trust,
-               :permitted,
-               :user,
-               :categories,
-               :uncategorized_category_id
+  def self.prepended(klass)
+    klass.class_eval do
+      attributes :id,
+                 :name,
+                 :background,
+                 :completed,
+                 :required,
+                 :min_trust,
+                 :permitted,
+                 :user,
+                 :categories,
+                 :uncategorized_category_id
+    end
   end
-
+  
   def id
     object.id
   end
@@ -89,7 +91,7 @@ module CustomWizardWizardSerializerExtension
       site = ::Site.new(scope)
       ::ActiveModel::ArraySerializer.new(site.categories, each_serializer: BasicCategorySerializer)
     rescue => e
-      puts "HERE IS THE ERROR: #{e.inspect}"
+      []
     end
   end
   
@@ -98,6 +100,6 @@ module CustomWizardWizardSerializerExtension
   end
 end
 
-class WizardSerializer
-  prepend CustomWizardWizardSerializerExtension if SiteSetting.custom_wizard_enabled
+class WizardSerializer       
+  prepend CustomWizardSerializerExtension if SiteSetting.custom_wizard_enabled
 end

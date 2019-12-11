@@ -1,8 +1,10 @@
-module CustomWizardWizardFieldSerializerExtension
+module CustomWizardFieldSerializerExtension
   extend ActiveSupport::Concern
   
-  included do
-    attributes :dropdown_none, :image, :file_types, :limit, :property
+  def self.prepended(klass)
+    klass.class_eval do
+      attributes :dropdown_none, :image, :file_types, :limit, :property
+    end
   end
 
   def label
@@ -45,5 +47,5 @@ module CustomWizardWizardFieldSerializerExtension
 end
 
 class WizardFieldSerializer
-  prepend CustomWizardWizardFieldSerializerExtension if SiteSetting.custom_wizard_enabled
+  prepend CustomWizardFieldSerializerExtension if SiteSetting.custom_wizard_enabled
 end

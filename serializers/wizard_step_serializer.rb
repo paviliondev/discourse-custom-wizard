@@ -1,8 +1,10 @@
-module CustomWizardWizardStepSerializerExtension
+module CustomWizardStepSerializerExtension
   extend ActiveSupport::Concern
   
-  included do
-    attributes :permitted, :permitted_message
+  def self.prepended(klass)
+    klass.class_eval do
+      attributes :permitted, :permitted_message
+    end
   end
 
   def title
@@ -25,5 +27,5 @@ module CustomWizardWizardStepSerializerExtension
 end
 
 class WizardStepSerializer
-  prepend CustomWizardWizardStepSerializerExtension if SiteSetting.custom_wizard_enabled
+  prepend CustomWizardStepSerializerExtension if SiteSetting.custom_wizard_enabled
 end
