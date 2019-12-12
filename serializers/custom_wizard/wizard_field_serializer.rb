@@ -1,11 +1,14 @@
-module CustomWizardFieldSerializerExtension
-  extend ActiveSupport::Concern
+# frozen_string_literal: true
+
+class CustomWizardFieldSerializer < ::WizardFieldSerializer
   
-  def self.prepended(klass)
-    klass.class_eval do
-      attributes :dropdown_none, :image, :file_types, :limit, :property
-    end
-  end
+  attributes :dropdown_none,
+             :image,
+             :file_types,
+             :limit,
+             :property
+  
+  has_many :fields, serializer: CustomWizardFieldSerializer, embed: :objects
 
   def label
     return object.label if object.label.present?
@@ -44,8 +47,4 @@ module CustomWizardFieldSerializerExtension
   def property
     object.property
   end
-end
-
-class WizardFieldSerializer
-  prepend CustomWizardFieldSerializerExtension if SiteSetting.custom_wizard_enabled
 end

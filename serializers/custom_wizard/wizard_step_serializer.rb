@@ -1,11 +1,8 @@
-module CustomWizardStepSerializerExtension
-  extend ActiveSupport::Concern
+# frozen_string_literal: true
+
+class ::CustomWizardStepSerializer < ::WizardStepSerializer
   
-  def self.prepended(klass)
-    klass.class_eval do
-      attributes :permitted, :permitted_message
-    end
-  end
+  attributes :permitted, :permitted_message
 
   def title
     return PrettyText.cook(object.title) if object.title
@@ -24,8 +21,4 @@ module CustomWizardStepSerializerExtension
   def permitted_message
     object.permitted_message
   end
-end
-
-class WizardStepSerializer
-  prepend CustomWizardStepSerializerExtension if SiteSetting.custom_wizard_enabled
 end

@@ -63,16 +63,16 @@ after_initialize do
     '../lib/wizard/choice.rb',
     '../lib/wizard/field.rb',
     '../lib/wizard/step.rb',
-    '../serializers/custom_wizard/api_serializer.rb',
-    '../serializers/custom_wizard/basic_api_serializer.rb',
     '../serializers/custom_wizard/api/authorization_serializer.rb',
     '../serializers/custom_wizard/api/basic_endpoint_serializer.rb',
     '../serializers/custom_wizard/api/endpoint_serializer.rb',
     '../serializers/custom_wizard/api/log_serializer.rb',
-    '../serializers/site_serializer.rb',
-    '../serializers/wizard_serializer.rb',
-    '../serializers/wizard_step_serializer.rb',
-    '../serializers/wizard_field_serializer.rb'
+    '../serializers/custom_wizard/api_serializer.rb',
+    '../serializers/custom_wizard/basic_api_serializer.rb',
+    '../serializers/custom_wizard/wizard_field_serializer.rb',
+    '../serializers/custom_wizard/wizard_step_serializer.rb',
+    '../serializers/custom_wizard/wizard_serializer.rb',
+    '../serializers/site_serializer.rb'
   ].each do |path|
     load File.expand_path(path, __FILE__)
   end

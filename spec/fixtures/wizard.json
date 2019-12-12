@@ -5,6 +5,7 @@
   "save_submissions": true,
   "multiple_submissions": true,
   "after_signup": true,
+  "min_trust": 1,
   "theme_id": 4,
   "steps": [
     {

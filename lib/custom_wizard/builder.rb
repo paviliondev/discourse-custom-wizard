@@ -245,6 +245,12 @@ class CustomWizard::Builder
     if field_template['type'] === 'category'
       params[:property] = field_template['property']
     end
+        
+    if field_template['type'] === 'category' ||
+      (field_template['type'] === 'dropdown' &&
+       field_template['choices_preset'] === 'categories')
+       @wizard.needs_categories = true
+    end
 
     field = step.add_field(params)
 

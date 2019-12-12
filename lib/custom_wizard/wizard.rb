@@ -6,6 +6,7 @@ require_dependency 'wizard/builder'
 UserHistory.actions[:custom_wizard_step] = 1000
 
 class CustomWizard::Wizard
+  include ActiveModel::SerializerSupport
 
   attr_reader :steps, :user
   attr_accessor :id,
@@ -19,12 +20,15 @@ class CustomWizard::Wizard
                 :after_signup,
                 :required,
                 :prompt_completion,
-                :restart_on_revisit
+                :restart_on_revisit,
+                :needs_categories
 
   def initialize(user=nil, attrs = {})
     @steps = []
     @user = user
     @first_step = nil
+    @required = false
+    @needs_categories = false
 
     attrs.each do |key, value|
       setter = "#{key}="
@@ -131,6 +135,10 @@ class CustomWizard::Wizard
       context: @id,
       subject: "reset"
     )
+  end
+  
+  def categories
+    @categories ||= ::Site.new(Guardian.new(@user)).categories
   end
 
   def self.after_signup

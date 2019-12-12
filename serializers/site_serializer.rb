@@ -1,4 +1,5 @@
 ## TODO limit this to the first admin
+
 module CustomWizardSiteSerializerExtension
   extend ActiveSupport::Concern
   
@@ -23,6 +24,6 @@ module CustomWizardSiteSerializerExtension
   end
 end
 
-class SiteSerializer
+class ::SiteSerializer
   prepend CustomWizardSiteSerializerExtension if SiteSetting.custom_wizard_enabled
 end
