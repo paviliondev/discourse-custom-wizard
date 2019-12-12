@@ -3,6 +3,7 @@
 class ::CustomWizardStepSerializer < ::WizardStepSerializer
   
   attributes :permitted, :permitted_message
+  has_many :fields, serializer: ::CustomWizardFieldSerializer, embed: :objects
 
   def title
     return PrettyText.cook(object.title) if object.title
