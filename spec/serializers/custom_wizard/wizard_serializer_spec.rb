@@ -50,8 +50,7 @@ describe CustomWizardSerializer do
   
   it "should return category attributes if there is a category selector field" do
     template['steps'][0]['fields'][0] = category_field
-    wizard = build_wizard(template)
-    json = CustomWizardSerializer.new(wizard, scope: Guardian.new(user)).as_json
+    json = CustomWizardSerializer.new(build_wizard(template), scope: Guardian.new(user)).as_json
     expect(json[:custom_wizard][:categories].present?).to eq(true)
     expect(json[:custom_wizard][:uncategorized_category_id].present?).to eq(true)
   end
