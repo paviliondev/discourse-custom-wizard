@@ -107,7 +107,13 @@
       <h3>{{i18n 'admin.wizard.theme_id'}}</h3>
     </div>
     <div class="setting-value">
-      {{combo-box content=model.themes valueAttribute='id' value=model.theme_id none='admin.wizard.no_theme'}}
+      {{combo-box
+        content=model.themes
+        valueProperty='id'
+        value=model.theme_id
+        options=(hash
+          none='admin.wizard.no_theme'
+        )}}
     </div>
   </div>
 

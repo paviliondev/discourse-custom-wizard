@@ -16,10 +16,12 @@
               {{toolbar-popup-menu-options
                 onPopupMenuAction=onPopupMenuAction
                 onExpand=(action b.action b)
-                title=b.title
-                headerIcon=b.icon
                 class=b.className
-                content=popupMenuOptions}}
+                content=popupMenuOptions
+                options=(hash
+                  popupTitle=b.title
+                  icon=b.icon
+                )}}
             {{else}}
               <div>{{d.icon}}</div>
               <button class='wizard-btn {{b.className}}' {{action b.action b}} title="{{b.title}}">

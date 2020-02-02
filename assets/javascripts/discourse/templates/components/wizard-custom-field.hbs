@@ -48,7 +48,12 @@
     <h3>{{i18n 'admin.wizard.type'}}</h3>
   </div>
   <div class="setting-value">
-    {{combo-box value=field.type content=types none="admin.wizard.field.type"}}
+    {{combo-box
+      value=field.type
+      content=types
+      options=(hash
+        none="admin.wizard.field.type"
+      )}}
   </div>
 </div>
 
@@ -79,7 +84,12 @@
       {{i18n 'admin.wizard.field.choices_label'}}
     </div>
 
-    {{combo-box value=field.choices_type content=choicesTypes none="admin.wizard.field.choices_type"}}
+    {{combo-box
+      value=field.choices_type
+      content=choicesTypes
+      options=(hash
+        none="admin.wizard.field.choices_type"
+      )}}
 
     {{#if choicesTranslation}}
       <div class="wizard-header small">
@@ -92,7 +102,12 @@
       <div class="wizard-header small">
         {{i18n 'admin.wizard.field.choices_preset.label'}}
       </div>
-      {{combo-box value=field.choices_preset content=presetChoices none='admin.wizard.none'}}
+      {{combo-box
+        value=field.choices_preset
+        content=presetChoices
+        options=(hash
+          none='admin.wizard.none'
+        )}}
       <div class="wizard-header small">
         {{i18n 'admin.wizard.field.choices_preset.filter'}}
       </div>
@@ -141,7 +156,9 @@
       <h3>{{i18n 'admin.wizard.field.property'}}</h3>
     </div>
     <div class="setting-value">
-      {{combo-box content=categoryPropertyTypes value=field.property}}
+      {{combo-box
+        content=categoryPropertyTypes
+        value=field.property}}
     </div>
   </div>
 {{/if}}

@@ -1,5 +1,6 @@
 import CustomWizard from '../models/custom-wizard';
 import { ajax } from 'discourse/lib/ajax';
+import { generateSelectKitContent } from '../lib/custom-wizard';
 
 export default Discourse.Route.extend({
   beforeModel() {
@@ -40,7 +41,12 @@ export default Discourse.Route.extend({
 
   _getFieldTypes(model) {
     return ajax('/admin/wizards/field-types')
-      .then((result) => model.set('fieldTypes', result.types));
+      .then((result) => {
+        model.set(
+          'fieldTypes',
+          generateSelectKitContent([...result.types])
+        )
+      });
   },
 
   _getThemes(model) {
