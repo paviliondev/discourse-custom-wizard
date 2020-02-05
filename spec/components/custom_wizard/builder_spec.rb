@@ -192,6 +192,7 @@ describe CustomWizard::Builder do
       end
       
       it 'returns a preset dropdown' do
+        SiteSetting.allow_uncategorized_topics = false
         template['steps'][0]['fields'][0] = dropdown_categories_field
         choices = build_wizard(template, user).steps[0].fields[0].choices
         expect(choices.present?).to eq(true)
