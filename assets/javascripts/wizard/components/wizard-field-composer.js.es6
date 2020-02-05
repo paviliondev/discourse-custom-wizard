@@ -30,14 +30,10 @@ export default Ember.Component.extend({
     groupsMentioned() {
     },
     afterRefresh() {
-    },
-    storeToolbarState() {
-    },                  
+    },               
     cannotSeeMention() {
     },
     importQuote() {
-    },
-    onPopupMenuAction() {
     },
     showUploadSelector() {
     }

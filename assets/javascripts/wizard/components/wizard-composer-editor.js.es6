@@ -64,15 +64,6 @@ export default ComposerEditor.extend({
           sendAction: this.showUploadModal
         });
       }
-
-      toolbar.addButton({
-        id: "options",
-        group: "extras",
-        icon: "cog",
-        title: "composer.options",
-        sendAction: this.onExpandPopupMenuOptions.bind(this),
-        popupMenu: true
-      });
     }
   }
 })

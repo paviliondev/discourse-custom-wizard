@@ -299,7 +299,7 @@ class CustomWizard::Builder
         
     case template['choices_preset']
     when 'categories'
-      objects = site.categories
+      objects = Set.new(Category.topic_create_allowed(guardian))
     when 'groups'
       objects = site.groups
     when 'tags'

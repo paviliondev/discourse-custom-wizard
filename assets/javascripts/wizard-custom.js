@@ -64,6 +64,9 @@
 //= require discourse/helpers/category-link
 //= require discourse/helpers/user-avatar
 //= require discourse/helpers/format-username
+//= require discourse/helpers/component-for-collection
+//= require discourse/helpers/component-for-row
+//= require discourse/helpers/discourse-tag
 
 //= require discourse/services/app-events
 //= require discourse/services/emoji-store
@@ -97,6 +100,7 @@
 //= require jquery.putcursoratend.js
 //= require template_include.js
 //= require caret_position.js
+//= require popper.js
 
 //= require ./wizard/custom-wizard
 //= require_tree ./wizard/components

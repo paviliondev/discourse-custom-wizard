@@ -89,7 +89,10 @@
     <div class="control-group auth-type">
       <label>{{i18n 'admin.wizard.api.auth.type'}}</label>
       <div class="controls">
-        {{combo-box value=api.authType content=authorizationTypes none='admin.wizard.api.auth.type_none'}}
+        {{combo-box
+          value=api.authType 
+          content=authorizationTypes
+          none='admin.wizard.api.auth.type_none'}}
       </div>
     </div>
 
@@ -240,15 +243,18 @@
                              class='remove-endpoint'}}
                 </div>
                 <div class="bottom">
-                  {{combo-box content=endpointMethods
-                              value=endpoint.method
-                              none="admin.wizard.api.endpoint.method"}}
-                  {{combo-box content=contentTypes
-                              value=endpoint.content_type
-                              none="admin.wizard.api.endpoint.content_type"}}
-                  {{multi-select content=successCodes
-                                 values=endpoint.success_codes
-                                 none="admin.wizard.api.endpoint.success_codes"}}
+                  {{combo-box
+                    content=endpointMethods
+                    value=endpoint.method
+                    none="admin.wizard.api.endpoint.method"}}
+                  {{combo-box
+                    content=contentTypes
+                    value=endpoint.content_type
+                    none="admin.wizard.api.endpoint.content_type"}}
+                  {{multi-select
+                    content=successCodes
+                    values=endpoint.success_codes
+                    none="admin.wizard.api.endpoint.success_codes"}}
                 </div>
               </div>
             </div>
