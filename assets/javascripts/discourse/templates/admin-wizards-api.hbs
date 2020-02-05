@@ -92,9 +92,7 @@
         {{combo-box
           value=api.authType 
           content=authorizationTypes
-          options=(hash
-            none='admin.wizard.api.auth.type_none'
-          )}}
+          none='admin.wizard.api.auth.type_none'}}
       </div>
     </div>
 
@@ -248,21 +246,15 @@
                   {{combo-box
                     content=endpointMethods
                     value=endpoint.method
-                    options=(hash
-                      none="admin.wizard.api.endpoint.method"
-                    )}}
+                    none="admin.wizard.api.endpoint.method"}}
                   {{combo-box
                     content=contentTypes
                     value=endpoint.content_type
-                    options=(hash
-                      none="admin.wizard.api.endpoint.content_type"
-                    )}}
+                    none="admin.wizard.api.endpoint.content_type"}}
                   {{multi-select
                     content=successCodes
                     values=endpoint.success_codes
-                    options=(hash
-                      none="admin.wizard.api.endpoint.success_codes"
-                    )}}
+                    none="admin.wizard.api.endpoint.success_codes"}}
                 </div>
               </div>
             </div>

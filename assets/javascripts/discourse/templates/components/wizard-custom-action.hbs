@@ -15,9 +15,7 @@
     {{combo-box
       value=action.type
       content=types
-      options=(hash
-        none="admin.wizard.field.type"
-      )}}
+      none="admin.wizard.field.type"}}
   </div>
 </div>
 
@@ -32,9 +30,7 @@
         content=availableFields
         nameProperty="label"
         isDisabled=action.custom_title_enabled
-        options=(hash
-          none='admin.wizard.select_field'
-        )}}
+        none='admin.wizard.select_field'}}
       <div class="setting-gutter">
         {{input type='checkbox' checked=action.custom_title_enabled}}
         <span>{{i18n 'admin.wizard.action.custom_title'}}</span>
@@ -55,9 +51,7 @@
         content=availableFields
         nameProperty='label'
         isDisabled=action.post_builder
-        options=(hash
-          none='admin.wizard.select_field'
-        )}}
+        none='admin.wizard.select_field'}}
       <div class="setting-gutter">
         {{input type='checkbox' checked=action.post_builder}}
         <span>{{i18n 'admin.wizard.action.post_builder.checkbox'}}</span>
@@ -105,9 +99,7 @@
                   value=action.category_id
                   content=categoryFields
                   nameProperty="label"
-                  options=(hash
-                    none='admin.wizard.select_field'
-                  )}}
+                  none='admin.wizard.select_field'}}
               {{/if}}
             </div>
             <div>
@@ -142,9 +134,7 @@
               value=action.custom_tag_field
               content=tagFields
               nameProperty="label"
-              options=(hash
-                none='admin.wizard.select_field'
-              )}}
+              none='admin.wizard.select_field'}}
           </div>
         {{/if}}
       </div>
@@ -185,9 +175,7 @@
         value=action.required
         content=availableFields
         nameProperty='label'
-        options=(hash
-          none='admin.wizard.select_field'
-        )}}
+        none='admin.wizard.select_field'}}
     </div>
   </div>
   <div class="setting">
@@ -232,9 +220,7 @@
         value=action.api
         content=availableApis
         isDisabled=action.custom_title_enabled
-        options=(hash
-          none='admin.wizard.action.send_to_api.select_an_api'
-        )}}
+        none='admin.wizard.action.send_to_api.select_an_api'}}
     </div>
   </div>
 
@@ -247,9 +233,7 @@
         value=action.api_endpoint
         content=availableEndpoints
         isDisabled=apiEmpty
-        options=(hash
-          none='admin.wizard.action.send_to_api.select_an_endpoint'
-        )}}
+        none='admin.wizard.action.send_to_api.select_an_endpoint'}}
     </div>
   </div>
 
@@ -277,9 +261,7 @@
         content=availableFields
         isDisabled=action.custom_group_enabled
         nameProperty="label"
-        options=(hash
-          none='admin.wizard.select_field'
-        )}}
+        none='admin.wizard.select_field'}}
       <div class="setting-gutter">
         {{input type='checkbox' checked=action.custom_group_enabled}}
         <span>{{i18n 'admin.wizard.action.add_to_group.custom_group'}}</span>

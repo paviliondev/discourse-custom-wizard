@@ -51,9 +51,7 @@
     {{combo-box
       value=field.type
       content=types
-      options=(hash
-        none="admin.wizard.field.type"
-      )}}
+      none="admin.wizard.field.type"}}
   </div>
 </div>
 
@@ -87,9 +85,7 @@
     {{combo-box
       value=field.choices_type
       content=choicesTypes
-      options=(hash
-        none="admin.wizard.field.choices_type"
-      )}}
+      none="admin.wizard.field.choices_type"}}
 
     {{#if choicesTranslation}}
       <div class="wizard-header small">
@@ -105,9 +101,7 @@
       {{combo-box
         value=field.choices_preset
         content=presetChoices
-        options=(hash
-          none='admin.wizard.none'
-        )}}
+        none='admin.wizard.none'}}
       <div class="wizard-header small">
         {{i18n 'admin.wizard.field.choices_preset.filter'}}
       </div>
