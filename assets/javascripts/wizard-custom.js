@@ -64,8 +64,8 @@
 //= require discourse/helpers/category-link
 //= require discourse/helpers/user-avatar
 //= require discourse/helpers/format-username
-//= require discourse/helpers/component-for-collection
-//= require discourse/helpers/component-for-row
+//= require discourse-common/helpers/component-for-collection
+//= require discourse-common/helpers/component-for-row
 //= require discourse/helpers/discourse-tag
 
 //= require discourse/services/app-events
