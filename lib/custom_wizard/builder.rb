@@ -387,8 +387,9 @@ class CustomWizard::Builder
       }
 
       params[:category] = action_category_id(action, data)
-      
-      tags = action['tags'] || []
+
+      tags = action_tags(action, data)
+
       params[:tags] = tags
       
       topic_custom_fields = {}
