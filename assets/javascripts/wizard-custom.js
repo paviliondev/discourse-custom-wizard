@@ -29,6 +29,7 @@
 //= require discourse/lib/intercept-click
 //= require discourse/lib/show-modal
 //= require discourse/lib/key-value-store
+//= require discourse/lib/settings
 
 //= require discourse/mixins/singleton
 
