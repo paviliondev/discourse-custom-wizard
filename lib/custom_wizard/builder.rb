@@ -411,7 +411,6 @@ class CustomWizard::Builder
 
                   params[:custom_fields] ||= {}
                   params[:custom_fields][custom_key.to_sym] = value
-
               end
             else
               value = [*value] + tags if key === 'tags'
