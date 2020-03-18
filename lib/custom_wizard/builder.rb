@@ -407,12 +407,11 @@ class CustomWizard::Builder
                 custom_key = keyArr.last
                 type = keyArr.first
 
-                if type === 'topic'
-                  topic_custom_fields[custom_key] = value
-                elsif type === 'post'
+                  topic_custom_fields[custom_key] = value if type === 'topic'
+
                   params[:custom_fields] ||= {}
                   params[:custom_fields][custom_key.to_sym] = value
-                end
+
               end
             else
               value = [*value] + tags if key === 'tags'
