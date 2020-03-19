@@ -7,9 +7,8 @@ export default Ember.Component.extend({
   isUpload: Ember.computed.equal('field.type', 'upload'),
   isCategory: Ember.computed.equal('field.type', 'category'),
   disableId: Ember.computed.not('field.isNew'),
-  choicesTypes: generateSelectKitContent(['translation', 'preset', 'custom']),
+  choicesTypes: generateSelectKitContent(['translation', 'custom']),
   choicesTranslation: Ember.computed.equal('field.choices_type', 'translation'),
-  choicesPreset: Ember.computed.equal('field.choices_type', 'preset'),
   choicesCustom: Ember.computed.equal('field.choices_type', 'custom'),
   categoryPropertyTypes: generateSelectKitContent(['id', 'slug']),
 
@@ -18,24 +17,6 @@ export default Ember.Component.extend({
 
   @computed('field.type')
   isCategoryOrTag: (type) => type === 'tag' || type === 'category',
-
-  @computed()
-  presetChoices() {
-    let presets = [
-      {
-        id: 'categories',
-        name: I18n.t('admin.wizard.field.choices_preset.categories')
-      },{
-        id: 'groups',
-        name: I18n.t('admin.wizard.field.choices_preset.groups')
-      },{
-        id: 'tags',
-        name: I18n.t('admin.wizard.field.choices_preset.tags')
-      }
-    ];
-    
-    return presets;
-  },
 
   @on('didInsertElement')
   @observes('isUpload')

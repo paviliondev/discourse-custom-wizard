@@ -20,7 +20,6 @@ describe CustomWizard::Builder do
   let(:required_data_message) {"Nickname is required to match your name"}
   let(:checkbox_field) {{"id":"checkbox","type":"checkbox","label":"Checkbox"}}
   let(:composer_field) {{"id": "composer","label":"Composer","type":"composer"}}
-  let(:dropdown_categories_field) {{"id": "dropdown_categories","type": "dropdown","label": "Dropdown Categories","choices_type": "preset","choices_preset": "categories"}}
   let(:tag_field) {{"id": "tag","type": "tag","label": "Tag","limit": "2"}}
   let(:category_field) {{"id": "category","type": "category","limit": "1","label": "Category"}}
   let(:image_field) {{"id": "image","type": "image","label": "Image"}}
@@ -29,11 +28,8 @@ describe CustomWizard::Builder do
   let(:text_only_field) {{"id": "text_only","type": "text-only","label": "Text only"}}
   let(:upload_field) {{"id": "upload","type": "upload","file_types": ".jpg,.png,.pdf","label": "Upload"}}
   let(:user_selector_field) {{"id": "user_selector","type": "user-selector","label": "User selector"}}
-  let(:dropdown_groups_field) {{"id": "dropdown_groups","type": "dropdown","choices_type": "preset","choices_preset": "groups","label": "Dropdown Groups"}}
-  let(:dropdown_tags_field) {{"id": "dropdown_tags","type": "dropdown","choices_type": "preset","choices_preset": "tags","label": "Dropdown Tags"}}
   let(:dropdown_custom_field) {{"id": "dropdown_custom","type": "dropdown","choices_type": "custom","choices": [{"key": "option_1","value": "Option 1"},{"key": "option_2","value": "Option 2"}]}}
   let(:dropdown_translation_field) {{"id": "dropdown_translation","type": "dropdown","choices_type": "translation","choices_key": "key1.key2"}}
-  let(:dropdown_categories_filtered_field) {{"id": "dropdown_categories_filtered_field","type": "dropdown","choices_type": "preset","choices_preset": "categories","choices_filters": [{"key": "slug","value": "cat2"}]}}
   let(:create_topic_action) {{"id":"create_topic","type":"create_topic","title":"text","post":"textarea"}}
   let(:send_message_action) {{"id":"send_message","type":"send_message","title":"text","post":"textarea","username":"angus"}}
   let(:route_to_action) {{"id":"route_to","type":"route_to","url":"https://google.com"}}
@@ -189,23 +185,6 @@ describe CustomWizard::Builder do
       it 'returns fields' do
         template['steps'][0]['fields'][1] = checkbox_field
         expect(build_wizard(template, user).steps[0].fields.length).to eq(2)
-      end
-      
-      it 'returns a preset dropdown' do
-        SiteSetting.allow_uncategorized_topics = false
-        template['steps'][0]['fields'][0] = dropdown_categories_field
-        choices = build_wizard(template, user).steps[0].fields[0].choices
-        expect(choices.present?).to eq(true)
-        expect(choices.length).to eq(2)
-        expect(choices.first.label).to eq("<p>cat1</p>")
-      end
-      
-      it 'returns a filtered preset dropdown' do
-        template['steps'][0]['fields'][0] = dropdown_categories_filtered_field
-        choices = build_wizard(template, user).steps[0].fields[0].choices
-        expect(choices.present?).to eq(true)
-        expect(choices.length).to eq(1)
-        expect(choices.first.label).to eq("<p>cat2</p>")
       end
     end
     

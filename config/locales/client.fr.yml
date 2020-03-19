@@ -83,10 +83,6 @@ fr:
           choices_type: "Choisir un type"
           choices_translation: "Traduction"
           choices_custom: "Personnalisé"
-          choices_preset:
-            label: "Prédéfini"
-            categories: "Catégories"
-            filter: "Filtre prédéfini"
           choice:
             value: "Valeur"
             label: "Étiquette"

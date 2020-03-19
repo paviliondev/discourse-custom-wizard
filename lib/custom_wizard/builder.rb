@@ -246,10 +246,12 @@ class CustomWizard::Builder
       params[:property] = field_template['property']
     end
         
-    if field_template['type'] === 'category' ||
-      (field_template['type'] === 'dropdown' &&
-       field_template['choices_preset'] === 'categories')
-       @wizard.needs_categories = true
+    if field_template['type'] === 'category'
+      @wizard.needs_categories = true
+    end
+    
+    if field_template['type'] === 'group'
+      @wizard.needs_groups = true
     end
 
     field = step.add_field(params)
@@ -289,43 +291,6 @@ class CustomWizard::Builder
 
     if choices.is_a?(Hash)
       choices.each { |k, v| field.add_choice(k, label: v) }
-    end
-  end
-  
-  def build_dropdown_preset(field, template)
-    objects = []
-    guardian = Guardian.new(@wizard.user)
-    site = Site.new(guardian)
-        
-    case template['choices_preset']
-    when 'categories'
-      objects = Set.new(Category.topic_create_allowed(guardian))
-    when 'groups'
-      objects = site.groups
-    when 'tags'
-      objects = Tag.top_tags(guardian: guardian).map do |tag|
-        TagStruct.new(tag,tag)
-      end
-    else
-      # do nothing
-    end
-
-    if template['choices_filters'] && template['choices_filters'].length > 0
-      template['choices_filters'].each do |f|
-        objects.reject! do |o|
-          if f['key'].include? 'custom_fields'
-            o.custom_fields[f['key'].split('.')[1]].to_s != f['value'].to_s
-          else
-            o[f['key']].to_s != f['value'].to_s
-          end
-        end
-      end
-    end
-  
-    if objects.length > 0
-      objects.each do |o|
-        field.add_choice(o.id, label: o.name)
-      end
     end
   end
 

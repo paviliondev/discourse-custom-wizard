@@ -98,12 +98,6 @@ en:
           choices_type: "Choose a type"
           choices_translation: "Translation"
           choices_custom: "Custom"
-          choices_preset:
-            label: "Preset"
-            categories: "Categories"
-            groups: "Groups"
-            tags: "Tags"
-            filter: "Preset Filter"
           choice:
             value: "Value"
             label: "Label"

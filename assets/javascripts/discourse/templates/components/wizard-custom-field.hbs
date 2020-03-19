@@ -94,20 +94,6 @@
       {{input name="key" value=field.choices_key placeholderKey="admin.wizard.key_placeholder"}}
     {{/if}}
 
-    {{#if choicesPreset}}
-      <div class="wizard-header small">
-        {{i18n 'admin.wizard.field.choices_preset.label'}}
-      </div>
-      {{combo-box
-        value=field.choices_preset
-        content=presetChoices
-        none='admin.wizard.none'}}
-      <div class="wizard-header small">
-        {{i18n 'admin.wizard.field.choices_preset.filter'}}
-      </div>
-      {{wizard-custom-inputs inputs=field.choices_filters}}
-    {{/if}}
-
     {{#if choicesCustom}}
       <div class="wizard-header small">
         {{i18n 'admin.wizard.field.choices_custom'}}
