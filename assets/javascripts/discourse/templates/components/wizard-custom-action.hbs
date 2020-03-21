@@ -27,7 +27,7 @@
     <div class="setting-value">
       {{combo-box
         value=action.title
-        content=availableFields
+        content=wizardFields
         nameProperty="label"
         isDisabled=action.custom_title_enabled
         none='admin.wizard.select_field'}}
@@ -48,7 +48,7 @@
     <div class="setting-value">
       {{combo-box
         value=action.post
-        content=availableFields
+        content=wizardFields
         nameProperty='label'
         isDisabled=action.post_builder
         none='admin.wizard.select_field'}}
@@ -65,9 +65,10 @@
         <h3>{{i18n 'admin.wizard.action.post_builder.label'}}</h3>
       </div>
       <div class="setting-value editor">
-        {{d-editor value=action.post_template
-                   placeholder='admin.wizard.action.interpolate_fields'
-                   classNames='post-builder-editor'}}
+        {{d-editor
+          value=action.post_template
+          placeholder='admin.wizard.action.interpolate_fields'
+          classNames='post-builder-editor'}}
         <div>
           <label>{{i18n 'admin.wizard.action.post_builder.user_fields'}}{{builderUserFields}}</label>
           <label>{{i18n 'admin.wizard.action.post_builder.wizard_fields'}}{{builderWizardFields}}</label>
@@ -119,12 +120,14 @@
     <div class="setting-label">
       <h3>{{i18n "admin.wizard.action.create_topic.tags"}}</h3>
     </div>
+    
     <div class="setting-value">
       {{tag-chooser
         tags=action.tags
         filterable=true
         allowCreate=true
         isDisabled=action.custom_tag_enabled}}
+        
       <div class="setting-gutter">
         {{input type='checkbox' checked=action.custom_tag_enabled}}
         <span>{{i18n 'admin.wizard.action.custom_tag.label'}}</span>
@@ -157,11 +160,13 @@
 {{#if createTopic}}
   <div class="setting full">
     <label>{{i18n 'admin.wizard.action.add_fields' type='Topic'}}</label>
-    {{wizard-custom-inputs inputs=action.add_fields
-                           valueContent=availableFields
-                           inputKey='admin.wizard.action.topic_attr'
-                           noneValue='admin.wizard.select_field'
-                           allowCustomField=true}}
+    {{wizard-custom-inputs
+      inputs=action.add_fields
+      userFields=userFields
+      wizardFields=wizardFields
+      options=(hash
+        allowWizardField=true
+      )}}
   </div>
 {{/if}}
 
@@ -170,43 +175,49 @@
     <div class="setting-label">
       <h3>{{i18n 'admin.wizard.required'}}</h3>
     </div>
+    
     <div class="setting-value">
       {{combo-box
         value=action.required
-        content=availableFields
+        content=wizardFields
         nameProperty='label'
         none='admin.wizard.select_field'}}
     </div>
   </div>
+  
   <div class="setting">
     <div class="setting-label">
       <h3>{{i18n "admin.wizard.action.send_message.recipient"}}</h3>
     </div>
     <div class="setting-value">
-      {{user-selector single="true"
-                      includeMentionableGroups="true"
-                      usernames=action.username
-                      allowedUsers="true"}}
+      {{user-selector
+        single="true"
+        includeMentionableGroups="true"
+        usernames=action.username
+        allowedUsers="true"}}
     </div>
   </div>
 
   <div class="setting full">
     <label>{{i18n "admin.wizard.action.add_fields" type='Message'}}</label>
-    {{wizard-custom-inputs inputs=action.add_fields
-                           keyContent=availableFields
-                           valuePlaceholder='admin.wizard.action.topic_attr'}}
+    {{wizard-custom-inputs
+      inputs=action.add_fields
+      userFields=userFields
+      wizardFields=wizardFields}}
   </div>
 {{/if}}
 
 {{#if updateProfile}}
   <div class="setting full">
     <label>{{i18n "admin.wizard.action.add_fields" type='Profile'}}</label>
-    {{wizard-custom-inputs inputs=action.profile_updates
-                           valueContent=profileFields
-                           keyContent=availableFields
-                           noneValue='admin.wizard.action.update_profile.profile_field'
-                           allowCustomField=true
-                           allowUserField=true}}
+    {{wizard-custom-inputs 
+      inputs=action.profile_updates
+      userFields=userFields
+      wizardFields=wizardFields
+      options=(hash
+        allowWizardField=true
+        allowUserField=true
+      )}}
   </div>
 {{/if}}
 
@@ -244,8 +255,9 @@
     <div class="setting-value">
       <label>{{i18n 'admin.wizard.action.post_builder.user_fields'}}{{builderUserFields}}</label>
       <label>{{i18n 'admin.wizard.action.post_builder.wizard_fields'}}{{builderWizardFields}}</label>
-      {{textarea value=action.api_body
-                 placeholder=(i18n 'admin.wizard.action.interpolate_fields')}}
+      {{textarea
+        value=action.api_body
+        placeholder=(i18n 'admin.wizard.action.interpolate_fields')}}
     </div>
   </div>
 {{/if}}
@@ -257,18 +269,34 @@
     </div>
     <div class="setting-value">
       {{combo-box
-        value=action.group_id
-        content=availableFields
-        isDisabled=action.custom_group_enabled
+        value=action.value
+        content=wizardFields
+        isDisabled=action.custom
         nameProperty="label"
         none='admin.wizard.select_field'}}
+      
       <div class="setting-gutter">
         {{input type='checkbox' checked=action.custom_group_enabled}}
         <span>{{i18n 'admin.wizard.action.add_to_group.custom_group'}}</span>
+        
         {{#if action.custom_group_enabled}}
-          {{input value=action.group_id}}
+          {{input value=action.custom}}
         {{/if}}
       </div>
+    </div>
+  </div>
+  
+  <div class="setting">
+    <div class="setting-label">
+      <h3>{{i18n "admin.wizard.action.add_to_group.property"}}</h3>
+    </div>
+    <div class="setting-value">
+      {{combo-box
+        value=action.property
+        content=groupPropertyTypes
+        options=(hash
+          none='admin.wizard.select_property'
+        )}}
     </div>
   </div>
 {{/if}}

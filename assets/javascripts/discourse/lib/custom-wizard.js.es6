@@ -2,4 +2,74 @@ function generateSelectKitContent(content) {
   return content.map(i => ({id: i, name: i}))
 }
 
-export { generateSelectKitContent };
+function generateName(id) {
+  return id.replace(/[_\-]+/g, ' ')
+    .toLowerCase()
+    .replace(/(^\w|\b\w)/g, (m) => m.toUpperCase())
+}
+
+const profileFields = [
+  'name',
+  'user_avatar',
+  'date_of_birth',
+  'title',
+  'locale',
+  'location',
+  'website',
+  'bio_raw',
+  'profile_background',
+  'card_background',
+  'theme_id'
+];
+
+const connectors = [
+  'equal'
+]
+
+const actionTypes = [
+  'create_topic',
+  'update_profile',
+  'create_topic',
+  'update_profile',
+  'send_message',
+  'send_to_api',
+  'add_to_group',
+  'route_to',
+  'open_composer'
+];
+
+function newInput(options = {}) {
+  let params = { 
+    pairs: Ember.A([newPair(options, 0)])
+  }
+  
+  if (options.hasOutput) {
+    params['output'] = '';
+    params['output_type'] = 'text';
+  }
+  
+  return Ember.Object.create(params);
+}
+
+function newPair(options = {}, index) {
+  let params = {
+    index,
+    key: '',
+    key_type: 'text',
+    value: '',
+    value_type: 'text',
+    connector: 'equal'
+  }
+  
+  return Ember.Object.create(params);
+}
+
+export {
+  generateSelectKitContent,
+  profileFields,
+  actionTypes,
+  generateName,
+  connectors,
+  newInput,
+  newPair
+};

@@ -1,4 +1,4 @@
-import { default as computed, observes } from 'ember-addons/ember-computed-decorators';
+import { default as computed, observes } from 'discourse-common/utils/decorators';
 import { renderAvatar } from 'discourse/helpers/user-avatar';
 import userSearch from '../lib/user-search';
 

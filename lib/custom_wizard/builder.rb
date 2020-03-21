@@ -44,6 +44,9 @@ class CustomWizard::Builder
 
   USER_FIELDS = ['name', 'username', 'email', 'date_of_birth', 'title', 'locale']
   PROFILE_FIELDS = ['location', 'website', 'bio_raw', 'profile_background', 'card_background']
+  OPERATORS = { 
+    'equal': '=='
+  }
 
   def self.fill_placeholders(string, user, data)
     result = string.gsub(/u\{(.*?)\}/) do |match|
@@ -99,8 +102,9 @@ class CustomWizard::Builder
           permitted_data = {}
 
           permitted_params.each do |p|
-            params_key = p['key'].to_sym
-            submission_key = p['value'].to_sym
+            pair = p['pairs'].first
+            params_key = pair['key'].to_sym
+            submission_key = pair['value'].to_sym
             permitted_data[submission_key] = params[params_key] if params[params_key]
           end
 
@@ -110,21 +114,32 @@ class CustomWizard::Builder
           end
         end
 
-        if required_data = step_template['required_data']
-          if !@submissions.last && required_data.present?
-            step.permitted = false
-            next
-          end
-
-          required_data.each do |rd|
-            if rd['connector'] === 'equals'
-              step.permitted = @submissions.last[rd['key']] == @submissions.last[rd['value']]
+        if (required_data = step_template['required_data']).present?
+          has_required_data = true
+          pairs = 
+          
+          required_data.each do |required|
+            required['pairs'].each do |pair|
+              if pair['key'].blank? || pair['value'].blank?
+                has_required_data = false
+              end
             end
           end
           
-          if !step.permitted
-            step.permitted_message = step_template['required_data_message'] if step_template['required_data_message']
-            next
+          if has_required_data
+            if !@submissions.last
+              step.permitted = false
+            else
+              required_data.each do |required|
+                pairs = required['pairs'].map { |p| p['value'] = @submissions.last[p['value']] }
+                step.permitted = false unless validate_pairs(pairs)
+              end
+            end
+            
+            if !step.permitted
+              step.permitted_message = step_template['required_data_message'] if step_template['required_data_message']
+              next
+            end
           end
         end
 
@@ -217,18 +232,7 @@ class CustomWizard::Builder
       params[:value] = submission[field_template['id']] if submission[field_template['id']]
     end
     
-    ## If a field updates a profile field, load the current value
-    if step_template['actions'] && step_template['actions'].any?
-      profile_actions = step_template['actions'].select { |a| a['type'] === 'update_profile' }
-
-      if profile_actions.any?
-        profile_actions.each do |action|
-          if update = action['profile_updates'].select { |u| u['key'] === field_template['id'] }.first
-            params[:value] = prefill_profile_field(update) || params[:value]
-          end
-        end
-      end
-    end
+    params[:value] = prefill_field(field_template, step_template) || params[:value]
 
     if field_template['type'] === 'checkbox'
       params[:value] = standardise_boolean(params[:value])
@@ -253,6 +257,8 @@ class CustomWizard::Builder
     if field_template['type'] === 'group'
       @wizard.needs_groups = true
     end
+    
+    puts "ADDING FIELD: #{params.inspect}"
 
     field = step.add_field(params)
 
@@ -260,24 +266,81 @@ class CustomWizard::Builder
       build_dropdown_list(field, field_template)
     end
   end
+  
+  def prefill_field(field_template, step_template)
+    if (prefill = field_template['prefill']).present?
+      output = nil
+      
+      prefill.each do |item|
+        puts "PREFIL: #{item.inspect}"
+        if validate_pairs(item['pairs'])
+          puts "OUTPUT: #{get_field(item['output'], item['output_type'])}"
+          output = get_field(item['output'], item['output_type'])
+        end
+      end
+            
+      output
+    else
+      actions = step_template['actions']
+      
+      if actions && actions.any?
+        profile_actions = actions.select { |a| a['type'] === 'update_profile' } || []
 
-  def prefill_profile_field(update)
-    attribute = update['value']
-    custom_field = update['value_custom']
-    user_field = update['user_field']
+        profile_actions.each do |action|
+          update = action['profile_updates'].select { |u| u['key'] === field_template['id'] }.first
+          get_user_field(update['value']) if update
+        end
+      end
+    end
+  end
+  
+  def validate_pairs(pairs)
+    failed = false
+    pairs.each do |pair|
+      puts "PAIR: #{pair.inspect}"
+      key = get_field(pair['key'], pair['key_type'])
+      value = get_field(pair['value'], pair['value_type'])
+      puts "KEY VALUE: #{key.inspect}; #{value.inspect}"
+      failed = true unless key.public_send(get_operator(pair['connector']), value)
+    end
+    !failed
+  end
+  
+  def get_operator(connector)
+    OPERATORS[connector] || '=='
+  end
+  
+  def get_field(value, type)
+    method = "get_#{type}_field"
+    
+    if self.respond_to?(method)
+      self.send(method, value)
+    else
+      value
+    end
+  end
+  
+  def get_wizard_field(value)
+    @submissions.last &&
+    !@submissions.last.key?("submitted_at") &&
+    @submissions.last[value]
+  end
 
-    if user_field || custom_field
-      UserCustomField.where(user_id: @wizard.user.id, name: user_field || custom_field).pluck(:value).first
-    elsif UserProfile.column_names.include? attribute
-      UserProfile.find_by(user_id: @wizard.user.id).send(attribute)
-    elsif User.column_names.include? attribute
-      User.find(@wizard.user.id).send(attribute)
+  def get_user_field(value)
+    puts "GETTING USER FIELD: #{value.inspect}"
+    if value.include?('user_field_')
+      UserCustomField.where(user_id: @wizard.user.id, name: value).pluck(:value).first
+    elsif UserProfile.column_names.include? value
+      UserProfile.find_by(user_id: @wizard.user.id).send(value)
+    elsif User.column_names.include? value
+      User.find(@wizard.user.id).send(value)
     end
   end
 
   def build_dropdown_list(field, template)
     field.dropdown_none = template['dropdown_none'] if template['dropdown_none']
-    self.send("build_dropdown_#{template['choices_type']}", field, template)
+    method = "build_dropdown_#{template['choices_type']}"
+    self.send(method, field, template) if self.respond_to?(method)
   end
   
   def build_dropdown_custom(field, template)
@@ -552,8 +615,8 @@ class CustomWizard::Builder
   end
 
   def add_to_group(user, action, data)
-    if group_id = data[action['group_id']]
-      if group = Group.find(group_id)
+    if value = data[action['value']]
+      if group = Group.where("#{action['property']} = '#{value}'").first
         group.add(user)
       end
     end

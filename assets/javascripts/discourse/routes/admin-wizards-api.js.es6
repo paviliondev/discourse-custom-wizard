@@ -1,6 +1,7 @@
 import CustomWizardApi from '../models/custom-wizard-api';
+import DiscourseRoute from "discourse/routes/discourse";
 
-export default Discourse.Route.extend({
+export default DiscourseRoute.extend({
   queryParams: {
     refresh_list: {
       refreshModel: true

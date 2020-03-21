@@ -52,7 +52,6 @@
       }
 
       button {
-        margin-top: 5px;
         display: block;
       }
 
@@ -87,11 +86,6 @@
           .d-editor {
             margin-bottom: 5px;
           }
-        }
-
-        .custom-input .remove {
-          margin-left: 10px;
-          margin-top: 0;
         }
       }
     }
@@ -194,11 +188,45 @@
 
 .custom-input {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 10px;
+  position: relative;
+  
+  .type-selector a {
+    color: $primary;
+    margin-right: 10px;
+    
+    &.active {
+      color: $tertiary;
+      text-decoration: underline;
+    }
+  }
+  
+  .pairs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    
+    .add-pair {
+      margin-top: 4px;
+    }
+    
+    .remove-pair {
+      position: absolute;
+      top: 25px;
+      right: -30px;
+    }
+  }
+  
+  .pair {
+    display: flex;
+    align-items: flex-end;
+    position: relative;
+    margin-bottom: 5px;
+  }
 
   .d-icon {
-    margin: 0 auto;
     text-align: center;
   }
 
@@ -210,18 +238,38 @@
     background-color: $primary-low;
     border-color: #ddd;
   }
-
-  .select-kit {
-    width: 232px !important;
+  
+  .input-block, .select-kit, input {
+    width: 150px;
+    min-width: 150px;
   }
 
-  .remove {
-    margin: 0 auto;
-    align-self: flex-start;
+  button.remove-input {
+    margin: 21px 0 0 10px;
   }
 
   .connector {
     margin: 0 10px;
+    
+    .select-kit {
+      min-width: 50px;
+    }
+    
+    .key-connector {
+      padding-bottom: 5px;
+      display: inline-block;
+    }
+    
+    .output-connector {
+      margin-top: 25px;
+      display: inline-block;
+    }
+  }
+  
+  .prefix {
+    position: absolute;
+    left: -20px;
+    top: 24px;
   }
 }
 

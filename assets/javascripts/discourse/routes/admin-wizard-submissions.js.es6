@@ -1,6 +1,7 @@
 import CustomWizard from '../models/custom-wizard';
+import DiscourseRoute from "discourse/routes/discourse";
 
-export default Discourse.Route.extend({
+export default DiscourseRoute.extend({
   model(params) {
     return CustomWizard.submissions(params.wizard_id);
   },

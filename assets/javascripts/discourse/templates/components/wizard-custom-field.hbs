@@ -98,7 +98,10 @@
       <div class="wizard-header small">
         {{i18n 'admin.wizard.field.choices_custom'}}
       </div>
-      {{wizard-custom-inputs inputs=field.choices}}
+      {{wizard-custom-inputs
+        inputs=field.choices
+        userFields=userFields
+        wizardFields=wizardFields}}
     {{/if}}
 
     <div class="wizard-header small">
@@ -138,7 +141,28 @@
     <div class="setting-value">
       {{combo-box
         content=categoryPropertyTypes
-        value=field.property}}
+        value=field.property
+        options=(hash
+          none='admin.wizard.select_property'
+        )}}
     </div>
   </div>
 {{/if}}
+
+<div class="setting full">
+  <div class="setting-label">
+    <h3>{{i18n 'admin.wizard.field.prefill'}}</h3>
+  </div>
+  <div class="setting-value">
+    {{wizard-custom-inputs
+      inputs=field.prefill
+      userFields=userFields
+      wizardFields=wizardFields
+      options=(hash
+        hasOutput=true
+        enableConnectors=true
+        allowWizardField=true
+        allowUserField=true
+      )}}
+  </div>
+</div>

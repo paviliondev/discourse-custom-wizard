@@ -1,4 +1,4 @@
-import { default as computed } from 'ember-addons/ember-computed-decorators';
+import { default as computed } from 'discourse-common/utils/decorators';
 import getUrl from 'discourse-common/lib/get-url';
 import WizardField from 'wizard/models/wizard-field';
 import { ajax } from 'wizard/lib/ajax';

@@ -1,15 +1,16 @@
 {{#each inputs as |input|}}
-  {{wizard-custom-input input=input
-                        valueContent=valueContent
-                        keyContent=keyContent
-                        connectorContent=connectorContent
-                        connectorKey=connectorKey
-                        noneValue=noneValue
-                        valuePlaceholder=valuePlaceholder
-                        allowCustomField=allowCustomField
-                        allowUserField=allowUserField
-                        remove=(action 'remove')}}
+  {{wizard-custom-input 
+    input=input
+    userFields=userFields
+    wizardFields=wizardFields
+    keyPlaceholder=keyPlaceholder
+    valuePlaceholder=valuePlaceholder
+    connectorContent=connectorContent
+    connectorKey=connectorKey
+    options=options
+    remove=(action 'remove')}}
 {{/each}}
+
 <div class="add-custom-input">
   {{d-button action='add' label='admin.wizard.add' icon='plus'}}
 </div>

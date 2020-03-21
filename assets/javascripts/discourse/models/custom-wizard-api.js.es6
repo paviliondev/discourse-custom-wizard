@@ -1,7 +1,8 @@
 import { ajax } from 'discourse/lib/ajax';
-import { default as computed } from 'ember-addons/ember-computed-decorators';
+import { default as computed } from 'discourse-common/utils/decorators';
+import EmberObject from "@ember/object";
 
-const CustomWizardApi = Discourse.Model.extend({
+const CustomWizardApi = EmberObject.extend({
   @computed('name')
   redirectUri(name) {
     let nameParam = name.toString().dasherize();

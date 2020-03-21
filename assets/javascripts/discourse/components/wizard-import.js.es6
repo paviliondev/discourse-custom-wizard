@@ -1,5 +1,5 @@
 import { ajax } from 'discourse/lib/ajax';
-import { default as computed } from 'ember-addons/ember-computed-decorators';
+import { default as computed } from 'discourse-common/utils/decorators';
 
 export default Ember.Component.extend({
   classNames: ['container', 'import'],

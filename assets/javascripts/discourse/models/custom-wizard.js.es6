@@ -1,4 +1,5 @@
 import { ajax } from 'discourse/lib/ajax';
+import EmberObject from "@ember/object";
 
 const wizardProperties = [
   'name',
@@ -15,7 +16,7 @@ const wizardProperties = [
   'theme_id'
 ];
 
-const CustomWizard = Discourse.Model.extend({
+const CustomWizard = EmberObject.extend({
   save() {
     return new Ember.RSVP.Promise((resolve, reject) => {
 

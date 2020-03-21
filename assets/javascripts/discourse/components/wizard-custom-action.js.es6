@@ -1,33 +1,16 @@
-import { default as computed, observes } from 'ember-addons/ember-computed-decorators';
-
-const ACTION_TYPES = [
-  { id: 'create_topic', name: 'Create Topic' },
-  { id: 'update_profile', name: 'Update Profile' },
-  { id: 'send_message', name: 'Send Message' },
-  { id: 'send_to_api', name: 'Send to API' },
-  { id: 'add_to_group', name: 'Add to Group' },
-  { id: 'route_to', name: 'Route To' },
-  { id: 'open_composer', name: 'Open Composer' }
-];
-
-const PROFILE_FIELDS = [
-  'name',
-  'user_avatar',
-  'date_of_birth',
-  'title',
-  'locale',
-  'location',
-  'website',
-  'bio_raw',
-  'profile_background',
-  'card_background',
-  'theme_id'
-];
+import {
+  default as computed,
+  observes
+} from 'discourse-common/utils/decorators';
+import {
+  actionTypes,
+  generateName,
+  generateSelectKitContent
+} from '../lib/custom-wizard';
 
 export default Ember.Component.extend({
   classNames: 'wizard-custom-action',
-  types: ACTION_TYPES,
-  profileFields: PROFILE_FIELDS,
+  types: actionTypes.map(t => ({ id: t, name: generateName(t) })),
   createTopic: Ember.computed.equal('action.type', 'create_topic'),
   updateProfile: Ember.computed.equal('action.type', 'update_profile'),
   sendMessage: Ember.computed.equal('action.type', 'send_message'),
@@ -36,6 +19,7 @@ export default Ember.Component.extend({
   addToGroup: Ember.computed.equal('action.type', 'add_to_group'),
   routeTo: Ember.computed.equal('action.type', 'route_to'),
   disableId: Ember.computed.not('action.isNew'),
+  groupPropertyTypes: generateSelectKitContent(['id', 'name']),
 
   @computed('action.type')
   basicTopicFields(actionType) {
@@ -52,17 +36,17 @@ export default Ember.Component.extend({
     return ['create_topic', 'send_message'].indexOf(actionType) > -1;
   },
 
-  @computed('availableFields')
+  @computed('wizardFields')
   builderWizardFields(fields) {
     return fields.map((f) => ` w{${f.id}}`);
   },
   
-  @computed('availableFields')
+  @computed('wizardFields')
   categoryFields(fields) {
     return fields.filter(f => f.type == 'category');
   },
   
-  @computed('availableFields')
+  @computed('wizardFields')
   tagFields(fields) {
     return fields.filter(f => f.type == 'tag');
   },

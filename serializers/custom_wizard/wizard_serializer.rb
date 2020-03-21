@@ -14,6 +14,7 @@ class CustomWizardSerializer < ::WizardSerializer
   has_one :user, serializer: ::BasicUserSerializer, embed: :objects           
   has_many :steps, serializer: ::CustomWizardStepSerializer, embed: :objects
   has_many :categories, serializer: ::BasicCategorySerializer, embed: :objects
+  has_many :groups, serializer: ::BasicGroupSerializer, embed: :objects
 
   def completed
     object.completed?
@@ -39,6 +40,10 @@ class CustomWizardSerializer < ::WizardSerializer
   
   def include_categories?
     object.needs_categories
+  end
+  
+  def include_groups?
+    object.needs_groups
   end
   
   def uncategorized_category_id

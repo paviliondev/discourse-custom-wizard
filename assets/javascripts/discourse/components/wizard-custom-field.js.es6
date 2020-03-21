@@ -1,4 +1,4 @@
-import { default as computed, observes, on } from 'ember-addons/ember-computed-decorators';
+import { default as computed, observes, on } from 'discourse-common/utils/decorators';
 import { generateSelectKitContent } from '../lib/custom-wizard';
 
 export default Ember.Component.extend({

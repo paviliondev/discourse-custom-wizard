@@ -6,7 +6,8 @@ en:
   admin_js:
     admin:
       wizard:
-        label: "Wizards"
+        label: "Wizard"
+        nav: "Wizards"
         new: "New"
         custom_label: "Custom"
         submissions_label: "Submissions"
@@ -46,17 +47,30 @@ en:
         url: "Url"
         key: "Key"
         or: "Or"
+        if: "if"
         value: "Value"
+        output: "Output"
+        property: "Property"
+        text: "text"
+        profile: "profile"
         id: "Id"
         id_placeholder: "Underscored. Cannot be changed."
         key_placeholder: "Translation key"
         custom_text_placeholder: "Overrides translation"
-        custom_field_placeholder: "Custom Field"
-        custom_value_placeholder: "Custom Value"
-        user_field_placeholder: "User Field"
         type: "Type"
         none: "Make a selection"
+        user_field: "User Field"
+        wizard_field: "Wizard Field"
         select_field: "Select Field"
+        select_property: "Select Property"
+        profile_field: "Profile Field"
+        submission_key: 'submission key'
+        param_key: 'param'
+        connector:
+          none: "op"
+          prefill: "prefill"
+          equal: "="
+        
         error:
           name_required: "Wizards must have a name."
           steps_required: "Wizards must have at least one step."
@@ -68,6 +82,7 @@ en:
           field:
             need_choices: "All dropdowns need choices."
             choices_label_empty: "Custom choice labels cannot be empty."
+        
         step:
           header: "Steps"
           title: "Title"
@@ -76,15 +91,11 @@ en:
           description: "Description"
           required_data:
             label: "Required Data"
-            key: 'Submission key'
-            connector:
-              equals: "Equals"
             not_permitted_message: "Message shown when required data not present"
           permitted_params:
             label: "Permitted Params"
-            key: 'Param'
-            value: 'Submission key'
-            connector: "Save as"
+            connector: "save as"
+        
         field:
           type: "Choose a type"
           header: "Fields"
@@ -110,6 +121,8 @@ en:
           category: "Category"
           limit: "Limit"
           property: "Property"
+          prefill: "Prefill"
+        
         action:
           header: "Actions<sup>*</sup>"
           include: "Include Fields"
@@ -132,7 +145,6 @@ en:
             tags: "Tags"
           update_profile:
             label: "Update Profile"
-            profile_field: "Profile Field"
           post_builder:
             checkbox: "Post Builder"
             label: "Builder"
@@ -142,8 +154,9 @@ en:
           add_to_group:
             label: "Add to Group"
             group: "Group"
-            group_selection: "Group Selection"
-            custom_group: "Custom Group"
+            group_selection: "Field"
+            custom_group: "Custom"
+            property: "Property"
           route_to:
             label: "Route To"
             url: "Url"
@@ -151,7 +164,6 @@ en:
           custom_title: "Custom Title"
           custom_category:
             label: "Custom Category"
-            wizard_field: "Wizard Field"
             user_field: "User Field"
           custom_tag:
             label: "Custom Tag"
@@ -230,6 +242,9 @@ en:
             file_size_error: "The file must be JSON and 512kb or less"
 
   wizard_js:
+    group:
+      select: "Select a group"
+
     location:
       name:
         title: "Name (optional)"

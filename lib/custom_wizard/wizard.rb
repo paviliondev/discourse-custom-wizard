@@ -21,7 +21,8 @@ class CustomWizard::Wizard
                 :required,
                 :prompt_completion,
                 :restart_on_revisit,
-                :needs_categories
+                :needs_categories,
+                :needs_groups
 
   def initialize(user=nil, attrs = {})
     @steps = []
@@ -29,6 +30,7 @@ class CustomWizard::Wizard
     @first_step = nil
     @required = false
     @needs_categories = false
+    @needs_groups = false
 
     attrs.each do |key, value|
       setter = "#{key}="
@@ -139,6 +141,10 @@ class CustomWizard::Wizard
   
   def categories
     @categories ||= ::Site.new(Guardian.new(@user)).categories
+  end
+  
+  def groups
+    @groups ||= ::Site.new(Guardian.new(@user)).groups
   end
 
   def self.after_signup

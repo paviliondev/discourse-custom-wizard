@@ -1,8 +1,13 @@
 import CustomWizard from '../models/custom-wizard';
 import { ajax } from 'discourse/lib/ajax';
-import { generateSelectKitContent } from '../lib/custom-wizard';
+import {
+  generateSelectKitContent,
+  profileFields,
+  generateName
+} from '../lib/custom-wizard';
+import DiscourseRoute from "discourse/routes/discourse";
 
-export default Discourse.Route.extend({
+export default DiscourseRoute.extend({
   beforeModel() {
     const param = this.paramsFor('adminWizard').wizard_id;
     const wizards = this.modelFor('admin-wizards-custom');
@@ -35,7 +40,8 @@ export default Discourse.Route.extend({
     return Ember.RSVP.all([
       this._getFieldTypes(model),
       this._getThemes(model),
-      this._getApis(model)
+      this._getApis(model),
+      this._getUserFields(model)
     ]);
   },
 
@@ -58,6 +64,20 @@ export default Discourse.Route.extend({
   _getApis(model) {
     return ajax('/admin/wizards/apis')
       .then((result) => model.set('apis', result));
+  },
+  
+  _getUserFields(model) {
+    return this.store.findAll('user-field').then((result) => {
+      if (result && result.content) {
+        let userContent = result.content.map((f) => {
+          return { id: `user_field_${f.id}`, name: f.name};
+        });
+        let profileContent = profileFields.map((f) => {
+          return { id: f, name: generateName(f) };
+        });
+        model.set('userFields', userContent.concat(profileContent));
+      }
+    });
   },
 
   setupController(controller, model) {

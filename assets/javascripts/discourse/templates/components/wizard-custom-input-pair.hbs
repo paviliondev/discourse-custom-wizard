@@ -1,0 +1,42 @@
+<div class="key input-block">
+  {{wizard-custom-input-chooser
+    inputType='key'
+    userFields=userFields
+    wizardFields=wizardFields
+    value=pair.key
+    activeType=pair.key_type
+    customPlaceholder=keyPlaceholder
+    options=options}}
+</div>
+
+<div class="connector">
+  {{#if options.enableConnectors}}
+    {{combo-box
+      value=pair.connector
+      content=connectors
+      options=(hash
+        none=connectorNone
+      )}}
+  {{/if}}
+  
+  {{#if connectorKey}}
+    <span class="key-connector">
+      {{i18n connectorKey}}
+    </span>
+  {{/if}}
+</div>
+
+<div class="value input-block">
+  {{wizard-custom-input-chooser
+    inputType='value'
+    userFields=userFields
+    wizardFields=wizardFields
+    value=pair.value
+    activeType=pair.value_type
+    customPlaceholder=valuePlaceholder
+    options=options}}
+</div>
+
+{{#if showRemove}}
+  <a {{action removePair pair}} class="remove-pair">{{d-icon 'minus'}}</a>
+{{/if}}

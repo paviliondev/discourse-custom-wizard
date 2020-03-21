@@ -1,0 +1,47 @@
+<div class="type-selector">
+  {{input-type-toggle
+    activeType=activeType
+    type='text'
+    toggle=(action 'toggleType')}}
+  
+  {{#if wizardEnabled}}
+    {{input-type-toggle
+      activeType=activeType
+      type='wizard'
+      toggle=(action 'toggleType')}}
+  {{/if}}
+  
+  {{#if userEnabled}}
+    {{input-type-toggle
+      activeType=activeType
+      type='user'
+      toggle=(action 'toggleType')}}
+  {{/if}}
+</div>
+
+<div class="input">
+  {{#if showText}}
+    {{input
+      type="text"
+      value=value
+      placeholder=(i18n textPlaceholder)}}
+  {{/if}}
+  
+  {{#if showWizard}}
+    {{combo-box
+      value=value
+      content=wizardFields
+      options=(hash
+        none='admin.wizard.wizard_field'
+      )}}
+  {{/if}}
+
+  {{#if showUser}}
+    {{combo-box
+      value=value
+      content=userFields
+      options=(hash
+        none='admin.wizard.user_field'
+      )}}
+  {{/if}}
+</div>

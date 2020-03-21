@@ -1,5 +1,5 @@
 import ComposerEditor from 'discourse/components/composer-editor';
-import { default as computed, on } from 'ember-addons/ember-computed-decorators';
+import { default as computed, on } from 'discourse-common/utils/decorators';
 import { findRawTemplate } from "discourse/lib/raw-templates";
 import { throttle } from "@ember/runloop";
 import { scheduleOnce } from "@ember/runloop";

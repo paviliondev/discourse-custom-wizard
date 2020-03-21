@@ -1,4 +1,4 @@
-import { observes, default as computed } from 'ember-addons/ember-computed-decorators';
+import { observes, default as computed } from 'discourse-common/utils/decorators';
 
 export default Ember.Component.extend({
   classNames: 'wizard-custom-step',
@@ -16,9 +16,9 @@ export default Ember.Component.extend({
     });
   },
 
-  @computed('availableFields', 'wizard.steps')
-  requiredContent(availableFields, steps) {
-    let content = availableFields;
+  @computed('wizardFields', 'wizard.steps')
+  requiredContent(wizardFields, steps) {
+    let content = wizardFields;
     let actions = [];
 
     steps.forEach(s => {
@@ -37,19 +37,8 @@ export default Ember.Component.extend({
     return content;
   },
 
-  @computed
-  requiredConnectorContent() {
-    const label = (id) => I18n.t(`admin.wizard.step.required_data.connector.${id}`);
-    return [
-      {
-        id: 'equals',
-        label: label('equals')
-      }
-    ];
-  },
-
   @computed('step.id', 'wizard.save_submissions')
-  availableFields(currentStepId, saveSubmissions) {
+  wizardFields(currentStepId, saveSubmissions) {
     const allSteps = this.get('wizard.steps');
     let steps = allSteps;
     let fields = [];

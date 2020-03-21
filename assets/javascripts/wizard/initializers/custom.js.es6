@@ -1,4 +1,4 @@
-import { default as computed } from 'ember-addons/ember-computed-decorators';
+import { default as computed } from 'discourse-common/utils/decorators';
 
 export default {
   name: 'custom-routes',
@@ -227,7 +227,8 @@ export default {
       'image',
       'user-selector',
       'text-only',
-      'composer'
+      'composer',
+      'group'
     ];
 
     FieldModel.reopen({
