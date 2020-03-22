@@ -13,7 +13,6 @@ export default {
       });
 
       this.route('adminWizardsTransfer', { path: '/transfer', resetNamespace: true });
-
     });
   }
 };

@@ -69,7 +69,6 @@ en:
         connector:
           none: "op"
           prefill: "prefill"
-          equal: "="
         
         error:
           name_required: "Wizards must have a name."

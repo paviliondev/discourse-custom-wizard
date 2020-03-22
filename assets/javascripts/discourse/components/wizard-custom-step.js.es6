@@ -1,11 +1,16 @@
-import { observes, default as computed } from 'discourse-common/utils/decorators';
+import { 
+  observes,
+  on,
+  default as computed
+} from 'discourse-common/utils/decorators';
 
 export default Ember.Component.extend({
   classNames: 'wizard-custom-step',
   currentField: null,
   currentAction: null,
   disableId: Ember.computed.not('step.isNew'),
-
+  
+  @on('didInsertElement')
   @observes('step')
   resetCurrentObjects() {
     const fields = this.get('step.fields');

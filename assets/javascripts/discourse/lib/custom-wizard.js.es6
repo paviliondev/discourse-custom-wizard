@@ -23,7 +23,22 @@ const profileFields = [
 ];
 
 const connectors = [
-  'equal'
+  {
+    id: 'eq',
+    name: '='
+  },{
+    id: 'gt',
+    name: '>'
+  },{
+    id: 'lt',
+    name: '<'
+  },{
+    id: 'gte',
+    name: '>='
+  },{
+    id: 'lte',
+    name: '<='
+  }
 ]
 
 const actionTypes = [
@@ -58,7 +73,7 @@ function newPair(options = {}, index) {
     key_type: 'text',
     value: '',
     value_type: 'text',
-    connector: 'equal'
+    connector: 'eq'
   }
   
   return Ember.Object.create(params);

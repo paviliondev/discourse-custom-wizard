@@ -45,7 +45,11 @@ class CustomWizard::Builder
   USER_FIELDS = ['name', 'username', 'email', 'date_of_birth', 'title', 'locale']
   PROFILE_FIELDS = ['location', 'website', 'bio_raw', 'profile_background', 'card_background']
   OPERATORS = { 
-    'equal': '=='
+    'eq': '==',
+    'gt': '>',
+    'lt': '<',
+    'gte': '>=',
+    'lte': '<='
   }
 
   def self.fill_placeholders(string, user, data)
@@ -272,35 +276,20 @@ class CustomWizard::Builder
       output = nil
       
       prefill.each do |item|
-        puts "PREFIL: #{item.inspect}"
         if validate_pairs(item['pairs'])
-          puts "OUTPUT: #{get_field(item['output'], item['output_type'])}"
           output = get_field(item['output'], item['output_type'])
         end
       end
             
       output
-    else
-      actions = step_template['actions']
-      
-      if actions && actions.any?
-        profile_actions = actions.select { |a| a['type'] === 'update_profile' } || []
-
-        profile_actions.each do |action|
-          update = action['profile_updates'].select { |u| u['key'] === field_template['id'] }.first
-          get_user_field(update['value']) if update
-        end
-      end
     end
   end
   
   def validate_pairs(pairs)
     failed = false
     pairs.each do |pair|
-      puts "PAIR: #{pair.inspect}"
       key = get_field(pair['key'], pair['key_type'])
       value = get_field(pair['value'], pair['value_type'])
-      puts "KEY VALUE: #{key.inspect}; #{value.inspect}"
       failed = true unless key.public_send(get_operator(pair['connector']), value)
     end
     !failed
@@ -516,18 +505,6 @@ class CustomWizard::Builder
 
     action['profile_updates'].each do |pu|
       value = pu['value']
-      custom_field = nil
-        
-      if pu['value_custom'].present?
-        custom_parts = pu['value_custom'].split('.')
-        if custom_parts.length == 2 && custom_parts[0] == 'custom_field'
-          custom_field = custom_parts[1]
-        else
-          value = custom_parts[0]
-        end 
-      end
-      
-      user_field = pu['user_field']
       key = pu['key']
       
       return if data[key].blank?

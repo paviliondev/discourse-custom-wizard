@@ -51,7 +51,9 @@
     {{combo-box
       value=field.type
       content=types
-      none="admin.wizard.field.type"}}
+      options=(hash
+        none="admin.wizard.field.type"
+      )}}
   </div>
 </div>
 
@@ -85,7 +87,9 @@
     {{combo-box
       value=field.choices_type
       content=choicesTypes
-      none="admin.wizard.field.choices_type"}}
+      options=(hash
+        none="admin.wizard.field.choices_type"
+      )}}
 
     {{#if choicesTranslation}}
       <div class="wizard-header small">

@@ -78,7 +78,7 @@
     <div class="setting-value">
       {{input type='checkbox' checked=model.after_time}}
       <span>{{i18n 'admin.wizard.after_time_label'}}</span>
-      {{d-button action='setNextSessionScheduled' translatedLabel=nextSessionScheduledLabel icon='calendar-o'}}
+      {{d-button action='setNextSessionScheduled' translatedLabel=nextSessionScheduledLabel icon='far-calendar'}}
     </div>
   </div>
 
@@ -111,7 +111,9 @@
         content=model.themes
         valueProperty='id'
         value=model.theme_id
-        none='admin.wizard.no_theme'}}
+        options=(hash
+          none='admin.wizard.no_theme'
+        )}}
     </div>
   </div>
 
