@@ -175,7 +175,7 @@
       userFields=userFields
       wizardFields=wizardFields
       options=(hash
-        allowWizardField=true
+        allowWizard=true
       )}}
   </div>
 {{/if}}
@@ -227,8 +227,8 @@
       userFields=userFields
       wizardFields=wizardFields
       options=(hash
-        allowWizardField=true
-        allowUserField=true
+        allowWizard=true
+        allowUser=true
       )}}
   </div>
 {{/if}}
@@ -281,39 +281,20 @@
 {{#if addToGroup}}
   <div class="setting">
     <div class="setting-label">
-      <h3>{{i18n "admin.wizard.action.add_to_group.group_selection"}}</h3>
+      <h3>{{i18n "admin.wizard.action.add_to_group.group"}}</h3>
     </div>
     <div class="setting-value">
-      {{combo-box
-        value=action.value
-        content=wizardFields
-        isDisabled=action.custom
-        nameProperty="label"
+      {{wizard-custom-inputs
+        inputs=action.selection
+        userFields=userFields
+        wizardFields=wizardFields
+        outputConnectorKey='admin.wizard.action.add_to_group.output_connector'
         options=(hash
-          none='admin.wizard.select_field'
-        )}}
-      
-      <div class="setting-gutter">
-        {{input type='checkbox' checked=action.custom_group_enabled}}
-        <span>{{i18n 'admin.wizard.action.add_to_group.custom_group'}}</span>
-        
-        {{#if action.custom_group_enabled}}
-          {{input value=action.custom}}
-        {{/if}}
-      </div>
-    </div>
-  </div>
-  
-  <div class="setting">
-    <div class="setting-label">
-      <h3>{{i18n "admin.wizard.action.add_to_group.property"}}</h3>
-    </div>
-    <div class="setting-value">
-      {{combo-box
-        value=action.property
-        content=groupPropertyTypes
-        options=(hash
-          none='admin.wizard.select_property'
+          hasOutput=true
+          enableConnectors=true
+          allowWizard='key,value'
+          allowUser='key,value'
+          allowGroup='value,output'
         )}}
     </div>
   </div>

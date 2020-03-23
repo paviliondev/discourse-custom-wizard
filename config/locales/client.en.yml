@@ -46,10 +46,7 @@ en:
         add: "Add"
         url: "Url"
         key: "Key"
-        or: "Or"
-        if: "if"
         value: "Value"
-        output: "Output"
         property: "Property"
         text: "text"
         profile: "profile"
@@ -63,13 +60,16 @@ en:
         wizard_field: "Wizard Field"
         select_field: "Select Field"
         select_property: "Select Property"
+        select_group: "Select Group"
         profile_field: "Profile Field"
         submission_key: 'submission key'
         param_key: 'param'
-        connector:
-          none: "op"
-          prefill: "prefill"
         
+        output:
+          label: "Output"
+          prefix: 'if'
+          connector: 'then'
+  
         error:
           name_required: "Wizards must have a name."
           steps_required: "Wizards must have at least one step."
@@ -153,9 +153,7 @@ en:
           add_to_group:
             label: "Add to Group"
             group: "Group"
-            group_selection: "Field"
-            custom_group: "Custom"
-            property: "Property"
+            output_connector: "add to"
           route_to:
             label: "Route To"
             url: "Url"

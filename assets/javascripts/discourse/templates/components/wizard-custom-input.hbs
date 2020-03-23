@@ -1,34 +1,36 @@
 {{#if options.hasOutput}}  
-  {{#if outputPrefixKey}}
-    <div class="prefix">
-      <span>{{i18n outputPrefixKey}}</span>
-    </div>
-  {{/if}}
+  <div class="prefix">
+    {{combo-box
+      value=input.type
+      contents=inputTypes
+      onChange=(mut (input.prefix))}}
+  </div>
 {{/if}}
 
-<div class="pairs">
-  {{#each input.pairs as |pair|}}
-    {{wizard-custom-input-pair
-      pair=pair
-      keyPlaceholder=keyPlaceholder
-      valuePlaceholder=valuePlaceholder
-      userFields=userFields
-      wizardFields=wizardFields
-      options=options
-      removePair=(action 'removePair')}}
-  {{/each}}
-  {{#if options.hasOutput}}
-    <a {{action 'addPair'}} class="add-pair">{{d-icon 'plus'}}</a>
-  {{/if}}
-</div>
+{{#if hasPairs}}
+  <div class="pairs">
+    {{#each input.pairs as |pair|}}
+      {{wizard-custom-input-pair
+        pair=pair
+        last=pair.last
+        keyPlaceholder=keyPlaceholder
+        valuePlaceholder=valuePlaceholder
+        userFields=userFields
+        wizardFields=wizardFields
+        options=options
+        removePair=(action 'removePair')}}
+    {{/each}}
+    {{#if options.hasOutput}}
+      <a {{action 'addPair'}} class="add-pair">{{d-icon 'plus'}}</a>
+    {{/if}}
+  </div>
+{{/if }}
 
 {{#if options.hasOutput}}
   <div class="connector">
-    {{#if outputConnectorKey}}
-      <span class="output-connector">
-        {{i18n outputConnectorKey}}
-      </span>
-    {{/if}}
+    <span class="output-connector">
+      {{outputConnector}}
+    </span>
   </div>
 
   <div class="output input-block">

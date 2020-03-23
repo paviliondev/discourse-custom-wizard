@@ -17,6 +17,27 @@
       type='user'
       toggle=(action 'toggleType')}}
   {{/if}}
+  
+  {{#if categoryEnabled}}
+    {{input-type-toggle
+      activeType=activeType
+      type='category'
+      toggle=(action 'toggleType')}}
+  {{/if}}
+  
+  {{#if tagEnabled}}
+    {{input-type-toggle
+      activeType=activeType
+      type='tag'
+      toggle=(action 'toggleType')}}
+  {{/if}}
+  
+  {{#if groupEnabled}}
+    {{input-type-toggle
+      activeType=activeType
+      type='group'
+      toggle=(action 'toggleType')}}
+  {{/if}}
 </div>
 
 <div class="input">
@@ -31,6 +52,7 @@
     {{combo-box
       value=value
       content=wizardFields
+      onChange=(action (mut value))
       options=(hash
         none='admin.wizard.wizard_field'
       )}}
@@ -40,8 +62,30 @@
     {{combo-box
       value=value
       content=userFields
+      onChange=(action (mut value))
       options=(hash
         none='admin.wizard.user_field'
+      )}}
+  {{/if}}
+  
+  {{#if showCategory}}
+    {{category-chooser value=value}}
+  {{/if}}
+  
+  {{#if showTag}}
+    {{tag-chooser
+      tags=value
+      filterable=true
+      allowCreate=true}}
+  {{/if}}
+  
+  {{#if showGroup}}
+    {{combo-box
+      content=site.groups
+      value=value
+      onChange=(action (mut value))
+      options=(hash
+        none='admin.wizard.select_group'
       )}}
   {{/if}}
 </div>

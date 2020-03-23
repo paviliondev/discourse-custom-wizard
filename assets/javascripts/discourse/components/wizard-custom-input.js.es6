@@ -1,19 +1,36 @@
 import { newPair } from '../lib/custom-wizard';
+import { computed } from "@ember/object";
 
 export default Ember.Component.extend({
   classNames: 'custom-input',
-  outputConnectorKey: 'admin.wizard.connector.prefill',
-  outputPrefixKey: 'admin.wizard.if',
+  outputConnector: computed(function() {
+    return I18n.t(this.outputConnectorKey || 'admin.wizard.output.connector').toLowerCase();
+  }),
   
   actions: {
     addPair() {
-      this.get('input.pairs').pushObject(
-        newPair(this.options, this.input.pairs.length)
+      const pairs = this.get('input.pairs');
+      
+      const pairCount = pairs.length + 1;
+      pairs.forEach(p => (p.set('pairCount', pairCount)));
+      
+      pairs.pushObject(
+        newPair(Object.assign(
+          {},
+          this.options,
+          { 
+            index: pairs.length,
+            pairCount,
+          }
+        ))
       );
     },
     
     removePair(pair) {
-      this.get('input.pairs').removeObject(pair);
+      const pairs = this.get('input.pairs');
+      const pairCount = pairs.length - 1;
+      pairs.forEach(p => (p.set('pairCount', pairCount)));
+      pairs.removeObject(pair);
     }
   }
 });

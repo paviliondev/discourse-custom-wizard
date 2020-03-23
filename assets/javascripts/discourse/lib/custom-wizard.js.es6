@@ -55,7 +55,7 @@ const actionTypes = [
 
 function newInput(options = {}) {
   let params = { 
-    pairs: Ember.A([newPair(options, 0)])
+    pairs: Ember.A([newPair({ index: 0, pairCount: 1 })])
   }
   
   if (options.hasOutput) {
@@ -66,9 +66,11 @@ function newInput(options = {}) {
   return Ember.Object.create(params);
 }
 
-function newPair(options = {}, index) {
+function newPair(options = {}) {
+  console.log('newPair: ', options)
   let params = {
-    index,
+    index: options.index,
+    pairCount: options.pairCount,
     key: '',
     key_type: 'text',
     value: '',

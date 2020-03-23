@@ -9,22 +9,21 @@
     options=options}}
 </div>
 
-<div class="connector">
-  {{#if options.enableConnectors}}
-    {{combo-box
-      value=pair.connector
-      content=connectors
-      options=(hash
-        none=connectorNone
-      )}}
-  {{/if}}
-  
-  {{#if connectorKey}}
-    <span class="key-connector">
-      {{i18n connectorKey}}
-    </span>
-  {{/if}}
-</div>
+{{#if hasConnector}}
+  <div class="connector">
+    {{#if options.enableConnectors}}
+      {{combo-box
+        value=pair.connector
+        content=connectors}}
+    {{/if}}
+    
+    {{#if connectorKey}}
+      <span class="key-connector">
+        {{i18n connectorKey}}
+      </span>
+    {{/if}}
+  </div>
+{{/if}}
 
 <div class="value input-block">
   {{wizard-custom-input-chooser
@@ -36,6 +35,10 @@
     customPlaceholder=valuePlaceholder
     options=options}}
 </div>
+
+{{#if showJoin}}
+  <div class="join-pair">&</div>
+{{/if}}
 
 {{#if showRemove}}
   <a {{action removePair pair}} class="remove-pair">{{d-icon 'minus'}}</a>

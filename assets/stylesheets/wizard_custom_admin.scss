@@ -194,11 +194,15 @@
   
   .type-selector a {
     color: $primary;
-    margin-right: 10px;
+    margin-right: 4px;
     
     &.active {
       color: $tertiary;
       text-decoration: underline;
+    }
+    
+    &:last-of-type {
+      margin-right: 0;
     }
   }
   
@@ -217,13 +221,20 @@
       top: 25px;
       right: -30px;
     }
+    
+    .join-pair {
+      position: absolute;
+      bottom: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
   }
   
   .pair {
     display: flex;
     align-items: flex-end;
     position: relative;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
   }
 
   .d-icon {
@@ -240,8 +251,8 @@
   }
   
   .input-block, .select-kit, input {
-    width: 150px;
-    min-width: 150px;
+    width: 160px;
+    min-width: 160px;
   }
 
   button.remove-input {
@@ -263,6 +274,7 @@
     .output-connector {
       margin-top: 25px;
       display: inline-block;
+      white-space: nowrap;
     }
   }
   
