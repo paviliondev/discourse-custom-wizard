@@ -29,6 +29,7 @@
 //= require discourse/lib/intercept-click
 //= require discourse/lib/show-modal
 //= require discourse/lib/key-value-store
+//= require discourse/lib/settings
 
 //= require discourse/mixins/singleton
 
@@ -43,6 +44,7 @@
 //= require discourse/models/trust-level
 //= require discourse/models/store
 //= require discourse/models/result-set
+//= require discourse/models/bookmark
 //= require discourse/models/user
 //= require discourse/models/user-stream
 //= require discourse/models/user-action
