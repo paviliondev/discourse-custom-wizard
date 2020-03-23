@@ -330,6 +330,7 @@ class CustomWizard::Builder
   end
 
   def validate_field(field, updater, step_template)
+    byebug
     value = updater.fields[field['id']]
     min_length = false
     label = field['label'] || I18n.t("#{field['key']}.label")
@@ -356,6 +357,7 @@ class CustomWizard::Builder
         validator[:block].call(field, updater, step_template)
       end
     end
+    byebug
   end
 
   def is_text_type(field)

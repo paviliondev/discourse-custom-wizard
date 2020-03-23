@@ -4,6 +4,7 @@ import getUrl from 'discourse-common/lib/get-url';
 export default StepController.extend({
   actions: {
     goNext(response) {
+      debugger;
       const next = this.get('step.next');
       if (response.redirect_on_next) {
         window.location.href = response.redirect_on_next;
