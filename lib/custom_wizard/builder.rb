@@ -1,3 +1,5 @@
+require 'uri'
+
 TagStruct = Struct.new(:id, :name)
 
 class CustomWizard::Builder
@@ -330,7 +332,6 @@ class CustomWizard::Builder
   end
 
   def validate_field(field, updater, step_template)
-    byebug
     value = updater.fields[field['id']]
     min_length = false
     label = field['label'] || I18n.t("#{field['key']}.label")
@@ -347,6 +348,12 @@ class CustomWizard::Builder
       updater.errors.add(field['id'].to_s, I18n.t('wizard.field.too_short', label: label, min: min_length.to_i))
     end
 
+    if is_url_type(field)
+      if !check_if_url(value)
+        updater.errors.add(field['id'].to_s, I18n.t('wizard.field.not_url', label: label))
+      end
+    end
+
     ## ensure all checkboxes are booleans
     if field['type'] === 'checkbox'
       updater.fields[field['id']] = standardise_boolean(value)
@@ -357,11 +364,18 @@ class CustomWizard::Builder
         validator[:block].call(field, updater, step_template)
       end
     end
-    byebug
   end
 
   def is_text_type(field)
     ['text', 'textarea'].include? field['type']
+  end
+
+  def is_url_type(field)
+    ['url'].include? field['type']
+  end
+
+  def check_if_url(value)
+    value =~ URI::regexp
   end
 
   def standardise_boolean(value)
