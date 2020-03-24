@@ -262,8 +262,10 @@ class CustomWizard::Builder
       @wizard.needs_groups = true
     end
     
-    puts "ADDING FIELD: #{params.inspect}"
-
+    if (prefill = field_template['filters']).present?
+      params[:filter] = get_output(field_template['filters'])
+    end
+    
     field = step.add_field(params)
 
     if field_template['type'] === 'dropdown'
@@ -273,25 +275,47 @@ class CustomWizard::Builder
   
   def prefill_field(field_template, step_template)
     if (prefill = field_template['prefill']).present?
-      output = nil
-      
-      prefill.each do |item|
-        if validate_pairs(item['pairs'])
-          output = get_field(item['output'], item['output_type'])
+      get_output(prefill)
+    end
+  end
+  
+  def get_output(inputs, opts = {})
+    output = opts[:multiple] ? [] : nil
+    
+    inputs.each do |input|
+      if input['type'] === 'conditional' && validate_pairs(input['pairs'])
+        if opts[:multiple]
+          output.push(get_field(input['output'], input['output_type'], opts))
+        else
+          output = get_field(input['output'], input['output_type'], opts)
+          break
         end
       end
-            
-      output
+      
+      if input['type'] === 'assignment'
+        value = get_field(input['output'], input['output_type'], opts)
+        
+        if opts[:multiple]
+          output.push(value)
+        else
+          output = value
+          break
+        end
+      end
     end
+          
+    output
   end
   
   def validate_pairs(pairs)
     failed = false
+    
     pairs.each do |pair|
       key = get_field(pair['key'], pair['key_type'])
       value = get_field(pair['value'], pair['value_type'])
       failed = true unless key.public_send(get_operator(pair['connector']), value)
     end
+    
     !failed
   end
   
@@ -299,23 +323,22 @@ class CustomWizard::Builder
     OPERATORS[connector] || '=='
   end
   
-  def get_field(value, type)
+  def get_field(value, type, opts = {})
     method = "get_#{type}_field"
-    
+  
     if self.respond_to?(method)
-      self.send(method, value)
+      self.send(method, value, opts)
     else
       value
     end
   end
   
-  def get_wizard_field(value)
-    @submissions.last &&
-    !@submissions.last.key?("submitted_at") &&
-    @submissions.last[value]
+  def get_wizard_field(value, opts = {})
+    data = opts[:data] || @submissions.last
+    data && !data.key?("submitted_at") && data[value]
   end
 
-  def get_user_field(value)
+  def get_user_field(value, opts = {})
     puts "GETTING USER FIELD: #{value.inspect}"
     if value.include?('user_field_')
       UserCustomField.where(user_id: @wizard.user.id, name: value).pluck(:value).first
@@ -592,9 +615,25 @@ class CustomWizard::Builder
   end
 
   def add_to_group(user, action, data)
-    if value = data[action['value']]
-      if group = Group.where("#{action['property']} = '#{value}'").first
-        group.add(user)
+    groups = get_output(action['inputs'], multiple: true, data: data)
+        
+    groups = groups.reduce([]) do |result, g|
+      g = g.first if g.is_a?(Array)
+
+      begin
+        result.push(Integer(g))
+      rescue ArgumentError
+        group = Group.find_by(name: g)
+        result.push(group.id) if group
+      end
+      
+      result
+    end
+    
+    if groups.present?
+      groups.each do |group_id|
+        group = Group.find(group_id) if group_id
+        group.add(user) if group
       end
     end
   end

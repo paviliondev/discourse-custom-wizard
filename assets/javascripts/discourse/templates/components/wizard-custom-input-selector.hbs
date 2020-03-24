@@ -1,8 +1,10 @@
 <div class="type-selector">
-  {{input-type-toggle
-    activeType=activeType
-    type='text'
-    toggle=(action 'toggleType')}}
+  {{#unless textDisabled}}
+    {{input-type-toggle
+      activeType=activeType
+      type='text'
+      toggle=(action 'toggleType')}}
+  {{/unless}}
   
   {{#if wizardEnabled}}
     {{input-type-toggle
@@ -69,19 +71,24 @@
   {{/if}}
   
   {{#if showCategory}}
-    {{category-chooser value=value}}
+    {{multi-select
+      content=categories
+      value=value
+      onChange=(action (mut value))
+      options=(hash
+        none='admin.wizard.select_category'
+      )}}
   {{/if}}
   
   {{#if showTag}}
     {{tag-chooser
       tags=value
-      filterable=true
-      allowCreate=true}}
+      filterable=true}}
   {{/if}}
   
   {{#if showGroup}}
-    {{combo-box
-      content=site.groups
+    {{multi-select
+      content=groups
       value=value
       onChange=(action (mut value))
       options=(hash

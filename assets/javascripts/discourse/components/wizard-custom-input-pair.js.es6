@@ -3,7 +3,7 @@ import { gt, or, alias } from "@ember/object/computed";
 import { computed, observes} from "@ember/object"; 
 
 export default Ember.Component.extend({
-  classNames: 'pair',
+  classNameBindings: [':input-pair', 'hasConnector::no-connector'],
   connectors: connectors,
   hasConnector: or('options.enableConnectors', 'connectorKey'),
   firstPair: gt('pair.index', 0),

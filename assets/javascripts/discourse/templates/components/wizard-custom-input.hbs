@@ -1,18 +1,18 @@
 {{#if options.hasOutput}}  
-  <div class="prefix">
+  <div class="connector prefix">
     {{combo-box
       value=input.type
-      contents=inputTypes
-      onChange=(mut (input.prefix))}}
+      content=inputTypes}}
   </div>
 {{/if}}
 
 {{#if hasPairs}}
-  <div class="pairs">
+  <div class="input-pairs">
     {{#each input.pairs as |pair|}}
       {{wizard-custom-input-pair
         pair=pair
         last=pair.last
+        inputType=inputType
         keyPlaceholder=keyPlaceholder
         valuePlaceholder=valuePlaceholder
         userFields=userFields
@@ -21,21 +21,26 @@
         removePair=(action 'removePair')}}
     {{/each}}
     {{#if options.hasOutput}}
-      <a {{action 'addPair'}} class="add-pair">{{d-icon 'plus'}}</a>
+      <a {{action 'addPair'}} class="add-pair">
+        {{d-icon 'plus'}}
+      </a>
     {{/if}}
   </div>
-{{/if }}
+{{/if}}
 
 {{#if options.hasOutput}}
-  <div class="connector">
-    <span class="output-connector">
-      {{outputConnector}}
-    </span>
-  </div>
+  {{#if hasOutputConnector}}
+    <div class="connector">
+      <span class="output-connector">
+        {{outputConnector}}
+      </span>
+    </div>
+  {{/if}}
 
   <div class="output input-block">
-    {{wizard-custom-input-chooser
-      inputType='output'
+    {{wizard-custom-input-selector
+      selectorType='output'
+      inputType=inputType
       userFields=userFields
       wizardFields=wizardFields
       value=input.output
@@ -45,8 +50,6 @@
   </div>
 {{/if}}
 
-{{d-button
-  action=remove
-  actionParam=input
-  icon='times'
-  class='remove-input'}}
+<a class="remove-input" {{action remove input}}>
+  {{d-icon 'times'}}
+</a>

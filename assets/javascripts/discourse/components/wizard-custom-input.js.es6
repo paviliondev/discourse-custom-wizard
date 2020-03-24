@@ -1,11 +1,47 @@
-import { newPair } from '../lib/custom-wizard';
+import {
+  newPair,
+  generateSelectKitContent,
+  defaultInputType
+} from '../lib/custom-wizard';
+import {
+  default as discourseComputed,
+  on
+} from 'discourse-common/utils/decorators';
 import { computed } from "@ember/object";
+import { alias } from "@ember/object/computed";
 
 export default Ember.Component.extend({
-  classNames: 'custom-input',
-  outputConnector: computed(function() {
-    return I18n.t(this.outputConnectorKey || 'admin.wizard.output.connector').toLowerCase();
+  classNameBindings: [':custom-input', 'type'],
+  inputType: alias('input.type'),
+  outputConnector: computed('inputTypes', function() {
+    const key = this.outputConnectorKey || `admin.wizard.input.${this.type}.output`;
+    return I18n.t(key).toLowerCase();
   }),
+  
+  @on('init')
+  setDefaults() {
+    if (!this.type) this.set('type', defaultInputType(this.options));
+  },
+  
+  @discourseComputed
+  inputTypes() {
+    return ['conditional', 'assignment'].map((type) => {
+      return {
+        id: type,
+        name: I18n.t(`admin.wizard.input.${type}.prefix`)
+      }
+    });
+  },
+  
+  @discourseComputed('options.hasOutput', 'input.type')
+  hasPairs(hasOutput, inputType) {
+    return !hasOutput || inputType === 'conditional';
+  },
+  
+  @discourseComputed('input.type')
+  hasOutputConnector(inputType) {
+    return inputType === 'conditional';
+  },
   
   actions: {
     addPair() {

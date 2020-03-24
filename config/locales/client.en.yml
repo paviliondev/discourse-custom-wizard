@@ -65,10 +65,12 @@ en:
         submission_key: 'submission key'
         param_key: 'param'
         
-        output:
-          label: "Output"
-          prefix: 'if'
-          connector: 'then'
+        input:
+          conditional: 
+            prefix: 'if'
+            output: 'then'
+          assignment:
+            prefix: 'set'
   
         error:
           name_required: "Wizards must have a name."
@@ -121,6 +123,7 @@ en:
           limit: "Limit"
           property: "Property"
           prefill: "Prefill"
+          filter: "Content"
         
         action:
           header: "Actions<sup>*</sup>"

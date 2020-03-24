@@ -53,28 +53,68 @@ const actionTypes = [
   'open_composer'
 ];
 
+const selectionTypes = [
+  'text',
+  'wizardField',
+  'userField',
+  'group',
+  'category',
+  'tag'
+]
+
+const inputTypes = [
+  'pair',
+  'conditional',
+  'assignment'
+]
+
+function defaultInputType(options = {}) {
+  return options.hasOutput ? 'conditional' : 'pair';
+}
+
+function defaultSelectionType(inputType, options = {}) {
+  const textDisabled = options.textDisabled;
+  let type = 'text';
+  
+  if (textDisabled === true || 
+      ((typeof textDisabled == 'string') && textDisabled.indexOf(inputType) > -1)) {
+    
+    for (let t of selectionTypes) {
+      let inputTypes = options[`${t}Selection`];
+      
+      if (inputTypes === true || 
+          ((typeof inputTypes == 'string') && inputTypes.indexOf(inputType) > -1)) {
+        
+        type = t;
+        break;
+      }
+    }
+  }
+  
+  return type;
+}
+
 function newInput(options = {}) {
-  let params = { 
+  let params = {
+    type: defaultInputType(options),
     pairs: Ember.A([newPair({ index: 0, pairCount: 1 })])
   }
   
   if (options.hasOutput) {
-    params['output'] = '';
-    params['output_type'] = 'text';
+    params['output_type'] = defaultSelectionType('output', options);
   }
   
   return Ember.Object.create(params);
 }
 
 function newPair(options = {}) {
-  console.log('newPair: ', options)
   let params = {
     index: options.index,
     pairCount: options.pairCount,
     key: '',
-    key_type: 'text',
+    key_type: defaultSelectionType('text', options),
     value: '',
-    value_type: 'text',
+    value_type: defaultSelectionType('text', options),
     connector: 'eq'
   }
   
@@ -86,6 +126,8 @@ export {
   profileFields,
   actionTypes,
   generateName,
+  defaultInputType,
+  defaultSelectionType,
   connectors,
   newInput,
   newPair

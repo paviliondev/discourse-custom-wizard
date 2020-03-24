@@ -1,6 +1,7 @@
 <div class="key input-block">
-  {{wizard-custom-input-chooser
-    inputType='key'
+  {{wizard-custom-input-selector
+    selectorType='key'
+    inputType=inputType
     userFields=userFields
     wizardFields=wizardFields
     value=pair.key
@@ -26,8 +27,9 @@
 {{/if}}
 
 <div class="value input-block">
-  {{wizard-custom-input-chooser
-    inputType='value'
+  {{wizard-custom-input-selector
+    selectorType='value'
+    inputType=inputType
     userFields=userFields
     wizardFields=wizardFields
     value=pair.value

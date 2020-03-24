@@ -1,5 +1,6 @@
-{{combo-box
-  content=wizard.groups
+{{wizard-group-selector
+  groups=wizard.groups
+  whitelist=field.filter
   value=field.value
   onChange=(action (mut field.value))
   options=(hash

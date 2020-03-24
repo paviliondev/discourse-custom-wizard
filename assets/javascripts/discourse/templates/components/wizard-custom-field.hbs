@@ -102,7 +102,7 @@
       <div class="wizard-header small">
         {{i18n 'admin.wizard.field.choices_custom'}}
       </div>
-      {{wizard-custom-inputs
+      {{wizard-field-mapper
         inputs=field.choices
         userFields=userFields
         wizardFields=wizardFields}}
@@ -153,16 +153,30 @@
   </div>
 {{/if}}
 
-<div class="setting full">
+<div class="setting full custom-inputs">
   <div class="setting-label">
     <h3>{{i18n 'admin.wizard.field.prefill'}}</h3>
   </div>
   <div class="setting-value">
-    {{wizard-custom-inputs
+    {{wizard-field-mapper
       inputs=field.prefill
       userFields=userFields
       wizardFields=wizardFields
-      outputConnectorKey='admin.wizard.field.prefill'
       options=prefillOptions}}
   </div>
 </div>
+
+{{#if canFilter}}
+  <div class="setting full custom-inputs">
+    <div class="setting-label">
+      <h3>{{i18n 'admin.wizard.field.filter'}}</h3>
+    </div>
+    <div class="setting-value">
+      {{wizard-field-mapper
+        inputs=field.filters
+        userFields=userFields
+        wizardFields=wizardFields
+        options=filterOptions}}
+    </div>
+  </div>
+{{/if}}

@@ -50,15 +50,15 @@
     <h3>{{i18n 'admin.wizard.step.required_data.label'}}</h3>
   </div>
   <div class="setting-value">
-    {{wizard-custom-inputs
+    {{wizard-field-mapper
       inputs=step.required_data
       userFields=userFields
       wizardFields=wizardFields
       keyPlaceholder="admin.wizard.submission_key"
       options=(hash
         enableConnectors=true
-        allowWizard='value'
-        allowUser='value'
+        wizardFieldSelection='value'
+        userFieldSelection='value'
       )}}
     {{#if step.required_data}}
       <div class="required-data-message">
@@ -76,7 +76,7 @@
     <h3>{{i18n 'admin.wizard.step.permitted_params.label'}}</h3>
   </div>
   <div class="setting-value">
-    {{wizard-custom-inputs
+    {{wizard-field-mapper
       inputs=step.permitted_params
       userFields=userFields
       wizardFields=wizardFields

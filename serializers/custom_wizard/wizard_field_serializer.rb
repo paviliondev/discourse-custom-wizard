@@ -6,7 +6,8 @@ class CustomWizardFieldSerializer < ::WizardFieldSerializer
              :image,
              :file_types,
              :limit,
-             :property
+             :property,
+             :filter
              
   has_many :choices, serializer: WizardFieldChoiceSerializer, embed: :objects
   
@@ -46,5 +47,9 @@ class CustomWizardFieldSerializer < ::WizardFieldSerializer
   
   def property
     object.property
+  end
+  
+  def filter
+    object.filter
   end
 end

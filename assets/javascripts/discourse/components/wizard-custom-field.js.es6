@@ -1,5 +1,5 @@
 import { default as computed, observes, on } from 'discourse-common/utils/decorators';
-import { equal, not } from "@ember/object/computed";
+import { equal, not, or } from "@ember/object/computed";
 import { generateSelectKitContent } from '../lib/custom-wizard';
 
 export default Ember.Component.extend({
@@ -34,25 +34,35 @@ export default Ember.Component.extend({
     let options = {
       hasOutput: true,
       enableConnectors: true,
-      allowWizard: true,
-      allowUser: true
+      wizardFieldSelection: true,
+      userFieldSelection: true
     }
     
-    if (isCategory) {
-      options.allowUser = 'key,value';
-      options.allowCategory = 'output';
-    }
-    
-    if (isGroup) {
-      options.allowUser = 'key,value';
-      options.allowGroup = 'output';
-    }
-    
-    if (isTag) {
-      options.allowUser = 'key,value';
-      options.allowTag = 'output';
+    if (isCategory || isGroup || isTag) {
+      options.userFieldSelection = 'key,value';
+      options[`${this.field.type}Selection`] = 'output';
     }
     
     return options;
-  }
+  },
+  
+  canFilter: or('isCategory', 'isTag', 'isGroup'),
+  
+  @computed('field.type')
+  filterOptions(fieldType) {
+    if (!this.canFilter) return {};
+    
+    let options = {
+      hasOutput: true,
+      enableConnectors: true,
+      wizardFieldSelection: 'key,value',
+      userFieldSelection: 'key,value',
+      textDisabled: 'output'
+    }
+
+    options[`${this.field.type}Selection`] = 'output';
+    options[`${this.field.type}AllowMultiple`] = true;
+    
+    return options;
+  },
 });

@@ -170,12 +170,12 @@
 {{#if createTopic}}
   <div class="setting full">
     <label>{{i18n 'admin.wizard.action.add_fields' type='Topic'}}</label>
-    {{wizard-custom-inputs
+    {{wizard-field-mapper
       inputs=action.add_fields
       userFields=userFields
       wizardFields=wizardFields
       options=(hash
-        allowWizard=true
+        wizardFieldSelection=true
       )}}
   </div>
 {{/if}}
@@ -212,7 +212,7 @@
 
   <div class="setting full">
     <label>{{i18n "admin.wizard.action.add_fields" type='Message'}}</label>
-    {{wizard-custom-inputs
+    {{wizard-field-mapper
       inputs=action.add_fields
       userFields=userFields
       wizardFields=wizardFields}}
@@ -222,13 +222,13 @@
 {{#if updateProfile}}
   <div class="setting full">
     <label>{{i18n "admin.wizard.action.add_fields" type='Profile'}}</label>
-    {{wizard-custom-inputs 
+    {{wizard-field-mapper 
       inputs=action.profile_updates
       userFields=userFields
       wizardFields=wizardFields
       options=(hash
-        allowWizard=true
-        allowUser=true
+        wizardFieldSelection=true
+        userFieldSelection=true
       )}}
   </div>
 {{/if}}
@@ -284,17 +284,17 @@
       <h3>{{i18n "admin.wizard.action.add_to_group.group"}}</h3>
     </div>
     <div class="setting-value">
-      {{wizard-custom-inputs
-        inputs=action.selection
+      {{wizard-field-mapper
+        inputs=action.inputs
         userFields=userFields
         wizardFields=wizardFields
         outputConnectorKey='admin.wizard.action.add_to_group.output_connector'
         options=(hash
           hasOutput=true
           enableConnectors=true
-          allowWizard='key,value'
-          allowUser='key,value'
-          allowGroup='value,output'
+          wizardFieldSelection='key,value,assignment'
+          userFieldSelection='key,value,assignment'
+          groupSelection='value,output'
         )}}
     </div>
   </div>

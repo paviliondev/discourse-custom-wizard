@@ -31,7 +31,6 @@
 
 .admin-wizard.settings {
   margin-left: 30px;
-  margin-right: 30px;
 
   .setting {
     display: inline-block;
@@ -70,6 +69,28 @@
 
     &.full {
       width: 100%;
+      
+      &.custom-inputs {
+        padding-bottom: 30px;
+        
+        .setting-label {
+          margin-top: 20px;
+        }
+        
+        .add-custom-input:first-child {
+          margin-top: 16px;
+        }
+        
+        .multi-select {
+          .multi-select-header, input {
+            min-height: 25px;
+          }
+          
+          .choices .choice {
+            height: 24px;
+          }
+        }
+      }
 
       .setting-label {
         width: 10%;
@@ -206,7 +227,7 @@
     }
   }
   
-  .pairs {
+  .input-pairs {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -230,11 +251,15 @@
     }
   }
   
-  .pair {
+  .input-pair {
     display: flex;
     align-items: flex-end;
     position: relative;
     margin-bottom: 10px;
+    
+    &.no-connector div.input-block:not(:last-of-type) {
+      margin-right: 10px;
+    }
   }
 
   .d-icon {
@@ -255,12 +280,17 @@
     min-width: 160px;
   }
 
-  button.remove-input {
-    margin: 21px 0 0 10px;
+  a.remove-input {
+    margin: 25px 0 0 10px;
   }
 
   .connector {
     margin: 0 10px;
+    margin-top: 21px;
+    
+    &.prefix {
+      margin-left: 0;
+    }
     
     .select-kit {
       min-width: 50px;
@@ -272,16 +302,8 @@
     }
     
     .output-connector {
-      margin-top: 25px;
-      display: inline-block;
       white-space: nowrap;
     }
-  }
-  
-  .prefix {
-    position: absolute;
-    left: -20px;
-    top: 24px;
   }
 }
 
@@ -295,10 +317,6 @@
   .required-data-message .label {
     margin-bottom: 5px;
   }
-}
-
-.setting .add-custom-input {
-  margin-top: 5px;
 }
 
 .admin-contents .wizard-submissions {

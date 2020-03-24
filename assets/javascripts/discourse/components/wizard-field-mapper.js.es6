@@ -3,7 +3,7 @@ import { on } from 'discourse-common/utils/decorators';
 import { newInput } from '../lib/custom-wizard';
 
 export default Ember.Component.extend({
-  classNames: 'custom-inputs',
+  classNames: 'field-mapper',
 
   actions: {
     add() {

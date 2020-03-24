@@ -6,7 +6,8 @@ module CustomWizardFieldExtension
               :min_length,
               :file_types,
               :limit,
-              :property
+              :property,
+              :filter
               
   attr_accessor :dropdown_none
 
@@ -25,6 +26,7 @@ module CustomWizardFieldExtension
     @file_types = attrs[:file_types]
     @limit = attrs[:limit]
     @property = attrs[:property]
+    @filter = attrs[:filter]
   end
 
   def label
