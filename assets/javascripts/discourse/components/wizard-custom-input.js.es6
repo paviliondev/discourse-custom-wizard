@@ -7,7 +7,7 @@ import {
   default as discourseComputed,
   on
 } from 'discourse-common/utils/decorators';
-import { computed } from "@ember/object";
+import { computed, set } from "@ember/object";
 import { alias } from "@ember/object/computed";
 
 export default Ember.Component.extend({
@@ -48,7 +48,7 @@ export default Ember.Component.extend({
       const pairs = this.get('input.pairs');
       
       const pairCount = pairs.length + 1;
-      pairs.forEach(p => (p.set('pairCount', pairCount)));
+      pairs.forEach(p => (set(p, 'pairCount', pairCount)));
       
       pairs.pushObject(
         newPair(Object.assign(
@@ -65,7 +65,7 @@ export default Ember.Component.extend({
     removePair(pair) {
       const pairs = this.get('input.pairs');
       const pairCount = pairs.length - 1;
-      pairs.forEach(p => (p.set('pairCount', pairCount)));
+      pairs.forEach(p => (set(p, 'pairCount', pairCount)));
       pairs.removeObject(pair);
     }
   }

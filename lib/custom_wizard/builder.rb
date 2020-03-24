@@ -339,7 +339,6 @@ class CustomWizard::Builder
   end
 
   def get_user_field(value, opts = {})
-    puts "GETTING USER FIELD: #{value.inspect}"
     if value.include?('user_field_')
       UserCustomField.where(user_id: @wizard.user.id, name: value).pluck(:value).first
     elsif UserProfile.column_names.include? value
@@ -617,9 +616,7 @@ class CustomWizard::Builder
   def add_to_group(user, action, data)
     groups = get_output(action['inputs'], multiple: true, data: data)
         
-    groups = groups.reduce([]) do |result, g|
-      g = g.first if g.is_a?(Array)
-
+    groups = groups.flatten.reduce([]) do |result, g|
       begin
         result.push(Integer(g))
       rescue ArgumentError

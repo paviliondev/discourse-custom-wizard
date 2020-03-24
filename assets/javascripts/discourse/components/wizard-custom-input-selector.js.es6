@@ -51,8 +51,6 @@ export default Ember.Component.extend({
     
     const types = [this.selectorType, this.inputType];
     
-    console.log('running', types, option)
-
     return option.split(',').filter(o => types.indexOf(o) !== -1).length
   },
   
