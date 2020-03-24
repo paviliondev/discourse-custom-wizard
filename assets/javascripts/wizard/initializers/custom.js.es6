@@ -252,6 +252,9 @@ export default {
         } else {
           const val = this.get('value');
           const type = this.get('type');
+          
+          console.log(val, type)
+          
           if (type === 'checkbox') {
             valid = val;
           } else if (type === 'category') {
