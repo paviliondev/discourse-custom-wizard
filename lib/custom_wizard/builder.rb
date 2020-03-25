@@ -408,8 +408,6 @@ class CustomWizard::Builder
 
       params[:tags] = tags
       
-      topic_custom_fields = {}
-
       if action['add_fields']
         action['add_fields'].each do |field|
           value = field['value_custom'].present? ? field['value_custom'] : data[field['value']]
@@ -424,7 +422,9 @@ class CustomWizard::Builder
                 type = keyArr.first
 
                 if type === 'topic'
-                  topic_custom_fields[custom_key] = value
+                  params[:topic_opts] ||= {}
+                  params[:topic_opts][:custom_fields] ||= {}
+                  params[:topic_opts][:custom_fields][custom_key] = value
                 elsif type === 'post'
                   params[:custom_fields] ||= {}
                   params[:custom_fields][custom_key.to_sym] = value
@@ -444,12 +444,6 @@ class CustomWizard::Builder
       if creator.errors.present?
         updater.errors.add(:create_topic, creator.errors.full_messages.join(" "))
       else
-        if topic_custom_fields.present?
-          topic_custom_fields.each do |k, v|
-            post.topic.custom_fields[k] = v
-          end
-          post.topic.save_custom_fields(true)
-        end
 
         unless action['skip_redirect']
           data['redirect_on_complete'] = post.topic.url
