@@ -214,13 +214,14 @@ export default {
       inputComponentName: function() {
         const type = this.get('field.type');
         const id = this.get('field.id');
-        if (type === 'text-only') return false;
+        if (['text-only'].includes(type)) return false;
         return (type === 'component') ? Ember.String.dasherize(id) : `wizard-field-${type}`;
       }.property('field.type', 'field.id')
     });
 
     const StandardFieldValidation = [
       'text',
+      'number',
       'textarea',
       'dropdown',
       'tag',
@@ -259,6 +260,8 @@ export default {
             valid = val && val.id > 0;
           } else if (StandardFieldValidation.indexOf(type) > -1) {
             valid = val && val.length > 0;
+          } else if (type === 'url') {
+            valid = true
           }
         }
 
