@@ -195,6 +195,14 @@
     }
   }
 
+  .url-field input {
+    width: 100%;
+    font-size: 1.1487em;
+    padding: 6px;
+    border: 1px solid #ccc;
+    transition: border-color 0.5s;
+  }
+
   .control-group {
     display: inline-block;
     vertical-align: top;
