@@ -880,3 +880,706 @@ input.input-location, div.input-location {
     }
   }
 }
+
+//events scss
+
+
+.add-event-controls {
+  padding: 0 10px;
+  margin-bottom: 10px;
+
+  .control {
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    min-height: 30px;
+    margin-right: 20px;
+
+    > span {
+      line-height: 30px;
+    }
+  }
+
+  .timezone-modal {
+    position: absolute;
+    top: 0;
+    padding: 5px;
+    height: auto;
+    background-color: $secondary;
+    box-shadow: 0 2px 2px rgba(0,0,0,0.4);
+
+    .combo-box {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .btn {
+      margin-right: 2px;
+    }
+  }
+}
+
+.date-time-card {
+  width: 270px;
+  display: inline-block;
+  padding: 0 10px;
+  text-align: left;
+}
+
+.start-card {
+  border-left: 1px solid transparent;
+  margin-right: 10px;
+}
+
+.end-card {
+  border-left: 1px solid #eee;
+  padding-left: 25px;
+}
+
+.set-all-day {
+  font-size: 1.2em;
+  padding-bottom: 13px;
+}
+
+.modal-title-label {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.modal-title{
+  width: 565px;
+}
+
+.modal-sub-title{
+  font-size: 1.2em;
+  font-weight: bold;
+  padding-bottom: 2px;
+  padding-right: 10px;
+}
+
+.modal-date-time-set{
+  padding-top: 3px;
+  padding-bottom: 4px;
+  display: flex;
+  flex-direction: row;
+
+  .modal-date-area{
+    order: 1;
+  }
+
+  .modal-time-area{
+    order: 2;
+    margin-left: 10px;
+
+    .modal-time{
+      width: 127px;
+    }
+  }
+}
+
+.ui-timepicker-input {
+  width: 105px;
+  text-align: center;
+}
+
+.date-picker{
+    width: 110px;
+}
+
+.pika-single {
+  position: relative !important;
+  z-index: 100;
+
+  .pika-lendar {
+    border: 1px solid #eee;
+    padding: 14px;
+    margin: 0;
+    float: none;
+    width: auto;
+  }
+}
+
+.rsvp {
+  margin-top: 10px;
+  padding: 10px;
+
+  .going-max {
+    margin-top: 10px;
+
+    input {
+      margin-left: 4px;
+      width: 60px;
+    }
+  }
+}
+
+
+.add-event-modal + .modal-footer .clear {
+  margin: 5px 10px;
+}
+
+.add-event {
+  text-align: left;
+
+  &.no-text {
+    width: 35px;
+  }
+
+  .dot {
+    padding: 0 4px;
+  }
+}
+
+.add-event, .add-event + button {
+  border: 1px solid $primary-medium;
+}
+
+.form-element + span {
+  display: block;
+}
+
+.event-label .fa {
+  margin-right: 7px;
+}
+
+.event-details {
+  display: flex;
+  flex-flow: wrap;
+
+  .event-label {
+    margin-top: 7px;
+    margin-right: 10px;
+    line-height: 18px;
+    display: inline-block;
+  }
+
+  .event-rsvp {
+    margin-top: 6px;
+  }
+}
+
+.date-time-container {
+  display: inline-block;
+
+  .d-icon {
+    margin-right: 7px;
+  }
+}
+
+.date-time.title {
+  width: 100px;
+
+  .d-icon.no-date {
+    margin: 0;
+  }
+
+  .date.no-date {
+    margin-left: -30px;
+  }
+}
+
+.add-to-calendar {
+  position: relative;
+  display: inline-block;
+  margin-right: 10px;
+  margin-top: 6px;
+
+  .dropdown-header {
+    min-height: initial;
+  }
+
+  .dropdown-menu {
+    top: 24px;
+    bottom: initial;
+    width: 190px;
+    position: absolute;
+
+    &.show {
+      display: block;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+    }
+  }
+}
+
+.navigation {
+  display: inline-block;
+}
+
+.select-kit.events-calendar-subscription {
+  float: right;
+
+  .select-kit-body {
+    width: 380px;
+    max-width: 90vw;
+
+    .events-calendar-subscription-warning {
+      padding: 6px 16px;
+      background-color: rgba(255, 247, 78, 0.32);
+      font-size: 1.1em;
+
+      .fa.d-icon {
+        margin-right: 6px;
+      }
+    }
+
+    .events-calendar-subscription-row {
+      cursor: initial;
+      display: flex;
+      padding: 5px;
+
+      &.is-highlighted {
+        background-color: initial;
+      }
+
+      span {
+        text-align: center;
+        width: 50px;
+        flex: initial;
+      }
+
+      input {
+        flex: 1;
+        margin: 0;
+      }
+    }
+  }
+}
+
+.select-kit.month-dropdown, .select-kit.year-dropdown {
+  width: 150px;
+  min-width: 150px;
+  height: 28px;
+  vertical-align: top;
+
+  .select-kit-header {
+    line-height: 1.3;
+  }
+}
+
+.events-calendar.responsive {
+  .month-dropdown, .year-dropdown {
+    width: 110px;
+    min-width: 110px;
+    height: 30px;
+
+    .select-kit-header {
+      line-height: 1.35;
+    }
+
+    &:not(.is-expanded) .select-kit-header {
+      width: inherit;
+    }
+  }
+
+  .events-calendar-body {
+    margin-top: 10px;
+    text-align: center;
+
+    .weekday {
+      height: 15px;
+      line-height: 15px;
+
+      span {
+        padding: 0 2px;
+      }
+    }
+
+    .day {
+      height: 38px;
+      cursor: pointer;
+      position: relative;
+
+      .header {
+        text-align: center;
+        margin-top: 2px;
+      }
+
+      .date label {
+        cursor: pointer;
+        display: inline-block;
+        height: 19px;
+        width: 19px;
+        margin: 0;
+      }
+
+      .has-events {
+        position: absolute;
+        bottom: 2px;
+        width: 100%;
+      }
+    }
+  }
+}
+
+.events-calendar-body {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-top: 15px;
+  border-bottom: 1px solid $primary-medium;
+  border-left: 1px solid $primary-medium;
+  box-sizing: border-box;
+
+  .day, .weekday {
+    width: calc(99.9999%/7);
+    border-top: 1px solid $primary-medium;
+    border-right: 1px solid $primary-medium;
+    box-sizing: border-box;
+  }
+
+  .weekday {
+    height: 23px;
+    line-height: 23px;
+
+    span {
+      padding: 0 4px;
+    }
+  }
+
+  .day {
+    height: 130px;
+    transition: all 0.2s;
+    position: relative;
+
+    .container {
+      background-color: $secondary;
+    }
+
+    &.today .container {
+      background-color: $highlight-low;
+      height: 100%;
+    }
+
+    &.different-month .container {
+      background-color: rgba($primary-low, .5);
+      color: rgba($primary, .5);
+      height: 100%;
+    }
+
+    &.selected .date label {
+      background-color: $tertiary;
+      color: $secondary;
+      border-radius: 50%;
+    }
+
+    &.expanded .container {
+      position: absolute;
+      z-index: 100;
+      height: auto;
+      width: auto;
+      min-width: 100%;
+      overflow: visible;
+      border: 1px solid $primary-low;
+      box-shadow: 0 2px 2px rgba(0,0,0,0.4);
+
+      .events {
+        padding: 3px 4px;
+
+        li {
+          height: 25px;
+          line-height: 25px;
+
+          &.empty {
+            display: none;
+          }
+        }
+      }
+    }
+
+    .header {
+      position: relative;
+    }
+
+    .date label {
+      margin: 2px;
+      padding: 2px 3px;
+      margin-bottom: 0;
+    }
+
+    .close {
+      position: absolute;
+      right: 3px;
+      top: -3px;
+    }
+
+    .hidden-events {
+      margin: 2px 5px;
+
+      .btn {
+        font-size: 0.9em;
+        border-radius: 4px;
+        line-height: 1;
+      }
+    }
+
+    .has-events {
+      font-size: 7px;
+    }
+  }
+}
+
+ul.events-calendar-events {
+  margin: 0;
+  list-style: none;
+
+  li {
+    margin: 2px 0;
+    position: relative;
+    height: 16px;
+
+    .event {
+      padding: 0 7px;
+      height: inherit;
+      line-height: 16px;
+      border-top: 1px solid transparent;
+      border-bottom: 1px solid transparent;
+      white-space: nowrap;
+      overflow: hidden;
+      cursor: pointer;
+
+      span {
+        font-size: 0.9em;
+      }
+
+      .fa-circle {
+        color: inherit;
+        font-size: 0.8em;
+      }
+
+      &.all-day {
+        background-color: $tertiary;
+        color: $secondary;
+        border-top: 1px solid $primary-low;
+        border-bottom: 1px solid $primary-low;
+
+        &:not(.full-width) {
+          &.start {
+            margin-left: 4px;
+            border-radius: 4px 0 0 4px;
+          }
+
+          &.multi span.title {
+            position: absolute;
+            z-index: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          &.start span.time {
+            margin-right: 5px;
+            float: left;
+          }
+
+          &.end {
+            margin-right: 4px;
+            border-radius: 0 4px 4px 0;
+          }
+        }
+      }
+
+      img.emoji {
+        height: 15px;
+        width: 15px;
+      }
+    }
+  }
+}
+
+.events-calendar-card {
+  position: absolute;
+  top: -15px;
+  left: -390px;
+  width: 350px;
+  z-index: 997;
+  background-color: $secondary;
+  box-shadow: shadow('card');
+  border: 1px solid $primary-low;
+  padding: 15px;
+  border-radius: 4px;
+
+  .topic-link {
+    font-size: 1.3em;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  .close .fa {
+    vertical-align: top;
+  }
+
+  .topic-meta {
+    margin-top: 6px;
+    width: 100%;
+    display: flex;
+    flex-flow: wrap;
+    align-items: center;
+  }
+
+  .topic-event {
+    margin-top: 6px;
+    width: 100%;
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  .topic-excerpt {
+    padding-top: 8px;
+    cursor: pointer;
+    line-height: 1.4;
+    width: 100%;
+    word-wrap: break-word;
+
+    p {
+      margin: 0;
+    }
+  }
+}
+
+.events-calendar-events .events-calendar-card .close {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}
+
+.events-below {
+  margin-top: 8px;
+  margin-bottom: 15px;
+
+  ul.events-calendar-events li {
+    height: auto;
+    line-height: 20px;
+    margin: 5px 0;
+    white-space: normal;
+
+    &.empty {
+      display: none;
+    }
+
+    img.emoji {
+      height: 20px;
+      width: 20px;
+    }
+  }
+}
+
+.edit-category-modal .enable-events .min-trust input {
+  width: 60px;
+}
+
+.event-rsvp {
+  display: flex;
+  align-items: center;
+
+  button {
+    min-height: initial;
+    margin-right: 7px;
+  }
+
+  .spinner {
+    width: 3px;
+    height: 3px;
+    margin-right: 8px;
+  }
+}
+
+.event-rsvp-details {
+  display: flex;
+  align-items: center;
+
+  a {
+    margin-right: 7px;
+  }
+}
+
+.modal-body.event-rsvp-modal {
+  overflow: hidden;
+
+  .header {
+    display: flex;
+
+    .types {
+      padding-top: 0;
+      padding-bottom: 15px;
+      margin: 0;
+      flex: 1;
+    }
+
+    .filter {
+      align-self: flex-start;
+      padding-bottom: 15px;
+      border-bottom: 1px solid $primary-low;
+
+      input {
+        width: 150px;
+        margin-bottom: -1px;
+      }
+    }
+  }
+
+  .list {
+    height: 300px;
+    position: relative;
+    overflow: scroll;
+
+    .spinner {
+      position: absolute;
+      left: calc(50% - 10px);
+      top: calc(50% - 10px);
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+
+      li {
+        padding: 10px 15px;
+        border-bottom: 1px solid $primary-low;
+
+        .user-info {
+          margin-bottom: 0;
+          position: relative;
+          width: 100%;
+
+          .details {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.main-link.row-below-title {
+  .link-top-line {
+    display: block;
+  }
+
+  > .date-time-container, > .topic-list-event-rsvp, > .discourse-tags {
+    display: inline-block;
+    margin-right: 10px;
+  }
+}
+
+.topic-list-event-rsvp {
+  font-size: 0.9em;
+  margin-top: 4px;
+}
+
+.composer-controls-event {
+  position: relative;
+
+  .popup-tip {
+    left: 0;
+    right: initial;
+    min-width: 300px;
+  }
+}
