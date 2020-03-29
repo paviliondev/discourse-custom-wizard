@@ -31,7 +31,7 @@ if Rails.env.production?
 end
 
 if respond_to?(:register_svg_icon)
-  register_svg_icon "calendar-o"
+  register_svg_icon "far-calendar"
   register_svg_icon "chevron-right"
   register_svg_icon "chevron-left"
 end
@@ -110,7 +110,7 @@ after_initialize do
     object.custom_fields['redirect_to_wizard']
   end
 
-  DiscourseEvent.on(:user_approved) do |user|
+  on(:user_approved) do |user|
     if wizard_id = CustomWizard::Wizard.after_signup
       CustomWizard::Wizard.set_wizard_redirect(user, wizard_id)
     end

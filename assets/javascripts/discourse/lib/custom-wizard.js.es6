@@ -121,6 +121,12 @@ function newPair(options = {}) {
   return Ember.Object.create(params);
 }
 
+function generateId(name) {
+  return name.replace(/[^\w ]/g, '')
+    .replace(/ /g,"_")
+    .toLowerCase();
+}
+
 export {
   generateSelectKitContent,
   profileFields,
@@ -130,5 +136,6 @@ export {
   defaultSelectionType,
   connectors,
   newInput,
-  newPair
+  newPair,
+  generateId
 };

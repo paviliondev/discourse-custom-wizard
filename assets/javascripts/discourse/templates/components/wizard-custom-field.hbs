@@ -1,24 +1,6 @@
 <div class="setting">
   <div class="setting-label">
-    <h3>{{i18n 'admin.wizard.id'}}</h3>
-  </div>
-  <div class="setting-value">
-    {{input name="id" value=field.id placeholderKey="admin.wizard.id_placeholder" disabled=disableId}}
-  </div>
-</div>
-
-<div class="setting">
-  <div class="setting-label">
-    <h3>{{i18n 'admin.wizard.key'}}</h3>
-  </div>
-  <div class="setting-value">
-    {{input name="key" value=field.key placeholderKey="admin.wizard.key_placeholder"}}
-  </div>
-</div>
-
-<div class="setting">
-  <div class="setting-label">
-    <h3>{{i18n 'admin.wizard.field.label'}}</h3>
+    <label>{{i18n 'admin.wizard.field.label'}}</label>
   </div>
   <div class="setting-value">
     {{input name="label" value=field.label}}
@@ -27,7 +9,30 @@
 
 <div class="setting">
   <div class="setting-label">
-    <h3>{{i18n 'admin.wizard.field.description'}}</h3>
+    <label>{{i18n 'admin.wizard.translation'}}</label>
+  </div>
+  <div class="setting-value">
+    {{input name="key" value=field.key placeholderKey="admin.wizard.translation_placeholder"}}
+  </div>
+</div>
+
+<div class="setting">
+  <div class="setting-label">
+    <label>{{i18n 'admin.wizard.field.image'}}</label>
+  </div>
+  <div class="setting-value">
+    {{image-uploader
+      imageUrl=field.image
+      onUploadDone=(action "imageUploadDone")
+      onUploadDeleted=(action "imageUploadDeleted")
+      type="wizard-step"
+      class="no-repeat contain-image"}}
+  </div>
+</div>
+
+<div class="setting">
+  <div class="setting-label">
+    <label>{{i18n 'admin.wizard.field.description'}}</label>
   </div>
   <div class="setting-value">
     {{textarea name="description" value=field.description}}
@@ -36,17 +41,9 @@
 
 <div class="setting">
   <div class="setting-label">
-    <h3>{{i18n 'admin.wizard.field.image'}}</h3>
+    <label>{{i18n 'admin.wizard.type'}}</label>
   </div>
-  <div class="setting-value">
-    {{input name="image" value=field.image placeholderKey="admin.wizard.field.image_placeholder"}}
-  </div>
-</div>
-
-<div class="setting">
-  <div class="setting-label">
-    <h3>{{i18n 'admin.wizard.type'}}</h3>
-  </div>
+  
   <div class="setting-value">
     {{combo-box
       value=field.type
@@ -60,21 +57,23 @@
 
 <div class="setting">
   <div class="setting-label">
-    <h3>{{i18n 'admin.wizard.field.required'}}</h3>
+    <label>{{i18n 'admin.wizard.field.required'}}</label>
   </div>
+  
   <div class="setting-value">
-    {{input type='checkbox' checked=field.required}}
     <span>{{i18n 'admin.wizard.field.required_label'}}</span>
+    {{input type='checkbox' checked=field.required}}
   </div>
 </div>
 
 {{#if isInput}}
   <div class="setting">
     <div class="setting-label">
-      <h3>{{i18n 'admin.wizard.field.min_length'}}</h3>
+      <label>{{i18n 'admin.wizard.field.min_length'}}</label>
     </div>
+    
     <div class="setting-value">
-      {{input type="number" name="min_length" value=field.min_length placeholder=(i18n 'admin.wizard.field.min_length_placeholder')}}
+      {{input type="number" name="min_length" value=field.min_length}}
     </div>
   </div>
 {{/if}}
@@ -97,7 +96,7 @@
       <div class="wizard-header small">
         {{i18n 'admin.wizard.field.choices_translation'}}
       </div>
-      {{input name="key" value=field.choices_key placeholderKey="admin.wizard.key_placeholder"}}
+      {{input name="key" value=field.choices_key placeholderKey="admin.wizard.translation_placeholder"}}
     {{/if}}
 
     {{#if choicesCustom}}
@@ -119,21 +118,11 @@
 {{#if isUpload}}
   <div class="setting">
     <div class="setting-label">
-      <h3>{{i18n 'admin.wizard.field.file_types'}}</h3>
+      <label>{{i18n 'admin.wizard.field.file_types'}}</label>
     </div>
+    
     <div class="setting-value">
       {{input value=field.file_types}}
-    </div>
-  </div>
-{{/if}}
-
-{{#if isCategoryOrTag}}
-  <div class="setting">
-    <div class="setting-label">
-      <h3>{{i18n 'admin.wizard.field.limit'}}</h3>
-    </div>
-    <div class="setting-value">
-      {{input type="number" value=field.limit}}
     </div>
   </div>
 {{/if}}
@@ -141,8 +130,9 @@
 {{#if isCategory}}
   <div class="setting">
     <div class="setting-label">
-      <h3>{{i18n 'admin.wizard.field.property'}}</h3>
+      <label>{{i18n 'admin.wizard.field.property'}}</label>
     </div>
+    
     <div class="setting-value">
       {{combo-box
         value=field.property
@@ -155,10 +145,23 @@
   </div>
 {{/if}}
 
+{{#if isCategoryOrTag}}
+  <div class="setting">
+    <div class="setting-label">
+      <label>{{i18n 'admin.wizard.field.limit'}}</label>
+    </div>
+    
+    <div class="setting-value">
+      {{input type="number" value=field.limit}}
+    </div>
+  </div>
+{{/if}}
+
 <div class="setting full field-mapper-setting">
   <div class="setting-label">
-    <h3>{{i18n 'admin.wizard.field.prefill'}}</h3>
+    <label>{{i18n 'admin.wizard.field.prefill'}}</label>
   </div>
+  
   <div class="setting-value">
     {{wizard-field-mapper
       inputs=field.prefill
@@ -170,8 +173,9 @@
 {{#if canFilter}}
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
-      <h3>{{i18n 'admin.wizard.field.filter'}}</h3>
+      <label>{{i18n 'admin.wizard.field.filter'}}</label>
     </div>
+    
     <div class="setting-value">
       {{wizard-field-mapper
         inputs=field.filters

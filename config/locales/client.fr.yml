@@ -68,7 +68,6 @@ fr:
           header: "Étapes"
           title: "Titre"
           banner: "Bannière"
-          banner_placeholder: "URL de l'image"
           description: "Description"
         field:
           type: "Choisir un type"

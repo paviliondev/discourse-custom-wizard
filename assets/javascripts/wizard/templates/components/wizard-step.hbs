@@ -2,15 +2,15 @@
   {{#if step.title}}
     <h1 class='wizard-step-title'>{{cookedTitle}}</h1>
   {{/if}}
-
-  {{#if step.description}}
-    <div class='wizard-step-description'>{{cookedDescription}}</div>
-  {{/if}}
-
+  
   {{#if bannerImage}}
     <div class="wizard-step-banner">
       <img src={{bannerImage}}>
     </div>
+  {{/if}}
+
+  {{#if step.description}}
+    <div class='wizard-step-description'>{{cookedDescription}}</div>
   {{/if}}
 
   {{#wizard-step-form step=step}}

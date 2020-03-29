@@ -1,10 +1,22 @@
-import { default as computed } from 'discourse-common/utils/decorators';
+import { default as computed, observes } from 'discourse-common/utils/decorators';
+import { notEmpty } from "@ember/object/computed";
 import showModal from 'discourse/lib/show-modal';
+import { generateId } from '../lib/custom-wizard';
+import { dasherize } from "@ember/string";
 
 export default Ember.Controller.extend({
-  @computed('model.id', 'model.name')
+  hasName: notEmpty('model.name'),
+  
+  @computed('model.id')
   wizardUrl(wizardId) {
-    return window.location.origin + '/w/' + Ember.String.dasherize(wizardId);
+    return window.location.origin + '/w/' + dasherize(wizardId);
+  },
+  
+  @observes('model.name')
+  setId() {
+    if (!this.model.existingId) {
+      this.set('model.id', generateId(this.model.name));
+    }
   },
 
   @computed('model.after_time_scheduled')

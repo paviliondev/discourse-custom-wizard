@@ -65,4 +65,14 @@ export default Ember.Component.extend({
     
     return options;
   },
+  
+  actions: {
+    imageUploadDone(upload) {
+      this.set("field.image", upload.url);
+    },
+    
+    imageUploadDeleted() {
+      this.set("field.image", null);
+    }
+  }
 });

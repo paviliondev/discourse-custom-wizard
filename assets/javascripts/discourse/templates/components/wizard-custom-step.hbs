@@ -1,31 +1,6 @@
 <div class="setting">
   <div class="setting-label">
-    <h3>{{i18n 'admin.wizard.id'}}</h3>
-  </div>
-  <div class="setting-value">
-    {{input
-      name="id"
-      value=step.id
-      placeholderKey="admin.wizard.id_placeholder"
-      disabled=disableId}}
-  </div>
-</div>
-
-<div class="setting">
-  <div class="setting-label">
-    <h3>{{i18n 'admin.wizard.key'}}</h3>
-  </div>
-  <div class="setting-value">
-    {{input
-      name="key"
-      value=step.key
-      placeholderKey="admin.wizard.key_placeholder"}}
-  </div>
-</div>
-
-<div class="setting">
-  <div class="setting-label">
-    <h3>{{i18n 'admin.wizard.step.title'}}</h3>
+    <label>{{i18n 'admin.wizard.step.title'}}</label>
   </div>
   <div class="setting-value">
     {{input
@@ -36,28 +11,44 @@
 
 <div class="setting">
   <div class="setting-label">
-    <h3>{{i18n 'admin.wizard.step.banner'}}</h3>
+    <label>{{i18n 'admin.wizard.translation'}}</label>
   </div>
   <div class="setting-value">
     {{input
-      name="banner"
-      value=step.banner
-      placeholderKey="admin.wizard.step.banner_placeholder"}}
+      name="key"
+      value=step.key
+      placeholderKey="admin.wizard.translation_placeholder"}}
   </div>
 </div>
 
 <div class="setting full">
   <div class="setting-label">
-    <h3>{{i18n 'admin.wizard.step.description'}}</h3>
+    <label>{{i18n 'admin.wizard.step.banner'}}</label>
   </div>
   <div class="setting-value">
-    {{wizard-text-editor value=step.raw_description}}
+    {{image-uploader
+      imageUrl=step.banner
+      onUploadDone=(action "bannerUploadDone")
+      onUploadDeleted=(action "bannerUploadDeleted")
+      type="wizard-banner"
+      class="no-repeat contain-image"}}
+  </div>
+</div>
+
+<div class="setting full">
+  <div class="setting-label">
+    <label>{{i18n 'admin.wizard.step.description'}}</label>
+  </div>
+  <div class="setting-value">
+    {{wizard-text-editor
+      value=step.raw_description
+      fieldsEnabled=false}}
   </div>
 </div>
 
 <div class="setting full field-mapper-setting">
   <div class="setting-label">
-    <h3>{{i18n 'admin.wizard.step.required_data.label'}}</h3>
+    <label>{{i18n 'admin.wizard.step.required_data.label'}}</label>
   </div>
   <div class="setting-value">
     {{wizard-field-mapper
@@ -82,7 +73,7 @@
 
 <div class="setting full field-mapper-setting">
   <div class="setting-label">
-    <h3>{{i18n 'admin.wizard.step.permitted_params.label'}}</h3>
+    <label>{{i18n 'admin.wizard.step.permitted_params.label'}}</label>
   </div>
   <div class="setting-value">
     {{wizard-field-mapper

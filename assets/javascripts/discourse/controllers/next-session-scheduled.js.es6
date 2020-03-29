@@ -1,4 +1,5 @@
 import { default as computed } from 'discourse-common/utils/decorators';
+import { scheduleOnce } from "@ember/runloop";
 
 export default Ember.Controller.extend({
   title: 'admin.wizard.after_time_modal.title',
@@ -14,7 +15,7 @@ export default Ember.Controller.extend({
 
     this.setProperties({ date, time });
 
-    Ember.run.scheduleOnce('afterRender', this, () => {
+    scheduleOnce('afterRender', this, () => {
       const $timePicker = $("#time-picker");
       $timePicker.timepicker({ timeFormat: 'H:i' });
       $timePicker.timepicker('setTime', time);

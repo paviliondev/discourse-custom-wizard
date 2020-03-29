@@ -30,7 +30,6 @@ export default ComposerEditor.extend({
         key: "@",
         transformComplete: v => v.username || v.name,
         afterComplete() {
-          // ensures textarea scroll position is correct
           scheduleOnce("afterRender", () => $input.blur().focus());
         }
       });

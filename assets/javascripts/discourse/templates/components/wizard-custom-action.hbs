@@ -1,19 +1,6 @@
 <div class="setting">
   <div class="setting-label">
-    <h3>{{i18n "admin.wizard.id"}}</h3>
-  </div>
-  
-  <div class="setting-value">
-    {{input
-      value=action.id
-      placeholderKey='admin.wizard.id_placeholder'
-      disabled=disableId}}
-  </div>
-</div>
-
-<div class="setting">
-  <div class="setting-label">
-    <h3>{{i18n "admin.wizard.type"}}</h3>
+    <label>{{i18n "admin.wizard.type"}}</label>
   </div>
   
   <div class="setting-value">
@@ -30,7 +17,7 @@
 {{#if basicTopicFields}}
   <div class="setting">
     <div class="setting-label">
-      <h3>{{i18n "admin.wizard.action.title"}}</h3>
+      <label>{{i18n "admin.wizard.action.title"}}</label>
     </div>
     
     <div class="setting-value">
@@ -56,7 +43,7 @@
 
   <div class="setting">
     <div class="setting-label">
-      <h3>{{i18n "admin.wizard.action.post"}}</h3>
+      <label>{{i18n "admin.wizard.action.post"}}</label>
     </div>
     
     <div class="setting-value">
@@ -80,13 +67,12 @@
   {{#if action.post_builder}}
     <div class="setting full">
       <div class="setting-label">
-        <h3>{{i18n 'admin.wizard.action.post_builder.label'}}</h3>
+        <label>{{i18n 'admin.wizard.action.post_builder.label'}}</label>
       </div>
       
       <div class="setting-value editor">
         {{wizard-text-editor
           value=action.post_template
-          fieldsEnabled=true
           wizardFields=wizardFields}}
       </div>
     </div>
@@ -96,7 +82,7 @@
 {{#if publicTopicFields}}
   <div class="setting">
     <div class="setting-label">
-      <h3>{{i18n "admin.wizard.action.create_topic.category"}}</h3>
+      <label>{{i18n "admin.wizard.action.create_topic.category"}}</label>
     </div>
     
     <div class="setting-value">
@@ -140,7 +126,7 @@
   
   <div class="setting">
     <div class="setting-label">
-      <h3>{{i18n "admin.wizard.action.create_topic.tags"}}</h3>
+      <label>{{i18n "admin.wizard.action.create_topic.tags"}}</label>
     </div>
     
     <div class="setting-value">
@@ -174,7 +160,7 @@
 {{#if newTopicFields}}
   <div class="setting">
     <div class="setting-label">
-      <h3>{{i18n "admin.wizard.action.skip_redirect.label"}}</h3>
+      <label>{{i18n "admin.wizard.action.skip_redirect.label"}}</label>
     </div>
     
     <div class="setting-value">
@@ -190,7 +176,7 @@
 {{#if createTopic}}
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
-      <h3>{{i18n 'admin.wizard.action.add_fields'}}</h3>
+      <label>{{i18n 'admin.wizard.action.add_fields'}}</label>
     </div>
     
     <div class="setting-value">
@@ -207,7 +193,7 @@
 {{#if sendMessage}}
   <div class="setting">
     <div class="setting-label">
-      <h3>{{i18n 'admin.wizard.required'}}</h3>
+      <label>{{i18n 'admin.wizard.required'}}</label>
     </div>
     
     <div class="setting-value">
@@ -224,7 +210,7 @@
   
   <div class="setting">
     <div class="setting-label">
-      <h3>{{i18n "admin.wizard.action.send_message.recipient"}}</h3>
+      <label>{{i18n "admin.wizard.action.send_message.recipient"}}</label>
     </div>
     
     <div class="setting-value">
@@ -238,7 +224,7 @@
 
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
-      <h3>{{i18n 'admin.wizard.action.add_fields'}}</h3>
+      <label>{{i18n 'admin.wizard.action.add_fields'}}</label>
     </div>
     
     {{wizard-field-mapper
@@ -250,7 +236,7 @@
 {{#if updateProfile}}
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
-      <h3>{{i18n 'admin.wizard.action.add_fields'}}</h3>
+      <label>{{i18n 'admin.wizard.action.add_fields'}}</label>
     </div>
     
     {{wizard-field-mapper 
@@ -266,7 +252,7 @@
 {{#if sendToApi}}
   <div class="setting">
     <div class="setting-label">
-      <h3>{{i18n "admin.wizard.action.send_to_api.api"}}</h3>
+      <label>{{i18n "admin.wizard.action.send_to_api.api"}}</label>
     </div>
     
     <div class="setting-value">
@@ -283,7 +269,7 @@
 
   <div class="setting">
     <div class="setting-label">
-      <h3>{{i18n "admin.wizard.action.send_to_api.endpoint"}}</h3>
+      <label>{{i18n "admin.wizard.action.send_to_api.endpoint"}}</label>
     </div>
     
     <div class="setting-value">
@@ -298,16 +284,18 @@
     </div>
   </div>
 
-  <div class="setting api-body">
+  <div class="setting full">
     <div class="setting-label">
-      <h3>{{i18n "admin.wizard.action.send_to_api.body"}}</h3>
+      <label>{{i18n "admin.wizard.action.send_to_api.body"}}</label>
     </div>
     
     <div class="setting-value">
       {{wizard-text-editor
         value=action.api_body
-        fieldsEnabled=true
-        wizardFields=wizardFields}}
+        previewEnabled=false
+        barEnabled=false
+        wizardFields=wizardFields
+        placeholder='admin.wizard.action.send_to_api.body_placeholder'}}
     </div>
   </div>
 {{/if}}
@@ -315,7 +303,7 @@
 {{#if addToGroup}}
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
-      <h3>{{i18n "admin.wizard.group"}}</h3>
+      <label>{{i18n "admin.wizard.group"}}</label>
     </div>
     
     <div class="setting-value">
@@ -337,7 +325,7 @@
 {{#if routeTo}}
   <div class="setting">
     <div class="setting-label">
-      <h3>{{i18n "admin.wizard.action.route_to.url"}}</h3>
+      <label>{{i18n "admin.wizard.action.route_to.url"}}</label>
     </div>
     
     <div class="setting-value">
@@ -347,7 +335,7 @@
   
   <div class="setting">
     <div class="setting-label">
-      <h3>{{i18n "admin.wizard.action.route_to.code"}}</h3>
+      <label>{{i18n "admin.wizard.action.route_to.code"}}</label>
     </div>
     
     <div class="setting-value">

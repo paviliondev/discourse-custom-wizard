@@ -1,30 +1,19 @@
 <div class="admin-wizard settings">
-
-  <div class="wizard-header">
-    <span>{{model.name}}</span>
-    
-    <div class="wizard-url">
-      <a href="{{wizardUrl}}" target="_blank">{{wizardUrl}}</a>
+  
+  {{#if hasName}}
+    <div class="wizard-header">
+      <span>{{model.name}}</span>
+      
+      <div class="wizard-url">
+        <a href="{{wizardUrl}}" target="_blank">{{wizardUrl}}</a>
+      </div>
     </div>
-  </div>
+  {{/if}}
   
   <div class="wizard-basic-details">
     <div class="setting">
       <div class="setting-label">
-        <h3>{{i18n 'admin.wizard.id'}}</h3>
-      </div>
-      <div class="setting-value">
-        {{input
-          name="name"
-          value=model.id
-          placeholderKey="admin.wizard.id_placeholder"
-          disabled=model.existingId}}
-      </div>
-    </div>
-
-    <div class="setting">
-      <div class="setting-label">
-        <h3>{{i18n 'admin.wizard.name'}}</h3>
+        <label>{{i18n 'admin.wizard.name'}}</label>
       </div>
       <div class="setting-value">
         {{input
@@ -42,7 +31,7 @@
   <div class="wizard-settings">    
     <div class="setting">
       <div class="setting-label">
-        <h3>{{i18n 'admin.wizard.background'}}</h3>
+        <label>{{i18n 'admin.wizard.background'}}</label>
       </div>
       <div class="setting-value">
         {{input
@@ -54,7 +43,7 @@
     
     <div class="setting">
       <div class="setting-label">
-        <h3>{{i18n 'admin.wizard.save_submissions'}}</h3>
+        <label>{{i18n 'admin.wizard.save_submissions'}}</label>
       </div>
       <div class="setting-value">
         {{input type='checkbox' checked=model.save_submissions}}
@@ -64,7 +53,7 @@
 
     <div class="setting">
       <div class="setting-label">
-        <h3>{{i18n 'admin.wizard.multiple_submissions'}}</h3>
+        <label>{{i18n 'admin.wizard.multiple_submissions'}}</label>
       </div>
       <div class="setting-value">
         {{input type='checkbox' checked=model.multiple_submissions}}
@@ -74,7 +63,7 @@
 
     <div class="setting">
       <div class="setting-label">
-        <h3>{{i18n 'admin.wizard.required'}}</h3>
+        <label>{{i18n 'admin.wizard.required'}}</label>
       </div>
       <div class="setting-value">
         {{input type='checkbox' checked=model.required}}
@@ -84,7 +73,7 @@
 
     <div class="setting">
       <div class="setting-label">
-        <h3>{{i18n 'admin.wizard.after_signup'}}</h3>
+        <label>{{i18n 'admin.wizard.after_signup'}}</label>
       </div>
       <div class="setting-value">
         {{input type='checkbox' checked=model.after_signup}}
@@ -94,7 +83,7 @@
 
     <div class="setting">
       <div class="setting-label">
-        <h3>{{i18n 'admin.wizard.after_time'}}</h3>
+        <label>{{i18n 'admin.wizard.after_time'}}</label>
       </div>
       <div class="setting-value">
         {{input type='checkbox' checked=model.after_time}}
@@ -109,7 +98,7 @@
 
     <div class="setting">
       <div class="setting-label">
-        <h3>{{i18n 'admin.wizard.prompt_completion'}}</h3>
+        <label>{{i18n 'admin.wizard.prompt_completion'}}</label>
       </div>
       <div class="setting-value">
         {{input type='checkbox' checked=model.prompt_completion}}
@@ -119,7 +108,7 @@
 
     <div class="setting">
       <div class="setting-label">
-        <h3>{{i18n 'admin.wizard.min_trust'}}</h3>
+        <label>{{i18n 'admin.wizard.min_trust'}}</label>
       </div>
       <div class="setting-value">
         <span>{{i18n 'admin.wizard.min_trust_label'}}</span>
@@ -129,7 +118,7 @@
 
     <div class="setting">
       <div class="setting-label">
-        <h3>{{i18n 'admin.wizard.theme_id'}}</h3>
+        <label>{{i18n 'admin.wizard.theme_id'}}</label>
       </div>
       <div class="setting-value">
         {{combo-box
@@ -145,7 +134,7 @@
 
     <div class="setting">
       <div class="setting-label">
-        <h3>{{i18n 'admin.wizard.restart_on_revisit'}}</h3>
+        <label>{{i18n 'admin.wizard.restart_on_revisit'}}</label>
       </div>
       <div class="setting-value">
         {{input type='checkbox' checked=model.restart_on_revisit}}
@@ -155,7 +144,7 @@
     
     <div class="setting full field-mapper-setting">
       <div class="setting-label">
-        <h3>{{i18n 'admin.wizard.group'}}</h3>
+        <label>{{i18n 'admin.wizard.group'}}</label>
       </div>
       <div class="setting-value">
         {{wizard-field-mapper

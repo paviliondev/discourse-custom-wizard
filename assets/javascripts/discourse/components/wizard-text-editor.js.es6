@@ -1,8 +1,24 @@
-import { default as discourseComputed } from 'discourse-common/utils/decorators';
+import {
+  default as discourseComputed,
+  on
+} from 'discourse-common/utils/decorators';
 import { profileFields } from '../lib/custom-wizard';
+import { scheduleOnce } from "@ember/runloop";
 
 export default Ember.Component.extend({
   classNames: 'wizard-text-editor',
+  barEnabled: true,
+  previewEnabled: true,
+  fieldsEnabled: true,
+  
+  didReceiveAttrs() {
+    this._super(...arguments);
+    if (!this.barEnabled) {
+      scheduleOnce('afterRender', () => {
+        $(this.element).find('.d-editor-button-bar').addClass('hidden');
+      });
+    }
+  },
   
   @discourseComputed('forcePreview')
   previewLabel(forcePreview) {

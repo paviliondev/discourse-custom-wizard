@@ -30,7 +30,7 @@
     flex: 0;
     
     p {
-      margin: 0.5em 0;
+      margin: 0 0 0.5em 0;
     }
   }
 
@@ -126,47 +126,33 @@
   .wizard-field {
     margin-bottom: 1em;
     
-    &.tip {
-      margin-top: auto;
+    .field-label {
+      font-weight: 800;
+    }
+    
+    .field-image {
+      margin-bottom: 0.5em;
+      
+      img {
+        max-width: 100%;
+        max-height: 150px;
+      }
     }
 
-    label {
-      display: flex;
-      flex-flow: wrap;
-      align-items: center;
+    .field-description {
+      flex: 1;
+      color: #333;
+      margin-top: 0;
 
-      .label-value {
-        width: 100%;
-
-        p {
-          margin: 0;
-        }
+      p {
+        margin: 0.3em 0;
+        line-height: 1.3em;
       }
 
-      .field-image {
-        margin-right: 10px;
-
-        img {
-          width: 30px;
-          height: 30px;
-        }
-      }
-
-      .field-description {
-        flex: 1;
-        color: #333;
-        margin-top: 0;
-
-        p {
-          margin: 0;
-          line-height: 1.3em;
-        }
-
-        img {
-          height: 15px;
-          width: 15px;
-          margin: 0 5px;
-        }
+      img {
+        height: 15px;
+        width: 15px;
+        margin: 0 5px;
       }
     }
   }

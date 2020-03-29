@@ -1,15 +1,16 @@
 import { default as computed, on, observes } from 'discourse-common/utils/decorators';
 import { notEmpty } from "@ember/object/computed";
+import { scheduleOnce } from "@ember/runloop";
 
 export default Ember.Component.extend({
-  classNames: 'wizard-links',
+  classNameBindings: [':wizard-links', 'type'],
   items: Ember.A(),
   anyLinks: notEmpty('links'),
 
   @on('didInsertElement')
   @observes('links.@each')
   didInsertElement() {
-    Ember.run.scheduleOnce('afterRender', () => (this.applySortable()));
+    scheduleOnce('afterRender', () => (this.applySortable()));
   },
 
   applySortable() {
@@ -25,7 +26,7 @@ export default Ember.Component.extend({
     const item = items.findBy('id', itemId);
     items.removeObject(item);
     items.insertAt(newIndex, item);
-    Ember.run.scheduleOnce('afterRender', this, () => this.applySortable());
+    scheduleOnce('afterRender', this, () => this.applySortable());
   },
 
   @computed('type')

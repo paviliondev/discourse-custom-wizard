@@ -67,4 +67,14 @@ export default Ember.Component.extend({
 
     return fields;
   },
+  
+  actions: {
+    bannerUploadDone(upload) {
+      this.set("step.banner", upload.url);
+    },
+    
+    bannerUploadDeleted() {
+      this.set("step.banner", null);
+    }
+  }
 });

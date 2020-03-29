@@ -1,11 +1,14 @@
 {{d-editor
   value=value
-  forcePreview=forcePreview}}
+  forcePreview=forcePreview
+  placeholder=placeholder}}
 
 <div class="wizard-editor-gutter">
-  {{d-button
-    action="togglePreview"
-    translatedLabel=previewLabel}}
+  {{#if previewEnabled}}
+    {{d-button
+      action="togglePreview"
+      translatedLabel=previewLabel}}
+  {{/if}}
   
   {{#if fieldsEnabled}}
     {{d-button
