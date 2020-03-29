@@ -21,7 +21,7 @@
     <h3>{{i18n 'admin.wizard.field.label'}}</h3>
   </div>
   <div class="setting-value">
-    {{input name="label" value=field.label placeholder=(i18n "admin.wizard.custom_text_placeholder")}}
+    {{input name="label" value=field.label}}
   </div>
 </div>
 
@@ -30,7 +30,7 @@
     <h3>{{i18n 'admin.wizard.field.description'}}</h3>
   </div>
   <div class="setting-value">
-    {{textarea name="description" value=field.description placeholder=(i18n "admin.wizard.custom_text_placeholder")}}
+    {{textarea name="description" value=field.description}}
   </div>
 </div>
 
@@ -51,6 +51,7 @@
     {{combo-box
       value=field.type
       content=types
+      onChange=(action (mut field.type))
       options=(hash
         none="admin.wizard.field.type"
       )}}
@@ -87,6 +88,7 @@
     {{combo-box
       value=field.choices_type
       content=choicesTypes
+      onChange=(action (mut field.choices_type))
       options=(hash
         none="admin.wizard.field.choices_type"
       )}}
@@ -104,7 +106,6 @@
       </div>
       {{wizard-field-mapper
         inputs=field.choices
-        userFields=userFields
         wizardFields=wizardFields}}
     {{/if}}
 
@@ -144,8 +145,9 @@
     </div>
     <div class="setting-value">
       {{combo-box
-        content=categoryPropertyTypes
         value=field.property
+        content=categoryPropertyTypes
+        onChange=(action (mut field.property))
         options=(hash
           none='admin.wizard.select_property'
         )}}
@@ -153,28 +155,26 @@
   </div>
 {{/if}}
 
-<div class="setting full custom-inputs">
+<div class="setting full field-mapper-setting">
   <div class="setting-label">
     <h3>{{i18n 'admin.wizard.field.prefill'}}</h3>
   </div>
   <div class="setting-value">
     {{wizard-field-mapper
       inputs=field.prefill
-      userFields=userFields
       wizardFields=wizardFields
       options=prefillOptions}}
   </div>
 </div>
 
 {{#if canFilter}}
-  <div class="setting full custom-inputs">
+  <div class="setting full field-mapper-setting">
     <div class="setting-label">
       <h3>{{i18n 'admin.wizard.field.filter'}}</h3>
     </div>
     <div class="setting-value">
       {{wizard-field-mapper
         inputs=field.filters
-        userFields=userFields
         wizardFields=wizardFields
         options=filterOptions}}
     </div>

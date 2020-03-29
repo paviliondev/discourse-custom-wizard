@@ -3,7 +3,11 @@
     <h3>{{i18n 'admin.wizard.id'}}</h3>
   </div>
   <div class="setting-value">
-    {{input name="id" value=step.id placeholderKey="admin.wizard.id_placeholder" disabled=disableId}}
+    {{input
+      name="id"
+      value=step.id
+      placeholderKey="admin.wizard.id_placeholder"
+      disabled=disableId}}
   </div>
 </div>
 
@@ -12,7 +16,10 @@
     <h3>{{i18n 'admin.wizard.key'}}</h3>
   </div>
   <div class="setting-value">
-    {{input name="key" value=step.key placeholderKey="admin.wizard.key_placeholder"}}
+    {{input
+      name="key"
+      value=step.key
+      placeholderKey="admin.wizard.key_placeholder"}}
   </div>
 </div>
 
@@ -21,7 +28,9 @@
     <h3>{{i18n 'admin.wizard.step.title'}}</h3>
   </div>
   <div class="setting-value">
-    {{input name="title" value=step.title placeholderKey="admin.wizard.custom_text_placeholder"}}
+    {{input
+      name="title"
+      value=step.title}}
   </div>
 </div>
 
@@ -30,7 +39,10 @@
     <h3>{{i18n 'admin.wizard.step.banner'}}</h3>
   </div>
   <div class="setting-value">
-    {{input name="banner" value=step.banner placeholderKey="admin.wizard.step.banner_placeholder"}}
+    {{input
+      name="banner"
+      value=step.banner
+      placeholderKey="admin.wizard.step.banner_placeholder"}}
   </div>
 </div>
 
@@ -39,20 +51,17 @@
     <h3>{{i18n 'admin.wizard.step.description'}}</h3>
   </div>
   <div class="setting-value">
-    {{d-editor
-      value=step.raw_description
-      placeholder="admin.wizard.custom_text_placeholder"}}
+    {{wizard-text-editor value=step.raw_description}}
   </div>
 </div>
 
-<div class="setting required-data full">
+<div class="setting full field-mapper-setting">
   <div class="setting-label">
     <h3>{{i18n 'admin.wizard.step.required_data.label'}}</h3>
   </div>
   <div class="setting-value">
     {{wizard-field-mapper
       inputs=step.required_data
-      userFields=userFields
       wizardFields=wizardFields
       keyPlaceholder="admin.wizard.submission_key"
       options=(hash
@@ -71,14 +80,13 @@
   </div>
 </div>
 
-<div class="setting full">
+<div class="setting full field-mapper-setting">
   <div class="setting-label">
     <h3>{{i18n 'admin.wizard.step.permitted_params.label'}}</h3>
   </div>
   <div class="setting-value">
     {{wizard-field-mapper
       inputs=step.permitted_params
-      userFields=userFields
       wizardFields=wizardFields
       keyPlaceholder='admin.wizard.param_key'
       valuePlaceholder='admin.wizard.submission_key'
@@ -93,7 +101,6 @@
     field=currentField
     types=wizard.fieldTypes
     removeField="removeField"
-    userFields=wizard.userFields
     wizardFields=wizardFields}}
 {{/if}}
 
@@ -104,8 +111,5 @@
     action=currentAction
     wizard=wizard
     removeAction="removeAction"
-    wizardFields=wizardFields
-    userFields=wizard.userFields}}
+    wizardFields=wizardFields}}
 {{/if}}
-
-<label>{{i18n 'admin.wizard.action.available_fields'}}</label>

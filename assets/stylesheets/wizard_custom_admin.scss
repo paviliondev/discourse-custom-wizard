@@ -1,6 +1,35 @@
+$setting-background: dark-light-diff($primary, $secondary, 96%, -65%);
+
 .wizard-list {
   float: left;
   width: 250px;
+  margin-top: 10px;
+}
+
+.wizard-settings-parent {
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: $setting-background;
+}
+
+.wizard-settings-group {
+  display: flex;
+  justify-content: space-between;
+  flex-flow: wrap;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.wizard-settings,
+.wizard-custom-step {
+  @extend .wizard-settings-parent;
+  @extend .wizard-settings-group;
+}
+
+.wizard-basic-details,
+.wizard-custom-field,
+.wizard-custom-action {
+  @extend .wizard-settings-group;
 }
 
 .new-wizard {
@@ -8,11 +37,11 @@
 }
 
 .wizard-header {
-  font-size: 1.4em;
-  margin-bottom: 15px;
+  font-size: 1.5em;
+  margin-bottom: 20px;
 
   &.medium {
-    font-size: 1.2em;
+    font-size: 1.3em;
   }
 
   &.small {
@@ -23,6 +52,13 @@
   &.underline {
     text-decoration: underline;
   }
+  
+  .wizard-url {
+    display: inline-block;
+    font-size: 1rem;
+    margin-left: 20px;
+    background-color: $setting-background;
+  }
 }
 
 .content-list + .content {
@@ -30,18 +66,25 @@
 }
 
 .admin-wizard.settings {
+  margin-top: 10px;
   margin-left: 30px;
 
   .setting {
-    display: inline-block;
+    display: inline-flex;
     vertical-align: top;
-    width: 49%;
+    width: 48%;
 
     .setting-label {
-      width: 20%;
+      width: 80px;
     }
 
     .setting-value {
+      flex: 1;
+      overflow: initial;
+      float: initial;
+      width: initial;
+      padding: 0;
+    
       label {
         font-size: 0.85em;
       }
@@ -53,61 +96,39 @@
       button {
         display: block;
       }
-
-      .d-editor {
+      
+      input[type="text"], textarea {
         width: 100%;
-
-        .d-editor-input {
-          height: 100px;
-        }
-
-        button {
-          margin: 0;
-        }
+        box-sizing: border-box;
+      }
+      
+      input[disabled] {
+        background-color: $primary-low;
+        cursor: not-allowed;
       }
     }
 
     &.full {
       width: 100%;
-      
-      &.custom-inputs {
-        padding-bottom: 30px;
-        
-        .setting-label {
-          margin-top: 20px;
-        }
-        
-        .add-custom-input:first-child {
-          margin-top: 16px;
-        }
-        
-        .multi-select {
-          .multi-select-header, input {
-            min-height: 25px;
-          }
-          
-          .choices .choice {
-            height: 24px;
-          }
-        }
-      }
-
-      .setting-label {
-        width: 10%;
-      }
 
       .setting-value {
         width: initial;
         float: none;
-        display: flex;
         
         &.editor {
-          flex-flow: wrap;
           
           .d-editor {
             margin-bottom: 5px;
           }
         }
+      }
+    }
+    
+    &.field-mapper-setting {
+      padding-bottom: 20px;
+      
+      .setting-label {
+        margin-top: 20px;
       }
     }
 
@@ -159,8 +180,95 @@
   }
 }
 
+.field-mapper {
+  width: 100%;
+  display: inline-block;
+  
+  > .custom-input, > .add-custom-input {
+    float: left;
+    clear: left;
+  }
+  
+  .add-custom-input:first-child {
+    margin-top: 15px;
+  }
+  
+  .multi-select {
+    .multi-select-header, input {
+      min-height: 25px;
+    }
+    
+    .choices .choice {
+      height: 24px;
+    }
+  }
+}
+
+.btn-after-time {
+  margin-top: 7px;
+}
+
+.wizard-text-editor {
+  .d-editor {
+    width: 100%;
+
+    .d-editor-input {
+      min-height: 120px;
+    }
+    
+    .d-editor-container {
+      display: block;
+    }
+    
+    .d-editor-textarea-wrapper {
+      display: grid;
+      margin-bottom: 10px;
+      
+      textarea {
+        resize: vertical;
+      }
+    }
+    
+    .d-editor-preview-wrapper {
+      display: none;
+      margin: 0 0 10px 0;
+      padding: 10px;
+      background-color: $secondary;
+      border: 1px solid $primary-medium;
+      max-width: 100%;
+      
+      &.force-preview {
+        display: block;
+      }
+    }
+
+    button {
+      margin: 0;
+    }
+  }
+  
+  .wizard-editor-gutter {
+    position: relative;
+    display: flex;
+    
+    .btn {
+      margin-right: 10px;
+    }
+    
+    .wizard-editor-gutter-popover {
+      position: absolute;
+      padding: 10px;
+      background-color: $secondary;
+      box-shadow: shadow('card');
+      z-index: 200;
+      top: 40px;
+    }
+  }
+}
+
 .wizard-links {
   margin-bottom: 20px;
+  width: 100%;
 
   ul {
     margin: 0;
@@ -190,17 +298,11 @@
   position: relative;
 }
 
-.wizard-custom-step {
-  display: inline-block;
-  margin-bottom: 20px;
-  padding: 15px;
-  background-color: dark-light-diff($primary, $secondary, 96%, -65%);
-}
-
 .wizard-dropdown-choices {
   padding: 15px;
   margin-bottom: 20px;
   background-color: $secondary;
+  width: 100%;
 
   .wizard-header:not(.underline) {
     margin-top: 15px;
@@ -208,7 +310,7 @@
 }
 
 .custom-input {
-  display: flex;
+  display: inline-flex;
   align-items: flex-start;
   margin-bottom: 10px;
   position: relative;
@@ -234,7 +336,7 @@
     position: relative;
     
     .add-pair {
-      margin-top: 4px;
+      margin-top: 10px;
     }
     
     .remove-pair {
@@ -255,7 +357,10 @@
     display: flex;
     align-items: flex-end;
     position: relative;
-    margin-bottom: 10px;
+    
+    &:not(:first-of-type) {
+      margin-top: 10px;
+    }
     
     &.no-connector div.input-block:not(:last-of-type) {
       margin-right: 10px;
@@ -281,7 +386,9 @@
   }
 
   a.remove-input {
-    margin: 25px 0 0 10px;
+    position: absolute;
+    right: -25px;
+    top: 25px;
   }
 
   .connector {
@@ -307,14 +414,11 @@
   }
 }
 
-.required-data .setting-value {
-  flex-flow: wrap;
-
-  .custom-inputs {
-    margin-bottom: 20px;
-  }
-
-  .required-data-message .label {
+.required-data-message {
+  display: inline-block;
+  margin-top: 20px;
+  
+  .label {
     margin-bottom: 5px;
   }
 }

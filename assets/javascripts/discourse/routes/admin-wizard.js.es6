@@ -22,18 +22,20 @@ export default DiscourseRoute.extend({
 
   model(params) {
     const wizardId = params.wizard_id;
-
-    if (wizardId === 'new') {
-      this.set('newWizard', true);
+    this.set('newWizard', wizardId === 'new');
+    
+    if (this.newWizard) {
       return CustomWizard.create();
-    };
-    this.set('newWizard', false);
-
-    const wizard = this.modelFor('admin-wizards-custom').findBy('id', wizardId.underscore());
-
-    if (!wizard) return this.transitionTo('adminWizard', 'new');
-
-    return wizard;
+    } else {      
+      const wizard = this.modelFor('admin-wizards-custom')
+        .findBy('id', wizardId.underscore());
+      
+      if (!wizard) {
+        return this.transitionTo('adminWizard', 'new');
+      } else {
+        return wizard;
+      }
+    }
   },
 
   afterModel(model) {
@@ -56,9 +58,15 @@ export default DiscourseRoute.extend({
   },
 
   _getThemes(model) {
-    return this.store.findAll('theme').then((result) => {
-      model.set('themes', result.content);
-    });
+    return ajax('/admin/themes')
+      .then((result) => {
+        model.set('themes', result.themes.map(t => {
+          return {
+            id: t.id,
+            name: t.name
+          }
+        }));
+      });
   },
 
   _getApis(model) {
@@ -69,13 +77,17 @@ export default DiscourseRoute.extend({
   _getUserFields(model) {
     return this.store.findAll('user-field').then((result) => {
       if (result && result.content) {
-        let userContent = result.content.map((f) => {
-          return { id: `user_field_${f.id}`, name: f.name};
-        });
-        let profileContent = profileFields.map((f) => {
-          return { id: f, name: generateName(f) };
-        });
-        model.set('userFields', userContent.concat(profileContent));
+        model.set('userFields', 
+          result.content.map((f) => ({
+            id: `user_field_${f.id}`,
+            name: f.name
+          })).concat(
+            profileFields.map((f) => ({
+              id: f,
+              name: generateName(f)
+            }))
+          )
+        );
       }
     });
   },

@@ -1,19 +1,19 @@
 import { default as computed, on, observes } from 'discourse-common/utils/decorators';
+import { notEmpty } from "@ember/object/computed";
 
 export default Ember.Component.extend({
   classNames: 'wizard-links',
   items: Ember.A(),
+  anyLinks: notEmpty('links'),
 
   @on('didInsertElement')
   @observes('links.@each')
   didInsertElement() {
-    Ember.run.scheduleOnce('afterRender', () => {
-      this.applySortable();
-    });
+    Ember.run.scheduleOnce('afterRender', () => (this.applySortable()));
   },
 
   applySortable() {
-    this.$("ul").sortable({tolerance: 'pointer'}).on('sortupdate', (e, ui) => {
+    $(this.element).find("ul").sortable({tolerance: 'pointer'}).on('sortupdate', (e, ui) => {
       const itemId = ui.item.data('id');
       const index = ui.item.index();
       Ember.run.bind(this, this.updateItemOrder(itemId, index));
@@ -69,7 +69,6 @@ export default Ember.Component.extend({
       const newItem = Ember.Object.create(params);
       items.pushObject(newItem);
       this.set('current', newItem);
-      this.sendAction('isNew');
     },
 
     change(itemId) {

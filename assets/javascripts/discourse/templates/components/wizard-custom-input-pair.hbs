@@ -2,7 +2,6 @@
   {{wizard-custom-input-selector
     selectorType='key'
     inputType=inputType
-    userFields=userFields
     wizardFields=wizardFields
     value=pair.key
     activeType=pair.key_type
@@ -15,7 +14,8 @@
     {{#if options.enableConnectors}}
       {{combo-box
         value=pair.connector
-        content=connectors}}
+        content=connectors
+        onChange=(action (mut pair.connector))}}
     {{/if}}
     
     {{#if connectorKey}}
@@ -30,7 +30,6 @@
   {{wizard-custom-input-selector
     selectorType='value'
     inputType=inputType
-    userFields=userFields
     wizardFields=wizardFields
     value=pair.value
     activeType=pair.value_type

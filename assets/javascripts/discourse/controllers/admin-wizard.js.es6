@@ -9,8 +9,9 @@ export default Ember.Controller.extend({
 
   @computed('model.after_time_scheduled')
   nextSessionScheduledLabel(scheduled) {
-    return scheduled ? moment(scheduled).format('MMMM Do, HH:mm') :
-                       I18n.t('admin.wizard.after_time_time_label');
+    return scheduled ?
+      moment(scheduled).format('MMMM Do, HH:mm') :
+      I18n.t('admin.wizard.after_time_time_label');
   },
 
   actions: {
@@ -19,7 +20,9 @@ export default Ember.Controller.extend({
         saving: true,
         error: null
       });
+      
       const wizard = this.get('model');
+      
       wizard.save().then(() => {
         this.set('saving', false);
         if (this.get('newWizard')) {

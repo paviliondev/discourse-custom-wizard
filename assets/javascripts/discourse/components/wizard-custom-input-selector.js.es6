@@ -2,9 +2,11 @@ import { alias, equal } from "@ember/object/computed";
 import { computed } from "@ember/object";
 import {
   default as discourseComputed,
-  observes
+  observes,
+  on
 } from "discourse-common/utils/decorators";
 import { defaultSelectionType } from '../lib/custom-wizard'; 
+import { getOwner } from 'discourse-common/lib/get-owner';
 
 export default Ember.Component.extend({
   classNames: 'input-selector',
@@ -12,6 +14,12 @@ export default Ember.Component.extend({
   categories: computed(function() {
     return this.site.categories.map(c => ({ id: c.id, name: c.name }));
   }),
+  
+  @discourseComputed
+  userFields() {
+    const controller = getOwner(this).lookup('controller:admin-wizard');
+    return controller.get('model.userFields');
+  },
   
   @observes('options.@each')
   resetActiveType() {

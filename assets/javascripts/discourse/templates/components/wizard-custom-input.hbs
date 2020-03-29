@@ -2,7 +2,8 @@
   <div class="connector prefix">
     {{combo-box
       value=input.type
-      content=inputTypes}}
+      content=inputTypes
+      onChange=(action (mut input.type))}}
   </div>
 {{/if}}
 
@@ -15,7 +16,6 @@
         inputType=inputType
         keyPlaceholder=keyPlaceholder
         valuePlaceholder=valuePlaceholder
-        userFields=userFields
         wizardFields=wizardFields
         options=options
         removePair=(action 'removePair')}}
@@ -41,7 +41,6 @@
     {{wizard-custom-input-selector
       selectorType='output'
       inputType=inputType
-      userFields=userFields
       wizardFields=wizardFields
       value=input.output
       activeType=input.output_type

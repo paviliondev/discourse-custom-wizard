@@ -5,7 +5,8 @@ import {
 import {
   actionTypes,
   generateName,
-  generateSelectKitContent
+  generateSelectKitContent,
+  profileFields
 } from '../lib/custom-wizard';
 
 export default Ember.Component.extend({
@@ -35,11 +36,6 @@ export default Ember.Component.extend({
   newTopicFields(actionType) {
     return ['create_topic', 'send_message'].indexOf(actionType) > -1;
   },
-
-  @computed('wizardFields')
-  builderWizardFields(fields) {
-    return fields.map((f) => ` w{${f.id}}`);
-  },
   
   @computed('wizardFields')
   categoryFields(fields) {
@@ -49,13 +45,6 @@ export default Ember.Component.extend({
   @computed('wizardFields')
   tagFields(fields) {
     return fields.filter(f => f.type == 'tag');
-  },
-
-  @computed()
-  builderUserFields() {
-    const noTheme = PROFILE_FIELDS.filter((f) => f !== 'theme_id');
-    const fields = noTheme.concat(['email', 'username']);
-    return fields.map((f) => ` u{${f}}`);
   },
 
   @observes('action.custom_category_wizard_field')
