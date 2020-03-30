@@ -10,16 +10,15 @@ function generateName(id) {
 
 const profileFields = [
   'name',
-  'user_avatar',
+  'username',
+  'email',
   'date_of_birth',
   'title',
   'locale',
   'location',
   'website',
   'bio_raw',
-  'profile_background',
-  'card_background',
-  'theme_id'
+  'trust_level'
 ];
 
 const connectors = [
@@ -69,7 +68,10 @@ const inputTypes = [
 ]
 
 function defaultInputType(options = {}) {
-  return options.hasOutput ? 'conditional' : 'pair';
+  if (!options.hasOutput) return 'pair';
+  const allowedInputs = options.allowedInputs;
+  if (!allowedInputs) return 'conditional';
+  return allowedInputs.split(',')[0];
 }
 
 function defaultSelectionType(inputType, options = {}) {

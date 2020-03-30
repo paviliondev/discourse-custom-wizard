@@ -1,7 +1,4 @@
-TagStruct = Struct.new(:id, :name)
-
 class CustomWizard::Builder
-
   attr_accessor :wizard, :updater, :submissions
 
   def initialize(user=nil, wizard_id)
@@ -10,10 +7,7 @@ class CustomWizard::Builder
 
     @steps = data['steps']
     @wizard = CustomWizard::Wizard.new(user, data)
-
-    if user
-      @submissions = Array.wrap(PluginStore.get("#{wizard_id}_submissions", user.id))
-    end
+    @submissions = Array.wrap(PluginStore.get("#{wizard_id}_submissions", user.id)) if user
   end
 
   def self.sorted_handlers
@@ -40,47 +34,6 @@ class CustomWizard::Builder
   def self.add_field_validator(priority = 0, type, &block)
     sorted_field_validators << { priority: priority, type: type, block: block }
     @sorted_field_validators.sort_by! { |h| -h[:priority] }
-  end
-
-  USER_FIELDS = ['name', 'username', 'email', 'date_of_birth', 'title', 'locale']
-  PROFILE_FIELDS = ['location', 'website', 'bio_raw', 'profile_background', 'card_background']
-  OPERATORS = { 
-    'eq': '==',
-    'gt': '>',
-    'lt': '<',
-    'gte': '>=',
-    'lte': '<='
-  }
-
-  def self.fill_placeholders(string, user, data)
-    result = string.gsub(/u\{(.*?)\}/) do |match|
-      result = ''
-      result = user.send($1) if USER_FIELDS.include?($1)
-      result = user.user_profile.send($1) if PROFILE_FIELDS.include?($1)
-      result
-    end
-
-    result = result.gsub(/w\{(.*?)\}/) { |match| recurse(data, [*$1.split('.')]) }
-    
-    result.gsub(/v\{(.*?)\}/) do |match|
-      attrs = $1.split(':')
-      key = attrs.first
-      format = attrs.length > 1 ? attrs.last : nil
-      v = nil
-      
-      if key == 'time'
-        time_format = format.present? ? format : "%B %-d, %Y"
-        v = Time.now.strftime(time_format)
-      end
-      
-      v
-    end
-  end
-  
-  def self.recurse(data, keys)
-    k = keys.shift
-    result = data[k]
-    keys.empty? ? result : self.recurse(result, keys)
   end
 
   def build(build_opts = {}, params = {})
@@ -135,13 +88,24 @@ class CustomWizard::Builder
               step.permitted = false
             else
               required_data.each do |required|
-                pairs = required['pairs'].map { |p| p['value'] = @submissions.last[p['value']] }
-                step.permitted = false unless validate_pairs(pairs)
+                pairs = required['pairs'].map do |p| 
+                  p['key'] = @submissions.last[p['key']]
+                end
+                
+                unless CustomWizard::Mapper.new(
+                  user: @wizard.user,
+                  data: @submissions.last
+                ).validate_pairs(pairs)
+                  step.permitted = false
+                end
               end
             end
             
             if !step.permitted
-              step.permitted_message = step_template['required_data_message'] if step_template['required_data_message']
+              if step_template['required_data_message']
+                step.permitted_message = step_template['required_data_message'] 
+              end
+              
               next
             end
           end
@@ -183,7 +147,12 @@ class CustomWizard::Builder
                     
           if step_template['actions'] && step_template['actions'].length && data
             step_template['actions'].each do |action|
-              self.send(action['type'].to_sym, user, action, data)
+              CustomWizard::Action.new(
+                action: action,
+                user: user,
+                data: data,
+                updater: updater
+              ).perform
             end
           end
 
@@ -237,6 +206,10 @@ class CustomWizard::Builder
     end
     
     params[:value] = prefill_field(field_template, step_template) || params[:value]
+    
+    if field_template['type'] === 'group'
+      params[:value] = params[:value].first
+    end
 
     if field_template['type'] === 'checkbox'
       params[:value] = standardise_boolean(params[:value])
@@ -262,8 +235,12 @@ class CustomWizard::Builder
       @wizard.needs_groups = true
     end
     
-    if (prefill = field_template['filters']).present?
-      params[:filter] = get_output(field_template['filters'])
+    if (content = field_template['content']).present?
+      params[:content] = CustomWizard::Mapper.new(
+        inputs: content,
+        user: @wizard.user,
+        data: @submissions.last
+      ).output
     end
     
     field = step.add_field(params)
@@ -275,76 +252,11 @@ class CustomWizard::Builder
   
   def prefill_field(field_template, step_template)
     if (prefill = field_template['prefill']).present?
-      get_output(prefill)
-    end
-  end
-  
-  def get_output(inputs, opts = {})
-    output = opts[:multiple] ? [] : nil
-    
-    inputs.each do |input|
-      if input['type'] === 'conditional' && validate_pairs(input['pairs'])
-        if opts[:multiple]
-          output.push(get_field(input['output'], input['output_type'], opts))
-        else
-          output = get_field(input['output'], input['output_type'], opts)
-          break
-        end
-      end
-      
-      if input['type'] === 'assignment'
-        value = get_field(input['output'], input['output_type'], opts)
-        
-        if opts[:multiple]
-          output.push(value)
-        else
-          output = value
-          break
-        end
-      end
-    end
-          
-    output
-  end
-  
-  def validate_pairs(pairs)
-    failed = false
-    
-    pairs.each do |pair|
-      key = get_field(pair['key'], pair['key_type'])
-      value = get_field(pair['value'], pair['value_type'])
-      failed = true unless key.public_send(get_operator(pair['connector']), value)
-    end
-    
-    !failed
-  end
-  
-  def get_operator(connector)
-    OPERATORS[connector] || '=='
-  end
-  
-  def get_field(value, type, opts = {})
-    method = "get_#{type}_field"
-  
-    if self.respond_to?(method)
-      self.send(method, value, opts)
-    else
-      value
-    end
-  end
-  
-  def get_wizard_field(value, opts = {})
-    data = opts[:data] || @submissions.last
-    data && !data.key?("submitted_at") && data[value]
-  end
-
-  def get_user_field(value, opts = {})
-    if value.include?('user_field_')
-      UserCustomField.where(user_id: @wizard.user.id, name: value).pluck(:value).first
-    elsif UserProfile.column_names.include? value
-      UserProfile.find_by(user_id: @wizard.user.id).send(value)
-    elsif User.column_names.include? value
-      User.find(@wizard.user.id).send(value)
+      CustomWizard::Mapper.new(
+        inputs: prefill,
+        user: @wizard.user,
+        data: @submissions.last
+      ).output
     end
   end
 
@@ -382,7 +294,10 @@ class CustomWizard::Builder
     end
 
     if min_length && value.is_a?(String) && value.strip.length < min_length.to_i
-      updater.errors.add(field['id'].to_s, I18n.t('wizard.field.too_short', label: label, min: min_length.to_i))
+      updater.errors.add(
+        field['id'].to_s,
+        I18n.t('wizard.field.too_short', label: label, min: min_length.to_i)
+      )
     end
 
     ## ensure all checkboxes are booleans
@@ -405,245 +320,6 @@ class CustomWizard::Builder
     ActiveRecord::Type::Boolean.new.cast(value)
   end
 
-  def create_topic(user, action, data)
-    if action['custom_title_enabled']
-      title = CustomWizard::Builder.fill_placeholders(action['custom_title'], user, data)
-    else
-      title = data[action['title']]
-    end
-    
-    if action['post_builder']
-      post = CustomWizard::Builder.fill_placeholders(action['post_template'], user, data)
-    else
-      post = data[action['post']]
-    end
-    
-    if title
-      params = {
-        title: title,
-        raw: post,
-        skip_validations: true
-      }
-
-      params[:category] = action_category_id(action, data)
-
-      tags = action_tags(action, data)
-
-      params[:tags] = tags
-      
-      topic_custom_fields = {}
-
-      if action['add_fields']
-        action['add_fields'].each do |field|
-          value = field['value_custom'].present? ? field['value_custom'] : data[field['value']]
-          key = field['key']
-          
-          if key && (value.present? || value === false)
-            if key.include?('custom_fields')
-              keyArr = key.split('.')
-
-              if keyArr.length === 3
-                custom_key = keyArr.last
-                type = keyArr.first
-
-                if type === 'topic'
-                  topic_custom_fields[custom_key] = value
-                elsif type === 'post'
-                  params[:custom_fields] ||= {}
-                  params[:custom_fields][custom_key.to_sym] = value
-                end
-              end
-            else
-              value = [*value] + tags if key === 'tags'
-              params[key.to_sym] = value
-            end
-          end
-        end
-      end
-
-      creator = PostCreator.new(user, params)
-      post = creator.create
-
-      if creator.errors.present?
-        updater.errors.add(:create_topic, creator.errors.full_messages.join(" "))
-      else
-        if topic_custom_fields.present?
-          topic_custom_fields.each do |k, v|
-            post.topic.custom_fields[k] = v
-          end
-          post.topic.save_custom_fields(true)
-        end
-
-        unless action['skip_redirect']
-          data['redirect_on_complete'] = post.topic.url
-        end
-      end
-    end
-  end
-
-  def send_message(user, action, data)
-
-    if action['required'].present? && data[action['required']].blank?
-      return
-    end
-    
-    if action['custom_title_enabled']
-      title = CustomWizard::Builder.fill_placeholders(action['custom_title'], user, data)
-    else
-      title = data[action['title']]
-    end
-
-    if action['post_builder']
-      post = CustomWizard::Builder.fill_placeholders(action['post_template'], user, data)
-    else
-      post = data[action['post']]
-    end
-
-    if title && post
-      creator = PostCreator.new(user,
-        title: title,
-        raw: post,
-        archetype: Archetype.private_message,
-        target_usernames: action['username']
-      )
-
-      post = creator.create
-
-      if creator.errors.present?
-        updater.errors.add(:send_message, creator.errors.full_messages.join(" "))
-      else
-        unless action['skip_redirect']
-          data['redirect_on_complete'] = post.topic.url
-        end
-      end
-    end
-  end
-
-  def update_profile(user, action, data)
-    return unless action['profile_updates'].length
-
-    attributes = {}
-    custom_fields = {}
-
-    action['profile_updates'].each do |pu|
-      value = pu['value']
-      key = pu['key']
-      
-      return if data[key].blank?
-
-      if user_field || custom_field
-        custom_fields[user_field || custom_field] = data[key]
-      else
-        updater_key = value
-        if ['profile_background', 'card_background'].include?(value)
-          updater_key = "#{value}_upload_url"
-        end
-        attributes[updater_key.to_sym] = data[key] if updater_key
-      end
-
-      if ['user_avatar'].include?(value)
-        this_upload_id = data[key][:id]
-        user.create_user_avatar unless user.user_avatar
-        user.user_avatar.custom_upload_id = this_upload_id
-        user.uploaded_avatar_id = this_upload_id
-        user.save!
-        user.user_avatar.save!
-      end
-    end
-
-    if custom_fields.present?
-      attributes[:custom_fields] = custom_fields
-    end
-    
-    if attributes.present?
-      user_updater = UserUpdater.new(user, user)
-      user_updater.update(attributes)
-    end
-  end
-
-  def send_to_api(user, action, data)
-    api_body = nil
-
-    if action['api_body'] != ""
-      begin
-        api_body_parsed = JSON.parse(action['api_body'])
-      rescue JSON::ParserError
-        raise Discourse::InvalidParameters, "Invalid API body definition: #{action['api_body']} for #{action['title']}"
-      end
-      api_body = JSON.parse(CustomWizard::Builder.fill_placeholders(JSON.generate(api_body_parsed), user, data))
-    end
-
-    result = CustomWizard::Api::Endpoint.request(user, action['api'], action['api_endpoint'], api_body)
-
-    if error = result['error'] || (result[0] && result[0]['error'])
-      error = error['message'] || error
-      updater.errors.add(:send_to_api, error)
-    else
-      ## add validation callback
-    end
-  end
-  
-  def open_composer(user, action, data)    
-    if action['custom_title_enabled']
-      title = CustomWizard::Builder.fill_placeholders(action['custom_title'], user, data)
-    else
-      title = data[action['title']]
-    end
-    
-    url = "/new-topic?title=#{title}"
-
-    if action['post_builder']
-      post = CustomWizard::Builder.fill_placeholders(action['post_template'], user, data)
-    else
-      post = data[action['post']]
-    end
-    
-    url += "&body=#{post}"
-    
-    if category_id = action_category_id(action, data)
-      if category = Category.find(category_id)
-        url += "&category=#{category.full_slug('/')}"
-      end
-    end
-    
-    if tags = action_tags(action, data)
-      url += "&tags=#{tags.join(',')}"
-    end
-        
-    data['redirect_on_complete'] = Discourse.base_uri + URI.encode(url)
-  end
-
-  def add_to_group(user, action, data)
-    groups = get_output(action['inputs'], multiple: true, data: data)
-        
-    groups = groups.flatten.reduce([]) do |result, g|
-      begin
-        result.push(Integer(g))
-      rescue ArgumentError
-        group = Group.find_by(name: g)
-        result.push(group.id) if group
-      end
-      
-      result
-    end
-    
-    if groups.present?
-      groups.each do |group_id|
-        group = Group.find(group_id) if group_id
-        group.add(user) if group
-      end
-    end
-  end
-
-  def route_to(user, action, data)
-    url = CustomWizard::Builder.fill_placeholders(action['url'], user, data)
-    if action['code']
-      data[action['code']] = SecureRandom.hex(8)
-      url += "&#{action['code']}=#{data[action['code']]}"
-    end
-    data['route_to'] = URI.encode(url)
-  end
-
   def save_submissions(data, final_step)
     if final_step
       data['submitted_at'] = Time.now.iso8601
@@ -660,30 +336,5 @@ class CustomWizard::Builder
     @submissions.pop(1) if @wizard.unfinished?
     PluginStore.set("#{@wizard.id}_submissions", @wizard.user.id, @submissions)
     @wizard.reset
-  end
-  
-  def action_category_id(action, data)
-    if action['custom_category_enabled']
-      if action['custom_category_wizard_field']
-        data[action['category_id']]
-      elsif action['custom_category_user_field_key']
-        if action['custom_category_user_field_key'].include?('custom_fields')
-          field = action['custom_category_user_field_key'].split('.').last
-          user.custom_fields[field]
-        else
-          user.send(action['custom_category_user_field_key'])
-        end
-      end
-    else
-      action['category_id']
-    end
-  end
-  
-  def action_tags(action, data)
-    if action['custom_tag_enabled']
-      data[action['custom_tag_field']]
-    else
-      action['tags']
-    end
   end
 end

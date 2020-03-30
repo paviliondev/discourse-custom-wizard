@@ -7,7 +7,6 @@ class CustomWizardSerializer < ::WizardSerializer
              :background,
              :completed,
              :required,
-             :min_trust,
              :permitted,
              :uncategorized_category_id
   

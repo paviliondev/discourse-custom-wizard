@@ -33,8 +33,6 @@ fr:
         required_label: "Les utilisatrices doivent compléter l'assistant."
         prompt_completion: "Invitation"
         prompt_completion_label: "Inviter l'utilisatrice à compléter l'assistant."
-        min_trust: "Confiance"
-        min_trust_label: "Niveau de confiance requis pour accéder à l'assistant."
         theme_id: "Thème"
         no_theme: "Choisir un thème (optionnel)"
         save: "Sauvegarder"

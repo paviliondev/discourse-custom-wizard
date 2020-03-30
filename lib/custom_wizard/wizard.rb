@@ -14,13 +14,13 @@ class CustomWizard::Wizard
                 :background,
                 :save_submissions,
                 :multiple_submissions,
-                :min_trust,
                 :after_time,
                 :after_time_scheduled,
                 :after_signup,
                 :required,
                 :prompt_completion,
                 :restart_on_revisit,
+                :permitted,
                 :needs_categories,
                 :needs_groups
 
@@ -127,7 +127,10 @@ class CustomWizard::Wizard
   end
 
   def permitted?
-    user && (user.staff? || user.trust_level.to_i >= min_trust.to_i)
+    return false unless user
+    return true if user.admin? || permitted.blank?
+    group_ids = permitted.first['output']
+    return GroupUser.exists?(group_id: group_ids, user_id: user.id)
   end
 
   def reset
@@ -146,22 +149,37 @@ class CustomWizard::Wizard
   def groups
     @groups ||= ::Site.new(Guardian.new(@user)).groups
   end
+  
+  def self.templates(filter = nil)
+    rows = [*PluginStoreRow.where(plugin_name: 'custom_wizard')]
+    rows = rows.select { |r| r.value[filter] } if filter
+    rows
+  end
 
-  def self.after_signup
-    rows = PluginStoreRow.where(plugin_name: 'custom_wizard')
-    wizards = [*rows].select { |r| r.value['after_signup'] }
-    if wizards.any?
-      wizards.first.key
+  def self.after_signup(user)
+    if (temps = templates('after_signup')).any?
+      wizard = nil
+      
+      temps
+        .sort_by { |t| template.value['permitted'].present? }
+        .each do |template|
+          wizard = CustomWizard::Wizard.new(user, template)
+          
+          if wizard.permitted?
+            wizard = wizard
+            break
+          end
+        end
+        
+      wizard
     else
       false
     end
   end
 
   def self.prompt_completion(user)
-    rows = PluginStoreRow.where(plugin_name: 'custom_wizard')
-    wizards = [*rows].select { |r| r.value['prompt_completion'] }
-    if wizards.any?
-      wizards.reduce([]) do |result, w|
+    if (temps = templates('prompt_completion')).any?
+      temps.reduce([]) do |result, w|
         data = ::JSON.parse(w.value)
         id = data['id']
         name = data['name']
@@ -175,10 +193,8 @@ class CustomWizard::Wizard
   end
 
   def self.restart_on_revisit
-    rows = PluginStoreRow.where(plugin_name: 'custom_wizard')
-    wizards = [*rows].select { |r| r.value['restart_on_revisit'] }
-    if wizards.any?
-      wizards.first.key
+    if (temps = templates('restart_on_revisit')).any?
+      temps.first.key
     else
       false
     end

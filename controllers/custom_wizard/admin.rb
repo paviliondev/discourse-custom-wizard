@@ -14,11 +14,8 @@ class CustomWizard::AdminController < ::ApplicationController
     params.require(:wizard)
 
     wizard = ::JSON.parse(params[:wizard])
-
     existing = PluginStore.get('custom_wizard', wizard['id']) || {}
-
     new_time = false
-
     error = nil
 
     if wizard["id"].blank?

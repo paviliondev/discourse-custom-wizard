@@ -170,17 +170,17 @@
   </div>
 </div>
 
-{{#if canFilter}}
+{{#if contentEnabled}}
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
-      <label>{{i18n 'admin.wizard.field.filter'}}</label>
+      <label>{{i18n 'admin.wizard.field.content'}}</label>
     </div>
     
     <div class="setting-value">
       {{wizard-field-mapper
-        inputs=field.filters
+        inputs=field.content
         wizardFields=wizardFields
-        options=filterOptions}}
+        options=contentOptions}}
     </div>
   </div>
 {{/if}}

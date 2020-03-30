@@ -10,6 +10,8 @@
     remove=(action 'remove')}}
 {{/each}}
 
-<div class="add-custom-input">
-  {{d-button action='add' label='admin.wizard.add' icon='plus'}}
-</div>
+{{#if canAdd}}
+  <div class="add-custom-input">
+    {{d-button action='add' label='admin.wizard.add' icon='plus'}}
+  </div>
+{{/if}}

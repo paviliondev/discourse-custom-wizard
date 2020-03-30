@@ -46,11 +46,11 @@ export default Ember.Component.extend({
     return options;
   },
   
-  canFilter: or('isCategory', 'isTag', 'isGroup'),
+  contentEnabled: or('isCategory', 'isTag', 'isGroup'),
   
   @computed('field.type')
-  filterOptions(fieldType) {
-    if (!this.canFilter) return {};
+  contentOptions(fieldType) {
+    if (!this.contentEnabled) return {};
     
     let options = {
       hasOutput: true,

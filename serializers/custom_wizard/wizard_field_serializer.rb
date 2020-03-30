@@ -7,7 +7,7 @@ class CustomWizardFieldSerializer < ::WizardFieldSerializer
              :file_types,
              :limit,
              :property,
-             :filter
+             :content
              
   has_many :choices, serializer: WizardFieldChoiceSerializer, embed: :objects
   
@@ -49,7 +49,7 @@ class CustomWizardFieldSerializer < ::WizardFieldSerializer
     object.property
   end
   
-  def filter
-    object.filter
+  def content
+    object.content
   end
 end

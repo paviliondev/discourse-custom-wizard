@@ -23,9 +23,14 @@ export default Ember.Component.extend({
     if (!this.type) this.set('type', defaultInputType(this.options));
   },
   
-  @discourseComputed
-  inputTypes() {
-    return ['conditional', 'assignment'].map((type) => {
+  @discourseComputed('options.allowedInputs')
+  allowedInputs(option) {
+    return option || 'conditional,assignment';
+  },
+  
+  @discourseComputed('allowedInputs')
+  inputTypes(allowedInputs) {
+    return allowedInputs.split(',').map((type) => {
       return {
         id: type,
         name: I18n.t(`admin.wizard.input.${type}.prefix`)

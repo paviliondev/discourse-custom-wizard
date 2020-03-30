@@ -36,8 +36,6 @@ en:
         prompt_completion_label: "Prompt user to complete wizard."
         restart_on_revisit: "Restart"
         restart_on_revisit_label: "Restart the the wizard whenever the user revisits, regardless of prior progress."
-        min_trust: "Trust"
-        min_trust_label: "Trust level required to access wizard."
         theme_id: "Theme"
         no_theme: "Select a Theme (optional)"
         save: "Save Changes"
@@ -61,6 +59,7 @@ en:
         submission_key: 'submission key'
         param_key: 'param'
         group: "Group"
+        permitted: "Permitted"
         
         editor:
           show: "Show"
@@ -125,7 +124,7 @@ en:
           limit: "Limit"
           property: "Property"
           prefill: "Prefill"
-          filter: "Content"
+          content: "Content"
         
         action:
           header: "Actions"
@@ -306,12 +305,12 @@ en:
 
     wizard:
       completed: "You have completed the {{name}} wizard."
-      not_permitted: "You need to be trust level {{level}} or higher to access the {{name}} wizard."
+      not_permitted: "You are not permitted to access the {{name}} wizard."
       none: "There is no wizard here."
       return_to_site: "Return to {{siteName}}"
       requires_login: "You need to be logged in to access the {{name}} wizard."
       reset: "Reset this wizard."
-      step_not_permitted: "You're not allowed to view this step."
+      step_not_permitted: "You're not permitted to view this step."
 
     wizard_composer:
       show_preview: "Preview Post"

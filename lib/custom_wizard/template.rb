@@ -8,12 +8,12 @@ class CustomWizard::Template
               :multiple_submissions,
               :prompt_completion,
               :restart_on_revisit,
-              :min_trust,
               :after_signup,
               :after_time,
               :after_time_scheduled,
               :required,
-              :theme_id
+              :theme_id,
+              :permitted
 
   def initialize(data)
     data = data.is_a?(String) ? ::JSON.parse(data) : data
@@ -28,12 +28,12 @@ class CustomWizard::Template
     @multiple_submissions = data['multiple_submissions'] || false
     @prompt_completion = data['prompt_completion'] || false
     @restart_on_revisit = data['restart_on_revisit'] || false
-    @min_trust = data['min_trust'] || 0
     @after_signup = data['after_signup']
     @after_time = data['after_time']
     @after_time_scheduled = data['after_time_scheduled']
     @required = data['required'] || false
     @theme_id = data['theme_id']
+    @permitted = data['permitted'] || nil
 
     if data['theme']
       theme = Theme.find_by(name: data['theme'])

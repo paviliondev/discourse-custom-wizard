@@ -22,13 +22,7 @@
           placeholderKey="admin.wizard.name_placeholder"}}
       </div>
     </div>
-  </div>
-  
-  <div class="wizard-header medium">
-    {{i18n 'admin.wizard.label'}}
-  </div>
-  
-  <div class="wizard-settings">    
+    
     <div class="setting">
       <div class="setting-label">
         <label>{{i18n 'admin.wizard.background'}}</label>
@@ -40,7 +34,13 @@
           placeholderKey="admin.wizard.background_placeholder"}}
       </div>
     </div>
-    
+  </div>
+  
+  <div class="wizard-header medium">
+    {{i18n 'admin.wizard.label'}}
+  </div>
+  
+  <div class="wizard-settings">
     <div class="setting">
       <div class="setting-label">
         <label>{{i18n 'admin.wizard.save_submissions'}}</label>
@@ -108,16 +108,6 @@
 
     <div class="setting">
       <div class="setting-label">
-        <label>{{i18n 'admin.wizard.min_trust'}}</label>
-      </div>
-      <div class="setting-value">
-        <span>{{i18n 'admin.wizard.min_trust_label'}}</span>
-        {{input type='number' value=model.min_trust class='input-small'}}
-      </div>
-    </div>
-
-    <div class="setting">
-      <div class="setting-label">
         <label>{{i18n 'admin.wizard.theme_id'}}</label>
       </div>
       <div class="setting-value">
@@ -144,17 +134,17 @@
     
     <div class="setting full field-mapper-setting">
       <div class="setting-label">
-        <label>{{i18n 'admin.wizard.group'}}</label>
+        <label>{{i18n 'admin.wizard.permitted'}}</label>
       </div>
       <div class="setting-value">
         {{wizard-field-mapper
-          inputs=model.group
+          inputs=model.permitted
           options=(hash
             hasOutput=true
-            enableConnectors=true
-            userFieldSelection='key,value'
-            groupSelection=true
+            groupSelection='output'
             textDisabled='output'
+            allowedInputs='assignment'
+            singular=true
           )}}
       </div>
     </div>
