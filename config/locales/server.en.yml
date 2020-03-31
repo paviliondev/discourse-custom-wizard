@@ -9,6 +9,7 @@ en:
     field:
       too_short: "%{label} must be at least %{min} characters"
       required: "%{label} is required."
+      not_url: "%{label} must be a valid url"
     none: "We couldn't find a wizard at that address."
     no_skip: "Wizard can't be skipped"
     export:

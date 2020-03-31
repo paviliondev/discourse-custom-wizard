@@ -300,6 +300,12 @@ class CustomWizard::Builder
       )
     end
 
+    if is_url_type(field)
+      if !check_if_url(value)
+        updater.errors.add(field['id'].to_s, I18n.t('wizard.field.not_url', label: label))
+      end
+    end
+
     ## ensure all checkboxes are booleans
     if field['type'] === 'checkbox'
       updater.fields[field['id']] = standardise_boolean(value)
@@ -314,6 +320,14 @@ class CustomWizard::Builder
 
   def is_text_type(field)
     ['text', 'textarea'].include? field['type']
+  end
+
+  def is_url_type(field)
+    ['url'].include? field['type']
+  end
+
+  def check_if_url(value)
+    value =~ URI::regexp
   end
 
   def standardise_boolean(value)

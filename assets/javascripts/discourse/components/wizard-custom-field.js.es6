@@ -16,7 +16,7 @@ export default Ember.Component.extend({
   categoryPropertyTypes: generateSelectKitContent(['id', 'slug']),
 
   @computed('field.type')
-  isInput: (type) => type === 'text' || type === 'textarea',
+  isInput: (type) => type === 'text' || type === 'textarea' || type === 'url',
 
   @computed('field.type')
   isCategoryOrTag: (type) => type === 'tag' || type === 'category',
