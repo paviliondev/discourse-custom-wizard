@@ -15,29 +15,20 @@
 </div>
 
 {{#if basicTopicFields}}
-  <div class="setting">
+  <div class="setting full field-mapper-setting">
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.title"}}</label>
     </div>
     
     <div class="setting-value">
-      {{combo-box
-        value=action.title
-        content=wizardFields
-        nameProperty="label"
-        onChange=(action (mut action.title))
+      {{wizard-field-mapper
+        inputs=action.title
+        wizardFields=wizardFields
         options=(hash
-          none='admin.wizard.select_field'
-          isDisabled=action.custom_title_enabled
+          hasOutput=true
+          wizardFieldSelection=true
+          userFieldSelection='key,value'
         )}}
-      
-      <div class="setting-gutter">
-        {{input type='checkbox' checked=action.custom_title_enabled}}
-        <span>{{i18n 'admin.wizard.action.custom_title'}}</span>
-        {{#if action.custom_title_enabled}}
-          {{input value=action.custom_title}}
-        {{/if}}
-      </div>
     </div>
   </div>
 
@@ -80,85 +71,45 @@
 {{/if}}
 
 {{#if publicTopicFields}}
-  <div class="setting">
+  <div class="setting full field-mapper-setting">
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.create_topic.category"}}</label>
     </div>
     
     <div class="setting-value">
-      {{category-chooser
-        value=action.category_id
-        isDisabled=action.custom_category_enabled}}
-      
-      <div class="setting-gutter">
-        {{input type='checkbox' checked=action.custom_category_enabled}}
-        <span>{{i18n 'admin.wizard.action.custom_category.label'}}</span>
-        
-        {{#if action.custom_category_enabled}}
-          <div class="custom-category">
-            <div>
-              {{input type='checkbox' checked=action.custom_category_wizard_field}}
-              <span>{{i18n 'admin.wizard.wizard_field'}}</span>
-              {{#if action.custom_category_wizard_field}}
-                {{combo-box
-                  value=action.category_id
-                  content=categoryFields
-                  nameProperty="label"
-                  onChange=(action (mut action.category_id))
-                  options=(hash
-                    none='admin.wizard.select_field'
-                  )}}
-              {{/if}}
-            </div>
-            
-            <div>
-              {{input type='checkbox' checked=action.custom_category_user_field}}
-              <span>{{i18n 'admin.wizard.action.custom_category.user_field'}}</span>
-              {{#if action.custom_category_user_field}}
-                {{input value=action.custom_category_user_field_key}}
-              {{/if}}
-            </div>
-          </div>
-        {{/if}}
-      </div>
+      {{wizard-field-mapper
+        inputs=action.category
+        wizardFields=wizardFields
+        options=(hash
+          hasOutput=true
+          categorySelection='output'
+          wizardFieldSelection=true
+          userFieldSelection='key,value'
+        )}}
     </div>
   </div>
   
-  <div class="setting">
+  <div class="setting full field-mapper-setting">
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.create_topic.tags"}}</label>
     </div>
     
     <div class="setting-value">
-      {{tag-chooser
-        tags=action.tags
-        filterable=true
-        allowCreate=true
-        isDisabled=action.custom_tag_enabled}}
-        
-      <div class="setting-gutter">
-        {{input type='checkbox' checked=action.custom_tag_enabled}}
-        <span>{{i18n 'admin.wizard.action.custom_tag.label'}}</span>
-        
-        {{#if action.custom_tag_enabled}}
-          <div class="custom-tag">
-            {{combo-box
-              value=action.custom_tag_field
-              content=tagFields
-              nameProperty="label"
-              onChange=(action (mut action.custom_tag_field))
-              options=(hash
-                none='admin.wizard.select_field'
-              )}}
-          </div>
-        {{/if}}
-      </div>
+      {{wizard-field-mapper
+        inputs=action.tags
+        wizardFields=wizardFields
+        options=(hash
+          hasOutput=true
+          tagSelection='output'
+          wizardFieldSelection=true
+          userFieldSelection='key,value'
+        )}}
     </div>
   </div>
 {{/if}}
 
 {{#if newTopicFields}}
-  <div class="setting">
+  <div class="setting full">
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.skip_redirect.label"}}</label>
     </div>
@@ -173,75 +124,70 @@
   </div>
 {{/if}}
 
-{{#if createTopic}}
+{{#if basicTopicFields}}
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
-      <label>{{i18n 'admin.wizard.action.add_fields'}}</label>
+      <label>{{i18n 'admin.wizard.action.add_fields.label'}}</label>
     </div>
     
-    <div class="setting-value">
-      {{wizard-field-mapper
-        inputs=action.add_fields
-        wizardFields=wizardFields
-        options=(hash
-          wizardFieldSelection=true
-        )}}
-    </div>
+    {{wizard-field-mapper
+      inputs=action.add_fields
+      wizardFields=wizardFields
+      connectorKey='admin.wizard.action.add_fields.connector'
+      options=(hash
+        wizardFieldSelection=true
+      )}}
   </div>
 {{/if}}
 
 {{#if sendMessage}}
-  <div class="setting">
+  <div class="setting full field-mapper-setting">
     <div class="setting-label">
       <label>{{i18n 'admin.wizard.required'}}</label>
     </div>
     
     <div class="setting-value">
-      {{combo-box
-        value=action.required
-        content=wizardFields
-        nameProperty='label'
-        onChange=(action (mut action.required))
+      {{wizard-field-mapper
+        inputs=action.required
+        wizardFields=wizardFields
         options=(hash
-          none='admin.wizard.select_field'
+          enableConnectors=true
+          wizardFieldSelection=true
+          userFieldSelection=true
+          groupSelection=true
         )}}
     </div>
   </div>
   
-  <div class="setting">
+  <div class="setting full field-mapper-setting">
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.send_message.recipient"}}</label>
     </div>
     
     <div class="setting-value">
-      {{user-selector
-        single="true"
-        includeMentionableGroups="true"
-        usernames=action.username
-        allowedUsers="true"}}
+      {{wizard-field-mapper
+        inputs=action.recipient
+        wizardFields=wizardFields
+        options=(hash
+          hasOutput=true
+          wizardFieldSelection=true
+          userFieldSelection=true
+          groupSelection='key,value'
+        )}}
     </div>
-  </div>
-
-  <div class="setting full field-mapper-setting">
-    <div class="setting-label">
-      <label>{{i18n 'admin.wizard.action.add_fields'}}</label>
-    </div>
-    
-    {{wizard-field-mapper
-      inputs=action.add_fields
-      wizardFields=wizardFields}}
   </div>
 {{/if}}
 
 {{#if updateProfile}}
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
-      <label>{{i18n 'admin.wizard.action.add_fields'}}</label>
+      <label>{{i18n 'admin.wizard.action.add_fields.label'}}</label>
     </div>
     
     {{wizard-field-mapper 
       inputs=action.profile_updates
       wizardFields=wizardFields
+      connectorKey='admin.wizard.action.add_fields.connector'
       options=(hash
         wizardFieldSelection=true
         userFieldSelection=true

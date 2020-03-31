@@ -361,7 +361,7 @@ $setting-background: dark-light-diff($primary, $secondary, 96%, -65%);
     .remove-pair {
       position: absolute;
       top: 25px;
-      right: -30px;
+      right: -25px;
     }
     
     .join-pair {
@@ -378,7 +378,7 @@ $setting-background: dark-light-diff($primary, $secondary, 96%, -65%);
     position: relative;
     
     &:not(:first-of-type) {
-      margin-top: 10px;
+      margin-top: 20px;
     }
     
     &.no-connector div.input-block:not(:last-of-type) {

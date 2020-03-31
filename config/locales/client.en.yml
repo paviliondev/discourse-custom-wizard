@@ -131,12 +131,14 @@ en:
           include: "Include Fields"
           title: "Title"
           post: "Post"
-          add_fields: "Fields"
           topic_attr: "Topic Attribute"
           interpolate_fields: "Insert wizard fields using the field_id in w{}. Insert user fields using field key in u{}."
-
+          
+          add_fields:
+            label: "Fields"
+            connector: "set"
           skip_redirect:
-            label: "No Redirect"
+            label: "Redirect"
             description: "Don't redirect the user to this {{type}} after the wizard completes"
           send_message:
             label: "Send Message"

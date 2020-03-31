@@ -19,7 +19,7 @@ class CustomWizard::Action
     @mapper ||= CustomWizard::Mapper.new(user: user, data: data)
   end
   
-  def create_topic       
+  def create_topic
     if action['custom_title_enabled']
       title = mapper.interpolate(action['custom_title'])
     else
@@ -43,8 +43,6 @@ class CustomWizard::Action
       tags = action_tags(action, data)
       params[:tags] = tags
       
-      topic_custom_fields = {}
-
       if action['add_fields']
         action['add_fields'].each do |field|
           value = field['value_custom'].present? ? field['value_custom'] : data[field['value']]
@@ -59,14 +57,16 @@ class CustomWizard::Action
                 type = keyArr.first
 
                 if type === 'topic'
-                  topic_custom_fields[custom_key] = value
+                  params[:topic_opts] ||= {}
+                  params[:topic_opts][:custom_fields] ||= {}
+                  params[:topic_opts][:custom_fields][custom_key] = value
                 elsif type === 'post'
                   params[:custom_fields] ||= {}
                   params[:custom_fields][custom_key.to_sym] = value
                 end
               end
             else
-              value = [*value] + tags if key === 'tags'
+              value = [*value] + [*tags] if key === 'tags'
               params[key.to_sym] = value
             end
           end
@@ -79,12 +79,6 @@ class CustomWizard::Action
       if creator.errors.present?
         updater.errors.add(:create_topic, creator.errors.full_messages.join(" "))
       else
-        if topic_custom_fields.present?
-          topic_custom_fields.each do |k, v|
-            post.topic.custom_fields[k] = v
-          end
-          post.topic.save_custom_fields(true)
-        end
 
         unless action['skip_redirect']
           data['redirect_on_complete'] = post.topic.url
@@ -211,13 +205,13 @@ class CustomWizard::Action
     
     url += "&body=#{post}"
     
-    if category_id = action_category_id(action, data)
+    if category_id = action_category_id
       if category = Category.find(category_id)
         url += "&category=#{category.full_slug('/')}"
       end
     end
     
-    if tags = action_tags(action, data)
+    if tags = action_tags
       url += "&tags=#{tags.join(',')}"
     end
         
