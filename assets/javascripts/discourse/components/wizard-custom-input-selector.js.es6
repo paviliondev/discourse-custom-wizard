@@ -53,7 +53,6 @@ export default Ember.Component.extend({
     if (!options) return false;
     
     const option = options[type];
-    
     if (option === true) return true;
     if (typeof option !== 'string') return false;
     

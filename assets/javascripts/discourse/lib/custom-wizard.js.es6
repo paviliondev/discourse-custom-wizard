@@ -75,6 +75,10 @@ function defaultInputType(options = {}) {
 }
 
 function defaultSelectionType(inputType, options = {}) {
+  if (options[`${inputType}DefaultType`]) {
+    return options[`${inputType}DefaultType`];
+  }
+  
   const textDisabled = options.textDisabled;
   let type = 'text';
   
@@ -99,7 +103,17 @@ function defaultSelectionType(inputType, options = {}) {
 function newInput(options = {}) {
   let params = {
     type: defaultInputType(options),
-    pairs: Ember.A([newPair({ index: 0, pairCount: 1 })])
+    pairs: Ember.A(
+      [
+        newPair(
+          Object.assign(
+            {},
+            options,
+            { index: 0, pairCount: 1 }
+          )
+        )
+      ]
+    )
   }
   
   if (options.hasOutput) {
@@ -114,9 +128,9 @@ function newPair(options = {}) {
     index: options.index,
     pairCount: options.pairCount,
     key: '',
-    key_type: defaultSelectionType('text', options),
+    key_type: defaultSelectionType('key', options),
     value: '',
-    value_type: defaultSelectionType('text', options),
+    value_type: defaultSelectionType('value', options),
     connector: 'eq'
   }
   

@@ -18,11 +18,11 @@ en:
         save_submissions: "Save"
         save_submissions_label: "Save wizard submissions."
         multiple_submissions: "Multiple"
-        multiple_submissions_label: "Allow multiple submissions by the same user."
+        multiple_submissions_label: "Users can submit multiple times."
         after_signup: "Signup"
-        after_signup_label: "Users are directed to wizard after creating an account."
+        after_signup_label: "Users directed to wizard after signup."
         after_time: "Time"
-        after_time_label: "Users are directed to wizard after the start time."
+        after_time_label: "Users directed to wizard after start time."
         after_time_time_label: "Start Time"
         after_time_modal:
           title: "Wizard Start Time"
@@ -35,7 +35,7 @@ en:
         prompt_completion: "Prompt"
         prompt_completion_label: "Prompt user to complete wizard."
         restart_on_revisit: "Restart"
-        restart_on_revisit_label: "Restart the the wizard whenever the user revisits, regardless of prior progress."
+        restart_on_revisit_label: "Clear submissions on each visit."
         theme_id: "Theme"
         no_theme: "Select a Theme (optional)"
         save: "Save Changes"
@@ -134,8 +134,9 @@ en:
           topic_attr: "Topic Attribute"
           interpolate_fields: "Insert wizard fields using the field_id in w{}. Insert user fields using field key in u{}."
           
-          add_fields:
-            label: "Fields"
+          custom_fields:
+            label: "Custom Fields"
+            key: "field"
             connector: "set"
           skip_redirect:
             label: "Redirect"
@@ -149,6 +150,8 @@ en:
             tags: "Tags"
           update_profile:
             label: "Update Profile"
+            key: "field"
+            connector: "set"
           post_builder:
             checkbox: "Post Builder"
             label: "Builder"

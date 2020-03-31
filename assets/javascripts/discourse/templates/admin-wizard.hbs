@@ -1,14 +1,14 @@
 <div class="admin-wizard settings">
   
-  {{#if hasName}}
-    <div class="wizard-header">
-      <span>{{model.name}}</span>
-      
+  <div class="wizard-header large">
+    <span>{{model.name}}</span>
+    
+    {{#if model.name}}
       <div class="wizard-url">
         <a href="{{wizardUrl}}" target="_blank">{{wizardUrl}}</a>
       </div>
-    </div>
-  {{/if}}
+    {{/if}}
+  </div>
   
   <div class="wizard-basic-details">
     <div class="setting">
@@ -32,6 +32,22 @@
           name="background"
           value=model.background
           placeholderKey="admin.wizard.background_placeholder"}}
+      </div>
+    </div>
+    
+    <div class="setting">
+      <div class="setting-label">
+        <label>{{i18n 'admin.wizard.theme_id'}}</label>
+      </div>
+      <div class="setting-value">
+        {{combo-box
+          content=model.themes
+          valueProperty='id'
+          value=model.theme_id
+          onChange=(action (mut model.theme_id))
+          options=(hash
+            none='admin.wizard.no_theme'
+          )}}
       </div>
     </div>
   </div>
@@ -80,19 +96,14 @@
         <span>{{i18n 'admin.wizard.after_signup_label'}}</span>
       </div>
     </div>
-
+    
     <div class="setting">
       <div class="setting-label">
-        <label>{{i18n 'admin.wizard.after_time'}}</label>
+        <label>{{i18n 'admin.wizard.restart_on_revisit'}}</label>
       </div>
       <div class="setting-value">
-        {{input type='checkbox' checked=model.after_time}}
-        <span>{{i18n 'admin.wizard.after_time_label'}}</span>
-        {{d-button
-          action='setNextSessionScheduled'
-          translatedLabel=nextSessionScheduledLabel
-          class="btn-after-time"
-          icon='far-calendar'}}
+        {{input type='checkbox' checked=model.restart_on_revisit}}
+        <span>{{i18n 'admin.wizard.restart_on_revisit_label'}}</span>
       </div>
     </div>
 
@@ -105,30 +116,19 @@
         <span>{{i18n 'admin.wizard.prompt_completion_label'}}</span>
       </div>
     </div>
-
-    <div class="setting">
+    
+    <div class="setting full-inline">
       <div class="setting-label">
-        <label>{{i18n 'admin.wizard.theme_id'}}</label>
+        <label>{{i18n 'admin.wizard.after_time'}}</label>
       </div>
       <div class="setting-value">
-        {{combo-box
-          content=model.themes
-          valueProperty='id'
-          value=model.theme_id
-          onChange=(action (mut model.theme_id))
-          options=(hash
-            none='admin.wizard.no_theme'
-          )}}
-      </div>
-    </div>
-
-    <div class="setting">
-      <div class="setting-label">
-        <label>{{i18n 'admin.wizard.restart_on_revisit'}}</label>
-      </div>
-      <div class="setting-value">
-        {{input type='checkbox' checked=model.restart_on_revisit}}
-        <span>{{i18n 'admin.wizard.restart_on_revisit_label'}}</span>
+        {{input type='checkbox' checked=model.after_time}}
+        <span>{{i18n 'admin.wizard.after_time_label'}}</span>
+        {{d-button
+          action='setNextSessionScheduled'
+          translatedLabel=nextSessionScheduledLabel
+          class="btn-after-time"
+          icon='far-calendar'}}
       </div>
     </div>
     

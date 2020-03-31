@@ -127,15 +127,17 @@
 {{#if basicTopicFields}}
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
-      <label>{{i18n 'admin.wizard.action.add_fields.label'}}</label>
+      <label>{{i18n 'admin.wizard.action.custom_fields.label'}}</label>
     </div>
     
     {{wizard-field-mapper
-      inputs=action.add_fields
+      inputs=action.custom_fields
       wizardFields=wizardFields
-      connectorKey='admin.wizard.action.add_fields.connector'
+      connectorKey='admin.wizard.action.custom_fields.connector'
+      keyPlaceholder='admin.wizard.action.custom_fields.key'
       options=(hash
-        wizardFieldSelection=true
+        wizardFieldSelection='value'
+        userFieldSelection='value'
       )}}
   </div>
 {{/if}}
@@ -151,6 +153,7 @@
         inputs=action.required
         wizardFields=wizardFields
         options=(hash
+          textDisabled='key'
           enableConnectors=true
           wizardFieldSelection=true
           userFieldSelection=true
@@ -169,6 +172,7 @@
         inputs=action.recipient
         wizardFields=wizardFields
         options=(hash
+          textDisabled='key'
           hasOutput=true
           wizardFieldSelection=true
           userFieldSelection=true
@@ -181,16 +185,18 @@
 {{#if updateProfile}}
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
-      <label>{{i18n 'admin.wizard.action.add_fields.label'}}</label>
+      <label>{{i18n 'admin.wizard.action.update_profile.label'}}</label>
     </div>
     
     {{wizard-field-mapper 
       inputs=action.profile_updates
       wizardFields=wizardFields
-      connectorKey='admin.wizard.action.add_fields.connector'
+      connectorKey='admin.wizard.action.update_profile.connector'
+      keyPlaceholder='admin.wizard.action.update_profile.key'
       options=(hash
-        wizardFieldSelection=true
-        userFieldSelection=true
+        keyDefaultType='user'
+        userFieldSelection='key'
+        wizardFieldSelection='value'
       )}}
   </div>
 {{/if}}
@@ -254,12 +260,13 @@
     
     <div class="setting-value">
       {{wizard-field-mapper
-        inputs=action.inputs
+        inputs=action.group
         wizardFields=wizardFields
         outputConnectorKey='admin.wizard.action.add_to_group.output_connector'
         options=(hash
           hasOutput=true
           enableConnectors=true
+          textDisabled='key'
           wizardFieldSelection='key,value,assignment'
           userFieldSelection='key,value,assignment'
           groupSelection='value,output'

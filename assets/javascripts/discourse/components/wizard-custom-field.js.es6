@@ -46,6 +46,7 @@ export default Ember.Component.extend({
     return options;
   },
   
+  prefillEnabled: or('isCategory', 'isTag', 'isGroup'),
   contentEnabled: or('isCategory', 'isTag', 'isGroup'),
   
   @computed('field.type')
