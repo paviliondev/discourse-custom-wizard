@@ -30,6 +30,7 @@
 //= require discourse/lib/show-modal
 //= require discourse/lib/key-value-store
 //= require discourse/lib/settings
+//= require discourse/lib/user-presence
 
 //= require discourse/mixins/singleton
 
