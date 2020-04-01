@@ -89,8 +89,6 @@ after_initialize do
     if user &&
        user.first_seen_at.blank? &&
        wizard = CustomWizard::Wizard.after_signup(user)
-       
-      byebug
 
       if !wizard.completed?
         custom_redirect = true
