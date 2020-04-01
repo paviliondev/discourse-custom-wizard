@@ -1,4 +1,4 @@
-import { connectorContent } from '../lib/custom-wizard';
+import { connectorContent } from '../lib/mapper';
 import { gt, or, alias } from "@ember/object/computed";
 import { computed, observes } from "@ember/object"; 
 

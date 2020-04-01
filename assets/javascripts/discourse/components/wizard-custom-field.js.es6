@@ -1,4 +1,4 @@
-import { default as computed, observes, on } from 'discourse-common/utils/decorators';
+import { default as discourseComputed, observes, on } from 'discourse-common/utils/decorators';
 import { equal, not, or } from "@ember/object/computed";
 import { generateSelectKitContent } from '../lib/custom-wizard';
 
@@ -17,10 +17,10 @@ export default Ember.Component.extend({
   prefillEnabled: or('isCategory', 'isTag', 'isGroup'),
   contentEnabled: or('isCategory', 'isTag', 'isGroup'),
 
-  @computed('field.type')
+  @discourseComputed('field.type')
   isInput: (type) => type === 'text' || type === 'textarea' || type === 'url',
 
-  @computed('field.type')
+  @discourseComputed('field.type')
   isCategoryOrTag: (type) => type === 'tag' || type === 'category',
 
   @on('didInsertElement')
@@ -31,7 +31,7 @@ export default Ember.Component.extend({
     }
   },
   
-  @computed('field.type')
+  @discourseComputed('field.type')
   prefillOptions(fieldType) {
     if (!this.prefillEnabled) return {};
     
@@ -48,7 +48,7 @@ export default Ember.Component.extend({
     return options;
   },
   
-  @computed('field.type')
+  @discourseComputed('field.type')
   contentOptions(fieldType) {
     if (!this.contentEnabled) return {};
     

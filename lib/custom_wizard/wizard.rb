@@ -31,7 +31,7 @@ class CustomWizard::Wizard
     @required = false
     @needs_categories = false
     @needs_groups = false
-
+    
     attrs.each do |key, value|
       setter = "#{key}="
       send(setter, value) if respond_to?(setter.to_sym, false)
@@ -150,40 +150,38 @@ class CustomWizard::Wizard
     @groups ||= ::Site.new(Guardian.new(@user)).groups
   end
   
-  def self.templates(filter = nil)
-    rows = [*PluginStoreRow.where(plugin_name: 'custom_wizard')]
-    rows = rows.select { |r| r.value[filter] } if filter
-    rows
+  def self.filter_records(filter)
+    PluginStoreRow.where("
+      plugin_name = 'custom_wizard' AND
+      (value::json ->> '#{filter}')::boolean IS TRUE
+    ")
   end
 
   def self.after_signup(user)
-    if (temps = templates('after_signup')).any?
-      wizard = nil
+    if (records = filter_records('after_signup')).any?
+      result = false
       
-      temps
-        .sort_by { |t| template.value['permitted'].present? }
-        .each do |template|
-          wizard = CustomWizard::Wizard.new(user, template)
-          
+      records
+        .sort_by { |record| record.value['permitted'].present? }
+        .each do |record|
+          wizard = CustomWizard::Wizard.new(user, JSON.parse(record.value))
+                    
           if wizard.permitted?
-            wizard = wizard
+            result = wizard
             break
           end
         end
         
-      wizard
+      result
     else
       false
     end
   end
 
   def self.prompt_completion(user)
-    if (temps = templates('prompt_completion')).any?
-      temps.reduce([]) do |result, w|
-        data = ::JSON.parse(w.value)
-        id = data['id']
-        name = data['name']
-        wizard = CustomWizard::Wizard.new(user, id: id, name: name)
+    if (records = filter_records('prompt_completion')).any?
+      records.reduce([]) do |result, record|
+        wizard = CustomWizard::Wizard.new(user, ::JSON.parse(record.value))
         result.push(id: id, name: name) if !wizard.completed?
         result
       end
@@ -193,8 +191,8 @@ class CustomWizard::Wizard
   end
 
   def self.restart_on_revisit
-    if (temps = templates('restart_on_revisit')).any?
-      temps.first.key
+    if (records = filter_records('restart_on_revisit')).any?
+      records.first.key
     else
       false
     end

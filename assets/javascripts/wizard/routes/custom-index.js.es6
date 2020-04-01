@@ -24,7 +24,6 @@ export default Ember.Route.extend({
         name,
         completed,
         notPermitted: !permitted,
-        minTrust,
         wizardId
       });
     } else {

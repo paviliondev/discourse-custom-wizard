@@ -1,7 +1,5 @@
-import {
-  default as computed,
-  observes
-} from 'discourse-common/utils/decorators';
+import { default as discourseComputed, observes } from 'discourse-common/utils/decorators';
+import { equal, not, empty } from "@ember/object/computed";
 import {
   actionTypes,
   generateName,
@@ -12,37 +10,37 @@ import {
 export default Ember.Component.extend({
   classNames: 'wizard-custom-action',
   types: actionTypes.map(t => ({ id: t, name: generateName(t) })),
-  createTopic: Ember.computed.equal('action.type', 'create_topic'),
-  updateProfile: Ember.computed.equal('action.type', 'update_profile'),
-  sendMessage: Ember.computed.equal('action.type', 'send_message'),
-  sendToApi: Ember.computed.equal('action.type', 'send_to_api'),
-  apiEmpty: Ember.computed.empty('action.api'),
-  addToGroup: Ember.computed.equal('action.type', 'add_to_group'),
-  routeTo: Ember.computed.equal('action.type', 'route_to'),
-  disableId: Ember.computed.not('action.isNew'),
+  createTopic: equal('action.type', 'create_topic'),
+  updateProfile: equal('action.type', 'update_profile'),
+  sendMessage: equal('action.type', 'send_message'),
+  sendToApi: equal('action.type', 'send_to_api'),
+  apiEmpty: empty('action.api'),
+  addToGroup: equal('action.type', 'add_to_group'),
+  routeTo: equal('action.type', 'route_to'),
+  disableId: not('action.isNew'),
   groupPropertyTypes: generateSelectKitContent(['id', 'name']),
 
-  @computed('action.type')
+  @discourseComputed('action.type')
   basicTopicFields(actionType) {
     return ['create_topic', 'send_message', 'open_composer'].indexOf(actionType) > -1;
   },
 
-  @computed('action.type')
+  @discourseComputed('action.type')
   publicTopicFields(actionType) {
     return ['create_topic', 'open_composer'].indexOf(actionType) > -1;
   },
 
-  @computed('action.type')
+  @discourseComputed('action.type')
   newTopicFields(actionType) {
     return ['create_topic', 'send_message'].indexOf(actionType) > -1;
   },
   
-  @computed('wizardFields')
+  @discourseComputed('wizardFields')
   categoryFields(fields) {
     return fields.filter(f => f.type == 'category');
   },
   
-  @computed('wizardFields')
+  @discourseComputed('wizardFields')
   tagFields(fields) {
     return fields.filter(f => f.type == 'tag');
   },
@@ -59,7 +57,7 @@ export default Ember.Component.extend({
       this.set('action.custom_category_wizard_field', false);
   },
 
-  @computed('wizard.apis')
+  @discourseComputed('wizard.apis')
   availableApis(apis) {
     return apis.map(a => {
       return {
@@ -69,7 +67,7 @@ export default Ember.Component.extend({
     });
   },
 
-  @computed('wizard.apis', 'action.api')
+  @discourseComputed('wizard.apis', 'action.api')
   availableEndpoints(apis, api) {
     if (!api) return [];
     return apis.find(a => a.name === api).endpoints;

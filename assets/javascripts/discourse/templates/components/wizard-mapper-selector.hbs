@@ -1,41 +1,41 @@
 <div class="type-selector">
   {{#if textEnabled}}
-    {{input-type-toggle
+    {{wizard-mapper-selector-type
       activeType=activeType
       type='text'
       toggle=(action 'toggleType')}}
   {{/if}}
   
   {{#if wizardEnabled}}
-    {{input-type-toggle
+    {{wizard-mapper-selector-type
       activeType=activeType
       type='wizard'
       toggle=(action 'toggleType')}}
   {{/if}}
   
   {{#if userEnabled}}
-    {{input-type-toggle
+    {{wizard-mapper-selector-type
       activeType=activeType
       type='user'
       toggle=(action 'toggleType')}}
   {{/if}}
   
   {{#if categoryEnabled}}
-    {{input-type-toggle
+    {{wizard-mapper-selector-type
       activeType=activeType
       type='category'
       toggle=(action 'toggleType')}}
   {{/if}}
   
   {{#if tagEnabled}}
-    {{input-type-toggle
+    {{wizard-mapper-selector-type
       activeType=activeType
       type='tag'
       toggle=(action 'toggleType')}}
   {{/if}}
   
   {{#if groupEnabled}}
-    {{input-type-toggle
+    {{wizard-mapper-selector-type
       activeType=activeType
       type='group'
       toggle=(action 'toggleType')}}
