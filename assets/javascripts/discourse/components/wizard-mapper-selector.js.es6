@@ -1,15 +1,14 @@
-import { alias, equal } from "@ember/object/computed";
+import { alias } from "@ember/object/computed";
 import { computed } from "@ember/object";
 import {
   default as discourseComputed,
   observes,
-  on
 } from "discourse-common/utils/decorators";
 import { defaultSelectionType } from '../lib/custom-wizard'; 
 import { getOwner } from 'discourse-common/lib/get-owner';
 
 export default Ember.Component.extend({
-  classNames: 'input-selector',
+  classNames: 'mapper-selector',
   groups: alias('site.groups'),
   categories: computed(function() {
     return this.site.categories.map(c => ({ id: c.id, name: c.name }));
@@ -18,7 +17,13 @@ export default Ember.Component.extend({
   @discourseComputed
   userFields() {
     const controller = getOwner(this).lookup('controller:admin-wizard');
-    return controller.get('model.userFields');
+    return controller.model.userFields;
+  },
+  
+  @discourseComputed
+  wizardFields() {
+    const controller = getOwner(this).lookup('controller:admin-wizard');
+    return controller.wizardFields;
   },
   
   @observes('options.@each')
@@ -36,12 +41,11 @@ export default Ember.Component.extend({
     return customPlaceholder || 'admin.wizard.text';
   },
   
-  showText: equal('activeType', 'text'),
-  
   showInput(type) {
-    return this.activeType === type && this[`${type}Enabled`] && !this[`${type}Disabled`];
+    return this.activeType === type && this[`${type}Enabled`];
   },
   
+  showText: computed('activeType', function() { return this.showInput('text') }),
   showWizard: computed('activeType', function() { return this.showInput('wizard') }),
   showUser: computed('activeType', function() { return this.showInput('user') }),
   showCategory: computed('activeType', function() { return this.showInput('category') }),
@@ -61,9 +65,9 @@ export default Ember.Component.extend({
     return option.split(',').filter(o => types.indexOf(o) !== -1).length
   },
   
-  textDisabled: computed('options.textDisabled', 'inputType', function() { return this.optionEnabled('textDisabled') }),
-  wizardEnabled: computed('options.wizardFieldSelection', 'inputType', function() { return this.optionEnabled('wizardFieldSelection') }),
-  userEnabled: computed('options.userFieldSelection', 'inputType', function() { return this.optionEnabled('userFieldSelection') }),
+  textEnabled: computed('options.textSelection', 'inputType', function() { return this.optionEnabled('textSelection') }),
+  wizardEnabled: computed('options.wizardSelection', 'inputType', function() { return this.optionEnabled('wizardSelection') }),
+  userEnabled: computed('options.userSelection', 'inputType', function() { return this.optionEnabled('userSelection') }),
   categoryEnabled: computed('options.categorySelection', 'inputType', function() { return this.optionEnabled('categorySelection') }),
   tagEnabled: computed('options.tagSelection', 'inputType', function() { return this.optionEnabled('tagSelection') }),
   groupEnabled: computed('options.groupSelection', 'inputType', function() { return this.optionEnabled('groupSelection') }),

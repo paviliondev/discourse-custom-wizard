@@ -51,14 +51,13 @@
     <label>{{i18n 'admin.wizard.step.required_data.label'}}</label>
   </div>
   <div class="setting-value">
-    {{wizard-field-mapper
+    {{wizard-mapper
       inputs=step.required_data
-      wizardFields=wizardFields
       keyPlaceholder="admin.wizard.submission_key"
       options=(hash
-        enableConnectors=true
-        wizardFieldSelection='value'
-        userFieldSelection='value'
+        pairConnector='equal'
+        wizardSelection='value'
+        userSelection='value'
       )}}
     {{#if step.required_data}}
       <div class="required-data-message">
@@ -76,12 +75,13 @@
     <label>{{i18n 'admin.wizard.step.permitted_params.label'}}</label>
   </div>
   <div class="setting-value">
-    {{wizard-field-mapper
+    {{wizard-mapper
       inputs=step.permitted_params
-      wizardFields=wizardFields
       keyPlaceholder='admin.wizard.param_key'
       valuePlaceholder='admin.wizard.submission_key'
-      connectorKey='admin.wizard.step.permitted_params.connector'}}
+      options=(hash
+        pairConnector='set'
+      )}}
   </div>
 </div>
 

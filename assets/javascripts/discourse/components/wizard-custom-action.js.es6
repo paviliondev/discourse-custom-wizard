@@ -49,14 +49,14 @@ export default Ember.Component.extend({
 
   @observes('action.custom_category_wizard_field')
   toggleCustomCategoryUserField() {
-    const wizard = this.get('action.custom_category_wizard_field');
-    if (wizard) this.set('action.custom_category_user_field', false);
+    if (this.action.custom_category_wizard_field) 
+      this.set('action.custom_category_user_field', false);
   },
 
   @observes('action.custom_category_user_field')
   toggleCustomCategoryWizardField() {
-    const user = this.get('action.custom_category_user_field');
-    if (user) this.set('action.custom_category_wizard_field', false);
+    if (this.action.custom_category_user_field)
+      this.set('action.custom_category_wizard_field', false);
   },
 
   @computed('wizard.apis')

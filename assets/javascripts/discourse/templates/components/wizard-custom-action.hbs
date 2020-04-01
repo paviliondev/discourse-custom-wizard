@@ -21,13 +21,12 @@
     </div>
     
     <div class="setting-value">
-      {{wizard-field-mapper
+      {{wizard-mapper
         inputs=action.title
-        wizardFields=wizardFields
         options=(hash
           hasOutput=true
-          wizardFieldSelection=true
-          userFieldSelection='key,value'
+          wizardSelection=true
+          userSelection='key,value'
         )}}
     </div>
   </div>
@@ -77,14 +76,13 @@
     </div>
     
     <div class="setting-value">
-      {{wizard-field-mapper
+      {{wizard-mapper
         inputs=action.category
-        wizardFields=wizardFields
         options=(hash
           hasOutput=true
           categorySelection='output'
-          wizardFieldSelection=true
-          userFieldSelection='key,value'
+          wizardSelection=true
+          userSelection='key,value'
         )}}
     </div>
   </div>
@@ -95,14 +93,13 @@
     </div>
     
     <div class="setting-value">
-      {{wizard-field-mapper
+      {{wizard-mapper
         inputs=action.tags
-        wizardFields=wizardFields
         options=(hash
           hasOutput=true
           tagSelection='output'
-          wizardFieldSelection=true
-          userFieldSelection='key,value'
+          wizardSelection=true
+          userSelection='key,value'
         )}}
     </div>
   </div>
@@ -130,15 +127,16 @@
       <label>{{i18n 'admin.wizard.action.custom_fields.label'}}</label>
     </div>
     
-    {{wizard-field-mapper
-      inputs=action.custom_fields
-      wizardFields=wizardFields
-      connectorKey='admin.wizard.action.custom_fields.connector'
-      keyPlaceholder='admin.wizard.action.custom_fields.key'
-      options=(hash
-        wizardFieldSelection='value'
-        userFieldSelection='value'
-      )}}
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.custom_fields
+        keyPlaceholder='admin.wizard.action.custom_fields.key'
+        options=(hash
+          pairConnector='set'
+          wizardSelection='value'
+          userSelection='value'
+        )}}
+    </div>
   </div>
 {{/if}}
 
@@ -149,14 +147,12 @@
     </div>
     
     <div class="setting-value">
-      {{wizard-field-mapper
+      {{wizard-mapper
         inputs=action.required
-        wizardFields=wizardFields
         options=(hash
-          textDisabled='key'
-          enableConnectors=true
-          wizardFieldSelection=true
-          userFieldSelection=true
+          textSelection='value'
+          wizardSelection=true
+          userSelection=true
           groupSelection=true
         )}}
     </div>
@@ -168,14 +164,13 @@
     </div>
     
     <div class="setting-value">
-      {{wizard-field-mapper
+      {{wizard-mapper
         inputs=action.recipient
-        wizardFields=wizardFields
         options=(hash
-          textDisabled='key'
           hasOutput=true
-          wizardFieldSelection=true
-          userFieldSelection=true
+          textSelection='value,output'
+          wizardSelection=true
+          userSelection=true
           groupSelection='key,value'
         )}}
     </div>
@@ -188,15 +183,14 @@
       <label>{{i18n 'admin.wizard.action.update_profile.label'}}</label>
     </div>
     
-    {{wizard-field-mapper 
+    {{wizard-mapper 
       inputs=action.profile_updates
-      wizardFields=wizardFields
-      connectorKey='admin.wizard.action.update_profile.connector'
       keyPlaceholder='admin.wizard.action.update_profile.key'
       options=(hash
-        keyDefaultType='user'
-        userFieldSelection='key'
-        wizardFieldSelection='value'
+        pairConnector='set'
+        userSelection='key'
+        wizardSelection='value'
+        keyDefaultSelection='user'
       )}}
   </div>
 {{/if}}
@@ -259,17 +253,15 @@
     </div>
     
     <div class="setting-value">
-      {{wizard-field-mapper
+      {{wizard-mapper
         inputs=action.group
-        wizardFields=wizardFields
-        outputConnectorKey='admin.wizard.action.add_to_group.output_connector'
         options=(hash
           hasOutput=true
-          enableConnectors=true
-          textDisabled='key'
-          wizardFieldSelection='key,value,assignment'
-          userFieldSelection='key,value,assignment'
+          textSelection='value,output'
+          wizardSelection='key,value,assignment'
+          userSelection='key,value,assignment'
           groupSelection='value,output'
+          outputDefaultSelection='group'
         )}}
     </div>
   </div>

@@ -4,7 +4,8 @@
 # authors: Angus McLeod
 # url: https://github.com/angusmcleod/discourse-custom-wizard
 
-register_asset 'stylesheets/wizard_custom_admin.scss'
+register_asset 'stylesheets/common/wizard-admin.scss'
+register_asset 'stylesheets/common/wizard-mapper.scss'
 register_asset 'lib/jquery.timepicker.min.js'
 register_asset 'lib/jquery.timepicker.scss'
 

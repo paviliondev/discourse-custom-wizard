@@ -1,4 +1,4 @@
-import { default as computed, observes } from 'discourse-common/utils/decorators';
+import { default as discourseComputed, observes } from 'discourse-common/utils/decorators';
 import { notEmpty } from "@ember/object/computed";
 import showModal from 'discourse/lib/show-modal';
 import { generateId } from '../lib/custom-wizard';
@@ -7,23 +7,48 @@ import { dasherize } from "@ember/string";
 export default Ember.Controller.extend({
   hasName: notEmpty('model.name'),
   
-  @computed('model.id')
+  @observes('model.name')
+  setId() {
+    if (!this.model.existingId) this.set('model.id', generateId(this.model.name));
+  },
+  
+  @discourseComputed('model.id')
   wizardUrl(wizardId) {
     return window.location.origin + '/w/' + dasherize(wizardId);
   },
-  
-  @observes('model.name')
-  setId() {
-    if (!this.model.existingId) {
-      this.set('model.id', generateId(this.model.name));
-    }
-  },
 
-  @computed('model.after_time_scheduled')
+  @discourseComputed('model.after_time_scheduled')
   nextSessionScheduledLabel(scheduled) {
     return scheduled ?
       moment(scheduled).format('MMMM Do, HH:mm') :
       I18n.t('admin.wizard.after_time_time_label');
+  },
+  
+  @discourseComputed('currentStep.id', 'model.save_submissions', 'model.steps.@each.fields[]')
+  wizardFields(currentStepId, saveSubmissions) {
+    const allSteps = this.get('model.steps');
+    let steps = allSteps;
+    let fields = [];
+
+    if (!saveSubmissions) {
+      steps = [allSteps.findBy('id', currentStepId)];
+    }
+
+    steps.forEach((s) => {
+      if (s.fields && s.fields.length > 0) {
+        let stepFields = s.fields.map((f) => {
+          return Ember.Object.create({
+            id: f.id,
+            label: `${f.id} (${s.id})`,
+            type: f.type
+          });
+        });
+        
+        fields.push(...stepFields);
+      }
+    });
+
+    return fields;
   },
 
   actions: {

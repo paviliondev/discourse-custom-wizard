@@ -14,6 +14,8 @@ export default Ember.Component.extend({
   choicesTranslation: equal('field.choices_type', 'translation'),
   choicesCustom: equal('field.choices_type', 'custom'),
   categoryPropertyTypes: generateSelectKitContent(['id', 'slug']),
+  prefillEnabled: or('isCategory', 'isTag', 'isGroup'),
+  contentEnabled: or('isCategory', 'isTag', 'isGroup'),
 
   @computed('field.type')
   isInput: (type) => type === 'text' || type === 'textarea' || type === 'url',
@@ -24,30 +26,27 @@ export default Ember.Component.extend({
   @on('didInsertElement')
   @observes('isUpload')
   setupFileType() {
-    if (this.get('isUpload') && !this.get('field.file_types')) {
+    if (this.isUpload && !this.field.file_types) {
       this.set('field.file_types', '.jpg,.png');
     }
   },
   
-  @computed('isCategory', 'isGroup', 'isTag')
-  prefillOptions(isCategory, isGroup, isTag) {
+  @computed('field.type')
+  prefillOptions(fieldType) {
+    if (!this.prefillEnabled) return {};
+    
     let options = {
       hasOutput: true,
-      enableConnectors: true,
-      wizardFieldSelection: true,
-      userFieldSelection: true
+      textSelection: 'key,value',
+      wizardSelection: true,
+      userSelection: 'key,value'
     }
-    
-    if (isCategory || isGroup || isTag) {
-      options.userFieldSelection = 'key,value';
-      options[`${this.field.type}Selection`] = 'output';
-    }
+
+    options[`${fieldType}Selection`] = 'output';
+    options[`outputDefaultSelection`] = fieldType;
     
     return options;
   },
-  
-  prefillEnabled: or('isCategory', 'isTag', 'isGroup'),
-  contentEnabled: or('isCategory', 'isTag', 'isGroup'),
   
   @computed('field.type')
   contentOptions(fieldType) {
@@ -55,14 +54,12 @@ export default Ember.Component.extend({
     
     let options = {
       hasOutput: true,
-      enableConnectors: true,
-      wizardFieldSelection: 'key,value',
-      userFieldSelection: 'key,value',
-      textDisabled: 'output'
+      wizardSelection: 'key,value',
+      userSelection: 'key,value',
+      textSelection: 'key,value'
     }
 
-    options[`${this.field.type}Selection`] = 'output';
-    options[`${this.field.type}AllowMultiple`] = true;
+    options[`${fieldType}Selection`] = 'output';
     
     return options;
   },

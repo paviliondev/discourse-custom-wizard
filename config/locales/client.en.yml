@@ -12,9 +12,9 @@ en:
         custom_label: "Custom"
         submissions_label: "Submissions"
         name: "Name"
-        name_placeholder: "name of the wizard"
+        name_placeholder: "name"
         background: "Background"
-        background_placeholder: "background: css"
+        background_placeholder: "#hex"
         save_submissions: "Save"
         save_submissions_label: "Save wizard submissions."
         multiple_submissions: "Multiple"
@@ -22,7 +22,7 @@ en:
         after_signup: "Signup"
         after_signup_label: "Users directed to wizard after signup."
         after_time: "Time"
-        after_time_label: "Users directed to wizard after start time."
+        after_time_label: "Users directed to wizard after start time:"
         after_time_time_label: "Start Time"
         after_time_modal:
           title: "Wizard Start Time"
@@ -69,10 +69,10 @@ en:
         
         input:
           conditional: 
-            prefix: 'if'
+            name: 'if'
             output: 'then'
           assignment:
-            prefix: 'set'
+            name: 'set'
   
         error:
           name_required: "Wizards must have a name."
@@ -96,7 +96,6 @@ en:
             not_permitted_message: "Message shown when required data not present"
           permitted_params:
             label: "Params"
-            connector: "save as"
         
         field:
           type: "Choose a type"
@@ -126,6 +125,15 @@ en:
           prefill: "Prefill"
           content: "Content"
         
+        connector:
+          then: "then"
+          set: "set"
+          equal: '='
+          greater: '>'
+          less: '<'
+          greater_or_equal: '>='
+          less_or_equal: '<='
+        
         action:
           header: "Actions"
           include: "Include Fields"
@@ -135,9 +143,8 @@ en:
           interpolate_fields: "Insert wizard fields using the field_id in w{}. Insert user fields using field key in u{}."
           
           custom_fields:
-            label: "Custom Fields"
+            label: "Custom"
             key: "field"
-            connector: "set"
           skip_redirect:
             label: "Redirect"
             description: "Don't redirect the user to this {{type}} after the wizard completes"
@@ -149,9 +156,8 @@ en:
             category: "Category"
             tags: "Tags"
           update_profile:
-            label: "Update Profile"
+            label: "Fields"
             key: "field"
-            connector: "set"
           post_builder:
             checkbox: "Post Builder"
             label: "Builder"
@@ -160,7 +166,6 @@ en:
             placeholder: "Insert wizard fields using the field_id in w{}. Insert user fields using field key in u{}."
           add_to_group:
             label: "Add to Group"
-            output_connector: "add to"
           route_to:
             label: "Route To"
             url: "Url"

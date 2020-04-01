@@ -1,28 +1,18 @@
 <div class="admin-wizard settings">
-  
   <div class="wizard-header large">
-    <span>{{model.name}}</span>
+    {{input
+      name="name"
+      value=model.name
+      placeholderKey="admin.wizard.name_placeholder"}}
     
-    {{#if model.name}}
-      <div class="wizard-url">
+    <div class="wizard-url">
+      {{#if model.name}}
         <a href="{{wizardUrl}}" target="_blank">{{wizardUrl}}</a>
-      </div>
-    {{/if}}
+      {{/if}}
+    </div>
   </div>
   
-  <div class="wizard-basic-details">
-    <div class="setting">
-      <div class="setting-label">
-        <label>{{i18n 'admin.wizard.name'}}</label>
-      </div>
-      <div class="setting-value">
-        {{input
-          name="name"
-          value=model.name
-          placeholderKey="admin.wizard.name_placeholder"}}
-      </div>
-    </div>
-    
+  <div class="wizard-basic-details">    
     <div class="setting">
       <div class="setting-label">
         <label>{{i18n 'admin.wizard.background'}}</label>
@@ -31,7 +21,8 @@
         {{input
           name="background"
           value=model.background
-          placeholderKey="admin.wizard.background_placeholder"}}
+          placeholderKey="admin.wizard.background_placeholder"
+          class="medium"}}
       </div>
     </div>
     
@@ -137,14 +128,14 @@
         <label>{{i18n 'admin.wizard.permitted'}}</label>
       </div>
       <div class="setting-value">
-        {{wizard-field-mapper
+        {{wizard-mapper
           inputs=model.permitted
           options=(hash
+            singular=true
+            inputTypes='assignment'
             hasOutput=true
             groupSelection='output'
-            textDisabled='output'
-            allowedInputs='assignment'
-            singular=true
+            textSelection='key,value'
           )}}
       </div>
     </div>
@@ -153,10 +144,10 @@
   {{wizard-links type="step" current=currentStep items=model.steps}}
   
   {{#if currentStep}}
-    {{wizard-custom-step step=currentStep wizard=model}}
+    {{wizard-custom-step step=currentStep wizard=model wizardFields=wizardFields}}
   {{/if}}
 
-  <div class='buttons'>
+  <div class='admin-wizard-buttons'>
     <button {{action "save"}} disabled={{disableSave}} class='btn btn-primary'>
       {{i18n 'admin.wizard.save'}}
     </button>

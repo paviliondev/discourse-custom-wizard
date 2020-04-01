@@ -1,0 +1,34 @@
+<div class="key mapper-block">
+  {{wizard-mapper-selector
+    selectorType='key'
+    inputType=inputType
+    value=pair.key
+    activeType=pair.key_type
+    customPlaceholder=keyPlaceholder
+    options=options}}
+</div>
+
+<div class="mapper-connector mapper-block">
+  {{combo-box
+    value=pair.connector
+    content=connectors
+    onChange=(action (mut pair.connector))}}
+</div>
+
+<div class="value mapper-block">
+  {{wizard-mapper-selector
+    selectorType='value'
+    inputType=inputType
+    value=pair.value
+    activeType=pair.value_type
+    customPlaceholder=valuePlaceholder
+    options=options}}
+</div>
+
+{{#if showJoin}}
+  <span class="join-pair">&</span>
+{{/if}}
+
+{{#if showRemove}}
+  <a {{action removePair pair}} class="remove-pair">{{d-icon 'minus'}}</a>
+{{/if}}

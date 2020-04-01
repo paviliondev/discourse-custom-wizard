@@ -103,9 +103,7 @@
       <div class="wizard-header small">
         {{i18n 'admin.wizard.field.choices_custom'}}
       </div>
-      {{wizard-field-mapper
-        inputs=field.choices
-        wizardFields=wizardFields}}
+      {{wizard-mapper inputs=field.choices}}
     {{/if}}
 
     <div class="wizard-header small">
@@ -164,10 +162,7 @@
     </div>
     
     <div class="setting-value">
-      {{wizard-field-mapper
-        inputs=field.prefill
-        wizardFields=wizardFields
-        options=prefillOptions}}
+      {{wizard-mapper inputs=field.prefill options=prefillOptions}}
     </div>
   </div>
 {{/if}}
@@ -179,10 +174,7 @@
     </div>
     
     <div class="setting-value">
-      {{wizard-field-mapper
-        inputs=field.content
-        wizardFields=wizardFields
-        options=contentOptions}}
+      {{wizard-mapper inputs=field.content options=contentOptions}}
     </div>
   </div>
 {{/if}}

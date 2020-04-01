@@ -8,6 +8,12 @@ function generateName(id) {
     .replace(/(^\w|\b\w)/g, (m) => m.toUpperCase())
 }
 
+function generateId(name) {
+  return name.replace(/[^\w ]/g, '')
+    .replace(/ /g,"_")
+    .toLowerCase();
+}
+
 const profileFields = [
   'name',
   'username',
@@ -21,25 +27,6 @@ const profileFields = [
   'trust_level'
 ];
 
-const connectors = [
-  {
-    id: 'eq',
-    name: '='
-  },{
-    id: 'gt',
-    name: '>'
-  },{
-    id: 'lt',
-    name: '<'
-  },{
-    id: 'gte',
-    name: '>='
-  },{
-    id: 'lte',
-    name: '<='
-  }
-]
-
 const actionTypes = [
   'create_topic',
   'update_profile',
@@ -52,62 +39,130 @@ const actionTypes = [
   'open_composer'
 ];
 
-const selectionTypes = [
-  'text',
-  'wizardField',
-  'userField',
-  'group',
-  'category',
-  'tag'
-]
+// Inputs
 
-const inputTypes = [
-  'pair',
+const selectableInputTypes = [
   'conditional',
   'assignment'
 ]
 
 function defaultInputType(options = {}) {
   if (!options.hasOutput) return 'pair';
-  const allowedInputs = options.allowedInputs;
-  if (!allowedInputs) return 'conditional';
-  return allowedInputs.split(',')[0];
+  if (!options.inputTypes) return selectableInputTypes[0];
+  return options.inputTypes.split(',')[0];
 }
 
+function mapInputTypes(types) {
+  return types.map(function(type) {
+    return {
+      id: type, 
+      name: I18n.t(`admin.wizard.input.${type}.name`) 
+    };
+  });
+}
+
+function inputTypesContent(options = {}) {
+  return options.inputTypes ?
+    mapInputTypes(options.inputTypes.split(',')) :
+    mapInputTypes(selectableInputTypes);
+}
+
+// Connectors
+
+const connectors = {
+  output: [
+    'then',
+    'set',
+  ],
+  pair: [
+    'equal',
+    'greater',
+    'less',
+    'greater_or_equal',
+    'less_or_equal'
+  ]
+}
+
+function connectorItem(connector) {
+  return {
+    id: connector, 
+    name: I18n.t(`admin.wizard.connector.${connector}`) 
+  };
+}
+
+function defaultConnector(connectorType, inputType, opts = {}) {
+  if (opts[`${connectorType}Connector`]) return opts[`${connectorType}Connector`];  
+  if (inputType === 'assignment') return 'set';
+  return connectorType === 'output' ? 'then' : 'equal';
+}
+
+function connectorContent(connectorType, inputType, opts) {
+  let connector = opts[`${connectorType}Connector`] || defaultConnector(connectorType, inputType, opts);
+  if (connector) return [connectorItem(connector)];
+  
+  return connectors[connectorType].map(function(connector) {
+    return connectorItem(connector);
+  });
+}
+
+// Selectors
+
+const selectionTypes = [
+  'text',
+  'wizard',
+  'user',
+  'group',
+  'category',
+  'tag'
+]
+
 function defaultSelectionType(inputType, options = {}) {
-  if (options[`${inputType}DefaultType`]) {
-    return options[`${inputType}DefaultType`];
+  if (options[`${inputType}DefaultSelection`]) {
+    return options[`${inputType}DefaultSelection`];
   }
-  
-  const textDisabled = options.textDisabled;
-  let type = 'text';
-  
-  if (textDisabled === true || 
-      ((typeof textDisabled == 'string') && textDisabled.indexOf(inputType) > -1)) {
     
-    for (let t of selectionTypes) {
-      let inputTypes = options[`${t}Selection`];
-      
-      if (inputTypes === true || 
-          ((typeof inputTypes == 'string') && inputTypes.indexOf(inputType) > -1)) {
-        
-        type = t;
-        break;
-      }
+  let type = selectionTypes[0];
+  
+  for (let t of selectionTypes) {
+    let inputTypes = options[`${t}Selection`];
+                
+    if (inputTypes === true || 
+        ((typeof inputTypes === 'string') &&
+         inputTypes.split(',').indexOf(inputType) > -1)) {
+      type = t;
+      break;
     }
   }
-  
+    
   return type;
 }
 
-function newInput(options = {}) {
+// items
+
+function newPair(inputType, options = {}) {
   let params = {
-    type: defaultInputType(options),
+    index: options.index,
+    pairCount: options.pairCount,
+    key: '',
+    key_type: defaultSelectionType('key', options),
+    value: '',
+    value_type: defaultSelectionType('value', options),
+    connector: defaultConnector('pair', inputType, options)
+  }
+    
+  return Ember.Object.create(params);
+}
+
+function newInput(options = {}) {
+  const inputType = defaultInputType(options);
+  
+  let params = {
+    type: inputType,
     pairs: Ember.A(
       [
         newPair(
-          Object.assign(
-            {},
+          inputType,
+          Object.assign({},
             options,
             { index: 0, pairCount: 1 }
           )
@@ -118,30 +173,13 @@ function newInput(options = {}) {
   
   if (options.hasOutput) {
     params['output_type'] = defaultSelectionType('output', options);
+    params['connector'] = defaultConnector('output', inputType, options);
   }
-  
+    
   return Ember.Object.create(params);
 }
 
-function newPair(options = {}) {
-  let params = {
-    index: options.index,
-    pairCount: options.pairCount,
-    key: '',
-    key_type: defaultSelectionType('key', options),
-    value: '',
-    value_type: defaultSelectionType('value', options),
-    connector: 'eq'
-  }
-  
-  return Ember.Object.create(params);
-}
-
-function generateId(name) {
-  return name.replace(/[^\w ]/g, '')
-    .replace(/ /g,"_")
-    .toLowerCase();
-}
+//
 
 export {
   generateSelectKitContent,
@@ -150,7 +188,8 @@ export {
   generateName,
   defaultInputType,
   defaultSelectionType,
-  connectors,
+  connectorContent,
+  inputTypesContent,
   newInput,
   newPair,
   generateId

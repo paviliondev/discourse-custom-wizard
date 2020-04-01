@@ -3,7 +3,13 @@ class CustomWizard::Mapper
   
   USER_FIELDS = ['name', 'username', 'email', 'date_of_birth', 'title', 'locale', 'trust_level']
   PROFILE_FIELDS = ['location', 'website', 'bio_raw']
-  OPERATORS = { 'eq': '==', 'gt': '>', 'lt': '<', 'gte': '>=', 'lte': '<=' }
+  OPERATORS = {
+    equal: '=',
+    greater: '>',
+    less: '<',
+    greater_or_equal: '>=',
+    less_or_equal: '<='
+  }
  
   def initialize(params)
     @inputs = params[:inputs] || {}
@@ -47,14 +53,19 @@ class CustomWizard::Mapper
     pairs.each do |pair|
       key = map_field(pair['key'], pair['key_type'])
       value = map_field(pair['value'], pair['value_type'])
-      failed = true unless key.public_send(operator(pair['connector']), value)
+      
+      begin
+        failed = true unless key.public_send(operator(pair['connector']), value)
+      rescue => e
+        byebug
+      end
     end
     
     !failed
   end
   
   def operator(connector)
-    OPERATORS[connector] || '=='
+    OPERATORS[connector.to_sym] || '=='
   end
   
   def map_field(value, type)

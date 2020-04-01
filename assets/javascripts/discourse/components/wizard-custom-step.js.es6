@@ -32,40 +32,16 @@ export default Ember.Component.extend({
 
     actions.forEach(a => {
       if (a.type === 'route_to' && a.code) {
-        content.push(Ember.Object.create({
-          id: a.code,
-          label: "code (Route To)"
-        }));
+        content.push(
+          Ember.Object.create({
+            id: a.code,
+            label: "code (Route To)"
+          })
+        );
       }
     });
 
     return content;
-  },
-
-  @computed('step.id', 'wizard.save_submissions')
-  wizardFields(currentStepId, saveSubmissions) {
-    const allSteps = this.get('wizard.steps');
-    let steps = allSteps;
-    let fields = [];
-
-    if (!saveSubmissions) {
-      steps = [allSteps.findBy('id', currentStepId)];
-    }
-
-    steps.forEach((s) => {
-      if (s.fields && s.fields.length > 0) {
-        let stepFields = s.fields.map((f) => {
-          return Ember.Object.create({
-            id: f.id,
-            label: `${f.id} (${s.id})`,
-            type: f.type
-          });
-        });
-        fields.push(...stepFields);
-      }
-    });
-
-    return fields;
   },
   
   actions: {

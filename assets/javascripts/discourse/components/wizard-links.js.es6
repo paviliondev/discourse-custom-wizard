@@ -22,7 +22,7 @@ export default Ember.Component.extend({
   },
 
   updateItemOrder(itemId, newIndex) {
-    const items = this.get('items');
+    const items = this.items;
     const item = items.findBy('id', itemId);
     items.removeObject(item);
     items.insertAt(newIndex, item);
@@ -38,13 +38,13 @@ export default Ember.Component.extend({
 
     return items.map((item) => {
       if (item) {
-        const id = item.get('id');
-        const type = this.get('type');
-        const label = type === 'action' ? id : (item.get('label') || item.get('title') || id);
+        const id = item.id;
+        const type = this.type;
+        const label = type === 'action' ? id : (item.label || item.title || id);
         let link = { id, label };
 
         let classes = 'btn';
-        if (current && item.get('id') === current.get('id')) {
+        if (current && item.id === current.id) {
           classes += ' btn-primary';
         };
 
@@ -57,8 +57,8 @@ export default Ember.Component.extend({
 
   actions: {
     add() {
-      const items = this.get('items');
-      const type = this.get('type');
+      const items = this.items;
+      const type = this.type;
       const newId = `${type}_${items.length + 1}`;
       let params = { id: newId, isNew: true };
 
@@ -73,12 +73,11 @@ export default Ember.Component.extend({
     },
 
     change(itemId) {
-      const items = this.get('items');
-      this.set('current', items.findBy('id', itemId));
+      this.set('current', this.items.findBy('id', itemId));
     },
 
     remove(itemId) {
-      const items = this.get('items');
+      const items = this.items;
       items.removeObject(items.findBy('id', itemId));
       this.set('current', items[items.length - 1]);
     }

@@ -1,0 +1,143 @@
+.wizard-mapper {
+  width: 100%;
+  
+  .select-kit {
+    min-width: initial;
+    width: initial;
+    
+    .select-kit-header {
+      min-height: 30px;
+    }
+    
+    .choices .choice {
+      height: 24px;
+    }
+  }
+  
+  div.mapper-block:not(:last-of-type) {
+    margin-right: 10px;
+  }
+}
+
+[class~='mapper-input'] {
+  display: flex;
+  align-items: flex-start;
+  width: min-content;
+  position: relative;
+  padding-bottom: 30px;    
+    
+  &:last-of-type {
+    padding-bottom: 0;
+  }
+
+  .d-icon {
+    text-align: center;
+  }
+
+  input {
+    margin: 0;
+  }
+
+  input[disabled] {
+    background-color: $primary-low;
+    border-color: #ddd;
+  }
+
+  a.remove-input {
+    position: absolute;
+    right: -25px;
+    top: 5px;
+  }
+}
+
+.add-mapper-input {
+  display: block;
+  
+  .btn {
+    background-color: $secondary;
+    border: 1px solid $primary-medium;
+  }
+}
+
+.mapper-input + .add-mapper-input {
+  padding-top: 10px;
+}
+
+.mapper-connector {
+  width: auto;
+  min-width: 40px;
+  
+  .select-kit .select-kit-header {
+    padding: 0 0.5em;
+    display: flex;
+    justify-content: center;
+    
+    .caret-icon {
+      display: none;
+    }
+  }
+}
+
+.mapper-selector {
+  width: 100%;
+  max-width: 160px;
+  min-width: 160px;
+  
+  input, .select-kit {
+    width: 160px;
+  }
+  
+  .type-selector {
+    position: absolute;
+    top: -22px;
+    width: 100%;
+  }
+
+  .type-selector a {
+    color: $primary;
+    margin-right: 4px;
+    
+    &.active {
+      color: $tertiary;
+      text-decoration: underline;
+    }
+    
+    &:last-of-type {
+      margin-right: 0;
+    }
+  }
+}
+
+.mapper-pairs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  
+  .add-pair {
+    margin-top: 5px;
+  }
+  
+  .remove-pair {
+    position: absolute;
+    top: 5px;
+    right: -25px;
+  }
+  
+  .join-pair {
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+.mapper-pair {
+  display: flex;
+  align-items: flex-end;
+  position: relative;
+  
+  &:not(:first-of-type) {
+    margin-top: 30px;
+  }
+}

@@ -1,5 +1,5 @@
-{{#if options.hasOutput}}  
-  <div class="connector prefix">
+{{#if hasOutput}}  
+  <div class="mapper-connector mapper-block">
     {{combo-box
       value=input.type
       content=inputTypes
@@ -8,20 +8,19 @@
 {{/if}}
 
 {{#if hasPairs}}
-  <div class="input-pairs">
+  <div class="mapper-pairs mapper-block">
     {{#each input.pairs as |pair|}}
-      {{wizard-custom-input-pair
+      {{wizard-mapper-pair
         pair=pair
         last=pair.last
         inputType=inputType
         keyPlaceholder=keyPlaceholder
         valuePlaceholder=valuePlaceholder
-        connectorKey=connectorKey
-        wizardFields=wizardFields
         options=options
         removePair=(action 'removePair')}}
     {{/each}}
-    {{#if options.hasOutput}}
+    
+    {{#if hasOutput}}
       <a {{action 'addPair'}} class="add-pair">
         {{d-icon 'plus'}}
       </a>
@@ -29,20 +28,20 @@
   </div>
 {{/if}}
 
-{{#if options.hasOutput}}
-  {{#if hasOutputConnector}}
-    <div class="connector">
-      <span class="output-connector">
-        {{outputConnector}}
-      </span>
+{{#if hasOutput}}
+  {{#if hasPairs}}
+    <div class="mapper-connector mapper-block">
+      {{combo-box
+        value=input.connector
+        content=connectors
+        onChange=(action (mut input.connector))}}
     </div>
   {{/if}}
 
-  <div class="output input-block">
-    {{wizard-custom-input-selector
+  <div class="output mapper-block">
+    {{wizard-mapper-selector
       selectorType='output'
       inputType=inputType
-      wizardFields=wizardFields
       value=input.output
       activeType=input.output_type
       customPlaceholder=outputPlaceholder

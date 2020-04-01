@@ -1,17 +1,14 @@
 {{#each inputs as |input|}}
-  {{wizard-custom-input 
+  {{wizard-mapper-input 
     input=input
-    wizardFields=wizardFields
     keyPlaceholder=keyPlaceholder
     valuePlaceholder=valuePlaceholder
-    connectorKey=connectorKey
-    outputConnectorKey=outputConnectorKey
-    options=options
+    options=inputOptions
     remove=(action 'remove')}}
 {{/each}}
 
 {{#if canAdd}}
-  <span class="add-custom-input">
+  <span class="add-mapper-input">
     {{d-button action='add' label='admin.wizard.add' icon='plus'}}
   </span>
 {{/if}}
