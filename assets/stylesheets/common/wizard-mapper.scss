@@ -134,7 +134,7 @@
 
 .mapper-pair {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   position: relative;
   
   &:not(:first-of-type) {
