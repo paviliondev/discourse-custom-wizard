@@ -104,7 +104,7 @@ class CustomWizard::AdminController < ::ApplicationController
 
     PluginStore.set('custom_wizard', wizard["id"], wizard)
 
-    render json: success_json
+    render json: success_json.merge(wizard: wizard)
   end
 
   def remove

@@ -1,11 +1,10 @@
 import { ajax } from 'discourse/lib/ajax';
 import EmberObject from "@ember/object";
-import { buildStepJson, buildJson, buildWizardProperties } from '../lib/json';
+import { buildStepJson, buildJson, buildProperties } from '../lib/json';
 
 const CustomWizard = EmberObject.extend({
   save() {
     return new Ember.RSVP.Promise((resolve, reject) => {
-
       let wizardJson = buildJson(this, 'wizard');
       
       if (wizardJson.after_time && !wizardJson.after_time_scheduled) {
@@ -35,6 +34,7 @@ const CustomWizard = EmberObject.extend({
           wizard: JSON.stringify(wizardJson)
         }
       }).then((result) => {
+        console.log('result: ', result);
         if (result.error) {
           reject(result);
         } else {
@@ -59,7 +59,9 @@ CustomWizard.reopenClass({
     return ajax("/admin/wizards/custom/all", {
       type: 'GET'
     }).then(result => {
-      return result.wizards.map(w => CustomWizard.create(w));
+      return result.wizards.map(wizard => {
+        return CustomWizard.create(wizard);
+      });
     });
   },
 
@@ -73,10 +75,7 @@ CustomWizard.reopenClass({
 
   create(wizardJson = {}) {
     const wizard = this._super.apply(this);
-
-  
-    wizard.setProperties(buildWizardProperties(wizardJson));
-
+    wizard.setProperties(buildProperties(wizardJson));
     return wizard;
   }
 });

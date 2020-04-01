@@ -2,6 +2,7 @@ import { default as discourseComputed, observes } from 'discourse-common/utils/d
 import { notEmpty } from "@ember/object/computed";
 import showModal from 'discourse/lib/show-modal';
 import { generateId } from '../lib/custom-wizard';
+import { buildProperties } from '../lib/json';
 import { dasherize } from "@ember/string";
 
 export default Ember.Controller.extend({
@@ -58,10 +59,16 @@ export default Ember.Controller.extend({
         error: null
       });
       
-      const wizard = this.get('model');
+      const wizard = this.model;
       
-      wizard.save().then(() => {
+      wizard.save().then((result) => {
+        
+        this.model.setProperties(
+          buildProperties(result.wizard)
+        );
+      
         this.set('saving', false);
+        
         if (this.get('newWizard')) {
           this.send("refreshAllWizards");
         } else {

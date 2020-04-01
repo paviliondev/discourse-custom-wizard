@@ -4,7 +4,7 @@ class CustomWizard::Mapper
   USER_FIELDS = ['name', 'username', 'email', 'date_of_birth', 'title', 'locale', 'trust_level']
   PROFILE_FIELDS = ['location', 'website', 'bio_raw']
   OPERATORS = {
-    equal: '=',
+    equal: '==',
     greater: '>',
     less: '<',
     greater_or_equal: '>=',
@@ -53,11 +53,11 @@ class CustomWizard::Mapper
     pairs.each do |pair|
       key = map_field(pair['key'], pair['key_type'])
       value = map_field(pair['value'], pair['value_type'])
-      
+            
       begin
         failed = true unless key.public_send(operator(pair['connector']), value)
-      rescue => e
-        byebug
+      rescue NoMethodError
+        #
       end
     end
     

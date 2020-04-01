@@ -1,9 +1,17 @@
 import { properties } from '../lib/custom-wizard';
 import { mappedProperties } from '../lib/mapper';
-import { EmberObject } from '@ember/object';
+import EmberObject from '@ember/object';
 
 function present(val) {
-  return val && val.length;
+  if (val === null || val === undefined) {
+    return false;
+  } else if (typeof val === 'object') {
+    return Object.keys(val).length !== 0;
+  } else if (typeof val === 'string' || val.constructor === Array) {
+    return val && val.length;
+  } else {
+    return false;
+  }
 }
 
 function mapped(property, type) {
@@ -16,14 +24,18 @@ function buildJson(object, type) {
   
   properties[type].forEach((p) => {
     let value = object.get(p);
+    
+    if (mapped(p, type)) {
+      value = buildMappedJson(value);
+    } 
 
     if (value) {
-      result[p] = mapped(p, type) ? buildMappedJson(value) : value;
+      result[p] = value;
     }
   });
   
   return result;
-},
+}
 
 function buildMappedJson(inputs) {
   if (!inputs || !inputs.length) return false;
@@ -76,7 +88,7 @@ function buildMappedJson(inputs) {
   return result;
 }
 
-buildStepJson(object) {
+function buildStepJson(object) {
   let steps = [];
   let error = null;
 
@@ -143,26 +155,35 @@ function buildObject(json, type) {
     if (mapped(prop, type)) {
       let inputs = [];
       
-      json[prop].forEach(inputJson => {
-        let input = {}
-        
-        Object.keys(inputJson).forEach(inputKey => {
-          if (inputKey === 'pairs') {
-            let pairs = [];
-            let pairCount = inputJson.pairs.length;
-            
-            inputJson.pairs.forEach(pairJson => {
-              let pair = pairJson;
-              pair.pairCount = pairCount;
-              pairs.push(EmberObject.create(pair));
-            });
-          } else {
-            input[inputKey] = inputJson[inputKey];
-          }
+      if (present(json[prop])) {
+        json[prop].forEach(inputJson => {
+          let input = {}
+          
+          Object.keys(inputJson).forEach(inputKey => {
+            if (inputKey === 'pairs') {
+              let pairs = [];
+              let pairCount = inputJson.pairs.length;
+              
+              inputJson.pairs.forEach(pairJson => {
+                let pair = pairJson;
+                pair.pairCount = pairCount;
+                
+                pairs.push(
+                  EmberObject.create(pair)
+                );
+              });
+              
+              input.pairs = pairs;
+            } else {
+              input[inputKey] = inputJson[inputKey];
+            }
+          });
+          
+          inputs.push(
+            EmberObject.create(input)
+          );
         });
-        
-        inputs.push(EmberObject.create(input));
-      });
+      }
       
       params[prop] = Ember.A(inputs);
     } else {
@@ -170,16 +191,15 @@ function buildObject(json, type) {
     }
   });
   
-  
-  EmberObject.create();
+  return EmberObject.create(params);
 }
 
-function buildWizardProperties(json) {
+function buildProperties(json) {
   let steps = Ember.A();
   let props = { 
     steps
   };
-  
+    
   if (present(json)) {
     props.id = json.id;
     props.existingId = true;
@@ -189,53 +209,60 @@ function buildWizardProperties(json) {
     });
 
     if (present(json.steps)) {
-      json.steps.forEach((s) => {
-        let fields = Ember.A();
-
-        if (present(s.fields)) {
-          s.fields.forEach((f) => {
-            fields.pushObject(buildObject(f, 'field'));
-          });
-        }
-
-        let actions = Ember.A();
-        if (s.actions && s.actions.length) {
-          s.actions.forEach((a) => {
-            const actionParams = { isNew: false };
-            const action = EmberObject.create($.extend(a, actionParams));
-            actions.pushObject(action);
-          });
-        }
-
-        steps.pushObject(EmberObject.create({
-          id: s.id,
-          key: s.key,
-          title: s.title,
-          raw_description: s.raw_description,
-          banner: s.banner,
-          required_data: s.required_data,
-          required_data_message: s.required_data_message,
-          permitted_params: s.permitted_params,
-          fields,
-          actions,
+      json.steps.forEach((stepJson) => {
+        let stepParams = {
           isNew: false
-        }));
+        };
+        
+        properties.step.forEach((p) => {
+          stepParams[p] = stepJson[p];
+        });
+        
+        stepParams.fields = Ember.A();
+        
+        if (present(stepJson.fields)) {
+          stepJson.fields.forEach((f) => {
+            stepParams.fields.pushObject(
+              buildObject(f, 'field')
+            );
+          });
+        }
+
+        stepParams.actions = Ember.A();
+        
+        if (present(stepJson.actions)) {
+          stepJson.actions.forEach((a) => {
+            stepParams.actions.pushObject(
+              buildObject(a, 'action')
+            );
+          });
+        }
+
+        steps.pushObject(
+          EmberObject.create(stepParams)
+        );
       });
     };
   } else {
-    props['id'] = '';
-    props['name'] = '';
-    props['background'] = '';
-    props['save_submissions'] = true;
-    props['multiple_submissions'] = false;
-    props['after_signup'] = false;
-    props['after_time'] = false;
-    props['required'] = false;
-    props['prompt_completion'] = false;
-    props['restart_on_revisit'] = false;
-    props['permitted'] = null;
-    props['steps'] = Ember.A();
+    props.id = '';
+    props.name = '';
+    props.background = '';
+    props.save_submissions = true;
+    props.multiple_submissions = false;
+    props.after_signup = false;
+    props.after_time = false;
+    props.required = false;
+    props.prompt_completion = false;
+    props.restart_on_revisit = false;
+    props.permitted = null;
+    props.steps = Ember.A();
   }
   
   return props;
+}
+
+export {
+  buildStepJson,
+  buildJson,
+  buildProperties
 }
