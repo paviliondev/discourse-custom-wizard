@@ -162,7 +162,7 @@ class CustomWizard::Wizard
       result = false
       
       records
-        .sort_by { |record| record.value['permitted'].present? }
+        .sort_by { |record| record.value['permitted'].present? ? 0 : 1 }
         .each do |record|
           wizard = CustomWizard::Wizard.new(user, JSON.parse(record.value))
                     
