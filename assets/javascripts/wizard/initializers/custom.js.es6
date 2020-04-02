@@ -5,7 +5,8 @@ export default {
 
   initialize(app) {
     if (window.location.pathname.indexOf('/w/') < 0) return;
-
+    
+    const EmberObject = requirejs('@ember/object').default;
     const Router = requirejs('wizard/router').default;
     const ApplicationRoute = requirejs('wizard/routes/application').default;
     const ajax = requirejs('wizard/lib/ajax').ajax;
@@ -22,7 +23,10 @@ export default {
     const Store = requirejs("discourse/models/store").default;
     const registerRawHelpers = requirejs("discourse-common/lib/raw-handlebars-helpers").registerRawHelpers;
     const RawHandlebars = requirejs("discourse-common/lib/raw-handlebars").default;
+    const Site = requirejs("discourse/models/site").default;
+    const RestAdapter = requirejs("discourse/adapters/rest").default;
     
+    Discourse.Model = EmberObject.extend();
     Discourse.__container__ = app.__container__;
     Discourse.getURLWithCDN = getUrl;
     Discourse.getURL = getUrl;
@@ -51,16 +55,16 @@ export default {
     
     app.register("service:store", Store);
     targets.forEach(t => app.inject(t, "store", "service:store"));
-    
-    const site = Discourse.Site;
-    app.register("site:main", site);
-    targets.forEach(t => app.inject(t, "site", "site:main"));
-    
     targets.forEach(t => app.inject(t, "appEvents", "service:app-events"));
     
-    site.reopenClass(Singleton);
-    site.currentProp('can_create_tag', false);
+    app.register("adapter:rest", RestAdapter);
     
+    const site = Site.current();
+    app.register("site:main", site, { instantiate: false });
+    targets.forEach(t => app.inject(t, "site", "site:main"));
+        
+    site.set('can_create_tag', false);
+        
     Router.reopen({
       rootURL: getUrl('/w/')
     });

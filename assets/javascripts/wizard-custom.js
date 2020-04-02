@@ -30,8 +30,12 @@
 //= require discourse/lib/show-modal
 //= require discourse/lib/key-value-store
 //= require discourse/lib/settings
+//= require discourse/lib/user-presence
+//= require discourse/lib/hash
 
 //= require discourse/mixins/singleton
+
+//= require discourse/adapters/rest
 
 //= require discourse/models/login-method
 //= require discourse/models/permission-type
