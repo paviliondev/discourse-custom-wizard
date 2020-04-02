@@ -69,7 +69,7 @@ class CustomWizard::Mapper
   end
   
   def map_field(value, type)
-    method = "#{type}_field"
+    method = "map_#{type}"
   
     if self.respond_to?(method)
       self.send(method, value)
@@ -78,11 +78,11 @@ class CustomWizard::Mapper
     end
   end
   
-  def wizard_field(value)
+  def map_wizard(value)
     data && !data.key?("submitted_at") && data[value]
   end
 
-  def user_field(value)
+  def map_user_field(value)
     if value.include?('user_field_')
       UserCustomField.where(user_id: user.id, name: value).pluck(:value).first
     elsif PROFILE_FIELDS.include?(value)

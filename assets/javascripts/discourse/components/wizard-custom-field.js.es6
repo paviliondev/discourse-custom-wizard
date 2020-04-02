@@ -1,6 +1,6 @@
 import { default as discourseComputed, observes, on } from 'discourse-common/utils/decorators';
 import { equal, not, or } from "@ember/object/computed";
-import { generateSelectKitContent } from '../lib/wizard';
+import { selectKitContent } from '../lib/wizard';
 
 export default Ember.Component.extend({
   classNames: 'wizard-custom-field',
@@ -10,10 +10,10 @@ export default Ember.Component.extend({
   isGroup: equal('field.type', 'group'),
   isTag: equal('field.type', 'tag'),
   disableId: not('field.isNew'),
-  choicesTypes: generateSelectKitContent(['translation', 'custom']),
+  choicesTypes: selectKitContent(['translation', 'custom']),
   choicesTranslation: equal('field.choices_type', 'translation'),
   choicesCustom: equal('field.choices_type', 'custom'),
-  categoryPropertyTypes: generateSelectKitContent(['id', 'slug']),
+  categoryPropertyTypes: selectKitContent(['id', 'slug']),
   prefillEnabled: or('isCategory', 'isTag', 'isGroup'),
   contentEnabled: or('isCategory', 'isTag', 'isGroup'),
   hasAdvanced: or('isCategory', 'isTag', 'isGroup'),
@@ -40,7 +40,7 @@ export default Ember.Component.extend({
       hasOutput: true,
       textSelection: 'key,value',
       wizardSelection: true,
-      userSelection: 'key,value'
+      userFieldSelection: 'key,value'
     }
 
     options[`${fieldType}Selection`] = 'output';
@@ -56,7 +56,7 @@ export default Ember.Component.extend({
     let options = {
       hasOutput: true,
       wizardSelection: 'key,value',
-      userSelection: 'key,value',
+      userFieldSelection: 'key,value',
       textSelection: 'key,value'
     }
 

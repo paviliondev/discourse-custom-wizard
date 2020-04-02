@@ -19,7 +19,7 @@ const CustomWizard = EmberObject.extend({
         if (stepsResult.error ||
            !stepsResult.steps ||
            stepsResult.steps.length < 1) {
-                    
+                              
           reject({
             error: stepsResult.error || 'steps_required'
           });

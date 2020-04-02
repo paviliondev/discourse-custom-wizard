@@ -1,17 +1,33 @@
-function generateSelectKitContent(content) {
+function selectKitContent(content) {
   return content.map(i => ({id: i, name: i}))
 }
 
 function generateName(id) {
-  return id.replace(/[_\-]+/g, ' ')
+  return sentenceCase(id);
+}
+
+function generateId(name) {
+  return snakeCase(name);
+}
+
+function sentenceCase(string) {
+  return string.replace(/[_\-]+/g, ' ')
     .toLowerCase()
     .replace(/(^\w|\b\w)/g, (m) => m.toUpperCase())
 }
 
-function generateId(name) {
-  return name.replace(/[^\w ]/g, '')
-    .replace(/ /g,"_")
-    .toLowerCase();
+function snakeCase(string) {
+  return string.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)
+    .map(x => x.toLowerCase())
+    .join('_')
+}
+
+function camelCase(string) {
+  return string.replace(/([-_][a-z])/ig, ($1) => {
+    return $1.toUpperCase()
+      .replace('-', '')
+      .replace('_', '');
+  });
 }
 
 const profileFields = [
@@ -137,9 +153,11 @@ const actionTypes = [
 ];
 
 export {
-  generateSelectKitContent,
+  selectKitContent,
   generateName,
   generateId,
+  camelCase,
+  snakeCase,
   properties,
   wizardProperties,
   mappedProperties,

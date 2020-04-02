@@ -1,4 +1,9 @@
-import { properties, mappedProperties } from '../lib/wizard';
+import { 
+  properties,
+  mappedProperties,
+  camelCase,
+  snakeCase
+} from '../lib/wizard';
 import EmberObject from '@ember/object';
 
 function present(val) {
@@ -48,7 +53,7 @@ function buildMappedJson(inputs) {
         
     if (present(inpt.output)) {
       input.output = inpt.output;
-      input.output_type = inpt.output_type;
+      input.output_type = snakeCase(inpt.output_type);
       input.connector = inpt.connector;
     }
     
@@ -61,9 +66,9 @@ function buildMappedJson(inputs) {
           let pairParams = {
             index: pr.index,
             key: pr.key,
-            key_type: pr.key_type,
+            key_type: snakeCase(pr.key_type),
             value: pr.value,
-            value_type: pr.value_type,
+            value_type: snakeCase(pr.value_type),
             connector: pr.connector
           }
                     
@@ -145,6 +150,10 @@ function buildStepJson(object) {
   };
 }
 
+function mappedProperty(property, value) {
+  return property.indexOf('_type') > -1 ? camelCase(value) : value;
+}
+
 function buildObject(json, type) {
   let params = {
     isNew: false
@@ -163,7 +172,12 @@ function buildObject(json, type) {
             let pairCount = inputJson.pairs.length;
             
             inputJson.pairs.forEach(pairJson => {
-              let pair = pairJson;
+              let pair = {};
+              
+              Object.keys(pairJson).forEach(pairKey => {
+                pair[pairKey] = mappedProperty(pairKey,  pairJson[pairKey]);
+              });
+              
               pair.pairCount = pairCount;
               
               pairs.push(
@@ -173,7 +187,7 @@ function buildObject(json, type) {
             
             input.pairs = pairs;
           } else {
-            input[inputKey] = inputJson[inputKey];
+            input[inputKey] = mappedProperty(inputKey,  inputJson[inputKey]);
           }
         });
         

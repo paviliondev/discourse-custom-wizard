@@ -13,10 +13,10 @@
       toggle=(action 'toggleType')}}
   {{/if}}
   
-  {{#if userEnabled}}
+  {{#if userFieldEnabled}}
     {{wizard-mapper-selector-type
       activeType=activeType
-      type='user'
+      type='userField'
       toggle=(action 'toggleType')}}
   {{/if}}
   
@@ -40,6 +40,13 @@
       type='group'
       toggle=(action 'toggleType')}}
   {{/if}}
+  
+  {{#if userEnabled}}
+    {{wizard-mapper-selector-type
+      activeType=activeType
+      type='user'
+      toggle=(action 'toggleType')}}
+  {{/if}}
 </div>
 
 <div class="input">
@@ -60,7 +67,7 @@
       )}}
   {{/if}}
 
-  {{#if showUser}}
+  {{#if showUserField}}
     {{combo-box
       value=value
       content=userFields
@@ -94,5 +101,14 @@
       options=(hash
         none='admin.wizard.select_group'
       )}}
+  {{/if}}
+  
+  {{#if showUser}}
+    {{user-selector 
+      topicId=topicId
+      includeMessageableGroups='true'
+      placeholderKey="composer.users_placeholder"
+      usernames=value
+      autocomplete="discourse"}}
   {{/if}}
 </div>

@@ -2,18 +2,18 @@ import { ajax } from 'discourse/lib/ajax';
 import { popupAjaxError } from 'discourse/lib/ajax-error';
 import CustomWizardApi from '../models/custom-wizard-api';
 import { default as computed } from 'discourse-common/utils/decorators';
-import { generateSelectKitContent } from '../lib/wizard';
+import { selectKitContent } from '../lib/wizard';
 
 export default Ember.Controller.extend({
   queryParams: ['refresh_list'],
   loadingSubscriptions: false,
   notAuthorized: Ember.computed.not('api.authorized'),
-  endpointMethods: generateSelectKitContent(['GET', 'PUT', 'POST', 'PATCH', 'DELETE']),
+  endpointMethods: selectKitContent(['GET', 'PUT', 'POST', 'PATCH', 'DELETE']),
   showRemove: Ember.computed.not('isNew'),
   showRedirectUri: Ember.computed.and('threeLeggedOauth', 'api.name'),
   responseIcon: null,
-  contentTypes: generateSelectKitContent(['application/json', 'application/x-www-form-urlencoded']),
-  successCodes: generateSelectKitContent([100, 101, 102, 200, 201, 202, 203, 204, 205, 206, 207, 208, 226, 300, 301, 302, 303, 303, 304, 305, 306, 307, 308]),
+  contentTypes: selectKitContent(['application/json', 'application/x-www-form-urlencoded']),
+  successCodes: selectKitContent([100, 101, 102, 200, 201, 202, 203, 204, 205, 206, 207, 208, 226, 300, 301, 302, 303, 303, 304, 305, 306, 307, 308]),
 
   @computed('saveDisabled', 'api.authType', 'api.authUrl', 'api.tokenUrl', 'api.clientId', 'api.clientSecret', 'threeLeggedOauth')
   authDisabled(saveDisabled, authType, authUrl, tokenUrl, clientId, clientSecret, threeLeggedOauth) {
@@ -27,7 +27,7 @@ export default Ember.Controller.extend({
     return !name || !authType;
   },
 
-  authorizationTypes: generateSelectKitContent(['none', 'basic', 'oauth_2', 'oauth_3']),
+  authorizationTypes: selectKitContent(['none', 'basic', 'oauth_2', 'oauth_3']),
   isBasicAuth: Ember.computed.equal('api.authType', 'basic'),
 
   @computed('api.authType')

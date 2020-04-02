@@ -3,7 +3,7 @@ import { equal, not, empty, or } from "@ember/object/computed";
 import {
   actionTypes,
   generateName,
-  generateSelectKitContent,
+  selectKitContent,
   profileFields
 } from '../lib/wizard';
 
@@ -18,7 +18,7 @@ export default Ember.Component.extend({
   addToGroup: equal('action.type', 'add_to_group'),
   routeTo: equal('action.type', 'route_to'),
   disableId: not('action.isNew'),
-  groupPropertyTypes: generateSelectKitContent(['id', 'name']),
+  groupPropertyTypes: selectKitContent(['id', 'name']),
   hasAdvanced: or('basicTopicFields', 'routeTo'),
   
   @on('didInsertElement')

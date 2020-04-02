@@ -74,10 +74,11 @@ function connectorContent(connectorType, inputType, opts) {
 const selectionTypes = [
   'text',
   'wizard',
-  'user',
+  'userField',
   'group',
   'category',
-  'tag'
+  'tag',
+  'user'
 ]
 
 function defaultSelectionType(inputType, options = {}) {

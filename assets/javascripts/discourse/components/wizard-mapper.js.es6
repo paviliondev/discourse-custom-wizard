@@ -20,10 +20,11 @@ export default Ember.Component.extend({
       outputConnector: options.outputConnector || null,
       textSelection: options.textSelection || true,
       wizardSelection: options.wizardSelection || false,
-      userSelection: options.userSelection || false,
+      userFieldSelection: options.userFieldSelection || false,
       categorySelection: options.categorySelection || false,
       tagSelection: options.tagSelection || false,
       groupSelection: options.groupSelection || false,
+      userSelection: options.userSelection || false,
       keyDefaultSelection: options.keyDefaultSelection || null,
       valueDefaultSelection: options.valueDefaultSelection || null,
       outputDefaultSelection: options.outputDefaultSelection || null

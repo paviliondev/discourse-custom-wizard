@@ -1,7 +1,7 @@
 import CustomWizard from '../models/custom-wizard';
 import { ajax } from 'discourse/lib/ajax';
 import {
-  generateSelectKitContent,
+  selectKitContent,
   profileFields,
   generateName
 } from '../lib/wizard';
@@ -52,7 +52,7 @@ export default DiscourseRoute.extend({
       .then((result) => {
         model.set(
           'fieldTypes',
-          generateSelectKitContent([...result.types])
+          selectKitContent([...result.types])
         )
       });
   },

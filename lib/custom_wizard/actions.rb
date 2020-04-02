@@ -21,15 +21,11 @@ class CustomWizard::Action
   
   def create_topic
     params = basic_topic_params
-    
-    byebug
-    
+        
     if params[:title] && params[:raw]
       params[:category] = action_category
       params[:tags] = action_tags
       
-      byebug
-
       creator = PostCreator.new(user, params)
       post = creator.create
 
@@ -48,12 +44,9 @@ class CustomWizard::Action
     params[:target_usernames] = CustomWizard::Mapper.new(
       inputs: action['recipient'],
       data: data,
-      user: user,
-      opts: {
-        multiple: true
-      }
+      user: user
     ).output
-    
+        
     if params[:title] && params[:raw]
       params[:archetype] = Archetype.private_message
       

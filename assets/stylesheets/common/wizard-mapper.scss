@@ -82,8 +82,8 @@
   max-width: 150px;
   min-width: 150px;
   
-  input, .select-kit {
-    width: 150px;
+  input, .select-kit, .ac-wrap, .autocomplete.ac-user {
+    width: 150px !important;
   }
   
   .type-selector {

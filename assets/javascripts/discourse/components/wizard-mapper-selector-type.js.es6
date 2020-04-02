@@ -14,10 +14,11 @@ export default Ember.Component.extend({
     let map = {
       text: I18n.t('admin.wizard.text'),
       wizard: I18n.t('admin.wizard.label'),
-      user: I18n.t('users_lowercase.one'),
+      userField: I18n.t('users_lowercase.one'),
       category: I18n.t('categories.category'),
       tag: I18n.t('tagging.tags'),
-      group: I18n.t('groups.title.one')
+      group: I18n.t('groups.title.one'),
+      user: I18n.t('users_lowercase.other')
     };
     return map[type].toLowerCase();
   },
