@@ -27,6 +27,7 @@ if Rails.env.production?
     stylesheets/wizard/wizard_composer.scss
     stylesheets/wizard/wizard_variables.scss
     stylesheets/wizard/wizard_custom_mobile.scss
+    stylesheets/wizard/jquery.timepicker.scss
   }
 end
 
