@@ -9,18 +9,6 @@
   </div>
 </div>
 
-<div class="setting">
-  <div class="setting-label">
-    <label>{{i18n 'admin.wizard.translation'}}</label>
-  </div>
-  <div class="setting-value">
-    {{input
-      name="key"
-      value=step.key
-      placeholderKey="admin.wizard.translation_placeholder"}}
-  </div>
-</div>
-
 <div class="setting full">
   <div class="setting-label">
     <label>{{i18n 'admin.wizard.step.banner'}}</label>
@@ -86,6 +74,18 @@
           options=(hash
             pairConnector='set'
           )}}
+      </div>
+    </div>
+    
+    <div class="setting">
+      <div class="setting-label">
+        <label>{{i18n 'admin.wizard.translation'}}</label>
+      </div>
+      <div class="setting-value">
+        {{input
+          name="key"
+          value=step.key
+          placeholderKey="admin.wizard.translation_placeholder"}}
       </div>
     </div>
     

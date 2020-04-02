@@ -140,6 +140,24 @@ const mappedProperties = {
   ]
 }
 
+const advancedProperties = {
+  step: [
+    'required_data',
+    'permitted_params'
+  ],
+  field: [
+    'property',
+    'prefill',
+    'content'
+  ],
+  action: [
+    'code',
+    'custom_fields',
+    'skip_redirect',
+    'required'
+  ]
+}
+
 const actionTypes = [
   'create_topic',
   'update_profile',
@@ -162,5 +180,6 @@ export {
   wizardProperties,
   mappedProperties,
   profileFields,
+  advancedProperties,
   actionTypes
 };

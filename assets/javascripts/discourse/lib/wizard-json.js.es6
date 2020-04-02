@@ -1,6 +1,7 @@
 import { 
   properties,
   mappedProperties,
+  advancedProperties,
   camelCase,
   snakeCase
 } from '../lib/wizard';
@@ -205,28 +206,20 @@ function buildObject(json, type) {
   return EmberObject.create(params);
 }
 
-function isAdvancedWizard(property, value) {
+function wizardHasAdvanced(property, value) {
   if (property === 'save_submissions' && value == false) return true;
   if (property === 'restart_on_revisit' && value == true) return true;
   return false;
 }
 
-function isAdvancedStep(property, value) {
-  return mapped(property, 'step') && present(value);
+function stepHasAdvanced(property, value) {
+  return advancedProperties.step[property] && present(value);
 }
 
-function isAdvancedField(params) {
-  if (present(params.property)) return true;
-  if (present(params.prefill)) return true;
-  if (present(params.content)) return true;
-  return false;
-}
-
-function isAdvancedAction(params) {
-  if (present(params.code)) return true;
-  if (present(params.custom_fields)) return true;
-  if (present(params.skip_redirect)) return true;
-  return false;
+function hasAdvanced(params, type) {
+  return Object.keys(params).some(p => {
+    return advancedProperties[type].indexOf(p) > -1 && present(params[p]);
+  });
 }
 
 function buildProperties(json) {
@@ -242,7 +235,7 @@ function buildProperties(json) {
     properties.wizard.forEach((p) => {
       props[p] = json[p];
       
-      if (isAdvancedWizard(p, json[p])) {
+      if (wizardHasAdvanced(p, json[p])) {
         props.showAdvanced = true;
       }
     });
@@ -256,7 +249,7 @@ function buildProperties(json) {
         properties.step.forEach((p) => {
           stepParams[p] = stepJson[p];
                     
-          if (isAdvancedStep(p, stepJson[p])) {
+          if (stepHasAdvanced(p, stepJson[p])) {
             stepParams.showAdvanced = true;
           }
         });
@@ -266,8 +259,8 @@ function buildProperties(json) {
         if (present(stepJson.fields)) {
           stepJson.fields.forEach((f) => {
             let params = buildObject(f, 'field');
-            
-            if (isAdvancedField(params)) {
+                        
+            if (hasAdvanced(params, 'field')) {
               params.showAdvanced = true;
             }
             
@@ -281,7 +274,7 @@ function buildProperties(json) {
           stepJson.actions.forEach((a) => {
             let params = buildObject(a, 'action');
             
-            if (isAdvancedAction(params)) {
+            if (hasAdvanced(params, 'action')) {
               params.showAdvanced = true;
             }
             

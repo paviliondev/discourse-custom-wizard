@@ -9,10 +9,21 @@
 
 <div class="setting">
   <div class="setting-label">
-    <label>{{i18n 'admin.wizard.translation'}}</label>
+    <label>{{i18n 'admin.wizard.field.required'}}</label>
+  </div>
+  
+  <div class="setting-value">
+    <span>{{i18n 'admin.wizard.field.required_label'}}</span>
+    {{input type='checkbox' checked=field.required}}
+  </div>
+</div>
+
+<div class="setting">
+  <div class="setting-label">
+    <label>{{i18n 'admin.wizard.field.description'}}</label>
   </div>
   <div class="setting-value">
-    {{input name="key" value=field.key placeholderKey="admin.wizard.translation_placeholder"}}
+    {{textarea name="description" value=field.description}}
   </div>
 </div>
 
@@ -32,15 +43,6 @@
 
 <div class="setting">
   <div class="setting-label">
-    <label>{{i18n 'admin.wizard.field.description'}}</label>
-  </div>
-  <div class="setting-value">
-    {{textarea name="description" value=field.description}}
-  </div>
-</div>
-
-<div class="setting">
-  <div class="setting-label">
     <label>{{i18n 'admin.wizard.type'}}</label>
   </div>
   
@@ -52,17 +54,6 @@
       options=(hash
         none="admin.wizard.field.type"
       )}}
-  </div>
-</div>
-
-<div class="setting">
-  <div class="setting-label">
-    <label>{{i18n 'admin.wizard.field.required'}}</label>
-  </div>
-  
-  <div class="setting-value">
-    <span>{{i18n 'admin.wizard.field.required_label'}}</span>
-    {{input type='checkbox' checked=field.required}}
   </div>
 </div>
 
@@ -142,6 +133,7 @@
 
   {{#if field.showAdvanced}}
     <div class="advanced-settings">
+      
       {{#if isCategory}}
         <div class="setting">
           <div class="setting-label">
@@ -183,6 +175,16 @@
           </div>
         </div>
       {{/if}}
+      
+      <div class="setting">
+        <div class="setting-label">
+          <label>{{i18n 'admin.wizard.translation'}}</label>
+        </div>
+        <div class="setting-value">
+          {{input name="key" value=field.key placeholderKey="admin.wizard.translation_placeholder"}}
+        </div>
+      </div>
+      
     </div>
   {{/if}}
 {{/if}}
