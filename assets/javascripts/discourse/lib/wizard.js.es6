@@ -3,11 +3,11 @@ function selectKitContent(content) {
 }
 
 function generateName(id) {
-  return sentenceCase(id);
+  return id ? sentenceCase(id) : '';
 }
 
 function generateId(name) {
-  return snakeCase(name);
+  return name ? snakeCase(name) : '';
 }
 
 function sentenceCase(string) {
