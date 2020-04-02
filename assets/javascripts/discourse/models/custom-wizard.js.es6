@@ -1,6 +1,6 @@
 import { ajax } from 'discourse/lib/ajax';
 import EmberObject from "@ember/object";
-import { buildStepJson, buildJson, buildProperties } from '../lib/json';
+import { buildStepJson, buildJson, buildProperties } from '../lib/wizard-json';
 
 const CustomWizard = EmberObject.extend({
   save() {
@@ -34,7 +34,6 @@ const CustomWizard = EmberObject.extend({
           wizard: JSON.stringify(wizardJson)
         }
       }).then((result) => {
-        console.log('result: ', result);
         if (result.error) {
           reject(result);
         } else {

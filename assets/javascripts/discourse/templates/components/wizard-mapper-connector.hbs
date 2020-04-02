@@ -1,0 +1,10 @@
+{{#if single}}
+  <span class="connector-single">
+    {{connectorLabel}}
+  </span>
+{{else}}
+  {{combo-box
+    value=connector
+    content=connectors
+    onChange=(action (mut connector))}}
+{{/if}}

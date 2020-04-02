@@ -8,12 +8,9 @@
     options=options}}
 </div>
 
-<div class="mapper-connector mapper-block">
-  {{combo-box
-    value=pair.connector
-    content=connectors
-    onChange=(action (mut pair.connector))}}
-</div>
+{{wizard-mapper-connector
+  connector=pair.connector
+  connectors=connectors}}
 
 <div class="value mapper-block">
   {{wizard-mapper-selector

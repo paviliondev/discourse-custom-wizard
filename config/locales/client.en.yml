@@ -60,6 +60,7 @@ en:
         param_key: 'param'
         group: "Group"
         permitted: "Permitted"
+        advanced: "Advanced"
         
         editor:
           show: "Show"

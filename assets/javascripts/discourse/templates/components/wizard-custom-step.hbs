@@ -46,44 +46,51 @@
   </div>
 </div>
 
-<div class="setting full field-mapper-setting">
-  <div class="setting-label">
-    <label>{{i18n 'admin.wizard.step.required_data.label'}}</label>
-  </div>
-  <div class="setting-value">
-    {{wizard-mapper
-      inputs=step.required_data
-      keyPlaceholder="admin.wizard.submission_key"
-      options=(hash
-        pairConnector='equal'
-        wizardSelection='value'
-        userSelection='value'
-      )}}
-    {{#if step.required_data}}
-      <div class="required-data-message">
-        <div class="label">
-          {{i18n 'admin.wizard.step.required_data.not_permitted_message'}}
-        </div>
-        {{input value=step.required_data_message}}
-      </div>
-    {{/if}}
-  </div>
-</div>
+{{wizard-advanced-toggle showAdvanced=step.showAdvanced}}
 
-<div class="setting full field-mapper-setting">
-  <div class="setting-label">
-    <label>{{i18n 'admin.wizard.step.permitted_params.label'}}</label>
+{{#if step.showAdvanced}}
+  <div class="advanced-settings">
+    
+    <div class="setting full field-mapper-setting">
+      <div class="setting-label">
+        <label>{{i18n 'admin.wizard.step.required_data.label'}}</label>
+      </div>
+      <div class="setting-value">
+        {{wizard-mapper
+          inputs=step.required_data
+          keyPlaceholder="admin.wizard.submission_key"
+          options=(hash
+            wizardSelection='value'
+            userSelection='value'
+          )}}
+        {{#if step.required_data}}
+          <div class="required-data-message">
+            <div class="label">
+              {{i18n 'admin.wizard.step.required_data.not_permitted_message'}}
+            </div>
+            {{input value=step.required_data_message}}
+          </div>
+        {{/if}}
+      </div>
+    </div>
+
+    <div class="setting full field-mapper-setting">
+      <div class="setting-label">
+        <label>{{i18n 'admin.wizard.step.permitted_params.label'}}</label>
+      </div>
+      <div class="setting-value">
+        {{wizard-mapper
+          inputs=step.permitted_params
+          keyPlaceholder='admin.wizard.param_key'
+          valuePlaceholder='admin.wizard.submission_key'
+          options=(hash
+            pairConnector='set'
+          )}}
+      </div>
+    </div>
+    
   </div>
-  <div class="setting-value">
-    {{wizard-mapper
-      inputs=step.permitted_params
-      keyPlaceholder='admin.wizard.param_key'
-      valuePlaceholder='admin.wizard.submission_key'
-      options=(hash
-        pairConnector='set'
-      )}}
-  </div>
-</div>
+{{/if}}
 
 {{wizard-links type="field" current=currentField items=step.fields}}
 

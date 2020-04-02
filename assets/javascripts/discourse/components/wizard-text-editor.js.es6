@@ -2,7 +2,7 @@ import {
   default as discourseComputed,
   on
 } from 'discourse-common/utils/decorators';
-import { profileFields } from '../lib/custom-wizard';
+import { profileFields } from '../lib/wizard';
 import { scheduleOnce } from "@ember/runloop";
 
 export default Ember.Component.extend({

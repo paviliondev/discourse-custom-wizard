@@ -107,59 +107,7 @@
   </div>
 {{/if}}
 
-{{#if newTopicFields}}
-  <div class="setting full">
-    <div class="setting-label">
-      <label>{{i18n "admin.wizard.action.skip_redirect.label"}}</label>
-    </div>
-    
-    <div class="setting-value">
-      {{input type='checkbox' checked=action.skip_redirect}}
-      
-      <span>
-        {{i18n 'admin.wizard.action.skip_redirect.description' type='topic'}}
-      </span>
-    </div>
-  </div>
-{{/if}}
-
-{{#if basicTopicFields}}
-  <div class="setting full field-mapper-setting">
-    <div class="setting-label">
-      <label>{{i18n 'admin.wizard.action.custom_fields.label'}}</label>
-    </div>
-    
-    <div class="setting-value">
-      {{wizard-mapper
-        inputs=action.custom_fields
-        keyPlaceholder='admin.wizard.action.custom_fields.key'
-        options=(hash
-          pairConnector='set'
-          wizardSelection='value'
-          userSelection='value'
-        )}}
-    </div>
-  </div>
-{{/if}}
-
-{{#if sendMessage}}
-  <div class="setting full field-mapper-setting">
-    <div class="setting-label">
-      <label>{{i18n 'admin.wizard.required'}}</label>
-    </div>
-    
-    <div class="setting-value">
-      {{wizard-mapper
-        inputs=action.required
-        options=(hash
-          textSelection='value'
-          wizardSelection=true
-          userSelection=true
-          groupSelection=true
-        )}}
-    </div>
-  </div>
-  
+{{#if sendMessage}}  
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.send_message.recipient"}}</label>
@@ -172,7 +120,7 @@
           hasOutput=true
           textSelection='value,output'
           wizardSelection=true
-          userSelection=true
+          userSelection='key,value'
           groupSelection='key,value'
         )}}
     </div>
@@ -279,14 +227,79 @@
       {{input value=action.url}}
     </div>
   </div>
-  
-  <div class="setting">
-    <div class="setting-label">
-      <label>{{i18n "admin.wizard.action.route_to.code"}}</label>
+{{/if}}
+
+{{#if hasAdvanced}}
+  {{wizard-advanced-toggle showAdvanced=action.showAdvanced}}
+
+  {{#if action.showAdvanced}}
+    <div class="advanced-settings">
+      
+      {{#if basicTopicFields}}
+        <div class="setting full field-mapper-setting">
+          <div class="setting-label">
+            <label>{{i18n 'admin.wizard.action.custom_fields.label'}}</label>
+          </div>
+          
+          <div class="setting-value">
+            {{wizard-mapper
+              inputs=action.custom_fields
+              keyPlaceholder='admin.wizard.action.custom_fields.key'
+              options=(hash
+                pairConnector='set'
+                wizardSelection='value'
+                userSelection='value'
+              )}}
+          </div>
+        </div>
+      {{/if}}
+      
+      {{#if sendMessage}}
+        <div class="setting full field-mapper-setting">
+          <div class="setting-label">
+            <label>{{i18n 'admin.wizard.required'}}</label>
+          </div>
+          
+          <div class="setting-value">
+            {{wizard-mapper
+              inputs=action.required
+              options=(hash
+                textSelection='value'
+                wizardSelection=true
+                userSelection=true
+                groupSelection=true
+              )}}
+          </div>
+        </div>
+      {{/if}}
+      
+      {{#if newTopicFields}}
+        <div class="setting full">
+          <div class="setting-label">
+            <label>{{i18n "admin.wizard.action.skip_redirect.label"}}</label>
+          </div>
+          
+          <div class="setting-value">
+            {{input type='checkbox' checked=action.skip_redirect}}
+            
+            <span>
+              {{i18n 'admin.wizard.action.skip_redirect.description' type='topic'}}
+            </span>
+          </div>
+        </div>
+      {{/if}}
+      
+      {{#if routeTo}}
+        <div class="setting">
+          <div class="setting-label">
+            <label>{{i18n "admin.wizard.action.route_to.code"}}</label>
+          </div>
+          
+          <div class="setting-value">
+            {{input value=action.code}}
+          </div>
+        </div>
+      {{/if}}
     </div>
-    
-    <div class="setting-value">
-      {{input value=action.code}}
-    </div>
-  </div>
+  {{/if}}
 {{/if}}

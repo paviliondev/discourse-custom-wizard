@@ -1,5 +1,4 @@
-import { properties } from '../lib/custom-wizard';
-import { mappedProperties } from '../lib/mapper';
+import { properties, mappedProperties } from '../lib/wizard';
 import EmberObject from '@ember/object';
 
 function present(val) {
@@ -152,38 +151,36 @@ function buildObject(json, type) {
   }
   
   Object.keys(json).forEach(prop => {
-    if (mapped(prop, type)) {
+    if (mapped(prop, type) && present(json[prop])) {
       let inputs = [];
       
-      if (present(json[prop])) {
-        json[prop].forEach(inputJson => {
-          let input = {}
-          
-          Object.keys(inputJson).forEach(inputKey => {
-            if (inputKey === 'pairs') {
-              let pairs = [];
-              let pairCount = inputJson.pairs.length;
+      json[prop].forEach(inputJson => {
+        let input = {}
+        
+        Object.keys(inputJson).forEach(inputKey => {
+          if (inputKey === 'pairs') {
+            let pairs = [];
+            let pairCount = inputJson.pairs.length;
+            
+            inputJson.pairs.forEach(pairJson => {
+              let pair = pairJson;
+              pair.pairCount = pairCount;
               
-              inputJson.pairs.forEach(pairJson => {
-                let pair = pairJson;
-                pair.pairCount = pairCount;
-                
-                pairs.push(
-                  EmberObject.create(pair)
-                );
-              });
-              
-              input.pairs = pairs;
-            } else {
-              input[inputKey] = inputJson[inputKey];
-            }
-          });
-          
-          inputs.push(
-            EmberObject.create(input)
-          );
+              pairs.push(
+                EmberObject.create(pair)
+              );
+            });
+            
+            input.pairs = pairs;
+          } else {
+            input[inputKey] = inputJson[inputKey];
+          }
         });
-      }
+        
+        inputs.push(
+          EmberObject.create(input)
+        );
+      });
       
       params[prop] = Ember.A(inputs);
     } else {
@@ -192,6 +189,30 @@ function buildObject(json, type) {
   });
   
   return EmberObject.create(params);
+}
+
+function isAdvancedWizard(property, value) {
+  if (property === 'save_submissions' && value == false) return true;
+  if (property === 'restart_on_revisit' && value == true) return true;
+  return false;
+}
+
+function isAdvancedStep(property, value) {
+  return mapped(property, 'step') && present(value);
+}
+
+function isAdvancedField(params) {
+  if (present(params.property)) return true;
+  if (present(params.prefill)) return true;
+  if (present(params.content)) return true;
+  return false;
+}
+
+function isAdvancedAction(params) {
+  if (present(params.code)) return true;
+  if (present(params.custom_fields)) return true;
+  if (present(params.skip_redirect)) return true;
+  return false;
 }
 
 function buildProperties(json) {
@@ -206,6 +227,10 @@ function buildProperties(json) {
 
     properties.wizard.forEach((p) => {
       props[p] = json[p];
+      
+      if (isAdvancedWizard(p, json[p])) {
+        props.showAdvanced = true;
+      }
     });
 
     if (present(json.steps)) {
@@ -216,15 +241,23 @@ function buildProperties(json) {
         
         properties.step.forEach((p) => {
           stepParams[p] = stepJson[p];
+                    
+          if (isAdvancedStep(p, stepJson[p])) {
+            stepParams.showAdvanced = true;
+          }
         });
         
         stepParams.fields = Ember.A();
         
         if (present(stepJson.fields)) {
           stepJson.fields.forEach((f) => {
-            stepParams.fields.pushObject(
-              buildObject(f, 'field')
-            );
+            let params = buildObject(f, 'field');
+            
+            if (isAdvancedField(params)) {
+              params.showAdvanced = true;
+            }
+            
+            stepParams.fields.pushObject(params);
           });
         }
 
@@ -232,9 +265,13 @@ function buildProperties(json) {
         
         if (present(stepJson.actions)) {
           stepJson.actions.forEach((a) => {
-            stepParams.actions.pushObject(
-              buildObject(a, 'action')
-            );
+            let params = buildObject(a, 'action');
+            
+            if (isAdvancedAction(params)) {
+              params.showAdvanced = true;
+            }
+            
+            stepParams.actions.pushObject(params);
           });
         }
 

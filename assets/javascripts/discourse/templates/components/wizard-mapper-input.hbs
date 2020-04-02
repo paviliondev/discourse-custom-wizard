@@ -1,10 +1,8 @@
 {{#if hasOutput}}  
-  <div class="mapper-connector mapper-block">
-    {{combo-box
-      value=input.type
-      content=inputTypes
-      onChange=(action (mut input.type))}}
-  </div>
+  {{wizard-mapper-connector
+    connector=input.type
+    connectors=inputTypes
+    inputTypes=true}}
 {{/if}}
 
 {{#if hasPairs}}
@@ -30,12 +28,9 @@
 
 {{#if hasOutput}}
   {{#if hasPairs}}
-    <div class="mapper-connector mapper-block">
-      {{combo-box
-        value=input.connector
-        content=connectors
-        onChange=(action (mut input.connector))}}
-    </div>
+    {{wizard-mapper-connector
+      connector=input.connector
+      connectors=connectors}}
   {{/if}}
 
   <div class="output mapper-block">

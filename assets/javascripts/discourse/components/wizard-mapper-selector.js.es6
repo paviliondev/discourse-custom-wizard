@@ -2,7 +2,7 @@ import { alias } from "@ember/object/computed";
 import { computed } from "@ember/object";
 import { default as discourseComputed, observes } from "discourse-common/utils/decorators";
 import { getOwner } from 'discourse-common/lib/get-owner';
-import { defaultSelectionType } from '../lib/mapper'; 
+import { defaultSelectionType } from '../lib/wizard-mapper'; 
 
 export default Ember.Component.extend({
   classNames: 'mapper-selector',

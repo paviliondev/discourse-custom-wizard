@@ -4,7 +4,7 @@ import {
   generateSelectKitContent,
   profileFields,
   generateName
-} from '../lib/custom-wizard';
+} from '../lib/wizard';
 import DiscourseRoute from "discourse/routes/discourse";
 
 export default DiscourseRoute.extend({
@@ -95,6 +95,7 @@ export default DiscourseRoute.extend({
   setupController(controller, model) {
     const newWizard = this.get('newWizard');
     const steps = model.get('steps') || [];
+    
     controller.setProperties({
       newWizard,
       model,

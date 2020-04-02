@@ -48,26 +48,7 @@
   </div>
   
   <div class="wizard-settings">
-    <div class="setting">
-      <div class="setting-label">
-        <label>{{i18n 'admin.wizard.save_submissions'}}</label>
-      </div>
-      <div class="setting-value">
-        {{input type='checkbox' checked=model.save_submissions}}
-        <span>{{i18n 'admin.wizard.save_submissions_label'}}</span>
-      </div>
-    </div>
-
-    <div class="setting">
-      <div class="setting-label">
-        <label>{{i18n 'admin.wizard.multiple_submissions'}}</label>
-      </div>
-      <div class="setting-value">
-        {{input type='checkbox' checked=model.multiple_submissions}}
-        <span>{{i18n 'admin.wizard.multiple_submissions_label'}}</span>
-      </div>
-    </div>
-
+    
     <div class="setting">
       <div class="setting-label">
         <label>{{i18n 'admin.wizard.required'}}</label>
@@ -90,11 +71,11 @@
     
     <div class="setting">
       <div class="setting-label">
-        <label>{{i18n 'admin.wizard.restart_on_revisit'}}</label>
+        <label>{{i18n 'admin.wizard.multiple_submissions'}}</label>
       </div>
       <div class="setting-value">
-        {{input type='checkbox' checked=model.restart_on_revisit}}
-        <span>{{i18n 'admin.wizard.restart_on_revisit_label'}}</span>
+        {{input type='checkbox' checked=model.multiple_submissions}}
+        <span>{{i18n 'admin.wizard.multiple_submissions_label'}}</span>
       </div>
     </div>
 
@@ -138,7 +119,36 @@
             textSelection='key,value'
           )}}
       </div>
+      
     </div>
+    
+    {{wizard-advanced-toggle showAdvanced=model.showAdvanced}}
+    
+    {{#if model.showAdvanced}}
+      <div class="advanced-settings">
+        
+        <div class="setting">
+          <div class="setting-label">
+            <label>{{i18n 'admin.wizard.save_submissions'}}</label>
+          </div>
+          <div class="setting-value">
+            {{input type='checkbox' checked=model.save_submissions}}
+            <span>{{i18n 'admin.wizard.save_submissions_label'}}</span>
+          </div>
+        </div>
+        
+        <div class="setting">
+          <div class="setting-label">
+            <label>{{i18n 'admin.wizard.restart_on_revisit'}}</label>
+          </div>
+          <div class="setting-value">
+            {{input type='checkbox' checked=model.restart_on_revisit}}
+            <span>{{i18n 'admin.wizard.restart_on_revisit_label'}}</span>
+          </div>
+        </div>
+        
+      </div>
+    {{/if}}
   </div>
 
   {{wizard-links type="step" current=currentStep items=model.steps}}

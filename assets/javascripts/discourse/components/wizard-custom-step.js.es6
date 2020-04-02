@@ -1,5 +1,6 @@
 import { observes, on, default as discourseComputed } from 'discourse-common/utils/decorators';
 import { not } from "@ember/object/computed";
+import EmberObject from "@ember/object";
 
 export default Ember.Component.extend({
   classNames: 'wizard-custom-step',
@@ -31,7 +32,7 @@ export default Ember.Component.extend({
     actions.forEach(a => {
       if (a.type === 'route_to' && a.code) {
         content.push(
-          Ember.Object.create({
+          EmberObject.create({
             id: a.code,
             label: "code (Route To)"
           })

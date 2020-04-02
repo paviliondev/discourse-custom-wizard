@@ -52,11 +52,6 @@
 
 .add-mapper-input {
   display: block;
-  
-  .btn {
-    background-color: $secondary;
-    border: 1px solid $primary-medium;
-  }
 }
 
 .mapper-input + .add-mapper-input {
@@ -68,23 +63,27 @@
   min-width: 40px;
   
   .select-kit .select-kit-header {
-    padding: 0 0.5em;
     display: flex;
     justify-content: center;
-    
-    .caret-icon {
-      display: none;
-    }
+  }
+  
+  &.single {
+    height: 28px;
+    background: $secondary;
+    border: 1px solid $primary-medium;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 
 .mapper-selector {
   width: 100%;
-  max-width: 160px;
-  min-width: 160px;
+  max-width: 150px;
+  min-width: 150px;
   
   input, .select-kit {
-    width: 160px;
+    width: 150px;
   }
   
   .type-selector {

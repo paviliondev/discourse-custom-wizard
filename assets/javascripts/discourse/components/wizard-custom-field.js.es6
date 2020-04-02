@@ -1,6 +1,6 @@
 import { default as discourseComputed, observes, on } from 'discourse-common/utils/decorators';
 import { equal, not, or } from "@ember/object/computed";
-import { generateSelectKitContent } from '../lib/custom-wizard';
+import { generateSelectKitContent } from '../lib/wizard';
 
 export default Ember.Component.extend({
   classNames: 'wizard-custom-field',
@@ -16,6 +16,7 @@ export default Ember.Component.extend({
   categoryPropertyTypes: generateSelectKitContent(['id', 'slug']),
   prefillEnabled: or('isCategory', 'isTag', 'isGroup'),
   contentEnabled: or('isCategory', 'isTag', 'isGroup'),
+  hasAdvanced: or('isCategory', 'isTag', 'isGroup'),
 
   @discourseComputed('field.type')
   isInput: (type) => type === 'text' || type === 'textarea' || type === 'url',

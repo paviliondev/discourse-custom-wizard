@@ -1,13 +1,20 @@
 import { default as discourseComputed, observes } from 'discourse-common/utils/decorators';
 import { notEmpty } from "@ember/object/computed";
 import showModal from 'discourse/lib/show-modal';
-import { generateId } from '../lib/custom-wizard';
-import { buildProperties } from '../lib/json';
+import { generateId } from '../lib/wizard';
+import { buildProperties } from '../lib/wizard-json';
 import { dasherize } from "@ember/string";
+import EmberObject from "@ember/object";
+import { scheduleOnce } from "@ember/runloop";
 
 export default Ember.Controller.extend({
   hasName: notEmpty('model.name'),
   
+  init() {
+    this._super();
+    scheduleOnce('afterRender', () => ($("body").addClass('admin-wizard')));
+  },
+    
   @observes('model.name')
   setId() {
     if (!this.model.existingId) this.set('model.id', generateId(this.model.name));
@@ -38,7 +45,7 @@ export default Ember.Controller.extend({
     steps.forEach((s) => {
       if (s.fields && s.fields.length > 0) {
         let stepFields = s.fields.map((f) => {
-          return Ember.Object.create({
+          return EmberObject.create({
             id: f.id,
             label: `${f.id} (${s.id})`,
             type: f.type
@@ -98,5 +105,9 @@ export default Ember.Controller.extend({
 
       controller.setup();
     },
+    
+    toggleAdvanced() {
+      this.toggleProperty('model.showAdvanced');
+    }
   }
 });

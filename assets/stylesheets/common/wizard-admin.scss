@@ -4,6 +4,12 @@
 
 $setting-background: dark-light-diff($primary, $secondary, 96%, -65%);
 
+body.admin-wizard {
+  .boxed.white {
+    background-color: initial;
+  }
+}
+
 .wizard-list {
   float: left;
   width: 250px;
@@ -12,8 +18,8 @@ $setting-background: dark-light-diff($primary, $secondary, 96%, -65%);
 
 .wizard-settings-parent {
   margin-bottom: 30px;
-  padding: 30px;
-  background-color: $setting-background;
+  padding: 20px;
+  border: 1px solid $primary-medium;
 }
 
 .wizard-settings-group {
@@ -32,8 +38,27 @@ $setting-background: dark-light-diff($primary, $secondary, 96%, -65%);
 
 .wizard-basic-details,
 .wizard-custom-field,
-.wizard-custom-action {
+.wizard-custom-action,
+.advanced-settings {
   @extend .wizard-settings-group;
+}
+
+.wizard-custom-field,
+.wizard-custom-action {
+  position: relative;
+  background: transparent;
+  background-color: $setting-background;
+  padding: 20px;
+}
+
+.wizard-links {
+  &.action, &.field {
+    margin-top: 50px;
+  }
+}
+
+.wizard-settings > .advanced-settings > div.setting {
+  margin-bottom: 0;
 }
 
 .admin-wizard.settings .wizard-basic-details {
@@ -99,13 +124,18 @@ $setting-background: dark-light-diff($primary, $secondary, 96%, -65%);
 .admin-wizard.settings {
   margin-top: 10px;
   margin-left: 30px;
-
+  
   [class~='setting'] {
     display: inline-flex;
     align-items: flex-start;
     width: 48%;
     margin-bottom: 30px;
     padding-bottom: 0;
+    position: relative;
+    
+    &:last-of-type {
+      margin-bottom: 0;
+    }
 
     .setting-label {
       width: 80px;
@@ -144,6 +174,7 @@ $setting-background: dark-light-diff($primary, $secondary, 96%, -65%);
       
       input[type="number"] {
         width: 70px;
+        margin-bottom: 0;
       }
       
       input.medium {
@@ -198,9 +229,8 @@ $setting-background: dark-light-diff($primary, $secondary, 96%, -65%);
         display: flex;
         align-items: center;
         
-        input[type='checkbox'],
-        span {
-          margin: 0 10px 0 0;
+        input {
+          margin: 0 7px 0 0;
         }
         
         button {
@@ -215,6 +245,15 @@ $setting-background: dark-light-diff($primary, $secondary, 96%, -65%);
 
     .setting-gutter {
       margin-top: 5px;
+    }
+  }
+  
+  .advanced-settings {
+    width: 100%;
+    margin-top: 30px;
+    
+    [class~='setting']:first-of-type {
+      border-top: none;
     }
   }
   
@@ -365,11 +404,11 @@ $setting-background: dark-light-diff($primary, $secondary, 96%, -65%);
 
 .admin-contents .wizard-submissions {
   width: 100%;
-  display: inline-block;
+  margin-top: 10px;
+  margin-left: 30px;
   
   table {
     margin-top: 0;
-    position: absolute;
   }
 }
 
@@ -470,3 +509,11 @@ $setting-background: dark-light-diff($primary, $secondary, 96%, -65%);
   height: unset !important;
 }
 
+.wizard-advanced-toggle {
+  width: 100%;
+}
+
+.add-mapper-input .btn, .btn-after-time, .wizard-editor-gutter .btn {
+  background-color: $secondary;
+  border: 1px solid $primary-medium;
+}

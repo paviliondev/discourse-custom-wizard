@@ -1,27 +1,4 @@
-const mappedProperties = {
-  wizard: [
-    'permitted'
-  ],
-  step: [
-    'required_data',
-    'permitted_params'
-  ],
-  field: [
-    'choices',
-    'prefill',
-    'content'
-  ],
-  action: [
-    'title',
-    'category',
-    'tags',
-    'custom_fields',
-    'required',
-    'recipient',
-    'profile_updates',
-    'group'
-  ]
-}
+import EmberObject from "@ember/object";
 
 // Inputs
 
@@ -67,25 +44,28 @@ const connectors = {
   ]
 }
 
-function connectorItem(connector) {
-  return {
-    id: connector, 
-    name: I18n.t(`admin.wizard.connector.${connector}`) 
-  };
-}
-
 function defaultConnector(connectorType, inputType, opts = {}) {
   if (opts[`${connectorType}Connector`]) return opts[`${connectorType}Connector`];  
-  if (inputType === 'assignment') return 'set';
-  return connectorType === 'output' ? 'then' : 'equal';
+  if (inputType === 'assignment' && connectorType === 'output') return 'set';
+  if (inputType === 'conditional' && connectorType === 'output') return 'then';
+  if (inputType === 'conditional' && connectorType === 'pair') return 'equal';
+  if (inputType === 'pair') return 'equal';
 }
 
 function connectorContent(connectorType, inputType, opts) {
-  let connector = opts[`${connectorType}Connector`] || defaultConnector(connectorType, inputType, opts);
-  if (connector) return [connectorItem(connector)];
+  let connector = opts[`${connectorType}Connector`];
   
-  return connectors[connectorType].map(function(connector) {
-    return connectorItem(connector);
+  if (!connector && connectorType === 'output') {
+    connector = defaultConnector(connectorType, inputType, opts);
+  }
+  
+  let content = connector ? [connector] : connectors[connectorType];
+  
+  return content.map(function(item) {
+    return {
+      id: item, 
+      name: I18n.t(`admin.wizard.connector.${item}`) 
+    };
   });
 }
 
@@ -113,6 +93,7 @@ function defaultSelectionType(inputType, options = {}) {
     if (inputTypes === true || 
         ((typeof inputTypes === 'string') &&
          inputTypes.split(',').indexOf(inputType) > -1)) {
+      
       type = t;
       break;
     }
@@ -134,7 +115,7 @@ function newPair(inputType, options = {}) {
     connector: defaultConnector('pair', inputType, options)
   }
     
-  return Ember.Object.create(params);
+  return EmberObject.create(params);
 }
 
 function newInput(options = {}) {
@@ -160,11 +141,10 @@ function newInput(options = {}) {
     params['connector'] = defaultConnector('output', inputType, options);
   }
     
-  return Ember.Object.create(params);
+  return EmberObject.create(params);
 }
 
 export {
-  mappedProperties,
   defaultInputType,
   defaultSelectionType,
   connectorContent,

@@ -1,6 +1,6 @@
 import { computed, set } from "@ember/object";
 import { alias, equal } from "@ember/object/computed";
-import { newPair, connectorContent, inputTypesContent } from '../lib/mapper';
+import { newPair, connectorContent, inputTypesContent } from '../lib/wizard-mapper';
 
 export default Ember.Component.extend({
   classNameBindings: [':mapper-input', 'type'],

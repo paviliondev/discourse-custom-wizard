@@ -75,6 +75,7 @@ const actionProperties = [
   'type',
   'title',
   'post',
+  'post_builder',
   'post_template',
   'category',
   'tags',
@@ -98,6 +99,31 @@ const properties = {
   action: actionProperties
 }
 
+const mappedProperties = {
+  wizard: [
+    'permitted'
+  ],
+  step: [
+    'required_data',
+    'permitted_params'
+  ],
+  field: [
+    'choices',
+    'prefill',
+    'content'
+  ],
+  action: [
+    'title',
+    'category',
+    'tags',
+    'custom_fields',
+    'required',
+    'recipient',
+    'profile_updates',
+    'group'
+  ]
+}
+
 const actionTypes = [
   'create_topic',
   'update_profile',
@@ -116,6 +142,7 @@ export {
   generateId,
   properties,
   wizardProperties,
+  mappedProperties,
   profileFields,
   actionTypes
 };

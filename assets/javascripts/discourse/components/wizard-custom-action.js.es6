@@ -1,11 +1,11 @@
-import { default as discourseComputed, observes } from 'discourse-common/utils/decorators';
-import { equal, not, empty } from "@ember/object/computed";
+import { default as discourseComputed, observes, on } from 'discourse-common/utils/decorators';
+import { equal, not, empty, or } from "@ember/object/computed";
 import {
   actionTypes,
   generateName,
   generateSelectKitContent,
   profileFields
-} from '../lib/custom-wizard';
+} from '../lib/wizard';
 
 export default Ember.Component.extend({
   classNames: 'wizard-custom-action',
@@ -19,6 +19,13 @@ export default Ember.Component.extend({
   routeTo: equal('action.type', 'route_to'),
   disableId: not('action.isNew'),
   groupPropertyTypes: generateSelectKitContent(['id', 'name']),
+  hasAdvanced: or('basicTopicFields', 'routeTo'),
+  
+  @on('didInsertElement')
+  @observes('action.type')
+  updateId() {
+    if (this.action.type) this.set('action.id', generateName(this.action.type));
+  },
 
   @discourseComputed('action.type')
   basicTopicFields(actionType) {

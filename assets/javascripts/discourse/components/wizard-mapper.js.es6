@@ -1,6 +1,6 @@
 import { getOwner } from 'discourse-common/lib/get-owner';
 import { on } from 'discourse-common/utils/decorators';
-import { newInput } from '../lib/mapper';
+import { newInput } from '../lib/wizard-mapper';
 import { default as discourseComputed } from 'discourse-common/utils/decorators';
 
 export default Ember.Component.extend({

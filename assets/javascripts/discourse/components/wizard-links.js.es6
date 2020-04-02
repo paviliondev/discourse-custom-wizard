@@ -1,6 +1,7 @@
 import { default as computed, on, observes } from 'discourse-common/utils/decorators';
 import { notEmpty } from "@ember/object/computed";
 import { scheduleOnce } from "@ember/runloop";
+import EmberObject from "@ember/object";
 
 export default Ember.Component.extend({
   classNameBindings: [':wizard-links', 'type'],
@@ -67,7 +68,7 @@ export default Ember.Component.extend({
         params['actions'] = Ember.A();
       };
 
-      const newItem = Ember.Object.create(params);
+      const newItem = EmberObject.create(params);
       items.pushObject(newItem);
       this.set('current', newItem);
     },

@@ -3,15 +3,15 @@ import getUrl from 'discourse-common/lib/get-url';
 import WizardField from 'wizard/models/wizard-field';
 import { ajax } from 'wizard/lib/ajax';
 import Step from 'wizard/models/step';
+import EmberObject from "@ember/object";
 
-const CustomWizard = Ember.Object.extend({
+const CustomWizard = EmberObject.extend({
   @computed('steps.length')
   totalSteps: length => length,
 
   skip() {
-    if (this.get('required') && (!this.get('completed') && this.get('permitted'))) return;
-    const id = this.get('id');
-    CustomWizard.skip(id);
+    if (this.required && (!this.completed && this.permitted)) return;
+    CustomWizard.skip(this.id);
   },
 });
 
@@ -70,7 +70,7 @@ export function findCustomWizard(wizardId, params = {}) {
             subcatMap[c.parent_category_id] || [];
           subcatMap[c.parent_category_id].push(c.id);
         }
-        return (categoriesById[c.id] = Ember.Object.create(c));
+        return (categoriesById[c.id] = EmberObject.create(c));
       });
 
       // Associate the categories with their parents

@@ -20,144 +20,69 @@ class CustomWizard::Action
   end
   
   def create_topic
-    if action['custom_title_enabled']
-      title = mapper.interpolate(action['custom_title'])
-    else
-      title = data[action['title']]
-    end
+    params = basic_topic_params
     
-    if action['post_builder']
-      post = mapper.interpolate(action['post_template'])
-    else
-      post = data[action['post']]
-    end
+    byebug
     
-    if title
-      params = {
-        title: title,
-        raw: post,
-        skip_validations: true
-      }
-
-      params[:category] = action_category_id(action, data)
-      tags = action_tags(action, data)
-      params[:tags] = tags
+    if params[:title] && params[:raw]
+      params[:category] = action_category
+      params[:tags] = action_tags
       
-      if action['add_fields']
-        action['add_fields'].each do |field|
-          value = field['value_custom'].present? ? field['value_custom'] : data[field['value']]
-          key = field['key']
-          
-          if key && (value.present? || value === false)
-            if key.include?('custom_fields')
-              keyArr = key.split('.')
-
-              if keyArr.length === 3
-                custom_key = keyArr.last
-                type = keyArr.first
-
-                if type === 'topic'
-                  params[:topic_opts] ||= {}
-                  params[:topic_opts][:custom_fields] ||= {}
-                  params[:topic_opts][:custom_fields][custom_key] = value
-                elsif type === 'post'
-                  params[:custom_fields] ||= {}
-                  params[:custom_fields][custom_key.to_sym] = value
-                end
-              end
-            else
-              value = [*value] + [*tags] if key === 'tags'
-              params[key.to_sym] = value
-            end
-          end
-        end
-      end
+      byebug
 
       creator = PostCreator.new(user, params)
       post = creator.create
 
       if creator.errors.present?
         updater.errors.add(:create_topic, creator.errors.full_messages.join(" "))
-      else
-
-        unless action['skip_redirect']
-          data['redirect_on_complete'] = post.topic.url
-        end
+      elsif action['skip_redirect'].blank?
+        data['redirect_on_complete'] = post.topic.url
       end
     end
   end
   
   def send_message
-    if action['required'].present? && data[action['required']].blank?
-      return
-    end
+    return if action['required'].present? && data[action['required']].blank?
     
-    if action['custom_title_enabled']
-      title = mapper.interpolate(action['custom_title'])
-    else
-      title = data[action['title']]
-    end
-
-    if action['post_builder']
-      post = mapper.interpolate(action['post_template'])
-    else
-      post = data[action['post']]
-    end
-
-    if title && post
-      creator = PostCreator.new(user,
-        title: title,
-        raw: post,
-        archetype: Archetype.private_message,
-        target_usernames: action['username']
-      )
-
+    params = basic_topic_params
+    params[:target_usernames] = CustomWizard::Mapper.new(
+      inputs: action['recipient'],
+      data: data,
+      user: user,
+      opts: {
+        multiple: true
+      }
+    ).output
+    
+    if params[:title] && params[:raw]
+      params[:archetype] = Archetype.private_message
+      
+      creator = PostCreator.new(user, params)
       post = creator.create
 
       if creator.errors.present?
         updater.errors.add(:send_message, creator.errors.full_messages.join(" "))
-      else
-        unless action['skip_redirect']
-          data['redirect_on_complete'] = post.topic.url
-        end
+      elsif action['skip_redirect'].blank?
+        data['redirect_on_complete'] = post.topic.url
       end
     end
   end
 
   def update_profile
-    return unless action['profile_updates'].length
+    return unless (profile_updates = action['profile_updates']).length
 
-    attributes = {}
-    custom_fields = {}
+    attributes = { custom_fields: {} }
 
-    action['profile_updates'].each do |pu|
-      value = pu['value']
-      key = pu['key']
+    profile_updates.each do |pu|
+      pair = field['pairs'].first
+      field = mapper.map_field(pair['key'], pair['key_type'])
+      value = mapper.map_field(pair['value'], pair['value_type'])
       
-      return if data[key].blank?
-
-      if user_field || custom_field
-        custom_fields[user_field || custom_field] = data[key]
+      if field.include?("custom_field")
+        attributes[:custom_fields][field] = value
       else
-        updater_key = value
-        if ['profile_background', 'card_background'].include?(value)
-          updater_key = "#{value}_upload_url"
-        end
-        attributes[updater_key.to_sym] = data[key] if updater_key
+        attributes[field.to_sym] = value
       end
-
-      if ['user_avatar'].include?(value)
-        this_upload_id = data[key][:id]
-        user.create_user_avatar unless user.user_avatar
-        user.user_avatar.custom_upload_id = this_upload_id
-        user.uploaded_avatar_id = this_upload_id
-        user.save!
-        user.user_avatar.save!
-      end
-    end
-
-    if custom_fields.present?
-      attributes[:custom_fields] = custom_fields
     end
     
     if attributes.present?
@@ -205,7 +130,7 @@ class CustomWizard::Action
     
     url += "&body=#{post}"
     
-    if category_id = action_category_id
+    if category_id = action_category
       if category = Category.find(category_id)
         url += "&category=#{category.full_slug('/')}"
       end
@@ -249,35 +174,92 @@ class CustomWizard::Action
 
   def route_to
     url = mapper.interpolate(action['url'])
+    
     if action['code']
       data[action['code']] = SecureRandom.hex(8)
       url += "&#{action['code']}=#{data[action['code']]}"
     end
+    
     data['route_to'] = URI.encode(url)
   end
   
-  def action_category_id
-    if action['custom_category_enabled']
-      if action['custom_category_wizard_field']
-        data[action['category_id']]
-      elsif action['custom_category_user_field_key']
-        if action['custom_category_user_field_key'].include?('custom_fields')
-          field = action['custom_category_user_field_key'].split('.').last
-          user.custom_fields[field]
-        else
-          user.send(action['custom_category_user_field_key'])
-        end
-      end
-    else
-      action['category_id']
+  private
+  
+  def action_category
+    output = CustomWizard::Mapper.new(
+      inputs: action['category'],
+      data: data,
+      user: user
+    ).output
+    
+    if output.is_a?(Array)
+      output.first
+    elsif output.is_a?(Integer)
+      output
+    elsif output.is_a?(String)
+      output.to_i
     end
   end
   
   def action_tags
-    if action['custom_tag_enabled']
-      data[action['custom_tag_field']]
-    else
-      action['tags']
+    output = CustomWizard::Mapper.new(
+      inputs: action['tags'],
+      data: data,
+      user: user,
+    ).output
+    
+    if output.is_a?(Array)
+      output.flatten
+    elsif output.is_a?(Integer)
+      [*output]
+    elsif output.is_a?(String)
+      [*output.to_i]
     end
+  end
+  
+  def add_custom_fields(params = {})
+    if (custom_fields = action['custom_fields']).present?
+      custom_fields.each do |field|
+        pair = field['pairs'].first
+        value = mapper.map_field(pair['key'], pair['key_type'])
+        key = mapper.map_field(pair['value'], pair['value_type'])
+        
+        if key && 
+          value.present? &&
+          (keyArr = key.split('.')).length === 2
+
+          if keyArr.first === 'topic'
+            params[:topic_opts] ||= {}
+            params[:topic_opts][:custom_fields] ||= {}
+            params[:topic_opts][:custom_fields][keyArr.last] = value
+          elsif keyArr.first === 'post'
+            params[:custom_fields] ||= {}
+            params[:custom_fields][keyArr.last.to_sym] = value
+          end
+        end
+      end
+    end
+    
+    params
+  end
+  
+  def basic_topic_params
+    params = {
+      skip_validations: true
+    }
+    
+    params[:title] = CustomWizard::Mapper.new(
+      inputs: action['title'],
+      data: data,
+      user: user
+    ).output
+
+    params[:raw] = action['post_builder'] ?
+      mapper.interpolate(action['post_template']) :
+      data[action['post']]
+    
+    params = add_custom_fields(params)
+    
+    params
   end
 end
