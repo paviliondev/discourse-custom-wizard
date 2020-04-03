@@ -1,6 +1,186 @@
-// datepicker
-
 @import "wizard_variables";
+
+// event form
+
+.event-form {
+  width: 585px;
+  max-width: 80vw;
+  
+  .control {
+    display: inline-flex;
+    align-items: flex-start;
+    min-height: 30px;
+    margin-right: 20px;
+    
+    > input:first-child {
+      margin-top: 10px !important;
+    }
+    
+    > span:first-child {
+      margin-top: 5px !important;
+    }
+    
+    > input + span {
+      margin-top: 5px;
+    }
+    
+    &:last-of-type {
+      margin-right: 0;
+    }
+    
+    input[type="checkbox"] {
+      margin: 0 10px 0 0;
+    }
+    
+    input[type="number"] {
+      width: 50px;
+      margin: 0;
+      min-height: 34px;
+      border: 1px solid #e9e9e9;
+    }
+    
+    &.full-width {
+      flex: 1;
+    }
+    
+    .select-kit, .ac-wrap {
+      width: 100% !important;
+      max-width: 330px;
+    }
+    
+    .select-kit-body {
+      width: 100% !important;
+      max-width: 330px;
+    }
+  }
+  
+  .event-controls {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  .datetime-controls {
+    display: flex;
+    margin-bottom: 5px;
+    
+    .date-time-card {
+      width: 270px;
+      display: inline-block;
+      text-align: left;
+    }
+
+    .start-card {
+      border-left: 1px solid transparent;
+      padding-right: 20px;
+    }
+
+    .end-card {
+      border-left: 1px solid #eee;
+      padding-left: 20px;
+      
+      &.disabled {
+        span, label, .pika-label, .pika-table th, .pika-button, .pika-prev, .pika-next, input, .pika-lendar, .is-selected .pika-button {
+          color: $primary-low;
+          background-image: initial;
+          background: initial;
+          box-shadow: initial;
+          cursor: default;
+          pointer-events: none;
+        }
+        
+        input, .pika-lendar {
+          border: 1px solid $primary-low !important;
+        }
+      }
+    }
+
+    .set-all-day {
+      font-size: 1.2em;
+      padding-bottom: 13px;
+    }
+
+    .sub-title {
+      font-size: 1.2em;
+      font-weight: bold;
+      padding-bottom: 2px;
+      padding-right: 10px;
+    }
+
+    .date-time-set {
+      padding-top: 10px;
+      display: flex;
+      flex-direction: row;
+
+      .date-area {
+        order: 1;
+      }
+
+      .time-area {
+        order: 2;
+        margin-left: 10px;
+
+        .modal-time {
+          width: 127px;
+        }
+      }
+      
+      input {
+        padding: 4px 10px;
+        font-size: 1em;
+        line-height: 1;
+        color: $primary;
+        border: 1px solid $primary-medium;
+        min-height: 30px;
+        width: 130px;
+        margin: 10px 0;
+      }
+    }
+    
+    #date-container-start,
+    #date-container-end {
+      height: 250px;
+    }
+
+    .ui-timepicker-input {
+      width: 105px;
+      text-align: center;
+    }
+
+    .pika-single {
+      position: relative !important;
+      border: none;
+      z-index: 100;
+
+      .pika-lendar {
+        border: 1px solid $primary-medium;
+        padding: 14px;
+        margin: 0;
+        float: none;
+        width: auto;
+      }
+    }
+  }
+
+  .rsvp-controls {
+    
+    .rsvp-container {
+      display: flex;
+      flex-flow: wrap;
+      margin-top: 10px;
+              
+      .control span {
+        margin-right: 10px;
+      }
+      
+      .full-width {
+        align-items: flex-start;
+      }
+    }
+  }
+}
+
+// datepicker
 
 /*!
  * Pikaday
