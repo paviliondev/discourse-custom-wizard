@@ -182,7 +182,7 @@ class CustomWizard::Wizard
     if (records = filter_records('prompt_completion')).any?
       records.reduce([]) do |result, record|
         wizard = CustomWizard::Wizard.new(user, ::JSON.parse(record.value))
-        result.push(id: id, name: name) if !wizard.completed?
+        result.push(id: wizard.id, name: wizard.name) if !wizard.completed?
         result
       end
     else
