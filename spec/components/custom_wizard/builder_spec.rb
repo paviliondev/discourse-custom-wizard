@@ -28,8 +28,6 @@ describe CustomWizard::Builder do
   let(:text_only_field) {{"id": "text_only","type": "text-only","label": "Text only"}}
   let(:upload_field) {{"id": "upload","type": "upload","file_types": ".jpg,.png,.pdf","label": "Upload"}}
   let(:user_selector_field) {{"id": "user_selector","type": "user-selector","label": "User selector"}}
-  let(:dropdown_custom_field) {{"id": "dropdown_custom","type": "dropdown","choices_type": "custom","choices": [{"key": "option_1","value": "Option 1"},{"key": "option_2","value": "Option 2"}]}}
-  let(:dropdown_translation_field) {{"id": "dropdown_translation","type": "dropdown","choices_type": "translation","choices_key": "key1.key2"}}
   let(:create_topic_action) {{"id":"create_topic","type":"create_topic","title":"text","post":"textarea"}}
   let(:send_message_action) {{"id":"send_message","type":"send_message","title":"text","post":"textarea","username":"angus"}}
   let(:route_to_action) {{"id":"route_to","type":"route_to","url":"https://google.com"}}

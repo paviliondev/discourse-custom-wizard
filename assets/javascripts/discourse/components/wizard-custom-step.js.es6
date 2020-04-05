@@ -1,8 +1,9 @@
 import { observes, on, default as discourseComputed } from 'discourse-common/utils/decorators';
 import { not } from "@ember/object/computed";
 import EmberObject from "@ember/object";
+import Component from "@ember/component";
 
-export default Ember.Component.extend({
+export default Component.extend({
   classNames: 'wizard-custom-step',
   currentField: null,
   currentAction: null,

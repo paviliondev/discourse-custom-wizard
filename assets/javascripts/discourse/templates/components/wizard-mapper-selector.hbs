@@ -1,52 +1,10 @@
 <div class="type-selector">
-  {{#if textEnabled}}
+  {{#each selectorTypes as |type|}}
     {{wizard-mapper-selector-type
       activeType=activeType
-      type='text'
+      type=type
       toggle=(action 'toggleType')}}
-  {{/if}}
-  
-  {{#if wizardEnabled}}
-    {{wizard-mapper-selector-type
-      activeType=activeType
-      type='wizard'
-      toggle=(action 'toggleType')}}
-  {{/if}}
-  
-  {{#if userFieldEnabled}}
-    {{wizard-mapper-selector-type
-      activeType=activeType
-      type='userField'
-      toggle=(action 'toggleType')}}
-  {{/if}}
-  
-  {{#if categoryEnabled}}
-    {{wizard-mapper-selector-type
-      activeType=activeType
-      type='category'
-      toggle=(action 'toggleType')}}
-  {{/if}}
-  
-  {{#if tagEnabled}}
-    {{wizard-mapper-selector-type
-      activeType=activeType
-      type='tag'
-      toggle=(action 'toggleType')}}
-  {{/if}}
-  
-  {{#if groupEnabled}}
-    {{wizard-mapper-selector-type
-      activeType=activeType
-      type='group'
-      toggle=(action 'toggleType')}}
-  {{/if}}
-  
-  {{#if userEnabled}}
-    {{wizard-mapper-selector-type
-      activeType=activeType
-      type='user'
-      toggle=(action 'toggleType')}}
-  {{/if}}
+  {{/each}}
 </div>
 
 <div class="input">
@@ -54,60 +12,44 @@
     {{input
       type="text"
       value=value
-      placeholder=(i18n textPlaceholder)}}
-  {{/if}}
-  
-  {{#if showWizard}}
-    {{combo-box
-      value=value
-      content=wizardFields
-      onChange=(action (mut value))
-      options=(hash
-        none='admin.wizard.wizard_field'
-      )}}
+      placeholder=(i18n placeholder)}}
   {{/if}}
 
-  {{#if showUserField}}
+  {{#if showComboBox}}
     {{combo-box
       value=value
-      content=userFields
+      content=comboBoxContent
       onChange=(action (mut value))
       options=(hash
-        none='admin.wizard.user_field'
+        none=placeholder
       )}}
   {{/if}}
   
-  {{#if showCategory}}
+  {{#if showMultiSelect}}
     {{multi-select
-      content=categories
+      content=multiSelectContent
       value=value
       onChange=(action (mut value))
-      options=(hash
-        none='admin.wizard.select_category'
-      )}}
+      options=multiSelectOptions}}
+  {{/if}}
+  
+  {{#if showList}}
+    {{value-list values=value}}
   {{/if}}
   
   {{#if showTag}}
     {{tag-chooser
       tags=value
-      filterable=true}}
-  {{/if}}
-  
-  {{#if showGroup}}
-    {{multi-select
-      content=groups
-      value=value
-      onChange=(action (mut value))
+      filterable=true
       options=(hash
-        none='admin.wizard.select_group'
+        none=placeholder
       )}}
   {{/if}}
   
   {{#if showUser}}
     {{user-selector 
-      topicId=topicId
       includeMessageableGroups='true'
-      placeholderKey="composer.users_placeholder"
+      placeholderKey=placeholder
       usernames=value
       autocomplete="discourse"}}
   {{/if}}

@@ -1,9 +1,7 @@
-{{#if hasOutput}}  
-  {{wizard-mapper-connector
-    connector=input.type
-    connectors=inputTypes
-    inputTypes=true}}
-{{/if}}
+{{wizard-mapper-connector
+  connector=input.type
+  connectors=inputTypes
+  inputTypes=true}}
 
 {{#if hasPairs}}
   <div class="mapper-pairs mapper-block">
@@ -12,8 +10,6 @@
         pair=pair
         last=pair.last
         inputType=inputType
-        keyPlaceholder=keyPlaceholder
-        valuePlaceholder=valuePlaceholder
         options=options
         removePair=(action 'removePair')}}
     {{/each}}
@@ -39,7 +35,6 @@
       inputType=inputType
       value=input.output
       activeType=input.output_type
-      customPlaceholder=outputPlaceholder
       options=options}}
   </div>
 {{/if}}

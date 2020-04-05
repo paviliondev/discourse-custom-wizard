@@ -8,9 +8,7 @@ class CustomWizardFieldSerializer < ::WizardFieldSerializer
              :limit,
              :property,
              :content
-             
-  has_many :choices, serializer: WizardFieldChoiceSerializer, embed: :objects
-  
+               
   def label
     return object.label if object.label.present?
     I18n.t("#{object.key || i18n_key}.label", default: '')

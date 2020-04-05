@@ -1,4 +1,5 @@
 import { default as computed } from 'discourse-common/utils/decorators';
+import { dasherize } from "@ember/string";
 
 export default {
   name: 'custom-routes',
@@ -219,7 +220,7 @@ export default {
         const type = this.get('field.type');
         const id = this.get('field.id');
         if (['text-only'].includes(type)) return false;
-        return (type === 'component') ? Ember.String.dasherize(id) : `wizard-field-${type}`;
+        return (type === 'component') ? dasherize(id) : `wizard-field-${type}`;
       }.property('field.type', 'field.id')
     });
 

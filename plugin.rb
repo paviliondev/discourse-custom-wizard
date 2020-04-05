@@ -63,7 +63,6 @@ after_initialize do
     ../lib/custom_wizard/api/authorization.rb
     ../lib/custom_wizard/api/endpoint.rb
     ../lib/custom_wizard/api/log_entry.rb
-    ../lib/wizard/choice.rb
     ../lib/wizard/field.rb
     ../lib/wizard/step.rb
     ../serializers/custom_wizard/api/authorization_serializer.rb

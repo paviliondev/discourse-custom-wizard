@@ -1,10 +1,11 @@
 import { ajax } from 'discourse/lib/ajax';
 import EmberObject from "@ember/object";
 import { buildStepJson, buildJson, buildProperties } from '../lib/wizard-json';
+import { Promise } from "rsvp";
 
 const CustomWizard = EmberObject.extend({
   save() {
-    return new Ember.RSVP.Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       let wizardJson = buildJson(this, 'wizard');
       
       if (wizardJson.after_time && !wizardJson.after_time_scheduled) {

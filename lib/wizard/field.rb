@@ -9,8 +9,6 @@ module CustomWizardFieldExtension
               :property,
               :content
               
-  attr_accessor :dropdown_none
-
   def initialize(attrs)
     @attrs = attrs || {}
     @id = attrs[:id]
@@ -21,8 +19,6 @@ module CustomWizardFieldExtension
     @key = attrs[:key]
     @min_length = attrs[:min_length]
     @value = attrs[:value]
-    @choices = []
-    @dropdown_none = attrs[:dropdown_none]
     @file_types = attrs[:file_types]
     @limit = attrs[:limit]
     @property = attrs[:property]

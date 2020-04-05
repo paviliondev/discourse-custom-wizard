@@ -1,11 +1,6 @@
-import { 
-  properties,
-  mappedProperties,
-  advancedProperties,
-  camelCase,
-  snakeCase
-} from '../lib/wizard';
+import { properties, mappedProperties, advancedProperties, camelCase, snakeCase } from '../lib/wizard';
 import EmberObject from '@ember/object';
+import { A } from "@ember/array";
 
 function present(val) {
   if (val === null || val === undefined) {
@@ -197,7 +192,7 @@ function buildObject(json, type) {
         );
       });
       
-      params[prop] = Ember.A(inputs);
+      params[prop] = A(inputs);
     } else {
       params[prop] = json[prop];
     }
@@ -223,7 +218,7 @@ function hasAdvanced(params, type) {
 }
 
 function buildProperties(json) {
-  let steps = Ember.A();
+  let steps = A();
   let props = { 
     steps
   };
@@ -254,7 +249,7 @@ function buildProperties(json) {
           }
         });
         
-        stepParams.fields = Ember.A();
+        stepParams.fields = A();
         
         if (present(stepJson.fields)) {
           stepJson.fields.forEach((f) => {
@@ -268,7 +263,7 @@ function buildProperties(json) {
           });
         }
 
-        stepParams.actions = Ember.A();
+        stepParams.actions = A();
         
         if (present(stepJson.actions)) {
           stepJson.actions.forEach((a) => {
@@ -299,7 +294,7 @@ function buildProperties(json) {
     props.prompt_completion = false;
     props.restart_on_revisit = false;
     props.permitted = null;
-    props.steps = Ember.A();
+    props.steps = A();
   }
   
   return props;

@@ -1,11 +1,13 @@
-import { default as computed, on, observes } from 'discourse-common/utils/decorators';
+import { default as discourseComputed, on, observes } from 'discourse-common/utils/decorators';
 import { notEmpty } from "@ember/object/computed";
-import { scheduleOnce } from "@ember/runloop";
+import { scheduleOnce, bind } from "@ember/runloop";
 import EmberObject from "@ember/object";
+import Component from "@ember/component";
+import { A } from "@ember/array";
 
-export default Ember.Component.extend({
+export default Component.extend({
   classNameBindings: [':wizard-links', 'type'],
-  items: Ember.A(),
+  items: A(),
   anyLinks: notEmpty('links'),
 
   @on('didInsertElement')
@@ -18,7 +20,7 @@ export default Ember.Component.extend({
     $(this.element).find("ul").sortable({tolerance: 'pointer'}).on('sortupdate', (e, ui) => {
       const itemId = ui.item.data('id');
       const index = ui.item.index();
-      Ember.run.bind(this, this.updateItemOrder(itemId, index));
+      bind(this, this.updateItemOrder(itemId, index));
     });
   },
 
@@ -30,10 +32,10 @@ export default Ember.Component.extend({
     scheduleOnce('afterRender', this, () => this.applySortable());
   },
 
-  @computed('type')
+  @discourseComputed('type')
   header: (type) => `admin.wizard.${type}.header`,
 
-  @computed('items.@each.id', 'current')
+  @discourseComputed('items.@each.id', 'current')
   links(items, current) {
     if (!items) return;
 
@@ -64,8 +66,8 @@ export default Ember.Component.extend({
       let params = { id: newId, isNew: true };
 
       if (type === 'step') {
-        params['fields'] = Ember.A();
-        params['actions'] = Ember.A();
+        params['fields'] = A();
+        params['actions'] = A();
       };
 
       const newItem = EmberObject.create(params);

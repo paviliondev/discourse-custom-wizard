@@ -46,10 +46,10 @@
       <div class="setting-value">
         {{wizard-mapper
           inputs=step.required_data
-          keyPlaceholder="admin.wizard.submission_key"
           options=(hash
-            wizardSelection='value'
+            wizardFieldSelection='value'
             userFieldSelection='value'
+            keyPlaceholder="admin.wizard.submission_key"
           )}}
         {{#if step.required_data}}
           <div class="required-data-message">
@@ -69,10 +69,10 @@
       <div class="setting-value">
         {{wizard-mapper
           inputs=step.permitted_params
-          keyPlaceholder='admin.wizard.param_key'
-          valuePlaceholder='admin.wizard.submission_key'
           options=(hash
             pairConnector='set'
+            keyPlaceholder='admin.wizard.param_key'
+            valuePlaceholder='admin.wizard.submission_key'
           )}}
       </div>
     </div>

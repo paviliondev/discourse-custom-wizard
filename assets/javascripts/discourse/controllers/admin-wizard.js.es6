@@ -5,9 +5,10 @@ import { generateId } from '../lib/wizard';
 import { buildProperties } from '../lib/wizard-json';
 import { dasherize } from "@ember/string";
 import EmberObject from "@ember/object";
-import { scheduleOnce } from "@ember/runloop";
+import { scheduleOnce, later } from "@ember/runloop";
+import Controller from "@ember/controller";
 
-export default Ember.Controller.extend({
+export default Controller.extend({
   hasName: notEmpty('model.name'),
   
   init() {
@@ -84,7 +85,7 @@ export default Ember.Controller.extend({
       }).catch((result) => {
         this.set('saving', false);
         this.set('error', I18n.t(`admin.wizard.error.${result.error}`));
-        Ember.run.later(() => this.set('error', null), 10000);
+        later(() => this.set('error', null), 10000);
       });
     },
 

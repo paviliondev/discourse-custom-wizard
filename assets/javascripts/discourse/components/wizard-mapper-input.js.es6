@@ -1,13 +1,16 @@
 import { computed, set } from "@ember/object";
-import { alias, equal } from "@ember/object/computed";
+import { alias, equal, or } from "@ember/object/computed";
 import { newPair, connectorContent, inputTypesContent } from '../lib/wizard-mapper';
+import Component from "@ember/component";
 
-export default Ember.Component.extend({
+export default Component.extend({
   classNameBindings: [':mapper-input', 'type'],
   inputType: alias('input.type'),
   isConditional: equal('inputType', 'conditional'),
-  hasOutput: alias('options.hasOutput'),
-  hasPairs: computed('hasOutput', 'isConditional', function() { return !this.hasOutput || this.isConditional; }),
+  isAssignment: equal('inputType', 'assignment'),
+  isPair: equal('inputType', 'pair'),
+  hasOutput: or('isConditional', 'isAssignment'),
+  hasPairs: or('isConditional', 'isPair'),
   connectors: computed(function() { return connectorContent('output', this.input.type, this.options) }),
   inputTypes: computed(function() { return inputTypesContent(this.options) }),
     

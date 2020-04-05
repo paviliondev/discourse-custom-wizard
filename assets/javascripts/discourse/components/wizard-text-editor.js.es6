@@ -1,11 +1,9 @@
-import {
-  default as discourseComputed,
-  on
-} from 'discourse-common/utils/decorators';
+import { default as discourseComputed, on } from 'discourse-common/utils/decorators';
 import { profileFields } from '../lib/wizard';
 import { scheduleOnce } from "@ember/runloop";
+import Component from "@ember/component";
 
-export default Ember.Component.extend({
+export default Component.extend({
   classNames: 'wizard-text-editor',
   barEnabled: true,
   previewEnabled: true,

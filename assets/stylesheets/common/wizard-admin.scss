@@ -379,17 +379,6 @@ body.admin-wizard {
   position: relative;
 }
 
-.wizard-dropdown-choices {
-  padding: 15px;
-  margin-bottom: 20px;
-  background-color: $secondary;
-  width: 100%;
-
-  .wizard-header:not(.underline) {
-    margin-top: 15px;
-  }
-}
-
 .required-data-message {
   display: inline-block;
   margin-top: 20px;

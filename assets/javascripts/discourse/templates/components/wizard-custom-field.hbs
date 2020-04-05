@@ -69,41 +69,6 @@
   </div>
 {{/if}}
 
-{{#if isDropdown}}
-  <div class="wizard-dropdown-choices">
-    <div class="wizard-header small underline">
-      {{i18n 'admin.wizard.field.choices_label'}}
-    </div>
-
-    {{combo-box
-      value=field.choices_type
-      content=choicesTypes
-      onChange=(action (mut field.choices_type))
-      options=(hash
-        none="admin.wizard.field.choices_type"
-      )}}
-
-    {{#if choicesTranslation}}
-      <div class="wizard-header small">
-        {{i18n 'admin.wizard.field.choices_translation'}}
-      </div>
-      {{input name="key" value=field.choices_key placeholderKey="admin.wizard.translation_placeholder"}}
-    {{/if}}
-
-    {{#if choicesCustom}}
-      <div class="wizard-header small">
-        {{i18n 'admin.wizard.field.choices_custom'}}
-      </div>
-      {{wizard-mapper inputs=field.choices}}
-    {{/if}}
-
-    <div class="wizard-header small">
-      {{i18n 'admin.wizard.field.dropdown_none'}}
-    </div>
-    {{input name="dropdown_none" value=field.dropdown_none placeholder=(i18n 'admin.wizard.field.dropdown_none_placeholder')}}
-  </div>
-{{/if}}
-
 {{#if isUpload}}
   <div class="setting">
     <div class="setting-label">
@@ -128,63 +93,61 @@
   </div>
 {{/if}}
 
-{{#if hasAdvanced}}
-  {{wizard-advanced-toggle showAdvanced=field.showAdvanced}}
+{{wizard-advanced-toggle showAdvanced=field.showAdvanced}}
 
-  {{#if field.showAdvanced}}
-    <div class="advanced-settings">
-      
-      {{#if isCategory}}
-        <div class="setting">
-          <div class="setting-label">
-            <label>{{i18n 'admin.wizard.field.property'}}</label>
-          </div>
-          
-          <div class="setting-value">
-            {{combo-box
-              value=field.property
-              content=categoryPropertyTypes
-              onChange=(action (mut field.property))
-              options=(hash
-                none='admin.wizard.select_property'
-              )}}
-          </div>
-        </div>
-      {{/if}}
-      
-      {{#if prefillEnabled}}
-        <div class="setting full field-mapper-setting">
-          <div class="setting-label">
-            <label>{{i18n 'admin.wizard.field.prefill'}}</label>
-          </div>
-          
-          <div class="setting-value">
-            {{wizard-mapper inputs=field.prefill options=prefillOptions}}
-          </div>
-        </div>
-      {{/if}}
-
-      {{#if contentEnabled}}
-        <div class="setting full field-mapper-setting">
-          <div class="setting-label">
-            <label>{{i18n 'admin.wizard.field.content'}}</label>
-          </div>
-          
-          <div class="setting-value">
-            {{wizard-mapper inputs=field.content options=contentOptions}}
-          </div>
-        </div>
-      {{/if}}
-      
+{{#if field.showAdvanced}}
+  <div class="advanced-settings">
+    
+    {{#if isCategory}}
       <div class="setting">
         <div class="setting-label">
-          <label>{{i18n 'admin.wizard.translation'}}</label>
+          <label>{{i18n 'admin.wizard.field.property'}}</label>
         </div>
+        
         <div class="setting-value">
-          {{input name="key" value=field.key placeholderKey="admin.wizard.translation_placeholder"}}
+          {{combo-box
+            value=field.property
+            content=categoryPropertyTypes
+            onChange=(action (mut field.property))
+            options=(hash
+              none='admin.wizard.select_property'
+            )}}
         </div>
       </div>
-      
+    {{/if}}
+    
+    {{#if prefillEnabled}}
+      <div class="setting full field-mapper-setting">
+        <div class="setting-label">
+          <label>{{i18n 'admin.wizard.field.prefill'}}</label>
+        </div>
+        
+        <div class="setting-value">
+          {{wizard-mapper inputs=field.prefill options=prefillOptions}}
+        </div>
+      </div>
+    {{/if}}
+
+    {{#if contentEnabled}}
+      <div class="setting full field-mapper-setting">
+        <div class="setting-label">
+          <label>{{i18n 'admin.wizard.field.content'}}</label>
+        </div>
+        
+        <div class="setting-value">
+          {{wizard-mapper inputs=field.content options=contentOptions}}
+        </div>
+      </div>
+    {{/if}}
+    
+    <div class="setting">
+      <div class="setting-label">
+        <label>{{i18n 'admin.wizard.translation'}}</label>
+      </div>
+      <div class="setting-value">
+        {{input name="key" value=field.key placeholderKey="admin.wizard.translation_placeholder"}}
+      </div>
     </div>
-  {{/if}}
+    
+  </div>
 {{/if}}

@@ -1,9 +1,11 @@
 import { getOwner } from 'discourse-common/lib/get-owner';
 import { on } from 'discourse-common/utils/decorators';
-import { newInput } from '../lib/wizard-mapper';
-import { default as discourseComputed } from 'discourse-common/utils/decorators';
+import { newInput, selectionTypes } from '../lib/wizard-mapper';
+import { default as discourseComputed, observes } from 'discourse-common/utils/decorators';
+import Component from "@ember/component";
+import { A } from "@ember/array";
 
-export default Ember.Component.extend({
+export default Component.extend({
   classNames: 'wizard-mapper',
   
   @discourseComputed('inputs.[]', 'options.singular')
@@ -11,29 +13,38 @@ export default Ember.Component.extend({
     return !singular || !inputs || inputs.length < 1;
   },
   
-  @discourseComputed('options')
+  @discourseComputed('options.@each')
   inputOptions(options) {
-    return {
-      hasOutput: options.hasOutput || false,
-      inputTypes: options.inputTypes || null,
+    let result = {
+      inputTypes: options.inputTypes || 'conditional,assignment',
       pairConnector: options.pairConnector || null,
-      outputConnector: options.outputConnector || null,
-      textSelection: options.textSelection || true,
-      wizardSelection: options.wizardSelection || false,
-      userFieldSelection: options.userFieldSelection || false,
-      categorySelection: options.categorySelection || false,
-      tagSelection: options.tagSelection || false,
-      groupSelection: options.groupSelection || false,
-      userSelection: options.userSelection || false,
-      keyDefaultSelection: options.keyDefaultSelection || null,
-      valueDefaultSelection: options.valueDefaultSelection || null,
-      outputDefaultSelection: options.outputDefaultSelection || null
+      outputConnector: options.outputConnector || null
     }
+    
+    let inputTypes = ['key', 'value', 'output'];
+    inputTypes.forEach(type => {
+      result[`${type}DefaultSelection`] = options[`${type}DefaultSelection`] || null;
+    });
+    
+    selectionTypes.forEach(type => {
+      if (options[`${type}Selection`]) {
+        result[`${type}Selection`] = options[`${type}Selection`]
+      } else {
+        result[`${type}Selection`] = type === 'text' ? true : false;
+      }
+    });
+        
+    return result;
+  },
+  
+  @observes('options.inputTypes')
+  clearInputs() {
+    this.get('inputs').clear();
   },
 
   actions: {
     add() {
-      if (!this.get('inputs')) this.set('inputs', Ember.A());            
+      if (!this.get('inputs')) this.set('inputs', A());            
       this.get('inputs').pushObject(newInput(this.inputOptions));
     },
 

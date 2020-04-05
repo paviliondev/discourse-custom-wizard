@@ -1,11 +1,8 @@
 import CustomWizard from '../models/custom-wizard';
 import { ajax } from 'discourse/lib/ajax';
-import {
-  selectKitContent,
-  profileFields,
-  generateName
-} from '../lib/wizard';
+import { selectKitContent, profileFields, generateName } from '../lib/wizard';
 import DiscourseRoute from "discourse/routes/discourse";
+import { all } from "rsvp";
 
 export default DiscourseRoute.extend({
   beforeModel() {
@@ -39,7 +36,7 @@ export default DiscourseRoute.extend({
   },
 
   afterModel(model) {
-    return Ember.RSVP.all([
+    return all([
       this._getFieldTypes(model),
       this._getThemes(model),
       this._getApis(model),

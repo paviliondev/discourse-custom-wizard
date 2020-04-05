@@ -1,7 +1,8 @@
 import { default as computed } from 'discourse-common/utils/decorators';
 import { scheduleOnce } from "@ember/runloop";
+import Controller from "@ember/controller";
 
-export default Ember.Controller.extend({
+export default Controller.extend({
   title: 'admin.wizard.after_time_modal.title',
 
   setup() {

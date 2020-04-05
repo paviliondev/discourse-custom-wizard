@@ -1,15 +1,9 @@
 import EmberObject from "@ember/object";
+import { A } from "@ember/array";
 
 // Inputs
 
-const selectableInputTypes = [
-  'conditional',
-  'assignment'
-]
-
 function defaultInputType(options = {}) {
-  if (!options.hasOutput) return 'pair';
-  if (!options.inputTypes) return selectableInputTypes[0];
   return options.inputTypes.split(',')[0];
 }
 
@@ -73,12 +67,13 @@ function connectorContent(connectorType, inputType, opts) {
 
 const selectionTypes = [
   'text',
-  'wizard',
+  'wizardField',
   'userField',
   'group',
   'category',
   'tag',
-  'user'
+  'user',
+  'list'
 ]
 
 function defaultSelectionType(inputType, options = {}) {
@@ -122,9 +117,11 @@ function newPair(inputType, options = {}) {
 function newInput(options = {}) {
   const inputType = defaultInputType(options);
   
+  console.log(inputType);
+    
   let params = {
     type: inputType,
-    pairs: Ember.A(
+    pairs: A(
       [
         newPair(
           inputType,
@@ -137,7 +134,7 @@ function newInput(options = {}) {
     )
   }
   
-  if (options.hasOutput) {
+  if (['conditional', 'assignment'].indexOf(inputType) > -1) {
     params['output_type'] = defaultSelectionType('output', options);
     params['connector'] = defaultConnector('output', inputType, options);
   }
@@ -150,6 +147,7 @@ export {
   defaultSelectionType,
   connectorContent,
   inputTypesContent,
+  selectionTypes,
   newInput,
-  newPair,
+  newPair
 }

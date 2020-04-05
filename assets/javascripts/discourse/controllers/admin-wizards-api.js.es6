@@ -1,42 +1,44 @@
 import { ajax } from 'discourse/lib/ajax';
 import { popupAjaxError } from 'discourse/lib/ajax-error';
 import CustomWizardApi from '../models/custom-wizard-api';
-import { default as computed } from 'discourse-common/utils/decorators';
+import { default as discourseComputed } from 'discourse-common/utils/decorators';
+import { not, and, equal } from "@ember/object/computed";
 import { selectKitContent } from '../lib/wizard';
+import Controller from "@ember/controller";
 
-export default Ember.Controller.extend({
+export default Controller.extend({
   queryParams: ['refresh_list'],
   loadingSubscriptions: false,
-  notAuthorized: Ember.computed.not('api.authorized'),
+  notAuthorized: not('api.authorized'),
   endpointMethods: selectKitContent(['GET', 'PUT', 'POST', 'PATCH', 'DELETE']),
-  showRemove: Ember.computed.not('isNew'),
-  showRedirectUri: Ember.computed.and('threeLeggedOauth', 'api.name'),
+  showRemove: not('isNew'),
+  showRedirectUri: and('threeLeggedOauth', 'api.name'),
   responseIcon: null,
   contentTypes: selectKitContent(['application/json', 'application/x-www-form-urlencoded']),
   successCodes: selectKitContent([100, 101, 102, 200, 201, 202, 203, 204, 205, 206, 207, 208, 226, 300, 301, 302, 303, 303, 304, 305, 306, 307, 308]),
 
-  @computed('saveDisabled', 'api.authType', 'api.authUrl', 'api.tokenUrl', 'api.clientId', 'api.clientSecret', 'threeLeggedOauth')
+  @discourseComputed('saveDisabled', 'api.authType', 'api.authUrl', 'api.tokenUrl', 'api.clientId', 'api.clientSecret', 'threeLeggedOauth')
   authDisabled(saveDisabled, authType, authUrl, tokenUrl, clientId, clientSecret, threeLeggedOauth) {
     if (saveDisabled || !authType || !tokenUrl || !clientId || !clientSecret) return true;
     if (threeLeggedOauth) return !authUrl;
     return false;
   },
 
-  @computed('api.name', 'api.authType')
+  @discourseComputed('api.name', 'api.authType')
   saveDisabled(name, authType) {
     return !name || !authType;
   },
 
   authorizationTypes: selectKitContent(['none', 'basic', 'oauth_2', 'oauth_3']),
-  isBasicAuth: Ember.computed.equal('api.authType', 'basic'),
+  isBasicAuth: equal('api.authType', 'basic'),
 
-  @computed('api.authType')
+  @discourseComputed('api.authType')
   isOauth(authType) {
     return authType && authType.indexOf('oauth') > -1;
   },
 
-  twoLeggedOauth: Ember.computed.equal('api.authType', 'oauth_2'),
-  threeLeggedOauth: Ember.computed.equal('api.authType', 'oauth_3'),
+  twoLeggedOauth: equal('api.authType', 'oauth_2'),
+  threeLeggedOauth: equal('api.authType', 'oauth_3'),
 
   actions: {
     addParam() {

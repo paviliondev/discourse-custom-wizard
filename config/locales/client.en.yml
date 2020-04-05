@@ -42,20 +42,13 @@ en:
         remove: "Delete Wizard"
         add: "Add"
         url: "Url"
+        key: "Key"
         value: "Value"
-        property: "Property"
-        text: "text"
         profile: "profile"
         translation: "Translation"
         translation_placeholder: "key"
         type: "Type"
-        none: "Make a selection"
-        user_field: "User Field"
-        wizard_field: "Wizard Field"
-        select_field: "Select Field"
-        select_property: "Select Property"
-        select_group: "Select Group"
-        profile_field: "Profile Field"
+        none: "Make a selection"              
         submission_key: 'submission key'
         param_key: 'param'
         group: "Group"
@@ -74,7 +67,31 @@ en:
             output: 'then'
           assignment:
             name: 'set'
+          pair:
+            name: 'pair'
   
+        selector:
+          label:
+            text: "text"
+            wizard_field: "wizard ○"
+            user_field: "user ○"
+            user: "user"
+            category: "category"
+            tag: "tag"
+            group: "group"
+            list: "list"
+
+          placeholder:
+            text: "Enter text"
+            property: "Select property"
+            wizard_field: "Select field"
+            user_field: "Select field"
+            user: "Select user"
+            category: "Select category"
+            tag: "Select tag"
+            group: "Select group"
+            list: "Enter item"
+            
         error:
           name_required: "Wizards must have a name."
           steps_required: "Wizards must have at least one step."
@@ -83,9 +100,6 @@ en:
           type_required: "All fields need a type."
           after_time_need_time: "After time is enabled but no time is set."
           after_time_invalid: "After time is invalid."
-          field:
-            need_choices: "All dropdowns need choices."
-            choices_label_empty: "Custom choice labels cannot be empty."
         
         step:
           header: "Steps"
@@ -107,13 +121,6 @@ en:
           image_placeholder: "Image url"
           dropdown_none: "None"
           dropdown_none_placeholder: "Label"
-          choices_label: "Dropdown Choices"
-          choices_type: "Choose a type"
-          choices_translation: "Translation"
-          choices_custom: "Custom"
-          choice:
-            value: "Value"
-            label: "Label"
           required: "Required"
           required_label: "Field is Required"
           min_length: "Min Length"
@@ -214,8 +221,6 @@ en:
             params:
               label: 'Params'
               new: 'New param'
-              key: 'key'
-              value: 'value'
 
           status:
             label: "Status"

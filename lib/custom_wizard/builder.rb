@@ -244,10 +244,6 @@ class CustomWizard::Builder
     end
     
     field = step.add_field(params)
-
-    if field_template['type'] === 'dropdown'
-      build_dropdown_list(field, field_template)
-    end
   end
   
   def prefill_field(field_template, step_template)
@@ -257,26 +253,6 @@ class CustomWizard::Builder
         user: @wizard.user,
         data: @submissions.last
       ).output
-    end
-  end
-
-  def build_dropdown_list(field, template)
-    field.dropdown_none = template['dropdown_none'] if template['dropdown_none']
-    method = "build_dropdown_#{template['choices_type']}"
-    self.send(method, field, template) if self.respond_to?(method)
-  end
-  
-  def build_dropdown_custom(field, template)
-    template['choices'].each do |c|
-      field.add_choice(c['key'], label: c['value'])
-    end
-  end
-  
-  def build_dropdown_translation(field, template)
-    choices = I18n.t(template['choices_key'])
-
-    if choices.is_a?(Hash)
-      choices.each { |k, v| field.add_choice(k, label: v) }
     end
   end
 

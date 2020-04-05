@@ -24,8 +24,7 @@
       {{wizard-mapper
         inputs=action.title
         options=(hash
-          hasOutput=true
-          wizardSelection=true
+          wizardFieldSelection=true
           userFieldSelection='key,value'
         )}}
     </div>
@@ -43,7 +42,7 @@
         nameProperty='label'
         onChange=(action (mut action.post))
         options=(hash
-          none='admin.wizard.select_field'
+          none='admin.wizard.selector.placeholder.wizard_field'
           isDisabled=action.post_builder
         )}}
       
@@ -79,9 +78,8 @@
       {{wizard-mapper
         inputs=action.category
         options=(hash
-          hasOutput=true
           textSelection='key,value'
-          wizardSelection=true
+          wizardFieldSelection=true
           userFieldSelection='key,value'
           categorySelection='output'
           outputDefaultSelection='category'
@@ -98,9 +96,8 @@
       {{wizard-mapper
         inputs=action.tags
         options=(hash
-          hasOutput=true
           tagSelection='output'
-          wizardSelection=true
+          wizardFieldSelection=true
           userFieldSelection='key,value'
         )}}
     </div>
@@ -117,9 +114,8 @@
       {{wizard-mapper
         inputs=action.recipient
         options=(hash
-          hasOutput=true
           textSelection='value,output'
-          wizardSelection=true
+          wizardFieldSelection=true
           userFieldSelection='key,value'
           groupSelection='key,value'
           userSelection='output'
@@ -137,12 +133,12 @@
     
     {{wizard-mapper 
       inputs=action.profile_updates
-      keyPlaceholder='admin.wizard.action.update_profile.key'
       options=(hash
         pairConnector='set'
         userFieldSelection='key'
-        wizardSelection='value'
+        wizardFieldSelection='value'
         keyDefaultSelection='userField'
+        keyPlaceholder='admin.wizard.action.update_profile.key'
       )}}
   </div>
 {{/if}}
@@ -208,9 +204,8 @@
       {{wizard-mapper
         inputs=action.group
         options=(hash
-          hasOutput=true
           textSelection='value,output'
-          wizardSelection='key,value,assignment'
+          wizardFieldSelection='key,value,assignment'
           userFieldSelection='key,value,assignment'
           groupSelection='value,output'
           outputDefaultSelection='group'
@@ -246,11 +241,11 @@
           <div class="setting-value">
             {{wizard-mapper
               inputs=action.custom_fields
-              keyPlaceholder='admin.wizard.action.custom_fields.key'
               options=(hash
                 pairConnector='set'
-                wizardSelection='value'
+                wizardFieldSelection='value'
                 userFieldSelection='value'
+                keyPlaceholder='admin.wizard.action.custom_fields.key'
               )}}
           </div>
         </div>
@@ -267,7 +262,7 @@
               inputs=action.required
               options=(hash
                 textSelection='value'
-                wizardSelection=true
+                wizardFieldSelection=true
                 userFieldSelection=true
                 groupSelection=true
               )}}

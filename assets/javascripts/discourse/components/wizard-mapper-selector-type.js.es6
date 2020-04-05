@@ -1,27 +1,17 @@
 import discourseComputed from 'discourse-common/utils/decorators';
+import { snakeCase } from '../lib/wizard';
+import { selectionTypes } from '../lib/wizard-mapper';
+import Component from "@ember/component";
 
-export default Ember.Component.extend({
+export default Component.extend({
   tagName: 'a',
   classNameBindings: ['type', 'active'],
   
   @discourseComputed('type', 'activeType')
-  active(type, activeType) {
-    return type === activeType;
-  },
+  active(type, activeType) { return type === activeType },
   
   @discourseComputed('type')
-  label(type) {
-    let map = {
-      text: I18n.t('admin.wizard.text'),
-      wizard: I18n.t('admin.wizard.label'),
-      userField: I18n.t('users_lowercase.one'),
-      category: I18n.t('categories.category'),
-      tag: I18n.t('tagging.tags'),
-      group: I18n.t('groups.title.one'),
-      user: I18n.t('users_lowercase.other')
-    };
-    return map[type].toLowerCase();
-  },
+  label(type) { return I18n.t(`admin.wizard.selector.label.${snakeCase(type)}`) },
   
   click() {
     this.toggle(this.type)

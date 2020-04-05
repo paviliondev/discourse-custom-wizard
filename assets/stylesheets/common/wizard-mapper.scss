@@ -24,11 +24,10 @@
   align-items: flex-start;
   width: min-content;
   position: relative;
-  padding-bottom: 30px;    
-    
-  &:last-of-type {
-    padding-bottom: 0;
-  }
+  padding: 25px 7px 7px 7px;
+  margin-bottom: 10px;
+  background: rgba($secondary, 0.5);
+  border: 2px solid $primary-low;
 
   .d-icon {
     text-align: center;
@@ -42,20 +41,21 @@
     background-color: $primary-low;
     border-color: #ddd;
   }
+  
+  .output {
+    position: relative;
+  }
 
   a.remove-input {
     position: absolute;
     right: -25px;
-    top: 5px;
+    top: 50%;
+    transform: translateY(-50%);
   }
 }
 
 .add-mapper-input {
   display: block;
-}
-
-.mapper-input + .add-mapper-input {
-  padding-top: 10px;
 }
 
 .mapper-connector {
@@ -103,6 +103,15 @@
     
     &:last-of-type {
       margin-right: 0;
+    }
+  }
+  
+  .value-list .remove-value-btn {
+    background: none;
+    border: none;
+    
+    .d-icon {
+      color: $primary;
     }
   }
 }

@@ -1,5 +1,5 @@
 function selectKitContent(content) {
-  return content.map(i => ({id: i, name: i}))
+  return content.map(i => ({id: i, name: i}));
 }
 
 function generateName(id) {
@@ -13,13 +13,13 @@ function generateId(name) {
 function sentenceCase(string) {
   return string.replace(/[_\-]+/g, ' ')
     .toLowerCase()
-    .replace(/(^\w|\b\w)/g, (m) => m.toUpperCase())
+    .replace(/(^\w|\b\w)/g, (m) => m.toUpperCase());
 }
 
 function snakeCase(string) {
   return string.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)
     .map(x => x.toLowerCase())
-    .join('_')
+    .join('_');
 }
 
 function camelCase(string) {
@@ -124,7 +124,6 @@ const mappedProperties = {
     'permitted_params'
   ],
   field: [
-    'choices',
     'prefill',
     'content'
   ],

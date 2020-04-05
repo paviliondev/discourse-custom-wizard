@@ -1,13 +1,9 @@
 import { default as discourseComputed, observes, on } from 'discourse-common/utils/decorators';
 import { equal, not, empty, or } from "@ember/object/computed";
-import {
-  actionTypes,
-  generateName,
-  selectKitContent,
-  profileFields
-} from '../lib/wizard';
+import { actionTypes, generateName, selectKitContent, profileFields } from '../lib/wizard';
+import Component from "@ember/component";
 
-export default Ember.Component.extend({
+export default Component.extend({
   classNames: 'wizard-custom-action',
   types: actionTypes.map(t => ({ id: t, name: generateName(t) })),
   createTopic: equal('action.type', 'create_topic'),
