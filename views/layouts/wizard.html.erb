@@ -1,11 +1,13 @@
 <html>
   <head>
     <%= discourse_stylesheet_link_tag :wizard, theme_id: nil %>
+    <%= stylesheet_link_tag "wizard_autocomplete" %>
     <%= stylesheet_link_tag "wizard_custom" %>
     <%= stylesheet_link_tag "wizard_composer" %>
     <%= stylesheet_link_tag "wizard_variables" %>
     <%= stylesheet_link_tag "wizard_custom_mobile" %>
-    <%= stylesheet_link_tag "jquery.timepicker"%>
+    <%= stylesheet_link_tag "wizard_locations"%>
+    <%= stylesheet_link_tag "wizard_events"%>
     <%- if theme_ids %>
       <%= discourse_stylesheet_link_tag (mobile_view? ? :mobile_theme : :desktop_theme) %>
     <%- end %>
