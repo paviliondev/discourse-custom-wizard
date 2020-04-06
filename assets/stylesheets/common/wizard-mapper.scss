@@ -17,6 +17,12 @@
   div.mapper-block:not(:last-of-type) {
     margin-right: 10px;
   }
+  
+  > .mapper-connector.single {
+    width: min-content;
+    margin-bottom: 10px;
+    height: 20px
+  }
 }
 
 [class~='mapper-input'] {
@@ -155,6 +161,10 @@
     bottom: -25px;
     left: 50%;
     transform: translateX(-50%);
+  }
+  
+  .mapper-connector {
+    min-width: 50px;
   }
 }
 

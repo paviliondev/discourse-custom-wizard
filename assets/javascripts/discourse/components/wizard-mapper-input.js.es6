@@ -5,13 +5,14 @@ import Component from "@ember/component";
 import { observes } from "discourse-common/utils/decorators";
 
 export default Component.extend({
-  classNameBindings: [':mapper-input', 'type'],
+  classNameBindings: [':mapper-input', 'inputType'],
   inputType: alias('input.type'),
   isConditional: equal('inputType', 'conditional'),
   isAssignment: equal('inputType', 'assignment'),
-  isPair: equal('inputType', 'pair'),
+  isAssociation: equal('inputType', 'association'),
+  isValidation: equal('inputType', 'validation'),
   hasOutput: or('isConditional', 'isAssignment'),
-  hasPairs: or('isConditional', 'isPair'),
+  hasPairs: or('isConditional', 'isAssociation', 'isValidation'),
   connectors: computed(function() { return connectorContent('output', this.input.type, this.options) }),
   inputTypes: computed(function() { return inputTypesContent(this.options) }),
     

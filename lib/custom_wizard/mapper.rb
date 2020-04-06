@@ -8,7 +8,8 @@ class CustomWizard::Mapper
     greater: '>',
     less: '<',
     greater_or_equal: '>=',
-    less_or_equal: '<='
+    less_or_equal: '<=',
+    regex: '=~'
   }
  
   def initialize(params)
@@ -18,33 +19,63 @@ class CustomWizard::Mapper
     @opts = params[:opts] || {}
   end
   
-  def output
+  def perform
     multiple = @opts[:multiple]
-    output = multiple ? [] : nil
+    perform_result = multiple ? [] : nil
     
     inputs.each do |input|
-      if input['type'] === 'conditional' && validate_pairs(input['pairs'])
+      input_type = input['type']
+      pairs = input['pairs']
+
+      if (input_type === 'conditional' && validate_pairs(pairs)) || input_type === 'assignment'
+        output = input['output']
+        output_type = input['output_type']
+        
+        result = build_result(map_field(output, output_type), input_type)
+        
         if multiple
-          output.push(map_field(input['output'], input['output_type']))
+          perform_result.push(result)
         else
-          output = map_field(input['output'], input['output_type'])
+          perform_result = result
           break
         end
       end
       
-      if input['type'] === 'assignment'
-        value = map_field(input['output'], input['output_type'])
+      if input_type === 'validation'
+        result = build_result(validate_pairs(pairs), input_type)
         
-        if @opts[:multiple]
-          output.push(value)
+        if multiple
+          perform_result.push(result)
         else
-          output = value
+          perform_result = result
+          break
+        end
+      end
+      
+      if input_type === 'association'
+        result = build_result(map_pairs(pairs), input_type)
+        
+        if multiple
+          perform_result.push(result)
+        else
+          perform_result = result
           break
         end
       end
     end
           
-    output
+    perform_result
+  end
+  
+  def build_result(result, type)
+    if opts[:with_type]
+      {
+        type: type,
+        result: result
+      }
+    else
+      result
+    end
   end
   
   def validate_pairs(pairs)
@@ -52,10 +83,12 @@ class CustomWizard::Mapper
     
     pairs.each do |pair|
       key = map_field(pair['key'], pair['key_type'])
-      value = map_field(pair['value'], pair['value_type'])
+      operator = map_operator(pair['connector'])
+      value = interpolate(map_field(pair['value'], pair['value_type']))
+      value = "/#{value}/" if pair['connector'] == 'regex'
             
       begin
-        failed = true unless key.public_send(operator(pair['connector']), value)
+        failed = true unless key.public_send(operator, value)
       rescue NoMethodError
         #
       end
@@ -64,7 +97,25 @@ class CustomWizard::Mapper
     !failed
   end
   
-  def operator(connector)
+  def map_pairs(pairs)
+    result = []
+    
+    pairs.each do |pair|
+      key = map_field(pair['key'], pair['key_type'])
+      value = map_field(pair['value'], pair['value_type'])
+      
+      if key && value
+        result.push(
+          key: key,
+          value: value
+        )
+      end
+    end
+    
+    result
+  end
+  
+  def map_operator(connector)
     OPERATORS[connector.to_sym] || '=='
   end
   

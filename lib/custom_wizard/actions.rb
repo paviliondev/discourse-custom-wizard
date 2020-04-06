@@ -45,7 +45,7 @@ class CustomWizard::Action
       inputs: action['recipient'],
       data: data,
       user: user
-    ).output
+    ).perform
         
     if params[:title] && params[:raw]
       params[:archetype] = Archetype.private_message
@@ -144,7 +144,7 @@ class CustomWizard::Action
       opts: {
         multiple: true
       }
-    ).output
+    ).perform
         
     groups = groups.flatten.reduce([]) do |result, g|
       begin
@@ -183,7 +183,7 @@ class CustomWizard::Action
       inputs: action['category'],
       data: data,
       user: user
-    ).output
+    ).perform
     
     if output.is_a?(Array)
       output.first
@@ -199,7 +199,7 @@ class CustomWizard::Action
       inputs: action['tags'],
       data: data,
       user: user,
-    ).output
+    ).perform
     
     if output.is_a?(Array)
       output.flatten
@@ -212,23 +212,23 @@ class CustomWizard::Action
   
   def add_custom_fields(params = {})
     if (custom_fields = action['custom_fields']).present?
-      custom_fields.each do |field|
-        pair = field['pairs'].first
-        value = mapper.map_field(pair['key'], pair['key_type'])
-        key = mapper.map_field(pair['value'], pair['value_type'])
+      field_map = CustomWizard::Mapper.new(
+        inputs: custom_fields,
+        data: data,
+        user: user
+      ).perform
+      
+      field_map.each do |field|
+        keyArr = field[:key].split('.')
+        value = field[:value]
         
-        if key && 
-          value.present? &&
-          (keyArr = key.split('.')).length === 2
-
-          if keyArr.first === 'topic'
-            params[:topic_opts] ||= {}
-            params[:topic_opts][:custom_fields] ||= {}
-            params[:topic_opts][:custom_fields][keyArr.last] = value
-          elsif keyArr.first === 'post'
-            params[:custom_fields] ||= {}
-            params[:custom_fields][keyArr.last.to_sym] = value
-          end
+        if keyArr.length != 2 || keyArr.first === 'topic'
+          params[:topic_opts] ||= {}
+          params[:topic_opts][:custom_fields] ||= {}
+          params[:topic_opts][:custom_fields][keyArr.last] = value
+        elsif keyArr.first === 'post'
+          params[:custom_fields] ||= {}
+          params[:custom_fields][keyArr.last.to_sym] = value
         end
       end
     end
@@ -245,7 +245,7 @@ class CustomWizard::Action
       inputs: action['title'],
       data: data,
       user: user
-    ).output
+    ).perform
 
     params[:raw] = action['post_builder'] ?
       mapper.interpolate(action['post_template']) :

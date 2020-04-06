@@ -235,12 +235,26 @@ class CustomWizard::Builder
       @wizard.needs_groups = true
     end
     
-    if (content = field_template['content']).present?
-      params[:content] = CustomWizard::Mapper.new(
-        inputs: content,
+    if (content_inputs = field_template['content']).present?
+      content = CustomWizard::Mapper.new(
+        inputs: content_inputs,
         user: @wizard.user,
-        data: @submissions.last
-      ).output
+        data: @submissions.last,
+        opts: {
+          with_type: true
+        }
+      ).perform
+            
+      if content[:type] == 'association'
+        content[:result] = content[:result].map do |item|
+          { 
+            id: item[:key],
+            name: item[:value] 
+          }
+        end
+      end
+      
+      params[:content] = content[:result]
     end
     
     field = step.add_field(params)
@@ -252,7 +266,7 @@ class CustomWizard::Builder
         inputs: prefill,
         user: @wizard.user,
         data: @submissions.last
-      ).output
+      ).perform
     end
   end
 

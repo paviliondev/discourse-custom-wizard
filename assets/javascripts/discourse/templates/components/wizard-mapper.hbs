@@ -1,4 +1,8 @@
 {{#each inputs as |input|}}
+  {{#if input.connector}}
+    {{wizard-mapper-connector connector=input.connector}}
+  {{/if}}
+  
   {{wizard-mapper-input 
     input=input
     options=inputOptions

@@ -129,8 +129,27 @@ class CustomWizard::Wizard
   def permitted?
     return false unless user
     return true if user.admin? || permitted.blank?
-    group_ids = permitted.first['output']
-    return GroupUser.exists?(group_id: group_ids, user_id: user.id)
+    
+    mapper = CustomWizard::Mapper.new(
+      inputs: permitted,
+      user: user,
+      opts: {
+        with_type: true,
+        multiple: true
+      }
+    ).perform
+        
+    return true if mapper.blank?
+    
+    mapper.all? do |m|
+      if m.type === 'assignment'
+        GroupUser.exists?(group_id: m.result, user_id: user.id)
+      elsif m.type === 'validation'
+        mapper.result
+      else
+        true
+      end
+    end
   end
 
   def reset

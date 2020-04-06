@@ -50,7 +50,7 @@ function buildMappedJson(inputs) {
     if (present(inpt.output)) {
       input.output = inpt.output;
       input.output_type = snakeCase(inpt.output_type);
-      input.connector = inpt.connector;
+      input.output_connector = inpt.output_connector;
     }
     
     if (present(inpt.pairs)) {
@@ -74,8 +74,7 @@ function buildMappedJson(inputs) {
     }
         
     if ((input.type === 'assignment' && present(input.output)) ||
-        (input.type === 'conditional' && present(input.pairs)) ||
-        (input.type === 'pair' && present(input.pairs))) {
+        present(input.pairs)) {
       
       result.push(input);
     }
@@ -146,8 +145,51 @@ function buildStepJson(object) {
   };
 }
 
-function mappedProperty(property, value) {
+function castCase(property, value) {
   return property.indexOf('_type') > -1 ? camelCase(value) : value;
+}
+
+function buildProperty(json, property, type) {  
+  if (mapped(property, type) && present(json[property])) {
+    let inputs = [];
+    
+    json[property].forEach(inputJson => {
+      let input = {}
+      
+      Object.keys(inputJson).forEach(inputKey => {
+        if (inputKey === 'pairs') {
+          let pairs = [];
+          let pairCount = inputJson.pairs.length;
+          
+          inputJson.pairs.forEach(pairJson => {
+            let pair = {};
+            
+            Object.keys(pairJson).forEach(pairKey => {
+              pair[pairKey] = castCase(pairKey,  pairJson[pairKey]);
+            });
+            
+            pair.pairCount = pairCount;
+            
+            pairs.push(
+              EmberObject.create(pair)
+            );
+          });
+          
+          input.pairs = pairs;
+        } else {
+          input[inputKey] = castCase(inputKey,  inputJson[inputKey]);
+        }
+      });
+      
+      inputs.push(
+        EmberObject.create(input)
+      );
+    });
+    
+    return A(inputs);
+  } else {
+    return json[property];
+  }
 }
 
 function buildObject(json, type) {
@@ -156,46 +198,7 @@ function buildObject(json, type) {
   }
   
   Object.keys(json).forEach(prop => {
-    if (mapped(prop, type) && present(json[prop])) {
-      let inputs = [];
-      
-      json[prop].forEach(inputJson => {
-        let input = {}
-        
-        Object.keys(inputJson).forEach(inputKey => {
-          if (inputKey === 'pairs') {
-            let pairs = [];
-            let pairCount = inputJson.pairs.length;
-            
-            inputJson.pairs.forEach(pairJson => {
-              let pair = {};
-              
-              Object.keys(pairJson).forEach(pairKey => {
-                pair[pairKey] = mappedProperty(pairKey,  pairJson[pairKey]);
-              });
-              
-              pair.pairCount = pairCount;
-              
-              pairs.push(
-                EmberObject.create(pair)
-              );
-            });
-            
-            input.pairs = pairs;
-          } else {
-            input[inputKey] = mappedProperty(inputKey,  inputJson[inputKey]);
-          }
-        });
-        
-        inputs.push(
-          EmberObject.create(input)
-        );
-      });
-      
-      params[prop] = A(inputs);
-    } else {
-      params[prop] = json[prop];
-    }
+    params[prop] = buildProperty(json, prop, type)
   });
   
   return EmberObject.create(params);
@@ -228,7 +231,7 @@ function buildProperties(json) {
     props.existingId = true;
 
     properties.wizard.forEach((p) => {
-      props[p] = json[p];
+      props[p] = buildProperty(json, p, 'wizard');
       
       if (wizardHasAdvanced(p, json[p])) {
         props.showAdvanced = true;
@@ -242,7 +245,7 @@ function buildProperties(json) {
         };
         
         properties.step.forEach((p) => {
-          stepParams[p] = stepJson[p];
+          stepParams[p] = buildProperty(stepJson, p, 'wizard');;
                     
           if (stepHasAdvanced(p, stepJson[p])) {
             stepParams.showAdvanced = true;

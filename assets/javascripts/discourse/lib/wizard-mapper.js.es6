@@ -34,16 +34,19 @@ const connectors = {
     'greater',
     'less',
     'greater_or_equal',
-    'less_or_equal'
+    'less_or_equal',
+    'regex'
   ]
 }
 
 function defaultConnector(connectorType, inputType, opts = {}) {
   if (opts[`${connectorType}Connector`]) return opts[`${connectorType}Connector`];  
-  if (inputType === 'assignment' && connectorType === 'output') return 'set';
   if (inputType === 'conditional' && connectorType === 'output') return 'then';
   if (inputType === 'conditional' && connectorType === 'pair') return 'equal';
-  if (inputType === 'pair') return 'equal';
+  if (inputType === 'assignment' && connectorType === 'output') return 'set';
+  if (inputType === 'association' && connectorType === 'pair') return 'association';
+  if (inputType === 'validation' && connectorType === 'pair') return 'equal';
+  return 'equal';
 }
 
 function connectorContent(connectorType, inputType, opts) {
@@ -114,7 +117,7 @@ function newPair(inputType, options = {}) {
   return EmberObject.create(params);
 }
 
-function newInput(options = {}) {
+function newInput(options = {}, count) {
   const inputType = defaultInputType(options);
       
   let params = {
@@ -131,13 +134,17 @@ function newInput(options = {}) {
       ]
     )
   }
+    
+  if (count > 0) {
+    params.connector = options.inputConnector;
+  }
   
   if (['conditional', 'assignment'].indexOf(inputType) > -1 ||
       options.outputDefaultSelection ||
       options.outputConnector) {
     
     params['output_type'] = defaultSelectionType('output', options);
-    params['connector'] = defaultConnector('output', inputType, options);
+    params['output_connector'] = defaultConnector('output', inputType, options);
   }
     
   return EmberObject.create(params);

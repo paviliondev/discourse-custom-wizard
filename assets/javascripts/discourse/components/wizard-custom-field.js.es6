@@ -41,7 +41,8 @@ export default Component.extend({
     if (this.isDropdown) {
       options.wizardFieldSelection = 'key,value';
       options.listSelection = 'assignment';
-      options.inputTypes = 'pair,assignment';
+      options.inputTypes = 'association,assignment';
+      options.singular = true;
       options.pairConnector = 'association';
       options.keyPlaceholder = 'admin.wizard.key';
       options.valuePlaceholder = 'admin.wizard.value';

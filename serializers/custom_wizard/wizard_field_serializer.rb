@@ -2,8 +2,7 @@
 
 class CustomWizardFieldSerializer < ::WizardFieldSerializer
   
-  attributes :dropdown_none,
-             :image,
+  attributes :image,
              :file_types,
              :limit,
              :property,
@@ -29,10 +28,6 @@ class CustomWizardFieldSerializer < ::WizardFieldSerializer
 
   def placeholder
     I18n.t("#{object.key || i18n_key}.placeholder", default: '')
-  end
-
-  def dropdown_none
-    object.dropdown_none
   end
 
   def file_types

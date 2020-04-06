@@ -111,14 +111,14 @@
         {{wizard-mapper
           inputs=model.permitted
           options=(hash
-            singular=true
             context='wizard'
-            inputTypes='assignment'
+            inputTypes='assignment,validation'
             groupSelection='output'
-            textSelection='key,value'
+            userFieldSelection='key'
+            textSelection='value'
+            inputConnector='and'
           )}}
       </div>
-      
     </div>
     
     {{wizard-advanced-toggle showAdvanced=model.showAdvanced}}

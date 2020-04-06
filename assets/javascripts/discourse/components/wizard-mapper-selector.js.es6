@@ -1,6 +1,6 @@
 import { alias, or, gt } from "@ember/object/computed";
 import { computed } from "@ember/object";
-import { default as discourseComputed, observes } from "discourse-common/utils/decorators";
+import { default as discourseComputed, observes, on } from "discourse-common/utils/decorators";
 import { getOwner } from 'discourse-common/lib/get-owner';
 import { defaultSelectionType, selectionTypes } from '../lib/wizard-mapper'; 
 import { snakeCase, selectKitContent } from '../lib/wizard';
@@ -72,7 +72,7 @@ export default Component.extend({
     return showTypes ? 'chevron-down' : 'chevron-right';
   },
   
-  @observes('options.@each', 'inputType')
+  @observes('inputType')
   resetActiveType() {
     this.set('activeType', defaultSelectionType(this.selectorType, this.options));
   },

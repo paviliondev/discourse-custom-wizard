@@ -67,8 +67,10 @@ en:
             output: 'then'
           assignment:
             name: 'set'
-          pair:
-            name: 'pair'
+          association:
+            name: 'map'
+          validation:
+            name: 'ensure'
   
         selector:
           label:
@@ -119,8 +121,6 @@ en:
           description: "Description"
           image: "Image"
           image_placeholder: "Image url"
-          dropdown_none: "None"
-          dropdown_none_placeholder: "Label"
           required: "Required"
           required_label: "Field is Required"
           min_length: "Min Length"
@@ -134,6 +134,8 @@ en:
           content: "Content"
         
         connector:
+          and: "and"
+          or: "or"
           then: "then"
           set: "set"
           equal: '='
@@ -141,6 +143,7 @@ en:
           less: '<'
           greater_or_equal: '>='
           less_or_equal: '<='
+          regex: '=~'
           association: '→'
         
         action:
