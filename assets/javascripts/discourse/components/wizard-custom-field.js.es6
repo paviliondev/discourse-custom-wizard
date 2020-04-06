@@ -34,14 +34,18 @@ export default Component.extend({
     let options = {
       wizardFieldSelection: true,
       textSelection: 'key,value',
-      userFieldSelection: 'key,value'
+      userFieldSelection: 'key,value',
+      context: 'field'
     }
     
     if (this.isDropdown) {
+      options.wizardFieldSelection = 'key,value';
+      options.listSelection = 'assignment';
       options.inputTypes = 'pair,assignment';
-      options.pairConnector = 'equal';
+      options.pairConnector = 'association';
       options.keyPlaceholder = 'admin.wizard.key';
       options.valuePlaceholder = 'admin.wizard.value';
+      options.outputDefaultSelection = 'list';
     }
     
     return options;
@@ -52,21 +56,27 @@ export default Component.extend({
     let options = {
       wizardFieldSelection: true,
       textSelection: 'key,value',
-      userFieldSelection: 'key,value'
+      userFieldSelection: 'key,value',
+      context: 'field'
     }
     
-    if (!this.isDropdown) {
-      let selectionType = {
-        category: 'category',
-        tag: 'tag',
-        group: 'group',
-        dropdown: 'text'
-      }[fieldType];
-      options[`${selectionType}Selection`] = 'output';
-      options.outputDefaultSelection = selectionType;
-    }
+    let outputSelectionType = {
+      category: 'category',
+      tag: 'tag',
+      group: 'group',
+      dropdown: 'text'
+    }[fieldType];
+    
+    options[`${outputSelectionType}Selection`] = 'output';
+    options.outputDefaultSelection = outputSelectionType;
     
     return options;
+  },
+  
+  @observes('field.type')
+  clearInputs() {
+    this.set('field.content', null);
+    this.set('field.prefill', null);
   },
   
   actions: {

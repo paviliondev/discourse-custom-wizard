@@ -5,21 +5,7 @@ import Component from "@ember/component";
 
 export default Component.extend({
   classNames: 'wizard-custom-step',
-  currentField: null,
-  currentAction: null,
   disableId: not('step.isNew'),
-  
-  @on('didInsertElement')
-  @observes('step')
-  resetCurrentObjects() {
-    const fields = this.step.fields;
-    const actions = this.step.actions;
-    
-    this.setProperties({
-      currentField: fields.length ? fields[0] : null,
-      currentAction: actions.length ? actions[0] : null
-    });
-  },
 
   @discourseComputed('wizardFields', 'wizard.steps')
   requiredContent(wizardFields, steps) {

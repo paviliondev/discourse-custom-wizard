@@ -1,7 +1,9 @@
 {{#admin-nav}}
   {{nav-item route='adminWizardsCustom' label='admin.wizard.custom_label'}}
   {{nav-item route='adminWizardsSubmissions' label='admin.wizard.submissions_label'}}
-  {{nav-item route='adminWizardsApis' label='admin.wizard.api.nav_label'}}
+  {{#if siteSettings.wizard_api_features}}
+    {{nav-item route='adminWizardsApis' label='admin.wizard.api.nav_label'}}
+  {{/if}}
   {{nav-item route='adminWizardsTransfer' label='admin.wizard.transfer.nav_label'}}
 {{/admin-nav}}
 

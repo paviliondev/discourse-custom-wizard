@@ -95,6 +95,8 @@
   .type-selector a {
     color: $primary;
     margin-right: 4px;
+    display: flex;
+    align-items: center;
     
     &.active {
       color: $tertiary;
@@ -104,6 +106,22 @@
     &:last-of-type {
       margin-right: 0;
     }
+    
+    .type-selector-icon {
+      margin-left: 2px;
+      font-size: 0.7em;
+    }
+  }
+  
+  .selector-types {
+    box-shadow: shadow('dropdown');
+    position: absolute;
+    background: $secondary;
+    z-index: 200;
+    padding: 5px 7px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid $primary-low;
   }
   
   .value-list .remove-value-btn {

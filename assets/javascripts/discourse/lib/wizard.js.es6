@@ -6,7 +6,7 @@ function generateName(id) {
   return id ? sentenceCase(id) : '';
 }
 
-function generateId(name) {
+function generateId(name, opts={}) {
   return name ? snakeCase(name) : '';
 }
 
@@ -167,7 +167,9 @@ const actionTypes = [
   'add_to_group',
   'route_to',
   'open_composer'
-];
+].filter(function(type) {
+  return Discourse.SiteSettings.wizard_api_features || type !== 'send_to_api'; 
+});
 
 export {
   selectKitContent,

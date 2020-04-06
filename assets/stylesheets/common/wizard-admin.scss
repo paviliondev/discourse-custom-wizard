@@ -51,11 +51,19 @@ body.admin-wizard {
   padding: 20px;
 }
 
-.wizard-links {
-  &.action, &.field {
-    margin-top: 50px;
-  }
+// style workdarounds for wizard_step_advanced site setting - to be refactored
+
+.wizard-custom-step .wizard-advanced-toggle + .wizard-links.field,
+.wizard-custom-step .advanced-settings + .wizard-links.field,
+.wizard-links.action {
+  margin-top: 40px;
 }
+
+.wizard-links.field {
+  margin-top: 20px;
+}
+
+// end workdarounds //
 
 .wizard-settings > .advanced-settings > div.setting {
   margin-bottom: 0;

@@ -35,15 +35,15 @@ export default Component.extend({
   @discourseComputed('type')
   header: (type) => `admin.wizard.${type}.header`,
 
-  @discourseComputed('items.@each.id', 'current')
-  links(items, current) {
+  @discourseComputed('current', 'items.@each.id', 'items.@each.label')
+  links(current, items) {
     if (!items) return;
 
     return items.map((item) => {
       if (item) {
         const id = item.id;
         const type = this.type;
-        const label = type === 'action' ? id : (item.label || item.title || id);
+        const label = item.label || item.title || id;
         let link = { id, label };
 
         let classes = 'btn';

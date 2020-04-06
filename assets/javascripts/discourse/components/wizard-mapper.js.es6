@@ -18,11 +18,13 @@ export default Component.extend({
     let result = {
       inputTypes: options.inputTypes || 'conditional,assignment',
       pairConnector: options.pairConnector || null,
-      outputConnector: options.outputConnector || null
+      outputConnector: options.outputConnector || null,
+      context: options.context || null
     }
     
     let inputTypes = ['key', 'value', 'output'];
     inputTypes.forEach(type => {
+      result[`${type}Placeholder`] = options[`${type}Placeholder`] || null;
       result[`${type}DefaultSelection`] = options[`${type}DefaultSelection`] || null;
     });
     
@@ -33,18 +35,16 @@ export default Component.extend({
         result[`${type}Selection`] = type === 'text' ? true : false;
       }
     });
-        
+                    
     return result;
-  },
-  
-  @observes('options.inputTypes')
-  clearInputs() {
-    this.get('inputs').clear();
   },
 
   actions: {
     add() {
-      if (!this.get('inputs')) this.set('inputs', A());            
+      if (!this.get('inputs')) {
+        this.set('inputs', A());
+      }
+
       this.get('inputs').pushObject(newInput(this.inputOptions));
     },
 

@@ -73,8 +73,8 @@ en:
         selector:
           label:
             text: "text"
-            wizard_field: "wizard ○"
-            user_field: "user ○"
+            wizard_field: "wizard field"
+            user_field: "user field"
             user: "user"
             category: "category"
             tag: "tag"
@@ -141,6 +141,7 @@ en:
           less: '<'
           greater_or_equal: '>='
           less_or_equal: '<='
+          association: '→'
         
         action:
           header: "Actions"

@@ -1,5 +1,5 @@
-import { default as discourseComputed, observes } from 'discourse-common/utils/decorators';
-import { notEmpty } from "@ember/object/computed";
+import { default as discourseComputed, observes, on } from 'discourse-common/utils/decorators';
+import { notEmpty, alias } from "@ember/object/computed";
 import showModal from 'discourse/lib/show-modal';
 import { generateId } from '../lib/wizard';
 import { buildProperties } from '../lib/wizard-json';
@@ -10,15 +10,27 @@ import Controller from "@ember/controller";
 
 export default Controller.extend({
   hasName: notEmpty('model.name'),
-  
-  init() {
-    this._super();
+  userFields: alias('model.userFields'),
+
+  @observes('currentStep')
+  resetCurrentObjects() {
+    const currentStep = this.currentStep;
+    const fields = currentStep.fields;
+    const actions = currentStep.actions;
+    
+    this.setProperties({
+      currentField: fields.length ? fields[0] : null,
+      currentAction: actions.length ? actions[0] : null
+    });
+    
     scheduleOnce('afterRender', () => ($("body").addClass('admin-wizard')));
   },
     
   @observes('model.name')
   setId() {
-    if (!this.model.existingId) this.set('model.id', generateId(this.model.name));
+    if (!this.model.existingId) {
+      this.set('model.id', generateId(this.model.name));
+    }
   },
   
   @discourseComputed('model.id')

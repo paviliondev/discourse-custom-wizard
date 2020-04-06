@@ -19,8 +19,10 @@ export default Component.extend({
   
   @on('didInsertElement')
   @observes('action.type')
-  updateId() {
-    if (this.action.type) this.set('action.id', generateName(this.action.type));
+  setLabel() {
+    if (this.action.type) {
+      this.set('action.label', generateName(this.action.type));
+    };
   },
 
   @discourseComputed('action.type')

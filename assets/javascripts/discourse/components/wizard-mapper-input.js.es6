@@ -2,6 +2,7 @@ import { computed, set } from "@ember/object";
 import { alias, equal, or } from "@ember/object/computed";
 import { newPair, connectorContent, inputTypesContent } from '../lib/wizard-mapper';
 import Component from "@ember/component";
+import { observes } from "discourse-common/utils/decorators";
 
 export default Component.extend({
   classNameBindings: [':mapper-input', 'type'],

@@ -1,4 +1,4 @@
-import { default as computed } from 'discourse-common/utils/decorators';
+import { default as discourseComputed } from 'discourse-common/utils/decorators';
 import { scheduleOnce } from "@ember/runloop";
 import Controller from "@ember/controller";
 
@@ -24,12 +24,12 @@ export default Controller.extend({
     });
   },
 
-  @computed('date', 'time')
+  @discourseComputed('date', 'time')
   dateTime: function(date, time) {
     return moment(date + 'T' + time).format();
   },
 
-  @computed('dateTime')
+  @discourseComputed('dateTime')
   submitDisabled(dateTime) {
     return moment().isAfter(dateTime);
   },

@@ -1,10 +1,10 @@
 import { ajax } from 'discourse/lib/ajax';
-import { default as computed } from 'discourse-common/utils/decorators';
+import { default as discourseComputed } from 'discourse-common/utils/decorators';
 import EmberObject from "@ember/object";
 import { A } from "@ember/array";
 
 const CustomWizardApi = EmberObject.extend({
-  @computed('name')
+  @discourseComputed('name')
   redirectUri(name) {
     let nameParam = name.toString().dasherize();
     const baseUrl = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '');

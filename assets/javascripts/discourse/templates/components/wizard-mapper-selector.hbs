@@ -1,10 +1,23 @@
 <div class="type-selector">
-  {{#each selectorTypes as |type|}}
-    {{wizard-mapper-selector-type
-      activeType=activeType
-      type=type
-      toggle=(action 'toggleType')}}
-  {{/each}}
+  {{#if hasTypes}}
+    <a {{action "toggleTypes"}} class="active">
+      {{activeTypeLabel}}
+      {{d-icon typeSelectorIcon class="type-selector-icon"}}
+    </a>
+    
+    {{#if showTypes}}
+      <div class="selector-types">
+        {{#each selectorTypes as |item|}}
+          {{wizard-mapper-selector-type
+            activeType=activeType
+            item=item
+            toggle=(action 'toggleType')}}
+        {{/each}}
+      </div>
+    {{/if}}
+  {{else}}
+    <span>{{activeTypeLabel}}</span>
+  {{/if}}
 </div>
 
 <div class="input">
@@ -12,7 +25,7 @@
     {{input
       type="text"
       value=value
-      placeholder=(i18n placeholder)}}
+      placeholder=(i18n placeholderKey)}}
   {{/if}}
 
   {{#if showComboBox}}
@@ -21,7 +34,7 @@
       content=comboBoxContent
       onChange=(action (mut value))
       options=(hash
-        none=placeholder
+        none=placeholderKey
       )}}
   {{/if}}
   
@@ -34,7 +47,9 @@
   {{/if}}
   
   {{#if showList}}
-    {{value-list values=value}}
+    {{value-list
+      values=value
+      addKey=placeholderKey}}
   {{/if}}
   
   {{#if showTag}}
@@ -42,14 +57,14 @@
       tags=value
       filterable=true
       options=(hash
-        none=placeholder
+        none=placeholderKey
       )}}
   {{/if}}
   
   {{#if showUser}}
     {{user-selector 
       includeMessageableGroups='true'
-      placeholderKey=placeholder
+      placeholderKey=placeholderKey
       usernames=value
       autocomplete="discourse"}}
   {{/if}}

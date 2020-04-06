@@ -48,7 +48,6 @@
   </div>
   
   <div class="wizard-settings">
-    
     <div class="setting">
       <div class="setting-label">
         <label>{{i18n 'admin.wizard.required'}}</label>
@@ -113,6 +112,7 @@
           inputs=model.permitted
           options=(hash
             singular=true
+            context='wizard'
             inputTypes='assignment'
             groupSelection='output'
             textSelection='key,value'
@@ -153,7 +153,12 @@
   {{wizard-links type="step" current=currentStep items=model.steps}}
   
   {{#if currentStep}}
-    {{wizard-custom-step step=currentStep wizard=model wizardFields=wizardFields}}
+    {{wizard-custom-step
+      step=currentStep
+      wizard=model
+      currentField=currentField
+      currentAction=currentAction
+      wizardFields=wizardFields}}
   {{/if}}
 
   <div class='admin-wizard-buttons'>

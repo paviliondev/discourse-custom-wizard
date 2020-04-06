@@ -67,13 +67,13 @@ function connectorContent(connectorType, inputType, opts) {
 
 const selectionTypes = [
   'text',
+  'list',
   'wizardField',
   'userField',
   'group',
   'category',
   'tag',
-  'user',
-  'list'
+  'user'
 ]
 
 function defaultSelectionType(inputType, options = {}) {
@@ -116,9 +116,7 @@ function newPair(inputType, options = {}) {
 
 function newInput(options = {}) {
   const inputType = defaultInputType(options);
-  
-  console.log(inputType);
-    
+      
   let params = {
     type: inputType,
     pairs: A(
@@ -134,7 +132,10 @@ function newInput(options = {}) {
     )
   }
   
-  if (['conditional', 'assignment'].indexOf(inputType) > -1) {
+  if (['conditional', 'assignment'].indexOf(inputType) > -1 ||
+      options.outputDefaultSelection ||
+      options.outputConnector) {
+    
     params['output_type'] = defaultSelectionType('output', options);
     params['connector'] = defaultConnector('output', inputType, options);
   }

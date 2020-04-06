@@ -1,10 +1,11 @@
-import { alias, or } from "@ember/object/computed";
+import { alias, or, gt } from "@ember/object/computed";
 import { computed } from "@ember/object";
 import { default as discourseComputed, observes } from "discourse-common/utils/decorators";
 import { getOwner } from 'discourse-common/lib/get-owner';
 import { defaultSelectionType, selectionTypes } from '../lib/wizard-mapper'; 
 import { snakeCase, selectKitContent } from '../lib/wizard';
 import Component from "@ember/component";
+import { bind } from "@ember/runloop";
 
 export default Component.extend({
   classNames: 'mapper-selector',
@@ -28,25 +29,50 @@ export default Component.extend({
   groupEnabled: computed('options.groupSelection', 'inputType', function() { return this.optionEnabled('groupSelection') }),
   userEnabled: computed('options.userSelection', 'inputType', function() { return this.optionEnabled('userSelection') }),
   listEnabled: computed('options.listSelection', 'inputType', function() { return this.optionEnabled('listSelection') }),
+  hasTypes: gt('selectorTypes.length', 1),
+  showTypes: false,
+  
+  didInsertElement() {
+    $(document).on("click", bind(this, this.documentClick));
+  },
+
+  willDestroyElement() {
+    $(document).off("click", bind(this, this.documentClick));
+  },
+
+  documentClick(e) {
+    let $element = $(this.element);
+    let $target = $(e.target);
+
+    if (!$target.hasClass('type-selector-icon') &&
+        $target.closest($element).length < 1 &&
+        this._state !== "destroying") {
+
+      this.set("showTypes", false);
+    }
+  },
+  
+  @discourseComputed
+  selectorTypes() {
+    return selectionTypes.filter(type => (this[`${type}Enabled`]))
+      .map(type => ({ type, label: this.typeLabel(type) }));
+  },
   
   @discourseComputed('activeType')
-  selectorTypes(activeType) {
-    return selectionTypes.filter(type => (this[`${type}Enabled`]));
+  activeTypeLabel(activeType) {
+    return this.typeLabel(activeType);
   },
   
-  @discourseComputed
-  userFields() {
-    const controller = getOwner(this).lookup('controller:admin-wizard');
-    return controller.model.userFields;
+  typeLabel(type) {
+    return I18n.t(`admin.wizard.selector.label.${snakeCase(type)}`)
   },
   
-  @discourseComputed
-  wizardFields() {
-    const controller = getOwner(this).lookup('controller:admin-wizard');
-    return controller.wizardFields;
+  @discourseComputed('showTypes')
+  typeSelectorIcon(showTypes) {
+    return showTypes ? 'chevron-down' : 'chevron-right';
   },
   
-  @observes('options.@each')
+  @observes('options.@each', 'inputType')
   resetActiveType() {
     this.set('activeType', defaultSelectionType(this.selectorType, this.options));
   },
@@ -58,7 +84,15 @@ export default Component.extend({
   
   @discourseComputed('activeType')
   comboBoxContent(activeType) {
-    return this[`${activeType}Fields`];
+    const controller = getOwner(this).lookup('controller:admin-wizard');
+    let content = controller[`${activeType}s`];
+    
+    if (activeType === 'wizardField' && this.options.context === 'field') {
+      const currentField = controller.currentField;
+      content = content.filter(field => field.id !== currentField.id);
+    }
+    
+    return content;
   },
   
   @discourseComputed('activeType')
@@ -70,18 +104,19 @@ export default Component.extend({
     }[activeType];
   },
   
-  @discourseComputed('activeType')
-  placeholder(activeType) {
+  @discourseComputed('activeType', 'inputType')
+  placeholderKey(activeType, inputType) {
     if (activeType === 'text' && this.options[`${this.selectorType}Placeholder`]) {
       return this.options[`${this.selectorType}Placeholder`];
-    }
-    return `admin.wizard.selector.placeholder.${snakeCase(activeType)}`;
+    } else {
+      return `admin.wizard.selector.placeholder.${snakeCase(activeType)}`;
+    }  
   },
   
   @discourseComputed('activeType')
   multiSelectOptions(activeType) {
     let result = {
-      none: this.placeholder
+      none: this.placeholderKey
     };
     
     if (activeType === 'list') {
@@ -111,6 +146,11 @@ export default Component.extend({
   actions: {
     toggleType(type) {
       this.set('activeType', type);
+      this.set('showTypes', false);
+    },
+    
+    toggleTypes() {
+      this.toggleProperty('showTypes')
     }
   }
 })
