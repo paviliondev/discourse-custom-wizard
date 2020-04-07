@@ -53,7 +53,12 @@ export default Component.extend({
     },
 
     remove(input) {
-      this.get('inputs').removeObject(input);
+      const inputs = this.inputs;
+      inputs.removeObject(input);
+            
+      if (inputs.length) {
+        inputs[0].set('connector', null);
+      }
     }
   }
 });

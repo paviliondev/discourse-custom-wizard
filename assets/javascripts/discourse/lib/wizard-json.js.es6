@@ -214,9 +214,11 @@ function stepHasAdvanced(property, value) {
   return advancedProperties.step[property] && present(value);
 }
 
-function hasAdvanced(params, type) {
+function objectHasAdvanced(params, type) {
   return Object.keys(params).some(p => {
-    return advancedProperties[type].indexOf(p) > -1 && present(params[p]);
+    let value = params[p];
+    let advanced = advancedProperties[type][params.type];
+    return advanced && advanced.indexOf(p) > -1 && present(value);
   });
 }
 
@@ -245,7 +247,7 @@ function buildProperties(json) {
         };
         
         properties.step.forEach((p) => {
-          stepParams[p] = buildProperty(stepJson, p, 'wizard');;
+          stepParams[p] = buildProperty(stepJson, p, 'wizard');
                     
           if (stepHasAdvanced(p, stepJson[p])) {
             stepParams.showAdvanced = true;
@@ -257,8 +259,8 @@ function buildProperties(json) {
         if (present(stepJson.fields)) {
           stepJson.fields.forEach((f) => {
             let params = buildObject(f, 'field');
-                        
-            if (hasAdvanced(params, 'field')) {
+                                    
+            if (objectHasAdvanced(params, 'field')) {
               params.showAdvanced = true;
             }
             
@@ -272,7 +274,7 @@ function buildProperties(json) {
           stepJson.actions.forEach((a) => {
             let params = buildObject(a, 'action');
             
-            if (hasAdvanced(params, 'action')) {
+            if (objectHasAdvanced(params, 'action')) {
               params.showAdvanced = true;
             }
             

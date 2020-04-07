@@ -54,9 +54,14 @@
 
   a.remove-input {
     position: absolute;
-    right: -25px;
-    top: 50%;
+    right: -14px;
+    top: 0px;
+    padding: 2px 5px;
     transform: translateY(-50%);
+    background: $secondary;
+    border-radius: 50%;
+    font-size: 0.8em;
+    border: 2px solid $primary-low;
   }
 }
 

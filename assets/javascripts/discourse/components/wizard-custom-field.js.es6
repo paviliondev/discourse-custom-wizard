@@ -80,6 +80,13 @@ export default Component.extend({
     this.set('field.prefill', null);
   },
   
+  @observes('isCategory')
+  setupCategoryType() {
+    if (this.isCategory && !this.field.property) {
+      this.set('field.property', 'id');
+    }
+  },
+  
   actions: {
     imageUploadDone(upload) {
       this.set("field.image", upload.url);

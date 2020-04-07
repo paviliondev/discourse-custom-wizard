@@ -83,7 +83,7 @@ const fieldProperties = [
   'property',
   'limit',
   'prefill',
-  'content',
+  'content'
 ]
 
 const actionProperties = [
@@ -139,27 +139,12 @@ const mappedProperties = {
   ]
 }
 
-const advancedProperties = {
-  step: [
-    'required_data',
-    'permitted_params'
-  ],
-  field: [
-    'property',
-    'prefill',
-    'content'
-  ],
-  action: [
-    'code',
-    'custom_fields',
-    'skip_redirect',
-    'required'
-  ]
-}
+const advancedFieldProperties = [
+  'prefill',
+  'content'
+]
 
 const actionTypes = [
-  'create_topic',
-  'update_profile',
   'create_topic',
   'update_profile',
   'send_message',
@@ -170,6 +155,37 @@ const actionTypes = [
 ].filter(function(type) {
   return Discourse.SiteSettings.wizard_api_features || type !== 'send_to_api'; 
 });
+
+const advancedProperties = {
+  step: [
+    'required_data',
+    'permitted_params'
+  ],
+  field: advancedFieldProperties.reduce(
+    function(map, type) {
+      console.log(map, type);
+      map[type] = advancedFieldProperties;
+      if (type === 'category') {
+        map.push('property');
+      }
+      return map;
+    }, {}
+  ),
+  action: actionTypes.reduce(
+    function(map, type) {
+      if (type === 'route_to') {
+        map[type] = ['code'];
+      } else if (['create_topic', 'send_message', 'open_composer'].indexOf(type) > -1) {
+        map[type] = ['custom_fields'];
+      } else if (['create_topic', 'send_message'].indexOf(type) > -1) {
+        map[type].push('skip_redirect');
+      } else if (type === 'send_message') {
+        map[type].push('required');
+      }
+      return map;
+    }, {}
+  )
+}
 
 export {
   selectKitContent,
