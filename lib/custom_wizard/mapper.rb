@@ -63,7 +63,7 @@ class CustomWizard::Mapper
         end
       end
     end
-              
+                  
     perform_result
   end
   
@@ -138,7 +138,7 @@ class CustomWizard::Mapper
     end
   end
   
-  def map_wizard(value)
+  def map_wizard_field(value)
     data && !data.key?("submitted_at") && data[value]
   end
 

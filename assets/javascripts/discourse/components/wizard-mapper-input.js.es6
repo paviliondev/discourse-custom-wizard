@@ -16,6 +16,13 @@ export default Component.extend({
   canAddPair: not('isAssignment'),
   connectors: computed(function() { return connectorContent('output', this.input.type, this.options) }),
   inputTypes: computed(function() { return inputTypesContent(this.options) }),
+  
+  @observes('input.type')
+  setupPairs() {
+    if (this.hasPairs && (!this.input.pairs || this.input.pairs.length < 1)) {
+      this.send('addPair');
+    }
+  },
     
   actions: {
     addPair() {

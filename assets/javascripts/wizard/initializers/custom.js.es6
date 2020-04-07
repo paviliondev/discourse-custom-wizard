@@ -20,7 +20,6 @@ export default {
     const autocomplete = requirejs('discourse/lib/autocomplete').default;
     const cook = requirejs('discourse/plugins/discourse-custom-wizard/wizard/lib/text-lite').cook;
     const Singleton = requirejs("discourse/mixins/singleton").default;
-    const WizardFieldDropdown = requirejs('wizard/components/wizard-field-dropdown').default;
     const Store = requirejs("discourse/models/store").default;
     const registerRawHelpers = requirejs("discourse-common/lib/raw-handlebars-helpers").registerRawHelpers;
     const RawHandlebars = requirejs("discourse-common/lib/raw-handlebars").default;
@@ -277,11 +276,5 @@ export default {
         return valid;
       }
     });
-    
-    WizardFieldDropdown.reopen({
-      didInsertElement() {
-        console.log(this.field)
-      }
-    })
   }
 };

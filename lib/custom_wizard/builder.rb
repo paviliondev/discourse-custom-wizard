@@ -265,10 +265,7 @@ class CustomWizard::Builder
       CustomWizard::Mapper.new(
         inputs: prefill,
         user: @wizard.user,
-        data: @submissions.last,
-        opts: {
-          debug: true
-        }
+        data: @submissions.last
       ).perform
     end
   end

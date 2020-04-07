@@ -20,7 +20,7 @@
   
   > .mapper-connector.single {
     width: min-content;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     height: 20px;
     border: 2px solid $primary-low;
   }
@@ -63,6 +63,10 @@
     border-radius: 50%;
     font-size: 0.8em;
     border: 2px solid $primary-low;
+  }
+  
+  &.association, &.validation {
+    padding-right: 27px;
   }
 }
 
@@ -156,6 +160,12 @@
   align-items: center;
   position: relative;
   
+  .add-pair,
+  .remove-pair,
+  .join-pair {
+    font-size: 0.9em;
+  }
+  
   .add-pair {
     margin-top: 5px;
   }
@@ -163,7 +173,7 @@
   .remove-pair {
     position: absolute;
     top: 5px;
-    right: -25px;
+    right: -20px;
   }
   
   .join-pair {
