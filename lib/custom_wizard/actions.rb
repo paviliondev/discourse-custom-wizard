@@ -28,7 +28,7 @@ class CustomWizard::Action
       
       creator = PostCreator.new(user, params)
       post = creator.create
-
+      
       if creator.errors.present?
         updater.errors.add(:create_topic, creator.errors.full_messages.join(" "))
       elsif action['skip_redirect'].blank?
@@ -200,13 +200,11 @@ class CustomWizard::Action
       data: data,
       user: user,
     ).perform
-    
+        
     if output.is_a?(Array)
       output.flatten
-    elsif output.is_a?(Integer)
+    else output.is_a?(String)
       [*output]
-    elsif output.is_a?(String)
-      [*output.to_i]
     end
   end
   
