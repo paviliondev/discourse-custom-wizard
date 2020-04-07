@@ -84,6 +84,9 @@
 //= require discourse/components/d-editor
 //= require discourse/components/input-tip
 //= require discourse/components/emoji-picker
+//= require discourse/components/input-tip
+//= require discourse/components/date-picker
+//= require discourse/components/text-field
 
 //= require discourse/templates/components/conditional-loading-spinner
 //= require discourse/templates/components/d-button
@@ -91,6 +94,7 @@
 //= require discourse/templates/components/emoji-picker
 //= require discourse/templates/category-tag-autocomplete
 //= require discourse/templates/emoji-selector-autocomplete
+//= require discourse/templates/user-selector-autocomplete
 
 //= require discourse/pre-initializers/sniff-capabilities
 

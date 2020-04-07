@@ -1,0 +1,502 @@
+@import "wizard_variables";
+
+// event form
+
+.event-form {
+  width: 585px;
+  max-width: 80vw;
+  
+  .control {
+    display: inline-flex;
+    align-items: flex-start;
+    min-height: 30px;
+    margin-right: 20px;
+    
+    > input:first-child {
+      margin-top: 10px !important;
+    }
+    
+    > span:first-child {
+      margin-top: 5px !important;
+    }
+    
+    > input + span {
+      margin-top: 5px;
+    }
+    
+    &:last-of-type {
+      margin-right: 0;
+    }
+    
+    input[type="checkbox"] {
+      margin: 0 10px 0 0;
+    }
+    
+    input[type="number"] {
+      width: 50px;
+      margin: 0;
+      min-height: 34px;
+      border: 1px solid #e9e9e9;
+    }
+    
+    &.full-width {
+      flex: 1;
+    }
+    
+    .select-kit, .ac-wrap {
+      width: 100% !important;
+      max-width: 330px;
+    }
+    
+    .select-kit-body {
+      width: 100% !important;
+      max-width: 330px;
+    }
+  }
+  
+  .event-controls {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  .datetime-controls {
+    display: flex;
+    margin-bottom: 5px;
+    
+    .date-time-card {
+      width: 270px;
+      display: inline-block;
+      text-align: left;
+    }
+
+    .start-card {
+      border-left: 1px solid transparent;
+      padding-right: 20px;
+    }
+
+    .end-card {
+      border-left: 1px solid #eee;
+      padding-left: 20px;
+      
+      &.disabled {
+        span, label, .pika-label, .pika-table th, .pika-button, .pika-prev, .pika-next, input, .pika-lendar, .is-selected .pika-button {
+          color: $primary-low;
+          background-image: initial;
+          background: initial;
+          box-shadow: initial;
+          cursor: default;
+          pointer-events: none;
+        }
+        
+        input, .pika-lendar {
+          border: 1px solid $primary-low !important;
+        }
+      }
+    }
+
+    .set-all-day {
+      font-size: 1.2em;
+      padding-bottom: 13px;
+    }
+
+    .sub-title {
+      font-size: 1.2em;
+      font-weight: bold;
+      padding-bottom: 2px;
+      padding-right: 10px;
+    }
+
+    .date-time-set {
+      padding-top: 10px;
+      display: flex;
+      flex-direction: row;
+
+      .date-area {
+        order: 1;
+      }
+
+      .time-area {
+        order: 2;
+        margin-left: 10px;
+
+        .modal-time {
+          width: 127px;
+        }
+      }
+      
+      input {
+        padding: 4px 10px;
+        font-size: 1em;
+        line-height: 1;
+        color: $primary;
+        border: 1px solid $primary-medium;
+        min-height: 30px;
+        width: 130px;
+        margin: 10px 0;
+      }
+    }
+    
+    #date-container-start,
+    #date-container-end {
+      height: 250px;
+    }
+
+    .ui-timepicker-input {
+      width: 105px;
+      text-align: center;
+    }
+
+    .pika-single {
+      position: relative !important;
+      border: none;
+      z-index: 100;
+
+      .pika-lendar {
+        border: 1px solid $primary-medium;
+        padding: 14px;
+        margin: 0;
+        float: none;
+        width: auto;
+      }
+    }
+  }
+
+  .rsvp-controls {
+    
+    .rsvp-container {
+      display: flex;
+      flex-flow: wrap;
+      margin-top: 10px;
+              
+      .control span {
+        margin-right: 10px;
+      }
+      
+      .full-width {
+        align-items: flex-start;
+      }
+    }
+  }
+}
+
+// datepicker
+
+/*!
+ * Pikaday
+ * Copyright © 2014 David Bushell | BSD & MIT license | http://dbushell.com/
+ */
+
+// Variables
+// Declare any of these variables before importing this SCSS file to easily override defaults
+// Variables are namespaced with the pd (pikaday) prefix
+
+// Colours
+$pd-text-color: $primary !default;
+$pd-title-color: $primary !default;
+$pd-title-bg: $secondary !default;
+$pd-picker-bg: $secondary !default;
+$pd-picker-border: $primary-low !default;
+$pd-picker-border-bottom: $primary-low !default;
+$pd-picker-shadow: rgba(0,0,0,.5) !default;
+$pd-th-color: $primary !default;
+$pd-day-color: $primary !default;
+$pd-day-bg: $secondary !default;
+$pd-day-hover-color: $primary !default;
+$pd-day-hover-bg: $tertiary-low !default;
+$pd-day-today-color: $tertiary !default;
+$pd-day-selected-color: $secondary !default;
+$pd-day-selected-bg: $tertiary !default;
+$pd-day-selected-shadow: $tertiary-low !default;
+$pd-day-disabled-color: $primary !default;
+$pd-week-color: $primary !default;
+
+// Font
+$pd-font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+
+
+.pika-single {
+    z-index: 9999;
+    display: block;
+    position: relative;
+    color: $pd-text-color;
+    background: $pd-picker-bg;
+    border: 1px solid $pd-picker-border;
+    border-bottom-color: $pd-picker-border-bottom;
+    font-family: $pd-font-family;
+
+    &.is-hidden {
+        display: none;
+    }
+
+    &.is-bound {
+        position: absolute;
+        box-shadow: 0 5px 15px -5px $pd-picker-shadow;
+    }
+}
+
+// clear child float (pika-lendar), using the famous micro clearfix hack
+// http://nicolasgallagher.com/micro-clearfix-hack/
+.pika-single {
+    &:before,
+    &:after {
+        content: " ";
+        display: table;
+    }
+
+    &:after { clear: both }
+}
+
+.pika-lendar {
+    float: left;
+    width: 240px;
+    margin: 8px;
+}
+
+.pika-title {
+    position: relative;
+    text-align: center;
+
+    select {
+        cursor: pointer;
+        position: absolute;
+        z-index: 9998;
+        margin: 0;
+        left: 0;
+        top: 5px;
+        filter: alpha(opacity=0);
+        opacity: 0;
+    }
+}
+
+.pika-label {
+    display: inline-block;
+    position: relative;
+    z-index: 9999;
+    overflow: hidden;
+    margin: 0;
+    padding: 5px 3px;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: bold;
+    color: $pd-title-color;
+    background-color: $pd-title-bg;
+}
+
+.pika-prev,
+.pika-next {
+    display: block;
+    cursor: pointer;
+    position: relative;
+    outline: none;
+    border: 0;
+    padding: 0;
+    width: 20px;
+    height: 30px;
+    text-indent: 20px; // hide text using text-indent trick, using width value (it's enough)
+    white-space: nowrap;
+    overflow: hidden;
+    background-color: transparent;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 75% 75%;
+    opacity: .5;
+    @if (lightness($secondary) < 50) { // invert the black png if the background is dark
+        filter: invert(1); 
+    } 
+
+    &:hover {
+        opacity: 1;
+    }
+
+    &.is-disabled {
+        cursor: default;
+        opacity: .2;
+    }
+}
+
+.pika-prev,
+.is-rtl .pika-next {
+    float: left;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAeCAYAAAAsEj5rAAAAUklEQVR42u3VMQoAIBADQf8Pgj+OD9hG2CtONJB2ymQkKe0HbwAP0xucDiQWARITIDEBEnMgMQ8S8+AqBIl6kKgHiXqQqAeJepBo/z38J/U0uAHlaBkBl9I4GwAAAABJRU5ErkJggg==');
+}
+
+.pika-next,
+.is-rtl .pika-prev {
+    float: right;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAeCAYAAAAsEj5rAAAAU0lEQVR42u3VOwoAMAgE0dwfAnNjU26bYkBCFGwfiL9VVWoO+BJ4Gf3gtsEKKoFBNTCoCAYVwaAiGNQGMUHMkjGbgjk2mIONuXo0nC8XnCf1JXgArVIZAQh5TKYAAAAASUVORK5CYII=');
+}
+
+.pika-select {
+    display: inline-block;
+}
+
+.pika-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: 0;
+
+    th,
+    td {
+        width: 14.285714285714286%;
+        padding: 0;
+    }
+
+    th {
+        color: $pd-th-color;
+        font-size: 12px;
+        line-height: 25px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    abbr {
+        border-bottom: none;
+        cursor: help;
+    }
+}
+
+.pika-button {
+    cursor: pointer;
+    display: block;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    outline: none;
+    border: 0;
+    margin: 0;
+    width: 100%;
+    padding: 5px;
+    color: $pd-day-color;
+    font-size: 12px;
+    line-height: 15px;
+    text-align: right;
+    background: $pd-day-bg;
+
+    .is-today & {
+        color: $pd-day-today-color;
+        font-weight: bold;
+    }
+
+    .is-selected & {
+        color: $pd-day-selected-color;
+        font-weight: bold;
+        background: $pd-day-selected-bg;
+        box-shadow: inset 0 1px 3px $pd-day-selected-shadow;
+        border-radius: 3px;
+    }
+
+    .is-disabled &,
+    .is-outside-current-month & {
+        pointer-events: none;
+        cursor: default;
+        color: $pd-day-disabled-color;
+        opacity: .3;
+    }
+
+    &:hover {
+        color: $pd-day-hover-color;
+        background: $pd-day-hover-bg;
+        box-shadow: none;
+        border-radius: 3px;
+    }
+}
+
+.pika-week {
+    font-size: 11px;
+    color: $pd-week-color;
+}
+
+.is-inrange .pika-button {
+    background: #D5E9F7;
+}
+
+.is-startrange .pika-button {
+    color: $secondary;
+    background: #6CB31D;
+    box-shadow: none;
+    border-radius: 3px;
+}
+
+.is-endrange .pika-button {
+    color: $secondary;
+    background: $tertiary;
+    box-shadow: none;
+    border-radius: 3px;
+}
+
+
+// timepicker
+
+.ui-timepicker-wrapper {
+	overflow-y: auto;
+	max-height: 150px;
+	width: 6.5em;
+	background: #fff;
+	border: 1px solid #ddd;
+	-webkit-box-shadow:0 5px 10px rgba(0,0,0,0.2);
+	-moz-box-shadow:0 5px 10px rgba(0,0,0,0.2);
+	box-shadow:0 5px 10px rgba(0,0,0,0.2);
+	outline: none;
+	z-index: 10001;
+	margin: 0;
+}
+
+.ui-timepicker-wrapper.ui-timepicker-with-duration {
+	width: 13em;
+}
+
+.ui-timepicker-wrapper.ui-timepicker-with-duration.ui-timepicker-step-30,
+.ui-timepicker-wrapper.ui-timepicker-with-duration.ui-timepicker-step-60 {
+	width: 11em;
+}
+
+.ui-timepicker-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.ui-timepicker-duration {
+	margin-left: 5px; color: #888;
+}
+
+.ui-timepicker-list:hover .ui-timepicker-duration {
+	color: #888;
+}
+
+.ui-timepicker-list li {
+	padding: 3px 0 3px 5px;
+	cursor: pointer;
+	white-space: nowrap;
+	color: #000;
+	list-style: none;
+	margin: 0;
+}
+
+.ui-timepicker-list:hover .ui-timepicker-selected {
+	background: #fff; color: #000;
+}
+
+li.ui-timepicker-selected,
+.ui-timepicker-list li:hover,
+.ui-timepicker-list .ui-timepicker-selected:hover {
+	background: #1980EC; color: #fff;
+}
+
+li.ui-timepicker-selected .ui-timepicker-duration,
+.ui-timepicker-list li:hover .ui-timepicker-duration {
+	color: #ccc;
+}
+
+.ui-timepicker-list li.ui-timepicker-disabled,
+.ui-timepicker-list li.ui-timepicker-disabled:hover,
+.ui-timepicker-list li.ui-timepicker-selected.ui-timepicker-disabled {
+	color: #888;
+	cursor: default;
+}
+
+.ui-timepicker-list li.ui-timepicker-disabled:hover,
+.ui-timepicker-list li.ui-timepicker-selected.ui-timepicker-disabled {
+	background: #f2f2f2;
+}
