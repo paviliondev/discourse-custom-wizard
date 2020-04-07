@@ -153,6 +153,7 @@ function newInput(options = {}, count) {
 export {
   defaultInputType,
   defaultSelectionType,
+  defaultConnector,
   connectorContent,
   inputTypesContent,
   selectionTypes,

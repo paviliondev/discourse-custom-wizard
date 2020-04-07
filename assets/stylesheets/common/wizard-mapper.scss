@@ -55,9 +55,12 @@
 
   a.remove-input {
     position: absolute;
-    right: -14px;
+    right: -13px;
     top: 0px;
-    padding: 2px 4px;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transform: translateY(-50%);
     background: $secondary;
     border-radius: 50%;
