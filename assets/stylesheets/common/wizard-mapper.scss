@@ -155,6 +155,16 @@
       color: $primary;
     }
   }
+  
+  .select-kit-header .selected-name {
+    max-width: 85%;
+    
+    .name {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
 }
 
 .mapper-pairs {

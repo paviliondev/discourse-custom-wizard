@@ -85,8 +85,11 @@ class CustomWizard::Mapper
       key = map_field(pair['key'], pair['key_type'])
       connector = pair['connector']
       operator = map_operator(connector)
-      value = interpolate(map_field(pair['value'], pair['value_type']))
-      value = Regexp.new(value) if connector == 'regex'
+      value = cast_value(
+        key,
+        interpolate(map_field(pair['value'], pair['value_type'])),
+        connector
+      )
                         
       begin
         failed = !cast_result(key.public_send(operator, value), connector)
@@ -96,6 +99,20 @@ class CustomWizard::Mapper
     end
     
     !failed
+  end
+  
+  def cast_value(key, value, connector)
+    if connector == 'regex'
+      Regexp.new(value)
+    else
+      if key.is_a?(String)
+        value.to_s
+      elsif key.is_a?(Integer)
+        value.to_i
+      else
+        value
+      end
+    end
   end
   
   def cast_result(result, connector)
