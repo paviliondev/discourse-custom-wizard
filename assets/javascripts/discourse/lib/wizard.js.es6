@@ -32,8 +32,8 @@ function camelCase(string) {
 
 const profileFields = [
   'name',
-  'username',
   'email',
+  'avatar',
   'date_of_birth',
   'title',
   'locale',
@@ -181,7 +181,7 @@ const advancedProperties = {
     function(map, type) {
       if (type === 'route_to') {
         map[type] = ['code'];
-      } else if (['create_topic', 'send_message', 'open_composer'].indexOf(type) > -1) {
+      } else if (['create_topic', 'send_message', 'open_composer', 'update_profile'].indexOf(type) > -1) {
         map[type] = ['custom_fields'];
       } else if (['create_topic', 'send_message'].indexOf(type) > -1) {
         map[type].push('skip_redirect');

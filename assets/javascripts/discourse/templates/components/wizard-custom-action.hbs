@@ -138,11 +138,11 @@
     {{wizard-mapper 
       inputs=action.profile_updates
       options=(hash
-        pairConnector='set'
+        single=true
+        inputTypes='association'
         userFieldSelection='key'
         wizardFieldSelection='value'
         keyDefaultSelection='userField'
-        keyPlaceholder='admin.wizard.action.update_profile.key'
         context='action'
       )}}
   </div>
@@ -238,7 +238,7 @@
   {{#if action.showAdvanced}}
     <div class="advanced-settings">
       
-      {{#if basicTopicFields}}
+      {{#if hasCustomFields}}
         <div class="setting full field-mapper-setting">
           <div class="setting-label">
             <label>{{i18n 'admin.wizard.action.custom_fields.label'}}</label>

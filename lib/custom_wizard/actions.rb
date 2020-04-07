@@ -63,25 +63,35 @@ class CustomWizard::Action
 
   def update_profile
     return unless (profile_updates = action['profile_updates']).length
-
-    attributes = { custom_fields: {} }
-
-    profile_updates.each do |pu|
-      pair = field['pairs'].first
-      field = mapper.map_field(pair['key'], pair['key_type'])
-      value = mapper.map_field(pair['value'], pair['value_type'])
-      
-      if field.include?("custom_field")
-        attributes[:custom_fields][field] = value
-      else
-        attributes[field.to_sym] = value
+    
+    allowed_fields = CustomWizard::Mapper.user_fields + ['avatar']
+    params = {}
+    
+    profile_updates.first[:pairs].each do |pair|
+      if allowed_fields.include?(pair['key'])
+        key = pair['key']
+        key = "#{key}_upload_url" if ['profile_background', 'card_background'].include?(key)          
+        params[key.to_sym] = mapper.map_field(pair['value'], pair['value_type'])
       end
     end
     
-    if attributes.present?
-      user_updater = UserUpdater.new(user, user)
-      user_updater.update(attributes)
+    params = add_custom_fields(params)
+    
+    if params.present?
+      UserUpdater.new(Discourse.system_user, user).update(params)
+      
+      if params[:avatar].present?
+        update_avatar(params[:avatar])
+      end
     end
+  end
+  
+  def update_avatar(upload)
+    user.create_user_avatar unless user.user_avatar
+    user.user_avatar.custom_upload_id = upload['id']
+    user.uploaded_avatar_id = upload['id']
+    user.save!
+    user.user_avatar.save!
   end
 
   def send_to_api
@@ -220,11 +230,11 @@ class CustomWizard::Action
         keyArr = field[:key].split('.')
         value = field[:value]
         
-        if keyArr.length != 2 || keyArr.first === 'topic'
+        if keyArr.first === 'topic'
           params[:topic_opts] ||= {}
           params[:topic_opts][:custom_fields] ||= {}
           params[:topic_opts][:custom_fields][keyArr.last] = value
-        elsif keyArr.first === 'post'
+        else
           params[:custom_fields] ||= {}
           params[:custom_fields][keyArr.last.to_sym] = value
         end
@@ -249,8 +259,6 @@ class CustomWizard::Action
       mapper.interpolate(action['post_template']) :
       data[action['post']]
     
-    params = add_custom_fields(params)
-    
-    params
+    add_custom_fields(params)
   end
 end

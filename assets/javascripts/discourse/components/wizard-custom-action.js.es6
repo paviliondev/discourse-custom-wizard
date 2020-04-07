@@ -15,7 +15,8 @@ export default Component.extend({
   routeTo: equal('action.type', 'route_to'),
   disableId: not('action.isNew'),
   groupPropertyTypes: selectKitContent(['id', 'name']),
-  hasAdvanced: or('basicTopicFields', 'routeTo'),
+  hasAdvanced: or('hasCustomFields', 'routeTo'),
+  hasCustomFields: or('basicTopicFields', 'updateProfile'),
   
   @on('didInsertElement')
   @observes('action.type')
