@@ -138,8 +138,9 @@
     {{wizard-mapper 
       inputs=action.profile_updates
       options=(hash
-        single=true
+        singular=true
         inputTypes='association'
+        textSelection='value'
         userFieldSelection='key'
         wizardFieldSelection='value'
         keyDefaultSelection='userField'
@@ -248,6 +249,7 @@
             {{wizard-mapper
               inputs=action.custom_fields
               options=(hash
+                singular=true
                 inputTypes='association'
                 wizardFieldSelection='value'
                 userFieldSelection='value'

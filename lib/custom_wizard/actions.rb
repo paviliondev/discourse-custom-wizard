@@ -63,15 +63,13 @@ class CustomWizard::Action
 
   def update_profile
     return unless (profile_updates = action['profile_updates']).length
-    
-    allowed_fields = CustomWizard::Mapper.user_fields + ['avatar']
     params = {}
     
     profile_updates.first[:pairs].each do |pair|
-      if allowed_fields.include?(pair['key'])
-        key = pair['key']
-        key = "#{key}_upload_url" if ['profile_background', 'card_background'].include?(key)          
-        params[key.to_sym] = mapper.map_field(pair['value'], pair['value_type'])
+      if allowed_profile_fields.include?(pair['key'])
+        key = cast_profile_key(pair['key']).to_sym
+        value = mapper.map_field(pair['value'], pair['value_type'])     
+        params[key] = cast_profile_value(value, pair['key'])
       end
     end
     
@@ -84,14 +82,6 @@ class CustomWizard::Action
         update_avatar(params[:avatar])
       end
     end
-  end
-  
-  def update_avatar(upload)
-    user.create_user_avatar unless user.user_avatar
-    user.user_avatar.custom_upload_id = upload['id']
-    user.uploaded_avatar_id = upload['id']
-    user.save!
-    user.user_avatar.save!
   end
 
   def send_to_api
@@ -260,5 +250,41 @@ class CustomWizard::Action
       data[action['post']]
     
     add_custom_fields(params)
+  end
+  
+  def profile_url_fields
+    ['profile_background', 'card_background']
+  end
+  
+  def cast_profile_key(key)
+    if profile_url_fields.include?(key)
+      "#{key}_upload_url"
+    else
+      key
+    end
+  end
+  
+  def cast_profile_value(value, key)
+    if profile_url_fields.include?(key)
+      value['url']
+    elsif key === 'avatar'
+      value['id']
+    else
+      value
+    end
+  end
+  
+  def allowed_profile_fields
+    CustomWizard::Mapper.user_fields + 
+    profile_url_fields + 
+    ['avatar']
+  end
+  
+  def update_avatar(upload_id)
+    user.create_user_avatar unless user.user_avatar
+    user.user_avatar.custom_upload_id = upload_id
+    user.uploaded_avatar_id = upload_id
+    user.save!
+    user.user_avatar.save!
   end
 end

@@ -31,7 +31,7 @@ export default Component.extend({
     });
     
     selectionTypes.forEach(type => {
-      if (options[`${type}Selection`]) {
+      if (options[`${type}Selection`] !== undefined) {
         result[`${type}Selection`] = options[`${type}Selection`]
       } else {
         result[`${type}Selection`] = type === 'text' ? true : false;

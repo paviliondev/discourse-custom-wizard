@@ -36,6 +36,8 @@ const profileFields = [
   'avatar',
   'date_of_birth',
   'title',
+  'profile_background',
+  'card_background',
   'locale',
   'location',
   'website',
