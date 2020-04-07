@@ -3,14 +3,14 @@ import { computed } from "@ember/object";
 import { default as discourseComputed, observes, on } from "discourse-common/utils/decorators";
 import { getOwner } from 'discourse-common/lib/get-owner';
 import { defaultSelectionType, selectionTypes } from '../lib/wizard-mapper'; 
-import { snakeCase, selectKitContent } from '../lib/wizard';
+import { snakeCase } from '../lib/wizard';
 import Component from "@ember/component";
 import { bind } from "@ember/runloop";
 
 export default Component.extend({
   classNames: 'mapper-selector',
   groups: alias('site.groups'),
-  categories: computed(function() { return selectKitContent(this.site.categories) }),
+  categories: alias('site.categories'),
   showText: computed('activeType', function() { return this.showInput('text') }),
   showWizardField: computed('activeType', function() { return this.showInput('wizardField') }),
   showUserField: computed('activeType', function() { return this.showInput('userField') }),
@@ -65,11 +65,6 @@ export default Component.extend({
   
   typeLabel(type) {
     return I18n.t(`admin.wizard.selector.label.${snakeCase(type)}`)
-  },
-  
-  @discourseComputed('showTypes')
-  typeSelectorIcon(showTypes) {
-    return showTypes ? 'chevron-down' : 'chevron-right';
   },
   
   @observes('inputType')

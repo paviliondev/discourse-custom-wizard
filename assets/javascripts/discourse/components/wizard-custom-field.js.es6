@@ -56,20 +56,22 @@ export default Component.extend({
   prefillOptions(fieldType) {
     let options = {
       wizardFieldSelection: true,
-      textSelection: 'key,value',
+      textSelection: true,
       userFieldSelection: 'key,value',
       context: 'field'
     }
     
     let outputSelectionType = {
-      category: 'category',
-      tag: 'tag',
-      group: 'group',
-      dropdown: 'text'
+      category: ['category'],
+      tag: ['tag'],
+      group: ['group'],
+      dropdown: ['list']
     }[fieldType];
     
-    options[`${outputSelectionType}Selection`] = 'output';
-    options.outputDefaultSelection = outputSelectionType;
+    outputSelectionType.forEach(function(type) {
+      options[`${type}Selection`] = 'output';
+      options.outputDefaultSelection = type;
+    });
     
     return options;
   },

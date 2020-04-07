@@ -244,7 +244,7 @@ class CustomWizard::Builder
           with_type: true
         }
       ).perform
-            
+                  
       if content[:type] == 'association'
         content[:result] = content[:result].map do |item|
           { 
@@ -265,7 +265,10 @@ class CustomWizard::Builder
       CustomWizard::Mapper.new(
         inputs: prefill,
         user: @wizard.user,
-        data: @submissions.last
+        data: @submissions.last,
+        opts: {
+          debug: true
+        }
       ).perform
     end
   end

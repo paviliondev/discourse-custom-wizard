@@ -139,6 +139,13 @@ const mappedProperties = {
   ]
 }
 
+const advancedFieldTypes = [
+  'category',
+  'tag',
+  'group',
+  'dropdown'
+]
+
 const advancedFieldProperties = [
   'prefill',
   'content'
@@ -161,12 +168,11 @@ const advancedProperties = {
     'required_data',
     'permitted_params'
   ],
-  field: advancedFieldProperties.reduce(
+  field: advancedFieldTypes.reduce(
     function(map, type) {
-      console.log(map, type);
       map[type] = advancedFieldProperties;
       if (type === 'category') {
-        map.push('property');
+        map[type].push('property');
       }
       return map;
     }, {}

@@ -277,5 +277,11 @@ export default {
         return valid;
       }
     });
+    
+    WizardFieldDropdown.reopen({
+      didInsertElement() {
+        console.log(this.field)
+      }
+    })
   }
 };

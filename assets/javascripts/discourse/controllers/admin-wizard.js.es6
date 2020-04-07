@@ -15,13 +15,16 @@ export default Controller.extend({
   @observes('currentStep')
   resetCurrentObjects() {
     const currentStep = this.currentStep;
-    const fields = currentStep.fields;
-    const actions = currentStep.actions;
     
-    this.setProperties({
-      currentField: fields.length ? fields[0] : null,
-      currentAction: actions.length ? actions[0] : null
-    });
+    if (currentStep) {
+      const fields = currentStep.fields;
+      const actions = currentStep.actions;
+      
+      this.setProperties({
+        currentField: fields.length ? fields[0] : null,
+        currentAction: actions.length ? actions[0] : null
+      });  
+    }
     
     scheduleOnce('afterRender', () => ($("body").addClass('admin-wizard')));
   },

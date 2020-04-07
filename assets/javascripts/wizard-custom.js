@@ -82,7 +82,7 @@
 //= require discourse/components/d-button
 //= require discourse/components/composer-editor
 //= require discourse/components/d-editor
-//= require discourse/components/popup-input-tip
+//= require discourse/components/input-tip
 //= require discourse/components/emoji-picker
 
 //= require discourse/templates/components/conditional-loading-spinner

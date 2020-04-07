@@ -52,7 +52,7 @@ function defaultConnector(connectorType, inputType, opts = {}) {
 function connectorContent(connectorType, inputType, opts) {
   let connector = opts[`${connectorType}Connector`];
   
-  if (!connector && connectorType === 'output') {
+  if ((!connector && connectorType === 'output') || inputType === 'association') {
     connector = defaultConnector(connectorType, inputType, opts);
   }
   

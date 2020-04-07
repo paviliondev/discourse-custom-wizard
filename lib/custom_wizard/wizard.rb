@@ -142,10 +142,10 @@ class CustomWizard::Wizard
     return true if mapper.blank?
     
     mapper.all? do |m|
-      if m.type === 'assignment'
-        GroupUser.exists?(group_id: m.result, user_id: user.id)
-      elsif m.type === 'validation'
-        mapper.result
+      if m[:type] === 'assignment'
+        GroupUser.exists?(group_id: m[:result], user_id: user.id)
+      elsif m[:type] === 'validation'
+        m[:result]
       else
         true
       end

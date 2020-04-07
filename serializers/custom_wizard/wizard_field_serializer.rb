@@ -45,4 +45,8 @@ class CustomWizardFieldSerializer < ::WizardFieldSerializer
   def content
     object.content
   end
+  
+  def include_choices?
+    object.choices.present?
+  end
 end

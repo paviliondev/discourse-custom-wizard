@@ -25,8 +25,7 @@ class CustomWizard::WizardController < ::ApplicationController
         builder_opts[:reset] = params[:reset] || builder.wizard.restart_on_revisit
 
         if builder.wizard.present?
-          wizard = builder.build(builder_opts, params)
-          render_serialized(wizard, ::CustomWizardSerializer)
+          render_serialized(builder.build(builder_opts, params), ::CustomWizardSerializer)
         else
           render json: { error: I18n.t('wizard.none') }
         end

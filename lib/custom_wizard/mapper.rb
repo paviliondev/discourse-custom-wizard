@@ -63,12 +63,12 @@ class CustomWizard::Mapper
         end
       end
     end
-          
+              
     perform_result
   end
   
   def build_result(result, type)
-    if opts[:with_type]
+    if @opts[:with_type]
       {
         type: type,
         result: result
@@ -83,18 +83,27 @@ class CustomWizard::Mapper
     
     pairs.each do |pair|
       key = map_field(pair['key'], pair['key_type'])
-      operator = map_operator(pair['connector'])
+      connector = pair['connector']
+      operator = map_operator(connector)
       value = interpolate(map_field(pair['value'], pair['value_type']))
-      value = "/#{value}/" if pair['connector'] == 'regex'
-            
+      value = Regexp.new(value) if connector == 'regex'
+                        
       begin
-        failed = true unless key.public_send(operator, value)
+        failed = !cast_result(key.public_send(operator, value), connector)
       rescue NoMethodError
         #
       end
     end
     
     !failed
+  end
+  
+  def cast_result(result, connector)
+    if connector == 'regex'
+      result == 0 ? true : false
+    else
+      result
+    end
   end
   
   def map_pairs(pairs)
