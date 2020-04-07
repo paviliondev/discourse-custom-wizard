@@ -29,6 +29,21 @@ export default Component.extend({
     }
   },
   
+  setupTypeOutput(fieldType, options) {    
+    const selectionType = {
+      category: 'category',
+      tag: 'tag',
+      group: 'group'
+    }[fieldType];
+    
+    if (selectionType) {
+      options[`${selectionType}Selection`] = 'output';
+      options.outputDefaultSelection = selectionType;
+    }
+
+    return options;
+  },
+  
   @discourseComputed('field.type')
   contentOptions(fieldType) {
     let options = {
@@ -38,17 +53,18 @@ export default Component.extend({
       context: 'field'
     }
     
+    options = this.setupTypeOutput(fieldType, options);
+    
     if (this.isDropdown) {
       options.wizardFieldSelection = 'key,value';
-      options.listSelection = 'assignment';
+      options.listSelection += ',assignment';
       options.inputTypes = 'association,assignment';
       options.singular = true;
       options.pairConnector = 'association';
       options.keyPlaceholder = 'admin.wizard.key';
       options.valuePlaceholder = 'admin.wizard.value';
-      options.outputDefaultSelection = 'list';
     }
-    
+        
     return options;
   },
   
@@ -60,20 +76,8 @@ export default Component.extend({
       userFieldSelection: 'key,value',
       context: 'field'
     }
-    
-    let outputSelectionType = {
-      category: ['category'],
-      tag: ['tag'],
-      group: ['group'],
-      dropdown: ['list']
-    }[fieldType];
-    
-    outputSelectionType.forEach(function(type) {
-      options[`${type}Selection`] = 'output';
-      options.outputDefaultSelection = type;
-    });
-    
-    return options;
+
+    return this.setupTypeOutput(fieldType, options);
   },
   
   @observes('field.type')

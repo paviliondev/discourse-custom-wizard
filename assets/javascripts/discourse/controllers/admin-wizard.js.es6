@@ -63,7 +63,7 @@ export default Controller.extend({
         let stepFields = s.fields.map((f) => {
           return EmberObject.create({
             id: f.id,
-            label: `${f.id} (${s.id})`,
+            label: `${f.label} (${s.id})`,
             type: f.type
           });
         });
