@@ -58,7 +58,9 @@ const wizardProperties = [
   'prompt_completion',
   'restart_on_revisit',
   'theme_id',
-  'permitted'
+  'permitted',
+  'steps',
+  'actions'
 ];
 
 const stepProperties = [
@@ -69,7 +71,8 @@ const stepProperties = [
   'raw_description',
   'required_data',
   'required_data_message',
-  'permitted_params'
+  'permitted_params',
+  'fields'
 ]
 
 const fieldProperties = [
@@ -91,6 +94,7 @@ const fieldProperties = [
 const actionProperties = [
   'id',
   'type',
+  'run_after',
   'title',
   'post',
   'post_builder',
@@ -116,6 +120,12 @@ const properties = {
   field: fieldProperties,
   action: actionProperties
 }
+
+const objectArrays = [
+  'steps',
+  'fields',
+  'actions'
+];
 
 const mappedProperties = {
   wizard: [
@@ -202,6 +212,7 @@ export {
   camelCase,
   snakeCase,
   properties,
+  objectArrays,
   wizardProperties,
   mappedProperties,
   profileFields,

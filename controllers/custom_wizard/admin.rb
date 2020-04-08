@@ -10,93 +10,31 @@ class CustomWizard::AdminController < ::ApplicationController
     render json: { types: CustomWizard::Field.types }
   end
 
-  def save
-    params.require(:wizard)
+  def save    
+    result = build_wizard
 
-    wizard = ::JSON.parse(params[:wizard])
-    existing = PluginStore.get('custom_wizard', wizard['id']) || {}
-    new_time = false
-    error = nil
+    if result[:error]
+      render json: { error: result[:error] }
+    else
+      wizard = result[:wizard]
+      existing_wizard = result[:existing_wizard]
+      
+      ActiveRecord::Base.transaction do
+        PluginStore.set('custom_wizard', wizard["id"], wizard)
+        
+        if wizard['after_time'] && result[:new_after_time]
+          Jobs.cancel_scheduled_job(:set_after_time_wizard, wizard_id: wizard['id'])
+          Jobs.enqueue_at(after_time_scheduled, :set_after_time_wizard, wizard_id: wizard['id'])
+        end
 
-    if wizard["id"].blank?
-      error = 'id_required'
-    elsif wizard["name"].blank?
-      error = 'name_required'
-    elsif wizard["steps"].blank?
-      error = 'steps_required'
-    elsif wizard["after_time"]
-      if !wizard["after_time_scheduled"] && !existing["after_time_scheduled"]
-        error = 'after_time_need_time'
-      else
-        after_time_scheduled = Time.parse(wizard["after_time_scheduled"]).utc
-
-        new_time = existing['after_time_scheduled'] ?
-                   after_time_scheduled != Time.parse(existing['after_time_scheduled']).utc :
-                   true
-
-        begin
-          if new_time && after_time_scheduled < Time.now.utc
-            error = 'after_time_invalid'
-          end
-        rescue ArgumentError
-          error = 'after_time_invalid'
+        if existing_wizard && existing_wizard['after_time'] && !wizard['after_time']
+          Jobs.cancel_scheduled_job(:set_after_time_wizard, wizard_id: wizard['id'])
+          Jobs.enqueue(:clear_after_time_wizard, wizard_id: wizard['id'])
         end
       end
+      
+      render json: success_json.merge(wizard: wizard)
     end
-
-    return render json: { error: error } if error
-
-    wizard["steps"].each do |s|
-      if s["id"].blank?
-        error = 'id_required'
-        break
-      end
-
-      if s["fields"] && s["fields"].present?
-        s["fields"].each do |f|
-          if f["id"].blank?
-            error = 'id_required'
-            break
-          end
-
-          if f["type"].blank?
-            error = 'type_required'
-            break
-          end
-        end
-      end
-
-      if s["actions"] && s["actions"].present?
-        s["actions"].each do |a|
-          if a["id"].blank?
-            error = 'id_required'
-            break
-          end
-        end
-      end
-    end
-
-    return render json: { error: error } if error
-
-    ## end of error checks
-
-    wizard['steps'].each do |s|
-      s['description'] = PrettyText.cook(s['raw_description']) if s['raw_description']
-    end
-
-    if wizard['after_time'] && new_time
-      Jobs.cancel_scheduled_job(:set_after_time_wizard, wizard_id: wizard['id'])
-      Jobs.enqueue_at(after_time_scheduled, :set_after_time_wizard, wizard_id: wizard['id'])
-    end
-
-    if existing['after_time'] && !wizard['after_time']
-      Jobs.cancel_scheduled_job(:set_after_time_wizard, wizard_id: wizard['id'])
-      Jobs.enqueue(:clear_after_time_wizard, wizard_id: wizard['id'])
-    end
-
-    PluginStore.set('custom_wizard', wizard["id"], wizard)
-
-    render json: success_json.merge(wizard: wizard)
   end
 
   def remove
@@ -148,5 +86,140 @@ class CustomWizard::AdminController < ::ApplicationController
     end.flatten
 
     render json: success_json.merge(submissions: all_submissions)
+  end
+  
+  private
+  
+  def wizard_params
+    params.require(:wizard)
+    params[:wizard]
+  end
+  
+  def required_properties
+    {
+      wizard: ['id', 'name', 'steps'],
+      step: ['id'],
+      field: ['id', 'type'],
+      action: ['id', 'type']
+    }
+  end
+  
+  def dependent_properties
+    {
+      after_time: 'after_time_scheduled'
+    }
+  end
+    
+  def check_required(object, type, error)       
+    object.each do |property, value|
+      required = required_properties[type].include?(property)
+      
+      if required && property.blank?
+        error = {
+          type: 'required',
+          params: { property: property }
+        }
+      end
+    end
+    
+    error
+  end
+  
+  def check_depdendent(object, error)       
+    object.each do |property, value|
+      dependent = dependent_properties[property]
+      
+      if dependent && object[dependent].blank?
+        error = {
+          type: 'dependent',
+          params: { dependent: dependent, property: property }
+        }
+      end
+    end
+    
+    error
+  end
+  
+  def validate_wizard(wizard)
+    error = nil
+    
+    error = check_required(wizard, :wizard, error)
+    error = check_depdendent(wizard, error)
+            
+    wizard['steps'].each do |step|
+      error = check_required(step, :step, error)
+      error = check_depdendent(step, error)
+      break if error.present?
+      
+      step['fields'].each do |field|
+        error = check_required(field, :field, error)
+        error = check_depdendent(field, error)
+        break if error.present?
+      end
+    end
+    
+    wizard['actions'].each do |action|
+      error = check_required(action, :action, error)
+      error = check_depdendent(action, error)
+      break if error.present?
+    end
+    
+    if error
+      { error: error }
+    else
+      { success: true }
+    end
+  end
+  
+  def validate_after_time(wizard, existing_wizard)
+    new = false
+    error = nil
+    
+    if wizard["after_time"]
+      if !wizard["after_time_scheduled"] && !existing_wizard["after_time_scheduled"]
+        error = 'after_time_need_time'
+      else
+        after_time_scheduled = Time.parse(wizard["after_time_scheduled"]).utc
+
+        new = existing_wizard['after_time_scheduled'] ?
+              after_time_scheduled != Time.parse(existing_wizard['after_time_scheduled']).utc :
+              true
+
+        begin
+          error = 'after_time_invalid' if new && after_time_scheduled < Time.now.utc
+        rescue ArgumentError
+          error = 'after_time_invalid'
+        end
+      end
+    end
+    
+    if error
+      { error: { type: error } }
+    else
+      { new: new }
+    end
+  end
+  
+  def build_wizard
+    wizard = ::JSON.parse(wizard_params)
+    existing_wizard = PluginStore.get('custom_wizard', wizard['id']) || {}
+    
+    validation = validate_wizard(wizard)
+    return validation[:error] if validation[:error]
+    
+    after_time_validation = validate_after_time(wizard, existing_wizard)
+    return after_time_validation[:error] if after_time_validation[:error]
+      
+    wizard['steps'].each do |step|
+      if s['raw_description']
+        step['description'] = PrettyText.cook(s['raw_description'])
+      end
+    end
+
+    result = {
+      wizard: wizard,
+      existing_wizard: existing_wizard,
+      new_after_time: after_time_validation[:new]
+    }
   end
 end

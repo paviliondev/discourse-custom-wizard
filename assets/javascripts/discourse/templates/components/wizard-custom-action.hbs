@@ -6,11 +6,24 @@
   <div class="setting-value">
     {{combo-box
       value=action.type
-      content=types
+      content=actionTypes
       onChange=(action (mut action.type))
       options=(hash
         none="admin.wizard.field.type"
       )}}
+  </div>
+</div>
+
+<div class="setting">
+  <div class="setting-label">
+    <label>{{i18n "admin.wizard.run_after"}}</label>
+  </div>
+  
+  <div class="setting-value">
+    {{combo-box
+      value=action.run_after
+      content=runAfterContent
+      onChange=(action (mut action.run_after))}}
   </div>
 </div>
 
@@ -99,6 +112,7 @@
         inputs=action.tags
         options=(hash
           tagSelection='output'
+          listSelection='output'
           wizardFieldSelection=true
           userFieldSelection='key,value'
           context='action'
@@ -280,7 +294,7 @@
         </div>
       {{/if}}
       
-      {{#if newTopicFields}}
+      {{#if showSkipRedirect}}
         <div class="setting full">
           <div class="setting-label">
             <label>{{i18n "admin.wizard.action.skip_redirect.label"}}</label>

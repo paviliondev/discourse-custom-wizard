@@ -1,5 +1,5 @@
-import { default as discourseComputed, observes, on } from 'discourse-common/utils/decorators';
-import { equal, not, or } from "@ember/object/computed";
+import { default as discourseComputed, observes } from 'discourse-common/utils/decorators';
+import { equal, or } from "@ember/object/computed";
 import { selectKitContent } from '../lib/wizard';
 import Component from "@ember/component";
 
@@ -10,23 +10,30 @@ export default Component.extend({
   isCategory: equal('field.type', 'category'),
   isGroup: equal('field.type', 'group'),
   isTag: equal('field.type', 'tag'),
-  disableId: not('field.isNew'),
+  isText: equal('field.type', 'text'),
+  isTextarea: equal('field.type', 'textarea'),
+  isUrl: equal('field.type', 'url'),
+  showPrefill: or('isCategory', 'isTag', 'isGroup', 'isDropdown'),
+  showContent: or('isCategory', 'isTag', 'isGroup', 'isDropdown'),
+  showLimit: or('isCategory', 'isTag'),
+  showMinLength: or('isText', 'isTextarea', 'isUrl'),
   categoryPropertyTypes: selectKitContent(['id', 'slug']),
-  prefillEnabled: or('isCategory', 'isTag', 'isGroup', 'isDropdown'),
-  contentEnabled: or('isCategory', 'isTag', 'isGroup', 'isDropdown'),
-
-  @discourseComputed('field.type')
-  isInput: (type) => type === 'text' || type === 'textarea' || type === 'url',
-
-  @discourseComputed('field.type')
-  isCategoryOrTag: (type) => type === 'tag' || type === 'category',
-
-  @on('didInsertElement')
-  @observes('isUpload')
-  setupFileType() {
+  
+  @observes('isUpload', 'isCategory')
+  setupDefaults() {
     if (this.isUpload && !this.field.file_types) {
       this.set('field.file_types', '.jpg,.png');
     }
+    
+    if (this.isCategory && !this.field.property) {
+      this.set('field.property', 'id');
+    }
+  },
+  
+  @observes('field.type')
+  clearMappedProperties() {
+    this.set('field.content', null);
+    this.set('field.prefill', null);
   },
   
   setupTypeOutput(fieldType, options) {    
@@ -78,19 +85,6 @@ export default Component.extend({
     }
 
     return this.setupTypeOutput(fieldType, options);
-  },
-  
-  @observes('field.type')
-  clearInputs() {
-    this.set('field.content', null);
-    this.set('field.prefill', null);
-  },
-  
-  @observes('isCategory')
-  setupCategoryType() {
-    if (this.isCategory && !this.field.property) {
-      this.set('field.property', 'id');
-    }
   },
   
   actions: {

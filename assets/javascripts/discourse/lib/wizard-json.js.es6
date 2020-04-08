@@ -19,132 +19,6 @@ function mapped(property, type) {
     mappedProperties[type].indexOf(property) > -1;
 }
 
-function buildJson(object, type) {
-  let result = {};
-  
-  properties[type].forEach((p) => {
-    let value = object.get(p);
-    
-    if (mapped(p, type)) {
-      value = buildMappedJson(value);
-    } 
-
-    if (value) {
-      result[p] = value;
-    }
-  });
-  
-  return result;
-}
-
-function buildMappedJson(inputs) {
-  if (!inputs || !inputs.length) return false;
-  
-  let result = [];
-    
-  inputs.forEach(inpt => {
-    let input = {
-      type: inpt.type,
-    };
-        
-    if (present(inpt.output)) {
-      input.output = inpt.output;
-      input.output_type = snakeCase(inpt.output_type);
-      input.output_connector = inpt.output_connector;
-    }
-    
-    if (present(inpt.pairs)) {
-      input.pairs = [];
-      
-      inpt.pairs.forEach(pr => {                
-        if (present(pr.key) && present(pr.value)) {
-          
-          let pairParams = {
-            index: pr.index,
-            key: pr.key,
-            key_type: snakeCase(pr.key_type),
-            value: pr.value,
-            value_type: snakeCase(pr.value_type),
-            connector: pr.connector
-          }
-                    
-          input.pairs.push(pairParams);
-        }
-      });
-    }
-        
-    if ((input.type === 'assignment' && present(input.output)) ||
-        present(input.pairs)) {
-      
-      result.push(input);
-    }
-  });
-  
-  if (!result.length) {
-    result = false;
-  }
-    
-  return result;
-}
-
-function buildStepJson(object) {
-  let steps = [];
-  let error = null;
-
-  object.some((s) => {
-    let step = buildJson(s, 'step');
-    let fields = s.fields;
-          
-    if (fields.length) {
-      step.fields = [];
-
-      fields.some((f) => {
-        if (!f.type) {
-          error = 'type_required';
-          return;
-        }
-
-        step.fields.push(
-          buildJson(f, 'field')
-        );
-      });
-
-      if (error) return;
-    }
-    
-    let actions = s.actions;
-    
-    if (actions.length) {
-      step.actions = [];
-
-      actions.some((a) => {          
-        if (a.api_body) {
-          try {
-            JSON.parse(a.api_body);
-          } catch (e) {
-            error = 'invalid_api_body';
-            return;
-          }
-        }
-
-        step.actions.push(
-          buildJson(a, 'action')
-        );
-      });
-
-      if (error) return;
-    }
-    
-    steps.push(step);
-  });
-  
-  if (error) {
-    return { error };
-  } else {
-    return { steps };
-  };
-}
-
 function castCase(property, value) {
   return property.indexOf('_type') > -1 ? camelCase(value) : value;
 }
@@ -223,9 +97,9 @@ function objectHasAdvanced(params, type) {
 }
 
 function buildProperties(json) {
-  let steps = A();
   let props = { 
-    steps
+    steps: A();
+    action: A();
   };
     
   if (present(json)) {
@@ -268,25 +142,23 @@ function buildProperties(json) {
           });
         }
 
-        stepParams.actions = A();
-        
-        if (present(stepJson.actions)) {
-          stepJson.actions.forEach((a) => {
-            let params = buildObject(a, 'action');
-            
-            if (objectHasAdvanced(params, 'action')) {
-              params.showAdvanced = true;
-            }
-            
-            stepParams.actions.pushObject(params);
-          });
-        }
-
         steps.pushObject(
           EmberObject.create(stepParams)
         );
       });
     };
+        
+    if (present(json.actions)) {
+      json.actions.forEach((a) => {
+        let params = buildObject(a, 'action');
+        
+        if (objectHasAdvanced(params, 'action')) {
+          params.showAdvanced = true;
+        }
+        
+        props.actions.pushObject(params);
+      });
+    }
   } else {
     props.id = '';
     props.name = '';
@@ -299,7 +171,6 @@ function buildProperties(json) {
     props.prompt_completion = false;
     props.restart_on_revisit = false;
     props.permitted = null;
-    props.steps = A();
   }
   
   return props;

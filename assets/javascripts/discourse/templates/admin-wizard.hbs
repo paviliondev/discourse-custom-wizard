@@ -157,7 +157,16 @@
       step=currentStep
       wizard=model
       currentField=currentField
-      currentAction=currentAction
+      wizardFields=wizardFields}}
+  {{/if}}
+  
+  {{wizard-links type="action" current=currentAction items=model.actions}}
+
+  {{#if currentAction}}
+    {{wizard-custom-action
+      action=currentAction
+      wizard=model
+      removeAction="removeAction"
       wizardFields=wizardFields}}
   {{/if}}
 

@@ -49,7 +49,7 @@
   <div class="setting-value">
     {{combo-box
       value=field.type
-      content=types
+      content=fieldTypes
       onChange=(action (mut field.type))
       options=(hash
         none="admin.wizard.field.type"
@@ -57,7 +57,7 @@
   </div>
 </div>
 
-{{#if isInput}}
+{{#if showMinLength}}
   <div class="setting">
     <div class="setting-label">
       <label>{{i18n 'admin.wizard.field.min_length'}}</label>
@@ -81,7 +81,7 @@
   </div>
 {{/if}}
 
-{{#if isCategoryOrTag}}
+{{#if showLimit}}
   <div class="setting">
     <div class="setting-label">
       <label>{{i18n 'admin.wizard.field.limit'}}</label>
@@ -116,7 +116,7 @@
       </div>
     {{/if}}
     
-    {{#if prefillEnabled}}
+    {{#if showPrefill}}
       <div class="setting full field-mapper-setting">
         <div class="setting-label">
           <label>{{i18n 'admin.wizard.field.prefill'}}</label>
@@ -130,7 +130,7 @@
       </div>
     {{/if}}
 
-    {{#if contentEnabled}}
+    {{#if showContent}}
       <div class="setting full field-mapper-setting">
         <div class="setting-label">
           <label>{{i18n 'admin.wizard.field.content'}}</label>

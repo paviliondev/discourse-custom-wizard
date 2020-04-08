@@ -99,7 +99,7 @@ export default Controller.extend({
         }
       }).catch((result) => {
         this.set('saving', false);
-        this.set('error', I18n.t(`admin.wizard.error.${result.error}`));
+        this.set('error', I18n.t(`admin.wizard.error.${result.error}`, result.errorParams || {}));
         later(() => this.set('error', null), 10000);
       });
     },

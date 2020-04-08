@@ -2,11 +2,12 @@ class CustomWizard::Builder
   attr_accessor :wizard, :updater, :submissions
 
   def initialize(user=nil, wizard_id)
-    data = PluginStore.get('custom_wizard', wizard_id)
-    return if data.blank?
+    template = PluginStore.get('custom_wizard', wizard_id)
+    return if template.blank?
 
-    @steps = data['steps']
-    @wizard = CustomWizard::Wizard.new(user, data)
+    @steps = template['steps']
+    @actions = template['actions']
+    @wizard = CustomWizard::Wizard.new(user, template)
     @submissions = Array.wrap(PluginStore.get("#{wizard_id}_submissions", user.id)) if user
   end
 
@@ -144,19 +145,24 @@ class CustomWizard::Builder
             submission = @submissions.last
             data = submission.merge(data)
           end
+          
+          final_step = updater.step.next.nil?
                     
-          if step_template['actions'] && step_template['actions'].length && data
-            step_template['actions'].each do |action|
-              CustomWizard::Action.new(
-                action: action,
-                user: user,
-                data: data,
-                updater: updater
-              ).perform
+          if @actions.present?
+            @actions.each do |action|
+  
+              if (action.run_after === updater.step.id) ||
+                 (final_step && (!action.run_after || (action.run_after === 'wizard_completion')))
+                 
+                CustomWizard::Action.new(
+                  action: action,
+                  user: user,
+                  data: data,
+                  updater: updater
+                ).perform
+              end
             end
           end
-
-          final_step = updater.step.next.nil?
           
           if route_to = data['route_to']
             data.delete('route_to')

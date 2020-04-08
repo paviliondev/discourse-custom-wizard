@@ -1,66 +1,43 @@
-import { default as discourseComputed, observes, on } from 'discourse-common/utils/decorators';
-import { equal, not, empty, or } from "@ember/object/computed";
-import { actionTypes, generateName, selectKitContent, profileFields } from '../lib/wizard';
+import { default as discourseComputed, observes } from 'discourse-common/utils/decorators';
+import { equal, empty, or } from "@ember/object/computed";
+import { actionTypes, generateName, selectKitContent } from '../lib/wizard';
 import Component from "@ember/component";
 
 export default Component.extend({
   classNames: 'wizard-custom-action',
-  types: actionTypes.map(t => ({ id: t, name: generateName(t) })),
+  actionTypes: actionTypes.map(t => ({ id: t, name: generateName(t) })),
   createTopic: equal('action.type', 'create_topic'),
   updateProfile: equal('action.type', 'update_profile'),
   sendMessage: equal('action.type', 'send_message'),
+  openComposer: equal('action.type', 'open_composer'),
   sendToApi: equal('action.type', 'send_to_api'),
-  apiEmpty: empty('action.api'),
   addToGroup: equal('action.type', 'add_to_group'),
   routeTo: equal('action.type', 'route_to'),
-  disableId: not('action.isNew'),
+  apiEmpty: empty('action.api'),
   groupPropertyTypes: selectKitContent(['id', 'name']),
   hasAdvanced: or('hasCustomFields', 'routeTo'),
   hasCustomFields: or('basicTopicFields', 'updateProfile'),
+  basicTopicFields: or('createTopic', 'sendMessage', 'openComposer'),
+  publicTopicFields: or('createTopic', 'openComposer'),
+  showSkipRedirect: or('createTopic', 'sendMessage'),
   
-  @on('didInsertElement')
   @observes('action.type')
-  setLabel() {
+  setupDefaults() {
     if (this.action.type) {
       this.set('action.label', generateName(this.action.type));
     };
   },
-
-  @discourseComputed('action.type')
-  basicTopicFields(actionType) {
-    return ['create_topic', 'send_message', 'open_composer'].indexOf(actionType) > -1;
-  },
-
-  @discourseComputed('action.type')
-  publicTopicFields(actionType) {
-    return ['create_topic', 'open_composer'].indexOf(actionType) > -1;
-  },
-
-  @discourseComputed('action.type')
-  newTopicFields(actionType) {
-    return ['create_topic', 'send_message'].indexOf(actionType) > -1;
-  },
   
-  @discourseComputed('wizardFields')
-  categoryFields(fields) {
-    return fields.filter(f => f.type == 'category');
-  },
-  
-  @discourseComputed('wizardFields')
-  tagFields(fields) {
-    return fields.filter(f => f.type == 'tag');
-  },
-
-  @observes('action.custom_category_wizard_field')
-  toggleCustomCategoryUserField() {
-    if (this.action.custom_category_wizard_field) 
-      this.set('action.custom_category_user_field', false);
-  },
-
-  @observes('action.custom_category_user_field')
-  toggleCustomCategoryWizardField() {
-    if (this.action.custom_category_user_field)
-      this.set('action.custom_category_wizard_field', false);
+  @discourseComputed('wizard.steps')
+  runAfterContent(steps) {
+    let content = steps.map(s => ({ id: s.id, name: s.label }));
+    
+    content.unshift({
+      id: 'wizard_completion',
+      name: I18n.t('admin.wizard.action.run_after.wizard_completion')
+    });
+    
+    return content;
   },
 
   @discourseComputed('wizard.apis')

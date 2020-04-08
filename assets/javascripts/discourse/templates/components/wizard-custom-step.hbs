@@ -103,17 +103,7 @@
 {{#if currentField}}
   {{wizard-custom-field
     field=currentField
-    types=wizard.fieldTypes
+    fieldTypes=wizard.fieldTypes
     removeField="removeField"
-    wizardFields=wizardFields}}
-{{/if}}
-
-{{wizard-links type="action" current=currentAction items=step.actions}}
-
-{{#if currentAction}}
-  {{wizard-custom-action
-    action=currentAction
-    wizard=wizard
-    removeAction="removeAction"
     wizardFields=wizardFields}}
 {{/if}}
