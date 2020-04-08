@@ -1,4 +1,4 @@
-import { default as discourseComputed, observes } from 'discourse-common/utils/decorators';
+import { default as discourseComputed, observes, on } from 'discourse-common/utils/decorators';
 import { equal, empty, or } from "@ember/object/computed";
 import { actionTypes, generateName, selectKitContent } from '../lib/wizard';
 import Component from "@ember/component";
@@ -21,22 +21,20 @@ export default Component.extend({
   publicTopicFields: or('createTopic', 'openComposer'),
   showSkipRedirect: or('createTopic', 'sendMessage'),
   
-  @observes('action.type')
-  setupDefaults() {
-    if (this.action.type) {
-      this.set('action.label', generateName(this.action.type));
-    };
-  },
-  
   @discourseComputed('wizard.steps')
   runAfterContent(steps) {
-    let content = steps.map(s => ({ id: s.id, name: s.label }));
+    let content = steps.map(function(step) {
+      return {
+        id: step.id,
+        name: step.title || step.id
+      };
+    });
     
     content.unshift({
       id: 'wizard_completion',
       name: I18n.t('admin.wizard.action.run_after.wizard_completion')
     });
-    
+        
     return content;
   },
 

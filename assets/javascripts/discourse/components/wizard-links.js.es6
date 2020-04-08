@@ -1,4 +1,5 @@
 import { default as discourseComputed, on, observes } from 'discourse-common/utils/decorators';
+import { generateName, defaultProperties } from '../lib/wizard';
 import { notEmpty } from "@ember/object/computed";
 import { scheduleOnce, bind } from "@ember/runloop";
 import EmberObject from "@ember/object";
@@ -35,23 +36,29 @@ export default Component.extend({
   @discourseComputed('type')
   header: (type) => `admin.wizard.${type}.header`,
 
-  @discourseComputed('current', 'items.@each.id', 'items.@each.label')
+  @discourseComputed('current', 'items.@each.id', 'items.@each.type')
   links(current, items) {
     if (!items) return;
 
     return items.map((item) => {
       if (item) {
-        const id = item.id;
-        const type = this.type;
-        const label = item.label || item.title || id;
-        let link = { id, label };
+        let link = {
+          id: item.id
+        }
+
+        let label = item.label || item.title || item.id;
+        if (this.generateLabels && item.type) {
+          label = generateName(item.type);
+        }
+        
+        link.label = label;
 
         let classes = 'btn';
         if (current && item.id === current.id) {
           classes += ' btn-primary';
         };
 
-        link['classes'] = classes;
+        link.classes = classes;
 
         return link;
       }
@@ -63,15 +70,25 @@ export default Component.extend({
       const items = this.items;
       const type = this.type;
       const newId = `${type}_${items.length + 1}`;
-      let params = { id: newId, isNew: true };
-
-      if (type === 'step') {
-        params['fields'] = A();
-        params['actions'] = A();
+      
+      let params = {
+        id: newId,
+        isNew: true
       };
 
+      if (type === 'step') {
+        params.fields = A();
+      };
+      
+      if (defaultProperties[type]) {
+        Object.keys(defaultProperties[type]).forEach(key => {
+          params[key] = defaultProperties[type][key];
+        });
+      }
+      
       const newItem = EmberObject.create(params);
       items.pushObject(newItem);
+      
       this.set('current', newItem);
     },
 

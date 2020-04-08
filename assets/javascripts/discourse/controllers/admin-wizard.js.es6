@@ -11,19 +11,14 @@ import Controller from "@ember/controller";
 export default Controller.extend({
   hasName: notEmpty('model.name'),
   userFields: alias('model.userFields'),
-
+  
   @observes('currentStep')
   resetCurrentObjects() {
     const currentStep = this.currentStep;
     
     if (currentStep) {
       const fields = currentStep.fields;
-      const actions = currentStep.actions;
-      
-      this.setProperties({
-        currentField: fields.length ? fields[0] : null,
-        currentAction: actions.length ? actions[0] : null
-      });  
+      this.set('currentField', fields && fields.length ? fields[0] : null)
     }
     
     scheduleOnce('afterRender', () => ($("body").addClass('admin-wizard')));
@@ -98,6 +93,7 @@ export default Controller.extend({
           this.send("refreshWizard");
         }
       }).catch((result) => {
+        console.log('catch result: ', result)
         this.set('saving', false);
         this.set('error', I18n.t(`admin.wizard.error.${result.error}`, result.errorParams || {}));
         later(() => this.set('error', null), 10000);

@@ -97,7 +97,7 @@ en:
         error:
           required: "{{type}} requires {{property}}"
           invalid: "{{property}} is invalid"
-          dependent: "{{dependentProperty}} is dependent on {{property}}"
+          dependent: "{{property}} is dependent on {{dependentOn}}"
         
         step:
           header: "Steps"
@@ -152,7 +152,7 @@ en:
           
           run_after: 
             label: "Run After"
-            wizard_completion: "Wizard completes"
+            wizard_completion: "Wizard Completion"
           
           custom_fields:
             label: "Custom"

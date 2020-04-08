@@ -151,8 +151,8 @@ class CustomWizard::Builder
           if @actions.present?
             @actions.each do |action|
   
-              if (action.run_after === updater.step.id) ||
-                 (final_step && (!action.run_after || (action.run_after === 'wizard_completion')))
+              if (action['run_after'] === updater.step.id) ||
+                 (final_step && (!action['run_after'] || (action['run_after'] === 'wizard_completion')))
                  
                 CustomWizard::Action.new(
                   action: action,

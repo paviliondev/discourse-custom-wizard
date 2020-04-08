@@ -116,30 +116,93 @@ const actionProperties = [
 
 const properties = {
   wizard: wizardProperties,
-  step: stepProperties,
-  field: fieldProperties,
-  action: actionProperties
+  steps: stepProperties,
+  fields: fieldProperties,
+  actions: actionProperties
 }
 
-const objectArrays = [
-  'steps',
-  'fields',
-  'actions'
-];
+const actionTypeProperties = {
+  create_topic: [
+    'id',
+    'type',
+    'run_after',
+    'title',
+    'post',
+    'post_builder',
+    'post_template',
+    'category',
+    'tags',
+    'skip_redirect',
+    'custom_fields'
+  ],
+  send_message: [
+    'id',
+    'type',
+    'run_after',
+    'title',
+    'post',
+    'post_builder',
+    'post_template',
+    'skip_redirect',
+    'custom_fields',
+    'required',
+    'recipient'
+  ],
+  open_composer: [
+    'id',
+    'type',
+    'run_after',
+    'title',
+    'post',
+    'post_builder',
+    'post_template',
+    'category',
+    'tags',
+    'custom_fields'
+  ],
+  update_profile: [
+    'id',
+    'type',
+    'run_after',
+    'profile_updates',
+    'custom_fields'
+  ],
+  add_to_group: [
+    'id',
+    'type',
+    'run_after',
+    'group'
+  ],
+  route_to: [
+    'id',
+    'type',
+    'run_after',
+    'url',
+    'code'
+  ],
+  send_to_api: [
+    'id',
+    'type',
+    'run_after',
+    'api',
+    'api_endpoint',
+    'api_body'
+  ]
+}
 
 const mappedProperties = {
   wizard: [
     'permitted'
   ],
-  step: [
+  steps: [
     'required_data',
     'permitted_params'
   ],
-  field: [
+  fields: [
     'prefill',
     'content'
   ],
-  action: [
+  actions: [
     'title',
     'category',
     'tags',
@@ -149,6 +212,12 @@ const mappedProperties = {
     'profile_updates',
     'group'
   ]
+}
+
+const defaultProperties = {
+  action: {
+    run_after: 'wizard_completion'
+  }
 }
 
 const advancedFieldTypes = [
@@ -176,11 +245,11 @@ const actionTypes = [
 });
 
 const advancedProperties = {
-  step: [
+  steps: [
     'required_data',
     'permitted_params'
   ],
-  field: advancedFieldTypes.reduce(
+  fields: advancedFieldTypes.reduce(
     function(map, type) {
       map[type] = advancedFieldProperties;
       if (type === 'category') {
@@ -189,7 +258,7 @@ const advancedProperties = {
       return map;
     }, {}
   ),
-  action: actionTypes.reduce(
+  actions: actionTypes.reduce(
     function(map, type) {
       if (type === 'route_to') {
         map[type] = ['code'];
@@ -212,10 +281,11 @@ export {
   camelCase,
   snakeCase,
   properties,
-  objectArrays,
   wizardProperties,
   mappedProperties,
   profileFields,
   advancedProperties,
-  actionTypes
+  actionTypes,
+  actionTypeProperties,
+  defaultProperties
 };

@@ -150,7 +150,10 @@
     {{/if}}
   </div>
 
-  {{wizard-links type="step" current=currentStep items=model.steps}}
+  {{wizard-links
+    type="step"
+    current=currentStep
+    items=model.steps}}
   
   {{#if currentStep}}
     {{wizard-custom-step
@@ -160,7 +163,11 @@
       wizardFields=wizardFields}}
   {{/if}}
   
-  {{wizard-links type="action" current=currentAction items=model.actions}}
+  {{wizard-links
+    type="action"
+    current=currentAction
+    items=model.actions
+    generateLabels=true}}
 
   {{#if currentAction}}
     {{wizard-custom-action

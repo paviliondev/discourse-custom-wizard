@@ -1,7 +1,7 @@
 import { ajax } from 'discourse/lib/ajax';
 import EmberObject from "@ember/object";
-import { buildJson, buildProperties, present } from '../lib/wizard-json';
-import { properties, arrays, camelCase, snakeCase } from '../lib/wizard';
+import { buildProperties, present, mapped } from '../lib/wizard-json';
+import { properties, actionTypeProperties, camelCase, snakeCase } from '../lib/wizard';
 import { Promise } from "rsvp";
 
 const jsonStrings = ['api_body'];
@@ -10,17 +10,17 @@ const dependent = { after_time: 'after_time_scheduled' }
 
 const CustomWizard = EmberObject.extend({
   save() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {      
       let json = this.buildJson(this, 'wizard');
       
       if (json.error) {
-        reject({ eror: json.error });
+        reject({ error: json.error });
       }
       
       ajax("/admin/wizards/custom/save", {
         type: 'PUT',
         data: {
-          wizard: JSON.stringify(wizardJson)
+          wizard: JSON.stringify(json)
         }
       }).then((result) => {
         if (result.error) {
@@ -32,35 +32,44 @@ const CustomWizard = EmberObject.extend({
     });
   },
 
-  buildJson(object, type, result = {}) {  
-    for (let property of properties[type]) {
+  buildJson(object, type, result = {}) {
+    let allowedProperties;
+    
+    if (type === 'actions') {
+      if (!object.type) {
+        result.error = {
+          type: 'required',
+          params: {
+            type,
+            property: 'type'
+          }
+        }
+        return result;
+      }
+      
+      allowedProperties = actionTypeProperties[object.type];
+    } else {
+      allowedProperties = properties[type];
+    }
+        
+    for (let property of allowedProperties) {
       let value = object.get(property);
       
-      if (objectArrays[type]) {
-        result[property] = [];
-        
-        for (let obj of value) {
-          let obj = this.buildJson(value, property, result);
-          
-          if (obj.error) {
-            result.error = r.error;
-            break;
-          } else {
-            result[property].push(obj);
-          }
+      if (required[property] && !value) {
+        result.error = {
+          type: 'required',
+          params: { type, property }
         }
       }
       
-      if (required[property] && !value) {
-        result.error = 'required'
-        result.errorParams = { type, property };
-      }
-      
-      if (dependent[property] && !properties[type][dependent[property]]) {
-        result.error = 'dependent';
-        result.errorParams = {
-          dependentProperty: properties[type][dependent[property]],
-          property
+      let dependentOn = dependent[property];
+      if (dependentOn && value && !object[dependentOn]) {
+        result.error = {
+          type: 'dependent',
+          params: {
+            property,
+            dependentOn
+          }
         }
       }
       
@@ -68,24 +77,43 @@ const CustomWizard = EmberObject.extend({
         try {
           value = JSON.parse(value);
         } catch (e) {
-          result.error = 'invalid';
-          result.errorParams = { property };
+          result.error = {
+            type: 'invalid',
+            params: { type, property }
+          }
         }
-      }
-      
-      if (mapped(property, type)) {
-        value = this.buildMappedJson(value);
       }
       
       if (result.error) {
         break;
-      } else if (value) {
-        result[property] = value;
       }
-    });
-      
+                  
+      if (properties[property]) {
+        result[property] = [];
+                
+        for (let item of value) {
+          let itemParams = this.buildJson(item, property);
+                    
+          if (itemParams.error) {
+            result.error = r.error;
+            break;
+          } else {
+            result[property].push(itemParams);
+          }
+        }
+      } else {
+        if (mapped(property, type)) {
+          value = this.buildMappedJson(value);
+        }
+        
+        if (value !== undefined && value !== null) {
+          result[property] = value;
+        }
+      } 
+    };
+          
     return result;
-  }
+  },
 
   buildMappedJson(inputs) {
     if (!inputs || !inputs.length) return false;

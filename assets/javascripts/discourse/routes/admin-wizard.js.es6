@@ -91,12 +91,12 @@ export default DiscourseRoute.extend({
 
   setupController(controller, model) {
     const newWizard = this.get('newWizard');
-    const steps = model.get('steps') || [];
-        
+            
     controller.setProperties({
       newWizard,
       model,
-      currentStep: steps[0]
+      currentStep: model.steps[0],
+      currentAction: model.actions[0]
     });
   },
 

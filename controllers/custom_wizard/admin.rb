@@ -151,17 +151,21 @@ class CustomWizard::AdminController < ::ApplicationController
       error = check_depdendent(step, error)
       break if error.present?
       
-      step['fields'].each do |field|
-        error = check_required(field, :field, error)
-        error = check_depdendent(field, error)
-        break if error.present?
+      if step['fields'].present?
+        step['fields'].each do |field|
+          error = check_required(field, :field, error)
+          error = check_depdendent(field, error)
+          break if error.present?
+        end
       end
     end
     
-    wizard['actions'].each do |action|
-      error = check_required(action, :action, error)
-      error = check_depdendent(action, error)
-      break if error.present?
+    if wizard['actions'].present?
+      wizard['actions'].each do |action|
+        error = check_required(action, :action, error)
+        error = check_depdendent(action, error)
+        break if error.present?
+      end
     end
     
     if error
@@ -211,8 +215,8 @@ class CustomWizard::AdminController < ::ApplicationController
     return after_time_validation[:error] if after_time_validation[:error]
       
     wizard['steps'].each do |step|
-      if s['raw_description']
-        step['description'] = PrettyText.cook(s['raw_description'])
+      if step['raw_description']
+        step['description'] = PrettyText.cook(step['raw_description'])
       end
     end
 

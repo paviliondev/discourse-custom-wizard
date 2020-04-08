@@ -2,7 +2,6 @@ class CustomWizard::Template
 
   attr_reader :id,
               :name,
-              :steps,
               :background,
               :save_submissions,
               :multiple_submissions,
@@ -13,7 +12,9 @@ class CustomWizard::Template
               :after_time_scheduled,
               :required,
               :theme_id,
-              :permitted
+              :permitted,
+              :steps,
+              :actions
 
   def initialize(data)
     data = data.is_a?(String) ? ::JSON.parse(data) : data
@@ -22,7 +23,6 @@ class CustomWizard::Template
 
     @id = data['id']
     @name = data['name']
-    @steps = data['steps']
     @background = data['background']
     @save_submissions = data['save_submissions'] || false
     @multiple_submissions = data['multiple_submissions'] || false
@@ -39,5 +39,8 @@ class CustomWizard::Template
       theme = Theme.find_by(name: data['theme'])
       @theme_id = theme.id if theme
     end
+    
+    @steps = data['steps']
+    @actions = data['actions']
   end
 end
