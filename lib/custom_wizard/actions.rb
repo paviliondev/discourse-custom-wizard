@@ -274,8 +274,12 @@ class CustomWizard::Action
     end
   end
   
+  def profile_excluded_fields
+    ['username', 'email'].freeze
+  end
+  
   def allowed_profile_fields
-    CustomWizard::Mapper.user_fields + 
+    CustomWizard::Mapper.user_fields.select { |f| profile_excluded_fields.exclude?(f) } + 
     profile_url_fields + 
     ['avatar']
   end

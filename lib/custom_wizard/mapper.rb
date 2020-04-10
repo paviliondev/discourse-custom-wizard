@@ -1,7 +1,7 @@
 class CustomWizard::Mapper
   attr_accessor :inputs, :data, :user
   
-  USER_FIELDS = ['name', 'email', 'date_of_birth', 'title', 'locale', 'trust_level']
+  USER_FIELDS = ['name', 'username', 'email', 'date_of_birth', 'title', 'locale', 'trust_level']
   PROFILE_FIELDS = ['location', 'website', 'bio_raw']
   
   def self.user_fields

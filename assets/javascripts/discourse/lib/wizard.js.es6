@@ -32,6 +32,7 @@ function camelCase(string) {
 
 const userProperties = [
   'name',
+  'username',
   'email',
   'avatar',
   'date_of_birth',

@@ -82,9 +82,18 @@ export default Component.extend({
     const controller = getOwner(this).lookup('controller:admin-wizard');
     let content = controller[`${activeType}s`];
     
+    // you can't select the current field in the field context
     if (activeType === 'wizardField' && this.options.context === 'field') {
-      const currentField = controller.currentField;
-      content = content.filter(field => field.id !== currentField.id);
+      content = content.filter(field => field.id !== controller.currentField.id);
+    }
+    
+    // updating usernames or emails via actions is not supported
+    if (activeType === 'userField' &&
+        this.options.context === 'action' &&
+        this.inputType === 'association' &&
+        this.selectorType === 'key') {
+      
+      content = content.filter(userField => ['username','email'].indexOf(userField.id) === -1);  
     }
     
     return content;
