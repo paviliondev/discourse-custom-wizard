@@ -1,12 +1,8 @@
 import { ajax } from 'discourse/lib/ajax';
 import EmberObject from "@ember/object";
 import { buildProperties, present, mapped } from '../lib/wizard-json';
-import { properties, actionTypeProperties, camelCase, snakeCase } from '../lib/wizard';
+import { schema, listProperties, camelCase, snakeCase } from '../lib/wizard';
 import { Promise } from "rsvp";
-
-const jsonStrings = ['api_body'];
-const required = ['id', 'steps', 'type'];
-const dependent = { after_time: 'after_time_scheduled' }
 
 const CustomWizard = EmberObject.extend({
   save() {
@@ -33,85 +29,94 @@ const CustomWizard = EmberObject.extend({
   },
 
   buildJson(object, type, result = {}) {
-    let allowedProperties;
+    let objectType = object.type || null;
     
-    if (type === 'actions') {
-      if (!object.type) {
+    if (schema[type].types) {
+      if (!objectType) {
         result.error = {
           type: 'required',
-          params: {
-            type,
-            property: 'type'
-          }
+          params: { type, property: 'type' }
         }
         return result;
       }
-      
-      allowedProperties = actionTypeProperties[object.type];
-    } else {
-      allowedProperties = properties[type];
     }
         
-    for (let property of allowedProperties) {
+    for (let property of listProperties(type, objectType)) {
       let value = object.get(property);
       
-      if (required[property] && !value) {
-        result.error = {
-          type: 'required',
-          params: { type, property }
-        }
-      }
-      
-      let dependentOn = dependent[property];
-      if (dependentOn && value && !object[dependentOn]) {
-        result.error = {
-          type: 'dependent',
-          params: {
-            property,
-            dependentOn
-          }
-        }
-      }
-      
-      if (jsonStrings[property]) {
-        try {
-          value = JSON.parse(value);
-        } catch (e) {
-          result.error = {
-            type: 'invalid',
-            params: { type, property }
-          }
-        }
-      }
+      result = this.validateValue(property, value, type, result);
       
       if (result.error) {
         break;
       }
-                  
-      if (properties[property]) {
-        result[property] = [];
+        
+      if (mapped(property, type)) {
+        value = this.buildMappedJson(value);
+      }
+            
+      if (value !== undefined && value !== null) {
+        result[property] = value;
+      }
+    };
+    
+    if (!result.error) {
+      for (let arrayObjectType of Object.keys(schema[type].objectArrays)) {
+        let arraySchema = schema[type].objectArrays[arrayObjectType];
+        let objectArray = object.get(arraySchema.property);
                 
-        for (let item of value) {
-          let itemParams = this.buildJson(item, property);
+        if (arraySchema.required && !present(objectArray)) {
+          result.error = {
+            type: 'required',
+            params: { type, property: arraySchema.property }
+          }
+          break;
+        }
+
+        result[arraySchema.property] = [];
+                
+        for (let item of objectArray) {
+          let itemProps = this.buildJson(item, arrayObjectType);
                     
-          if (itemParams.error) {
-            result.error = r.error;
+          if (itemProps.error) {
+            result.error = itemProps.error;
             break;
           } else {
-            result[property].push(itemParams);
+            result[arraySchema.property].push(itemProps);
           }
         }
-      } else {
-        if (mapped(property, type)) {
-          value = this.buildMappedJson(value);
-        }
-        
-        if (value !== undefined && value !== null) {
-          result[property] = value;
-        }
-      } 
-    };
+      };
+    }
           
+    return result;
+  },
+  
+  validateValue(property, value, type, result) {
+    if (schema[type].required.indexOf(property) > -1 && !value) {
+      result.error = {
+        type: 'required',
+        params: { type, property }
+      }
+    }
+    
+    let dependent = schema[type].dependent[property];
+    if (dependent && value && !object[dependent]) {
+      result.error = {
+        type: 'dependent',
+        params: { property, dependent }
+      }
+    }
+    
+    if (property === 'api_body') {
+      try {
+        value = JSON.parse(value);
+      } catch (e) {
+        result.error = {
+          type: 'invalid',
+          params: { type, property }
+        }
+      }
+    }
+    
     return result;
   },
 

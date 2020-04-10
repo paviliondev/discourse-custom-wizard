@@ -1,4 +1,4 @@
-import { properties, mappedProperties, advancedProperties, camelCase, snakeCase } from '../lib/wizard';
+import { schema, listProperties, camelCase, snakeCase } from '../lib/wizard';
 import EmberObject from '@ember/object';
 import { A } from "@ember/array";
 
@@ -15,8 +15,7 @@ function present(val) {
 }
 
 function mapped(property, type) {
-  return mappedProperties[type] &&
-    mappedProperties[type].indexOf(property) > -1;
+  return schema[type].mapped.indexOf(property) > -1;
 }
 
 function castCase(property, value) {
@@ -67,36 +66,54 @@ function buildProperty(json, property, type) {
 }
 
 function buildObject(json, type) {
-  let params = {
+  let props = {
     isNew: false
   }
   
   Object.keys(json).forEach(prop => {
-    params[prop] = buildProperty(json, prop, type)
+    props[prop] = buildProperty(json, prop, type)
   });
   
-  return EmberObject.create(params);
+  return EmberObject.create(props);
 }
 
-function wizardHasAdvanced(property, value) {
-  if (property === 'save_submissions' && value == false) return true;
-  if (property === 'restart_on_revisit' && value == true) return true;
-  return false;
+function buildObjectArray(json, type) {
+  let array = A();
+  
+  if (present(json)) {
+    json.forEach((objJson) => {
+      let object = buildObject(objJson, type);
+      
+      if (hasAdvancedProperties(object, type)) {
+        object.set('showAdvanced', true);
+      }
+      
+      array.pushObject(object);
+    });
+  }
+  
+  return array;
 }
 
-function stepHasAdvanced(property, value) {
-  return advancedProperties.steps[property] && present(value);
+function buildBasicProperties(json, type, props) {
+  listProperties(type).forEach((p) => {
+    props[p] = buildProperty(json, p, type);
+    
+    if (hasAdvancedProperties(json, type)) {
+      result.showAdvanced = true;
+    }
+  });
+  
+  return props;
 }
 
-function objectHasAdvanced(params, type) {
-  return Object.keys(params).some(p => {
-    let value = params[p];
-    let advanced = advancedProperties[type][params.type];
-    return advanced && advanced.indexOf(p) > -1 && present(value);
+function hasAdvancedProperties(object, type) {
+  return Object.keys(object).some(p => {
+    return schema[type].advanced.indexOf(p) > -1 && present(object[p]);
   });
 }
 
-/// to be removed
+/// to be removed: necessary due to action array being moved from step to wizard
 function actionPatch(json) {
   let actions = json.actions || [];
   
@@ -117,86 +134,32 @@ function actionPatch(json) {
 
 function buildProperties(json) {
   let props = { 
-    steps: A(),
-    actions: A()
+    steps: A()
   };
       
   if (present(json)) {
-    props.id = json.id;
     props.existingId = true;
-    
-    // to fix
-    properties.wizard
-      .filter(p => ['steps', 'actions'].indexOf(p) === -1)
-      .forEach((p) => {
-        props[p] = buildProperty(json, p, 'wizard');
-        
-        if (wizardHasAdvanced(p, json[p])) {
-          props.showAdvanced = true;
-        }
-      });
+    props = buildBasicProperties(json, 'wizard', props);
     
     if (present(json.steps)) {
       json.steps.forEach((stepJson) => {
-        let stepParams = {
+        let stepProps = {
           isNew: false
         };
+  
+        stepProps = buildBasicProperties(stepJson, 'step', stepProps);
+        stepProps.fields = buildObjectArray(stepJson.fields, 'field');
         
-        properties.steps.forEach((p) => {
-          stepParams[p] = buildProperty(stepJson, p, 'wizard');
-                    
-          if (stepHasAdvanced(p, stepJson[p])) {
-            stepParams.showAdvanced = true;
-          }
-        });
-        
-        stepParams.fields = A();
-        
-        if (present(stepJson.fields)) {
-          stepJson.fields.forEach((f) => {
-            let params = buildObject(f, 'fields');
-                                    
-            if (objectHasAdvanced(params, 'fields')) {
-              params.showAdvanced = true;
-            }
-            
-            stepParams.fields.pushObject(params);
-          });
-        }
-        
-        props.steps.pushObject(
-          EmberObject.create(stepParams)
-        );
+        props.steps.pushObject(EmberObject.create(stepProps));
       });
     };
-    
-    // to be removed
-    json = actionPatch(json);
-    // to be removed
-  
-    if (present(json.actions)) {
-      json.actions.forEach((a) => {
-        let params = buildObject(a, 'actions');
-        
-        if (objectHasAdvanced(params, 'actions')) {
-          params.showAdvanced = true;
-        }
-        
-        props.actions.pushObject(params);
-      });
-    }
+
+    json = actionPatch(json); // to be removed - see above
+    props.actions = buildObjectArray(json.actions, 'action');
   } else {
-    props.id = '';
-    props.name = '';
-    props.background = '';
-    props.save_submissions = true;
-    props.multiple_submissions = false;
-    props.after_signup = false;
-    props.after_time = false;
-    props.required = false;
-    props.prompt_completion = false;
-    props.restart_on_revisit = false;
-    props.permitted = null;
+    listProperties('wizard').forEach(prop => {
+      props[prop] = schema.wizard.basic[prop];
+    });
   }
     
   return props;

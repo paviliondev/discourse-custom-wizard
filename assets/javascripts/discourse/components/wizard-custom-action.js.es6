@@ -1,11 +1,11 @@
 import { default as discourseComputed, observes, on } from 'discourse-common/utils/decorators';
 import { equal, empty, or } from "@ember/object/computed";
-import { actionTypes, generateName, selectKitContent } from '../lib/wizard';
+import { generateName, selectKitContent, schema } from '../lib/wizard';
 import Component from "@ember/component";
 
 export default Component.extend({
   classNames: 'wizard-custom-action',
-  actionTypes: actionTypes.map(t => ({ id: t, name: generateName(t) })),
+  actionTypes: Object.keys(schema.action.types).map(t => ({ id: t, name: generateName(t) })),
   createTopic: equal('action.type', 'create_topic'),
   updateProfile: equal('action.type', 'update_profile'),
   sendMessage: equal('action.type', 'send_message'),
@@ -20,6 +20,17 @@ export default Component.extend({
   basicTopicFields: or('createTopic', 'sendMessage', 'openComposer'),
   publicTopicFields: or('createTopic', 'openComposer'),
   showSkipRedirect: or('createTopic', 'sendMessage'),
+  
+  @observes('action.type')
+  setupDefaults() {
+    const defaultProperties = schema.action.types[this.action.type];
+    
+    Object.keys(defaultProperties).forEach(property => {
+      if (defaultProperties[property]) {
+        this.set(`action.${property}`, defaultProperties[property]);
+      }
+    });
+  },
   
   @discourseComputed('wizard.steps')
   runAfterContent(steps) {

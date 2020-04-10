@@ -97,7 +97,7 @@ en:
         error:
           required: "{{type}} requires {{property}}"
           invalid: "{{property}} is invalid"
-          dependent: "{{property}} is dependent on {{dependentOn}}"
+          dependent: "{{property}} is dependent on {{dependent}}"
         
         step:
           header: "Steps"

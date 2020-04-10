@@ -30,7 +30,7 @@ function camelCase(string) {
   });
 }
 
-const profileFields = [
+const userProperties = [
   'name',
   'email',
   'avatar',
@@ -45,164 +45,198 @@ const profileFields = [
   'trust_level'
 ];
 
-const wizardProperties = [
-  'id',
-  'name',
-  'background',
-  'save_submissions',
-  'multiple_submissions',
-  'after_signup',
-  'after_time',
-  'after_time_scheduled',
-  'required',
-  'prompt_completion',
-  'restart_on_revisit',
-  'theme_id',
-  'permitted',
-  'steps',
-  'actions'
-];
-
-const stepProperties = [
-  'id',
-  'title',
-  'key',
-  'banner',
-  'raw_description',
-  'required_data',
-  'required_data_message',
-  'permitted_params',
-  'fields'
-]
-
-const fieldProperties = [
-  'id',
-  'label',
-  'key',
-  'image',
-  'description',
-  'type',
-  'required',
-  'min_length',
-  'file_types',
-  'property',
-  'limit',
-  'prefill',
-  'content'
-]
-
-const actionProperties = [
-  'id',
-  'type',
-  'run_after',
-  'title',
-  'post',
-  'post_builder',
-  'post_template',
-  'category',
-  'tags',
-  'skip_redirect',
-  'custom_fields',
-  'required',
-  'recipient',
-  'profile_updates',
-  'group',
-  'url',
-  'code',
-  'api',
-  'api_endpoint',
-  'api_body'
-]
-
-const properties = {
-  wizard: wizardProperties,
-  steps: stepProperties,
-  fields: fieldProperties,
-  actions: actionProperties
-}
-
-const actionTypeProperties = {
-  create_topic: [
-    'id',
-    'type',
-    'run_after',
-    'title',
-    'post',
-    'post_builder',
-    'post_template',
-    'category',
-    'tags',
-    'skip_redirect',
-    'custom_fields'
-  ],
-  send_message: [
-    'id',
-    'type',
-    'run_after',
-    'title',
-    'post',
-    'post_builder',
-    'post_template',
-    'skip_redirect',
-    'custom_fields',
-    'required',
-    'recipient'
-  ],
-  open_composer: [
-    'id',
-    'type',
-    'run_after',
-    'title',
-    'post',
-    'post_builder',
-    'post_template',
-    'category',
-    'tags',
-    'custom_fields'
-  ],
-  update_profile: [
-    'id',
-    'type',
-    'run_after',
-    'profile_updates',
-    'custom_fields'
-  ],
-  add_to_group: [
-    'id',
-    'type',
-    'run_after',
-    'group'
-  ],
-  route_to: [
-    'id',
-    'type',
-    'run_after',
-    'url',
-    'code'
-  ],
-  send_to_api: [
-    'id',
-    'type',
-    'run_after',
-    'api',
-    'api_endpoint',
-    'api_body'
-  ]
-}
-
-const mappedProperties = {
-  wizard: [
+const wizardProperties = {
+  basic: {
+    id: null,
+    name: null,
+    background: null,
+    save_submissions: true,
+    multiple_submissions: null,
+    after_signup: null,
+    after_time: null,
+    after_time_scheduled: null,
+    required: null,
+    prompt_completion: null,
+    restart_on_revisit: null,
+    theme_id: null,
+    permitted: null
+  },
+  mapped: [
     'permitted'
   ],
-  steps: [
+  advanced: [
+    'restart_on_revisit',
+  ],
+  required: [
+    'id',
+  ],
+  dependent: {
+    after_time: 'after_time_scheduled'
+  },
+  objectArrays: {
+    step: {
+      property: 'steps',
+      required: false
+    },
+    action: {
+      property: 'actions',
+      required: false
+    }
+  }
+};
+
+const stepProperties = {
+  basic: {
+    id: null,
+    title: null,
+    key: null,
+    banner: null,
+    raw_description: null,
+    required_data: null,
+    required_data_message: null,
+    permitted_params: null
+  },
+  mapped: [
     'required_data',
     'permitted_params'
   ],
-  fields: [
+  advanced: [
+    'required_data',
+    'permitted_params'
+  ],
+  required: [
+    'id'
+  ],
+  dependent: {
+  },
+  objectArrays: {
+    field: {
+      property: 'fields',
+      required: false
+    }
+  }
+}
+
+const fieldProperties = {
+  basic: {
+    id: null,
+    label: null,
+    image: null,
+    description: null,
+    required: null,
+    key: null,
+    type: 'text'
+  },
+  types: {
+    text: {
+      min_length: null
+    },
+    textarea: {
+      min_length: null
+    },
+    composer: {
+      min_length: null
+    },
+    number: {
+    },
+    url: {
+      min_length: null
+    },
+    'text-only': {
+    },
+    'user-selector': {
+    },
+    upload: {
+      file_types: '.jpg,.png'
+    },
+    dropdown: {
+      prefill: null,
+      content: null
+    },
+    tag: {
+      limit: null,
+      prefill: null,
+      content: null
+    },
+    category: {
+      limit: 1,
+      property: 'id',
+      prefill: null,
+      content: null
+    },
+    group: {
+      prefill: null,
+      content: null
+    }
+  },
+  mapped: [
     'prefill',
     'content'
   ],
-  actions: [
+  advanced: [
+    'prefill',
+    'content',
+    'property'
+  ],
+  required: [
+    'id',
+    'type'
+  ],
+  dependent: {
+  },
+  objectArrays: {
+  }
+}
+
+const actionProperties = {
+  basic: {
+    id: null,
+    run_after: 'wizard_completion',
+    type: 'create_topic'
+  },
+  types: {
+    create_topic: {
+      title: null,
+      post: null,
+      post_builder: null,
+      post_template: null,
+      category: null,
+      tags: null,
+      custom_fields: null,
+      skip_redirect: null
+    },
+    send_message: {
+      title: null,
+      post: null,
+      post_builder: null,
+      post_template: null,
+      skip_redirect: null,
+      custom_fields: null,
+      required: null,
+      recipient: null
+    },
+    open_composer: {
+      title: null,
+      post: null,
+      post_builder: null,
+      post_template: null,
+      category: null,
+      tags: null,
+      custom_fields: null
+    },
+    update_profile: {
+      profile_updates: null,
+      custom_fields: null
+    },
+    add_to_group: {
+      group: null
+    },
+    route_to: {
+      url: null,
+      code: null
+    }
+  },
+  mapped: [
     'title',
     'category',
     'tags',
@@ -211,67 +245,46 @@ const mappedProperties = {
     'recipient',
     'profile_updates',
     'group'
-  ]
-}
-
-const defaultProperties = {
-  action: {
-    run_after: 'wizard_completion'
+  ],
+  advanced: [
+    'code',
+    'custom_fields',
+    'skip_redirect',
+    'required'
+  ],
+  required: [
+    'id',
+    'type'
+  ],
+  dependent: {
+  },
+  objectArrays: {
   }
 }
 
-const advancedFieldTypes = [
-  'category',
-  'tag',
-  'group',
-  'dropdown'
-]
+if (Discourse.SiteSettings.wizard_api_features) {
+  actionProperties.types.send_to_api = {
+    api: null,
+    api_endpoint: null,
+    api_body: null
+  }
+}
 
-const advancedFieldProperties = [
-  'prefill',
-  'content'
-]
+const schema = {
+  wizard: wizardProperties,
+  step: stepProperties,
+  field: fieldProperties,
+  action: actionProperties
+}
 
-const actionTypes = [
-  'create_topic',
-  'update_profile',
-  'send_message',
-  'send_to_api',
-  'add_to_group',
-  'route_to',
-  'open_composer'
-].filter(function(type) {
-  return Discourse.SiteSettings.wizard_api_features || type !== 'send_to_api'; 
-});
-
-const advancedProperties = {
-  steps: [
-    'required_data',
-    'permitted_params'
-  ],
-  fields: advancedFieldTypes.reduce(
-    function(map, type) {
-      map[type] = advancedFieldProperties;
-      if (type === 'category') {
-        map[type].push('property');
-      }
-      return map;
-    }, {}
-  ),
-  actions: actionTypes.reduce(
-    function(map, type) {
-      if (type === 'route_to') {
-        map[type] = ['code'];
-      } else if (['create_topic', 'send_message', 'open_composer', 'update_profile'].indexOf(type) > -1) {
-        map[type] = ['custom_fields'];
-      } else if (['create_topic', 'send_message'].indexOf(type) > -1) {
-        map[type].push('skip_redirect');
-      } else if (type === 'send_message') {
-        map[type].push('required');
-      }
-      return map;
-    }, {}
-  )
+function listProperties(type, objectType = null) {
+  let properties = Object.keys(schema[type].basic);
+    
+  if (schema[type].types && objectType) {
+    properties = properties.concat(Object.keys(schema[type].types[objectType]));
+  }
+    
+  return properties;
 }
 
 export {
@@ -280,12 +293,7 @@ export {
   generateId,
   camelCase,
   snakeCase,
-  properties,
-  wizardProperties,
-  mappedProperties,
-  profileFields,
-  advancedProperties,
-  actionTypes,
-  actionTypeProperties,
-  defaultProperties
+  schema,
+  userProperties,
+  listProperties
 };

@@ -93,9 +93,16 @@ export default Controller.extend({
           this.send("refreshWizard");
         }
       }).catch((result) => {
-        console.log('catch result: ', result)
         this.set('saving', false);
-        this.set('error', I18n.t(`admin.wizard.error.${result.error}`, result.errorParams || {}));
+
+        let error = true;
+        if (result.error) {
+          let type = result.error.type;
+          let params = result.error.params || {};
+          error = I18n.t(`admin.wizard.error.${type}`, params);
+        }
+        this.set('error', error);
+        
         later(() => this.set('error', null), 10000);
       });
     },

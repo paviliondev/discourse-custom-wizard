@@ -31,20 +31,19 @@ body.admin-wizard {
 }
 
 .wizard-settings,
-.wizard-custom-step {
+.wizard-custom-step,
+.wizard-custom-action {
   @extend .wizard-settings-parent;
   @extend .wizard-settings-group;
 }
 
 .wizard-basic-details,
 .wizard-custom-field,
-.wizard-custom-action,
 .advanced-settings {
   @extend .wizard-settings-group;
 }
 
-.wizard-custom-field,
-.wizard-custom-action {
+.wizard-custom-field {
   position: relative;
   background: transparent;
   background-color: $setting-background;

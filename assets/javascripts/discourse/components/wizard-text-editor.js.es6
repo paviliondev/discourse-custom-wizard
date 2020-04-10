@@ -1,5 +1,5 @@
 import { default as discourseComputed, on } from 'discourse-common/utils/decorators';
-import { profileFields } from '../lib/wizard';
+import { userProperties } from '../lib/wizard';
 import { scheduleOnce } from "@ember/runloop";
 import Component from "@ember/component";
 
@@ -34,7 +34,7 @@ export default Component.extend({
   
   @discourseComputed()
   userFieldList() {
-    return profileFields.map((f) => ` u{${f}}`);
+    return userProperties.map((f) => ` u{${f}}`);
   },
   
   @discourseComputed('wizardFields')

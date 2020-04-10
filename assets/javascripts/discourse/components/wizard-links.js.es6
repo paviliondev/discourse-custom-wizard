@@ -1,5 +1,5 @@
 import { default as discourseComputed, on, observes } from 'discourse-common/utils/decorators';
-import { generateName, defaultProperties } from '../lib/wizard';
+import { generateName, schema } from '../lib/wizard';
 import { notEmpty } from "@ember/object/computed";
 import { scheduleOnce, bind } from "@ember/runloop";
 import EmberObject from "@ember/object";
@@ -7,7 +7,7 @@ import Component from "@ember/component";
 import { A } from "@ember/array";
 
 export default Component.extend({
-  classNameBindings: [':wizard-links', 'type'],
+  classNameBindings: [':wizard-links', 'itemType'],
   items: A(),
   anyLinks: notEmpty('links'),
 
@@ -33,10 +33,10 @@ export default Component.extend({
     scheduleOnce('afterRender', this, () => this.applySortable());
   },
 
-  @discourseComputed('type')
-  header: (type) => `admin.wizard.${type}.header`,
+  @discourseComputed('itemType')
+  header: (itemType) => `admin.wizard.${itemType}.header`,
 
-  @discourseComputed('current', 'items.@each.id', 'items.@each.type')
+  @discourseComputed('current', 'items.@each.id', 'items.@each.type', 'items.@each.label', 'items.@each.title')
   links(current, items) {
     if (!items) return;
 
@@ -50,7 +50,7 @@ export default Component.extend({
         if (this.generateLabels && item.type) {
           label = generateName(item.type);
         }
-        
+                
         link.label = label;
 
         let classes = 'btn';
@@ -64,28 +64,37 @@ export default Component.extend({
       }
     });
   },
+  
+  setDefaults(object, params) {
+    Object.keys(object).forEach(property => {
+      if (object[property]) {
+        params[property] = object[property];
+      }
+    });
+    return params;
+  },
 
   actions: {
     add() {
       const items = this.items;
-      const type = this.type;
-      const newId = `${type}_${items.length + 1}`;
+      const itemType = this.itemType;      
       
       let params = {
-        id: newId,
+        id: `${itemType}_${items.length + 1}`,
         isNew: true
       };
-
-      if (type === 'step') {
-        params.fields = A();
+      
+      if (schema[itemType].objectArrays) {
+        Object.keys(schema[itemType].objectArrays).forEach(objectType => {
+          params[objectArrays[objectType].property] = A();
+        });
       };
       
-      if (defaultProperties[type]) {
-        Object.keys(defaultProperties[type]).forEach(key => {
-          params[key] = defaultProperties[type][key];
-        });
+      params = this.setDefaults(schema[itemType].basic, params);
+      if (schema[itemType].types) {
+        params = this.setDefaults(schema[itemType].types[params.type], params);
       }
-      
+            
       const newItem = EmberObject.create(params);
       items.pushObject(newItem);
       

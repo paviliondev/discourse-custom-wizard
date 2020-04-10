@@ -1,6 +1,6 @@
 import { default as discourseComputed, observes } from 'discourse-common/utils/decorators';
 import { equal, or } from "@ember/object/computed";
-import { selectKitContent } from '../lib/wizard';
+import { selectKitContent, schema } from '../lib/wizard';
 import Component from "@ember/component";
 
 export default Component.extend({
@@ -16,24 +16,25 @@ export default Component.extend({
   showPrefill: or('isCategory', 'isTag', 'isGroup', 'isDropdown'),
   showContent: or('isCategory', 'isTag', 'isGroup', 'isDropdown'),
   showLimit: or('isCategory', 'isTag'),
-  showMinLength: or('isText', 'isTextarea', 'isUrl'),
+  showMinLength: or('isText', 'isTextarea', 'isUrl', 'isComposer'),
   categoryPropertyTypes: selectKitContent(['id', 'slug']),
   
-  @observes('isUpload', 'isCategory')
+  @observes('field.type')
   setupDefaults() {
-    if (this.isUpload && !this.field.file_types) {
-      this.set('field.file_types', '.jpg,.png');
-    }
+    const defaultProperties = schema.field.types[this.field.type];
     
-    if (this.isCategory && !this.field.property) {
-      this.set('field.property', 'id');
-    }
+    Object.keys(defaultProperties).forEach(property => {
+      if (defaultProperties[property]) {
+        this.set(`field.${property}`, defaultProperties[property]);
+      }
+    });
   },
   
   @observes('field.type')
-  clearMappedProperties() {
-    this.set('field.content', null);
-    this.set('field.prefill', null);
+  clearMapped() {
+    schema.field.mapped.forEach(property => {
+      this.set(`field.${property}`, null);
+    });
   },
   
   setupTypeOutput(fieldType, options) {    
@@ -66,7 +67,6 @@ export default Component.extend({
       options.wizardFieldSelection = 'key,value';
       options.listSelection += ',assignment';
       options.inputTypes = 'association,assignment';
-      options.singular = true;
       options.pairConnector = 'association';
       options.keyPlaceholder = 'admin.wizard.key';
       options.valuePlaceholder = 'admin.wizard.value';

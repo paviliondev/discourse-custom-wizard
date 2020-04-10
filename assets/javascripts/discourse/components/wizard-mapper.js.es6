@@ -1,23 +1,23 @@
 import { getOwner } from 'discourse-common/lib/get-owner';
 import { newInput, selectionTypes } from '../lib/wizard-mapper';
 import { default as discourseComputed, observes, on } from 'discourse-common/utils/decorators';
-import { gt } from "@ember/object/computed";
 import Component from "@ember/component";
 import { A } from "@ember/array";
 
 export default Component.extend({
   classNames: 'wizard-mapper',
-  hasInput: gt('inputs.length', 0),
   
-  @discourseComputed('options.singular', 'hasInput')
-  canAdd(singular, hasInput) {
-    return !singular || !hasInput;
+  @discourseComputed('inputs.@each.type')
+  canAdd(inputs) {
+    return !inputs || inputs.every(i => {
+      return ['assignment','association'].indexOf(i.type) === -1;
+    });
   },
   
   @discourseComputed('options.@each.inputType')
   inputOptions(options) {
     let result = {
-      inputTypes: options.inputTypes || 'conditional,assignment',
+      inputTypes: options.inputTypes || 'assignment,conditional',
       inputConnector: options.inputConnector || 'or',
       pairConnector: options.pairConnector || null,
       outputConnector: options.outputConnector || null,

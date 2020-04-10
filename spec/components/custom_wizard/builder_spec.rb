@@ -18,6 +18,7 @@ describe CustomWizard::Builder do
   let(:permitted_params) {[{"key":"param_key","value":"submission_param_key"}]}
   let(:required_data) {[{"key":"nickname","connector":"equals","value":"name"}]}
   let(:required_data_message) {"Nickname is required to match your name"}
+  
   let(:checkbox_field) {{"id":"checkbox","type":"checkbox","label":"Checkbox"}}
   let(:composer_field) {{"id": "composer","label":"Composer","type":"composer"}}
   let(:tag_field) {{"id": "tag","type": "tag","label": "Tag","limit": "2"}}
@@ -28,6 +29,7 @@ describe CustomWizard::Builder do
   let(:text_only_field) {{"id": "text_only","type": "text-only","label": "Text only"}}
   let(:upload_field) {{"id": "upload","type": "upload","file_types": ".jpg,.png,.pdf","label": "Upload"}}
   let(:user_selector_field) {{"id": "user_selector","type": "user-selector","label": "User selector"}}
+  
   let(:create_topic_action) {{"id":"create_topic","type":"create_topic","title":"text","post":"textarea"}}
   let(:send_message_action) {{"id":"send_message","type":"send_message","title":"text","post":"textarea","username":"angus"}}
   let(:route_to_action) {{"id":"route_to","type":"route_to","url":"https://google.com"}}

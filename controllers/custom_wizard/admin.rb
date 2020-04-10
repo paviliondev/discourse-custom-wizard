@@ -106,18 +106,21 @@ class CustomWizard::AdminController < ::ApplicationController
   
   def dependent_properties
     {
-      after_time: 'after_time_scheduled'
+      wizard: {
+        after_time: 'after_time_scheduled'
+      },
+      step: {},
+      field: {},
+      action: {}
     }
   end
     
-  def check_required(object, type, error)       
-    object.each do |property, value|
-      required = required_properties[type].include?(property)
-      
-      if required && property.blank?
+  def check_required(object, type, error)
+    required_properties[type].each do |property|      
+      if object[property].blank?
         error = {
           type: 'required',
-          params: { property: property }
+          params: { type: type, property: property }
         }
       end
     end
@@ -125,18 +128,16 @@ class CustomWizard::AdminController < ::ApplicationController
     error
   end
   
-  def check_depdendent(object, error)       
-    object.each do |property, value|
-      dependent = dependent_properties[property]
-      
-      if dependent && object[dependent].blank?
+  def check_depdendent(object, type, error)
+    dependent_properties[type].each do |property, dependent|
+      if object[property] && object[dependent].blank?
         error = {
           type: 'dependent',
-          params: { dependent: dependent, property: property }
+          params: { property: property, dependent: dependent }
         }
       end
     end
-    
+
     error
   end
   
@@ -144,27 +145,29 @@ class CustomWizard::AdminController < ::ApplicationController
     error = nil
     
     error = check_required(wizard, :wizard, error)
-    error = check_depdendent(wizard, error)
-            
-    wizard['steps'].each do |step|
-      error = check_required(step, :step, error)
-      error = check_depdendent(step, error)
-      break if error.present?
-      
-      if step['fields'].present?
-        step['fields'].each do |field|
-          error = check_required(field, :field, error)
-          error = check_depdendent(field, error)
-          break if error.present?
+    error = check_depdendent(wizard, :wizard, error)
+        
+    if !error
+      wizard['steps'].each do |step|
+        error = check_required(step, :step, error)
+        error = check_depdendent(step, :step, error)
+        break if error.present?
+        
+        if step['fields'].present?
+          step['fields'].each do |field|
+            error = check_required(field, :field, error)
+            error = check_depdendent(field, :field, error)
+            break if error.present?
+          end
         end
       end
-    end
-    
-    if wizard['actions'].present?
-      wizard['actions'].each do |action|
-        error = check_required(action, :action, error)
-        error = check_depdendent(action, error)
-        break if error.present?
+      
+      if wizard['actions'].present?
+        wizard['actions'].each do |action|
+          error = check_required(action, :action, error)
+          error = check_depdendent(action, :action, error)
+          break if error.present?
+        end
       end
     end
     
@@ -209,10 +212,10 @@ class CustomWizard::AdminController < ::ApplicationController
     existing_wizard = PluginStore.get('custom_wizard', wizard['id']) || {}
     
     validation = validate_wizard(wizard)
-    return validation[:error] if validation[:error]
+    return validation if validation[:error]
     
     after_time_validation = validate_after_time(wizard, existing_wizard)
-    return after_time_validation[:error] if after_time_validation[:error]
+    return after_time_validation if after_time_validation[:error]
       
     wizard['steps'].each do |step|
       if step['raw_description']
@@ -220,7 +223,7 @@ class CustomWizard::AdminController < ::ApplicationController
       end
     end
 
-    result = {
+    {
       wizard: wizard,
       existing_wizard: existing_wizard,
       new_after_time: after_time_validation[:new]

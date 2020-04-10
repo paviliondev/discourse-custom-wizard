@@ -1,6 +1,6 @@
 import CustomWizard from '../models/custom-wizard';
 import { ajax } from 'discourse/lib/ajax';
-import { selectKitContent, profileFields, generateName } from '../lib/wizard';
+import { selectKitContent, userProperties, generateName } from '../lib/wizard';
 import DiscourseRoute from "discourse/routes/discourse";
 import { all } from "rsvp";
 
@@ -79,7 +79,7 @@ export default DiscourseRoute.extend({
             id: `user_field_${f.id}`,
             name: f.name
           })).concat(
-            profileFields.map((f) => ({
+            userProperties.map((f) => ({
               id: f,
               name: generateName(f)
             }))

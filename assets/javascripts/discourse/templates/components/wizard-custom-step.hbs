@@ -49,6 +49,7 @@
             inputs=step.required_data
             options=(hash
               inputTypes='validation'
+              inputConnector='and'
               wizardFieldSelection='value'
               userFieldSelection='value'
               keyPlaceholder="admin.wizard.submission_key"
@@ -98,7 +99,7 @@
   {{/if}}
 {{/if}}
 
-{{wizard-links type="field" current=currentField items=step.fields}}
+{{wizard-links itemType="field" current=currentField items=step.fields}}
 
 {{#if currentField}}
   {{wizard-custom-field
