@@ -2,14 +2,26 @@
 @import 'wizard-transfer';
 @import 'wizard-api';
 
-body.admin-wizard {
-  .admin-container > .row {
+.admin-wizard-container {
+  .row {
     display: flex;
+    
+    > .content {
+      flex: 1;
+      margin-top: 10px;
+      margin-left: 30px;
+      
+      table {
+        margin-top: 0;
+        min-width: 100%;
+        width: auto;
+      }
+    }
   }
-  
-  .boxed.white {
-    background-color: initial;
-  }
+}
+
+.wizard-submissions {
+  overflow: scroll;
 }
 
 .wizard-list {
@@ -97,10 +109,20 @@ body.admin-wizard {
     min-height: 31px;
     margin-bottom: 30px;
     display: flex;
+    justify-content: space-between;
     
     input {
       margin-bottom: 0;
       width: 350px;
+    }
+    
+    label {
+      margin-bottom: 0;
+    }
+    
+    .download-link {
+      font-size: 1rem;
+      line-height: 20px;
     }
   }
 
@@ -138,8 +160,6 @@ body.admin-wizard {
 }
 
 .admin-wizard.settings {
-  margin-top: 10px;
-  margin-left: 30px;
   
   [class~='setting'] {
     display: inline-flex;
@@ -407,16 +427,6 @@ body.admin-wizard {
   
   input {
     margin-bottom: 0;
-  }
-}
-
-.admin-contents .wizard-submissions {
-  width: 100%;
-  margin-top: 10px;
-  margin-left: 30px;
-  
-  table {
-    margin-top: 0;
   }
 }
 

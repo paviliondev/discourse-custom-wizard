@@ -198,8 +198,6 @@ CustomWizard.reopenClass({
   submissions(wizardId) {
     return ajax(`/admin/wizards/submissions/${wizardId}`, {
       type: "GET"
-    }).then(result => {
-      return result.submissions;
     });
   },
 

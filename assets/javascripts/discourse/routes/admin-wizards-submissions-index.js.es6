@@ -2,6 +2,6 @@ import DiscourseRoute from "discourse/routes/discourse";
 
 export default DiscourseRoute.extend({
   redirect() {
-    this.transitionTo('adminWizard', 'first');
+    this.transitionTo('adminWizardSubmissions', 'first');
   }
 });

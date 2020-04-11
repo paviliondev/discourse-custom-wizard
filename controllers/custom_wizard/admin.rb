@@ -1,5 +1,5 @@
-class CustomWizard::AdminController < ::ApplicationController
-  before_action :ensure_logged_in
+class CustomWizard::AdminController < ::Admin::AdminController
+  skip_before_action :check_xhr, only: [:download_submissions]
   before_action :ensure_admin
 
   def index
@@ -55,38 +55,42 @@ class CustomWizard::AdminController < ::ApplicationController
 
   def find_wizard
     params.require(:wizard_id)
-
     wizard = PluginStore.get('custom_wizard', params[:wizard_id].underscore)
-
     render json: success_json.merge(wizard: wizard)
   end
 
   def custom_wizards
     rows = PluginStoreRow.where(plugin_name: 'custom_wizard').order(:id)
-
     wizards = [*rows].map { |r| CustomWizard::Template.new(r.value) }
-
     render json: success_json.merge(wizards: wizards)
   end
 
   def submissions
     params.require(:wizard_id)
-
-    rows = PluginStoreRow.where(plugin_name: "#{params[:wizard_id]}_submissions").order('id DESC')
-
-    all_submissions = [*rows].map do |r|
-      submissions = ::JSON.parse(r.value)
-
-      if user = User.find_by(id: r.key)
-        username = user.username
-      else
-        username = I18n.t('admin.wizard.submissions.no_user', id: r.key)
-      end
-
-      submissions.map { |s| { username: username }.merge!(s.except("redirect_to")) }
-    end.flatten
-
-    render json: success_json.merge(submissions: all_submissions)
+    
+    wizard_id = params[:wizard_id].underscore
+    wizard = PluginStore.get('custom_wizard', wizard_id)
+    
+    if wizard.present?    
+      render json: success_json.merge(
+        submissions: build_submissions(wizard_id),
+        wizard: wizard.slice(:id, :name)
+      )
+    else
+      head :ok
+    end
+  end
+  
+  def download_submissions
+    params.require(:wizard_id)
+    wizard_id = params[:wizard_id].underscore
+    
+    wizard = PluginStore.get('custom_wizard', wizard_id)
+    submissions = build_submissions(wizard_id).to_json
+    
+    send_data submissions,
+      filename: "#{Discourse.current_hostname}-wizard-submissions-#{wizard['name']}.json",
+      content_type: "application/json"
   end
   
   private
@@ -243,5 +247,25 @@ class CustomWizard::AdminController < ::ApplicationController
     end
     
     result
+  end
+  
+  def build_submissions(wizard_id)
+    rows = PluginStoreRow.where(plugin_name: "#{wizard_id}_submissions").order('id DESC')
+
+    submissions = [*rows].map do |row|
+      value = ::JSON.parse(row.value)
+
+      if user = User.find_by(id: row.key)
+        username = user.username
+      else
+        username = I18n.t('admin.wizard.submissions.no_user', id: row.key)
+      end
+
+      value.map do |submission|
+        {
+          username: username
+        }.merge!(submission.except("redirect_to"))
+      end
+    end.flatten
   end
 end

@@ -7,12 +7,10 @@ en:
     admin:
       wizard:
         label: "Wizard"
-        nav: "Wizards"
+        nav_label: "Wizards"
         new: "New"
-        custom_label: "Custom"
-        submissions_label: "Submissions"
         name: "Name"
-        name_placeholder: "name"
+        name_placeholder: "wizard name"
         background: "Background"
         background_placeholder: "#hex"
         save_submissions: "Save"
@@ -197,6 +195,11 @@ en:
             select_an_endpoint: "Select an endpoint"
             body: "Body"
             body_placeholder: "JSON"
+        
+        submissions:
+          nav_label: "Submissions"
+          title: "{{name}} Submissions"
+          download: "Download"
 
         api:
           label: "API"
