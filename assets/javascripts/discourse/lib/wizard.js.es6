@@ -126,7 +126,7 @@ const fieldProperties = {
     description: null,
     required: null,
     key: null,
-    type: 'text'
+    type: null
   },
   types: {
     text: {
@@ -138,14 +138,14 @@ const fieldProperties = {
     composer: {
       min_length: null
     },
+    text_only: {
+    },
     number: {
+    },
+    checkbox: {
     },
     url: {
       min_length: null
-    },
-    'text-only': {
-    },
-    'user-selector': {
     },
     upload: {
       file_types: '.jpg,.png'
@@ -168,6 +168,8 @@ const fieldProperties = {
     group: {
       prefill: null,
       content: null
+    },
+    user_selector: {
     }
   },
   mapped: [
@@ -193,7 +195,7 @@ const actionProperties = {
   basic: {
     id: null,
     run_after: 'wizard_completion',
-    type: 'create_topic'
+    type: null
   },
   types: {
     create_topic: {
@@ -280,7 +282,7 @@ const schema = {
 
 function listProperties(type, objectType = null) {
   let properties = Object.keys(schema[type].basic);
-    
+      
   if (schema[type].types && objectType) {
     properties = properties.concat(Object.keys(schema[type].types[objectType]));
   }

@@ -7,6 +7,7 @@ import { dasherize } from "@ember/string";
 import EmberObject from "@ember/object";
 import { scheduleOnce, later } from "@ember/runloop";
 import Controller from "@ember/controller";
+import copyText from "discourse/lib/copy-text";
 
 export default Controller.extend({
   hasName: notEmpty('model.name'),
@@ -58,7 +59,7 @@ export default Controller.extend({
         let stepFields = s.fields.map((f) => {
           return EmberObject.create({
             id: f.id,
-            label: `${f.label} (${s.id})`,
+            label: `${f.label} (${s.id}, ${f.id})`,
             type: f.type
           });
         });
@@ -94,14 +95,16 @@ export default Controller.extend({
         }
       }).catch((result) => {
         this.set('saving', false);
-
-        let error = true;
+                
+        let errorType = 'failed';
+        let errorParams = {};
+        
         if (result.error) {
-          let type = result.error.type;
-          let params = result.error.params || {};
-          error = I18n.t(`admin.wizard.error.${type}`, params);
+          errorType = result.error.type;
+          errorParams = result.error.params;
         }
-        this.set('error', error);
+        
+        this.set('error', I18n.t(`admin.wizard.error.${errorType}`, errorParams));
         
         later(() => this.set('error', null), 10000);
       });
@@ -127,6 +130,20 @@ export default Controller.extend({
     
     toggleAdvanced() {
       this.toggleProperty('model.showAdvanced');
+    },
+    
+    copyUrl() {
+      const $copyRange = $('<p id="copy-range"></p>');
+      $copyRange.html(this.wizardUrl);
+      
+      $(document.body).append($copyRange);
+      
+      if (copyText(this.wizardUrl, $copyRange[0])) {
+        this.set("copiedUrl", true);
+        later(() => this.set("copiedUrl", false), 2000);
+      }
+      
+      $copyRange.remove();
     }
   }
 });

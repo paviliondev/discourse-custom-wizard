@@ -2,7 +2,8 @@
   {{combo-box
     value=connector
     content=connectors
-    onChange=(action (mut connector))}}
+    onChange=(action (mut connector))
+    onOpen=(action "onOpen")}}
 {{else}}
   <span class="connector-single">
     {{connectorLabel}}

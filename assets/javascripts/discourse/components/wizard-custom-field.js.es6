@@ -20,17 +20,6 @@ export default Component.extend({
   categoryPropertyTypes: selectKitContent(['id', 'slug']),
   
   @observes('field.type')
-  setupDefaults() {
-    const defaultProperties = schema.field.types[this.field.type];
-    
-    Object.keys(defaultProperties).forEach(property => {
-      if (defaultProperties[property]) {
-        this.set(`field.${property}`, defaultProperties[property]);
-      }
-    });
-  },
-  
-  @observes('field.type')
   clearMapped() {
     schema.field.mapped.forEach(property => {
       this.set(`field.${property}`, null);

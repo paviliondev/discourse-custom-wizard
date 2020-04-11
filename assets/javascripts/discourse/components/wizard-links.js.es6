@@ -18,11 +18,11 @@ export default Component.extend({
   },
 
   applySortable() {
-    $(this.element).find("ul").sortable({tolerance: 'pointer'}).on('sortupdate', (e, ui) => {
-      const itemId = ui.item.data('id');
-      const index = ui.item.index();
-      bind(this, this.updateItemOrder(itemId, index));
-    });
+    $(this.element).find("ul")
+      .sortable({ tolerance: 'pointer' })
+      .on('sortupdate', (e, ui) => {
+        this.updateItemOrder(ui.item.data('id'), ui.item.index());
+      });
   },
 
   updateItemOrder(itemId, newIndex) {
@@ -51,7 +51,7 @@ export default Component.extend({
           label = generateName(item.type);
         }
                 
-        link.label = label;
+        link.label = `${label} (${item.id})`;
 
         let classes = 'btn';
         if (current && item.id === current.id) {
@@ -77,22 +77,30 @@ export default Component.extend({
   actions: {
     add() {
       const items = this.items;
-      const itemType = this.itemType;      
+      const itemType = this.itemType;
+      let next = 1;
       
+      if (items.length) {
+        next =  Math.max.apply(Math, items.map((i) => (i.id.split('_')[1]))) + 1;
+      }
+            
       let params = {
-        id: `${itemType}_${items.length + 1}`,
+        id: `${itemType}_${next}`,
         isNew: true
       };
       
-      if (schema[itemType].objectArrays) {
-        Object.keys(schema[itemType].objectArrays).forEach(objectType => {
+      let objectArrays = schema[itemType].objectArrays;
+      if (objectArrays) {
+        Object.keys(objectArrays).forEach(objectType => {
           params[objectArrays[objectType].property] = A();
         });
       };
       
       params = this.setDefaults(schema[itemType].basic, params);
-      if (schema[itemType].types) {
-        params = this.setDefaults(schema[itemType].types[params.type], params);
+      
+      let types = schema[itemType].types;
+      if (types && params.type) {
+        params = this.setDefaults(types[params.type], params);
       }
             
       const newItem = EmberObject.create(params);
@@ -107,8 +115,26 @@ export default Component.extend({
 
     remove(itemId) {
       const items = this.items;
-      items.removeObject(items.findBy('id', itemId));
-      this.set('current', items[items.length - 1]);
+      let item;
+      let index;
+            
+      items.forEach((it, ind) => {
+        if (it.id === itemId) {
+          item = it;
+          index = ind;
+        }
+      });
+      
+      let nextIndex;
+      if (this.current.id === itemId) {
+        nextIndex = index < (items.length-2) ? (index+1) : (index-1);
+      }
+      
+      items.removeObject(item);
+      
+      if (nextIndex) {
+        this.set('current', items[nextIndex]);
+      }
     }
   }
 });

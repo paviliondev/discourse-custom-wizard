@@ -1,19 +1,17 @@
 <div class="type-selector">
   {{#if hasTypes}}
-    <a {{action "toggleTypes"}} class="active">
+    <a {{action "showTypes"}} class="active">
       {{activeTypeLabel}}
     </a>
     
-    {{#if showTypes}}
-      <div class="selector-types">
-        {{#each selectorTypes as |item|}}
-          {{wizard-mapper-selector-type
-            activeType=activeType
-            item=item
-            toggle=(action 'toggleType')}}
-        {{/each}}
-      </div>
-    {{/if}}
+    <div class="selector-types">
+      {{#each selectorTypes as |item|}}
+        {{wizard-mapper-selector-type
+          activeType=activeType
+          item=item
+          toggle=(action 'toggleType')}}
+      {{/each}}
+    </div>
   {{else}}
     <span>{{activeTypeLabel}}</span>
   {{/if}}
@@ -24,6 +22,7 @@
     {{input
       type="text"
       value=value
+      click=(action 'enableActive')
       placeholder=(i18n placeholderKey)}}
   {{/if}}
 
@@ -32,6 +31,8 @@
       value=value
       content=comboBoxContent
       onChange=(action (mut value))
+      onOpen=(action "enableActive")
+      onClick=(action 'enableActive')
       options=(hash
         none=placeholderKey
       )}}
@@ -42,6 +43,8 @@
       content=multiSelectContent
       value=value
       onChange=(action (mut value))
+      onOpen=(action "enableActive")
+      onClose=(action "disableActive")
       options=multiSelectOptions}}
   {{/if}}
   
@@ -55,6 +58,8 @@
     {{tag-chooser
       tags=value
       filterable=true
+      onOpen=(action "enableActive")
+      onClose=(action "disableActive")
       options=(hash
         none=placeholderKey
       )}}
@@ -65,6 +70,7 @@
       includeMessageableGroups='true'
       placeholderKey=placeholderKey
       usernames=value
-      autocomplete="discourse"}}
+      autocomplete="discourse"
+      click=(action "enableActive")}}
   {{/if}}
 </div>

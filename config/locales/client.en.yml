@@ -95,6 +95,7 @@ en:
             list: "Enter item"
             
         error:
+          failed: "failed to save wizard"
           required: "{{type}} requires {{property}}"
           invalid: "{{property}} is invalid"
           dependent: "{{property}} is dependent on {{dependent}}"

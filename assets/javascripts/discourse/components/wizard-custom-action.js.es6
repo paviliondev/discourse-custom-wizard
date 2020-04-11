@@ -21,17 +21,6 @@ export default Component.extend({
   publicTopicFields: or('createTopic', 'openComposer'),
   showSkipRedirect: or('createTopic', 'sendMessage'),
   
-  @observes('action.type')
-  setupDefaults() {
-    const defaultProperties = schema.action.types[this.action.type];
-    
-    Object.keys(defaultProperties).forEach(property => {
-      if (defaultProperties[property]) {
-        this.set(`action.${property}`, defaultProperties[property]);
-      }
-    });
-  },
-  
   @discourseComputed('wizard.steps')
   runAfterContent(steps) {
     let content = steps.map(function(step) {

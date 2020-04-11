@@ -44,7 +44,7 @@ const CustomWizard = EmberObject.extend({
     for (let property of listProperties(type, objectType)) {
       let value = object.get(property);
       
-      result = this.validateValue(property, value, type, result);
+      result = this.validateValue(property, value, object, type, result);
       
       if (result.error) {
         break;
@@ -90,7 +90,7 @@ const CustomWizard = EmberObject.extend({
     return result;
   },
   
-  validateValue(property, value, type, result) {
+  validateValue(property, value, object, type, result) {
     if (schema[type].required.indexOf(property) > -1 && !value) {
       result.error = {
         type: 'required',
@@ -129,6 +129,10 @@ const CustomWizard = EmberObject.extend({
       let input = {
         type: inpt.type,
       };
+      
+      if (inpt.connector) {
+        input.connector = inpt.connector;
+      }
           
       if (present(inpt.output)) {
         input.output = inpt.output;

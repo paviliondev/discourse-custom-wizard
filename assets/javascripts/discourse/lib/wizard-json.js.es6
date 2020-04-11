@@ -134,7 +134,8 @@ function actionPatch(json) {
 
 function buildProperties(json) {
   let props = { 
-    steps: A()
+    steps: A(),
+    actions: A()
   };
       
   if (present(json)) {

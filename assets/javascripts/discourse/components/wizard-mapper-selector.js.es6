@@ -2,13 +2,13 @@ import { alias, or, gt } from "@ember/object/computed";
 import { computed } from "@ember/object";
 import { default as discourseComputed, observes, on } from "discourse-common/utils/decorators";
 import { getOwner } from 'discourse-common/lib/get-owner';
-import { defaultSelectionType, selectionTypes } from '../lib/wizard-mapper'; 
+import { defaultSelectionType, selectionTypes, removeMapperClasses } from '../lib/wizard-mapper'; 
 import { snakeCase } from '../lib/wizard';
 import Component from "@ember/component";
 import { bind } from "@ember/runloop";
 
 export default Component.extend({
-  classNames: 'mapper-selector',
+  classNameBindings: [':mapper-selector', 'activeType'],
   groups: alias('site.groups'),
   categories: alias('site.categories'),
   showText: computed('activeType', function() { return this.showInput('text') }),
@@ -30,7 +30,6 @@ export default Component.extend({
   userEnabled: computed('options.userSelection', 'inputType', function() { return this.optionEnabled('userSelection') }),
   listEnabled: computed('options.listSelection', 'inputType', function() { return this.optionEnabled('listSelection') }),
   hasTypes: gt('selectorTypes.length', 1),
-  showTypes: false,
   
   didInsertElement() {
     $(document).on("click", bind(this, this.documentClick));
@@ -41,14 +40,16 @@ export default Component.extend({
   },
 
   documentClick(e) {
-    let $element = $(this.element);
+    if (this._state == "destroying") return;
+    
     let $target = $(e.target);
-
-    if (!$target.hasClass('type-selector-icon') &&
-        $target.closest($element).length < 1 &&
-        this._state !== "destroying") {
-
-      this.set("showTypes", false);
+    
+    if (!$target.parents('.wizard-mapper .input').length) {
+      this.send('disableActive');
+    }
+    
+    if (!$target.parents('.type-selector').length) {
+      this.send('hideTypes');
     }
   },
   
@@ -147,14 +148,34 @@ export default Component.extend({
     return this.activeType === type && this[`${type}Enabled`];
   },
   
+  removeClasses() {
+    removeMapperClasses(this);
+  },
+  
   actions: {
     toggleType(type) {
       this.set('activeType', type);
-      this.set('showTypes', false);
+      this.send('hideTypes');
     },
     
-    toggleTypes() {
-      this.toggleProperty('showTypes')
+    // jquery is used here to ensure other selectors and types disable properly
+    
+    showTypes() {
+      this.removeClasses();
+      $(this.element).find('.selector-types').addClass('show');
+    },
+    
+    hideTypes() {
+      $(this.element).find('.selector-types').removeClass('show');
+    },
+  
+    enableActive() {
+      this.removeClasses();
+      $(this.element).addClass('active');
+    },
+    
+    disableActive() {
+      $(this.element).removeClass('active');
     }
   }
 })

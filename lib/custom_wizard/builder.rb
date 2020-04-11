@@ -124,7 +124,7 @@ class CustomWizard::Builder
           
           if step_template['fields'] && step_template['fields'].length
             step_template['fields'].each do |field|
-              validate_field(field, updater, step_template) if field['type'] != 'text-only'
+              validate_field(field, updater, step_template) if field['type'] != 'text_only'
             end
           end
           

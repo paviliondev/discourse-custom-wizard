@@ -161,7 +161,7 @@ export default {
         const fields = {};
 
         this.get('fields').forEach(f => {
-          if (f.type !== 'text-only') {
+          if (f.type !== 'text_only') {
             fields[f.id] = f.value;
           }
         });
@@ -218,8 +218,8 @@ export default {
       inputComponentName: function() {
         const type = this.get('field.type');
         const id = this.get('field.id');
-        if (['text-only'].includes(type)) return false;
-        return (type === 'component') ? dasherize(id) : `wizard-field-${type}`;
+        if (['text_only'].includes(type)) return false;
+        return dasherize((type === 'component') ? id : `wizard-field-${type}`);
       }.property('field.type', 'field.id')
     });
 
@@ -230,8 +230,8 @@ export default {
       'dropdown',
       'tag',
       'image',
-      'user-selector',
-      'text-only',
+      'user_selector',
+      'text_only',
       'composer',
       'category',
       'group'

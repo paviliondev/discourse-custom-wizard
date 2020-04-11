@@ -2,18 +2,21 @@
 @import 'wizard-transfer';
 @import 'wizard-api';
 
-$setting-background: dark-light-diff($primary, $secondary, 96%, -65%);
-
 body.admin-wizard {
+  .admin-container > .row {
+    display: flex;
+  }
+  
   .boxed.white {
     background-color: initial;
   }
 }
 
 .wizard-list {
-  float: left;
   width: 250px;
+  min-width: 250px;
   margin-top: 10px;
+  float: none;
 }
 
 .wizard-settings-parent {
@@ -46,7 +49,7 @@ body.admin-wizard {
 .wizard-custom-field {
   position: relative;
   background: transparent;
-  background-color: $setting-background;
+  background-color: dark-light-diff($primary, $secondary, 96%, -65%);
   padding: 20px;
 }
 
@@ -93,9 +96,11 @@ body.admin-wizard {
     font-size: 1.5em;
     min-height: 31px;
     margin-bottom: 30px;
+    display: flex;
     
     input {
       margin-bottom: 0;
+      width: 350px;
     }
   }
 
@@ -113,20 +118,23 @@ body.admin-wizard {
   }
   
   .wizard-url {
-    display: inline-block;
-    font-size: 1rem;
+    display: inline-flex;
     margin-left: 20px;
-    background-color: $setting-background;
-    padding: 2px 6px;
+    
+    a {
+      padding: 6px 12px;
+      font-size: 1rem;
+      background-color: $primary-low;
+    }
+    
+    button {
+      font-size: 1rem;
+    }
   }
 }
 
 .admin-wizard-buttons {
   margin-top: 20px;
-}
-
-.content-list + .content {
-  overflow: hidden;
 }
 
 .admin-wizard.settings {
@@ -358,16 +366,19 @@ body.admin-wizard {
   display: inline-block;
   width: 100%;
 
-  ul {
+  .link-list {
     margin: 0;
     padding: 0;
     list-style: none;
-    display: inline-block;
+    display: inline-flex;
+    align-items: flex-start;
+    flex-flow: wrap;
 
-    li {
-      display: inline-block;
-      margin-bottom: 7px;
-      margin-right: 7px;
+    > div {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      margin-right: 10px;
     }
   }
 

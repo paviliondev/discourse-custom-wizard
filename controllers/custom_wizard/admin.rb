@@ -18,16 +18,17 @@ class CustomWizard::AdminController < ::ApplicationController
     else
       wizard = result[:wizard]
       existing_wizard = result[:existing_wizard]
+      after_time = result[:after_time]
       
       ActiveRecord::Base.transaction do
         PluginStore.set('custom_wizard', wizard["id"], wizard)
         
-        if wizard['after_time'] && result[:new_after_time]
+        if after_time[:enabled]
           Jobs.cancel_scheduled_job(:set_after_time_wizard, wizard_id: wizard['id'])
-          Jobs.enqueue_at(after_time_scheduled, :set_after_time_wizard, wizard_id: wizard['id'])
+          Jobs.enqueue_at(after_time[:scheduled], :set_after_time_wizard, wizard_id: wizard['id'])
         end
 
-        if existing_wizard && existing_wizard['after_time'] && !wizard['after_time']
+        if existing_wizard && existing_wizard['after_time'] && !after_time[:enabled]
           Jobs.cancel_scheduled_job(:set_after_time_wizard, wizard_id: wizard['id'])
           Jobs.enqueue(:clear_after_time_wizard, wizard_id: wizard['id'])
         end
@@ -181,19 +182,24 @@ class CustomWizard::AdminController < ::ApplicationController
   def validate_after_time(wizard, existing_wizard)
     new = false
     error = nil
+    enabled = false
+    scheduled = nil
     
     if wizard["after_time"]
+      enabled = true
+      
       if !wizard["after_time_scheduled"] && !existing_wizard["after_time_scheduled"]
         error = 'after_time_need_time'
       else
-        after_time_scheduled = Time.parse(wizard["after_time_scheduled"]).utc
-
-        new = existing_wizard['after_time_scheduled'] ?
-              after_time_scheduled != Time.parse(existing_wizard['after_time_scheduled']).utc :
-              true
+        scheduled = Time.parse(wizard["after_time_scheduled"]).utc
+        new = false
+        
+        if existing_wizard['after_time_scheduled']
+          new = scheduled != Time.parse(existing_wizard['after_time_scheduled']).utc
+        end
 
         begin
-          error = 'after_time_invalid' if new && after_time_scheduled < Time.now.utc
+          error = 'after_time_invalid' if new && scheduled < Time.now.utc
         rescue ArgumentError
           error = 'after_time_invalid'
         end
@@ -203,7 +209,11 @@ class CustomWizard::AdminController < ::ApplicationController
     if error
       { error: { type: error } }
     else
-      { new: new }
+      {
+        new: new,
+        scheduled: scheduled,
+        enabled: enabled
+      }
     end
   end
   
@@ -214,19 +224,24 @@ class CustomWizard::AdminController < ::ApplicationController
     validation = validate_wizard(wizard)
     return validation if validation[:error]
     
-    after_time_validation = validate_after_time(wizard, existing_wizard)
-    return after_time_validation if after_time_validation[:error]
+    after_time = validate_after_time(wizard, existing_wizard)
+    return after_time if after_time[:error]
       
     wizard['steps'].each do |step|
       if step['raw_description']
         step['description'] = PrettyText.cook(step['raw_description'])
       end
     end
-
-    {
+    
+    result = {
       wizard: wizard,
-      existing_wizard: existing_wizard,
-      new_after_time: after_time_validation[:new]
+      existing_wizard: existing_wizard
     }
+    
+    if after_time[:enabled]
+      result[:after_time] = after_time
+    end
+    
+    result
   end
 end

@@ -1,6 +1,6 @@
 class CustomWizard::Field
   def self.types
-    @types ||= ['checkbox', 'composer', 'dropdown', 'tag', 'category', 'group', 'text', 'textarea', 'text-only', 'number', 'upload', 'user-selector', 'url']
+    @types ||= ['text', 'textarea', 'composer', 'text_only', 'number', 'checkbox', 'url', 'upload', 'dropdown', 'tag', 'category', 'group', 'user_selector']
   end
 
   def self.require_assets

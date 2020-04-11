@@ -8,6 +8,11 @@
     <div class="wizard-url">
       {{#if model.name}}
         <a href="{{wizardUrl}}" target="_blank">{{wizardUrl}}</a>
+        {{#if copiedUrl}}
+          {{d-button class="btn-hover pull-right" icon="copy" label="ip_lookup.copied"}}
+        {{else}}
+          {{d-button action=(action "copyUrl") class="pull-right no-text" icon="copy"}}
+        {{/if}}
       {{/if}}
     </div>
   </div>
