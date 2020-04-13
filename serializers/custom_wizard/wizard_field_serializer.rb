@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CustomWizardFieldSerializer < ::WizardFieldSerializer
+class CustomWizard::FieldSerializer < ::WizardFieldSerializer
   
   attributes :image,
              :file_types,

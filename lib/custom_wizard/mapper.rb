@@ -160,6 +160,10 @@ class CustomWizard::Mapper
     end
   end
   
+  def map_text(value)
+    interpolate(value)
+  end
+  
   def map_wizard_field(value)
     data && !data.key?("submitted_at") && data[value]
   end

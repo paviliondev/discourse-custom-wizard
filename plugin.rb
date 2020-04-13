@@ -44,11 +44,13 @@ after_initialize do
   %w[
     ../lib/custom_wizard/engine.rb
     ../config/routes.rb
+    ../controllers/custom_wizard/admin/admin.rb
+    ../controllers/custom_wizard/admin/wizard.rb
+    ../controllers/custom_wizard/admin/submissions.rb
+    ../controllers/custom_wizard/admin/api.rb
     ../controllers/custom_wizard/wizard.rb
     ../controllers/custom_wizard/steps.rb
-    ../controllers/custom_wizard/admin.rb
     ../controllers/custom_wizard/transfer.rb
-    ../controllers/custom_wizard/api.rb
     ../controllers/application_controller.rb
     ../controllers/extra_locales_controller.rb
     ../controllers/invites_controller.rb
@@ -60,7 +62,7 @@ after_initialize do
     ../lib/custom_wizard/field.rb
     ../lib/custom_wizard/mapper.rb
     ../lib/custom_wizard/step_updater.rb
-    ../lib/custom_wizard/template.rb
+    ../lib/custom_wizard/validator.rb
     ../lib/custom_wizard/wizard.rb
     ../lib/custom_wizard/api/api.rb
     ../lib/custom_wizard/api/authorization.rb
@@ -74,6 +76,7 @@ after_initialize do
     ../serializers/custom_wizard/api/log_serializer.rb
     ../serializers/custom_wizard/api_serializer.rb
     ../serializers/custom_wizard/basic_api_serializer.rb
+    ../serializers/custom_wizard/basic_wizard_serializer.rb
     ../serializers/custom_wizard/wizard_field_serializer.rb
     ../serializers/custom_wizard/wizard_step_serializer.rb
     ../serializers/custom_wizard/wizard_serializer.rb
@@ -94,7 +97,7 @@ after_initialize do
 
       if !wizard.completed?
         custom_redirect = true
-        CustomWizard::Wizard.set_wizard_redirect(user, wizard.id)
+        CustomWizard::Wizard.set_wizard_redirect(wizard.id, user)
       end
     end
 
@@ -115,7 +118,7 @@ after_initialize do
 
   on(:user_approved) do |user|
     if wizard_id = CustomWizard::Wizard.after_signup
-      CustomWizard::Wizard.set_wizard_redirect(user, wizard_id)
+      CustomWizard::Wizard.set_wizard_redirect(wizard_id, user)
     end
   end
 

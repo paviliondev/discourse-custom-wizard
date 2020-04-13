@@ -64,7 +64,11 @@
     </div>
     
     <div class="setting-value">
-      {{input type="number" name="min_length" value=field.min_length}}
+      {{input
+        type="number"
+        name="min_length"
+        value=field.min_length
+        class="small"}}
     </div>
   </div>
 {{/if}}
@@ -88,7 +92,7 @@
     </div>
     
     <div class="setting-value">
-      {{input type="number" value=field.limit}}
+      {{input type="number" value=field.limit class="small"}}
     </div>
   </div>
 {{/if}}
@@ -148,8 +152,12 @@
       <div class="setting-label">
         <label>{{i18n 'admin.wizard.translation'}}</label>
       </div>
-      <div class="setting-value">
-        {{input name="key" value=field.key placeholderKey="admin.wizard.translation_placeholder"}}
+      <div class="setting-value medium">
+        {{input
+          name="key"
+          value=field.key
+          class="small"
+          placeholderKey="admin.wizard.translation_placeholder"}}
       </div>
     </div>
     

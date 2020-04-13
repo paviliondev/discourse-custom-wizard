@@ -2,33 +2,28 @@
 @import 'wizard-transfer';
 @import 'wizard-api';
 
+.admin-wizard-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.admin-wizard-message {
+  background-color: $primary-low;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
 .admin-wizard-container {
-  .row {
-    display: flex;
-    
-    > .content {
-      flex: 1;
-      margin-top: 10px;
-      margin-left: 30px;
-      
-      table {
-        margin-top: 0;
-        min-width: 100%;
-        width: auto;
-      }
-    }
+  margin-top: 20px;
+  
+  .row > .content table {
+    margin-top: 0;
+    min-width: 100%;
+    width: auto;
   }
-}
-
-.wizard-submissions {
-  overflow: scroll;
-}
-
-.wizard-list {
-  width: 250px;
-  min-width: 250px;
-  margin-top: 10px;
-  float: none;
 }
 
 .wizard-settings-parent {
@@ -65,25 +60,7 @@
   padding: 20px;
 }
 
-// style workdarounds for wizard_step_advanced site setting - to be refactored
-
-.wizard-custom-step .wizard-advanced-toggle + .wizard-links.field,
-.wizard-custom-step .advanced-settings + .wizard-links.field,
-.wizard-links.action {
-  margin-top: 40px;
-}
-
-.wizard-links.field {
-  margin-top: 20px;
-}
-
-// end workdarounds //
-
-.wizard-settings > .advanced-settings > div.setting {
-  margin-bottom: 0;
-}
-
-.admin-wizard.settings .wizard-basic-details {
+.admin-wizard-container.settings .wizard-basic-details {
   justify-content: initial;
   
   .setting {
@@ -97,23 +74,20 @@
   }
 }
 
-.new-wizard {
-  margin-top: 15px;
-}
-
 .wizard-header {
   margin-bottom: 20px;
   
   &.large {
     font-size: 1.5em;
     min-height: 31px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
     
     input {
       margin-bottom: 0;
-      width: 350px;
+      width: 400px;
     }
     
     label {
@@ -123,6 +97,22 @@
     .download-link {
       font-size: 1rem;
       line-height: 20px;
+    }
+    
+    .wizard-url {
+      display: inline-flex;
+      margin-left: 20px;
+      max-width: 50%;
+      
+      a {
+        padding: 6px 12px;
+        font-size: 1rem;
+        background-color: $primary-low;
+      }
+      
+      button {
+        font-size: 1rem;
+      }
     }
   }
 
@@ -138,28 +128,13 @@
   &.underline {
     text-decoration: underline;
   }
-  
-  .wizard-url {
-    display: inline-flex;
-    margin-left: 20px;
-    
-    a {
-      padding: 6px 12px;
-      font-size: 1rem;
-      background-color: $primary-low;
-    }
-    
-    button {
-      font-size: 1rem;
-    }
-  }
 }
 
 .admin-wizard-buttons {
   margin-top: 20px;
 }
 
-.admin-wizard.settings {
+.admin-wizard-container.settings {
   
   [class~='setting'] {
     display: inline-flex;
@@ -208,13 +183,12 @@
         cursor: not-allowed;
       }
       
-      input[type="number"] {
-        width: 70px;
-        margin-bottom: 0;
-      }
-      
       input.medium {
         width: 200px;
+      }
+      
+      input.small {
+        width: 100px;
       }
       
       .uploaded-image-preview {
@@ -239,6 +213,11 @@
         float: left;
         margin: 5px 7px 0 0;
       }
+      
+      .input .select-kit, > .select-kit {
+        max-width: 250px !important;
+        min-width: 250px !important;
+      }
     }
 
     &.full, &.full-inline {
@@ -255,7 +234,7 @@
         }
         
         .uploaded-image-preview {
-          max-height: 170px;
+          max-height: 200px;
         }
       }
     }
@@ -293,7 +272,7 @@
     }
   }
   
-  .wizard-custom-action > [class~='setting']:last-of-type {
+  .wizard-custom-action > [class~='setting']:first-of-type {
     margin-bottom: 0;
   }
 
@@ -328,7 +307,7 @@
     width: 100%;
 
     .d-editor-input {
-      min-height: 130px;
+      min-height: 150px;
     }
     
     .d-editor-container {

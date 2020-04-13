@@ -22,12 +22,6 @@ function inputTypesContent(options = {}) {
     mapInputTypes(selectableInputTypes);
 }
 
-function removeMapperClasses(ctx) {
-  const $mapper = $(ctx.element).parents('.wizard-mapper');
-  $mapper.find('.selector-types').removeClass('show');
-  $mapper.find('.mapper-selector').removeClass('active');
-}
-
 // Connectors
 
 const connectors = {
@@ -160,7 +154,6 @@ export {
   defaultInputType,
   defaultSelectionType,
   defaultConnector,
-  removeMapperClasses,
   connectorContent,
   inputTypesContent,
   selectionTypes,

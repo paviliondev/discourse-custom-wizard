@@ -5,19 +5,26 @@ import { schema, listProperties, camelCase, snakeCase } from '../lib/wizard';
 import { Promise } from "rsvp";
 
 const CustomWizard = EmberObject.extend({
-  save() {
+  save(opts) {
     return new Promise((resolve, reject) => {      
-      let json = this.buildJson(this, 'wizard');
+      let wizard = this.buildJson(this, 'wizard');
       
-      if (json.error) {
-        reject({ error: json.error });
+      if (wizard.error) {
+        reject(wizard);
       }
       
-      ajax("/admin/wizards/custom/save", {
+      let data = {
+        wizard
+      };
+      
+      if (opts.create) {
+        data.create = true;
+      }
+            
+      ajax(`/admin/wizards/wizard/${wizard.id}`, {
         type: 'PUT',
-        data: {
-          wizard: JSON.stringify(json)
-        }
+        contentType: "application/json",
+        data: JSON.stringify(data)
       }).then((result) => {
         if (result.error) {
           reject(result);
@@ -40,7 +47,7 @@ const CustomWizard = EmberObject.extend({
         return result;
       }
     }
-        
+            
     for (let property of listProperties(type, objectType)) {
       let value = object.get(property);
       
@@ -175,23 +182,18 @@ const CustomWizard = EmberObject.extend({
   },
 
   remove() {
-    return ajax("/admin/wizards/custom/remove", {
-      type: 'DELETE',
-      data: {
-        id: this.get('id')
-      }
+    return ajax(`/admin/wizards/wizard/${this.id}`, {
+      type: 'DELETE'
     }).then(() => this.destroy());
   }
 });
 
 CustomWizard.reopenClass({
   all() {
-    return ajax("/admin/wizards/custom/all", {
+    return ajax("/admin/wizards/wizard", {
       type: 'GET'
     }).then(result => {
-      return result.wizards.map(wizard => {
-        return CustomWizard.create(wizard);
-      });
+      return result.wizard_list;
     });
   },
 

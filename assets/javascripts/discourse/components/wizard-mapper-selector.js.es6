@@ -2,7 +2,7 @@ import { alias, or, gt } from "@ember/object/computed";
 import { computed } from "@ember/object";
 import { default as discourseComputed, observes, on } from "discourse-common/utils/decorators";
 import { getOwner } from 'discourse-common/lib/get-owner';
-import { defaultSelectionType, selectionTypes, removeMapperClasses } from '../lib/wizard-mapper'; 
+import { defaultSelectionType, selectionTypes } from '../lib/wizard-mapper'; 
 import { snakeCase } from '../lib/wizard';
 import Component from "@ember/component";
 import { bind } from "@ember/runloop";
@@ -30,6 +30,7 @@ export default Component.extend({
   userEnabled: computed('options.userSelection', 'inputType', function() { return this.optionEnabled('userSelection') }),
   listEnabled: computed('options.listSelection', 'inputType', function() { return this.optionEnabled('listSelection') }),
   hasTypes: gt('selectorTypes.length', 1),
+  showTypes: false,
   
   didInsertElement() {
     $(document).on("click", bind(this, this.documentClick));
@@ -41,15 +42,10 @@ export default Component.extend({
 
   documentClick(e) {
     if (this._state == "destroying") return;
-    
     let $target = $(e.target);
-    
-    if (!$target.parents('.wizard-mapper .input').length) {
-      this.send('disableActive');
-    }
-    
-    if (!$target.parents('.type-selector').length) {
-      this.send('hideTypes');
+        
+    if (!$target.parents('.type-selector').length && this.showTypes) {
+      this.set('showTypes', false);
     }
   },
   
@@ -80,9 +76,9 @@ export default Component.extend({
   
   @discourseComputed('activeType')
   comboBoxContent(activeType) {
-    const controller = getOwner(this).lookup('controller:admin-wizard');
+    const controller = getOwner(this).lookup('controller:admin-wizards-wizard-show');
     let content = controller[`${activeType}s`];
-    
+        
     // you can't select the current field in the field context
     if (activeType === 'wizardField' && this.options.context === 'field') {
       content = content.filter(field => field.id !== controller.currentField.id);
@@ -148,34 +144,14 @@ export default Component.extend({
     return this.activeType === type && this[`${type}Enabled`];
   },
   
-  removeClasses() {
-    removeMapperClasses(this);
-  },
-  
   actions: {
     toggleType(type) {
       this.set('activeType', type);
-      this.send('hideTypes');
+      this.set('showTypes', false);
     },
     
-    // jquery is used here to ensure other selectors and types disable properly
-    
-    showTypes() {
-      this.removeClasses();
-      $(this.element).find('.selector-types').addClass('show');
-    },
-    
-    hideTypes() {
-      $(this.element).find('.selector-types').removeClass('show');
-    },
-  
-    enableActive() {
-      this.removeClasses();
-      $(this.element).addClass('active');
-    },
-    
-    disableActive() {
-      $(this.element).removeClass('active');
+    toggleTypes() {
+      this.toggleProperty('showTypes');
     }
   }
 })

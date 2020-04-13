@@ -6,7 +6,7 @@ class CustomWizard::WizardController < ::ApplicationController
   helper_method :theme_ids
 
   def wizard
-    CustomWizard::Template.new(PluginStore.get('custom_wizard', params[:wizard_id].underscore))
+    CustomWizard::Wizard.create(params[:wizard_id].underscore, current_user)
   end
 
   def wizard_page_title
@@ -20,12 +20,14 @@ class CustomWizard::WizardController < ::ApplicationController
   def index
     respond_to do |format|
       format.json do
-        builder = CustomWizard::Builder.new(current_user, params[:wizard_id].underscore)
-        builder_opts = {}
-        builder_opts[:reset] = params[:reset] || builder.wizard.restart_on_revisit
-
+        builder = CustomWizard::Builder.new(params[:wizard_id].underscore, current_user)
+        
         if builder.wizard.present?
-          render_serialized(builder.build(builder_opts, params), ::CustomWizardSerializer)
+          builder_opts = {}
+          builder_opts[:reset] = params[:reset] || builder.wizard.restart_on_revisit
+          built_wizard = builder.build(builder_opts, params)
+          
+          render_serialized(built_wizard, ::CustomWizard::WizardSerializer, root: false)
         else
           render json: { error: I18n.t('wizard.none') }
         end
@@ -34,34 +36,28 @@ class CustomWizard::WizardController < ::ApplicationController
     end
   end
 
-  ## clean up if user skips wizard
   def skip
     params.require(:wizard_id)
-
-    wizard_id = params[:wizard_id]
-
-    user = current_user
-    wizard_template = PluginStore.get('custom_wizard', wizard_id.underscore)
-    wizard = CustomWizard::Wizard.new(user, wizard_template)
 
     if wizard.required && !wizard.completed? && wizard.permitted?
       return render json: { error: I18n.t('wizard.no_skip') }
     end
 
     result = success_json
-
+    user = current_user
+    
     if user
-      submission = Array.wrap(PluginStore.get("#{wizard_id}_submissions", user.id)).last
+      submission = wizard.submissions.last
 
       if submission && submission['redirect_to']
         result.merge!(redirect_to: submission['redirect_to'])
       end
 
       if submission && !wizard.save_submissions
-        PluginStore.remove("#{wizard_id}_submissions", user.id)
+        PluginStore.remove("#{wizard.id}_submissions", user.id)
       end
 
-      if user.custom_fields['redirect_to_wizard'] === wizard_id
+      if user.custom_fields['redirect_to_wizard'] === wizard.id
         user.custom_fields.delete('redirect_to_wizard')
         user.save_custom_fields(true)
       end

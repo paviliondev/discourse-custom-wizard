@@ -1,5 +1,5 @@
 {{#admin-nav}}
-  {{nav-item route='adminWizardsCustom' label='admin.wizard.nav_label'}}
+  {{nav-item route='adminWizardsWizard' label='admin.wizard.nav_label'}}
   {{nav-item route='adminWizardsSubmissions' label='admin.wizard.submissions.nav_label'}}
   {{#if siteSettings.wizard_api_features}}
     {{nav-item route='adminWizardsApis' label='admin.wizard.api.nav_label'}}
@@ -7,6 +7,6 @@
   {{nav-item route='adminWizardsTransfer' label='admin.wizard.transfer.nav_label'}}
 {{/admin-nav}}
 
-<div class="admin-container admin-wizard-container">
+<div class="admin-container">
   {{outlet}}
 </div>

@@ -5,7 +5,7 @@ module Jobs
         user_ids = []
 
         User.human_users.each do |user|
-          if CustomWizard::Wizard.set_wizard_redirect(user, args[:wizard_id])
+          if CustomWizard::Wizard.set_wizard_redirect(args[:wizard_id], user)
             user_ids.push(user.id)
           end
         end

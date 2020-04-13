@@ -1,0 +1,29 @@
+{{#if submissions}}
+  <div class="wizard-header large">
+    <label>{{i18n 'admin.wizard.submissions.title' name=wizard.name}}</label>
+    
+    <a class="btn btn-default download-link" href="{{downloadUrl}}" target="_blank">
+       {{d-icon 'download'}}
+       <span class="d-button-label">
+         {{i18n "admin.wizard.submissions.download"}}
+       </span>
+    </a>
+  </div>
+
+  <div class="wizard-submissions">
+    <table>
+      <tr>
+        {{#each fields as |f|}}
+          <th>{{f}}</th>
+        {{/each}}
+      </tr>
+      {{#each submissions as |s|}}
+        <tr>
+          {{#each-in s as |k v|}}
+            <td>{{v}}</td>
+          {{/each-in}}
+        </tr>
+      {{/each}}
+    </table>
+  </div>
+{{/if}}

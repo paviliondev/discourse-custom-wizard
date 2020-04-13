@@ -100,40 +100,15 @@
   }
 }
 
-.mapper-input.assignment,
-.mapper-input.validation,
-.mapper-input.association {
-  .mapper-selector {
-    max-width: 250px;
-    min-width: 250px;
-    
-    > input, .select-kit, .ac-wrap, .autocomplete.ac-user {
-      width: 250px !important;
-    }
-  }
-}
-
-.mapper-input.conditional {
-  .mapper-selector {
-    max-width: 170px;
-    min-width: 170px;
-    
-    &:not(.text).active .input {
-      width: 250px;
-      box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.2);
-      position: absolute;
-      z-index: 300;
-      
-      .select-kit, .ac-wrap, .autocomplete.ac-user, .select-kit-wrapper {
-        width: 250px !important;
-      }
-    }
-  }
-}
-
 .mapper-selector {
   width: 100%;
+  max-width: 250px;
+  min-width: 250px;
   position: relative;
+  
+  > input, .select-kit, .ac-wrap, .autocomplete.ac-user {
+    width: 250px !important;
+  }
   
   .input {
     width: 100%;
@@ -170,16 +145,12 @@
   .selector-types {
     box-shadow: shadow('dropdown');
     position: absolute;
-    display: none;
+    display: flex;
     background: $secondary;
     z-index: 200;
     padding: 5px 7px;
     flex-direction: column;
     border: 1px solid $primary-low;
-    
-    &.show {
-      display: flex;
-    }
   }
   
   .value-list .remove-value-btn {

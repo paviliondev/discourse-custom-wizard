@@ -8,11 +8,12 @@ en:
       wizard:
         label: "Wizard"
         nav_label: "Wizards"
-        new: "New"
+        select: "Select a wizard"
+        create: "Create Wizard"
         name: "Name"
         name_placeholder: "wizard name"
         background: "Background"
-        background_placeholder: "#hex"
+        background_placeholder: "color"
         save_submissions: "Save"
         save_submissions_label: "Save wizard submissions."
         multiple_submissions: "Multiple"
@@ -52,6 +53,12 @@ en:
         group: "Group"
         permitted: "Permitted"
         advanced: "Advanced"
+        
+        message:
+          select: "Select a wizard, or create a new one"
+          edit: "You're editing a wizard"
+          create: "You're creating a new wizard"
+          help: "Stuck? Check out the documentation"
         
         editor:
           show: "Show"
@@ -97,6 +104,7 @@ en:
           required: "{{type}} requires {{property}}"
           invalid: "{{property}} is invalid"
           dependent: "{{property}} is dependent on {{dependent}}"
+          conflict: "{{type}} with {{property}} '{{value}}' already exists"
         
         step:
           header: "Steps"

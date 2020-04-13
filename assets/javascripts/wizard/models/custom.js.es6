@@ -50,7 +50,7 @@ export function findCustomWizard(wizardId, params = {}) {
   }
 
   return ajax({ url, cache: false, dataType: 'json' }).then(result => {
-    const wizard = result.custom_wizard;
+    const wizard = result;
     if (!wizard) return null;
 
     if (!wizard.completed) {

@@ -8,10 +8,10 @@ UserHistory.actions[:custom_wizard_step] = 1000
 class CustomWizard::Wizard
   include ActiveModel::SerializerSupport
 
-  attr_reader :steps, :user
   attr_accessor :id,
                 :name,
                 :background,
+                :theme_id,
                 :save_submissions,
                 :multiple_submissions,
                 :after_time,
@@ -22,20 +22,38 @@ class CustomWizard::Wizard
                 :restart_on_revisit,
                 :permitted,
                 :needs_categories,
-                :needs_groups
+                :needs_groups,
+                :steps,
+                :actions,
+                :user
 
-  def initialize(user=nil, attrs = {})
-    @steps = []
+  def initialize(attrs = {}, user=nil)
     @user = user
-    @first_step = nil
-    @required = false
+  
+    @id = attrs['id']
+    @name = attrs['name']
+    @background = attrs['background']
+    @save_submissions = attrs['save_submissions'] || false
+    @multiple_submissions = attrs['multiple_submissions'] || false
+    @prompt_completion = attrs['prompt_completion'] || false
+    @restart_on_revisit = attrs['restart_on_revisit'] || false
+    @after_signup = attrs['after_signup']
+    @after_time = attrs['after_time']
+    @after_time_scheduled = attrs['after_time_scheduled']
+    @required = attrs['required'] || false
+    @permitted = attrs['permitted'] || nil
     @needs_categories = false
     @needs_groups = false
-    
-    attrs.each do |key, value|
-      setter = "#{key}="
-      send(setter, value) if respond_to?(setter.to_sym, false)
+    @theme_id = attrs['theme_id']
+
+    if attrs['theme']
+      theme = Theme.find_by(name: attrs['theme'])
+      @theme_id = theme.id if theme
     end
+    
+    @first_step = nil
+    @steps = []
+    @actions = []
   end
 
   def create_step(step_name)
@@ -44,13 +62,13 @@ class CustomWizard::Wizard
 
   def append_step(step)
     step = create_step(step) if step.is_a?(String)
-
+    
     yield step if block_given?
 
     last_step = @steps.last
 
     @steps << step
-
+    
     # If it's the first step
     if @steps.size == 1
       @first_step = step
@@ -108,7 +126,7 @@ class CustomWizard::Wizard
 
   def completed?
     return nil if !@user
-
+    
     steps = CustomWizard::Wizard.step_ids(@id)
 
     history = ::UserHistory.where(
@@ -151,6 +169,13 @@ class CustomWizard::Wizard
       end
     end
   end
+  
+  def can_access?
+    return true if user.admin
+    return false if multiple_submissions && completed?
+    return false if !permitted?
+    return true
+  end
 
   def reset
     ::UserHistory.create(
@@ -169,6 +194,10 @@ class CustomWizard::Wizard
     @groups ||= ::Site.new(Guardian.new(@user)).groups
   end
   
+  def submissions
+    Array.wrap(PluginStore.get("#{id}_submissions", @user.id))
+  end
+  
   def self.filter_records(filter)
     PluginStoreRow.where("
       plugin_name = 'custom_wizard' AND
@@ -183,7 +212,7 @@ class CustomWizard::Wizard
       records
         .sort_by { |record| record.value['permitted'].present? ? 0 : 1 }
         .each do |record|
-          wizard = CustomWizard::Wizard.new(user, JSON.parse(record.value))
+          wizard = CustomWizard::Wizard.new(JSON.parse(record.value), user)
                     
           if wizard.permitted?
             result = wizard
@@ -200,7 +229,7 @@ class CustomWizard::Wizard
   def self.prompt_completion(user)
     if (records = filter_records('prompt_completion')).any?
       records.reduce([]) do |result, record|
-        wizard = CustomWizard::Wizard.new(user, ::JSON.parse(record.value))
+        wizard = CustomWizard::Wizard.new(::JSON.parse(record.value), user)
         result.push(id: wizard.id, name: wizard.name) if !wizard.completed?
         result
       end
@@ -247,21 +276,69 @@ class CustomWizard::Wizard
   def self.find(wizard_id)
     PluginStore.get('custom_wizard', wizard_id)
   end
+  
+  def self.list(user=nil)
+    PluginStoreRow.where(plugin_name: 'custom_wizard').order(:id)
+      .map { |record| self.new(JSON.parse(record.value), user) }
+  end
+  
+  def self.save(wizard)
+    existing_wizard = self.create(wizard[:id])
+    
+    wizard[:steps].each do |step|
+      if step[:raw_description]
+        step[:description] = PrettyText.cook(step[:raw_description])
+      end
+    end
+    
+    wizard = wizard.slice!(:create)
+    
+    ActiveRecord::Base.transaction do
+      PluginStore.set('custom_wizard', wizard[:id], wizard)
+      
+      if wizard[:after_time]
+        Jobs.cancel_scheduled_job(:set_after_time_wizard, wizard_id: wizard[:id])
+        Jobs.enqueue_at(wizard[:after_time_scheduled], :set_after_time_wizard, wizard_id: wizard[:id])
+      end
+
+      if existing_wizard && existing_wizard.after_time && !wizard[:after_time]
+        Jobs.cancel_scheduled_job(:set_after_time_wizard, wizard_id: wizard[:id])
+        Jobs.enqueue(:clear_after_time_wizard, wizard_id: wizard[:id])
+      end
+    end
+    
+    wizard[:id]
+  end
+  
+  def self.remove(wizard_id)
+    wizard = self.create(wizard_id)
+    
+    ActiveRecord::Base.transaction do
+      if wizard.after_time
+        Jobs.cancel_scheduled_job(:set_after_time_wizard)
+        Jobs.enqueue(:clear_after_time_wizard, wizard_id: wizard.id)
+      end
+      
+      PluginStore.remove('custom_wizard', wizard.id)
+    end
+  end
 
   def self.exists?(wizard_id)
     PluginStoreRow.exists?(plugin_name: 'custom_wizard', key: wizard_id)
   end
 
-  def self.create(user, wizard_id)
-    CustomWizard::Wizard.new(user, self.find(wizard_id).to_h)
+  def self.create(wizard_id, user = nil)
+    if wizard = self.find(wizard_id)
+      CustomWizard::Wizard.new(wizard.to_h, user)
+    end
   end
 
   def self.set_submission_redirect(user, wizard_id, url)
     PluginStore.set("#{wizard_id.underscore}_submissions", user.id, [{ redirect_to: url }])
   end
 
-  def self.set_wizard_redirect(user, wizard_id)
-    wizard = CustomWizard::Wizard.create(user, wizard_id)
+  def self.set_wizard_redirect(wizard_id, user)
+    wizard = CustomWizard::Wizard.create(wizard_id, user)
 
     if wizard.permitted?
       user.custom_fields['redirect_to_wizard'] = wizard_id

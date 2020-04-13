@@ -8,10 +8,10 @@ import EmberObject from "@ember/object";
 import { scheduleOnce, later } from "@ember/runloop";
 import Controller from "@ember/controller";
 import copyText from "discourse/lib/copy-text";
+import CustomWizard from '../models/custom-wizard';
 
 export default Controller.extend({
-  hasName: notEmpty('model.name'),
-  userFields: alias('model.userFields'),
+  hasName: notEmpty('wizard.name'),
   
   @observes('currentStep')
   resetCurrentObjects() {
@@ -25,28 +25,29 @@ export default Controller.extend({
     scheduleOnce('afterRender', () => ($("body").addClass('admin-wizard')));
   },
     
-  @observes('model.name')
+  @observes('wizard.name')
   setId() {
-    if (!this.model.existingId) {
-      this.set('model.id', generateId(this.model.name));
+    const wizard = this.wizard;    
+    if (wizard && !wizard.existingId) {      
+      this.set('wizard.id', generateId(wizard.name));
     }
   },
   
-  @discourseComputed('model.id')
+  @discourseComputed('wizard.id')
   wizardUrl(wizardId) {
     return window.location.origin + '/w/' + dasherize(wizardId);
   },
 
-  @discourseComputed('model.after_time_scheduled')
+  @discourseComputed('wizard.after_time_scheduled')
   nextSessionScheduledLabel(scheduled) {
     return scheduled ?
       moment(scheduled).format('MMMM Do, HH:mm') :
       I18n.t('admin.wizard.after_time_time_label');
   },
   
-  @discourseComputed('currentStep.id', 'model.save_submissions', 'model.steps.@each.fields[]')
+  @discourseComputed('currentStep.id', 'wizard.save_submissions', 'wizard.steps.@each.fields[]')
   wizardFields(currentStepId, saveSubmissions) {
-    const allSteps = this.get('model.steps');
+    const allSteps = this.get('wizard.steps');
     let steps = allSteps;
     let fields = [];
 
@@ -71,31 +72,24 @@ export default Controller.extend({
     return fields;
   },
 
-  actions: {
+  actions: {    
     save() {
       this.setProperties({
         saving: true,
         error: null
       });
       
-      const wizard = this.model;
+      const wizard = this.wizard;
+      const creating = this.creating;
+      let opts = {};
       
-      wizard.save().then((result) => {
-        
-        this.model.setProperties(
-          buildProperties(result.wizard)
-        );
+      if (creating) {
+        opts.create = true;
+      }
       
-        this.set('saving', false);
-        
-        if (this.get('newWizard')) {
-          this.send("refreshAllWizards");
-        } else {
-          this.send("refreshWizard");
-        }
-      }).catch((result) => {
-        this.set('saving', false);
-                
+      wizard.save(opts).then((result) => {
+        this.send('afterSave', result.wizard_id);
+      }).catch((result) => {                
         let errorType = 'failed';
         let errorParams = {};
         
@@ -107,21 +101,18 @@ export default Controller.extend({
         this.set('error', I18n.t(`admin.wizard.error.${errorType}`, errorParams));
         
         later(() => this.set('error', null), 10000);
-      });
+      }).finally(() => this.set('saving', false));
     },
 
     remove() {
-      const wizard = this.get('model');
-      wizard.remove().then(() => {
-        this.send("refreshAllWizards");
-      });
+      this.wizard.remove().then(() => this.send('afterDestroy'));
     },
 
     setNextSessionScheduled() {
       let controller = showModal('next-session-scheduled', {
         model: {
-          dateTime: this.get('model.after_time_scheduled'),
-          update: (dateTime) => this.set('model.after_time_scheduled', dateTime)
+          dateTime: this.wizard.after_time_scheduled,
+          update: (dateTime) => this.set('wizard.after_time_scheduled', dateTime)
         }
       });
 
@@ -129,7 +120,7 @@ export default Controller.extend({
     },
     
     toggleAdvanced() {
-      this.toggleProperty('model.showAdvanced');
+      this.toggleProperty('wizard.showAdvanced');
     },
     
     copyUrl() {

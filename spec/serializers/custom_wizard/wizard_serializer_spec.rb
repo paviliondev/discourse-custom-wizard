@@ -16,7 +16,7 @@ describe CustomWizardSerializer do
   
   def build_wizard(t = template, u = user, build_opts = {}, params = {})
     CustomWizard::Wizard.add_wizard(t)
-    CustomWizard::Builder.new(u, 'welcome').build(build_opts, params)
+    CustomWizard::Builder.new('welcome', u).build(build_opts, params)
   end
 
   it 'should return the wizard attributes' do

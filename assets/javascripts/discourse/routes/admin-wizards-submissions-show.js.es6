@@ -2,25 +2,8 @@ import CustomWizard from '../models/custom-wizard';
 import DiscourseRoute from "discourse/routes/discourse";
 
 export default DiscourseRoute.extend({
-  beforeModel() {
-    const param = this.paramsFor('adminWizardSubmissions').wizard_id;
-    const wizards = this.modelFor('admin-wizards-submissions');
-        
-    if (wizards.length && (param === 'first')) {
-      const wizard = wizards.get(`${param}Object`);
-      if (wizard) {
-        this.transitionTo('adminWizardSubmissions', wizard.id.dasherize());
-      }
-    }
-  },
-  
   model(params) {
-    const wizardId = params.wizard_id;
-    if (wizardId && wizardId !== 'new') {
-      return CustomWizard.submissions(params.wizard_id);
-    } else {
-      return {};
-    }
+    return CustomWizard.submissions(params.wizardId);
   },
 
   setupController(controller, model) {
@@ -43,8 +26,6 @@ export default DiscourseRoute.extend({
         submissions.push(submission);
       });
       
-      console.log(model.id)
-
       controller.setProperties({
         wizard: model.wizard,
         submissions,

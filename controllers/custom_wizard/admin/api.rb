@@ -1,6 +1,4 @@
-class CustomWizard::ApiController < ::ApplicationController
-  before_action :ensure_logged_in
-  before_action :ensure_admin
+class CustomWizard::AdminApiController < CustomWizard::AdminController
   skip_before_action :check_xhr, only: [:redirect]
 
   def index

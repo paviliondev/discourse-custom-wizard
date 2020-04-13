@@ -1,14 +1,14 @@
 class CustomWizard::Builder
   attr_accessor :wizard, :updater, :submissions
 
-  def initialize(user=nil, wizard_id)
-    template = PluginStore.get('custom_wizard', wizard_id)
-    return if template.blank?
-
-    @steps = template['steps']
-    @actions = template['actions']
-    @wizard = CustomWizard::Wizard.new(user, template)
-    @submissions = Array.wrap(PluginStore.get("#{wizard_id}_submissions", user.id)) if user
+  def initialize(wizard_id, user=nil)
+    params = CustomWizard::Wizard.find(wizard_id)
+    return nil if params.blank?
+    
+    @wizard = CustomWizard::Wizard.new(params, user)
+    @steps = params['steps'] || []
+    @actions = params['actions'] || []
+    @submissions = @wizard.submissions if user && @wizard
   end
 
   def self.sorted_handlers
@@ -38,13 +38,8 @@ class CustomWizard::Builder
   end
 
   def build(build_opts = {}, params = {})
-    
-    return @wizard if !SiteSetting.custom_wizard_enabled ||
-      (!@wizard.multiple_submissions &&
-        @wizard.completed? &&
-        !@wizard.user.admin) ||
-        !@steps ||
-        !@wizard.permitted?
+    return nil if !SiteSetting.custom_wizard_enabled || !@wizard
+    return @wizard if !@wizard.can_access?
     
     reset_submissions if build_opts[:reset]
 
@@ -150,10 +145,10 @@ class CustomWizard::Builder
                     
           if @actions.present?
             @actions.each do |action|
-  
+              
               if (action['run_after'] === updater.step.id) ||
                  (final_step && (!action['run_after'] || (action['run_after'] === 'wizard_completion')))
-                 
+
                 CustomWizard::Action.new(
                   action: action,
                   user: user,
@@ -189,7 +184,7 @@ class CustomWizard::Builder
         end
       end
     end
-
+    
     @wizard
   end
 
@@ -213,7 +208,7 @@ class CustomWizard::Builder
     
     params[:value] = prefill_field(field_template, step_template) || params[:value]
     
-    if field_template['type'] === 'group'
+    if field_template['type'] === 'group' && params[:value].present?
       params[:value] = params[:value].first
     end
 
@@ -262,7 +257,7 @@ class CustomWizard::Builder
       
       params[:content] = content[:result]
     end
-    
+        
     field = step.add_field(params)
   end
   
