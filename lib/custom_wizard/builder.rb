@@ -69,7 +69,6 @@ class CustomWizard::Builder
 
         if (required_data = step_template['required_data']).present?
           has_required_data = true
-          pairs = 
           
           required_data.each do |required|
             required['pairs'].each do |pair|
@@ -122,7 +121,7 @@ class CustomWizard::Builder
               validate_field(field, updater, step_template) if field['type'] != 'text_only'
             end
           end
-          
+                    
           next if updater.errors.any?
 
           CustomWizard::Builder.step_handlers.each do |handler|
@@ -274,36 +273,31 @@ class CustomWizard::Builder
   def validate_field(field, updater, step_template)
     value = updater.fields[field['id']]
     min_length = false
-    label = field['label'] || I18n.t("#{field['key']}.label")
     
-    if field['required'] && !value
-      updater.errors.add(field['id'].to_s, I18n.t('wizard.field.required', label: label))
-    end
-
-    if is_text_type(field)
-      min_length = field['min_length']
+    label = field['label'] || I18n.t("#{field['key']}.label")
+    type = field['type']
+    required = field['required']
+    id = field['id'].to_s
+    min_length = field['min_length'] if is_text_type(field)
+    
+    if required && !value
+      updater.errors.add(id, I18n.t('wizard.field.required', label: label))
     end
 
     if min_length && value.is_a?(String) && value.strip.length < min_length.to_i
-      updater.errors.add(
-        field['id'].to_s,
-        I18n.t('wizard.field.too_short', label: label, min: min_length.to_i)
-      )
+      updater.errors.add(id, I18n.t('wizard.field.too_short', label: label, min: min_length.to_i))
     end
 
-    if is_url_type(field)
-      if !check_if_url(value)
-        updater.errors.add(field['id'].to_s, I18n.t('wizard.field.not_url', label: label))
-      end
+    if is_url_type(field) && !check_if_url(value)
+      updater.errors.add(id, I18n.t('wizard.field.not_url', label: label))
     end
 
-    ## ensure all checkboxes are booleans
-    if field['type'] === 'checkbox'
-      updater.fields[field['id']] = standardise_boolean(value)
+    if type === 'checkbox'
+      updater.fields[id] = standardise_boolean(value)
     end
 
     CustomWizard::Builder.field_validators.each do |validator|
-      if field['type'] === validator[:type]
+      if type === validator[:type]
         validator[:block].call(field, updater, step_template)
       end
     end

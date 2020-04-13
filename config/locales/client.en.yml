@@ -13,7 +13,7 @@ en:
         name: "Name"
         name_placeholder: "wizard name"
         background: "Background"
-        background_placeholder: "color"
+        background_placeholder: "#hex"
         save_submissions: "Save"
         save_submissions_label: "Save wizard submissions."
         multiple_submissions: "Multiple"
@@ -105,6 +105,7 @@ en:
           invalid: "{{property}} is invalid"
           dependent: "{{property}} is dependent on {{dependent}}"
           conflict: "{{type}} with {{property}} '{{value}}' already exists"
+          after_time: "After time invalid"
         
         step:
           header: "Steps"

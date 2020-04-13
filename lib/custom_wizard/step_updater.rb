@@ -18,10 +18,12 @@ class CustomWizard::StepUpdater
     @step.updater.call(self) if @step.present? && @step.updater.present?
 
     if success?
-      UserHistory.create(action: UserHistory.actions[:custom_wizard_step],
-                         acting_user_id: @current_user.id,
-                         context: @wizard.id,
-                         subject: @step.id)
+      UserHistory.create(
+        action: UserHistory.actions[:custom_wizard_step],
+        acting_user_id: @current_user.id,
+        context: @wizard.id,
+        subject: @step.id
+      )
     end
   end
 

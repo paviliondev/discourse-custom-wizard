@@ -14,6 +14,12 @@
   padding: 10px;
   display: flex;
   justify-content: space-between;
+  
+  .wizard-message {
+    .d-icon {
+      margin-right: 4px;
+    }
+  }
 }
 
 .admin-wizard-container {
@@ -175,6 +181,10 @@
       input[type="text"], textarea {
         width: 100%;
         box-sizing: border-box;
+        margin-bottom: 0;
+      }
+      
+      input[type="number"] {
         margin-bottom: 0;
       }
       

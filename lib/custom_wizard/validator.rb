@@ -8,17 +8,17 @@ class CustomWizard::Validator
   
   def perform
     params = @params
-        
+            
     check_id(params, :wizard)
     check_required(params, :wizard)
     check_depdendent(params, :wizard)
     
     after_time = nil
-    
-    if !@error && @params[:after_time]
-      after_time = validate_after_time
-    end
         
+    if !@error && @params[:after_time]
+      validate_after_time
+    end
+            
     if !@error
       params[:steps].each do |step|
         check_required(step, :step)
@@ -42,13 +42,11 @@ class CustomWizard::Validator
         end
       end
     end
-    
+        
     if @error
       { error: @error }
     else
-      result = { wizard: params }
-      result[:after_time] = after_time if after_time
-      result
+      { wizard: params }
     end
   end
   
@@ -105,39 +103,16 @@ class CustomWizard::Validator
     end
   end
   
-  def validate_after_time
-    if !@opts[:create]
-      wizard = CustomWizard::Wizard.create(params)
-    end
-    
-    new = false
-    error = nil
-    scheduled = nil
-    
-    if !@params[:after_time_scheduled] && !wizard[:after_time_scheduled]
-      error = 'after_time_need_time'
-    else
-      scheduled = Time.parse(@params[:after_time_scheduled]).utc
-      new = false
-      
-      if wizard[:after_time_scheduled]
-        new = scheduled != Time.parse(wizard[:after_time_scheduled]).utc
-      end
+  def validate_after_time    
+    wizard = CustomWizard::Wizard.create(@params[:id]) if !@opts[:create]
+    current_time = wizard.present? ? wizard.after_time_scheduled : nil
+    new_time = @params[:after_time_scheduled]
 
-      begin
-        error = 'after_time_invalid' if new && scheduled < Time.now.utc
-      rescue ArgumentError
-        error = 'after_time_invalid'
-      end
-    end
-    
-    if error
-      @error = { type: error }
-    else
-      {
-        new: new,
-        scheduled: scheduled
-      }
+    if (new_time.blank? && current_time.blank?) ||
+       (new_time !~ /^([01]?[0-9]|2[0-3])\:[0-5][0-9]$/) ||
+       (Time.parse(new_time).utc < Time.now.utc)
+      
+      @error = { type: 'after_time' }
     end
   end
 end

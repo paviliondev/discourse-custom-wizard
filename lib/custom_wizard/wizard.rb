@@ -298,7 +298,8 @@ class CustomWizard::Wizard
       
       if wizard[:after_time]
         Jobs.cancel_scheduled_job(:set_after_time_wizard, wizard_id: wizard[:id])
-        Jobs.enqueue_at(wizard[:after_time_scheduled], :set_after_time_wizard, wizard_id: wizard[:id])
+        enqueue_at = Time.parse(wizard[:after_time_scheduled]).utc
+        Jobs.enqueue_at(enqueue_at, :set_after_time_wizard, wizard_id: wizard[:id])
       end
 
       if existing_wizard && existing_wizard.after_time && !wizard[:after_time]
@@ -330,6 +331,8 @@ class CustomWizard::Wizard
   def self.create(wizard_id, user = nil)
     if wizard = self.find(wizard_id)
       CustomWizard::Wizard.new(wizard.to_h, user)
+    else
+      false
     end
   end
 

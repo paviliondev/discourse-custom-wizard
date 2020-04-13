@@ -6,7 +6,7 @@ import { ajax } from 'discourse/lib/ajax';
 
 export default DiscourseRoute.extend({  
   model() {
-    return ajax(`/admin/wizards/wizard`);
+    return ajax("/admin/wizards/wizard");
   },
   
   afterModel(model) {
@@ -52,14 +52,20 @@ export default DiscourseRoute.extend({
     });
   },
   
+  currentWizard() {
+    const params = this.paramsFor('adminWizardsWizardShow');    
+    
+    if (params && params.wizardId) {
+      return params.wizardId;
+    } else {
+      return null;
+    }
+  },
+  
   setupController(controller, model) {
     let props = {
-      wizardList: model.wizard_list
-    }
-    
-    const params = this.paramsFor('adminWizardsWizardShow');    
-    if (params && params.wizardId) {
-      props.wizardId = params.wizardId;
+      wizardList: model.wizard_list,
+      wizardId: this.currentWizard()
     }
             
     controller.setProperties(props);

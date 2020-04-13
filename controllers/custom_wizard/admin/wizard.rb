@@ -29,16 +29,14 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
   def save
     opts = {}
     opts[:create] = params[:create] if params[:create]
-        
+            
     validator = CustomWizard::Validator.new(save_wizard_params.to_h, opts)
     validation = validator.perform
 
     if validation[:error]
       render json: { error: validation[:error] }
-    else
-      params = validation[:wizard]
-      
-      if wizard_id = CustomWizard::Wizard.save(params)
+    else      
+      if wizard_id = CustomWizard::Wizard.save(validation[:wizard])
         render json: success_json.merge(wizard_id: wizard_id)
       else
         render json: failed_json
@@ -116,10 +114,9 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
         :code,
         :skip_redirect,
         :url,
+        :post,
+        :post_template,
         title: mapped_params,
-        post: mapped_params,
-        post_builder: mapped_params,
-        post_template: mapped_params,
         category: mapped_params,
         tags: mapped_params,
         custom_fields: mapped_params,
