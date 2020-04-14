@@ -1,6 +1,7 @@
-module CustomWizardApplicationControllerExtension  
+# frozen_string_literal: true
+module CustomWizardApplicationControllerExtension
   extend ActiveSupport::Concern
-  
+
   def self.prepended(klass)
     klass.class_eval do
       before_action :redirect_to_wizard_if_required, if: :current_user
@@ -12,9 +13,9 @@ module CustomWizardApplicationControllerExtension
     @excluded_routes ||= SiteSetting.wizard_redirect_exclude_paths.split('|') + ['/w/']
     url = request.referer || request.original_url
 
-    if request.format === 'text/html' && !@excluded_routes.any? {|str| /#{str}/ =~ url} && wizard_id
-      if request.referer !~ /\/w\// && request.referer !~ /\/invites\//
-        CustomWizard::Wizard.set_submission_redirect(current_user, wizard_id, request.referer)
+    if request.format === 'text/html' && !@excluded_routes.any? { |str| /#{str}/ =~ url } && wizard_id
+      if url !~ /\/w\// && url !~ /\/invites\//
+        CustomWizard::Wizard.set_submission_redirect(current_user, wizard_id, url)
       end
 
       if CustomWizard::Wizard.exists?(wizard_id)
