@@ -21,3 +21,5 @@ plugins:
   wizard_api_features:
     client: true
     default: false
+  wizard_action_debug:
+    default: false

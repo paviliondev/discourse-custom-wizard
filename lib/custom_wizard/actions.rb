@@ -2,7 +2,8 @@ class CustomWizard::Action
   attr_accessor :data,
                 :action,
                 :user,
-                :updater
+                :updater,
+                :result
   
   def initialize(params)
     @action = params[:action]
@@ -12,7 +13,20 @@ class CustomWizard::Action
   end
   
   def perform
-    ActiveRecord::Base.transaction { self.send(action['type'].to_sym) }
+    ActiveRecord::Base.transaction do
+      self.send(action['type'].to_sym)
+      
+      if SiteSetting.wizard_action_debug
+        log = "action: #{action['type']}; "
+        log << "result: #{@result}"
+                
+        updater.errors.messages.each do |field, msg|
+          log << "error: #{field.to_s}; #{msg.to_s}; "
+        end
+        
+        Rails.logger.warn("Wizard Action: #{log.to_s}")
+      end
+    end
   end
   
   def mapper
@@ -21,19 +35,26 @@ class CustomWizard::Action
   
   def create_topic
     params = basic_topic_params
-        
+            
     if params[:title].present? && params[:raw].present?
       params[:category] = action_category
       params[:tags] = action_tags
       
       creator = PostCreator.new(user, params)
       post = creator.create
-      
+            
       if creator.errors.present?
+        @result = "failed to create"
         updater.errors.add(:create_topic, creator.errors.full_messages.join(" "))
       elsif action['skip_redirect'].blank?
         data['redirect_on_complete'] = post.topic.url
       end
+      
+      if creator.errors.blank?
+        @result = "success (created topic: #{post.topic.id})"
+      end
+    else
+      @result = "invalid params"
     end
   end
   
@@ -54,10 +75,17 @@ class CustomWizard::Action
       post = creator.create
 
       if creator.errors.present?
+        @result = "failed to create"
         updater.errors.add(:send_message, creator.errors.full_messages.join(" "))
       elsif action['skip_redirect'].blank?
         data['redirect_on_complete'] = post.topic.url
       end
+      
+      if creator.errors.blank?
+        @result = "success (created pm: #{post.topic.id})"
+      end
+    else
+      @result = "invalid params"
     end
   end
 
@@ -76,11 +104,19 @@ class CustomWizard::Action
     params = add_custom_fields(params)
     
     if params.present?
-      UserUpdater.new(Discourse.system_user, user).update(params)
+      result = UserUpdater.new(Discourse.system_user, user).update(params)
       
       if params[:avatar].present?
-        update_avatar(params[:avatar])
+        result = update_avatar(params[:avatar])
       end
+      
+      if result
+        @result = "success (updated fields #{params.keys.map{ |p| p.to_s }.join(',')})"
+      else
+        @result = "failed to update"
+      end
+    else
+      @result = "invalid params"
     end
   end
 
@@ -160,8 +196,14 @@ class CustomWizard::Action
     if groups.present?
       groups.each do |group_id|
         group = Group.find(group_id) if group_id
-        group.add(user) if group
+        result = group.add(user) if group
       end
+    end
+    
+    if result
+      @result = "success (added to groups: #{groups.map { |g| g.id.to_s }.join(',')})"
+    else
+      @result = "failed to add"
     end
   end
 

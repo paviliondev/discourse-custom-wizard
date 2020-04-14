@@ -31,3 +31,4 @@ en:
     wizard_recognised_image_upload_formats: "File types which will result in upload displaying an image preview"
     wizard_step_advanced: "Enable advanced settings for wizard steps (experimental)."
     wizard_api_features: "Enable API features (experimental)."
+    wizard_action_debug: "Log action details for debugging."

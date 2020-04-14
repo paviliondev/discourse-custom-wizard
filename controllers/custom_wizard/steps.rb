@@ -24,7 +24,7 @@ class CustomWizard::StepsController < ::ApplicationController
     else
       errors = []
       updater.errors.messages.each do |field, msg|
-        errors << { field: field, description: msg.join }
+        errors << { field: field, description: msg.join(',') }
       end
       render json: { errors: errors }, status: 422
     end
