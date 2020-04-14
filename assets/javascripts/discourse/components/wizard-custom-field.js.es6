@@ -19,11 +19,21 @@ export default Component.extend({
   showMinLength: or('isText', 'isTextarea', 'isUrl', 'isComposer'),
   categoryPropertyTypes: selectKitContent(['id', 'slug']),
   
-  @observes('field.type')
-  clearMapped() {
-    schema.field.mapped.forEach(property => {
-      this.set(`field.${property}`, null);
-    });
+  // clearMapped only clears mapped fields if the field type of a specific field
+  // changes, and not when switching between fields. Switching between fields also
+  // changes the field.type property in this component
+  
+  @observes('field.id', 'field.type')
+  clearMapped(ctx, changed) {    
+    if (this.field.id === this.bufferedFieldId) {
+      schema.field.mapped.forEach(property => {
+        this.set(`field.${property}`, null);
+      });
+    }
+    
+    if (changed === 'field.type') {
+      this.set('bufferedFieldId', this.field.id);
+    }
   },
   
   setupTypeOutput(fieldType, options) {    
