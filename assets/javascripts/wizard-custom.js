@@ -107,7 +107,6 @@
 //= require preload-store
 //= require lodash.js
 //= require mousetrap.js
-//= require jquery.putcursoratend.js
 //= require template_include.js
 //= require caret_position.js
 //= require popper.js
