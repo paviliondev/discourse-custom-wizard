@@ -13,17 +13,23 @@ class CustomWizard::StepUpdater
   end
 
   def update
-    return false if !SiteSetting.custom_wizard_enabled
-    
-    @step.updater.call(self) if @step.present? && @step.updater.present?
+    byebug
 
-    if success?
+    if SiteSetting.custom_wizard_enabled &&
+       @step.present? &&
+       @step.updater.present? &&
+       success?
+      
+      @step.updater.call(self)
+      
       UserHistory.create(
         action: UserHistory.actions[:custom_wizard_step],
         acting_user_id: @current_user.id,
         context: @wizard.id,
         subject: @step.id
       )
+    else
+      false
     end
   end
 

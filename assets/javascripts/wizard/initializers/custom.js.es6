@@ -89,7 +89,13 @@ export default {
 
       animateInvalidFields() {
         Ember.run.scheduleOnce('afterRender', () => {
-          $('.invalid input[type=text], .invalid textarea, .invalid input[type=checkbox], .invalid .select-kit').wiggle(2, 100);
+          let query = '.invalid input[type=text], .invalid textarea, .invalid input[type=checkbox], .invalid .select-kit';
+
+          $([document.documentElement, document.body]).animate({
+              scrollTop: $(query).offset().top - 200
+          }, 400, function() {
+            $(query).wiggle(2, 100);
+          });
         });
       },
 
@@ -185,6 +191,7 @@ export default {
             if (wizardErrors.length) {
               this.handleWizardError(wizardErrors.join('\n'));
             }
+            this.animateInvalidFields();
             throw response;
           }
 

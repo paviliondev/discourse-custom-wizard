@@ -1,3 +1,5 @@
+import EmberObject from "@ember/object";
+
 function selectKitContent(content) {
   return content.map(i => ({id: i, name: i}));
 }
@@ -177,9 +179,8 @@ const fieldProperties = {
     'content'
   ],
   advanced: [
-    'prefill',
-    'content',
-    'property'
+    'property',
+    'key'
   ],
   required: [
     'id',
@@ -290,6 +291,33 @@ function listProperties(type, objectType = null) {
   return properties;
 }
 
+function wizardFieldList(steps = [], opts = {}) {
+  let upToIndex = null;
+  
+  if (opts.upTo) {
+    upToIndex = steps.map((s) => (s.id)).indexOf(opts.upTo);
+  }
+     
+  return steps.reduce((result, step, index) => {
+    let fields = step.fields;
+  
+    if (fields && fields.length > 0) {
+            
+      if (upToIndex === null || index < upToIndex) {
+        result.push(...fields.map((field) => {
+          return EmberObject.create({
+            id: field.id,
+            label: `${field.label} (${step.id}, ${field.id})`,
+            type: field.type
+          });
+        }));
+      }
+    }
+    
+    return result;
+  }, []);
+}
+
 export {
   selectKitContent,
   generateName,
@@ -298,5 +326,6 @@ export {
   snakeCase,
   schema,
   userProperties,
-  listProperties
+  listProperties,
+  wizardFieldList
 };

@@ -36,6 +36,13 @@ class CustomWizard::Builder
     sorted_field_validators << { priority: priority, type: type, block: block }
     @sorted_field_validators.sort_by! { |h| -h[:priority] }
   end
+  
+  def mapper
+    CustomWizard::Mapper.new(
+      user: @wizard.user,
+      data: @submissions.last
+    )
+  end
 
   def build(build_opts = {}, params = {})
     return nil if !SiteSetting.custom_wizard_enabled || !@wizard
@@ -46,8 +53,12 @@ class CustomWizard::Builder
     @steps.each do |step_template|
       @wizard.append_step(step_template['id']) do |step|
         step.title = step_template['title'] if step_template['title']
-        step.description = step_template['description'] if step_template['description']
         step.banner = step_template['banner'] if step_template['banner']
+        
+        if step_template['description']
+          step.description = mapper.interpolate(step_template['description'])
+        end
+        
         step.key = step_template['key'] if step_template['key']
         step.permitted = true
 
@@ -87,10 +98,7 @@ class CustomWizard::Builder
                   p['key'] = @submissions.last[p['key']]
                 end
                 
-                unless CustomWizard::Mapper.new(
-                  user: @wizard.user,
-                  data: @submissions.last
-                ).validate_pairs(pairs)
+                unless mapper.validate_pairs(pairs)
                   step.permitted = false
                 end
               end

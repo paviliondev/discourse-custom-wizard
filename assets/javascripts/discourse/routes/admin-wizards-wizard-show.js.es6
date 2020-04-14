@@ -21,7 +21,7 @@ export default DiscourseRoute.extend({
   setupController(controller, model) {
     const parentModel = this.modelFor('adminWizardsWizard');
     const wizard = CustomWizard.create((!model || model.create) ? {} : model);
-      
+          
     controller.setProperties({
       wizardList: parentModel.wizard_list,
       fieldTypes: selectKitContent(parentModel.field_types),

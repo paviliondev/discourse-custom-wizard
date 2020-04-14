@@ -97,6 +97,34 @@
   </div>
 {{/if}}
 
+{{#if showPrefill}}
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n 'admin.wizard.field.prefill'}}</label>
+    </div>
+    
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=field.prefill
+        options=prefillOptions}}
+    </div>
+  </div>
+{{/if}}
+
+{{#if showContent}}
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n 'admin.wizard.field.content'}}</label>
+    </div>
+    
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=field.content
+        options=contentOptions}}
+    </div>
+  </div>
+{{/if}}
+
 {{wizard-advanced-toggle showAdvanced=field.showAdvanced}}
 
 {{#if field.showAdvanced}}
@@ -116,34 +144,6 @@
             options=(hash
               none='admin.wizard.selector.placeholder.property'
             )}}
-        </div>
-      </div>
-    {{/if}}
-    
-    {{#if showPrefill}}
-      <div class="setting full field-mapper-setting">
-        <div class="setting-label">
-          <label>{{i18n 'admin.wizard.field.prefill'}}</label>
-        </div>
-        
-        <div class="setting-value">
-          {{wizard-mapper
-            inputs=field.prefill
-            options=prefillOptions}}
-        </div>
-      </div>
-    {{/if}}
-
-    {{#if showContent}}
-      <div class="setting full field-mapper-setting">
-        <div class="setting-label">
-          <label>{{i18n 'admin.wizard.field.content'}}</label>
-        </div>
-        
-        <div class="setting-value">
-          {{wizard-mapper
-            inputs=field.content
-            options=contentOptions}}
         </div>
       </div>
     {{/if}}

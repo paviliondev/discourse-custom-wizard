@@ -137,7 +137,7 @@ function buildProperties(json) {
     steps: A(),
     actions: A()
   };
-      
+        
   if (present(json)) {
     props.existingId = true;
     props = buildBasicProperties(json, 'wizard', props);

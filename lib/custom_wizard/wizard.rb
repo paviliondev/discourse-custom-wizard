@@ -172,9 +172,7 @@ class CustomWizard::Wizard
   
   def can_access?
     return true if user.admin
-    return false if multiple_submissions && completed?
-    return false if !permitted?
-    return true
+    return permitted? && (multiple_submissions || !completed?)
   end
 
   def reset
@@ -230,7 +228,11 @@ class CustomWizard::Wizard
     if (records = filter_records('prompt_completion')).any?
       records.reduce([]) do |result, record|
         wizard = CustomWizard::Wizard.new(::JSON.parse(record.value), user)
-        result.push(id: wizard.id, name: wizard.name) if !wizard.completed?
+        
+        if wizard.permitted? && !wizard.completed?
+          result.push(id: wizard.id, name: wizard.name) 
+        end
+        
         result
       end
     else

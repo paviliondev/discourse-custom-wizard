@@ -1,4 +1,5 @@
 import { default as discourseComputed, on } from 'discourse-common/utils/decorators';
+import { notEmpty } from "@ember/object/computed";
 import { userProperties } from '../lib/wizard';
 import { scheduleOnce } from "@ember/runloop";
 import Component from "@ember/component";
@@ -8,9 +9,11 @@ export default Component.extend({
   barEnabled: true,
   previewEnabled: true,
   fieldsEnabled: true,
+  hasWizardFields: notEmpty('wizardFieldList'),
   
   didReceiveAttrs() {
     this._super(...arguments);
+    
     if (!this.barEnabled) {
       scheduleOnce('afterRender', () => {
         $(this.element).find('.d-editor-button-bar').addClass('hidden');

@@ -107,11 +107,14 @@ class CustomWizard::Validator
     wizard = CustomWizard::Wizard.create(@params[:id]) if !@opts[:create]
     current_time = wizard.present? ? wizard.after_time_scheduled : nil
     new_time = @params[:after_time_scheduled]
+    
+    begin
+      active_time = Time.parse(new_time.present? ? new_time : current_time).utc
+    rescue ArgumentError
+      invalid_time = true
+    end
 
-    if (new_time.blank? && current_time.blank?) ||
-       (new_time !~ /^([01]?[0-9]|2[0-3])\:[0-5][0-9]$/) ||
-       (Time.parse(new_time).utc < Time.now.utc)
-      
+    if invalid_time || active_time.blank? || active_time < Time.now.utc
       @error = { type: 'after_time' }
     end
   end

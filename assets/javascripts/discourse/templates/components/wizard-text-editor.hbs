@@ -21,10 +21,13 @@
           {{i18n 'admin.wizard.action.post_builder.user_fields'}}
           {{userFieldList}}
         </label>
-        <label>
-          {{i18n 'admin.wizard.action.post_builder.wizard_fields'}}
-          {{wizardFieldList}}
-        </label>
+        
+        {{#if hasWizardFields}}
+          <label>
+            {{i18n 'admin.wizard.action.post_builder.wizard_fields'}}
+            {{wizardFieldList}}
+          </label>
+        {{/if}}
       </div>
     {{/if}}
   {{/if}}

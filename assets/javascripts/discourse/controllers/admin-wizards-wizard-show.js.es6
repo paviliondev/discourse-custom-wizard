@@ -1,7 +1,7 @@
 import { default as discourseComputed, observes, on } from 'discourse-common/utils/decorators';
 import { notEmpty, alias } from "@ember/object/computed";
 import showModal from 'discourse/lib/show-modal';
-import { generateId } from '../lib/wizard';
+import { generateId, wizardFieldList } from '../lib/wizard';
 import { buildProperties } from '../lib/wizard-json';
 import { dasherize } from "@ember/string";
 import EmberObject from "@ember/object";
@@ -47,29 +47,11 @@ export default Controller.extend({
   
   @discourseComputed('currentStep.id', 'wizard.save_submissions', 'wizard.steps.@each.fields[]')
   wizardFields(currentStepId, saveSubmissions) {
-    const allSteps = this.get('wizard.steps');
-    let steps = allSteps;
-    let fields = [];
-
+    let steps = this.wizard.steps;
     if (!saveSubmissions) {
-      steps = [allSteps.findBy('id', currentStepId)];
+      steps = [steps.findBy('id', currentStepId)];
     }
-
-    steps.forEach((s) => {
-      if (s.fields && s.fields.length > 0) {
-        let stepFields = s.fields.map((f) => {
-          return EmberObject.create({
-            id: f.id,
-            label: `${f.label} (${s.id}, ${f.id})`,
-            type: f.type
-          });
-        });
-        
-        fields.push(...stepFields);
-      }
-    });
-
-    return fields;
+    return wizardFieldList(steps);
   },
 
   actions: {    
