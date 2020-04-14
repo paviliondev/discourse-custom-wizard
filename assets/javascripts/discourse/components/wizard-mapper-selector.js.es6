@@ -84,13 +84,14 @@ export default Component.extend({
       content = content.filter(field => field.id !== controller.currentField.id);
     }
     
-    // updating usernames or emails via actions is not supported
+    // updating certain user fields via the profile update action is not supported
     if (activeType === 'userField' &&
         this.options.context === 'action' &&
         this.inputType === 'association' &&
         this.selectorType === 'key') {
       
-      content = content.filter(userField => ['username','email'].indexOf(userField.id) === -1);  
+      const excludedFields = ['username','email', 'trust_level'];
+      content = content.filter(userField => excludedFields.indexOf(userField.id) === -1);  
     }
     
     return content;

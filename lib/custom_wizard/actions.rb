@@ -275,7 +275,7 @@ class CustomWizard::Action
   end
   
   def profile_excluded_fields
-    ['username', 'email'].freeze
+    ['username', 'email', 'trust_level'].freeze
   end
   
   def allowed_profile_fields
