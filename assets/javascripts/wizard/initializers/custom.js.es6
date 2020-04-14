@@ -89,15 +89,15 @@ export default {
 
       animateInvalidFields() {
         Ember.run.scheduleOnce('afterRender', () => {
-          let query = '.invalid input[type=text], .invalid textarea, .invalid input[type=checkbox], .invalid .select-kit';
-          let $element = $(query);
-          let scrollTop = $(query).length ? $(query).offset().top - 200 : 0;
+          let $element = $('.invalid input[type=text], .invalid textarea, .invalid input[type=checkbox], .invalid .select-kit');
           
-          $([document.documentElement, document.body]).animate({
-            scrollTop
-          }, 400, function() {
-            $(query).wiggle(2, 100);
-          });
+          if ($element.length) {
+            $([document.documentElement, document.body]).animate({
+              scrollTop: $(query).offset().top - 200
+            }, 400, function() {
+              $(query).wiggle(2, 100);
+            });
+          }
         });
       },
 
@@ -179,6 +179,7 @@ export default {
           type: 'PUT',
           data: { fields }
         }).catch(response => {
+          console.log(response)
           if (response && response.responseJSON && response.responseJSON.errors) {
             let wizardErrors = [];
             response.responseJSON.errors.forEach(err => {
