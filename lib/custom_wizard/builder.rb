@@ -165,7 +165,7 @@ class CustomWizard::Builder
               end
             end
           end
-          
+                    
           if route_to = data['route_to']
             data.delete('route_to')
           end
@@ -305,7 +305,7 @@ class CustomWizard::Builder
       updater.fields[id] = standardise_boolean(value)
     end
     
-    if type === 'upload' && !validate_file_type(value, file_types)
+    if type === 'upload' && value.present? && !validate_file_type(value, file_types)
       updater.errors.add(id, I18n.t('wizard.field.invalid_file', label: label, types: file_types))
     end
 

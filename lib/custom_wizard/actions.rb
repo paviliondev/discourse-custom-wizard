@@ -106,7 +106,7 @@ class CustomWizard::Action
     end
   end
   
-  def open_composer   
+  def open_composer
     if action['custom_title_enabled']
       title = mapper.interpolate(action['custom_title'])
     else
@@ -138,7 +138,7 @@ class CustomWizard::Action
 
   def add_to_group
     groups = CustomWizard::Mapper.new(
-      inputs: action['inputs'],
+      inputs: action['group'],
       data: data,
       user: user,
       opts: {
@@ -167,7 +167,7 @@ class CustomWizard::Action
 
   def route_to
     url = mapper.interpolate(action['url'])
-    
+        
     if action['code']
       data[action['code']] = SecureRandom.hex(8)
       url += "&#{action['code']}=#{data[action['code']]}"
