@@ -22,7 +22,7 @@ class CustomWizard::Action
   def create_topic
     params = basic_topic_params
         
-    if params[:title] && params[:raw]
+    if params[:title].present? && params[:raw].present?
       params[:category] = action_category
       params[:tags] = action_tags
       
@@ -47,7 +47,7 @@ class CustomWizard::Action
       user: user
     ).perform
         
-    if params[:title] && params[:raw]
+    if params[:title].present? && params[:raw].present? && params[:target_usernames].present?
       params[:archetype] = Archetype.private_message
       
       creator = PostCreator.new(user, params)
