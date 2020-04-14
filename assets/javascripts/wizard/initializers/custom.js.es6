@@ -93,9 +93,9 @@ export default {
           
           if ($element.length) {
             $([document.documentElement, document.body]).animate({
-              scrollTop: $(query).offset().top - 200
+              scrollTop: $element.offset().top - 200
             }, 400, function() {
-              $(query).wiggle(2, 100);
+              $element.wiggle(2, 100);
             });
           }
         });
