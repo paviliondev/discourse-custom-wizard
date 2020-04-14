@@ -13,8 +13,6 @@ class CustomWizard::StepUpdater
   end
 
   def update
-    byebug
-
     if SiteSetting.custom_wizard_enabled &&
        @step.present? &&
        @step.updater.present? &&

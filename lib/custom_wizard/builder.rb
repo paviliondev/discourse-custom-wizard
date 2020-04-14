@@ -287,6 +287,7 @@ class CustomWizard::Builder
     required = field['required']
     id = field['id'].to_s
     min_length = field['min_length'] if is_text_type(field)
+    file_types = field['file_types']
     
     if required && !value
       updater.errors.add(id, I18n.t('wizard.field.required', label: label))
@@ -303,12 +304,22 @@ class CustomWizard::Builder
     if type === 'checkbox'
       updater.fields[id] = standardise_boolean(value)
     end
+    
+    if type === 'upload' && !validate_file_type(value, file_types)
+      updater.errors.add(id, I18n.t('wizard.field.invalid_file', label: label, types: file_types))
+    end
 
     CustomWizard::Builder.field_validators.each do |validator|
       if type === validator[:type]
         validator[:block].call(field, updater, step_template)
       end
     end
+  end
+  
+  def validate_file_type(value, file_types)
+    file_types.split(',')
+      .map { |t| t.gsub('.', '') }
+      .include?(File.extname(value['original_filename'])[1..-1])
   end
 
   def is_text_type(field)
