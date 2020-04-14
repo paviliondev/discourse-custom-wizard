@@ -58,7 +58,7 @@ en:
           select: "Select a wizard, or create a new one"
           edit: "You're editing a wizard"
           create: "You're creating a new wizard"
-          help: "Stuck? Check out the documentation"
+          help: "Need help? Check out the documentation"
         
         editor:
           show: "Show"
