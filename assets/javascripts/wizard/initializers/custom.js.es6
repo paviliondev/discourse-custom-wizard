@@ -90,9 +90,11 @@ export default {
       animateInvalidFields() {
         Ember.run.scheduleOnce('afterRender', () => {
           let query = '.invalid input[type=text], .invalid textarea, .invalid input[type=checkbox], .invalid .select-kit';
-
+          let $element = $(query);
+          let scrollTop = $(query).length ? $(query).offset().top - 200 : 0;
+          
           $([document.documentElement, document.body]).animate({
-              scrollTop: $(query).offset().top - 200
+            scrollTop
           }, 400, function() {
             $(query).wiggle(2, 100);
           });
