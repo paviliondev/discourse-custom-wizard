@@ -22,11 +22,16 @@ function castCase(property, value) {
   return property.indexOf('_type') > -1 ? camelCase(value) : value;
 }
 
-function buildProperty(json, property, type) {  
-  if (mapped(property, type) && present(json[property])) {
-    let inputs = [];
+function buildProperty(json, property, type) {
+  let value = json[property];
+  
+  if (mapped(property, type) &&
+      present(value) &&
+      value.constructor === Array) {
     
-    json[property].forEach(inputJson => {
+    let inputs = [];
+        
+    value.forEach(inputJson => {
       let input = {}
       
       Object.keys(inputJson).forEach(inputKey => {
@@ -61,7 +66,7 @@ function buildProperty(json, property, type) {
     
     return A(inputs);
   } else {
-    return json[property];
+    return value;
   }
 }
 

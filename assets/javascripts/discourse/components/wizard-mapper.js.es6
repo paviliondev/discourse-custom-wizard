@@ -1,17 +1,26 @@
 import { getOwner } from 'discourse-common/lib/get-owner';
 import { newInput, selectionTypes } from '../lib/wizard-mapper';
 import { default as discourseComputed, observes, on } from 'discourse-common/utils/decorators';
+import { later } from "@ember/runloop";
 import Component from "@ember/component";
 import { A } from "@ember/array";
 
 export default Component.extend({
   classNames: 'wizard-mapper',
   
+  didReceiveAttrs() {
+    if (this.inputs && this.inputs.constructor !== Array) {
+      later(() => this.set('inputs', null));
+    }
+  },
+  
   @discourseComputed('inputs.@each.type')
   canAdd(inputs) {
-    return !inputs || inputs.every(i => {
-      return ['assignment','association'].indexOf(i.type) === -1;
-    });
+    return !inputs ||
+           inputs.constructor !== Array ||
+           inputs.every(i => {
+             return ['assignment','association'].indexOf(i.type) === -1;
+           });
   },
   
   @discourseComputed('options.@each.inputType')
