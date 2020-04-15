@@ -1,0 +1,50 @@
+{{wizard-mapper-connector
+  connector=input.type
+  connectors=inputTypes
+  inputTypes=true
+  inputType=inputType
+  connectorType="type"
+  options=options}}
+
+{{#if hasPairs}}
+  <div class="mapper-pairs mapper-block">
+    {{#each input.pairs as |pair|}}
+      {{wizard-mapper-pair
+        pair=pair
+        last=pair.last
+        inputType=inputType
+        options=options
+        removePair=(action 'removePair')}}
+    {{/each}}
+    
+    {{#if canAddPair}}
+      <a {{action 'addPair'}} class="add-pair">
+        {{d-icon 'plus'}}
+      </a>
+    {{/if}}
+  </div>
+{{/if}}
+
+{{#if hasOutput}}
+  {{#if hasPairs}}
+    {{wizard-mapper-connector
+      connector=input.output_connector
+      connectors=connectors
+      connectorType="output"
+      inputType=inputType
+      options=options}}
+  {{/if}}
+
+  <div class="output mapper-block">
+    {{wizard-mapper-selector
+      selectorType='output'
+      inputType=input.type
+      value=input.output
+      activeType=input.output_type
+      options=options}}
+  </div>
+{{/if}}
+
+<a class="remove-input" {{action remove input}}>
+  {{d-icon 'times'}}
+</a>

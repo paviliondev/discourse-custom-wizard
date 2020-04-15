@@ -10,11 +10,14 @@ en:
       too_short: "%{label} must be at least %{min} characters"
       required: "%{label} is required."
       not_url: "%{label} must be a valid url"
+      invalid_file: "%{label} must be a %{types}"
+    
     none: "We couldn't find a wizard at that address."
     no_skip: "Wizard can't be skipped"
     export:
       error:
         select_one: "Please select atleast one wizard"
+    
     import:
       error:
         no_file: "No file selected"
@@ -26,3 +29,4 @@ en:
     custom_wizard_enabled: "Enable custom wizards."
     wizard_redirect_exclude_paths: "Routes excluded from wizard redirects."
     wizard_recognised_image_upload_formats: "File types which will result in upload displaying an image preview"
+    wizard_apis_enabled: "Enable API features (experimental)."

@@ -1,4 +1,5 @@
-import { default as computed } from 'ember-addons/ember-computed-decorators';
+import { default as computed } from 'discourse-common/utils/decorators';
+import { dasherize } from "@ember/string";
 
 export default {
   name: 'custom-routes',
@@ -19,7 +20,6 @@ export default {
     const autocomplete = requirejs('discourse/lib/autocomplete').default;
     const cook = requirejs('discourse/plugins/discourse-custom-wizard/wizard/lib/text-lite').cook;
     const Singleton = requirejs("discourse/mixins/singleton").default;
-    const WizardFieldDropdown = requirejs('wizard/components/wizard-field-dropdown').default;
     const Store = requirejs("discourse/models/store").default;
     const registerRawHelpers = requirejs("discourse-common/lib/raw-handlebars-helpers").registerRawHelpers;
     const RawHandlebars = requirejs("discourse-common/lib/raw-handlebars").default;
@@ -89,7 +89,15 @@ export default {
 
       animateInvalidFields() {
         Ember.run.scheduleOnce('afterRender', () => {
-          $('.invalid input[type=text], .invalid textarea, .invalid input[type=checkbox], .invalid .select-kit').wiggle(2, 100);
+          let $element = $('.invalid input[type=text], .invalid textarea, .invalid input[type=checkbox], .invalid .select-kit');
+          
+          if ($element.length) {
+            $([document.documentElement, document.body]).animate({
+              scrollTop: $element.offset().top - 200
+            }, 400, function() {
+              $element.wiggle(2, 100);
+            });
+          }
         });
       },
 
@@ -161,7 +169,7 @@ export default {
         const fields = {};
 
         this.get('fields').forEach(f => {
-          if (f.type !== 'text-only') {
+          if (f.type !== 'text_only') {
             fields[f.id] = f.value;
           }
         });
@@ -171,6 +179,7 @@ export default {
           type: 'PUT',
           data: { fields }
         }).catch(response => {
+          console.log(response)
           if (response && response.responseJSON && response.responseJSON.errors) {
             let wizardErrors = [];
             response.responseJSON.errors.forEach(err => {
@@ -185,6 +194,7 @@ export default {
             if (wizardErrors.length) {
               this.handleWizardError(wizardErrors.join('\n'));
             }
+            this.animateInvalidFields();
             throw response;
           }
 
@@ -218,8 +228,8 @@ export default {
       inputComponentName: function() {
         const type = this.get('field.type');
         const id = this.get('field.id');
-        if (['text-only'].includes(type)) return false;
-        return (type === 'component') ? Ember.String.dasherize(id) : `wizard-field-${type}`;
+        if (['text_only'].includes(type)) return false;
+        return dasherize((type === 'component') ? id : `wizard-field-${type}`);
       }.property('field.type', 'field.id')
     });
 
@@ -230,9 +240,11 @@ export default {
       'dropdown',
       'tag',
       'image',
-      'user-selector',
-      'text-only',
-      'composer'
+      'user_selector',
+      'text_only',
+      'composer',
+      'category',
+      'group'
     ];
 
     FieldModel.reopen({
@@ -256,16 +268,15 @@ export default {
         } else {
           const val = this.get('value');
           const type = this.get('type');
+                    
           if (type === 'checkbox') {
             valid = val;
-          } else if (type === 'category') {
-            valid = val && val.toString().length > 0;
           } else if (type === 'upload') {
             valid = val && val.id > 0;
           } else if (StandardFieldValidation.indexOf(type) > -1) {
-            valid = val && val.length > 0;
+            valid = val && val.toString().length > 0;
           } else if (type === 'url') {
-            valid = true
+            valid = true;
           }
         }
 

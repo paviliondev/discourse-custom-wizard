@@ -1,86 +1,140 @@
-import { default as computed, on, observes } from 'ember-addons/ember-computed-decorators';
+import { default as discourseComputed, on, observes } from 'discourse-common/utils/decorators';
+import { generateName, schema } from '../lib/wizard';
+import { notEmpty } from "@ember/object/computed";
+import { scheduleOnce, bind } from "@ember/runloop";
+import EmberObject from "@ember/object";
+import Component from "@ember/component";
+import { A } from "@ember/array";
 
-export default Ember.Component.extend({
-  classNames: 'wizard-links',
-  items: Ember.A(),
+export default Component.extend({
+  classNameBindings: [':wizard-links', 'itemType'],
+  items: A(),
+  anyLinks: notEmpty('links'),
 
   @on('didInsertElement')
   @observes('links.@each')
   didInsertElement() {
-    Ember.run.scheduleOnce('afterRender', () => {
-      this.applySortable();
-    });
+    scheduleOnce('afterRender', () => (this.applySortable()));
   },
 
   applySortable() {
-    this.$("ul").sortable({tolerance: 'pointer'}).on('sortupdate', (e, ui) => {
-      const itemId = ui.item.data('id');
-      const index = ui.item.index();
-      Ember.run.bind(this, this.updateItemOrder(itemId, index));
-    });
+    $(this.element).find("ul")
+      .sortable({ tolerance: 'pointer' })
+      .on('sortupdate', (e, ui) => {
+        this.updateItemOrder(ui.item.data('id'), ui.item.index());
+      });
   },
 
   updateItemOrder(itemId, newIndex) {
-    const items = this.get('items');
+    const items = this.items;
     const item = items.findBy('id', itemId);
     items.removeObject(item);
     items.insertAt(newIndex, item);
-    Ember.run.scheduleOnce('afterRender', this, () => this.applySortable());
+    scheduleOnce('afterRender', this, () => this.applySortable());
   },
 
-  @computed('type')
-  header: (type) => `admin.wizard.${type}.header`,
+  @discourseComputed('itemType')
+  header: (itemType) => `admin.wizard.${itemType}.header`,
 
-  @computed('items.@each.id', 'current')
-  links(items, current) {
+  @discourseComputed('current', 'items.@each.id', 'items.@each.type', 'items.@each.label', 'items.@each.title')
+  links(current, items) {
     if (!items) return;
 
     return items.map((item) => {
       if (item) {
-        const id = item.get('id');
-        const type = this.get('type');
-        const label = type === 'action' ? id : (item.get('label') || item.get('title') || id);
-        let link = { id, label };
+        let link = {
+          id: item.id
+        }
+
+        let label = item.label || item.title || item.id;
+        if (this.generateLabels && item.type) {
+          label = generateName(item.type);
+        }
+                
+        link.label = `${label} (${item.id})`;
 
         let classes = 'btn';
-        if (current && item.get('id') === current.get('id')) {
+        if (current && item.id === current.id) {
           classes += ' btn-primary';
         };
 
-        link['classes'] = classes;
+        link.classes = classes;
 
         return link;
       }
     });
   },
+  
+  setDefaults(object, params) {
+    Object.keys(object).forEach(property => {
+      if (object[property]) {
+        params[property] = object[property];
+      }
+    });
+    return params;
+  },
 
   actions: {
     add() {
-      const items = this.get('items');
-      const type = this.get('type');
-      const newId = `${type}_${items.length + 1}`;
-      let params = { id: newId, isNew: true };
-
-      if (type === 'step') {
-        params['fields'] = Ember.A();
-        params['actions'] = Ember.A();
+      const items = this.items;
+      const itemType = this.itemType;
+      let next = 1;
+      
+      if (items.length) {
+        next =  Math.max.apply(Math, items.map((i) => (i.id.split('_')[1]))) + 1;
+      }
+            
+      let params = {
+        id: `${itemType}_${next}`,
+        isNew: true
       };
-
-      const newItem = Ember.Object.create(params);
+      
+      let objectArrays = schema[itemType].objectArrays;
+      if (objectArrays) {
+        Object.keys(objectArrays).forEach(objectType => {
+          params[objectArrays[objectType].property] = A();
+        });
+      };
+      
+      params = this.setDefaults(schema[itemType].basic, params);
+      
+      let types = schema[itemType].types;
+      if (types && params.type) {
+        params = this.setDefaults(types[params.type], params);
+      }
+            
+      const newItem = EmberObject.create(params);
       items.pushObject(newItem);
+      
       this.set('current', newItem);
-      this.sendAction('isNew');
     },
 
     change(itemId) {
-      const items = this.get('items');
-      this.set('current', items.findBy('id', itemId));
+      this.set('current', this.items.findBy('id', itemId));
     },
 
     remove(itemId) {
-      const items = this.get('items');
-      items.removeObject(items.findBy('id', itemId));
-      this.set('current', items[items.length - 1]);
+      const items = this.items;
+      let item;
+      let index;
+            
+      items.forEach((it, ind) => {
+        if (it.id === itemId) {
+          item = it;
+          index = ind;
+        }
+      });
+      
+      let nextIndex;
+      if (this.current.id === itemId) {
+        nextIndex = index < (items.length-2) ? (index+1) : (index-1);
+      }
+      
+      items.removeObject(item);
+      
+      if (nextIndex) {
+        this.set('current', items[nextIndex]);
+      }
     }
   }
 });

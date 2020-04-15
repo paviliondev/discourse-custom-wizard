@@ -1,6 +1,8 @@
-import { default as computed } from 'ember-addons/ember-computed-decorators';
+import { default as discourseComputed } from 'discourse-common/utils/decorators';
+import { scheduleOnce } from "@ember/runloop";
+import Controller from "@ember/controller";
 
-export default Ember.Controller.extend({
+export default Controller.extend({
   title: 'admin.wizard.after_time_modal.title',
 
   setup() {
@@ -14,7 +16,7 @@ export default Ember.Controller.extend({
 
     this.setProperties({ date, time });
 
-    Ember.run.scheduleOnce('afterRender', this, () => {
+    scheduleOnce('afterRender', this, () => {
       const $timePicker = $("#time-picker");
       $timePicker.timepicker({ timeFormat: 'H:i' });
       $timePicker.timepicker('setTime', time);
@@ -22,12 +24,12 @@ export default Ember.Controller.extend({
     });
   },
 
-  @computed('date', 'time')
+  @discourseComputed('date', 'time')
   dateTime: function(date, time) {
     return moment(date + 'T' + time).format();
   },
 
-  @computed('dateTime')
+  @discourseComputed('dateTime')
   submitDisabled(dateTime) {
     return moment().isAfter(dateTime);
   },

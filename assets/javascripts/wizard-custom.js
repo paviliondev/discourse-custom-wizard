@@ -82,7 +82,7 @@
 //= require discourse/components/d-button
 //= require discourse/components/composer-editor
 //= require discourse/components/d-editor
-//= require discourse/components/popup-input-tip
+//= require discourse/components/input-tip
 //= require discourse/components/emoji-picker
 //= require discourse/components/input-tip
 //= require discourse/components/date-picker
@@ -92,6 +92,7 @@
 //= require discourse/templates/components/d-button
 //= require discourse/templates/components/d-editor
 //= require discourse/templates/components/emoji-picker
+//= require discourse/templates/components/popup-input-tip
 //= require discourse/templates/category-tag-autocomplete
 //= require discourse/templates/emoji-selector-autocomplete
 //= require discourse/templates/user-selector-autocomplete
@@ -107,7 +108,6 @@
 //= require preload-store
 //= require lodash.js
 //= require mousetrap.js
-//= require jquery.putcursoratend.js
 //= require template_include.js
 //= require caret_position.js
 //= require popper.js

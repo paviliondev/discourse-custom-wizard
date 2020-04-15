@@ -1,0 +1,9 @@
+{{wizard-group-selector
+  groups=wizard.groups
+  field=field
+  whitelist=field.content
+  value=field.value
+  onChange=(action (mut field.value))
+  options=(hash
+    none='group.select'
+  )}}

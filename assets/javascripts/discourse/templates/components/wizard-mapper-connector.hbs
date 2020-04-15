@@ -1,0 +1,12 @@
+{{#if hasMultiple}}
+  {{combo-box
+    value=connector
+    content=connectors
+    onChange=(action (mut connector))}}
+{{else}}
+  {{#if connector}}
+    <span class="connector-single">
+      {{connectorLabel}}
+    </span>
+  {{/if}}
+{{/if}}

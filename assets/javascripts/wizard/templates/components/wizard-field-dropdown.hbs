@@ -1,7 +1,7 @@
-{{combo-box elementId=field.id
-            class=fieldClass
-            value=field.value
-            content=field.choices
-            none=(hash id="__none__" label=field.dropdown_none)
-            nameProperty="label"
-            tabindex="9"}}
+{{combo-box 
+  class=fieldClass
+  value=field.value
+  content=field.content
+  options=(hash
+    none="select_kit.default_header_text"
+  )}}

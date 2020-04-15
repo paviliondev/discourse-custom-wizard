@@ -8,7 +8,7 @@
     <%= stylesheet_link_tag "wizard_custom_mobile" %>
     <%= stylesheet_link_tag "wizard_locations"%>
     <%= stylesheet_link_tag "wizard_events"%>
-    <%- if theme_ids %>
+    <%- if theme_ids.present? %>
       <%= discourse_stylesheet_link_tag (mobile_view? ? :mobile_theme : :desktop_theme) %>
     <%- end %>
 

@@ -53,7 +53,7 @@ class CustomWizard::TransferController < ::ApplicationController
     failed_ids = []
     
     jsonObject.each do |o|
-      if !CustomWizard::Template.new(o)
+      if !CustomWizard::Wizard.new(o)
         failed_ids.push o['id']
         next
       end

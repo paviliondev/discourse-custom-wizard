@@ -1,158 +1,165 @@
 <div class="setting">
   <div class="setting-label">
-    <h3>{{i18n 'admin.wizard.id'}}</h3>
+    <label>{{i18n 'admin.wizard.field.label'}}</label>
   </div>
   <div class="setting-value">
-    {{input name="id" value=field.id placeholderKey="admin.wizard.id_placeholder" disabled=disableId}}
+    {{input name="label" value=field.label}}
   </div>
 </div>
 
 <div class="setting">
   <div class="setting-label">
-    <h3>{{i18n 'admin.wizard.key'}}</h3>
+    <label>{{i18n 'admin.wizard.field.required'}}</label>
   </div>
+  
   <div class="setting-value">
-    {{input name="key" value=field.key placeholderKey="admin.wizard.key_placeholder"}}
+    <span>{{i18n 'admin.wizard.field.required_label'}}</span>
+    {{input type='checkbox' checked=field.required}}
   </div>
 </div>
 
 <div class="setting">
   <div class="setting-label">
-    <h3>{{i18n 'admin.wizard.field.label'}}</h3>
+    <label>{{i18n 'admin.wizard.field.description'}}</label>
   </div>
   <div class="setting-value">
-    {{input name="label" value=field.label placeholder=(i18n "admin.wizard.custom_text_placeholder")}}
+    {{textarea name="description" value=field.description}}
   </div>
 </div>
 
 <div class="setting">
   <div class="setting-label">
-    <h3>{{i18n 'admin.wizard.field.description'}}</h3>
+    <label>{{i18n 'admin.wizard.field.image'}}</label>
   </div>
   <div class="setting-value">
-    {{textarea name="description" value=field.description placeholder=(i18n "admin.wizard.custom_text_placeholder")}}
+    {{image-uploader
+      imageUrl=field.image
+      onUploadDone=(action "imageUploadDone")
+      onUploadDeleted=(action "imageUploadDeleted")
+      type="wizard-step"
+      class="no-repeat contain-image"}}
   </div>
 </div>
 
 <div class="setting">
   <div class="setting-label">
-    <h3>{{i18n 'admin.wizard.field.image'}}</h3>
+    <label>{{i18n 'admin.wizard.type'}}</label>
   </div>
-  <div class="setting-value">
-    {{input name="image" value=field.image placeholderKey="admin.wizard.field.image_placeholder"}}
-  </div>
-</div>
-
-<div class="setting">
-  <div class="setting-label">
-    <h3>{{i18n 'admin.wizard.type'}}</h3>
-  </div>
+  
   <div class="setting-value">
     {{combo-box
       value=field.type
-      content=types
-      none="admin.wizard.field.type"}}
+      content=fieldTypes
+      onChange=(action (mut field.type))
+      options=(hash
+        none="admin.wizard.field.type"
+      )}}
   </div>
 </div>
 
-<div class="setting">
-  <div class="setting-label">
-    <h3>{{i18n 'admin.wizard.field.required'}}</h3>
-  </div>
-  <div class="setting-value">
-    {{input type='checkbox' checked=field.required}}
-    <span>{{i18n 'admin.wizard.field.required_label'}}</span>
-  </div>
-</div>
-
-{{#if isInput}}
+{{#if showMinLength}}
   <div class="setting">
     <div class="setting-label">
-      <h3>{{i18n 'admin.wizard.field.min_length'}}</h3>
+      <label>{{i18n 'admin.wizard.field.min_length'}}</label>
     </div>
+    
     <div class="setting-value">
-      {{input type="number" name="min_length" value=field.min_length placeholder=(i18n 'admin.wizard.field.min_length_placeholder')}}
+      {{input
+        type="number"
+        name="min_length"
+        value=field.min_length
+        class="small"}}
     </div>
-  </div>
-{{/if}}
-
-{{#if isDropdown}}
-  <div class="wizard-dropdown-choices">
-    <div class="wizard-header small underline">
-      {{i18n 'admin.wizard.field.choices_label'}}
-    </div>
-
-    {{combo-box
-      value=field.choices_type
-      content=choicesTypes
-      none="admin.wizard.field.choices_type"}}
-
-    {{#if choicesTranslation}}
-      <div class="wizard-header small">
-        {{i18n 'admin.wizard.field.choices_translation'}}
-      </div>
-      {{input name="key" value=field.choices_key placeholderKey="admin.wizard.key_placeholder"}}
-    {{/if}}
-
-    {{#if choicesPreset}}
-      <div class="wizard-header small">
-        {{i18n 'admin.wizard.field.choices_preset.label'}}
-      </div>
-      {{combo-box
-        value=field.choices_preset
-        content=presetChoices
-        none='admin.wizard.none'}}
-      <div class="wizard-header small">
-        {{i18n 'admin.wizard.field.choices_preset.filter'}}
-      </div>
-      {{wizard-custom-inputs inputs=field.choices_filters}}
-    {{/if}}
-
-    {{#if choicesCustom}}
-      <div class="wizard-header small">
-        {{i18n 'admin.wizard.field.choices_custom'}}
-      </div>
-      {{wizard-custom-inputs inputs=field.choices}}
-    {{/if}}
-
-    <div class="wizard-header small">
-      {{i18n 'admin.wizard.field.dropdown_none'}}
-    </div>
-    {{input name="dropdown_none" value=field.dropdown_none placeholder=(i18n 'admin.wizard.field.dropdown_none_placeholder')}}
   </div>
 {{/if}}
 
 {{#if isUpload}}
   <div class="setting">
     <div class="setting-label">
-      <h3>{{i18n 'admin.wizard.field.file_types'}}</h3>
+      <label>{{i18n 'admin.wizard.field.file_types'}}</label>
     </div>
+    
     <div class="setting-value">
-      {{input value=field.file_types}}
+      {{input value=field.file_types class="medium"}}
     </div>
   </div>
 {{/if}}
 
-{{#if isCategoryOrTag}}
+{{#if showLimit}}
   <div class="setting">
     <div class="setting-label">
-      <h3>{{i18n 'admin.wizard.field.limit'}}</h3>
+      <label>{{i18n 'admin.wizard.field.limit'}}</label>
     </div>
+    
     <div class="setting-value">
-      {{input type="number" value=field.limit}}
+      {{input type="number" value=field.limit class="small"}}
     </div>
   </div>
 {{/if}}
 
-{{#if isCategory}}
-  <div class="setting">
+{{#if showPrefill}}
+  <div class="setting full field-mapper-setting">
     <div class="setting-label">
-      <h3>{{i18n 'admin.wizard.field.property'}}</h3>
+      <label>{{i18n 'admin.wizard.field.prefill'}}</label>
     </div>
+    
     <div class="setting-value">
-      {{combo-box
-        content=categoryPropertyTypes
-        value=field.property}}
+      {{wizard-mapper
+        inputs=field.prefill
+        options=prefillOptions}}
     </div>
+  </div>
+{{/if}}
+
+{{#if showContent}}
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n 'admin.wizard.field.content'}}</label>
+    </div>
+    
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=field.content
+        options=contentOptions}}
+    </div>
+  </div>
+{{/if}}
+
+{{wizard-advanced-toggle showAdvanced=field.showAdvanced}}
+
+{{#if field.showAdvanced}}
+  <div class="advanced-settings">
+    
+    {{#if isCategory}}
+      <div class="setting">
+        <div class="setting-label">
+          <label>{{i18n 'admin.wizard.field.property'}}</label>
+        </div>
+        
+        <div class="setting-value">
+          {{combo-box
+            value=field.property
+            content=categoryPropertyTypes
+            onChange=(action (mut field.property))
+            options=(hash
+              none='admin.wizard.selector.placeholder.property'
+            )}}
+        </div>
+      </div>
+    {{/if}}
+    
+    <div class="setting">
+      <div class="setting-label">
+        <label>{{i18n 'admin.wizard.translation'}}</label>
+      </div>
+      <div class="setting-value medium">
+        {{input
+          name="key"
+          value=field.key
+          class="medium"
+          placeholderKey="admin.wizard.translation_placeholder"}}
+      </div>
+    </div>
+    
   </div>
 {{/if}}

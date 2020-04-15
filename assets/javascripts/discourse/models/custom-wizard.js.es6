@@ -1,57 +1,30 @@
 import { ajax } from 'discourse/lib/ajax';
+import EmberObject from "@ember/object";
+import { buildProperties, present, mapped } from '../lib/wizard-json';
+import { schema, listProperties, camelCase, snakeCase } from '../lib/wizard';
+import { Promise } from "rsvp";
 
-const wizardProperties = [
-  'name',
-  'background',
-  'save_submissions',
-  'multiple_submissions',
-  'after_signup',
-  'after_time',
-  'after_time_scheduled',
-  'required',
-  'prompt_completion',
-  'restart_on_revisit',
-  'min_trust',
-  'theme_id'
-];
-
-const CustomWizard = Discourse.Model.extend({
-  save() {
-    return new Ember.RSVP.Promise((resolve, reject) => {
-
-      const id = this.get('id');
-      if (!id || !id.underscore()) return reject({ error: 'id_required' });
-
-      let wizard = { id: id.underscore() };
-
-      wizardProperties.forEach((p) => {
-        const value = this.get(p);
-        if (value) wizard[p] = value;
-      });
-
-      if (wizard['after_time'] && !wizard['after_time_scheduled']) {
-        return reject({ error: 'after_time_need_time' });
+const CustomWizard = EmberObject.extend({
+  save(opts) {
+    return new Promise((resolve, reject) => {      
+      let wizard = this.buildJson(this, 'wizard');
+      
+      if (wizard.error) {
+        reject(wizard);
+      }
+      
+      let data = {
+        wizard
       };
-
-      const steps = this.get('steps');
-      if (steps.length > 0)  {
-        const stepsResult = this.buildSteps(steps);
-        if (stepsResult.error) {
-          reject({ error: stepsResult.error });
-        } else {
-          wizard['steps'] = stepsResult.steps;
-        }
+      
+      if (opts.create) {
+        data.create = true;
       }
-
-      if (steps.length < 1 || !wizard['steps'] || wizard['steps'].length < 1) {
-        return reject({ error: 'steps_required' });
-      }
-
-      ajax("/admin/wizards/custom/save", {
+            
+      ajax(`/admin/wizards/wizard/${wizard.id}`, {
         type: 'PUT',
-        data: {
-          wizard: JSON.stringify(wizard)
-        }
+        contentType: "application/json",
+        data: JSON.stringify(data)
       }).then((result) => {
         if (result.error) {
           reject(result);
@@ -62,216 +35,177 @@ const CustomWizard = Discourse.Model.extend({
     });
   },
 
-  buildSteps(stepsObj) {
-    let steps = [];
-    let error = null;
-
-    stepsObj.some((s) => {
-      if (!s.id || !s.id.underscore()) {
-        error = 'id_required';
-        return;
-      };
-
-      let step = { id: s.id.underscore() };
-
-      if (s.title) step['title'] = s.title;
-      if (s.key) step['key'] = s.key;
-      if (s.banner) step['banner'] = s.banner;
-      if (s.raw_description) step['raw_description'] = s.raw_description;
-      if (s.required_data) step['required_data'] = s.required_data;
-      if (s.required_data_message) step['required_data_message'] = s.required_data_message;
-      if (s.permitted_params) step['permitted_params'] = s.permitted_params;
-
-      const fields = s.get('fields');
-      if (fields.length) {
-        step['fields'] = [];
-
-        fields.some((f) => {
-          let id = f.id;
-
-          if (!id || !id.underscore()) {
-            error = 'id_required';
-            return;
-          }
-
-          if (!f.type) {
-            error = 'type_required';
-            return;
-          }
-
-          f.set('id', id.underscore());
-
-          if (f.label === '') delete f.label;
-          if (f.description === '') delete f.description;
-
-          if (f.type === 'dropdown') {
-            const choices = f.choices;
-            if ((!choices || choices.length < 1) && !f.choices_key && !f.choices_preset) {
-              error = 'field.need_choices';
-              return;
-            }
-
-            if (f.dropdown_none === '') delete f.dropdown_none;
-          }
-
-          delete f.isNew;
-
-          step['fields'].push(f);
-        });
-
-        if (error) return;
+  buildJson(object, type, result = {}) {
+    let objectType = object.type || null;
+    
+    if (schema[type].types) {
+      if (!objectType) {
+        result.error = {
+          type: 'required',
+          params: { type, property: 'type' }
+        }
+        return result;
       }
-
-      const actions = s.actions;
-      if (actions.length) {
-        step['actions'] = [];
-
-        actions.some((a) => {
-          let id = a.get('id');
-          if (!id || !id.underscore()) {
-            error = 'id_required';
-            return;
-          }
-          //check if api_body is valid JSON
-          let api_body = a.get('api_body');
-          if (api_body) {
-            try {
-              JSON.parse(api_body);
-            } catch (e) {
-              error = 'invalid_api_body';
-              return;
-            }
-          }
-
-          a.set('id', id.underscore());
-
-          delete a.isNew;
-
-          step['actions'].push(a);
-        });
-
-        if (error) return;
+    }
+            
+    for (let property of listProperties(type, objectType)) {
+      let value = object.get(property);
+      
+      result = this.validateValue(property, value, object, type, result);
+      
+      if (result.error) {
+        break;
       }
-
-      steps.push(step);
-    });
-
-    if (error) {
-      return { error };
-    } else {
-      return { steps };
+        
+      if (mapped(property, type)) {
+        value = this.buildMappedJson(value);
+      }
+            
+      if (value !== undefined && value !== null) {
+        result[property] = value;
+      }
     };
+    
+    if (!result.error) {
+      for (let arrayObjectType of Object.keys(schema[type].objectArrays)) {
+        let arraySchema = schema[type].objectArrays[arrayObjectType];
+        let objectArray = object.get(arraySchema.property);
+                
+        if (arraySchema.required && !present(objectArray)) {
+          result.error = {
+            type: 'required',
+            params: { type, property: arraySchema.property }
+          }
+          break;
+        }
+
+        result[arraySchema.property] = [];
+                
+        for (let item of objectArray) {
+          let itemProps = this.buildJson(item, arrayObjectType);
+                    
+          if (itemProps.error) {
+            result.error = itemProps.error;
+            break;
+          } else {
+            result[arraySchema.property].push(itemProps);
+          }
+        }
+      };
+    }
+          
+    return result;
+  },
+  
+  validateValue(property, value, object, type, result) {
+    if (schema[type].required.indexOf(property) > -1 && !value) {
+      result.error = {
+        type: 'required',
+        params: { type, property }
+      }
+    }
+    
+    let dependent = schema[type].dependent[property];
+    if (dependent && value && !object[dependent]) {
+      result.error = {
+        type: 'dependent',
+        params: { property, dependent }
+      }
+    }
+    
+    if (property === 'api_body') {
+      try {
+        value = JSON.parse(value);
+      } catch (e) {
+        result.error = {
+          type: 'invalid',
+          params: { type, property }
+        }
+      }
+    }
+    
+    return result;
+  },
+
+  buildMappedJson(inputs) {
+    if (!inputs || !inputs.length) return false;
+    
+    let result = [];
+      
+    inputs.forEach(inpt => {
+      let input = {
+        type: inpt.type,
+      };
+      
+      if (inpt.connector) {
+        input.connector = inpt.connector;
+      }
+          
+      if (present(inpt.output)) {
+        input.output = inpt.output;
+        input.output_type = snakeCase(inpt.output_type);
+        input.output_connector = inpt.output_connector;
+      }
+      
+      if (present(inpt.pairs)) {
+        input.pairs = [];
+        
+        inpt.pairs.forEach(pr => {                
+          if (present(pr.key) && present(pr.value)) {
+            
+            let pairParams = {
+              index: pr.index,
+              key: pr.key,
+              key_type: snakeCase(pr.key_type),
+              value: pr.value,
+              value_type: snakeCase(pr.value_type),
+              connector: pr.connector
+            }
+                      
+            input.pairs.push(pairParams);
+          }
+        });
+      }
+          
+      if ((input.type === 'assignment' && present(input.output)) ||
+          present(input.pairs)) {
+        
+        result.push(input);
+      }
+    });
+    
+    if (!result.length) {
+      result = false;
+    }
+      
+    return result;
   },
 
   remove() {
-    return ajax("/admin/wizards/custom/remove", {
-      type: 'DELETE',
-      data: {
-        id: this.get('id')
-      }
+    return ajax(`/admin/wizards/wizard/${this.id}`, {
+      type: 'DELETE'
     }).then(() => this.destroy());
   }
 });
 
 CustomWizard.reopenClass({
   all() {
-    return ajax("/admin/wizards/custom/all", {
+    return ajax("/admin/wizards/wizard", {
       type: 'GET'
     }).then(result => {
-      return result.wizards.map(w => CustomWizard.create(w));
+      return result.wizard_list;
     });
   },
 
   submissions(wizardId) {
     return ajax(`/admin/wizards/submissions/${wizardId}`, {
       type: "GET"
-    }).then(result => {
-      return result.submissions;
     });
   },
 
-  create(w) {
+  create(wizardJson = {}) {
     const wizard = this._super.apply(this);
-    let steps = Ember.A();
-    let props = { steps };
-
-    if (w) {
-      props['id'] = w.id;
-      props['existingId'] = true;
-
-      wizardProperties.forEach((p) => {
-        props[p] = w[p];
-      });
-
-      if (w.steps && w.steps.length) {
-        w.steps.forEach((s) => {
-          // clean empty strings
-          Object.keys(s).forEach((key) => (s[key] === '') && delete s[key]);
-
-          let fields =  Ember.A();
-
-          if (s.fields && s.fields.length) {
-            s.fields.forEach((f) => {
-              Object.keys(f).forEach((key) => (f[key] === '') && delete f[key]);
-
-              const fieldParams = { isNew: false };
-              let field = Ember.Object.create($.extend(f, fieldParams));
-
-              if (f.choices) {
-                let choices = Ember.A();
-
-                f.choices.forEach((c) => {
-                  choices.pushObject(Ember.Object.create(c));
-                });
-
-                field.set('choices', choices);
-              }
-
-              fields.pushObject(field);
-            });
-          }
-
-          let actions = Ember.A();
-          if (s.actions && s.actions.length) {
-            s.actions.forEach((a) => {
-              const actionParams = { isNew: false };
-              const action = Ember.Object.create($.extend(a, actionParams));
-              actions.pushObject(action);
-            });
-          }
-
-          steps.pushObject(Ember.Object.create({
-            id: s.id,
-            key: s.key,
-            title: s.title,
-            raw_description: s.raw_description,
-            banner: s.banner,
-            required_data: s.required_data,
-            required_data_message: s.required_data_message,
-            permitted_params: s.permitted_params,
-            fields,
-            actions,
-            isNew: false
-          }));
-        });
-      };
-    } else {
-      props['id'] = '';
-      props['name'] = '';
-      props['background'] = '';
-      props['save_submissions'] = true;
-      props['multiple_submissions'] = false;
-      props['after_signup'] = false;
-      props['after_time'] = false;
-      props['required'] = false;
-      props['prompt_completion'] = false;
-      props['restart_on_revisit'] = false;
-      props['min_trust'] = 0;
-      props['steps'] = Ember.A();
-    };
-
-    wizard.setProperties(props);
-
+    wizard.setProperties(buildProperties(wizardJson));
     return wizard;
   }
 });

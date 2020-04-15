@@ -1,0 +1,310 @@
+<div class="wizard-api-header page">
+  <div class='buttons'>
+    {{#if updating}}
+      {{loading-spinner size="small"}}
+    {{else}}
+      {{#if responseIcon}}
+        {{d-icon responseIcon}}
+      {{/if}}
+    {{/if}}
+
+    {{d-button label="admin.wizard.api.save" action=(action "save") class="btn-primary" disabled=saveDisabled}}
+
+    {{#if showRemove}}
+      {{d-button action=(action "remove") label="admin.wizard.api.remove"}}
+    {{/if}}
+
+    {{#if error}}
+      <div class="error">
+        {{error}}
+      </div>
+    {{/if}}
+  </div>
+
+  <div class="wizard-header">
+    {{#if api.isNew}}
+      {{i18n 'admin.wizard.api.new'}}
+    {{else}}
+      {{api.title}}
+    {{/if}}
+  </div>
+
+  <div class="metadata">
+    <div class="title">
+      <label>{{i18n 'admin.wizard.api.title'}}</label>
+      {{input value=api.title placeholder=(i18n 'admin.wizard.api.title_placeholder')}}
+    </div>
+
+    <div class="name">
+      <label>{{i18n 'admin.wizard.api.name'}}</label>
+      {{#if api.isNew}}
+        {{input value=api.name placeholder=(i18n 'admin.wizard.api.name_placeholder')}}
+      {{else}}
+        {{api.name}}
+      {{/if}}
+    </div>
+  </div>
+</div>
+
+<div class="wizard-api-header">
+  <div class="buttons">
+    {{#if isOauth}}
+      {{#if authorizing}}
+        {{loading-spinner size="small"}}
+      {{else}}
+        {{#if authErrorMessage}}
+          <span>{{authErrorMessage}}</span>
+        {{/if}}
+      {{/if}}
+      {{d-button label="admin.wizard.api.auth.btn"
+                 action=(action "authorize")
+                 disabled=authDisabled
+                 class="btn-primary"}}
+    {{/if}}
+  </div>
+
+  <div class="wizard-header">
+    {{i18n 'admin.wizard.api.auth.label'}}
+  </div>
+</div>
+
+<div class="wizard-api-authentication">
+  <div class="settings">
+
+    <div class="wizard-header medium">
+      {{i18n 'admin.wizard.api.auth.settings'}}
+    </div>
+
+    {{#if showRedirectUri}}
+      <div class="control-group redirect-uri">
+        <div class="control-label">
+          <label>{{i18n 'admin.wizard.api.auth.redirect_uri'}}</label>
+          <div class="controls">
+            {{api.redirectUri}}
+          </div>
+        </div>
+      </div>
+    {{/if}}
+
+    <div class="control-group auth-type">
+      <label>{{i18n 'admin.wizard.api.auth.type'}}</label>
+      <div class="controls">
+        {{combo-box
+          value=api.authType 
+          content=authorizationTypes
+          onChange=(action (mut authorizationTypes))
+          options=(hash
+            none='admin.wizard.api.auth.type_none'
+          )}}
+      </div>
+    </div>
+
+    {{#if isOauth}}
+      {{#if threeLeggedOauth}}
+        <div class="control-group">
+          <label>{{i18n 'admin.wizard.api.auth.url'}}</label>
+          <div class="controls">
+            {{input value=api.authUrl}}
+          </div>
+        </div>
+      {{/if}}
+
+      <div class="control-group">
+        <label>{{i18n 'admin.wizard.api.auth.token_url'}}</label>
+        <div class="controls">
+          {{input value=api.tokenUrl}}
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label>{{i18n 'admin.wizard.api.auth.client_id'}}</label>
+        <div class="controls">
+          {{input value=api.clientId}}
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label>{{i18n 'admin.wizard.api.auth.client_secret'}}</label>
+        <div class="controls">
+          {{input value=api.clientSecret}}
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label>{{i18n 'admin.wizard.api.auth.params.label'}}</label>
+        <div class="controls">
+          {{#each api.authParams as |param|}}
+            <div class="param">
+              {{input value=param.key placeholder=(i18n 'admin.wizard.key')}}
+              {{input value=param.value placeholder=(i18n 'admin.wizard.value')}}
+              {{d-button action=(action "removeParam") actionParam=param icon='times'}}
+            </div>
+          {{/each}}
+          {{d-button label='admin.wizard.api.auth.params.new' icon='plus' action=(action "addParam")}}
+        </div>
+      </div>
+    {{/if}}
+
+    {{#if isBasicAuth}}
+      <div class="control-group">
+        <label>{{i18n 'admin.wizard.api.auth.username'}}</label>
+        <div class="controls">
+          {{input value=api.username}}
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label>{{i18n 'admin.wizard.api.auth.password'}}</label>
+        <div class="controls">
+          {{input value=api.password}}
+        </div>
+      </div>
+    {{/if}}
+  </div>
+
+  {{#if isOauth}}
+    <div class="status">
+      <div class="authorization">
+        {{#if api.authorized}}
+          <span class="authorization-indicator authorized"></span>
+          <span>{{i18n "admin.wizard.api.status.authorized"}}</span>
+        {{else}}
+          <span class="authorization-indicator not-authorized"></span>
+          <span>{{i18n "admin.wizard.api.status.not_authorized"}}</span>
+        {{/if}}
+      </div>
+
+      <div class="wizard-header medium">
+        {{i18n 'admin.wizard.api.status.label'}}
+      </div>
+
+      {{#if threeLeggedOauth}}
+        <div class="control-group">
+          <label>{{i18n 'admin.wizard.api.status.code'}}</label>
+          <div class="controls">
+            {{api.code}}
+          </div>
+        </div>
+      {{/if}}
+
+      <div class="control-group">
+        <label>{{i18n 'admin.wizard.api.status.access_token'}}</label>
+        <div class="controls">
+          {{api.accessToken}}
+        </div>
+      </div>
+
+      {{#if threeLeggedOauth}}
+        <div class="control-group">
+          <label>{{i18n 'admin.wizard.api.status.refresh_token'}}</label>
+          <div class="controls">
+            {{api.refreshToken}}
+          </div>
+        </div>
+      {{/if}}
+
+      <div class="control-group">
+        <label>{{i18n 'admin.wizard.api.status.expires_at'}}</label>
+        <div class="controls">
+          {{api.tokenExpiresAt}}
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label>{{i18n 'admin.wizard.api.status.refresh_at'}}</label>
+        <div class="controls">
+          {{api.tokenRefreshAt}}
+        </div>
+      </div>
+    </div>
+  {{/if}}
+</div>
+
+<div class="wizard-header">
+  {{i18n 'admin.wizard.api.endpoint.label'}}
+</div>
+
+<div class="wizard-api-endpoints">
+  {{d-button action=(action "addEndpoint") label='admin.wizard.api.endpoint.add' icon='plus'}}
+
+  {{#if api.endpoints}}
+    <div class="endpoint-list">
+      <ul>
+        {{#each api.endpoints as |endpoint|}}
+          <li>
+            <div class="endpoint">
+              <div class="endpoint-">
+                <div class="top">
+                  {{input value=endpoint.name
+                          placeholder=(i18n 'admin.wizard.api.endpoint.name')}}
+                  {{input value=endpoint.url
+                          placeholder=(i18n 'admin.wizard.api.endpoint.url')
+                          class='endpoint-url'}}
+                  {{d-button action=(action "removeEndpoint")
+                             actionParam=endpoint
+                             icon='times'
+                             class='remove-endpoint'}}
+                </div>
+                <div class="bottom">
+                  {{combo-box
+                    content=endpointMethods
+                    value=endpoint.method
+                    onChange=(action (mut endpoint.method))
+                    options=(hash
+                      none="admin.wizard.api.endpoint.method"
+                    )}}
+                  {{combo-box
+                    content=contentTypes
+                    value=endpoint.content_type
+                    onChange=(action (mut endpoint.content_type))
+                    options=(hash
+                      none="admin.wizard.api.endpoint.content_type"
+                    )}}
+                  {{multi-select
+                    content=successCodes
+                    values=endpoint.success_codes
+                    onChange=(action (mut endpoint.success_codes))
+                    options=(hash
+                      none="admin.wizard.api.endpoint.success_codes"
+                    )}}
+                </div>
+              </div>
+            </div>
+          </li>
+        {{/each}}
+      </ul>
+    </div>
+  {{/if}}
+</div>
+
+<div class="wizard-header">
+  {{i18n 'admin.wizard.api.log.label'}}
+  {{d-button action=(action "clearLogs")
+             icon='trash-alt'
+             class='clear-logs'}}
+</div>
+
+<div class="wizard-api-log">
+    <div class="log-list">
+      <table class="wizard-api-log-table">
+        <th>Datetime</th>
+        <th>User</th>
+        <th>Status</th>
+        <th>URL</th>
+        <th>Error</th>
+        {{#each api.log as |logentry|}}
+          <tr>
+            <td>{{logentry.time}}</td>
+            <td class="user-image">
+              <div class="user-image-inner">
+                <a href="{{unbound logentry.userpath}}" data-user-card="{{unbound logentry.username}}">{{avatar logentry imageSize="large"}}</a>
+              </div>
+            </td>
+            <td>{{logentry.status}}</td>
+            <td>{{logentry.url}}</td>
+            <td>{{logentry.error}}</td>
+          </tr>
+        {{/each}}
+      </table>
+    </div>
+</div>

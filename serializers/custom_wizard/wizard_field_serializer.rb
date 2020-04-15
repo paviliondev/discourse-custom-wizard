@@ -1,15 +1,13 @@
 # frozen_string_literal: true
 
-class CustomWizardFieldSerializer < ::WizardFieldSerializer
+class CustomWizard::FieldSerializer < ::WizardFieldSerializer
   
-  attributes :dropdown_none,
-             :image,
+  attributes :image,
              :file_types,
              :limit,
-             :property
-             
-  has_many :choices, serializer: WizardFieldChoiceSerializer, embed: :objects
-  
+             :property,
+             :content
+               
   def label
     return object.label if object.label.present?
     I18n.t("#{object.key || i18n_key}.label", default: '')
@@ -32,10 +30,6 @@ class CustomWizardFieldSerializer < ::WizardFieldSerializer
     I18n.t("#{object.key || i18n_key}.placeholder", default: '')
   end
 
-  def dropdown_none
-    object.dropdown_none
-  end
-
   def file_types
     object.file_types
   end
@@ -46,5 +40,13 @@ class CustomWizardFieldSerializer < ::WizardFieldSerializer
   
   def property
     object.property
+  end
+  
+  def content
+    object.content
+  end
+  
+  def include_choices?
+    object.choices.present?
   end
 end

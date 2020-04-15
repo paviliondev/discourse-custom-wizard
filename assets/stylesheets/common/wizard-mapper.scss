@@ -1,0 +1,218 @@
+.wizard-mapper {
+  width: 100%;
+  
+  .select-kit {
+    min-width: initial;
+    width: initial;
+    
+    .select-kit-header {
+      min-height: 30px;
+    }
+    
+    .choices .choice {
+      height: 24px;
+    }
+  }
+  
+  div.mapper-block:not(:last-of-type) {
+    margin-right: 10px;
+  }
+  
+  > .mapper-connector.single {
+    width: min-content;
+    margin-bottom: 10px;
+    height: 20px;
+    border: 2px solid $primary-low;
+  }
+}
+
+[class~='mapper-input'] {
+  display: flex;
+  align-items: flex-start;
+  width: min-content;
+  position: relative;
+  padding: 25px 7px 7px 7px;
+  margin-bottom: 10px;
+  background: rgba($secondary, 0.5);
+  border: 2px solid $primary-low;
+
+  .d-icon {
+    text-align: center;
+  }
+
+  input {
+    margin: 0;
+  }
+
+  input[disabled] {
+    background-color: $primary-low;
+    border-color: #ddd;
+  }
+  
+  .output {
+    position: relative;
+  }
+
+  a.remove-input {
+    position: absolute;
+    right: -13px;
+    top: 0px;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(-50%);
+    background: $secondary;
+    border-radius: 50%;
+    font-size: 0.8em;
+    border: 2px solid $primary-low;
+  }
+  
+  &.association, &.validation {
+    padding-right: 27px;
+  }
+}
+
+.add-mapper-input {
+  display: inline-block;
+}
+
+.mapper-connector {
+  width: auto;
+  min-width: 40px;
+  
+  .select-kit .select-kit-header {
+    display: flex;
+    justify-content: center;
+  }
+  
+  &.single {
+    height: 28px;
+    background: $secondary;
+    border: 1px solid $primary-medium;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .connector-single {
+    padding: 0 5px;
+  }
+}
+
+.mapper-selector {
+  width: 100%;
+  max-width: 250px;
+  min-width: 250px;
+  position: relative;
+  
+  > input, .select-kit, .ac-wrap, .autocomplete.ac-user {
+    width: 250px !important;
+  }
+  
+  .input {
+    width: 100%;
+    transition: all 0.1s;
+  }
+  
+  .type-selector {
+    position: absolute;
+    top: -22px;
+    width: 150px;
+  }
+
+  .type-selector a {
+    color: $primary;
+    margin-right: 4px;
+    display: flex;
+    align-items: center;
+    
+    &.active {
+      color: $tertiary;
+      text-decoration: underline;
+    }
+    
+    &:last-of-type {
+      margin-right: 0;
+    }
+    
+    .type-selector-icon {
+      margin-left: 2px;
+      font-size: 0.7em;
+    }
+  }
+  
+  .selector-types {
+    box-shadow: shadow('dropdown');
+    position: absolute;
+    display: flex;
+    background: $secondary;
+    z-index: 200;
+    padding: 5px 7px;
+    flex-direction: column;
+    border: 1px solid $primary-low;
+  }
+  
+  .value-list .remove-value-btn {
+    background: none;
+    border: none;
+    
+    .d-icon {
+      color: $primary;
+    }
+  }
+  
+  .select-kit-header .selected-name {
+    max-width: 85%;
+    
+    .name {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+}
+
+.mapper-pairs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  
+  .add-pair,
+  .remove-pair,
+  .join-pair {
+    font-size: 0.9em;
+  }
+  
+  .add-pair {
+    margin-top: 5px;
+  }
+  
+  .remove-pair {
+    position: absolute;
+    top: 5px;
+    right: -20px;
+  }
+  
+  .join-pair {
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .mapper-connector {
+    min-width: 50px;
+  }
+}
+
+.mapper-pair {
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+  
+  &:not(:first-of-type) {
+    margin-top: 30px;
+  }
+}

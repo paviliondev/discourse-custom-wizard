@@ -1,27 +1,27 @@
 en:
   js:
     wizard:
-      complete_custom: "Welcome to %{site_name}! Get started with <a href='%{wizard_url}' data-auto-route='true'>the %{wizard_name} wizard</a> ✨"
+      complete_custom: "Complete the {{name}}"
 
   admin_js:
     admin:
       wizard:
-        label: "Wizards"
-        new: "New"
-        custom_label: "Custom"
-        submissions_label: "Submissions"
+        label: "Wizard"
+        nav_label: "Wizards"
+        select: "Select a wizard"
+        create: "Create Wizard"
         name: "Name"
-        name_placeholder: "name of the wizard"
+        name_placeholder: "wizard name"
         background: "Background"
-        background_placeholder: "Background css property"
+        background_placeholder: "#hex"
         save_submissions: "Save"
         save_submissions_label: "Save wizard submissions."
         multiple_submissions: "Multiple"
-        multiple_submissions_label: "Allow multiple submissions by the same user."
-        after_signup: "After Signup"
-        after_signup_label: "Users are directed to wizard after signup."
-        after_time: "After Time"
-        after_time_label: "Users are directed to wizard after the start time until wizard is completed or skipped."
+        multiple_submissions_label: "Users can submit multiple times."
+        after_signup: "Signup"
+        after_signup_label: "Users directed to wizard after signup."
+        after_time: "Time"
+        after_time_label: "Users directed to wizard after start time:"
         after_time_time_label: "Start Time"
         after_time_modal:
           title: "Wizard Start Time"
@@ -34,57 +34,91 @@ en:
         prompt_completion: "Prompt"
         prompt_completion_label: "Prompt user to complete wizard."
         restart_on_revisit: "Restart"
-        restart_on_revisit_label: "Restart the the wizard whenever the user revisits, regardless of prior progress."
-        min_trust: "Trust"
-        min_trust_label: "Trust level required to access wizard."
+        restart_on_revisit_label: "Clear submissions on each visit."
         theme_id: "Theme"
         no_theme: "Select a Theme (optional)"
         save: "Save Changes"
         remove: "Delete Wizard"
-        header: "Wizard"
         add: "Add"
         url: "Url"
         key: "Key"
-        or: "Or"
         value: "Value"
-        id: "Id"
-        id_placeholder: "Underscored. Cannot be changed."
-        key_placeholder: "Translation key"
-        custom_text_placeholder: "Overrides translation"
-        custom_field_placeholder: "Custom Field"
-        custom_value_placeholder: "Custom Value"
-        user_field_placeholder: "User Field"
+        profile: "profile"
+        translation: "Translation"
+        translation_placeholder: "key"
         type: "Type"
-        none: "Make a selection"
-        select_field: "Select Field"
+        none: "Make a selection"              
+        submission_key: 'submission key'
+        param_key: 'param'
+        group: "Group"
+        permitted: "Permitted"
+        advanced: "Advanced"
+        
+        message:
+          select: "Select a wizard, or create a new one"
+          edit: "You're editing a wizard"
+          create: "You're creating a new wizard"
+          documentation: "Check out the documentation"
+          contact: "Contact the developer"
+        
+        editor:
+          show: "Show"
+          hide: "Hide"
+          preview: "{{action}} Preview"
+          popover: "{{action}} Fields"
+        
+        input:
+          conditional: 
+            name: 'if'
+            output: 'then'
+          assignment:
+            name: 'set'
+          association:
+            name: 'map'
+          validation:
+            name: 'ensure'
+  
+        selector:
+          label:
+            text: "text"
+            wizard_field: "wizard field"
+            user_field: "user field"
+            user: "user"
+            category: "category"
+            tag: "tag"
+            group: "group"
+            list: "list"
+
+          placeholder:
+            text: "Enter text"
+            property: "Select property"
+            wizard_field: "Select field"
+            user_field: "Select field"
+            user: "Select user"
+            category: "Select category"
+            tag: "Select tag"
+            group: "Select group"
+            list: "Enter item"
+            
         error:
-          name_required: "Wizards must have a name."
-          steps_required: "Wizards must have at least one step."
-          id_required: "All wizards, steps, fields and actions need an id."
-          invalid_api_body: "Request body JSON needs to be a valid JSON."
-          type_required: "All fields need a type."
-          after_time_need_time: "After time is enabled but no time is set."
-          after_time_invalid: "After time is invalid."
-          field:
-            need_choices: "All dropdowns need choices."
-            choices_label_empty: "Custom choice labels cannot be empty."
+          failed: "failed to save wizard"
+          required: "{{type}} requires {{property}}"
+          invalid: "{{property}} is invalid"
+          dependent: "{{property}} is dependent on {{dependent}}"
+          conflict: "{{type}} with {{property}} '{{value}}' already exists"
+          after_time: "After time invalid"
+        
         step:
           header: "Steps"
           title: "Title"
           banner: "Banner"
-          banner_placeholder: "Image url"
           description: "Description"
           required_data:
-            label: "Required Data"
-            key: 'Submission key'
-            connector:
-              equals: "Equals"
+            label: "Required"
             not_permitted_message: "Message shown when required data not present"
           permitted_params:
-            label: "Permitted Params"
-            key: 'Param'
-            value: 'Submission key'
-            connector: "Save as"
+            label: "Params"
+        
         field:
           type: "Choose a type"
           header: "Fields"
@@ -92,21 +126,6 @@ en:
           description: "Description"
           image: "Image"
           image_placeholder: "Image url"
-          dropdown_none: "None"
-          dropdown_none_placeholder: "Label"
-          choices_label: "Dropdown Choices"
-          choices_type: "Choose a type"
-          choices_translation: "Translation"
-          choices_custom: "Custom"
-          choices_preset:
-            label: "Preset"
-            categories: "Categories"
-            groups: "Groups"
-            tags: "Tags"
-            filter: "Preset Filter"
-          choice:
-            value: "Value"
-            label: "Label"
           required: "Required"
           required_label: "Field is Required"
           min_length: "Min Length"
@@ -116,18 +135,39 @@ en:
           category: "Category"
           limit: "Limit"
           property: "Property"
+          prefill: "Prefill"
+          content: "Content"
+        
+        connector:
+          and: "and"
+          or: "or"
+          then: "then"
+          set: "set"
+          equal: '='
+          greater: '>'
+          less: '<'
+          greater_or_equal: '>='
+          less_or_equal: '<='
+          regex: '=~'
+          association: '→'
+        
         action:
-          header: "Actions<sup>*</sup>"
+          header: "Actions"
           include: "Include Fields"
           title: "Title"
           post: "Post"
-          add_fields: "{{type}} Fields"
-          available_fields: "* If 'Save wizard submissions' is disabled, only the fields of the current step are available to the current step's actions."
           topic_attr: "Topic Attribute"
           interpolate_fields: "Insert wizard fields using the field_id in w{}. Insert user fields using field key in u{}."
-
+          
+          run_after: 
+            label: "Run After"
+            wizard_completion: "Wizard Completion"
+          
+          custom_fields:
+            label: "Custom"
+            key: "field"
           skip_redirect:
-            label: "Skip Redirect"
+            label: "Redirect"
             description: "Don't redirect the user to this {{type}} after the wizard completes"
           send_message:
             label: "Send Message"
@@ -137,8 +177,8 @@ en:
             category: "Category"
             tags: "Tags"
           update_profile:
-            label: "Update Profile"
-            profile_field: "Profile Field"
+            label: "Fields"
+            key: "field"
           post_builder:
             checkbox: "Post Builder"
             label: "Builder"
@@ -147,9 +187,6 @@ en:
             placeholder: "Insert wizard fields using the field_id in w{}. Insert user fields using field key in u{}."
           add_to_group:
             label: "Add to Group"
-            group: "Group"
-            group_selection: "Group Selection"
-            custom_group: "Custom Group"
           route_to:
             label: "Route To"
             url: "Url"
@@ -157,7 +194,6 @@ en:
           custom_title: "Custom Title"
           custom_category:
             label: "Custom Category"
-            wizard_field: "Wizard Field"
             user_field: "User Field"
           custom_tag:
             label: "Custom Tag"
@@ -167,7 +203,13 @@ en:
             endpoint: "Endpoint"
             select_an_api: "Select an API"
             select_an_endpoint: "Select an endpoint"
-            body: "Request body JSON"
+            body: "Body"
+            body_placeholder: "JSON"
+        
+        submissions:
+          nav_label: "Submissions"
+          title: "{{name}} Submissions"
+          download: "Download"
 
         api:
           label: "API"
@@ -197,8 +239,6 @@ en:
             params:
               label: 'Params'
               new: 'New param'
-              key: 'key'
-              value: 'value'
 
           status:
             label: "Status"
@@ -221,6 +261,9 @@ en:
 
           log:
             label: "Logs"
+            
+        log:
+          nav_label: "Logs"
 
         transfer:
           nav_label: "Transfer"
@@ -236,6 +279,9 @@ en:
             file_size_error: "The file must be JSON and 512kb or less"
 
   wizard_js:
+    group:
+      select: "Select a group"
+
     location:
       name:
         title: "Name (optional)"
@@ -295,13 +341,13 @@ en:
         other: "Select at least {{count}} items."
 
     wizard:
-      completed: "You have completed the {{name}} wizard."
-      not_permitted: "You need to be trust level {{level}} or higher to access the {{name}} wizard."
+      completed: "You have completed this wizard."
+      not_permitted: "You are not permitted to access this wizard."
       none: "There is no wizard here."
       return_to_site: "Return to {{siteName}}"
-      requires_login: "You need to be logged in to access the {{name}} wizard."
+      requires_login: "You need to be logged in to access this wizard."
       reset: "Reset this wizard."
-      step_not_permitted: "You're not allowed to view this step."
+      step_not_permitted: "You're not permitted to view this step."
 
     wizard_composer:
       show_preview: "Preview Post"

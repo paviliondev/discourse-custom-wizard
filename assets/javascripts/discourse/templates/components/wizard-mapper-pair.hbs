@@ -1,0 +1,32 @@
+<div class="key mapper-block">
+  {{wizard-mapper-selector
+    selectorType='key'
+    inputType=inputType
+    value=pair.key
+    activeType=pair.key_type
+    options=options}}
+</div>
+
+{{wizard-mapper-connector
+  connector=pair.connector
+  connectors=connectors
+  connectorType="pair"
+  inputType=inputType
+  options=options}}
+
+<div class="value mapper-block">
+  {{wizard-mapper-selector
+    selectorType='value'
+    inputType=inputType
+    value=pair.value
+    activeType=pair.value_type
+    options=options}}
+</div>
+
+{{#if showJoin}}
+  <span class="join-pair">&</span>
+{{/if}}
+
+{{#if showRemove}}
+  <a {{action removePair pair}} class="remove-pair">{{d-icon 'times'}}</a>
+{{/if}}

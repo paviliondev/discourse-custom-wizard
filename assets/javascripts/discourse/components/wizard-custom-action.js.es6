@@ -1,92 +1,44 @@
-import { default as computed, observes } from 'ember-addons/ember-computed-decorators';
+import { default as discourseComputed, observes, on } from 'discourse-common/utils/decorators';
+import { equal, empty, or } from "@ember/object/computed";
+import { generateName, selectKitContent, schema } from '../lib/wizard';
+import Component from "@ember/component";
 
-const ACTION_TYPES = [
-  { id: 'create_topic', name: 'Create Topic' },
-  { id: 'update_profile', name: 'Update Profile' },
-  { id: 'send_message', name: 'Send Message' },
-  { id: 'send_to_api', name: 'Send to API' },
-  { id: 'add_to_group', name: 'Add to Group' },
-  { id: 'route_to', name: 'Route To' },
-  { id: 'open_composer', name: 'Open Composer' }
-];
-
-const PROFILE_FIELDS = [
-  'name',
-  'user_avatar',
-  'date_of_birth',
-  'title',
-  'locale',
-  'location',
-  'website',
-  'bio_raw',
-  'profile_background',
-  'card_background',
-  'theme_id'
-];
-
-export default Ember.Component.extend({
+export default Component.extend({
   classNames: 'wizard-custom-action',
-  types: ACTION_TYPES,
-  profileFields: PROFILE_FIELDS,
-  createTopic: Ember.computed.equal('action.type', 'create_topic'),
-  updateProfile: Ember.computed.equal('action.type', 'update_profile'),
-  sendMessage: Ember.computed.equal('action.type', 'send_message'),
-  sendToApi: Ember.computed.equal('action.type', 'send_to_api'),
-  apiEmpty: Ember.computed.empty('action.api'),
-  addToGroup: Ember.computed.equal('action.type', 'add_to_group'),
-  routeTo: Ember.computed.equal('action.type', 'route_to'),
-  disableId: Ember.computed.not('action.isNew'),
-
-  @computed('action.type')
-  basicTopicFields(actionType) {
-    return ['create_topic', 'send_message', 'open_composer'].indexOf(actionType) > -1;
-  },
-
-  @computed('action.type')
-  publicTopicFields(actionType) {
-    return ['create_topic', 'open_composer'].indexOf(actionType) > -1;
-  },
-
-  @computed('action.type')
-  newTopicFields(actionType) {
-    return ['create_topic', 'send_message'].indexOf(actionType) > -1;
-  },
-
-  @computed('availableFields')
-  builderWizardFields(fields) {
-    return fields.map((f) => ` w{${f.id}}`);
-  },
+  actionTypes: Object.keys(schema.action.types).map(t => ({ id: t, name: generateName(t) })),
+  createTopic: equal('action.type', 'create_topic'),
+  updateProfile: equal('action.type', 'update_profile'),
+  sendMessage: equal('action.type', 'send_message'),
+  openComposer: equal('action.type', 'open_composer'),
+  sendToApi: equal('action.type', 'send_to_api'),
+  addToGroup: equal('action.type', 'add_to_group'),
+  routeTo: equal('action.type', 'route_to'),
+  apiEmpty: empty('action.api'),
+  groupPropertyTypes: selectKitContent(['id', 'name']),
+  hasAdvanced: or('hasCustomFields', 'routeTo'),
+  hasCustomFields: or('basicTopicFields', 'updateProfile'),
+  basicTopicFields: or('createTopic', 'sendMessage', 'openComposer'),
+  publicTopicFields: or('createTopic', 'openComposer'),
+  showSkipRedirect: or('createTopic', 'sendMessage'),
   
-  @computed('availableFields')
-  categoryFields(fields) {
-    return fields.filter(f => f.type == 'category');
-  },
-  
-  @computed('availableFields')
-  tagFields(fields) {
-    return fields.filter(f => f.type == 'tag');
-  },
-
-  @computed()
-  builderUserFields() {
-    const noTheme = PROFILE_FIELDS.filter((f) => f !== 'theme_id');
-    const fields = noTheme.concat(['email', 'username']);
-    return fields.map((f) => ` u{${f}}`);
-  },
-
-  @observes('action.custom_category_wizard_field')
-  toggleCustomCategoryUserField() {
-    const wizard = this.get('action.custom_category_wizard_field');
-    if (wizard) this.set('action.custom_category_user_field', false);
+  @discourseComputed('wizard.steps')
+  runAfterContent(steps) {
+    let content = steps.map(function(step) {
+      return {
+        id: step.id,
+        name: step.title || step.id
+      };
+    });
+    
+    content.unshift({
+      id: 'wizard_completion',
+      name: I18n.t('admin.wizard.action.run_after.wizard_completion')
+    });
+        
+    return content;
   },
 
-  @observes('action.custom_category_user_field')
-  toggleCustomCategoryWizardField() {
-    const user = this.get('action.custom_category_user_field');
-    if (user) this.set('action.custom_category_wizard_field', false);
-  },
-
-  @computed('wizard.apis')
+  @discourseComputed('wizard.apis')
   availableApis(apis) {
     return apis.map(a => {
       return {
@@ -96,7 +48,7 @@ export default Ember.Component.extend({
     });
   },
 
-  @computed('wizard.apis', 'action.api')
+  @discourseComputed('wizard.apis', 'action.api')
   availableEndpoints(apis, api) {
     if (!api) return [];
     return apis.find(a => a.name === api).endpoints;

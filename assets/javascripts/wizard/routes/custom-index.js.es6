@@ -14,7 +14,6 @@ export default Ember.Route.extend({
     if (model) {
       const completed = model.get('completed');
       const permitted = model.get('permitted');
-      const minTrust = model.get('min_trust');
       const wizardId = model.get('id');
       const user = model.get('user');
       const name = model.get('name');
@@ -25,7 +24,6 @@ export default Ember.Route.extend({
         name,
         completed,
         notPermitted: !permitted,
-        minTrust,
         wizardId
       });
     } else {

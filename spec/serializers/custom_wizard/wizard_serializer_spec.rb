@@ -12,12 +12,11 @@ describe CustomWizardSerializer do
     ).read)
   end
   
-  let(:dropdown_categories_field) {{"id": "dropdown_categories","type": "dropdown","label": "Dropdown Categories","choices_type": "preset","choices_preset": "categories"}}
   let(:category_field) {{"id": "category","type": "category","limit": "1","label": "Category"}}
   
   def build_wizard(t = template, u = user, build_opts = {}, params = {})
     CustomWizard::Wizard.add_wizard(t)
-    CustomWizard::Builder.new(u, 'welcome').build(build_opts, params)
+    CustomWizard::Builder.new('welcome', u).build(build_opts, params)
   end
 
   it 'should return the wizard attributes' do
@@ -40,13 +39,6 @@ describe CustomWizardSerializer do
     expect(json[:custom_wizard][:categories].present?).to eq(false)
     expect(json[:custom_wizard][:uncategorized_category_id].present?).to eq(false)
   end 
-  
-  it "should return category attributes if there are dropdown category fields" do
-    template['steps'][0]['fields'][0] = dropdown_categories_field
-    json = CustomWizardSerializer.new(build_wizard(template), scope: Guardian.new(user)).as_json
-    expect(json[:custom_wizard][:categories].present?).to eq(true)
-    expect(json[:custom_wizard][:uncategorized_category_id].present?).to eq(true)
-  end
   
   it "should return category attributes if there is a category selector field" do
     template['steps'][0]['fields'][0] = category_field

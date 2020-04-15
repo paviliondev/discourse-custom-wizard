@@ -3,10 +3,12 @@
 <ul class="wizard-list-select">
   {{#each wizards as |w|}}
     <li>
-      {{input type="checkbox"
-              id=(dasherize w.id)
-              change=(action 'checkChanged')}}
-      {{#link-to "adminWizard" (dasherize w.id)}}
+      {{input 
+        type="checkbox"
+        id=(dasherize w.id)
+        change=(action 'checkChanged')}}
+        
+      {{#link-to "adminWizardsWizardShow" (dasherize w.id)}}
         {{w.name}}
       {{/link-to}}
     </li>

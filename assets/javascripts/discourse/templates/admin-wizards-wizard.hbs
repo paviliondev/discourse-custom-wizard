@@ -1,0 +1,37 @@
+<div class="admin-wizard-controls">
+  {{combo-box
+    value=wizardListVal
+    content=wizardList
+    onChange=(route-action 'changeWizard')
+    options=(hash
+      none='admin.wizard.select'
+    )}}
+  
+  {{d-button
+    action="createWizard"
+    label="admin.wizard.create"
+    icon="plus"}}
+</div>
+
+<div class="admin-wizard-message">
+  <div class="wizard-message">
+    {{d-icon 'info-circle'}}
+    <span>{{message}}</span>
+  </div>
+  
+  <div class="wizard-message">
+    {{d-icon 'question-circle'}}
+        
+    <a href="https://thepavilion.io/c/knowledge/custom-wizard" target="_blank">
+      {{i18n 'admin.wizard.message.documentation'}}
+    </a>
+    
+    {{!--<a href="mailto:help@thepavilion.io" target="_blank">
+      {{i18n 'admin.wizard.message.contact'}}
+    </a>--}}
+  </div>
+</div>
+
+<div class="admin-wizard-container settings">
+  {{outlet}}
+</div>

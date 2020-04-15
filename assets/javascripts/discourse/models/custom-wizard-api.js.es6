@@ -1,8 +1,10 @@
 import { ajax } from 'discourse/lib/ajax';
-import { default as computed } from 'ember-addons/ember-computed-decorators';
+import { default as discourseComputed } from 'discourse-common/utils/decorators';
+import EmberObject from "@ember/object";
+import { A } from "@ember/array";
 
-const CustomWizardApi = Discourse.Model.extend({
-  @computed('name')
+const CustomWizardApi = EmberObject.extend({
+  @discourseComputed('name')
   redirectUri(name) {
     let nameParam = name.toString().dasherize();
     const baseUrl = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '');
@@ -27,14 +29,14 @@ CustomWizardApi.reopenClass({
       clientSecret: authorization.client_secret,
       username: authorization.username,
       password: authorization.password,
-      authParams: Ember.A(authorization.auth_params),
+      authParams: A(authorization.auth_params),
       authorized: authorization.authorized,
       accessToken: authorization.access_token,
       refreshToken: authorization.refresh_token,
       code: authorization.code,
       tokenExpiresAt: authorization.token_expires_at,
       tokenRefreshAt: authorization.token_refresh_at,
-      endpoints: Ember.A(endpoints),
+      endpoints: A(endpoints),
       isNew: params.isNew,
       log: params.log
     });

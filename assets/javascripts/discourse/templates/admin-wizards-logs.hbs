@@ -1,0 +1,34 @@
+<div class="admin-wizard-controls">
+  <h3>{{i18n 'admin.wizard.log.nav_label'}}</h3>
+  
+  {{d-button
+    label="refresh"
+    icon="refresh"
+    action="refresh"
+    class="refresh"}}
+</div>
+
+{{#load-more selector=".log-list tr" action=(action "loadMore") class="wizard-logs"}}
+  {{#if noResults}}
+    <p>{{i18n 'search.no_results'}}</p>
+  {{else}}
+    <table class="table grid">
+      <thead>
+        <tr>
+          <th>Message</th>
+          <th class="date">Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each logs as |log|}}
+          <tr>
+            <td>{{log.message}}</td>
+            <td class="date">{{bound-date log.date}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>  
+  {{/if}}
+  
+  {{conditional-loading-spinner condition=refreshing}}
+{{/load-more}}

@@ -1,4 +1,5 @@
-import { default as computed, observes } from 'ember-addons/ember-computed-decorators';
+import { default as computed, observes } from 'discourse-common/utils/decorators';
+import EmberObject from "@ember/object";
 
 export default Ember.Component.extend({
   showPreview: false,
@@ -6,7 +7,7 @@ export default Ember.Component.extend({
   classNameBindings: ["showPreview:show-preview:hide-preview"],
   
   didInsertElement() {
-    this.set('composer', Ember.Object.create({
+    this.set('composer', EmberObject.create({
       loading: false,
       reply: this.get('field.value')
     }))

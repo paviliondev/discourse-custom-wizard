@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-class ::CustomWizardStepSerializer < ::WizardStepSerializer
+class CustomWizard::StepSerializer < ::WizardStepSerializer
   
   attributes :permitted, :permitted_message
-  has_many :fields, serializer: ::CustomWizardFieldSerializer, embed: :objects
+  has_many :fields, serializer: ::CustomWizard::FieldSerializer, embed: :objects
 
   def title
     return PrettyText.cook(object.title) if object.title

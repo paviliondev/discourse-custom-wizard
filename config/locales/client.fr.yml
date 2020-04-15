@@ -33,8 +33,6 @@ fr:
         required_label: "Les utilisatrices doivent compléter l'assistant."
         prompt_completion: "Invitation"
         prompt_completion_label: "Inviter l'utilisatrice à compléter l'assistant."
-        min_trust: "Confiance"
-        min_trust_label: "Niveau de confiance requis pour accéder à l'assistant."
         theme_id: "Thème"
         no_theme: "Choisir un thème (optionnel)"
         save: "Sauvegarder"
@@ -61,14 +59,10 @@ fr:
           type_required: "Tous les champs ont besoin d'un type."
           after_time_need_time: "Le délai est activé mais aucune heure n'est établie."
           after_time_invalid: "Le délai est invalide."
-          field:
-            need_choices: "Tous les menus déroulants ont besoin d'options."
-            choices_label_empty: "Les étiquettes pour le choix personnalisé ne peuvent être vides."
         step:
           header: "Étapes"
           title: "Titre"
           banner: "Bannière"
-          banner_placeholder: "URL de l'image"
           description: "Description"
         field:
           type: "Choisir un type"
@@ -77,19 +71,6 @@ fr:
           description: "Description"
           image: "Image"
           image_placeholder: "URL de l'image"
-          dropdown_none: "Aucun"
-          dropdown_none_placeholder: "Clé de traduction"
-          choices_label: "Options du menu déroulant"
-          choices_type: "Choisir un type"
-          choices_translation: "Traduction"
-          choices_custom: "Personnalisé"
-          choices_preset:
-            label: "Prédéfini"
-            categories: "Catégories"
-            filter: "Filtre prédéfini"
-          choice:
-            value: "Valeur"
-            label: "Étiquette"
           required: "Requis"
           required_label: "Le champ est obligatoire"
           min_length: "Longueur min."
@@ -110,7 +91,6 @@ fr:
             category: "Catégorie"
           update_profile:
             label: "Mettre à jour le profil"
-            profile_field: "Champ du profil"
           post_builder:
             checkbox: "Générateur de message"
             label: "Générateur"

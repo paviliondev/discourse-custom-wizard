@@ -12,7 +12,7 @@ class CustomWizard::StepsController < ::ApplicationController
       permitted.permit!
     end
 
-    wizard = CustomWizard::Builder.new(current_user, permitted[:wizard_id].underscore).build
+    wizard = CustomWizard::Builder.new(permitted[:wizard_id].underscore, current_user).build
     updater = wizard.create_updater(permitted[:step_id], permitted[:fields])
     updater.update
 
@@ -24,7 +24,7 @@ class CustomWizard::StepsController < ::ApplicationController
     else
       errors = []
       updater.errors.messages.each do |field, msg|
-        errors << { field: field, description: msg.join }
+        errors << { field: field, description: msg.join(',') }
       end
       render json: { errors: errors }, status: 422
     end

@@ -1,21 +1,14 @@
-require 'uri'
-
-TagStruct = Struct.new(:id, :name)
-
 class CustomWizard::Builder
-
   attr_accessor :wizard, :updater, :submissions
 
-  def initialize(user=nil, wizard_id)
-    data = PluginStore.get('custom_wizard', wizard_id)
-    return if data.blank?
-
-    @steps = data['steps']
-    @wizard = CustomWizard::Wizard.new(user, data)
-
-    if user
-      @submissions = Array.wrap(PluginStore.get("#{wizard_id}_submissions", user.id))
-    end
+  def initialize(wizard_id, user=nil)
+    params = CustomWizard::Wizard.find(wizard_id)
+    return nil if params.blank?
+    
+    @wizard = CustomWizard::Wizard.new(params, user)
+    @steps = params['steps'] || []
+    @actions = params['actions'] || []
+    @submissions = @wizard.submissions if user && @wizard
   end
 
   def self.sorted_handlers
@@ -43,57 +36,29 @@ class CustomWizard::Builder
     sorted_field_validators << { priority: priority, type: type, block: block }
     @sorted_field_validators.sort_by! { |h| -h[:priority] }
   end
-
-  USER_FIELDS = ['name', 'username', 'email', 'date_of_birth', 'title', 'locale']
-  PROFILE_FIELDS = ['location', 'website', 'bio_raw', 'profile_background', 'card_background']
-
-  def self.fill_placeholders(string, user, data)
-    result = string.gsub(/u\{(.*?)\}/) do |match|
-      result = ''
-      result = user.send($1) if USER_FIELDS.include?($1)
-      result = user.user_profile.send($1) if PROFILE_FIELDS.include?($1)
-      result
-    end
-
-    result = result.gsub(/w\{(.*?)\}/) { |match| recurse(data, [*$1.split('.')]) }
-    
-    result.gsub(/v\{(.*?)\}/) do |match|
-      attrs = $1.split(':')
-      key = attrs.first
-      format = attrs.length > 1 ? attrs.last : nil
-      v = nil
-      
-      if key == 'time'
-        time_format = format.present? ? format : "%B %-d, %Y"
-        v = Time.now.strftime(time_format)
-      end
-      
-      v
-    end
-  end
   
-  def self.recurse(data, keys)
-    k = keys.shift
-    result = data[k]
-    keys.empty? ? result : self.recurse(result, keys)
+  def mapper
+    CustomWizard::Mapper.new(
+      user: @wizard.user,
+      data: @submissions.last
+    )
   end
 
   def build(build_opts = {}, params = {})
-    
-    return @wizard if !SiteSetting.custom_wizard_enabled ||
-      (!@wizard.multiple_submissions &&
-        @wizard.completed? &&
-        !@wizard.user.admin) ||
-        !@steps ||
-        !@wizard.permitted?
+    return nil if !SiteSetting.custom_wizard_enabled || !@wizard
+    return @wizard if !@wizard.can_access?
     
     reset_submissions if build_opts[:reset]
 
     @steps.each do |step_template|
       @wizard.append_step(step_template['id']) do |step|
         step.title = step_template['title'] if step_template['title']
-        step.description = step_template['description'] if step_template['description']
         step.banner = step_template['banner'] if step_template['banner']
+        
+        if step_template['description']
+          step.description = mapper.interpolate(step_template['description'])
+        end
+        
         step.key = step_template['key'] if step_template['key']
         step.permitted = true
 
@@ -101,8 +66,9 @@ class CustomWizard::Builder
           permitted_data = {}
 
           permitted_params.each do |p|
-            params_key = p['key'].to_sym
-            submission_key = p['value'].to_sym
+            pair = p['pairs'].first
+            params_key = pair['key'].to_sym
+            submission_key = pair['value'].to_sym
             permitted_data[submission_key] = params[params_key] if params[params_key]
           end
 
@@ -112,21 +78,39 @@ class CustomWizard::Builder
           end
         end
 
-        if required_data = step_template['required_data']
-          if !@submissions.last && required_data.present?
-            step.permitted = false
-            next
-          end
-
-          required_data.each do |rd|
-            if rd['connector'] === 'equals'
-              step.permitted = @submissions.last[rd['key']] == @submissions.last[rd['value']]
+        if (required_data = step_template['required_data']).present?
+          has_required_data = true
+          
+          required_data.each do |required|
+            required['pairs'].each do |pair|
+              if pair['key'].blank? || pair['value'].blank?
+                has_required_data = false
+              end
             end
           end
           
-          if !step.permitted
-            step.permitted_message = step_template['required_data_message'] if step_template['required_data_message']
-            next
+          if has_required_data
+            if !@submissions.last
+              step.permitted = false
+            else
+              required_data.each do |required|
+                pairs = required['pairs'].map do |p| 
+                  p['key'] = @submissions.last[p['key']]
+                end
+                
+                unless mapper.validate_pairs(pairs)
+                  step.permitted = false
+                end
+              end
+            end
+            
+            if !step.permitted
+              if step_template['required_data_message']
+                step.permitted_message = step_template['required_data_message'] 
+              end
+              
+              next
+            end
           end
         end
 
@@ -142,10 +126,10 @@ class CustomWizard::Builder
           
           if step_template['fields'] && step_template['fields'].length
             step_template['fields'].each do |field|
-              validate_field(field, updater, step_template) if field['type'] != 'text-only'
+              validate_field(field, updater, step_template) if field['type'] != 'text_only'
             end
           end
-          
+                    
           next if updater.errors.any?
 
           CustomWizard::Builder.step_handlers.each do |handler|
@@ -163,15 +147,25 @@ class CustomWizard::Builder
             submission = @submissions.last
             data = submission.merge(data)
           end
+          
+          final_step = updater.step.next.nil?
                     
-          if step_template['actions'] && step_template['actions'].length && data
-            step_template['actions'].each do |action|
-              self.send(action['type'].to_sym, user, action, data)
+          if @actions.present?
+            @actions.each do |action|
+              
+              if (action['run_after'] === updater.step.id) ||
+                 (final_step && (!action['run_after'] || (action['run_after'] === 'wizard_completion')))
+
+                CustomWizard::Action.new(
+                  wizard: @wizard,
+                  action: action,
+                  user: user,
+                  data: data
+                ).perform
+              end
             end
           end
-
-          final_step = updater.step.next.nil?
-          
+                    
           if route_to = data['route_to']
             data.delete('route_to')
           end
@@ -197,7 +191,7 @@ class CustomWizard::Builder
         end
       end
     end
-
+    
     @wizard
   end
 
@@ -219,17 +213,10 @@ class CustomWizard::Builder
       params[:value] = submission[field_template['id']] if submission[field_template['id']]
     end
     
-    ## If a field updates a profile field, load the current value
-    if step_template['actions'] && step_template['actions'].any?
-      profile_actions = step_template['actions'].select { |a| a['type'] === 'update_profile' }
-
-      if profile_actions.any?
-        profile_actions.each do |action|
-          if update = action['profile_updates'].select { |u| u['key'] === field_template['id'] }.first
-            params[:value] = prefill_profile_field(update) || params[:value]
-          end
-        end
-      end
+    params[:value] = prefill_field(field_template, step_template) || params[:value]
+    
+    if field_template['type'] === 'group' && params[:value].present?
+      params[:value] = params[:value].first
     end
 
     if field_template['type'] === 'checkbox'
@@ -248,122 +235,91 @@ class CustomWizard::Builder
       params[:property] = field_template['property']
     end
         
-    if field_template['type'] === 'category' ||
-      (field_template['type'] === 'dropdown' &&
-       field_template['choices_preset'] === 'categories')
-       @wizard.needs_categories = true
+    if field_template['type'] === 'category'
+      @wizard.needs_categories = true
     end
-
-    field = step.add_field(params)
-
-    if field_template['type'] === 'dropdown'
-      build_dropdown_list(field, field_template)
+    
+    if field_template['type'] === 'group'
+      @wizard.needs_groups = true
     end
-  end
-
-  def prefill_profile_field(update)
-    attribute = update['value']
-    custom_field = update['value_custom']
-    user_field = update['user_field']
-
-    if user_field || custom_field
-      UserCustomField.where(user_id: @wizard.user.id, name: user_field || custom_field).pluck(:value).first
-    elsif UserProfile.column_names.include? attribute
-      UserProfile.find_by(user_id: @wizard.user.id).send(attribute)
-    elsif User.column_names.include? attribute
-      User.find(@wizard.user.id).send(attribute)
-    end
-  end
-
-  def build_dropdown_list(field, template)
-    field.dropdown_none = template['dropdown_none'] if template['dropdown_none']
-    self.send("build_dropdown_#{template['choices_type']}", field, template)
-  end
-  
-  def build_dropdown_custom(field, template)
-    template['choices'].each do |c|
-      field.add_choice(c['key'], label: c['value'])
-    end
-  end
-  
-  def build_dropdown_translation(field, template)
-    choices = I18n.t(template['choices_key'])
-
-    if choices.is_a?(Hash)
-      choices.each { |k, v| field.add_choice(k, label: v) }
-    end
-  end
-  
-  def build_dropdown_preset(field, template)
-    objects = []
-    guardian = Guardian.new(@wizard.user)
-    site = Site.new(guardian)
-        
-    case template['choices_preset']
-    when 'categories'
-      objects = Set.new(Category.topic_create_allowed(guardian))
-    when 'groups'
-      objects = site.groups
-    when 'tags'
-      objects = Tag.top_tags(guardian: guardian).map do |tag|
-        TagStruct.new(tag,tag)
-      end
-    else
-      # do nothing
-    end
-
-    if template['choices_filters'] && template['choices_filters'].length > 0
-      template['choices_filters'].each do |f|
-        objects.reject! do |o|
-          if f['key'].include? 'custom_fields'
-            o.custom_fields[f['key'].split('.')[1]].to_s != f['value'].to_s
-          else
-            o[f['key']].to_s != f['value'].to_s
-          end
+    
+    if (content_inputs = field_template['content']).present?
+      content = CustomWizard::Mapper.new(
+        inputs: content_inputs,
+        user: @wizard.user,
+        data: @submissions.last,
+        opts: {
+          with_type: true
+        }
+      ).perform
+                  
+      if content[:type] == 'association'
+        content[:result] = content[:result].map do |item|
+          { 
+            id: item[:key],
+            name: item[:value] 
+          }
         end
       end
+      
+      params[:content] = content[:result]
     end
+        
+    field = step.add_field(params)
+  end
   
-    if objects.length > 0
-      objects.each do |o|
-        field.add_choice(o.id, label: o.name)
-      end
+  def prefill_field(field_template, step_template)
+    if (prefill = field_template['prefill']).present?
+      CustomWizard::Mapper.new(
+        inputs: prefill,
+        user: @wizard.user,
+        data: @submissions.last
+      ).perform
     end
   end
 
   def validate_field(field, updater, step_template)
     value = updater.fields[field['id']]
     min_length = false
-    label = field['label'] || I18n.t("#{field['key']}.label")
     
-    if field['required'] && !value
-      updater.errors.add(field['id'].to_s, I18n.t('wizard.field.required', label: label))
-    end
-
-    if is_text_type(field)
-      min_length = field['min_length']
+    label = field['label'] || I18n.t("#{field['key']}.label")
+    type = field['type']
+    required = field['required']
+    id = field['id'].to_s
+    min_length = field['min_length'] if is_text_type(field)
+    file_types = field['file_types']
+    
+    if required && !value
+      updater.errors.add(id, I18n.t('wizard.field.required', label: label))
     end
 
     if min_length && value.is_a?(String) && value.strip.length < min_length.to_i
-      updater.errors.add(field['id'].to_s, I18n.t('wizard.field.too_short', label: label, min: min_length.to_i))
+      updater.errors.add(id, I18n.t('wizard.field.too_short', label: label, min: min_length.to_i))
     end
 
-    if is_url_type(field)
-      if !check_if_url(value)
-        updater.errors.add(field['id'].to_s, I18n.t('wizard.field.not_url', label: label))
-      end
+    if is_url_type(field) && !check_if_url(value)
+      updater.errors.add(id, I18n.t('wizard.field.not_url', label: label))
     end
 
-    ## ensure all checkboxes are booleans
-    if field['type'] === 'checkbox'
-      updater.fields[field['id']] = standardise_boolean(value)
+    if type === 'checkbox'
+      updater.fields[id] = standardise_boolean(value)
+    end
+    
+    if type === 'upload' && value.present? && !validate_file_type(value, file_types)
+      updater.errors.add(id, I18n.t('wizard.field.invalid_file', label: label, types: file_types))
     end
 
     CustomWizard::Builder.field_validators.each do |validator|
-      if field['type'] === validator[:type]
+      if type === validator[:type]
         validator[:block].call(field, updater, step_template)
       end
     end
+  end
+  
+  def validate_file_type(value, file_types)
+    file_types.split(',')
+      .map { |t| t.gsub('.', '') }
+      .include?(File.extname(value['original_filename'])[1..-1])
   end
 
   def is_text_type(field)
@@ -382,237 +338,6 @@ class CustomWizard::Builder
     ActiveRecord::Type::Boolean.new.cast(value)
   end
 
-  def create_topic(user, action, data)
-    if action['custom_title_enabled']
-      title = CustomWizard::Builder.fill_placeholders(action['custom_title'], user, data)
-    else
-      title = data[action['title']]
-    end
-    
-    if action['post_builder']
-      post = CustomWizard::Builder.fill_placeholders(action['post_template'], user, data)
-    else
-      post = data[action['post']]
-    end
-    
-    if title
-      params = {
-        title: title,
-        raw: post,
-        skip_validations: true
-      }
-
-      params[:category] = action_category_id(action, data)
-
-      tags = action_tags(action, data)
-
-      params[:tags] = tags
-      
-      if action['add_fields']
-        action['add_fields'].each do |field|
-          value = field['value_custom'].present? ? field['value_custom'] : data[field['value']]
-          key = field['key']
-          
-          if key && (value.present? || value === false)
-            if key.include?('custom_fields')
-              keyArr = key.split('.')
-
-              if keyArr.length === 3
-                custom_key = keyArr.last
-                type = keyArr.first
-
-                if type === 'topic'
-                  params[:topic_opts] ||= {}
-                  params[:topic_opts][:custom_fields] ||= {}
-                  params[:topic_opts][:custom_fields][custom_key] = value
-                elsif type === 'post'
-                  params[:custom_fields] ||= {}
-                  params[:custom_fields][custom_key.to_sym] = value
-                end
-              end
-            else
-              value = [*value] + [*tags] if key === 'tags'
-              params[key.to_sym] = value
-            end
-          end
-        end
-      end
-
-      creator = PostCreator.new(user, params)
-      post = creator.create
-
-      if creator.errors.present?
-        updater.errors.add(:create_topic, creator.errors.full_messages.join(" "))
-      else
-
-        unless action['skip_redirect']
-          data['redirect_on_complete'] = post.topic.url
-        end
-      end
-    end
-  end
-
-  def send_message(user, action, data)
-
-    if action['required'].present? && data[action['required']].blank?
-      return
-    end
-    
-    if action['custom_title_enabled']
-      title = CustomWizard::Builder.fill_placeholders(action['custom_title'], user, data)
-    else
-      title = data[action['title']]
-    end
-
-    if action['post_builder']
-      post = CustomWizard::Builder.fill_placeholders(action['post_template'], user, data)
-    else
-      post = data[action['post']]
-    end
-
-    if title && post
-      creator = PostCreator.new(user,
-        title: title,
-        raw: post,
-        archetype: Archetype.private_message,
-        target_usernames: action['username']
-      )
-
-      post = creator.create
-
-      if creator.errors.present?
-        updater.errors.add(:send_message, creator.errors.full_messages.join(" "))
-      else
-        unless action['skip_redirect']
-          data['redirect_on_complete'] = post.topic.url
-        end
-      end
-    end
-  end
-
-  def update_profile(user, action, data)
-    return unless action['profile_updates'].length
-
-    attributes = {}
-    custom_fields = {}
-
-    action['profile_updates'].each do |pu|
-      value = pu['value']
-      custom_field = nil
-        
-      if pu['value_custom'].present?
-        custom_parts = pu['value_custom'].split('.')
-        if custom_parts.length == 2 && custom_parts[0] == 'custom_field'
-          custom_field = custom_parts[1]
-        else
-          value = custom_parts[0]
-        end 
-      end
-      
-      user_field = pu['user_field']
-      key = pu['key']
-      
-      return if data[key].blank?
-
-      if user_field || custom_field
-        custom_fields[user_field || custom_field] = data[key]
-      else
-        updater_key = value
-        if ['profile_background', 'card_background'].include?(value)
-          updater_key = "#{value}_upload_url"
-        end
-        attributes[updater_key.to_sym] = data[key] if updater_key
-      end
-
-      if ['user_avatar'].include?(value)
-        this_upload_id = data[key][:id]
-        user.create_user_avatar unless user.user_avatar
-        user.user_avatar.custom_upload_id = this_upload_id
-        user.uploaded_avatar_id = this_upload_id
-        user.save!
-        user.user_avatar.save!
-      end
-    end
-
-    if custom_fields.present?
-      attributes[:custom_fields] = custom_fields
-    end
-    
-    if attributes.present?
-      user_updater = UserUpdater.new(user, user)
-      user_updater.update(attributes)
-    end
-  end
-
-  def send_to_api(user, action, data)
-    api_body = nil
-
-    if action['api_body'] != ""
-      begin
-        api_body_parsed = JSON.parse(action['api_body'])
-      rescue JSON::ParserError
-        raise Discourse::InvalidParameters, "Invalid API body definition: #{action['api_body']} for #{action['title']}"
-      end
-      api_body = JSON.parse(CustomWizard::Builder.fill_placeholders(JSON.generate(api_body_parsed), user, data))
-    end
-
-    result = CustomWizard::Api::Endpoint.request(user, action['api'], action['api_endpoint'], api_body)
-
-    if error = result['error'] || (result[0] && result[0]['error'])
-      error = error['message'] || error
-      updater.errors.add(:send_to_api, error)
-    else
-      ## add validation callback
-    end
-  end
-  
-  def open_composer(user, action, data)    
-    if action['custom_title_enabled']
-      title = CustomWizard::Builder.fill_placeholders(action['custom_title'], user, data)
-    else
-      title = data[action['title']]
-    end
-    
-    url = "/new-topic?title=#{title}"
-
-    if action['post_builder']
-      post = CustomWizard::Builder.fill_placeholders(action['post_template'], user, data)
-    else
-      post = data[action['post']]
-    end
-    
-    url += "&body=#{post}"
-    
-    if category_id = action_category_id(action, data)
-      if category = Category.find(category_id)
-        url += "&category=#{category.full_slug('/')}"
-      end
-    end
-    
-    if tags = action_tags(action, data)
-      url += "&tags=#{tags.join(',')}"
-    end
-        
-    data['redirect_on_complete'] = Discourse.base_uri + URI.encode(url)
-  end
-
-  def add_to_group(user, action, data)
-    if group_id = data[action['group_id']]
-      if group = Group.find(group_id)
-        group.add(user)
-      end
-    end
-  end
-
-  def route_to(user, action, data)
-    url = CustomWizard::Builder.fill_placeholders(action['url'], user, data)
-    if action['code']
-      data[action['code']] = SecureRandom.hex(8)
-      url += "&#{action['code']}=#{data[action['code']]}"
-    end
-    data['route_to'] = URI.encode(url)
-  end
-
   def save_submissions(data, final_step)
     if final_step
       data['submitted_at'] = Time.now.iso8601
@@ -629,30 +354,5 @@ class CustomWizard::Builder
     @submissions.pop(1) if @wizard.unfinished?
     PluginStore.set("#{@wizard.id}_submissions", @wizard.user.id, @submissions)
     @wizard.reset
-  end
-  
-  def action_category_id(action, data)
-    if action['custom_category_enabled']
-      if action['custom_category_wizard_field']
-        data[action['category_id']]
-      elsif action['custom_category_user_field_key']
-        if action['custom_category_user_field_key'].include?('custom_fields')
-          field = action['custom_category_user_field_key'].split('.').last
-          user.custom_fields[field]
-        else
-          user.send(action['custom_category_user_field_key'])
-        end
-      end
-    else
-      action['category_id']
-    end
-  end
-  
-  def action_tags(action, data)
-    if action['custom_tag_enabled']
-      data[action['custom_tag_field']]
-    else
-      action['tags']
-    end
   end
 end

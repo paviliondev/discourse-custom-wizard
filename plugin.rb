@@ -1,10 +1,11 @@
 # name: discourse-custom-wizard
 # about: Create custom wizards
-# version: 0.1
+# version: 0.2
 # authors: Angus McLeod
 # url: https://github.com/angusmcleod/discourse-custom-wizard
 
-register_asset 'stylesheets/wizard_custom_admin.scss'
+register_asset 'stylesheets/common/wizard-admin.scss'
+register_asset 'stylesheets/common/wizard-mapper.scss'
 register_asset 'lib/jquery.timepicker.min.js'
 register_asset 'lib/jquery.timepicker.scss'
 
@@ -34,48 +35,55 @@ if Rails.env.production?
 end
 
 if respond_to?(:register_svg_icon)
-  register_svg_icon "calendar-o"
+  register_svg_icon "far-calendar"
   register_svg_icon "chevron-right"
   register_svg_icon "chevron-left"
 end
 
 after_initialize do
-  [
-    '../lib/custom_wizard/engine.rb',
-    '../config/routes.rb',
-    '../controllers/custom_wizard/wizard.rb',
-    '../controllers/custom_wizard/steps.rb',
-    '../controllers/custom_wizard/admin.rb',
-    '../controllers/custom_wizard/transfer.rb',
-    '../controllers/custom_wizard/api.rb',
-    '../controllers/application_controller.rb',
-    '../controllers/extra_locales_controller.rb',
-    '../controllers/invites_controller.rb',
-    '../jobs/clear_after_time_wizard.rb',
-    '../jobs/refresh_api_access_token.rb',
-    '../jobs/set_after_time_wizard.rb',
-    '../lib/custom_wizard/builder.rb',
-    '../lib/custom_wizard/field.rb',
-    '../lib/custom_wizard/step_updater.rb',
-    '../lib/custom_wizard/template.rb',
-    '../lib/custom_wizard/wizard.rb',
-    '../lib/custom_wizard/api/api.rb',
-    '../lib/custom_wizard/api/authorization.rb',
-    '../lib/custom_wizard/api/endpoint.rb',
-    '../lib/custom_wizard/api/log_entry.rb',
-    '../lib/wizard/choice.rb',
-    '../lib/wizard/field.rb',
-    '../lib/wizard/step.rb',
-    '../serializers/custom_wizard/api/authorization_serializer.rb',
-    '../serializers/custom_wizard/api/basic_endpoint_serializer.rb',
-    '../serializers/custom_wizard/api/endpoint_serializer.rb',
-    '../serializers/custom_wizard/api/log_serializer.rb',
-    '../serializers/custom_wizard/api_serializer.rb',
-    '../serializers/custom_wizard/basic_api_serializer.rb',
-    '../serializers/custom_wizard/wizard_field_serializer.rb',
-    '../serializers/custom_wizard/wizard_step_serializer.rb',
-    '../serializers/custom_wizard/wizard_serializer.rb',
-    '../serializers/site_serializer.rb'
+  %w[
+    ../lib/custom_wizard/engine.rb
+    ../config/routes.rb
+    ../controllers/custom_wizard/admin/admin.rb
+    ../controllers/custom_wizard/admin/wizard.rb
+    ../controllers/custom_wizard/admin/submissions.rb
+    ../controllers/custom_wizard/admin/api.rb
+    ../controllers/custom_wizard/admin/logs.rb
+    ../controllers/custom_wizard/wizard.rb
+    ../controllers/custom_wizard/steps.rb
+    ../controllers/custom_wizard/transfer.rb
+    ../controllers/application_controller.rb
+    ../controllers/extra_locales_controller.rb
+    ../controllers/invites_controller.rb
+    ../jobs/clear_after_time_wizard.rb
+    ../jobs/refresh_api_access_token.rb
+    ../jobs/set_after_time_wizard.rb
+    ../lib/custom_wizard/action.rb
+    ../lib/custom_wizard/builder.rb
+    ../lib/custom_wizard/field.rb
+    ../lib/custom_wizard/mapper.rb
+    ../lib/custom_wizard/log.rb
+    ../lib/custom_wizard/step_updater.rb
+    ../lib/custom_wizard/validator.rb
+    ../lib/custom_wizard/wizard.rb
+    ../lib/custom_wizard/api/api.rb
+    ../lib/custom_wizard/api/authorization.rb
+    ../lib/custom_wizard/api/endpoint.rb
+    ../lib/custom_wizard/api/log_entry.rb
+    ../lib/wizard/field.rb
+    ../lib/wizard/step.rb
+    ../serializers/custom_wizard/api/authorization_serializer.rb
+    ../serializers/custom_wizard/api/basic_endpoint_serializer.rb
+    ../serializers/custom_wizard/api/endpoint_serializer.rb
+    ../serializers/custom_wizard/api/log_serializer.rb
+    ../serializers/custom_wizard/api_serializer.rb
+    ../serializers/custom_wizard/basic_api_serializer.rb
+    ../serializers/custom_wizard/basic_wizard_serializer.rb
+    ../serializers/custom_wizard/wizard_field_serializer.rb
+    ../serializers/custom_wizard/wizard_step_serializer.rb
+    ../serializers/custom_wizard/wizard_serializer.rb
+    ../serializers/custom_wizard/log_serializer.rb
+    ../serializers/site_serializer.rb
   ].each do |path|
     load File.expand_path(path, __FILE__)
   end
@@ -88,13 +96,11 @@ after_initialize do
 
     if user &&
        user.first_seen_at.blank? &&
-       wizard_id = CustomWizard::Wizard.after_signup
-       
-      wizard = CustomWizard::Wizard.create(user, wizard_id)
+       wizard = CustomWizard::Wizard.after_signup(user)
 
-      if !wizard.completed? && wizard.permitted?
+      if !wizard.completed?
         custom_redirect = true
-        CustomWizard::Wizard.set_wizard_redirect(user, wizard_id)
+        CustomWizard::Wizard.set_wizard_redirect(wizard.id, user)
       end
     end
 
@@ -113,9 +119,9 @@ after_initialize do
     object.custom_fields['redirect_to_wizard']
   end
 
-  DiscourseEvent.on(:user_approved) do |user|
+  on(:user_approved) do |user|
     if wizard_id = CustomWizard::Wizard.after_signup
-      CustomWizard::Wizard.set_wizard_redirect(user, wizard_id)
+      CustomWizard::Wizard.set_wizard_redirect(wizard_id, user)
     end
   end
 

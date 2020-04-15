@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
-class CustomWizardSerializer < ::WizardSerializer
+class CustomWizard::WizardSerializer < CustomWizard::BasicWizardSerializer
   
-  attributes :id,
-             :name,
+  attributes :start,
              :background,
+             :theme_id,
              :completed,
              :required,
-             :min_trust,
              :permitted,
              :uncategorized_category_id
   
-  has_one :user, serializer: ::BasicUserSerializer, embed: :objects           
-  has_many :steps, serializer: ::CustomWizardStepSerializer, embed: :objects
+  has_many :steps, serializer: ::CustomWizard::StepSerializer, embed: :objects
+  has_one :user, serializer: ::BasicUserSerializer, embed: :objects
   has_many :categories, serializer: ::BasicCategorySerializer, embed: :objects
+  has_many :groups, serializer: ::BasicGroupSerializer, embed: :objects
 
   def completed
     object.completed?
@@ -28,6 +28,10 @@ class CustomWizardSerializer < ::WizardSerializer
   def permitted
     object.permitted?
   end
+  
+  def start
+    object.start.id
+  end
 
   def include_start?
     object.start && include_steps?
@@ -39,6 +43,10 @@ class CustomWizardSerializer < ::WizardSerializer
   
   def include_categories?
     object.needs_categories
+  end
+  
+  def include_groups?
+    object.needs_groups
   end
   
   def uncategorized_category_id

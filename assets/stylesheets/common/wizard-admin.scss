@@ -1,0 +1,559 @@
+@import 'wizard-mapper';
+@import 'wizard-transfer';
+@import 'wizard-api';
+
+.admin-wizard-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.admin-wizard-message {
+  background-color: $primary-low;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  
+  .wizard-message {
+    .d-icon {
+      margin-right: 4px;
+    }
+    
+    a + a {
+      border-left: 1px solid $primary-medium;
+      padding-left: 5px;
+      margin-left: 5px;
+    }
+  }
+}
+
+.admin-wizard-container {
+  margin-top: 20px;
+}
+
+.wizard-submissions {
+  overflow: scroll;
+  
+  table td {
+    min-width: 150px;
+  }
+}
+
+.admin-wizards-logs {
+  .admin-wizard-controls {
+    h3 {
+      margin: 0 7px;
+    }
+  }
+  
+  .wizard-logs {
+    .date {
+      width: 100px;
+    }
+  }
+}
+
+.wizard-settings-parent {
+  margin-bottom: 30px;
+  padding: 20px;
+  border: 1px solid $primary-low;
+}
+
+.wizard-settings-group {
+  display: flex;
+  justify-content: space-between;
+  flex-flow: wrap;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.wizard-settings,
+.wizard-custom-step,
+.wizard-custom-action {
+  @extend .wizard-settings-parent;
+  @extend .wizard-settings-group;
+}
+
+.wizard-basic-details,
+.wizard-custom-field,
+.advanced-settings {
+  @extend .wizard-settings-group;
+}
+
+.wizard-custom-field {
+  position: relative;
+  background: transparent;
+  background-color: dark-light-diff($primary, $secondary, 96%, -65%);
+  padding: 20px;
+}
+
+.admin-wizard-container.settings .wizard-basic-details {
+  justify-content: initial;
+  
+  .setting {
+    width: auto;
+    margin-right: 20px;
+    
+    .setting-label {
+      width: initial;
+      min-width: initial;
+    }
+  }
+}
+
+.wizard-header {
+  margin-bottom: 20px;
+  
+  &.large {
+    font-size: 1.5em;
+    min-height: 31px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    
+    input {
+      margin-bottom: 0;
+      width: 400px;
+    }
+    
+    label {
+      margin-bottom: 0;
+    }
+    
+    .download-link {
+      font-size: 1rem;
+      line-height: 20px;
+    }
+    
+    .wizard-url {
+      display: inline-flex;
+      margin-left: 20px;
+      max-width: 50%;
+      
+      a {
+        padding: 6px 12px;
+        font-size: 1rem;
+        background-color: $primary-low;
+      }
+      
+      button {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  &.medium {
+    font-size: 1.3em;
+  }
+
+  &.small {
+    font-size: 1em;
+    margin-bottom: 5px;
+  }
+
+  &.underline {
+    text-decoration: underline;
+  }
+}
+
+.admin-wizard-buttons {
+  margin-top: 20px;
+}
+
+.admin-wizard-container.settings {
+  
+  [class~='setting'] {
+    display: inline-flex;
+    align-items: flex-start;
+    width: 48%;
+    margin-bottom: 30px;
+    padding-bottom: 0;
+    position: relative;
+    
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+
+    .setting-label {
+      width: 80px;
+      min-width: 80px;
+    }
+
+    .setting-value {
+      flex: 1;
+      overflow: initial;
+      float: initial;
+      width: initial;
+      padding: 0;
+    
+      label {
+        font-size: 0.85em;
+      }
+
+      span {
+        font-size: 0.929em;
+      }
+
+      button {
+        display: block;
+      }
+      
+      input[type="text"], textarea {
+        width: 100%;
+        box-sizing: border-box;
+        margin-bottom: 0;
+      }
+      
+      input[type="number"] {
+        margin-bottom: 0;
+      }
+      
+      input[disabled] {
+        background-color: $primary-low;
+        cursor: not-allowed;
+      }
+      
+      input.medium {
+        width: 200px;
+      }
+      
+      input.small {
+        width: 100px;
+      }
+      
+      .uploaded-image-preview {
+        width: 100%;
+        max-height: 100px;
+        margin-bottom: 0;
+      }
+      
+      .image-upload-controls {
+        label {
+          font-size: 1em;
+          margin: 0 5px 0 0;
+        }
+      }
+      
+      > textarea {
+        min-height: 100px;
+        resize: vertical;
+      }
+      
+      input[type="checkbox"] {
+        float: left;
+        margin: 5px 7px 0 0;
+      }
+      
+      .input .select-kit, > .select-kit {
+        max-width: 250px !important;
+        min-width: 250px !important;
+      }
+    }
+
+    &.full, &.full-inline {
+      width: 100%;
+
+      .setting-value {
+        width: initial;
+        float: none;
+        
+        &.editor {
+          .d-editor {
+            margin-bottom: 5px;
+          }
+        }
+        
+        .uploaded-image-preview {
+          max-height: 200px;
+        }
+      }
+    }
+    
+    &.full-inline {
+      .setting-value {
+        display: flex;
+        align-items: center;
+        
+        input {
+          margin: 0 7px 0 0;
+        }
+        
+        button {
+          margin: 0 0 0 20px;
+        }
+      }
+    }
+    
+    &.field-mapper-setting {
+      .setting-value {
+        max-width: calc(100% - 80px);
+        
+        .mapper-input {
+          max-width: 100%;
+          box-sizing: border-box;
+        }
+      }
+    }
+
+    label {
+      margin: 3px 0;
+    }
+
+    .setting-gutter {
+      margin-top: 5px;
+    }
+  }
+  
+  .advanced-settings {
+    width: 100%;
+    margin-top: 30px;
+    
+    [class~='setting']:first-of-type {
+      border-top: none;
+    }
+  }
+  
+  .wizard-custom-action > [class~='setting']:first-of-type {
+    margin-bottom: 0;
+  }
+
+  .select-box-kit-header {
+    height: initial;
+  }
+
+  .buttons .error {
+    color: $danger;
+
+    .fa {
+      margin-right: 5px;
+    }
+  }
+
+  .buttons .remove {
+    float: right;
+  }
+
+  .custom-category {
+    margin-top: 5px;
+    padding: 5px;
+  }
+}
+
+.btn-after-time {
+  margin-top: 7px;
+}
+
+.wizard-text-editor {
+  .d-editor {
+    width: 100%;
+
+    .d-editor-input {
+      min-height: 150px;
+    }
+    
+    .d-editor-container {
+      display: block;
+    }
+    
+    .d-editor-textarea-wrapper {
+      display: grid;
+      margin-bottom: 10px;
+      
+      textarea {
+        resize: vertical;
+      }
+    }
+    
+    .d-editor-preview-wrapper {
+      display: none;
+      margin: 0 0 10px 0;
+      padding: 10px;
+      background-color: $secondary;
+      border: 1px solid $primary-medium;
+      max-width: 100%;
+      
+      &.force-preview {
+        display: block;
+      }
+    }
+
+    button {
+      margin: 0;
+    }
+  }
+  
+  .wizard-editor-gutter {
+    position: relative;
+    display: flex;
+    
+    .btn {
+      margin-right: 10px;
+    }
+    
+    .wizard-editor-gutter-popover {
+      position: absolute;
+      padding: 10px;
+      background-color: $secondary;
+      box-shadow: shadow('card');
+      z-index: 200;
+      top: 40px;
+    }
+  }
+}
+
+.wizard-links {
+  margin: 20px 0;
+  display: inline-block;
+  width: 100%;
+
+  .link-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: inline-flex;
+    align-items: flex-start;
+    flex-flow: wrap;
+
+    > div {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      margin-right: 10px;
+    }
+  }
+
+  .sortable-placeholder {
+    height: 30px;
+    width: 100px;
+    display: inline-block;
+    vertical-align: top;
+    background-color: $primary-low;
+    margin-right: 10px;
+    margin-left: 3px;
+  }
+}
+
+.wizard-column-contents {
+  position: relative;
+}
+
+.required-data-message {
+  display: inline-block;
+  margin-top: 20px;
+  
+  .label {
+    margin-bottom: 5px;
+  }
+  
+  input {
+    margin-bottom: 0;
+  }
+}
+
+.wizard-field-composer textarea {
+  width: 100%;
+  min-height: 150px;
+}
+
+.next-session-time-modal {
+  text-align: center;
+
+  .date-time-card {
+    width: 270px;
+    padding: 10px 20px;
+    text-align: left;
+  }
+
+  .modal-date-time-set{
+    padding-top: 3px;
+    padding-bottom: 4px;
+    display: flex;
+    flex-direction: row;
+
+    .modal-date-area{
+      order: 1;
+    }
+
+    .modal-time-area{
+      order: 2;
+      margin-left: 10px;
+
+      .modal-time{
+        width: 127px;
+      }
+    }
+  }
+
+  .ui-timepicker-input {
+    width: 119px;
+    text-align: center;
+  }
+
+  .date-picker{
+     width: 121px;
+  }
+
+  .pika-single {
+    position: relative !important;
+
+    .pika-lendar {
+      border: 1px solid #eee;
+      padding: 14px;
+      margin: 0;
+      float: none;
+      width: auto;
+    }
+  }
+}
+
+.post-builder-editor {
+  min-height: 220px;
+}
+
+.text-divider {
+  display: block;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  margin: 5px 0;
+
+  > span {
+    position: relative;
+    display: inline-block;
+  }
+
+  > span:before,
+  > span:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 9999px;
+    height: 1px;
+    background: $tertiary;
+  }
+
+  > span:before {
+    right: 100%;
+    margin-right: 15px;
+  }
+
+  > span:after {
+    left: 100%;
+    margin-left: 15px;
+  }
+}
+
+.wizard-step-contents {
+  height: unset !important;
+}
+
+.wizard-advanced-toggle {
+  width: 100%;
+}
+
+.add-mapper-input .btn, .btn-after-time, .wizard-editor-gutter .btn {
+  background-color: $secondary;
+  border: 1px solid $primary-medium;
+}

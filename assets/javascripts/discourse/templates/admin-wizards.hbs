@@ -1,7 +1,10 @@
 {{#admin-nav}}
-  {{nav-item route='adminWizardsCustom' label='admin.wizard.custom_label'}}
-  {{nav-item route='adminWizardsSubmissions' label='admin.wizard.submissions_label'}}
-  {{nav-item route='adminWizardsApis' label='admin.wizard.api.nav_label'}}
+  {{nav-item route='adminWizardsWizard' label='admin.wizard.nav_label'}}
+  {{nav-item route='adminWizardsSubmissions' label='admin.wizard.submissions.nav_label'}}
+  {{#if siteSettings.wizard_apis_enabled}}
+    {{nav-item route='adminWizardsApi' label='admin.wizard.api.nav_label'}}
+  {{/if}}
+  {{nav-item route='adminWizardsLogs' label='admin.wizard.log.nav_label'}}
   {{nav-item route='adminWizardsTransfer' label='admin.wizard.transfer.nav_label'}}
 {{/admin-nav}}
 

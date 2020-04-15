@@ -1,0 +1,33 @@
+.admin-wizards-transfer .admin-container .container {
+  padding-top: 20px;
+}
+
+#file-url {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.wizard-list-select {
+  list-style-type: none;
+}
+
+.wizard-action-buttons {
+  flex-direction: column;
+}
+
+.import-message {
+  margin: 10px 0;
+}
+
+.import-logs {
+  margin-top: 20px;
+  
+  .title {
+    font-weight: 800;
+    margin-bottom: 10px;
+  }
+  
+  ul {
+    list-style: none;
+  }
+}
