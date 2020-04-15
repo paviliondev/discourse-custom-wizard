@@ -57,12 +57,18 @@ class CustomWizard::Action
         log_success("created topic", post.topic.id)
       end
     else
-      log_error("invalid topic params")
+      log_error("invalid topic params", "title: #{params[:title]}; post: #{params[:raw]}")
     end
   end
   
   def send_message
-    return if action['required'].present? && data[action['required']].blank?
+    if action['required'].present? && data[action['required']].blank?
+      log_error(
+        "required not present",
+        "required: #{action['required']}; data: #{data[action['required']]}"
+      )
+      return
+    end
     
     params = basic_topic_params
     params[:target_usernames] = CustomWizard::Mapper.new(
@@ -89,7 +95,10 @@ class CustomWizard::Action
         log_error("created message", post.topic.id)
       end
     else
-      log_error("invalid message params")
+      log_error(
+        "invalid message params",
+        "title: #{params[:title]}; post: #{params[:raw]}; recipients: #{params[:target_usernames]}"
+      )
     end
   end
 
@@ -120,7 +129,7 @@ class CustomWizard::Action
         log_error("failed to update profile fields")
       end
     else
-      log_error("invalid profile fields params")
+      log_error("invalid profile fields params", params.inspect)
     end
   end
 
@@ -172,8 +181,11 @@ class CustomWizard::Action
     if tags = action_tags
       url += "&tags=#{tags.join(',')}"
     end
-        
-    data['redirect_on_complete'] = Discourse.base_uri + URI.encode(url)
+    
+    route_to = Discourse.base_uri + URI.encode(url)
+    data['redirect_on_complete'] = route_to
+    
+    log_info("route: #{route_to}")
   end
 
   def add_to_group
@@ -219,7 +231,10 @@ class CustomWizard::Action
       url += "&#{action['code']}=#{data[action['code']]}"
     end
     
-    data['route_to'] = URI.encode(url)
+    route_to = URI.encode(url)
+    data['route_to'] = route_to
+    
+    log_info("route: #{route_to}")
   end
   
   private
@@ -344,5 +359,9 @@ class CustomWizard::Action
   
   def log_error(message, detail = nil)
     @log.push("error - #{message} - #{detail}")
+  end
+  
+  def log_info(mesage, detail = nil)
+    @log.push("info - #{message} - #{detail}")
   end
 end
