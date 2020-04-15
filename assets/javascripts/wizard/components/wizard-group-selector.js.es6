@@ -10,7 +10,7 @@ export default ComboBox.extend({
     }).map(g => {
       return {
         id: g.id,
-        name: g.name
+        name: g.full_name
       }
     });
   })
