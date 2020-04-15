@@ -172,6 +172,10 @@ const fieldProperties = {
       content: null
     },
     user_selector: {
+    },
+    event: {
+    },
+    location: {
     }
   },
   mapped: [
