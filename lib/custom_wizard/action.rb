@@ -54,7 +54,7 @@ class CustomWizard::Action
       end
       
       if creator.errors.blank?
-        log_success("created topic", post.topic.id)
+        log_success("created topic", "id: #{post.topic.id}")
       end
     else
       log_error("invalid topic params", "title: #{params[:title]}; post: #{params[:raw]}")
@@ -92,7 +92,7 @@ class CustomWizard::Action
       end
       
       if creator.errors.blank?
-        log_error("created message", post.topic.id)
+        log_error("created message", "id: #{post.topic.id}")
       end
     else
       log_error(
