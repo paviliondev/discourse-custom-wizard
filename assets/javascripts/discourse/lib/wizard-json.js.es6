@@ -105,7 +105,7 @@ function buildBasicProperties(json, type, props) {
     props[p] = buildProperty(json, p, type);
     
     if (hasAdvancedProperties(json, type)) {
-      result.showAdvanced = true;
+      props.showAdvanced = true;
     }
   });
   
