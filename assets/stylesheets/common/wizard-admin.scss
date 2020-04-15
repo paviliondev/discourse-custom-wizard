@@ -30,6 +30,20 @@
   overflow: scroll;
 }
 
+.admin-wizards-logs {
+  .admin-wizard-controls {
+    h3 {
+      margin: 0 7px;
+    }
+  }
+  
+  .wizard-logs {
+    .date {
+      width: 100px;
+    }
+  }
+}
+
 .wizard-settings-parent {
   margin-bottom: 30px;
   padding: 20px;
