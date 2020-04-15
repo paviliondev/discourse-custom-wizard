@@ -281,6 +281,17 @@
         }
       }
     }
+    
+    &.field-mapper-setting {
+      .setting-value {
+        max-width: calc(100% - 80px);
+        
+        .mapper-input {
+          max-width: 100%;
+          box-sizing: border-box;
+        }
+      }
+    }
 
     label {
       margin: 3px 0;
