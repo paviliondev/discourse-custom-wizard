@@ -91,7 +91,7 @@ class CustomWizard::Action
       end
       
       if creator.errors.blank?
-        log_error("created message", "id: #{post.topic.id}")
+        log_success("created message", "id: #{post.topic.id}")
       end
     else
       log_error(
