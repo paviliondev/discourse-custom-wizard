@@ -306,7 +306,7 @@ class CustomWizard::Action
       user: user
     ).perform
 
-    params[:raw] = action['post_builder'] ?
+    params[:raw] = action['post_template'] ?
       mapper.interpolate(action['post_template']) :
       data[action['post']]
     
