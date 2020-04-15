@@ -2,7 +2,6 @@ class CustomWizard::Action
   attr_accessor :data,
                 :action,
                 :user,
-                :updater,
                 :result
   
   def initialize(params)
@@ -10,7 +9,6 @@ class CustomWizard::Action
     @action = params[:action]
     @user = params[:user]
     @data = params[:data]
-    @updater = params[:updater]
     @log = []
   end
   
@@ -47,7 +45,6 @@ class CustomWizard::Action
       if creator.errors.present?
         messages = creator.errors.full_messages.join(" ")
         log_error("failed to create", messages)
-        updater.errors.add(:create_topic, messages)
       elsif action['skip_redirect'].blank?
         data['redirect_on_complete'] = post.topic.url
       end
@@ -85,7 +82,6 @@ class CustomWizard::Action
       if creator.errors.present?
         messages = creator.errors.full_messages.join(" ")
         log_error("failed to create message", messages)
-        updater.errors.add(:send_message, messages)
       elsif action['skip_redirect'].blank?
         data['redirect_on_complete'] = post.topic.url
       end
@@ -123,7 +119,7 @@ class CustomWizard::Action
       end
       
       if result
-        log_success("updated profile fields", "fields: #{params.keys.map{ |p| p.to_s }.join(',')}")
+        log_success("updated profile fields", "fields: #{params.keys.map(&:to_s).join(',')}")
       else
         log_error("failed to update profile fields", "result: #{result.inspect}")
       end
@@ -148,9 +144,9 @@ class CustomWizard::Action
 
     if error = result['error'] || (result[0] && result[0]['error'])
       error = error['message'] || error
-      updater.errors.add(:send_to_api, error)
+      log_error("api request failed", "message: #{error}")
     else
-      ## add validation callback
+      log_success("api request succeeded", "result: #{result}")
     end
   end
   

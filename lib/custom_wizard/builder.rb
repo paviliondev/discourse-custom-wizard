@@ -160,8 +160,7 @@ class CustomWizard::Builder
                   wizard: @wizard,
                   action: action,
                   user: user,
-                  data: data,
-                  updater: updater
+                  data: data
                 ).perform
               end
             end
