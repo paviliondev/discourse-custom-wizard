@@ -281,7 +281,19 @@ class CustomWizard::Wizard
   
   def self.list(user=nil)
     PluginStoreRow.where(plugin_name: 'custom_wizard').order(:id)
-      .map { |record| self.new(JSON.parse(record.value), user) }
+      .reduce([]) do |result, record|
+        attrs = JSON.parse(record.value)
+        
+        if attrs.present? &&
+          attrs.is_a?(Hash) &&
+          attrs['id'].present? &&
+          attrs['name'].present?
+          
+          result.push(self.new(attrs, user))
+        end
+        
+        result
+      end
   end
   
   def self.save(wizard)

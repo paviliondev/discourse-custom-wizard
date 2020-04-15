@@ -20,13 +20,10 @@
       margin-right: 4px;
     }
     
-    a {
-      padding-left: 10px;
-      
-      + a {
-        border-left: 1px solid $primary-medium;
-        margin-left: 10px;
-      }
+    a + a {
+      border-left: 1px solid $primary-medium;
+      padding-left: 5px;
+      margin-left: 5px;
     }
   }
 }
