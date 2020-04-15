@@ -1,5 +1,5 @@
 import { default as discourseComputed, observes, on } from 'discourse-common/utils/decorators';
-import { equal, empty, or, notEmpty } from "@ember/object/computed";
+import { equal, empty, or } from "@ember/object/computed";
 import { generateName, selectKitContent, schema } from '../lib/wizard';
 import Component from "@ember/component";
 
@@ -20,7 +20,6 @@ export default Component.extend({
   basicTopicFields: or('createTopic', 'sendMessage', 'openComposer'),
   publicTopicFields: or('createTopic', 'openComposer'),
   showSkipRedirect: or('createTopic', 'sendMessage'),
-  showPostBuilder: notEmpty('action.post_template'),
   
   @discourseComputed('wizard.steps')
   runAfterContent(steps) {

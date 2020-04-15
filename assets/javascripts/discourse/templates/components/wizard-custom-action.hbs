@@ -61,13 +61,13 @@
         )}}
       
       <div class="setting-gutter">
-        {{input type='checkbox' checked=showPostBuilder}}
+        {{input type='checkbox' checked=action.post_builder}}
         <span>{{i18n 'admin.wizard.action.post_builder.checkbox'}}</span>
       </div>
     </div>
   </div>
 
-  {{#if showPostBuilder}}
+  {{#if action.post_builder}}
     <div class="setting full">
       <div class="setting-label">
         <label>{{i18n 'admin.wizard.action.post_builder.label'}}</label>

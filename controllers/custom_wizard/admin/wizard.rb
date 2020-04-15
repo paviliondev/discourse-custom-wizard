@@ -115,6 +115,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
         :skip_redirect,
         :url,
         :post,
+        :post_builder,
         :post_template,
         title: mapped_params,
         category: mapped_params,
