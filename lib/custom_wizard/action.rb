@@ -151,36 +151,29 @@ class CustomWizard::Action
   end
   
   def open_composer
-    if action['custom_title_enabled']
-      title = mapper.interpolate(action['custom_title'])
-    else
-      title = data[action['title']]
-    end
-    
-    url = "/new-topic?title=#{title}"
-
-    if action['post_builder']
-      post = mapper.interpolate(action['post_template'])
-    else
-      post = data[action['post']]
-    end
-    
-    url += "&body=#{post}"
-    
-    if category_id = action_category
-      if category = Category.find(category_id)
-        url += "&category=#{category.full_slug('/')}"
+    params = basic_topic_params
+            
+    if params[:title].present? && params[:raw].present?
+      url = "/new-topic?title=#{params[:title]}"
+      url += "&body=#{params[:raw]}"
+      
+      if category_id = action_category
+        if category_id && category = Category.find(category_id)
+          url += "&category=#{category.full_slug('/')}"
+        end
       end
-    end
-    
-    if tags = action_tags
-      url += "&tags=#{tags.join(',')}"
-    end
-    
-    route_to = Discourse.base_uri + URI.encode(url)
-    data['redirect_on_complete'] = route_to
-    
-    log_info("route: #{route_to}")
+      
+      if tags = action_tags
+        url += "&tags=#{tags.join(',')}"
+      end
+      
+      route_to = Discourse.base_uri + URI.encode(url)
+      data['redirect_on_complete'] = route_to
+      
+      log_info("route: #{route_to}")
+    else
+      log_error("invalid composer params", "title: #{params[:title]}; post: #{params[:raw]}")
+    end    
   end
 
   def add_to_group
