@@ -19,6 +19,15 @@
     .d-icon {
       margin-right: 4px;
     }
+    
+    a {
+      padding-left: 10px;
+      
+      + a {
+        border-left: 1px solid $primary-medium;
+        margin-left: 10px;
+      }
+    }
   }
 }
 
@@ -35,6 +44,8 @@
     h3 {
       margin: 0 7px;
     }
+    
+    
   }
   
   .wizard-logs {
