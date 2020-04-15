@@ -266,7 +266,7 @@ const actionProperties = {
   }
 }
 
-if (Discourse.SiteSettings.wizard_api_features) {
+if (Discourse.SiteSettings.wizard_apis_enabled) {
   actionProperties.types.send_to_api = {
     api: null,
     api_endpoint: null,

@@ -30,7 +30,7 @@ export default DiscourseRoute.extend({
   },
 
   _getApis(model) {
-    return ajax('/admin/wizards/apis')
+    return ajax('/admin/wizards/api')
       .then((result) => set(model, 'apis', result));
   },
   

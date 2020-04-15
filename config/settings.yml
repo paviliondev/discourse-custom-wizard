@@ -15,9 +15,6 @@ plugins:
     refresh: true
     type: list
     list_type: compact
-  wizard_step_advanced:
-    client: true
-    default: false
-  wizard_api_features:
+  wizard_apis_enabled:
     client: true
     default: false
