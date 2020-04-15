@@ -1,6 +1,6 @@
 {{#each inputs as |input|}}
   {{#if input.connector}}
-    {{wizard-mapper-connector connector=input.connector}}
+    {{wizard-mapper-connector connector=input.connector connectorType="input"}}
   {{/if}}
   
   {{wizard-mapper-input 

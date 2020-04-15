@@ -5,7 +5,7 @@ import { getOwner } from 'discourse-common/lib/get-owner';
 import { defaultSelectionType, selectionTypes } from '../lib/wizard-mapper'; 
 import { snakeCase } from '../lib/wizard';
 import Component from "@ember/component";
-import { bind } from "@ember/runloop";
+import { bind, later } from "@ember/runloop";
 
 export default Component.extend({
   classNameBindings: [':mapper-selector', 'activeType'],
@@ -33,6 +33,10 @@ export default Component.extend({
   showTypes: false,
   
   didInsertElement() {
+    if (this.activeType && !this[`${this.activeType}Enabled`]) {
+      later(() => this.resetActiveType());
+    }
+    
     $(document).on("click", bind(this, this.documentClick));
   },
 

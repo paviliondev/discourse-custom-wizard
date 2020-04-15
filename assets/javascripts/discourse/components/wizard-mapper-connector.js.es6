@@ -1,6 +1,8 @@
 import Component from "@ember/component";
 import { gt } from '@ember/object/computed';
 import { computed } from "@ember/object";
+import { defaultConnector } from '../lib/wizard-mapper';
+import { later } from "@ember/runloop";
 
 export default Component.extend({
   classNameBindings: [':mapper-connector', ':mapper-block', 'hasMultiple::single'],
@@ -9,5 +11,16 @@ export default Component.extend({
     let key = this.connector;
     let path = this.inputTypes ? `input.${key}.name` : `connector.${key}`;
     return I18n.t(`admin.wizard.${path}`);
-  })
+  }),
+  
+  didReceiveAttrs() {
+    if (!this.connector) {
+      later(() => {
+        this.set(
+          'connector',
+          defaultConnector(this.connectorType, this.inputType, this.options)
+        );
+      });  
+    }
+  }
 });

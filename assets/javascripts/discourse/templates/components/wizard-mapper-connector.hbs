@@ -4,7 +4,9 @@
     content=connectors
     onChange=(action (mut connector))}}
 {{else}}
-  <span class="connector-single">
-    {{connectorLabel}}
-  </span>
+  {{#if connector}}
+    <span class="connector-single">
+      {{connectorLabel}}
+    </span>
+  {{/if}}
 {{/if}}

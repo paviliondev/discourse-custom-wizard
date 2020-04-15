@@ -1,7 +1,10 @@
 {{wizard-mapper-connector
   connector=input.type
   connectors=inputTypes
-  inputTypes=true}}
+  inputTypes=true
+  inputType=inputType
+  connectorType="type"
+  options=options}}
 
 {{#if hasPairs}}
   <div class="mapper-pairs mapper-block">
@@ -26,7 +29,10 @@
   {{#if hasPairs}}
     {{wizard-mapper-connector
       connector=input.output_connector
-      connectors=connectors}}
+      connectors=connectors
+      connectorType="output"
+      inputType=inputType
+      options=options}}
   {{/if}}
 
   <div class="output mapper-block">

@@ -22,13 +22,9 @@ function inputTypesContent(options = {}) {
     mapInputTypes(selectableInputTypes);
 }
 
-// Connectors
+// connectorTypes
 
 const connectors = {
-  output: [
-    'then',
-    'set',
-  ],
   pair: [
     'equal',
     'greater',
@@ -36,16 +32,26 @@ const connectors = {
     'greater_or_equal',
     'less_or_equal',
     'regex'
-  ]
+  ],
+  output: [
+    'then',
+    'set',
+  ],
 }
 
-function defaultConnector(connectorType, inputType, opts = {}) {
-  if (opts[`${connectorType}Connector`]) return opts[`${connectorType}Connector`];  
-  if (inputType === 'conditional' && connectorType === 'output') return 'then';
-  if (inputType === 'conditional' && connectorType === 'pair') return 'equal';
-  if (inputType === 'assignment' && connectorType === 'output') return 'set';
-  if (inputType === 'association' && connectorType === 'pair') return 'association';
-  if (inputType === 'validation' && connectorType === 'pair') return 'equal';
+function defaultConnector(connectorType, inputType, options={}) {
+  if (connectorType === 'input') {
+    return defaultInputType(options);
+  }
+  if (connectorType === 'pair') {
+    if (inputType === 'conditional') return 'equal';
+    if (inputType === 'association') return 'association';
+    if (inputType === 'validation') return 'equal';
+  }
+  if (connectorType === 'output') {
+    if (inputType === 'conditional') return 'then';
+    if (inputType === 'assignment') return 'set';
+  }
   return 'equal';
 }
 
@@ -53,7 +59,7 @@ function connectorContent(connectorType, inputType, opts) {
   let connector = opts[`${connectorType}Connector`];
   
   if ((!connector && connectorType === 'output') || inputType === 'association') {
-    connector = defaultConnector(connectorType, inputType, opts);
+    connector = defaultConnector(connectorType, inputType);
   }
   
   let content = connector ? [connector] : connectors[connectorType];
