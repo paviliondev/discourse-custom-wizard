@@ -361,7 +361,7 @@ class CustomWizard::Action
     @log.push("error - #{message} - #{detail}")
   end
   
-  def log_info(mesage, detail = nil)
+  def log_info(message, detail = nil)
     @log.push("info - #{message} - #{detail}")
   end
 end
