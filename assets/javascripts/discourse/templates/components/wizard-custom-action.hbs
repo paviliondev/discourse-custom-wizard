@@ -57,17 +57,17 @@
         onChange=(action (mut action.post))
         options=(hash
           none='admin.wizard.selector.placeholder.wizard_field'
-          isDisabled=action.post_builder
+          isDisabled=showPostBuilder
         )}}
       
       <div class="setting-gutter">
-        {{input type='checkbox' checked=action.post_builder}}
+        {{input type='checkbox' checked=showPostBuilder}}
         <span>{{i18n 'admin.wizard.action.post_builder.checkbox'}}</span>
       </div>
     </div>
   </div>
 
-  {{#if action.post_builder}}
+  {{#if showPostBuilder}}
     <div class="setting full">
       <div class="setting-label">
         <label>{{i18n 'admin.wizard.action.post_builder.label'}}</label>

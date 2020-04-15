@@ -6,27 +6,29 @@ class CustomWizard::Action
                 :result
   
   def initialize(params)
+    @wizard = params[:wizard]
     @action = params[:action]
     @user = params[:user]
     @data = params[:data]
     @updater = params[:updater]
+    @log = []
   end
   
   def perform
     ActiveRecord::Base.transaction do
       self.send(action['type'].to_sym)
-      
-      if SiteSetting.wizard_action_debug
-        log = "action: #{action['type']}; "
-        log << "result: #{@result}"
-                
-        updater.errors.messages.each do |field, msg|
-          log << "error: #{field.to_s}; #{msg.to_s}; "
-        end
-        
-        Rails.logger.warn("Wizard Action: #{log.to_s}")
+    end
+    
+    log = "wizard: #{@wizard.id}; action: #{action['type']}; user: #{user.username}"
+    
+    if @log.any?
+      @log.each do |item|
+        log << "; result: "
+        log << item.to_s
       end
     end
+    
+    CustomWizard::Log.create(log)
   end
   
   def mapper
@@ -44,17 +46,18 @@ class CustomWizard::Action
       post = creator.create
             
       if creator.errors.present?
-        @result = "failed to create"
-        updater.errors.add(:create_topic, creator.errors.full_messages.join(" "))
+        messages = creator.errors.full_messages.join(" ")
+        log_error("failed to create", messages)
+        updater.errors.add(:create_topic, messages)
       elsif action['skip_redirect'].blank?
         data['redirect_on_complete'] = post.topic.url
       end
       
       if creator.errors.blank?
-        @result = "success (created topic: #{post.topic.id})"
+        log_success("created topic", post.topic.id)
       end
     else
-      @result = "invalid params"
+      log_error("invalid topic params")
     end
   end
   
@@ -75,17 +78,18 @@ class CustomWizard::Action
       post = creator.create
 
       if creator.errors.present?
-        @result = "failed to create"
-        updater.errors.add(:send_message, creator.errors.full_messages.join(" "))
+        messages = creator.errors.full_messages.join(" ")
+        log_error("failed to create message", messages)
+        updater.errors.add(:send_message, messages)
       elsif action['skip_redirect'].blank?
         data['redirect_on_complete'] = post.topic.url
       end
       
       if creator.errors.blank?
-        @result = "success (created pm: #{post.topic.id})"
+        log_error("created message", post.topic.id)
       end
     else
-      @result = "invalid params"
+      log_error("invalid message params")
     end
   end
 
@@ -111,12 +115,12 @@ class CustomWizard::Action
       end
       
       if result
-        @result = "success (updated fields #{params.keys.map{ |p| p.to_s }.join(',')})"
+        log_success("updated profile fields", params.keys.map{ |p| p.to_s }.join(','))
       else
-        @result = "failed to update"
+        log_error("failed to update profile fields")
       end
     else
-      @result = "invalid params"
+      log_error("invalid profile fields params")
     end
   end
 
@@ -201,9 +205,9 @@ class CustomWizard::Action
     end
     
     if result
-      @result = "success (added to groups: #{groups.map { |g| g.id.to_s }.join(',')})"
+      log_success("added to groups", groups.map { |g| g.id.to_s }.join(','))
     else
-      @result = "failed to add"
+      log_error("failed to add to groups")
     end
   end
 
@@ -332,5 +336,13 @@ class CustomWizard::Action
     user.uploaded_avatar_id = upload_id
     user.save!
     user.user_avatar.save!
+  end
+  
+  def log_success(message, detail = nil)
+    @log.push("success - #{message} - #{detail}")
+  end
+  
+  def log_error(message, detail = nil)
+    @log.push("error - #{message} - #{detail}")
   end
 end

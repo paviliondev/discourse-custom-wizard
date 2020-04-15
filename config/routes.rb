@@ -32,6 +32,8 @@ Discourse::Application.routes.append do
     get 'admin/wizards/apis/:name/redirect' => 'admin_api#redirect'
     get 'admin/wizards/apis/:name/authorize' => 'admin_api#authorize'
     
+    get 'admin/wizards/logs' => 'admin_logs#index'
+    
     get 'admin/wizards/transfer' => 'transfer#index'
     get 'admin/wizards/transfer/export' => 'transfer#export'
     post 'admin/wizards/transfer/import' => 'transfer#import'

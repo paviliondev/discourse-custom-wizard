@@ -14,6 +14,8 @@ export default {
       this.route('adminWizardsApi', { path: '/api', resetNamespace: true }, function() {
         this.route('adminWizardsApiShow', { path: '/:name', resetNamespace: true });
       });
+      
+      this.route('adminWizardsLogs', { path: '/logs', resetNamespace: true });
 
       this.route('adminWizardsTransfer', { path: '/transfer', resetNamespace: true });
     });

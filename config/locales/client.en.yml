@@ -260,6 +260,9 @@ en:
 
           log:
             label: "Logs"
+            
+        log:
+          nav_label: "Logs"
 
         transfer:
           nav_label: "Transfer"

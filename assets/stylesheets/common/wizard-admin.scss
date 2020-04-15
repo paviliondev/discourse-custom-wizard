@@ -24,12 +24,10 @@
 
 .admin-wizard-container {
   margin-top: 20px;
-  
-  .row > .content table {
-    margin-top: 0;
-    min-width: 100%;
-    width: auto;
-  }
+}
+
+.wizard-submissions {
+  overflow: scroll;
 }
 
 .wizard-settings-parent {

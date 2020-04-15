@@ -157,6 +157,7 @@ class CustomWizard::Builder
                  (final_step && (!action['run_after'] || (action['run_after'] === 'wizard_completion')))
 
                 CustomWizard::Action.new(
+                  wizard: @wizard,
                   action: action,
                   user: user,
                   data: data,

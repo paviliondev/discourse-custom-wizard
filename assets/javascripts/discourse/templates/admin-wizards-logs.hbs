@@ -1,0 +1,28 @@
+<div class="admin-wizard-controls">
+  {{d-button label="refresh" icon="refresh" action="refresh"}}
+</div>
+
+{{#load-more selector=".log-list tr" action=(action "loadMore")}}
+  {{#if noResults}}
+    <p>{{i18n 'search.no_results'}}</p>
+  {{else}}
+    <table class="table grid">
+      <thead>
+        <tr>
+          <th>Message</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each logs as |log|}}
+          <tr>
+            <td>{{log.message}}</td>
+            <td>{{bound-date log.date}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>  
+  {{/if}}
+  
+  {{conditional-loading-spinner condition=refreshing}}
+{{/load-more}}

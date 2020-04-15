@@ -1,5 +1,6 @@
 class CustomWizard::AdminSubmissionsController < CustomWizard::AdminController
-  skip_before_action :check_xhr, only: [:download_submissions]
+  skip_before_action :preload_json, :check_xhr, only: [:download]
+  
   before_action :find_wizard
   
   def index
@@ -23,8 +24,9 @@ class CustomWizard::AdminSubmissionsController < CustomWizard::AdminController
   
   def download   
     send_data build_submissions(@wizard.id).to_json,
-      filename: "#{Discourse.current_hostname}-wizard-submissions-#{wizard['name']}.json",
-      content_type: "application/json"
+      filename: "#{Discourse.current_hostname}-wizard-submissions-#{@wizard.name}.json",
+      content_type: "application/json",
+      disposition: "attachment"
   end
   
   private
