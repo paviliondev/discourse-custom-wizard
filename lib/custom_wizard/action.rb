@@ -23,8 +23,7 @@ class CustomWizard::Action
     
     if @log.any?
       @log.each do |item|
-        log << "; result: "
-        log << item.to_s
+        log << "; #{item.to_s}"
       end
     end
     
@@ -124,12 +123,12 @@ class CustomWizard::Action
       end
       
       if result
-        log_success("updated profile fields", params.keys.map{ |p| p.to_s }.join(','))
+        log_success("updated profile fields", "fields: #{params.keys.map{ |p| p.to_s }.join(',')}")
       else
-        log_error("failed to update profile fields")
+        log_error("failed to update profile fields", "result: #{result.inspect}")
       end
     else
-      log_error("invalid profile fields params", params.inspect)
+      log_error("invalid profile fields params", "params: #{params.inspect}")
     end
   end
 
@@ -189,7 +188,7 @@ class CustomWizard::Action
   end
 
   def add_to_group
-    groups = CustomWizard::Mapper.new(
+    group_map = CustomWizard::Mapper.new(
       inputs: action['group'],
       data: data,
       user: user,
@@ -198,16 +197,18 @@ class CustomWizard::Action
       }
     ).perform
         
-    groups = groups.flatten.reduce([]) do |result, g|
+    groups = group_map.flatten.reduce([]) do |groups, g|
       begin
-        result.push(Integer(g))
+        groups.push(Integer(g))
       rescue ArgumentError
         group = Group.find_by(name: g)
-        result.push(group.id) if group
+        groups.push(group.id) if group
       end
       
-      result
+      groups
     end
+    
+    result = nil
     
     if groups.present?
       groups.each do |group_id|
@@ -217,9 +218,10 @@ class CustomWizard::Action
     end
     
     if result
-      log_success("added to groups", groups.map { |g| g.id.to_s }.join(','))
+      log_success("added to groups", "groups: #{groups.map(&:to_s).join(',')}")
     else
-      log_error("failed to add to groups")
+      detail = groups.present? ? "groups: #{groups.map(&:to_s).join(',')}" : nil 
+      log_error("failed to add to groups", detail)
     end
   end
 
@@ -354,14 +356,14 @@ class CustomWizard::Action
   end
   
   def log_success(message, detail = nil)
-    @log.push("success - #{message} - #{detail}")
+    @log.push("success: #{message} - #{detail}")
   end
   
   def log_error(message, detail = nil)
-    @log.push("error - #{message} - #{detail}")
+    @log.push("error: #{message} - #{detail}")
   end
   
   def log_info(message, detail = nil)
-    @log.push("info - #{message} - #{detail}")
+    @log.push("info: #{message} - #{detail}")
   end
 end
