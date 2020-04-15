@@ -179,7 +179,6 @@ export default {
           type: 'PUT',
           data: { fields }
         }).catch(response => {
-          console.log(response)
           if (response && response.responseJSON && response.responseJSON.errors) {
             let wizardErrors = [];
             response.responseJSON.errors.forEach(err => {
@@ -248,39 +247,31 @@ export default {
     ];
 
     FieldModel.reopen({
-      hasCustomCheck: false,
-
-      customCheck() {
-        return true;
-      },
-
       check() {
-        let valid = this.get('valid');
+        if (this.customCheck) {
+          return this.customCheck();
+        }
+        
+        let valid = this.valid;
 
-        if (!this.get('required')) {
+        if (!this.required) {
           this.setValid(true);
           return true;
         }
 
-        const hasCustomCheck = this.get('hasCustomCheck');
-        if (hasCustomCheck) {
-          valid = this.customCheck();
-        } else {
-          const val = this.get('value');
-          const type = this.get('type');
-                    
-          if (type === 'checkbox') {
-            valid = val;
-          } else if (type === 'upload') {
-            valid = val && val.id > 0;
-          } else if (StandardFieldValidation.indexOf(type) > -1) {
-            valid = val && val.toString().length > 0;
-          } else if (type === 'url') {
-            valid = true;
-          }
+        const val = this.get('value');
+        const type = this.get('type');
+                  
+        if (type === 'checkbox') {
+          valid = val;
+        } else if (type === 'upload') {
+          valid = val && val.id > 0;
+        } else if (StandardFieldValidation.indexOf(type) > -1) {
+          valid = val && val.toString().length > 0;
+        } else if (type === 'url') {
+          valid = true;
         }
-
-
+            
         this.setValid(valid);
 
         return valid;
