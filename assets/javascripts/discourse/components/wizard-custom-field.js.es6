@@ -1,6 +1,7 @@
 import { default as discourseComputed, observes } from 'discourse-common/utils/decorators';
 import { equal, or } from "@ember/object/computed";
-import { selectKitContent, schema } from '../lib/wizard';
+import { selectKitContent } from '../lib/wizard';
+import { default as wizardSchema, setSchemaDefaults } from '../lib/wizard-schema';
 import Component from "@ember/component";
 
 export default Component.extend({
@@ -19,18 +20,15 @@ export default Component.extend({
   showMinLength: or('isText', 'isTextarea', 'isUrl', 'isComposer'),
   categoryPropertyTypes: selectKitContent(['id', 'slug']),
   
-  // clearMapped only clears mapped fields if the field type of a specific field
+  // setTypeDefaults only set defaults if the field type of a specific field
   // changes, and not when switching between fields. Switching between fields also
   // changes the field.type property in this component
   
   @observes('field.id', 'field.type')
-  clearMapped(ctx, changed) {    
+  setTypeDefaults(ctx, changed) {    
     if (this.field.id === this.bufferedFieldId) {
-      schema.field.mapped.forEach(property => {
-        this.set(`field.${property}`, null);
-      });
+      setSchemaDefaults(this.field, 'field');
     }
-    
     if (changed === 'field.type') {
       this.set('bufferedFieldId', this.field.id);
     }

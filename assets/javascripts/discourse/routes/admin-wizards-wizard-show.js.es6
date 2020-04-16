@@ -24,7 +24,7 @@ export default DiscourseRoute.extend({
           
     controller.setProperties({
       wizardList: parentModel.wizard_list,
-      fieldTypes: selectKitContent(parentModel.field_types),
+      fieldTypes: selectKitContent(Object.keys(parentModel.field_types)),
       userFields: parentModel.userFields,
       apis: parentModel.apis,
       themes: parentModel.themes,

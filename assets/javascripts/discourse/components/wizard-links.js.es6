@@ -1,5 +1,6 @@
 import { default as discourseComputed, on, observes } from 'discourse-common/utils/decorators';
-import { generateName, schema } from '../lib/wizard';
+import { generateName } from '../lib/wizard';
+import { default as wizardSchema, setSchemaDefaults } from '../lib/wizard-schema';
 import { notEmpty } from "@ember/object/computed";
 import { scheduleOnce, bind } from "@ember/runloop";
 import EmberObject from "@ember/object";
@@ -64,15 +65,6 @@ export default Component.extend({
       }
     });
   },
-  
-  setDefaults(object, params) {
-    Object.keys(object).forEach(property => {
-      if (object[property]) {
-        params[property] = object[property];
-      }
-    });
-    return params;
-  },
 
   actions: {
     add() {
@@ -89,19 +81,14 @@ export default Component.extend({
         isNew: true
       };
       
-      let objectArrays = schema[itemType].objectArrays;
+      let objectArrays = wizardSchema[itemType].objectArrays;
       if (objectArrays) {
         Object.keys(objectArrays).forEach(objectType => {
           params[objectArrays[objectType].property] = A();
         });
       };
       
-      params = this.setDefaults(schema[itemType].basic, params);
-      
-      let types = schema[itemType].types;
-      if (types && params.type) {
-        params = this.setDefaults(types[params.type], params);
-      }
+      setSchemaDefaults(params, itemType);
             
       const newItem = EmberObject.create(params);
       items.pushObject(newItem);

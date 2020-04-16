@@ -1,4 +1,5 @@
-import { schema, listProperties, camelCase, snakeCase } from '../lib/wizard';
+import { listProperties, camelCase, snakeCase } from '../lib/wizard';
+import wizardSchema from '../lib/wizard-schema';
 import EmberObject from '@ember/object';
 import { A } from "@ember/array";
 
@@ -15,7 +16,7 @@ function present(val) {
 }
 
 function mapped(property, type) {
-  return schema[type].mapped.indexOf(property) > -1;
+  return wizardSchema[type].mapped.indexOf(property) > -1;
 }
 
 function castCase(property, value) {
@@ -114,7 +115,7 @@ function buildBasicProperties(json, type, props) {
 
 function hasAdvancedProperties(object, type) {
   return Object.keys(object).some(p => {
-    return schema[type].advanced.indexOf(p) > -1 && present(object[p]);
+    return wizardSchema[type].advanced.indexOf(p) > -1 && present(object[p]);
   });
 }
 
@@ -164,7 +165,7 @@ function buildProperties(json) {
     props.actions = buildObjectArray(json.actions, 'action');
   } else {
     listProperties('wizard').forEach(prop => {
-      props[prop] = schema.wizard.basic[prop];
+      props[prop] = wizardSchema.wizard.basic[prop];
     });
   }
     

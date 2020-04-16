@@ -1,5 +1,6 @@
 import DiscourseRoute from "discourse/routes/discourse";
 import { userProperties, generateName } from '../lib/wizard';
+import { buildFieldTypes } from '../lib/wizard-schema';
 import { set } from "@ember/object";
 import { all } from "rsvp";
 import { ajax } from 'discourse/lib/ajax';
@@ -10,6 +11,8 @@ export default DiscourseRoute.extend({
   },
   
   afterModel(model) {
+    buildFieldTypes(model.field_types);
+    
     return all([
       this._getThemes(model),
       this._getApis(model),
@@ -63,12 +66,10 @@ export default DiscourseRoute.extend({
   },
   
   setupController(controller, model) {
-    let props = {
+    controller.setProperties({
       wizardList: model.wizard_list,
       wizardId: this.currentWizard()
-    }
-            
-    controller.setProperties(props);
+    });
   },
   
   actions: {

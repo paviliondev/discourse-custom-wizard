@@ -1,11 +1,12 @@
 import { default as discourseComputed, observes, on } from 'discourse-common/utils/decorators';
 import { equal, empty, or } from "@ember/object/computed";
-import { generateName, selectKitContent, schema } from '../lib/wizard';
+import { generateName, selectKitContent } from '../lib/wizard';
+import wizardSchema from '../lib/wizard-schema';
 import Component from "@ember/component";
 
 export default Component.extend({
   classNames: 'wizard-custom-action',
-  actionTypes: Object.keys(schema.action.types).map(t => ({ id: t, name: generateName(t) })),
+  actionTypes: Object.keys(wizardSchema.action.types).map(t => ({ id: t, name: generateName(t) })),
   createTopic: equal('action.type', 'create_topic'),
   updateProfile: equal('action.type', 'update_profile'),
   sendMessage: equal('action.type', 'send_message'),

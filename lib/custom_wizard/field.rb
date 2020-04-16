@@ -1,15 +1,55 @@
 class CustomWizard::Field
   def self.types
-    @types ||= ['text', 'textarea', 'composer', 'text_only', 'number', 'checkbox', 'url', 'upload', 'dropdown', 'tag', 'category', 'group', 'user_selector']
+    @types ||= {
+      text: {
+        min_length: nil
+      },
+      textarea: {
+        min_length: nil
+      },
+      composer: {
+        min_length: nil
+      },
+      text_only: {},
+      number: {},
+      checkbox: {},
+      url: {
+        min_length: nil
+      },
+      upload: {
+        file_types: '.jpg,.png'
+      },
+      dropdown: {
+        prefill: nil,
+        content: nil
+      },
+      tag: {
+        limit: nil,
+        prefill: nil,
+        content: nil
+      },
+      category: {
+        limit: 1,
+        property: 'id',
+        prefill: nil,
+        content: nil
+      },
+      group: {
+        prefill: nil,
+        content: nil
+      },
+      user_selector: {}
+    }
   end
 
   def self.require_assets
     @require_assets ||= {}
   end
 
-  def self.add_assets(type, plugin = nil, asset_paths = [])
+  def self.add_assets(type, plugin = nil, asset_paths = [], opts={})
     if type
-      types.push(*type)
+      types[type] ||= {}
+      types[type] = opts[:type_opts] if opts[:type_opts].present?
     end
 
     if plugin && asset_paths

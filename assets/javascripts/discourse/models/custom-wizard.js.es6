@@ -1,7 +1,8 @@
 import { ajax } from 'discourse/lib/ajax';
 import EmberObject from "@ember/object";
 import { buildProperties, present, mapped } from '../lib/wizard-json';
-import { schema, listProperties, camelCase, snakeCase } from '../lib/wizard';
+import { listProperties, camelCase, snakeCase } from '../lib/wizard';
+import wizardSchema from '../lib/wizard-schema';
 import { Promise } from "rsvp";
 
 const CustomWizard = EmberObject.extend({
@@ -38,7 +39,7 @@ const CustomWizard = EmberObject.extend({
   buildJson(object, type, result = {}) {
     let objectType = object.type || null;
     
-    if (schema[type].types) {
+    if (wizardSchema[type].types) {
       if (!objectType) {
         result.error = {
           type: 'required',
@@ -67,8 +68,8 @@ const CustomWizard = EmberObject.extend({
     };
     
     if (!result.error) {
-      for (let arrayObjectType of Object.keys(schema[type].objectArrays)) {
-        let arraySchema = schema[type].objectArrays[arrayObjectType];
+      for (let arrayObjectType of Object.keys(wizardSchema[type].objectArrays)) {
+        let arraySchema = wizardSchema[type].objectArrays[arrayObjectType];
         let objectArray = object.get(arraySchema.property);
                 
         if (arraySchema.required && !present(objectArray)) {
@@ -98,14 +99,14 @@ const CustomWizard = EmberObject.extend({
   },
   
   validateValue(property, value, object, type, result) {
-    if (schema[type].required.indexOf(property) > -1 && !value) {
+    if (wizardSchema[type].required.indexOf(property) > -1 && !value) {
       result.error = {
         type: 'required',
         params: { type, property }
       }
     }
     
-    let dependent = schema[type].dependent[property];
+    let dependent = wizardSchema[type].dependent[property];
     if (dependent && value && !object[dependent]) {
       result.error = {
         type: 'dependent',
