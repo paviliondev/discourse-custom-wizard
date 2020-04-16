@@ -92,7 +92,7 @@ class CustomWizard::Mapper
       operator = map_operator(connector)
       value = cast_value(
         key,
-        interpolate(map_field(pair['value'], pair['value_type'])),
+        map_field(pair['value'], pair['value_type']),
         connector
       )
                         
@@ -178,32 +178,42 @@ class CustomWizard::Mapper
     end
   end
   
-  def interpolate(string)
-    string.gsub!(/u\{(.*?)\}/) do |match|
-      result = ''
-      result = user.send($1) if USER_FIELDS.include?($1)
-      result = user.user_profile.send($1) if PROFILE_FIELDS.include?($1)
-      result
+  def interpolate(string, opts={ user: true, wizard: true, value: true })    
+    return string if string.blank?
+        
+    if opts[:user]
+      string.gsub!(/u\{(.*?)\}/) do |match|
+        result = ''
+        result = user.send($1) if USER_FIELDS.include?($1)
+        result = user.user_profile.send($1) if PROFILE_FIELDS.include?($1)
+        result
+      end
     end
     
-    string.gsub(/v\{(.*?)\}/) do |match|
-      attrs = $1.split(':')
-      key = attrs.first
-      value = data[key]
-      format = attrs.last if attrs.length > 1
-      result = nil
-      
-      if key == 'time'
-        time_format = value.present? ? value : "%B %-d, %Y"
-        return Time.now.strftime(time_format)
+    if opts[:wizard]
+      string.gsub!(/w\{(.*?)\}/) do |match|
+        value = recurse(data, [*$1.split('.')])
+        value.present? ? value : ''
       end
-      
-      if value.present?
-        return recurse(value, [*$1.split('.')])
-      end
-
-      result
     end
+    
+    if opts[:value]
+      string.gsub!(/v\{(.*?)\}/) do |match|
+        attrs = $1.split(':')
+        key = attrs.first
+        format = attrs.last if attrs.length > 1
+        result = ''
+        
+        if key == 'time' &&
+          time_format = format.present? ? format : "%B %-d, %Y"
+          result = Time.now.strftime(time_format)
+        end
+
+        result
+      end
+    end
+    
+    string
   end
   
   def recurse(data, keys)

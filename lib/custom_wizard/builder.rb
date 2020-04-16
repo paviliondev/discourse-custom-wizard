@@ -56,7 +56,11 @@ class CustomWizard::Builder
         step.banner = step_template['banner'] if step_template['banner']
         
         if step_template['description']
-          step.description = mapper.interpolate(step_template['description'])
+          step.description = mapper.interpolate(
+            step_template['description'],
+            user: true,
+            value: true
+          ) 
         end
         
         step.key = step_template['key'] if step_template['key']
