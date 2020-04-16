@@ -75,7 +75,7 @@ function wizardFieldList(steps = [], opts = {}) {
         result.push(...fields.map((field) => {
           return EmberObject.create({
             id: field.id,
-            label: `${field.label} (${step.id}, ${field.id})`,
+            label: `${field.label} (${field.id})`,
             type: field.type
           });
         }));
