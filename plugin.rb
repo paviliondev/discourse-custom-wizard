@@ -120,7 +120,7 @@ after_initialize do
   end
 
   on(:user_approved) do |user|
-    if wizard_id = CustomWizard::Wizard.after_signup
+    if wizard_id = CustomWizard::Wizard.after_signup(user)
       CustomWizard::Wizard.set_wizard_redirect(wizard_id, user)
     end
   end
