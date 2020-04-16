@@ -97,7 +97,11 @@
   </div>
 {{/if}}
 
-{{wizard-links itemType="field" current=currentField items=step.fields}}
+{{wizard-links
+  itemType="field"
+  current=currentField
+  items=step.fields
+  parentId=step.id}}
 
 {{#if currentField}}
   {{wizard-custom-field

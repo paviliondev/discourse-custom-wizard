@@ -68,16 +68,25 @@ export default Component.extend({
 
   actions: {
     add() {
-      const items = this.items;
+      const items = this.get('items');
       const itemType = this.itemType;
       let next = 1;
-      
+            
       if (items.length) {
-        next =  Math.max.apply(Math, items.map((i) => (i.id.split('_')[1]))) + 1;
+        next =  Math.max.apply(Math, items.map((i) => {
+          let parts = i.id.split('_');
+          return parts[parts.length - 1];
+        })) + 1;
+      }
+            
+      let id = `${itemType}_${next}`;
+      
+      if (itemType === 'field') {
+        id = `${this.parentId}_${id}`;
       }
             
       let params = {
-        id: `${itemType}_${next}`,
+        id,
         isNew: true
       };
       
