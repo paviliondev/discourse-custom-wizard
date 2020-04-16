@@ -179,27 +179,30 @@ class CustomWizard::Mapper
   end
   
   def interpolate(string)
-    result = string.gsub(/u\{(.*?)\}/) do |match|
+    string.gsub!(/u\{(.*?)\}/) do |match|
       result = ''
       result = user.send($1) if USER_FIELDS.include?($1)
       result = user.user_profile.send($1) if PROFILE_FIELDS.include?($1)
       result
     end
-
-    result = result.gsub(/w\{(.*?)\}/) { |match| recurse(data, [*$1.split('.')]) }
     
-    result.gsub(/v\{(.*?)\}/) do |match|
+    string.gsub(/v\{(.*?)\}/) do |match|
       attrs = $1.split(':')
       key = attrs.first
-      format = attrs.length > 1 ? attrs.last : nil
-      val = nil
+      value = data[key]
+      format = attrs.last if attrs.length > 1
+      result = nil
       
       if key == 'time'
-        time_format = format.present? ? format : "%B %-d, %Y"
-        val = Time.now.strftime(time_format)
+        time_format = value.present? ? value : "%B %-d, %Y"
+        return Time.now.strftime(time_format)
+      end
+      
+      if value.present?
+        return recurse(value, [*$1.split('.')])
       end
 
-      val
+      result
     end
   end
   
