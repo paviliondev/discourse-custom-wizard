@@ -13,13 +13,13 @@ export default Component.extend({
   anyLinks: notEmpty('links'),
 
   @on('didInsertElement')
-  @observes('links.@each')
-  didInsertElement() {
+  @observes('links.[]')
+  setupSortable() {
     scheduleOnce('afterRender', () => (this.applySortable()));
   },
 
   applySortable() {
-    $(this.element).find("ul")
+    $(this.element).find(".link-list")
       .sortable({ tolerance: 'pointer' })
       .on('sortupdate', (e, ui) => {
         this.updateItemOrder(ui.item.data('id'), ui.item.index());
