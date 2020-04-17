@@ -32,6 +32,7 @@
 //= require discourse/lib/settings
 //= require discourse/lib/user-presence
 //= require discourse/lib/hash
+//= require discourse/lib/bookmark
 
 //= require discourse/mixins/singleton
 
