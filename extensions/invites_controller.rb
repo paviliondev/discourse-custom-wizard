@@ -1,6 +1,6 @@
 module InvitesControllerCustomWizard
   def path(url)
-    if Wizard.user_requires_completion?(@user)
+    if ::Wizard.user_requires_completion?(@user)
       wizard_id = @user.custom_fields['custom_wizard_redirect']
 
       if wizard_id && url != '/'
@@ -15,8 +15,4 @@ module InvitesControllerCustomWizard
     super(user)
     @user = user
   end
-end
-
-class InvitesController
-  prepend InvitesControllerCustomWizard if SiteSetting.custom_wizard_enabled
 end

@@ -52,9 +52,6 @@ after_initialize do
     ../controllers/custom_wizard/wizard.rb
     ../controllers/custom_wizard/steps.rb
     ../controllers/custom_wizard/transfer.rb
-    ../controllers/application_controller.rb
-    ../controllers/extra_locales_controller.rb
-    ../controllers/invites_controller.rb
     ../jobs/clear_after_time_wizard.rb
     ../jobs/refresh_api_access_token.rb
     ../jobs/set_after_time_wizard.rb
@@ -83,7 +80,8 @@ after_initialize do
     ../serializers/custom_wizard/wizard_step_serializer.rb
     ../serializers/custom_wizard/wizard_serializer.rb
     ../serializers/custom_wizard/log_serializer.rb
-    ../serializers/site_serializer.rb
+    ../extensions/extra_locales_controller.rb
+    ../extensions/invites_controller.rb
   ].each do |path|
     load File.expand_path(path, __FILE__)
   end
@@ -124,6 +122,47 @@ after_initialize do
       CustomWizard::Wizard.set_wizard_redirect(wizard_id, user)
     end
   end
+  
+  add_to_class(:application_controller, :redirect_to_wizard_if_required) do
+    wizard_id = current_user.custom_fields['redirect_to_wizard']
+    @excluded_routes ||= SiteSetting.wizard_redirect_exclude_paths.split('|') + ['/w/']
+    url = request.referer || request.original_url
 
+    if request.format === 'text/html' && !@excluded_routes.any? {|str| /#{str}/ =~ url} && wizard_id
+      if request.referer !~ /\/w\// && request.referer !~ /\/invites\//
+        CustomWizard::Wizard.set_submission_redirect(current_user, wizard_id, request.referer)
+      end
+
+      if CustomWizard::Wizard.exists?(wizard_id)
+        redirect_to "/w/#{wizard_id.dasherize}"
+      end
+    end
+  end
+  
+  add_to_serializer(:site, :include_wizard_required?) do
+    scope.is_admin? && Wizard.new(scope.user).requires_completion?
+  end
+  
+  add_to_serializer(:site, :complete_custom_wizard) do
+    if scope.user && requires_completion = CustomWizard::Wizard.prompt_completion(scope.user)
+      requires_completion.map {|w| { name: w[:name], url: "/w/#{w[:id]}"} }
+    end
+  end
+
+  add_to_serializer(:site, :include_complete_custom_wizard?) do
+    complete_custom_wizard.present?
+  end
+  
+  add_model_callback(:application_controller, :before_action) do
+    redirect_to_wizard_if_required if current_user
+  end
+  
+  reloadable_patch do |plugin|
+    if enabled?
+      ::ExtraLocalesController.prepend ExtraLocalesControllerCustomWizard
+      ::InvitesController.prepend InvitesControllerCustomWizard
+    end
+  end
+  
   DiscourseEvent.trigger(:custom_wizard_ready)
 end
