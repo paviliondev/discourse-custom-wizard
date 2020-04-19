@@ -256,13 +256,22 @@ class CustomWizard::Builder
           with_type: true
         }
       ).perform
-      
+            
       if content.present?          
         if content[:type] == 'association'
           content[:result] = content[:result].map do |item|
             { 
               id: item[:key],
               name: item[:value] 
+            }
+          end
+        end
+        
+        if content[:type] == 'assignment' && field_template['type'] === 'dropdown'
+          content[:result] = content[:result].map do |item|
+            { 
+              id: item,
+              name: item
             }
           end
         end

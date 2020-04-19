@@ -37,7 +37,7 @@ class CustomWizard::Mapper
         output_type = input['output_type']
         
         result = build_result(map_field(output, output_type), input_type)
-        
+                
         if multiple
           perform_result.push(result)
         else
@@ -169,12 +169,20 @@ class CustomWizard::Mapper
   end
 
   def map_user_field(value)
-    if value.include?('user_field_')
+    if value.include?(User::USER_FIELD_PREFIX)
       UserCustomField.where(user_id: user.id, name: value).pluck(:value).first
     elsif PROFILE_FIELDS.include?(value)
       UserProfile.find_by(user_id: user.id).send(value)
     elsif USER_FIELDS.include?(value)
       User.find(user.id).send(value)
+    end
+  end
+  
+  def map_user_field_options(value)
+    if value.include?(User::USER_FIELD_PREFIX)
+      if field = UserField.find(value.split('_').last)
+        field.user_field_options.map(&:value)
+      end
     end
   end
   

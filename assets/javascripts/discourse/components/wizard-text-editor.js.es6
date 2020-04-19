@@ -36,7 +36,7 @@ export default Component.extend({
   },
   
   @discourseComputed()
-  userFieldList() {
+  userPropertyList() {
     return userProperties.map((f) => ` u{${f}}`);
   },
   

@@ -1,5 +1,4 @@
 import DiscourseRoute from "discourse/routes/discourse";
-import { userProperties, generateName } from '../lib/wizard';
 import { buildFieldTypes } from '../lib/wizard-schema';
 import { set } from "@ember/object";
 import { all } from "rsvp";
@@ -44,12 +43,7 @@ export default DiscourseRoute.extend({
           result.content.map((f) => ({
             id: `user_field_${f.id}`,
             name: f.name
-          })).concat(
-            userProperties.map((f) => ({
-              id: f,
-              name: generateName(f)
-            }))
-          )
+          }))
         );
       }
     });

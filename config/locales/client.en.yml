@@ -83,6 +83,7 @@ en:
             text: "text"
             wizard_field: "wizard field"
             user_field: "user field"
+            user_field_options: "user field options"
             user: "user"
             category: "category"
             tag: "tag"
@@ -94,6 +95,7 @@ en:
             property: "Select property"
             wizard_field: "Select field"
             user_field: "Select field"
+            user_field_options: "Select field"
             user: "Select user"
             category: "Select category"
             tag: "Select tag"
@@ -182,9 +184,9 @@ en:
           post_builder:
             checkbox: "Post Builder"
             label: "Builder"
-            user_fields: "User Fields: "
-            wizard_fields: "Wizard Fields: "
-            placeholder: "Insert wizard fields using the field_id in w{}. Insert user fields using field key in u{}."
+            user_properties: "User Properties"
+            wizard_fields: "Wizard Fields"
+            placeholder: "Insert wizard fields using the field_id in w{}. Insert user properties using property in u{}."
           add_to_group:
             label: "Add to Group"
           route_to:

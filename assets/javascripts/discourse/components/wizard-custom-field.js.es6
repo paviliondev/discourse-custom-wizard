@@ -62,7 +62,8 @@ export default Component.extend({
     
     if (this.isDropdown) {
       options.wizardFieldSelection = 'key,value';
-      options.inputTypes = 'association';
+      options.userFieldOptionsSelection = 'output';
+      options.inputTypes = 'association,assignment';
       options.pairConnector = 'association';
       options.keyPlaceholder = 'admin.wizard.key';
       options.valuePlaceholder = 'admin.wizard.value';

@@ -79,6 +79,7 @@ const selectionTypes = [
   'list',
   'wizardField',
   'userField',
+  'userFieldOptions',
   'group',
   'category',
   'tag',
