@@ -256,17 +256,19 @@ class CustomWizard::Builder
           with_type: true
         }
       ).perform
-                        
-      if content && content[:type] == 'association'
-        content[:result] = content[:result].map do |item|
-          { 
-            id: item[:key],
-            name: item[:value] 
-          }
-        end
-      end
       
-      params[:content] = content[:result]
+      if content.present?          
+        if content[:type] == 'association'
+          content[:result] = content[:result].map do |item|
+            { 
+              id: item[:key],
+              name: item[:value] 
+            }
+          end
+        end
+        
+        params[:content] = content[:result]
+      end
     end
         
     field = step.add_field(params)
