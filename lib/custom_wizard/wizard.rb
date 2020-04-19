@@ -45,9 +45,9 @@ class CustomWizard::Wizard
     @needs_categories = false
     @needs_groups = false
     @theme_id = attrs['theme_id']
-
-    if attrs['theme']
-      theme = Theme.find_by(name: attrs['theme'])
+    
+    if attrs['theme'].present?
+      theme = ::Theme.find_by(name: attrs['theme'])
       @theme_id = theme.id if theme
     end
     
@@ -210,14 +210,14 @@ class CustomWizard::Wizard
       records
         .sort_by { |record| record.value['permitted'].present? ? 0 : 1 }
         .each do |record|
-          wizard = CustomWizard::Wizard.new(JSON.parse(record.value), user)
-                    
+          wizard = self.new(JSON.parse(record.value), user)
+          
           if wizard.permitted?
             result = wizard
             break
           end
         end
-        
+              
       result
     else
       false
@@ -344,7 +344,7 @@ class CustomWizard::Wizard
 
   def self.create(wizard_id, user = nil)
     if wizard = self.find(wizard_id)
-      CustomWizard::Wizard.new(wizard.to_h, user)
+      self.new(wizard.to_h, user)
     else
       false
     end
@@ -355,8 +355,8 @@ class CustomWizard::Wizard
   end
 
   def self.set_wizard_redirect(wizard_id, user)
-    wizard = CustomWizard::Wizard.create(wizard_id, user)
-
+    wizard = self.create(wizard_id, user)
+    
     if wizard.permitted?
       user.custom_fields['redirect_to_wizard'] = wizard_id
       user.save_custom_fields(true)
