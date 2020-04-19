@@ -102,10 +102,16 @@ class CustomWizard::Action
     params = {}
     
     profile_updates.first[:pairs].each do |pair|
-      if allowed_profile_fields.include?(pair['key'])
-        key = cast_profile_key(pair['key']).to_sym
-        value = mapper.map_field(pair['value'], pair['value_type'])     
-        params[key] = cast_profile_value(value, pair['key'])
+      if allowed_profile_field?(pair['key'])
+        key = cast_profile_key(pair['key'])
+        value = cast_profile_value(mapper.map_field(pair['value'], pair['value_type']), pair['key']) 
+        
+        if user_field?(pair['key'])
+          params[:custom_fields] ||= {}
+          params[:custom_fields][key] = value
+        else
+          params[key.to_sym] = value
+        end
       end
     end
     
@@ -328,6 +334,15 @@ class CustomWizard::Action
   
   def profile_excluded_fields
     ['username', 'email', 'trust_level'].freeze
+  end
+  
+  def allowed_profile_field?(field)
+    allowed_profile_fields.include?(field) || user_field?(field)
+  end
+  
+  def user_field?(field)
+    field.to_s.include?(::User::USER_FIELD_PREFIX) &&
+    ::UserField.exists?(field.split('_').last.to_i) 
   end
   
   def allowed_profile_fields
