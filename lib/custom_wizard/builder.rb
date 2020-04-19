@@ -256,8 +256,8 @@ class CustomWizard::Builder
           with_type: true
         }
       ).perform
-                  
-      if content[:type] == 'association'
+                        
+      if content && content[:type] == 'association'
         content[:result] = content[:result].map do |item|
           { 
             id: item[:key],
