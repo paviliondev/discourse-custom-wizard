@@ -33,6 +33,8 @@
 //= require discourse/lib/user-presence
 //= require discourse/lib/hash
 //= require discourse/lib/bookmark
+//= require discourse/lib/put-cursor-at-end
+//= require discourse/lib/safari-hacks
 
 //= require discourse/mixins/singleton
 
