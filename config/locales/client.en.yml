@@ -205,6 +205,7 @@ en:
             label: "Open Composer"
           update_profile:
             label: "Update Profile"
+            setting: "Fields"
             key: "field"
           post_builder:
             checkbox: "Post Builder"

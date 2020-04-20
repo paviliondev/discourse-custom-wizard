@@ -97,7 +97,7 @@ export default Component.extend({
       }
     }
     
-    if (activeType ===' userField') {
+    if (activeType === 'userField') {
       content = userProperties.map((f) => ({
         id: f,
         name: generateName(f)
