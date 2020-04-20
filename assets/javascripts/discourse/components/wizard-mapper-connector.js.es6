@@ -3,6 +3,7 @@ import { gt } from '@ember/object/computed';
 import { computed } from "@ember/object";
 import { defaultConnector } from '../lib/wizard-mapper';
 import { later } from "@ember/runloop";
+import { observes } from "discourse-common/utils/decorators";
 
 export default Component.extend({
   classNameBindings: [':mapper-connector', ':mapper-block', 'hasMultiple::single'],
@@ -22,5 +23,10 @@ export default Component.extend({
         );
       });  
     }
+  },
+  
+  @observes('connector')
+  updated() {
+    this.onUpdate('connector');
   }
 });

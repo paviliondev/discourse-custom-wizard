@@ -167,6 +167,11 @@ export default Component.extend({
     return this.activeType === type && this[`${type}Enabled`];
   },
   
+  @observes('activeType', 'value')
+  updated() {
+    this.onUpdate('selector');
+  },
+  
   actions: {
     toggleType(type) {
       this.set('activeType', type);

@@ -4,7 +4,8 @@
     inputType=inputType
     value=pair.key
     activeType=pair.key_type
-    options=options}}
+    options=options
+    onUpdate=onUpdate}}
 </div>
 
 {{wizard-mapper-connector
@@ -12,7 +13,8 @@
   connectors=connectors
   connectorType="pair"
   inputType=inputType
-  options=options}}
+  options=options
+  onUpdate=onUpdate}}
 
 <div class="value mapper-block">
   {{wizard-mapper-selector
@@ -20,7 +22,8 @@
     inputType=inputType
     value=pair.value
     activeType=pair.value_type
-    options=options}}
+    options=options
+    onUpdate=onUpdate}}
 </div>
 
 {{#if showJoin}}

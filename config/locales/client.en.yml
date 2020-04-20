@@ -53,6 +53,8 @@ en:
         group: "Group"
         permitted: "Permitted"
         advanced: "Advanced"
+        undo: "Undo"
+        clear: "Clear"
         
         message:
           select: "Select a wizard, or create a new one"

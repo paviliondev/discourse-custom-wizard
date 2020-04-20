@@ -59,6 +59,8 @@ export default Component.extend({
       this.get('inputs').pushObject(
         newInput(this.inputOptions, this.inputs.length)
       );
+      
+      this.onUpdate(this.property, 'input');
     },
 
     remove(input) {
@@ -68,6 +70,12 @@ export default Component.extend({
       if (inputs.length) {
         inputs[0].set('connector', null);
       }
+      
+      this.onUpdate(this.property, 'input');
+    },
+    
+    inputUpdated(type) {
+      this.onUpdate(this.property, type);
     }
   }
 });

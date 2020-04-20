@@ -1,3 +1,11 @@
+{{#if showUndo}}
+  {{d-button
+    action="undoChanges"
+    icon=undoIcon
+    label=undoKey
+    class="undo-changes"}}
+{{/if}}
+
 <div class="setting">
   <div class="setting-label">
     <label>{{i18n 'admin.wizard.field.label'}}</label>
@@ -50,7 +58,7 @@
     {{combo-box
       value=field.type
       content=fieldTypes
-      onChange=(action (mut field.type))
+      onChange=(action "changeType")
       options=(hash
         none="admin.wizard.field.type"
       )}}
@@ -106,6 +114,8 @@
     <div class="setting-value">
       {{wizard-mapper
         inputs=field.prefill
+        property='prefill'
+        onUpdate=(action 'mappedFieldUpdated')
         options=prefillOptions}}
     </div>
   </div>
@@ -120,6 +130,8 @@
     <div class="setting-value">
       {{wizard-mapper
         inputs=field.content
+        property='content'
+        onUpdate=(action 'mappedFieldUpdated')
         options=contentOptions}}
     </div>
   </div>

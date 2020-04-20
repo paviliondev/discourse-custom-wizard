@@ -1,3 +1,11 @@
+{{#if showUndo}}
+  {{d-button
+    action="undoChanges"
+    icon=undoIcon
+    label=undoKey
+    class="undo-changes"}}
+{{/if}}
+
 <div class="setting">
   <div class="setting-label">
     <label>{{i18n "admin.wizard.type"}}</label>
@@ -7,7 +15,7 @@
     {{combo-box
       value=action.type
       content=actionTypes
-      onChange=(action (mut action.type))
+      onChange=(action "changeType")
       options=(hash
         none="admin.wizard.field.type"
       )}}
@@ -36,6 +44,8 @@
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.title
+        property='title'
+        onUpdate=(action 'mappedFieldUpdated')
         options=(hash
           wizardFieldSelection=true
           userFieldSelection='key,value'
@@ -91,6 +101,8 @@
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.category
+        property='category'
+        onUpdate=(action 'mappedFieldUpdated')
         options=(hash
           textSelection='key,value'
           wizardFieldSelection=true
@@ -110,6 +122,8 @@
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.tags
+        property='tags'
+        onUpdate=(action 'mappedFieldUpdated')
         options=(hash
           tagSelection='output'
           outputDefaultSelection='tag'
@@ -131,6 +145,8 @@
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.recipient
+        property='recipient'
+        onUpdate=(action 'mappedFieldUpdated')
         options=(hash
           textSelection='value,output'
           wizardFieldSelection=true
@@ -152,6 +168,8 @@
     
     {{wizard-mapper 
       inputs=action.profile_updates
+      property='profile_updates'
+      onUpdate=(action 'mappedFieldUpdated')
       options=(hash
         inputTypes='association'
         textSelection='value'
@@ -223,6 +241,8 @@
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.group
+        property='group'
+        onUpdate=(action 'mappedFieldUpdated')
         options=(hash
           textSelection='value,output'
           wizardFieldSelection='key,value,assignment'
@@ -262,6 +282,8 @@
           <div class="setting-value">
             {{wizard-mapper
               inputs=action.custom_fields
+              property='custom_fields'
+              onUpdate=(action 'mappedFieldUpdated')
               options=(hash
                 inputTypes='association'
                 wizardFieldSelection='value'
@@ -282,6 +304,8 @@
           <div class="setting-value">
             {{wizard-mapper
               inputs=action.required
+              property='required'
+              onUpdate=(action 'mappedFieldUpdated')
               options=(hash
                 textSelection='value'
                 wizardFieldSelection=true

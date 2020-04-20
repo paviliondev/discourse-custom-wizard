@@ -79,7 +79,7 @@ function buildObject(json, type) {
   Object.keys(json).forEach(prop => {
     props[prop] = buildProperty(json, prop, type)
   });
-  
+    
   return EmberObject.create(props);
 }
 
@@ -162,6 +162,7 @@ function buildProperties(json) {
     };
 
     json = actionPatch(json); // to be removed - see above
+    
     props.actions = buildObjectArray(json.actions, 'action');
   } else {
     listProperties('wizard').forEach(prop => {

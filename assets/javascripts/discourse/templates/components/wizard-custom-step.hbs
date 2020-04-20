@@ -102,10 +102,11 @@
   items=step.fields
   parentId=step.id}}
 
-{{#if currentField}}
+{{#each step.fields as |field|}}
   {{wizard-custom-field
-    field=currentField
+    field=field
+    currentFieldId=currentField.id
     fieldTypes=fieldTypes
     removeField="removeField"
     wizardFields=wizardFields}}
-{{/if}}
+{{/each}}

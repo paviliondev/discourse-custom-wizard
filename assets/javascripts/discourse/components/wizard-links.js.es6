@@ -1,6 +1,6 @@
 import { default as discourseComputed, on, observes } from 'discourse-common/utils/decorators';
 import { generateName } from '../lib/wizard';
-import { default as wizardSchema, setSchemaDefaults } from '../lib/wizard-schema';
+import { default as wizardSchema, setWizardDefaults } from '../lib/wizard-schema';
 import { notEmpty } from "@ember/object/computed";
 import { scheduleOnce, bind } from "@ember/runloop";
 import EmberObject from "@ember/object";
@@ -70,6 +70,10 @@ export default Component.extend({
     add() {
       const items = this.get('items');
       const itemType = this.itemType;
+      let params = setWizardDefaults({}, itemType);
+      
+      params.isNew = true;
+      
       let next = 1;
             
       if (items.length) {
@@ -84,11 +88,8 @@ export default Component.extend({
       if (itemType === 'field') {
         id = `${this.parentId}_${id}`;
       }
-            
-      let params = {
-        id,
-        isNew: true
-      };
+    
+      params.id = id;
       
       let objectArrays = wizardSchema[itemType].objectArrays;
       if (objectArrays) {
@@ -96,9 +97,7 @@ export default Component.extend({
           params[objectArrays[objectType].property] = A();
         });
       };
-      
-      setSchemaDefaults(params, itemType);
-            
+          
       const newItem = EmberObject.create(params);
       items.pushObject(newItem);
       

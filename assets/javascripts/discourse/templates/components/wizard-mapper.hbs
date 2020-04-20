@@ -1,12 +1,16 @@
 {{#each inputs as |input|}}
   {{#if input.connector}}
-    {{wizard-mapper-connector connector=input.connector connectorType="input"}}
+    {{wizard-mapper-connector
+      connector=input.connector
+      connectorType="input"
+      onUpdate=(action 'inputUpdated')}}
   {{/if}}
   
   {{wizard-mapper-input 
     input=input
     options=inputOptions
-    remove=(action 'remove')}}
+    remove=(action 'remove')
+    onUpdate=(action 'inputUpdated')}}
 {{/each}}
 
 {{#if canAdd}}

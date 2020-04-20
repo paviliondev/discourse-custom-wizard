@@ -1,4 +1,4 @@
-import { set } from "@ember/object";
+import { set, get } from "@ember/object";
 
 const wizard = {
   basic: {
@@ -194,25 +194,27 @@ if (Discourse.SiteSettings.wizard_apis_enabled) {
   }
 }
 
-export function setSchemaDefaults(obj, objType) {
-  let objSchema = wizardSchema[objType];
-  let basicDefaults = objSchema.basic;
-    
-  Object.keys(basicDefaults).forEach(property => {  
-    if (basicDefaults[property]) {
-      set(obj, property, basicDefaults[property]);
+export function setWizardDefaults(obj, itemType, opts={}) {
+  const objSchema = wizardSchema[itemType];
+  const basicDefaults = objSchema.basic;
+  const typeDefaults = objSchema.types[obj.type];
+  
+  Object.keys(basicDefaults).forEach(property => {
+    let defaultValue = get(basicDefaults, property);
+    if (defaultValue) {
+      set(obj, property, defaultValue);
     }
   });
   
-  if (objSchema.types && obj.type) {
-    let typeDefaults = objSchema.types[obj.type];
-    
+  if (typeDefaults) {
     Object.keys(typeDefaults).forEach(property => {
       if (typeDefaults.hasOwnProperty(property)) {
-        set(obj, property, typeDefaults[property]);
-      }
+        set(obj, property, get(typeDefaults, property));
+      }        
     });
   }
+  
+  return obj;
 }
 
 export default wizardSchema;

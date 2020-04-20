@@ -49,7 +49,7 @@ const CustomWizard = EmberObject.extend({
       }
     }
             
-    for (let property of listProperties(type, objectType)) {
+    for (let property of listProperties(type, { objectType })) {
       let value = object.get(property);
       
       result = this.validateValue(property, value, object, type, result);

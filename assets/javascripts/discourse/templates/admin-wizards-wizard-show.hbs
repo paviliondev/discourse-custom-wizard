@@ -175,13 +175,14 @@
     items=wizard.actions
     generateLabels=true}}
 
-  {{#if currentAction}}
+  {{#each wizard.actions as |action|}}
     {{wizard-custom-action
-      action=currentAction
+      action=action
+      currentActionId=currentAction.id
       wizard=wizard
       removeAction="removeAction"
       wizardFields=wizardFields}}
-  {{/if}}
+  {{/each}}
 
   <div class='admin-wizard-buttons'>
     <button {{action "save"}} disabled={{disableSave}} class='btn btn-primary'>

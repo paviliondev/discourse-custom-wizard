@@ -1,11 +1,15 @@
-import { default as discourseComputed, observes, on } from 'discourse-common/utils/decorators';
+import { default as discourseComputed } from 'discourse-common/utils/decorators';
 import { equal, empty, or } from "@ember/object/computed";
 import { generateName, selectKitContent } from '../lib/wizard';
+import { computed } from "@ember/object";
 import wizardSchema from '../lib/wizard-schema';
+import UndoChanges from '../mixins/undo-changes';
 import Component from "@ember/component";
 
-export default Component.extend({
-  classNames: 'wizard-custom-action',
+export default Component.extend(UndoChanges, {
+  componentType: 'action',
+  classNameBindings: [':wizard-custom-action', 'visible'],
+  visible: computed('currentActionId', function() { return this.action.id === this.currentActionId }),
   actionTypes: Object.keys(wizardSchema.action.types).map(t => ({ id: t, name: generateName(t) })),
   createTopic: equal('action.type', 'create_topic'),
   updateProfile: equal('action.type', 'update_profile'),

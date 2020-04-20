@@ -22,7 +22,7 @@ export default DiscourseRoute.extend({
     const parentModel = this.modelFor('adminWizardsWizard');
     const wizard = CustomWizard.create((!model || model.create) ? {} : model);
           
-    controller.setProperties({
+    let props = {
       wizardList: parentModel.wizard_list,
       fieldTypes: selectKitContent(Object.keys(parentModel.field_types)),
       userFields: parentModel.userFields,
@@ -32,6 +32,8 @@ export default DiscourseRoute.extend({
       currentStep: wizard.steps[0],
       currentAction: wizard.actions[0],
       creating: model.create
-    });
+    };
+    
+    controller.setProperties(props);
   }
 });

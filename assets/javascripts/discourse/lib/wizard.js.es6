@@ -49,11 +49,23 @@ const userProperties = [
   'trust_level'
 ];
 
-function listProperties(type, objectType = null) {
+function listProperties(type, opts={}) {
   let properties = Object.keys(wizardSchema[type].basic);
-      
-  if (wizardSchema[type].types && objectType) {
-    properties = properties.concat(Object.keys(wizardSchema[type].types[objectType]));
+  
+  const types = wizardSchema[type].types;
+  
+  if (types) {
+    let typeProperties = [];
+    
+    if (opts.allTypes) {
+      Object.keys(types).forEach(type => {
+        typeProperties = typeProperties.concat(Object.keys(types[type]));
+      });
+    } else if (opts.objectType) {
+      typeProperties = Object.keys(types[opts.objectType]);
+    }
+    
+    properties = properties.concat(typeProperties);
   }
     
   return properties;

@@ -82,10 +82,25 @@
 }
 
 .wizard-custom-field {
-  position: relative;
   background: transparent;
   background-color: dark-light-diff($primary, $secondary, 96%, -65%);
   padding: 20px;
+}
+
+.wizard-custom-field,
+.wizard-custom-action {
+  position: relative;
+  display: none;
+  
+  &.visible {
+    display: flex;
+  }
+  
+  .undo-changes {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
 }
 
 .admin-wizard-container.settings .wizard-basic-details {

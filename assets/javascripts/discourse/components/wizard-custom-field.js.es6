@@ -1,11 +1,14 @@
-import { default as discourseComputed, observes } from 'discourse-common/utils/decorators';
+import { default as discourseComputed } from 'discourse-common/utils/decorators';
 import { equal, or } from "@ember/object/computed";
+import { computed } from "@ember/object";
 import { selectKitContent } from '../lib/wizard';
-import { default as wizardSchema, setSchemaDefaults } from '../lib/wizard-schema';
+import UndoChanges from '../mixins/undo-changes';
 import Component from "@ember/component";
 
-export default Component.extend({
-  classNames: 'wizard-custom-field',
+export default Component.extend(UndoChanges, {
+  componentType: 'field',
+  classNameBindings: [':wizard-custom-field', 'visible'],
+  visible: computed('currentFieldId', function() { return this.field.id === this.currentFieldId }),
   isDropdown: equal('field.type', 'dropdown'),
   isUpload: equal('field.type', 'upload'),
   isCategory: equal('field.type', 'category'),
@@ -19,20 +22,6 @@ export default Component.extend({
   showLimit: or('isCategory', 'isTag'),
   showMinLength: or('isText', 'isTextarea', 'isUrl', 'isComposer'),
   categoryPropertyTypes: selectKitContent(['id', 'slug']),
-  
-  // setTypeDefaults only set defaults if the field type of a specific field
-  // changes, and not when switching between fields. Switching between fields also
-  // changes the field.type property in this component
-  
-  @observes('field.id', 'field.type')
-  setTypeDefaults(ctx, changed) {    
-    if (this.field.id === this.bufferedFieldId) {
-      setSchemaDefaults(this.field, 'field');
-    }
-    if (changed === 'field.type') {
-      this.set('bufferedFieldId', this.field.id);
-    }
-  },
   
   setupTypeOutput(fieldType, options) {    
     const selectionType = {
@@ -84,7 +73,7 @@ export default Component.extend({
     return this.setupTypeOutput(fieldType, options);
   },
   
-  actions: {
+  actions: {    
     imageUploadDone(upload) {
       this.set("field.image", upload.url);
     },
