@@ -197,7 +197,6 @@ if (Discourse.SiteSettings.wizard_apis_enabled) {
 export function setWizardDefaults(obj, itemType, opts={}) {
   const objSchema = wizardSchema[itemType];
   const basicDefaults = objSchema.basic;
-  const typeDefaults = objSchema.types[obj.type];
   
   Object.keys(basicDefaults).forEach(property => {
     let defaultValue = get(basicDefaults, property);
@@ -206,12 +205,16 @@ export function setWizardDefaults(obj, itemType, opts={}) {
     }
   });
   
-  if (typeDefaults) {
-    Object.keys(typeDefaults).forEach(property => {
-      if (typeDefaults.hasOwnProperty(property)) {
-        set(obj, property, get(typeDefaults, property));
-      }        
-    });
+  if (objSchema.types) {
+    const typeDefaults = objSchema.types[obj.type];
+    
+    if (typeDefaults) {
+      Object.keys(typeDefaults).forEach(property => {
+        if (typeDefaults.hasOwnProperty(property)) {
+          set(obj, property, get(typeDefaults, property));
+        }        
+      });
+    }
   }
   
   return obj;
