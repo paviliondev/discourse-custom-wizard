@@ -1,5 +1,5 @@
 import { default as discourseComputed } from 'discourse-common/utils/decorators';
-import { equal, or } from "@ember/object/computed";
+import { equal, or, alias } from "@ember/object/computed";
 import { computed } from "@ember/object";
 import { selectKitContent } from '../lib/wizard';
 import UndoChanges from '../mixins/undo-changes';
@@ -22,6 +22,17 @@ export default Component.extend(UndoChanges, {
   showLimit: or('isCategory', 'isTag'),
   showMinLength: or('isText', 'isTextarea', 'isUrl', 'isComposer'),
   categoryPropertyTypes: selectKitContent(['id', 'slug']),
+  showAdvanced: alias('field.type'),
+  messageUrl: 'https://thepavilion.io/t/2809',
+  
+  @discourseComputed('field.type')
+  messageKey(type) {
+    let key = 'type';
+    if (type) {
+      key = 'edit';
+    }
+    return key;
+  },
   
   setupTypeOutput(fieldType, options) {    
     const selectionType = {

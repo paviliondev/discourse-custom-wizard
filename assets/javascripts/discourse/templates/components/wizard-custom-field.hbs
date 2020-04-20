@@ -60,10 +60,15 @@
       content=fieldTypes
       onChange=(action "changeType")
       options=(hash
-        none="admin.wizard.field.type"
+        none="admin.wizard.select_type"
       )}}
   </div>
 </div>
+
+{{wizard-message
+  key=messageKey
+  url=messageUrl
+  component='field'}}
 
 {{#if showMinLength}}
   <div class="setting">
@@ -137,41 +142,43 @@
   </div>
 {{/if}}
 
-{{wizard-advanced-toggle showAdvanced=field.showAdvanced}}
+{{#if showAdvanced}}
+  {{wizard-advanced-toggle showAdvanced=field.showAdvanced}}
 
-{{#if field.showAdvanced}}
-  <div class="advanced-settings">
-    
-    {{#if isCategory}}
+  {{#if field.showAdvanced}}
+    <div class="advanced-settings">
+      
+      {{#if isCategory}}
+        <div class="setting">
+          <div class="setting-label">
+            <label>{{i18n 'admin.wizard.field.property'}}</label>
+          </div>
+          
+          <div class="setting-value">
+            {{combo-box
+              value=field.property
+              content=categoryPropertyTypes
+              onChange=(action (mut field.property))
+              options=(hash
+                none='admin.wizard.selector.placeholder.property'
+              )}}
+          </div>
+        </div>
+      {{/if}}
+      
       <div class="setting">
         <div class="setting-label">
-          <label>{{i18n 'admin.wizard.field.property'}}</label>
+          <label>{{i18n 'admin.wizard.translation'}}</label>
         </div>
-        
-        <div class="setting-value">
-          {{combo-box
-            value=field.property
-            content=categoryPropertyTypes
-            onChange=(action (mut field.property))
-            options=(hash
-              none='admin.wizard.selector.placeholder.property'
-            )}}
+        <div class="setting-value medium">
+          {{input
+            name="key"
+            value=field.key
+            class="medium"
+            placeholderKey="admin.wizard.translation_placeholder"}}
         </div>
       </div>
-    {{/if}}
-    
-    <div class="setting">
-      <div class="setting-label">
-        <label>{{i18n 'admin.wizard.translation'}}</label>
-      </div>
-      <div class="setting-value medium">
-        {{input
-          name="key"
-          value=field.key
-          class="medium"
-          placeholderKey="admin.wizard.translation_placeholder"}}
-      </div>
+      
     </div>
-    
-  </div>
+  {{/if}}
 {{/if}}

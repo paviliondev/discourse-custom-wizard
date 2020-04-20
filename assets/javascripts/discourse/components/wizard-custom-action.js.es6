@@ -1,5 +1,5 @@
 import { default as discourseComputed } from 'discourse-common/utils/decorators';
-import { equal, empty, or } from "@ember/object/computed";
+import { equal, empty, or, and } from "@ember/object/computed";
 import { generateName, selectKitContent } from '../lib/wizard';
 import { computed } from "@ember/object";
 import wizardSchema from '../lib/wizard-schema';
@@ -10,7 +10,6 @@ export default Component.extend(UndoChanges, {
   componentType: 'action',
   classNameBindings: [':wizard-custom-action', 'visible'],
   visible: computed('currentActionId', function() { return this.action.id === this.currentActionId }),
-  actionTypes: Object.keys(wizardSchema.action.types).map(t => ({ id: t, name: generateName(t) })),
   createTopic: equal('action.type', 'create_topic'),
   updateProfile: equal('action.type', 'update_profile'),
   sendMessage: equal('action.type', 'send_message'),
@@ -21,10 +20,28 @@ export default Component.extend(UndoChanges, {
   apiEmpty: empty('action.api'),
   groupPropertyTypes: selectKitContent(['id', 'name']),
   hasAdvanced: or('hasCustomFields', 'routeTo'),
+  showAdvanced: and('hasAdvanced', 'action.type'),
   hasCustomFields: or('basicTopicFields', 'updateProfile'),
   basicTopicFields: or('createTopic', 'sendMessage', 'openComposer'),
   publicTopicFields: or('createTopic', 'openComposer'),
   showSkipRedirect: or('createTopic', 'sendMessage'),
+  actionTypes: Object.keys(wizardSchema.action.types).map(type => {
+    return {
+      id: type,
+      name: I18n.t(`admin.wizard.action.${type}.label`)
+    };
+  }),
+  
+  messageUrl: 'https://thepavilion.io/t/2810',
+  
+  @discourseComputed('action.type')
+  messageKey(type) {
+    let key = 'type';
+    if (type) {
+      key = 'edit';
+    }
+    return key;
+  },
   
   @discourseComputed('wizard.steps')
   runAfterContent(steps) {

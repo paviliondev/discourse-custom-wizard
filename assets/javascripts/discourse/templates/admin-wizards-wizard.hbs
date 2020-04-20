@@ -13,24 +13,10 @@
     icon="plus"}}
 </div>
 
-<div class="admin-wizard-message">
-  <div class="wizard-message">
-    {{d-icon 'info-circle'}}
-    <span>{{message}}</span>
-  </div>
-  
-  <div class="wizard-message">
-    {{d-icon 'question-circle'}}
-        
-    <a href="https://thepavilion.io/c/knowledge/custom-wizard" target="_blank">
-      {{i18n 'admin.wizard.message.documentation'}}
-    </a>
-    
-    {{!--<a href="mailto:help@thepavilion.io" target="_blank">
-      {{i18n 'admin.wizard.message.contact'}}
-    </a>--}}
-  </div>
-</div>
+{{wizard-message
+  key=messageKey
+  url=messageUrl
+  component='wizard'}}
 
 <div class="admin-wizard-container settings">
   {{outlet}}

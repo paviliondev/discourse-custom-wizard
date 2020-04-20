@@ -7,15 +7,21 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
+  
+  &+ .wizard-message + div {
+    margin-top: 20px;
+  }
 }
 
-.admin-wizard-message {
+.wizard-message {
   background-color: $primary-low;
+  width: 100%;
   padding: 10px;
+  box-sizing: border-box;
   display: flex;
   justify-content: space-between;
   
-  .wizard-message {
+  .message-block {
     .d-icon {
       margin-right: 4px;
     }
@@ -26,10 +32,10 @@
       margin-left: 5px;
     }
   }
-}
-
-.admin-wizard-container {
-  margin-top: 20px;
+  
+  & + div {
+    margin-top: 30px;
+  }
 }
 
 .wizard-submissions {
@@ -55,7 +61,6 @@
 }
 
 .wizard-settings-parent {
-  margin-bottom: 30px;
   padding: 20px;
   border: 1px solid $primary-low;
 }
@@ -419,7 +424,7 @@
 }
 
 .wizard-links {
-  margin: 20px 0;
+  margin: 40px 0 20px 0;
   display: inline-block;
   width: 100%;
 

@@ -55,13 +55,23 @@ en:
         advanced: "Advanced"
         undo: "Undo"
         clear: "Clear"
+        select_type: "Select a type"
         
         message:
-          select: "Select a wizard, or create a new one"
-          edit: "You're editing a wizard"
-          create: "You're creating a new wizard"
-          documentation: "Check out the documentation"
-          contact: "Contact the developer"
+          wizard:
+            select: "Select a wizard, or create a new one"
+            edit: "You're editing a wizard"
+            create: "You're creating a new wizard"
+            documentation: "Check out the wizard documentation"
+            contact: "Contact the developer"
+          field:
+            type: "Select a field type"
+            edit: "You're editing a field"
+            documentation: "Check out the field documentation"
+          action:
+            type: "Select an action type"
+            edit: "You're editing an action"
+            documentation: "Check out the action documentation"
         
         editor:
           show: "Show"
@@ -124,7 +134,6 @@ en:
             label: "Params"
         
         field:
-          type: "Choose a type"
           header: "Fields"
           label: "Label"
           description: "Description"
@@ -135,12 +144,25 @@ en:
           min_length: "Min Length"
           min_length_placeholder: "Minimum length in characters"
           file_types: "File Types"
-          tag: "Tag"
-          category: "Category"
           limit: "Limit"
           property: "Property"
           prefill: "Prefill"
           content: "Content"
+          
+          type:
+            text: "Text"
+            textarea: Textarea
+            composer: Composer
+            text_only: Text Only
+            number: Number
+            checkbox: Checkbox
+            url: Url
+            upload: Upload
+            dropdown: Dropdown
+            tag: Tag
+            category: Category
+            group: Group
+            user_selector: User Selector
         
         connector:
           and: "and"
@@ -166,7 +188,6 @@ en:
           run_after: 
             label: "Run After"
             wizard_completion: "Wizard Completion"
-          
           custom_fields:
             label: "Custom"
             key: "field"
@@ -180,6 +201,8 @@ en:
             label: "Create Topic"
             category: "Category"
             tags: "Tags"
+          open_composer:
+            label: "Open Composer"
           update_profile:
             label: "Fields"
             key: "field"
@@ -195,12 +218,6 @@ en:
             label: "Route To"
             url: "Url"
             code: "Code"
-          custom_title: "Custom Title"
-          custom_category:
-            label: "Custom Category"
-            user_field: "User Field"
-          custom_tag:
-            label: "Custom Tag"
           send_to_api:
             label: "Send to API"
             api: "API"

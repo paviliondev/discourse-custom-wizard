@@ -17,7 +17,7 @@
       content=actionTypes
       onChange=(action "changeType")
       options=(hash
-        none="admin.wizard.field.type"
+        none="admin.wizard.select_type"
       )}}
   </div>
 </div>
@@ -34,6 +34,11 @@
       onChange=(action (mut action.run_after))}}
   </div>
 </div>
+
+{{wizard-message
+  key=messageKey
+  url=messageUrl
+  component='action'}}
 
 {{#if basicTopicFields}}
   <div class="setting full field-mapper-setting">
@@ -267,7 +272,7 @@
   </div>
 {{/if}}
 
-{{#if hasAdvanced}}
+{{#if showAdvanced}}
   {{wizard-advanced-toggle showAdvanced=action.showAdvanced}}
 
   {{#if action.showAdvanced}}

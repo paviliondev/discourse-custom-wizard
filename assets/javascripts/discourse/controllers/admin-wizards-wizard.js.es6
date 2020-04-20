@@ -11,15 +11,15 @@ export default Controller.extend({
   },
   
   @discourseComputed('creating', 'wizardId')
-  message(creating, wizardId) {
-    let type = 'select';
-          
+  messageKey(creating, wizardId) {
+    let key = 'select';
     if (creating) {
-      type = 'create';
+      key = 'create';
     } else if (wizardId) {
-      type = 'edit';
+      key = 'edit';
     }
-    
-    return I18n.t(`admin.wizard.message.${type}`);  
-  }
+    return key;  
+  },
+  
+  messageUrl: "https://thepavilion.io/c/knowledge/custom-wizard"
 });
