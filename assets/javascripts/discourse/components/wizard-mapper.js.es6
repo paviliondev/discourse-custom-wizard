@@ -49,6 +49,9 @@ export default Component.extend({
                     
     return result;
   },
+  
+  onUpdate() {
+  },
 
   actions: {
     add() {
