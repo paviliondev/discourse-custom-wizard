@@ -45,7 +45,7 @@ CustomWizardApi.reopenClass({
   },
 
   find(name) {
-    return ajax(`/admin/wizards/apis/${name}`, {
+    return ajax(`/admin/wizards/api/${name}`, {
       type: 'GET'
     }).then(result => {
       return CustomWizardApi.create(result);
@@ -53,7 +53,7 @@ CustomWizardApi.reopenClass({
   },
 
   list() {
-    return ajax("/admin/wizards/apis", {
+    return ajax("/admin/wizards/api", {
       type: 'GET'
     }).then(result => {
       return result;

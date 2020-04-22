@@ -60,7 +60,7 @@ export default Component.extend(UndoChanges, {
     return content;
   },
 
-  @discourseComputed('wizard.apis')
+  @discourseComputed('apis')
   availableApis(apis) {
     return apis.map(a => {
       return {
@@ -70,7 +70,7 @@ export default Component.extend(UndoChanges, {
     });
   },
 
-  @discourseComputed('wizard.apis', 'action.api')
+  @discourseComputed('apis', 'action.api')
   availableEndpoints(apis, api) {
     if (!api) return [];
     return apis.find(a => a.name === api).endpoints;

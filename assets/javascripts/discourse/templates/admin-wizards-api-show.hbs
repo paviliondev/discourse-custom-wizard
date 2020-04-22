@@ -92,7 +92,7 @@
         {{combo-box
           value=api.authType 
           content=authorizationTypes
-          onChange=(action (mut authorizationTypes))
+          onChange=(action (mut api.authType))
           options=(hash
             none='admin.wizard.api.auth.type_none'
           )}}
@@ -261,8 +261,8 @@
                       none="admin.wizard.api.endpoint.content_type"
                     )}}
                   {{multi-select
+                    value=endpoint.success_codes
                     content=successCodes
-                    values=endpoint.success_codes
                     onChange=(action (mut endpoint.success_codes))
                     options=(hash
                       none="admin.wizard.api.endpoint.success_codes"
@@ -285,26 +285,26 @@
 </div>
 
 <div class="wizard-api-log">
-    <div class="log-list">
-      <table class="wizard-api-log-table">
-        <th>Datetime</th>
-        <th>User</th>
-        <th>Status</th>
-        <th>URL</th>
-        <th>Error</th>
-        {{#each api.log as |logentry|}}
-          <tr>
-            <td>{{logentry.time}}</td>
-            <td class="user-image">
-              <div class="user-image-inner">
-                <a href="{{unbound logentry.userpath}}" data-user-card="{{unbound logentry.username}}">{{avatar logentry imageSize="large"}}</a>
-              </div>
-            </td>
-            <td>{{logentry.status}}</td>
-            <td>{{logentry.url}}</td>
-            <td>{{logentry.error}}</td>
-          </tr>
-        {{/each}}
-      </table>
-    </div>
+  <div class="log-list">
+    <table class="wizard-api-log-table">
+      <th>Datetime</th>
+      <th>User</th>
+      <th>Status</th>
+      <th>URL</th>
+      <th>Error</th>
+      {{#each api.log as |logentry|}}
+        <tr>
+          <td>{{logentry.time}}</td>
+          <td class="user-image">
+            <div class="user-image-inner">
+              <a href="{{unbound logentry.userpath}}" data-user-card="{{unbound logentry.username}}">{{avatar logentry imageSize="large"}}</a>
+            </div>
+          </td>
+          <td>{{logentry.status}}</td>
+          <td>{{logentry.url}}</td>
+          <td>{{logentry.error}}</td>
+        </tr>
+      {{/each}}
+    </table>
+  </div>
 </div>

@@ -1,12 +1,8 @@
 class CustomWizard::AdminApiController < CustomWizard::AdminController
   skip_before_action :check_xhr, only: [:redirect]
 
-  def index
-  end
-
   def list
-    serializer = ActiveModel::ArraySerializer.new(
-      CustomWizard::Api.list,
+    serializer = ActiveModel::ArraySerializer.new(CustomWizard::Api.list,
       each_serializer: CustomWizard::BasicApiSerializer
     )
     render json: MultiJson.dump(serializer)

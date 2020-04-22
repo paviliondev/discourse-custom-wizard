@@ -236,7 +236,9 @@ en:
         api:
           label: "API"
           nav_label: 'APIs'
-          new: 'New Api'
+          select: "Select API"
+          create: "Create API"
+          new: 'New API'
           name: "Name (can't be changed)"
           name_placeholder: 'Underscored'
           title: 'Title'

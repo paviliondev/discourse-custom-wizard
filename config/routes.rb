@@ -24,11 +24,10 @@ Discourse::Application.routes.append do
     get 'admin/wizards/submissions/:wizard_id/download' => 'admin_submissions#download'
   
     get 'admin/wizards/api' => 'admin_api#list'
-    get 'admin/wizards/api/new' => 'admin_api#index'
     get 'admin/wizards/api/:name' => 'admin_api#find'
     put 'admin/wizards/api/:name' => 'admin_api#save'
     delete 'admin/wizards/api/:name' => 'admin_api#remove'
-    delete 'admin/wizards/api/log/:name' => 'admin_api#clearlogs'
+    delete 'admin/wizards/api/:name/logs' => 'admin_api#clearlogs'
     get 'admin/wizards/api/:name/redirect' => 'admin_api#redirect'
     get 'admin/wizards/api/:name/authorize' => 'admin_api#authorize'
     

@@ -1,3 +1,18 @@
+<div class="admin-wizard-controls">
+  {{combo-box
+    value=apiName
+    content=apiList
+    onChange=(route-action 'changeApi')
+    options=(hash
+      none='admin.wizard.api.select'
+    )}}
+    
+  {{d-button
+    action="createApi"
+    label="admin.wizard.api.create"
+    icon="plus"}}
+</div>
+
 <div class="admin-wizard-container">
   {{outlet}}
 </div>

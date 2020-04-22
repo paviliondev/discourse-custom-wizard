@@ -166,20 +166,13 @@ export default Controller.extend({
 
       this.set('updating', true);
 
-      ajax(`/admin/wizards/apis/${name.underscore()}`, {
+      ajax(`/admin/wizards/api/${name.underscore()}`, {
         type: 'PUT',
         data
       }).catch(popupAjaxError)
         .then(result => {
           if (result.success) {
-            if (refreshList) {
-              this.transitionToRoute('adminWizardsApi', result.api.name.dasherize()).then(() => {
-                this.send('refreshModel');
-              });
-            } else {
-              this.set('api', CustomWizardApi.create(result.api));
-              this.set('responseIcon', 'check');
-            }
+            this.send('afterSave', result.api.name);
           } else {
             this.set('responseIcon', 'times');
           }
@@ -192,14 +185,12 @@ export default Controller.extend({
 
       this.set('updating', true);
 
-      ajax(`/admin/wizards/apis/${name.underscore()}`, {
+      ajax(`/admin/wizards/api/${name.underscore()}`, {
         type: 'DELETE'
       }).catch(popupAjaxError)
         .then(result => {
           if (result.success) {
-            this.transitionToRoute('adminWizardsApis').then(() => {
-              this.send('refreshModel');
-            });
+            this.send('afterDestroy');
           }
         }).finally(() => this.set('updating', false));
     },
@@ -208,7 +199,7 @@ export default Controller.extend({
       const name = this.get('api.name');
       if (!name) return;
 
-      ajax(`/admin/wizards/apis/logs/${name.underscore()}`, {
+      ajax(`/admin/wizards/api/${name.underscore()}/logs`, {
         type: 'DELETE'
       }).catch(popupAjaxError)
         .then(result => {

@@ -26,7 +26,7 @@ export default DiscourseRoute.extend({
         name: I18n.t(`admin.wizard.field.type.${type}`)
       };
     })
-          
+              
     let props = {
       wizardList: parentModel.wizard_list,
       fieldTypes,
