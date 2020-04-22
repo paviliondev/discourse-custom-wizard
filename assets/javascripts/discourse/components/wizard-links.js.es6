@@ -77,9 +77,10 @@ export default Component.extend({
       let next = 1;
             
       if (items.length) {
-        next =  Math.max.apply(Math, items.map((i) => {
+        next = Math.max.apply(Math, items.map((i) => {
           let parts = i.id.split('_');
-          return parts[parts.length - 1];
+          let lastPart = parts[parts.length - 1];
+          return isNaN(lastPart) ? 0 : lastPart;
         })) + 1;
       }
             
