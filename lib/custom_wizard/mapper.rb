@@ -84,9 +84,7 @@ class CustomWizard::Mapper
   end
   
   def validate_pairs(pairs)
-    failed = false
-    
-    pairs.each do |pair|
+    pairs.all? do |pair|
       key = map_field(pair['key'], pair['key_type'])
       connector = pair['connector']
       operator = map_operator(connector)
@@ -95,15 +93,13 @@ class CustomWizard::Mapper
         map_field(pair['value'], pair['value_type']),
         connector
       )
-                        
+                              
       begin
-        failed = !cast_result(key.public_send(operator, value), connector)
+        cast_result(key.public_send(operator, value), connector)
       rescue NoMethodError
         #
       end
     end
-    
-    !failed
   end
   
   def cast_value(key, value, connector)
