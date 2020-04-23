@@ -37,7 +37,7 @@ export default Component.extend({
   showTypes: false,
   
   didInsertElement() {
-    if (this.activeType && !this[`${this.activeType}Enabled`]) {
+    if (!this.activeType || (this.activeType && !this[`${this.activeType}Enabled`])) {
       later(() => this.resetActiveType());
     }
     
@@ -69,7 +69,7 @@ export default Component.extend({
   },
   
   typeLabel(type) {
-    return I18n.t(`admin.wizard.selector.label.${snakeCase(type)}`)
+    return type ? I18n.t(`admin.wizard.selector.label.${snakeCase(type)}`) : null;
   },
   
   @observes('inputType')
