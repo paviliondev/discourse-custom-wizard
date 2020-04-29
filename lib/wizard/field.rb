@@ -10,15 +10,12 @@ module CustomWizardFieldExtension
               :content
               
   def initialize(attrs)
+    super
     @attrs = attrs || {}
-    @id = attrs[:id]
-    @type = attrs[:type]
-    @required = !!attrs[:required]
     @description = attrs[:description]
     @image = attrs[:image]
     @key = attrs[:key]
     @min_length = attrs[:min_length]
-    @value = attrs[:value]
     @file_types = attrs[:file_types]
     @limit = attrs[:limit]
     @property = attrs[:property]
