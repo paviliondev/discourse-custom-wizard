@@ -221,7 +221,17 @@ class CustomWizard::Action
   end
 
   def route_to
-    url = mapper.interpolate(action['url'])
+    return unless (url_input = action['url']).present?
+    
+    if url_input.is_a?(String)
+      url = mapper.interpolate(url_input)
+    else
+      url = CustomWizard::Mapper.new(
+        inputs: url_input,
+        data: data,
+        user: user
+      ).perform
+    end
         
     if action['code']
       data[action['code']] = SecureRandom.hex(8)

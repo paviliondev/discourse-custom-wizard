@@ -267,7 +267,18 @@
     </div>
     
     <div class="setting-value">
-      {{input value=action.url}}
+      {{wizard-mapper
+        inputs=action.url
+        property='url'
+        onUpdate=(action 'mappedFieldUpdated')
+        options=(hash
+          context='action'
+          wizardFieldSelection=true
+          userFieldSelection='key,value'
+          groupSelection='key,value'
+          categorySelection='key,value'
+          userSelection='key,value'
+        )}}
     </div>
   </div>
 {{/if}}

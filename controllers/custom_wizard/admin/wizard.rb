@@ -113,7 +113,6 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
         :type,
         :code,
         :skip_redirect,
-        :url,
         :post,
         :post_builder,
         :post_template,
@@ -124,7 +123,8 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
         required: mapped_params,
         recipient: mapped_params,
         profile_updates: mapped_params,
-        group: mapped_params
+        group: mapped_params,
+        url: mapped_params
       ]
     )
   end

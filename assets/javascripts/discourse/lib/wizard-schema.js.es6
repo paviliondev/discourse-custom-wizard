@@ -157,7 +157,8 @@ const action = {
     'required',
     'recipient',
     'profile_updates',
-    'group'
+    'group',
+    'url'
   ],
   advanced: [
     'code',
