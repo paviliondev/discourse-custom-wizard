@@ -61,7 +61,7 @@ function listProperties(type, opts={}) {
       Object.keys(types).forEach(type => {
         typeProperties = typeProperties.concat(Object.keys(types[type]));
       });
-    } else if (opts.objectType) {
+    } else if (opts.objectType && types[opts.objectType]) {
       typeProperties = Object.keys(types[opts.objectType]);
     }
     
