@@ -25,8 +25,10 @@ export default Component.extend({
     }
   },
   
-  @observes('connector')
-  updated() {
-    this.onUpdate('connector');
+  actions: {
+    changeConnector(value) {
+      this.set('connector', value);
+      this.onUpdate('connector', this.connectorType);
+    }
   }
 });

@@ -72,16 +72,6 @@ export default Component.extend({
     return type ? I18n.t(`admin.wizard.selector.label.${snakeCase(type)}`) : null;
   },
   
-  @observes('inputType')
-  resetActiveType() {
-    this.set('activeType', defaultSelectionType(this.selectorType, this.options));
-  },
-  
-  @observes('activeType')
-  clearValue() {
-    this.set('value', null);
-  },
-  
   @discourseComputed('activeType')
   comboBoxContent(activeType) {
     const controller = getOwner(this).lookup('controller:admin-wizards-wizard-show');
@@ -167,19 +157,38 @@ export default Component.extend({
     return this.activeType === type && this[`${type}Enabled`];
   },
   
-  @observes('activeType', 'value')
-  updated() {
-    this.onUpdate('selector');
+  changeValue(value) {
+    this.set('value', value);
+    this.onUpdate('selector', this.activeType);
+  },
+  
+  @observes('inputType')
+  resetActiveType() {
+    this.set('activeType', defaultSelectionType(this.selectorType, this.options));
   },
   
   actions: {
     toggleType(type) {
       this.set('activeType', type);
       this.set('showTypes', false);
+      this.set('value', null);
+      this.onUpdate('selector');
     },
     
     toggleTypes() {
       this.toggleProperty('showTypes');
+    },
+    
+    changeValue(value) {
+      this.changeValue(value);
+    },
+    
+    changeInputValue(event) {
+      this.changeValue(event.target.value);
+    },
+    
+    changeUserValue(previousValue, value) {
+      this.changeValue(value);
     }
   }
 })

@@ -117,8 +117,9 @@ export default Mixin.create({
       this.setupObservers(type);
     },
     
-    mappedFieldUpdated(property, type) {
-      this.get(this.componentType).notifyPropertyChange(property);
+    mappedFieldUpdated(property, mappedComponent, type) {
+      const obj = this.get(this.componentType);
+      obj.notifyPropertyChange(property); 
     }
   }
 })

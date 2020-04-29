@@ -24,14 +24,15 @@
     {{input
       type="text"
       value=value
-      placeholder=(i18n placeholderKey)}}
+      placeholder=(i18n placeholderKey)
+      change=(action "changeInputValue")}}
   {{/if}}
 
   {{#if showComboBox}}
     {{combo-box
       value=value
       content=comboBoxContent
-      onChange=(action (mut value))
+      onChange=(action "changeValue")
       options=(hash
         none=placeholderKey
       )}}
@@ -41,19 +42,21 @@
     {{multi-select
       content=multiSelectContent
       value=value
-      onChange=(action (mut value))
+      onChange=(action "changeValue")
       options=multiSelectOptions}}
   {{/if}}
   
   {{#if showList}}
-    {{value-list
+    {{wizard-value-list
       values=value
-      addKey=placeholderKey}}
+      addKey=placeholderKey
+      onChange=(action "changeValue")}}
   {{/if}}
   
   {{#if showTag}}
     {{tag-chooser
       tags=value
+      onChange=(action "changeValue")
       options=(hash
         none=placeholderKey
         filterable=true
@@ -65,6 +68,7 @@
       includeMessageableGroups='true'
       placeholderKey=placeholderKey
       usernames=value
-      autocomplete="discourse"}}
+      autocomplete="discourse"
+      onChangeCallback=(action "changeUserValue")}}
   {{/if}}
 </div>

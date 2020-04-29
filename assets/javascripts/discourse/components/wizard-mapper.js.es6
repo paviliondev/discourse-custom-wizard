@@ -77,8 +77,8 @@ export default Component.extend({
       this.onUpdate(this.property, 'input');
     },
     
-    inputUpdated(type) {
-      this.onUpdate(this.property, type);
+    inputUpdated(component, type) {
+      this.onUpdate(this.property, component, type);
     }
   }
 });

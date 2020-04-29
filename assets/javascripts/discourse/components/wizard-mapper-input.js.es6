@@ -24,10 +24,14 @@ export default Component.extend({
       this.send('addPair');
     }
     
-    if (this.hasOutput && !this.input.outputConnector) {
-      const options = this.options;
-      this.set('input.output_type', defaultSelectionType('output', options));
-      this.set('input.output_connector', defaultConnector('output', this.inputType, options));
+    if (this.hasOutput) {
+      this.set('input.output', null);
+      
+      if (!this.input.outputConnector) {
+        const options = this.options;
+        this.set('input.output_type', defaultSelectionType('output', options));
+        this.set('input.output_connector', defaultConnector('output', this.inputType, options));
+      }
     }
   },
     
