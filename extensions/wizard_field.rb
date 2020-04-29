@@ -26,7 +26,3 @@ module CustomWizardFieldExtension
     @label ||= PrettyText.cook(@attrs[:label])
   end
 end
-
-class Wizard::Field
-  prepend CustomWizardFieldExtension if SiteSetting.custom_wizard_enabled
-end

@@ -67,8 +67,6 @@ after_initialize do
     ../lib/custom_wizard/api/authorization.rb
     ../lib/custom_wizard/api/endpoint.rb
     ../lib/custom_wizard/api/log_entry.rb
-    ../lib/wizard/field.rb
-    ../lib/wizard/step.rb
     ../serializers/custom_wizard/api/authorization_serializer.rb
     ../serializers/custom_wizard/api/basic_endpoint_serializer.rb
     ../serializers/custom_wizard/api/endpoint_serializer.rb
@@ -82,6 +80,8 @@ after_initialize do
     ../serializers/custom_wizard/log_serializer.rb
     ../extensions/extra_locales_controller.rb
     ../extensions/invites_controller.rb
+    ../extensions/wizard_field.rb
+    ../extensions/wizard_step.rb
   ].each do |path|
     load File.expand_path(path, __FILE__)
   end
@@ -161,6 +161,8 @@ after_initialize do
     if enabled?
       ::ExtraLocalesController.prepend ExtraLocalesControllerCustomWizard
       ::InvitesController.prepend InvitesControllerCustomWizard
+      ::Wizard::Field.prepend CustomWizardFieldExtension
+      ::Wizard::Step.prepend CustomWizardStepExtension
     end
   end
   
