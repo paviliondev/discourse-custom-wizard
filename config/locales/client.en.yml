@@ -176,6 +176,7 @@ en:
           less_or_equal: '<='
           regex: '=~'
           association: '→'
+          boolean: 'is'
         
         action:
           header: "Actions"

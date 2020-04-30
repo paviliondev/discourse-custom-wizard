@@ -31,7 +31,8 @@ const connectors = {
     'less',
     'greater_or_equal',
     'less_or_equal',
-    'regex'
+    'regex',
+    'boolean'
   ],
   output: [
     'then',

@@ -14,7 +14,8 @@ class CustomWizard::Mapper
     less: '<',
     greater_or_equal: '>=',
     less_or_equal: '<=',
-    regex: '=~'
+    regex: '=~',
+    boolean: '=='
   }
  
   def initialize(params)
@@ -85,14 +86,12 @@ class CustomWizard::Mapper
   
   def validate_pairs(pairs)
     pairs.all? do |pair|
-      key = map_field(pair['key'], pair['key_type'])
       connector = pair['connector']
       operator = map_operator(connector)
-      value = cast_value(
-        key,
-        map_field(pair['value'], pair['value_type']),
-        connector
-      )
+      key = map_field(pair['key'], pair['key_type'])
+      value = cast_value(map_field(pair['value'], pair['value_type']), key, connector)
+      
+      byebug
                               
       begin
         cast_result(key.public_send(operator, value), connector)
@@ -102,9 +101,11 @@ class CustomWizard::Mapper
     end
   end
   
-  def cast_value(key, value, connector)
+  def cast_value(value, key, connector)
     if connector == 'regex'
       Regexp.new(value)
+    elsif connector == 'boolean'
+      ActiveRecord::Type::Boolean.new.cast(value)
     else
       if key.is_a?(String)
         value.to_s
