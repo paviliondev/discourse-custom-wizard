@@ -90,8 +90,6 @@ class CustomWizard::Mapper
       operator = map_operator(connector)
       key = map_field(pair['key'], pair['key_type'])
       value = cast_value(map_field(pair['value'], pair['value_type']), key, connector)
-      
-      byebug
                               
       begin
         cast_result(key.public_send(operator, value), connector)
