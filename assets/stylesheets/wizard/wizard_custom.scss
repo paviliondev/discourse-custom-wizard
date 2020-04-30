@@ -171,8 +171,9 @@
       }
     }
 
-    &> label {
+    &> label.field-label {
       order: 1;
+      font-weight: 400;
     }
 
     &> .field-description {
