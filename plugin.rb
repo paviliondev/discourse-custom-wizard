@@ -157,14 +157,10 @@ after_initialize do
     redirect_to_wizard_if_required if current_user
   end
   
-  reloadable_patch do |plugin|
-    if enabled?
-      ::ExtraLocalesController.prepend ExtraLocalesControllerCustomWizard
-      ::InvitesController.prepend InvitesControllerCustomWizard
-      ::Wizard::Field.prepend CustomWizardFieldExtension
-      ::Wizard::Step.prepend CustomWizardStepExtension
-    end
-  end
+  ::ExtraLocalesController.prepend ExtraLocalesControllerCustomWizard
+  ::InvitesController.prepend InvitesControllerCustomWizard
+  ::Wizard::Field.prepend CustomWizardFieldExtension
+  ::Wizard::Step.prepend CustomWizardStepExtension
   
   DiscourseEvent.trigger(:custom_wizard_ready)
 end

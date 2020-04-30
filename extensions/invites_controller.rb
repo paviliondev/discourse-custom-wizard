@@ -8,11 +8,11 @@ module InvitesControllerCustomWizard
         url = "/w/#{wizard_id.dasherize}"
       end
     end
-    super(url)
+    super
   end
 
   private def post_process_invite(user)
-    super(user)
+    super
     @user = user
   end
 end
