@@ -209,7 +209,7 @@ class CustomWizard::Mapper
         format = attrs.last if attrs.length > 1
         result = ''
         
-        if key == 'time' &&
+        if key == 'time'
           time_format = format.present? ? format : "%B %-d, %Y"
           result = Time.now.strftime(time_format)
         end
