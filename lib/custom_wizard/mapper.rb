@@ -15,7 +15,11 @@ class CustomWizard::Mapper
     greater_or_equal: '>=',
     less_or_equal: '<=',
     regex: '=~',
-    boolean: '=='
+    boolean: {
+      present: "present?",
+      true: "==",
+      false: "=="
+    }
   }
  
   def initialize(params)
@@ -90,9 +94,8 @@ class CustomWizard::Mapper
       operator = map_operator(connector)
       key = map_field(pair['key'], pair['key_type'])
       value = cast_value(map_field(pair['value'], pair['value_type']), key, connector)
-                              
       begin
-        cast_result(key.public_send(operator, value), connector)
+        validation_result(key, value, operator)
       rescue NoMethodError
         #
       end
@@ -102,8 +105,6 @@ class CustomWizard::Mapper
   def cast_value(value, key, connector)
     if connector == 'regex'
       Regexp.new(value)
-    elsif connector == 'boolean'
-      ActiveRecord::Type::Boolean.new.cast(value)
     else
       if key.is_a?(String)
         value.to_s
@@ -115,8 +116,20 @@ class CustomWizard::Mapper
     end
   end
   
-  def cast_result(result, connector)
-    if connector == 'regex'
+  def validation_result(key, value, operator)
+    result = nil
+    
+    if operator.is_a?(Hash) && (operator = operator[value.to_sym]).present?
+      if value == "present"
+        result = key.public_send(operator)
+      elsif ["true", "false"].include?(value)
+        result = key.public_send(operator, ActiveRecord::Type::Boolean.new.cast(value))
+      end
+    else
+      result = key.public_send(operator, value)
+    end
+    
+    if operator == '=~'
       result == 0 ? true : false
     else
       result

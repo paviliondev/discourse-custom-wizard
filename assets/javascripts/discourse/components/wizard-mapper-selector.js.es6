@@ -72,6 +72,8 @@ export default Component.extend({
     return type ? I18n.t(`admin.wizard.selector.label.${snakeCase(type)}`) : null;
   },
   
+  comboBoxAllowAny: alias('showWizardField'),
+  
   @discourseComputed('activeType')
   comboBoxContent(activeType) {
     const controller = getOwner(this).lookup('controller:admin-wizards-wizard-show');

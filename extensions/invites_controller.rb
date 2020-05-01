@@ -1,7 +1,7 @@
 module InvitesControllerCustomWizard
   def path(url)
     if ::Wizard.user_requires_completion?(@user)
-      wizard_id = @user.custom_fields['custom_wizard_redirect']
+      wizard_id = @user.custom_fields['redirect_to_wizard']
 
       if wizard_id && url != '/'
         CustomWizard::Wizard.set_submission_redirect(@user, wizard_id, url)
