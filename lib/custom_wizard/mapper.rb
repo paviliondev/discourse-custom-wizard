@@ -15,7 +15,7 @@ class CustomWizard::Mapper
     greater_or_equal: '>=',
     less_or_equal: '<=',
     regex: '=~',
-    boolean: {
+    is: {
       present: "present?",
       true: "==",
       false: "=="

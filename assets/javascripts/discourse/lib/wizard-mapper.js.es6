@@ -32,7 +32,7 @@ const connectors = {
     'greater_or_equal',
     'less_or_equal',
     'regex',
-    'boolean'
+    'is'
   ],
   output: [
     'then',
