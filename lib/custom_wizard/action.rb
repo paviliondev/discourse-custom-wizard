@@ -10,22 +10,19 @@ class CustomWizard::Action
     @user = params[:user]
     @data = params[:data]
     @log = []
+    @result = CustomWizard::ActionResult.new
   end
   
-  def perform
+  def perform    
     ActiveRecord::Base.transaction do
       self.send(action['type'].to_sym)
     end
-    
-    log = "wizard: #{@wizard.id}; action: #{action['type']}; user: #{user.username}"
-    
-    if @log.any?
-      @log.each do |item|
-        log << "; #{item.to_s}"
-      end
+        
+    if creates_post? && @result.success?
+      @result.handler.enqueue_jobs
     end
     
-    CustomWizard::Log.create(log)
+    save_log
   end
   
   def mapper
@@ -51,6 +48,7 @@ class CustomWizard::Action
       
       if creator.errors.blank?
         log_success("created topic", "id: #{post.topic.id}")
+        result.handler = creator
       end
     else
       log_error("invalid topic params", "title: #{params[:title]}; post: #{params[:raw]}")
@@ -88,6 +86,7 @@ class CustomWizard::Action
       
       if creator.errors.blank?
         log_success("created message", "id: #{post.topic.id}")
+        result.handler = creator
       end
     else
       log_error(
@@ -320,6 +319,10 @@ class CustomWizard::Action
     add_custom_fields(params)
   end
   
+  def creates_post?
+    [:create_topic, :send_message].include?(action['type'].to_sym)
+  end
+  
   def profile_url_fields
     ['profile_background', 'card_background']
   end
@@ -371,13 +374,27 @@ class CustomWizard::Action
   
   def log_success(message, detail = nil)
     @log.push("success: #{message} - #{detail}")
+    @result.success = true
   end
   
   def log_error(message, detail = nil)
     @log.push("error: #{message} - #{detail}")
+    @result.success = false
   end
   
   def log_info(message, detail = nil)
     @log.push("info: #{message} - #{detail}")
+  end
+  
+  def save_log
+    log = "wizard: #{@wizard.id}; action: #{action['type']}; user: #{user.username}"
+    
+    if @log.any?
+      @log.each do |item|
+        log << "; #{item.to_s}"
+      end
+    end
+    
+    CustomWizard::Log.create(log)
   end
 end

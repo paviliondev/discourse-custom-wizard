@@ -55,6 +55,7 @@ after_initialize do
     ../jobs/clear_after_time_wizard.rb
     ../jobs/refresh_api_access_token.rb
     ../jobs/set_after_time_wizard.rb
+    ../lib/custom_wizard/action_result.rb
     ../lib/custom_wizard/action.rb
     ../lib/custom_wizard/builder.rb
     ../lib/custom_wizard/field.rb
