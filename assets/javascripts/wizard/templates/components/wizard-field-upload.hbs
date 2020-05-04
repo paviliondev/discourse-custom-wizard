@@ -10,11 +10,9 @@
 </label>
 
 {{#if field.value}}
-  <a href="{{field.value.url}}" class="filename">
-    {{#unless isImage}}
-      {{field.value.original_filename}}
-    {{else}}
-      <img src={{field.value.url}}  class="wizard-image-preview">
-    {{/unless}}
-  </a>
+  {{#unless isImage}}
+    {{field.value.original_filename}}
+  {{else}}
+    <img src={{field.value.url}}  class="wizard-image-preview">
+  {{/unless}}
 {{/if}}

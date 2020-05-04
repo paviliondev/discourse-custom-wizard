@@ -233,13 +233,17 @@
   }
 
   .wizard-image-preview  {
-    max-width: 200px;
-    max-height: 200px;
+    margin-top: 10px;
+    max-width: 500px;
+    max-height: 500px;
     overflow: hidden;
+    display: block;
+    border: none;
+    padding: 0;
 
     img {
-      max-width:100%;
-      max-height:100%;
+      max-width: 100%;
+      max-height: 100%;
     }
   }
 
