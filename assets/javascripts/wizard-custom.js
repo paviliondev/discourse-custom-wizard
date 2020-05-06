@@ -23,7 +23,6 @@
 //= require discourse/app/lib/category-hashtags
 //= require discourse/app/lib/link-tag-hashtag
 //= require discourse/app/lib/tag-hashtags
-//= require discourse/app/lib/raw-templates
 //= require discourse/app/lib/uploads
 //= require discourse/app/lib/category-tag-search
 //= require discourse/app/lib/intercept-click
@@ -75,6 +74,7 @@
 //= require discourse/app/helpers/format-username
 //= require discourse-common/addon/helpers/component-for-collection
 //= require discourse-common/addon/helpers/component-for-row
+//= require discourse-common/addon/lib/raw-templates
 //= require discourse/app/helpers/discourse-tag
 
 //= require discourse/app/services/app-events
