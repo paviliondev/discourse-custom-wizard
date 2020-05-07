@@ -34,6 +34,7 @@
 //= require discourse/app/lib/bookmark
 //= require discourse/app/lib/put-cursor-at-end
 //= require discourse/app/lib/safari-hacks
+//= require discourse/app/lib/preload-store
 
 //= require discourse/app/mixins/singleton
 
@@ -108,7 +109,6 @@
 //= require polyfills
 
 //= require markdown-it-bundle
-//= require preload-store
 //= require lodash.js
 //= require mousetrap.js
 //= require template_include.js
