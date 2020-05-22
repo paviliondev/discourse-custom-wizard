@@ -208,6 +208,9 @@ en:
             label: "Update Profile"
             setting: "Fields"
             key: "field"
+          watch_categories:
+            label: "Watch Categories"
+            mute_remainder: "Mute Remainder"
           post_builder:
             checkbox: "Post Builder"
             label: "Builder"

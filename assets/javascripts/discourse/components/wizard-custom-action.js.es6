@@ -12,6 +12,7 @@ export default Component.extend(UndoChanges, {
   visible: computed('currentActionId', function() { return this.action.id === this.currentActionId }),
   createTopic: equal('action.type', 'create_topic'),
   updateProfile: equal('action.type', 'update_profile'),
+  watchCategories: equal('action.type', 'watch_categories'),
   sendMessage: equal('action.type', 'send_message'),
   openComposer: equal('action.type', 'open_composer'),
   sendToApi: equal('action.type', 'send_to_api'),

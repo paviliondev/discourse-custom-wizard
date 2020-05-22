@@ -141,6 +141,10 @@ const action = {
       profile_updates: null,
       custom_fields: null
     },
+    watch_categories: {
+      category: null,
+      mute_remainder: null
+    },
     add_to_group: {
       group: null
     },
@@ -158,6 +162,7 @@ const action = {
     'recipient',
     'profile_updates',
     'group',
+    'mute_remainder',
     'url'
   ],
   advanced: [

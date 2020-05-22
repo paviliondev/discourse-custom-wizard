@@ -133,6 +133,18 @@ class CustomWizard::Action
     end
   end
 
+  def watch_categories
+    key, watched_categories = data.first
+    mute_remainder = data.values[1]
+    Category.all.each do |category|
+      if watched_categories.include?(category.id.to_s)
+       CategoryUser.set_notification_level_for_category(user, CategoryUser.notification_levels[:watching], category.id)
+      elsif mute_remainder
+        CategoryUser.set_notification_level_for_category(user, CategoryUser.notification_levels[:muted], category.id)
+      end
+    end
+  end
+
   def send_to_api
     api_body = nil
 

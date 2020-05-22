@@ -3,6 +3,7 @@ class CustomWizard::Mapper
   
   USER_FIELDS = ['name', 'username', 'email', 'date_of_birth', 'title', 'locale', 'trust_level']
   PROFILE_FIELDS = ['location', 'website', 'bio_raw']
+  CATEGORY_NOTIFICATION_LEVELS = ['regular','watching', 'tracking', 'watching_first_post','muted']
   
   def self.user_fields
     USER_FIELDS + PROFILE_FIELDS
@@ -115,10 +116,10 @@ class CustomWizard::Mapper
       end
     end
   end
-  
+
   def validation_result(key, value, operator)
     result = nil
-    
+
     if operator.is_a?(Hash) && (operator = operator[value.to_sym]).present?
       if value == "present"
         result = key.public_send(operator)
