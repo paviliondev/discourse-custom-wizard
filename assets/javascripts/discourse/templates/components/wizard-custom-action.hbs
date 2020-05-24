@@ -10,7 +10,7 @@
   <div class="setting-label">
     <label>{{i18n "admin.wizard.type"}}</label>
   </div>
-
+  
   <div class="setting-value">
     {{combo-box
       value=action.type
@@ -26,7 +26,7 @@
   <div class="setting-label">
     <label>{{i18n "admin.wizard.action.run_after.label"}}</label>
   </div>
-
+  
   <div class="setting-value">
     {{combo-box
       value=action.run_after
@@ -45,7 +45,7 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.title"}}</label>
     </div>
-
+  
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.title
@@ -102,7 +102,7 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.create_topic.category"}}</label>
     </div>
-
+    
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.category
@@ -123,7 +123,7 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.create_topic.tags"}}</label>
     </div>
-
+    
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.tags
@@ -146,7 +146,7 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.send_message.recipient"}}</label>
     </div>
-
+    
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.recipient
@@ -170,7 +170,7 @@
     <div class="setting-label">
       <label>{{i18n 'admin.wizard.action.update_profile.setting'}}</label>
     </div>
-
+    
     {{wizard-mapper 
       inputs=action.profile_updates
       property='profile_updates'
@@ -191,7 +191,7 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.send_to_api.api"}}</label>
     </div>
-
+    
     <div class="setting-value">
       {{combo-box
         value=action.api
@@ -208,7 +208,7 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.send_to_api.endpoint"}}</label>
     </div>
-
+    
     <div class="setting-value">
       {{combo-box
         value=action.api_endpoint
@@ -225,7 +225,7 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.send_to_api.body"}}</label>
     </div>
-
+    
     <div class="setting-value">
       {{wizard-text-editor
         value=action.api_body
@@ -242,7 +242,7 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.group"}}</label>
     </div>
-
+    
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.group
@@ -265,7 +265,7 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.route_to.url"}}</label>
     </div>
-
+    
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.url
@@ -311,13 +311,13 @@
 
   {{#if action.showAdvanced}}
     <div class="advanced-settings">
-
+    
       {{#if hasCustomFields}}
         <div class="setting full field-mapper-setting">
           <div class="setting-label">
             <label>{{i18n 'admin.wizard.action.custom_fields.label'}}</label>
           </div>
-
+          
           <div class="setting-value">
             {{wizard-mapper
               inputs=action.custom_fields
@@ -333,13 +333,13 @@
           </div>
         </div>
       {{/if}}
-
+      
       {{#if sendMessage}}
         <div class="setting full field-mapper-setting">
           <div class="setting-label">
             <label>{{i18n 'admin.wizard.required'}}</label>
           </div>
-
+          
           <div class="setting-value">
             {{wizard-mapper
               inputs=action.required
@@ -355,23 +355,23 @@
           </div>
         </div>
       {{/if}}
-
+      
       {{#if showSkipRedirect}}
         <div class="setting full">
           <div class="setting-label">
             <label>{{i18n "admin.wizard.action.skip_redirect.label"}}</label>
           </div>
-
+          
           <div class="setting-value">
             {{input type='checkbox' checked=action.skip_redirect}}
-
+            
             <span>
               {{i18n 'admin.wizard.action.skip_redirect.description' type='topic'}}
             </span>
           </div>
         </div>
       {{/if}}
-
+      
       {{#if routeTo}}
         <div class="setting">
           <div class="setting-label">
