@@ -122,6 +122,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
         custom_fields: mapped_params,
         required: mapped_params,
         recipient: mapped_params,
+        categories: mapped_params,
         mute_remainder: mapped_params,
         profile_updates: mapped_params,
         group: mapped_params,

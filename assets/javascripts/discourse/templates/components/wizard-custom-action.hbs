@@ -284,6 +284,25 @@
 {{/if}}
 
 {{#if watchCategories}}
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.watch_categories.categories"}}</label>
+    </div>
+    
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.categories
+        property='categories'
+        onUpdate=(action 'mappedFieldUpdated')
+        options=(hash
+          textSelection='key,value'
+          wizardFieldSelection=true
+          userFieldSelection='key,value'
+          context='action'
+        )}}
+    </div>
+  </div>
+
   <div class="setting">
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.watch_categories.mute_remainder"}}</label>

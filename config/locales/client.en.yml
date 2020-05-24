@@ -211,6 +211,7 @@ en:
           watch_categories:
             label: "Watch Categories"
             mute_remainder: "Mute Remainder"
+            categories: "Categories"
           post_builder:
             checkbox: "Post Builder"
             label: "Builder"
