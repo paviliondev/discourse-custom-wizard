@@ -3,7 +3,6 @@ class CustomWizard::Mapper
   
   USER_FIELDS = ['name', 'username', 'email', 'date_of_birth', 'title', 'locale', 'trust_level']
   PROFILE_FIELDS = ['location', 'website', 'bio_raw']
-  CATEGORY_NOTIFICATION_LEVELS = ['regular','watching', 'tracking', 'watching_first_post','muted']
   
   def self.user_fields
     USER_FIELDS + PROFILE_FIELDS
