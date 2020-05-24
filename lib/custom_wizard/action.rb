@@ -135,7 +135,7 @@ class CustomWizard::Action
 
   def watch_categories
 
-    watched_categories_map = CustomWizard::Mapper.new(
+    watched_categories = CustomWizard::Mapper.new(
       inputs: action['categories'],
       data: data,
       user: user
@@ -148,7 +148,7 @@ class CustomWizard::Action
     ).perform
 
     Category.all.each do |category|
-      if watched_categories_map.include?(category.id.to_s)
+      if watched_categories.include?(category.id.to_s)
        CategoryUser.set_notification_level_for_category(user, CategoryUser.notification_levels[:watching], category.id)
       elsif mute_remainder
         CategoryUser.set_notification_level_for_category(user, CategoryUser.notification_levels[:muted], category.id)
