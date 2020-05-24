@@ -116,10 +116,10 @@ class CustomWizard::Mapper
       end
     end
   end
-
+  
   def validation_result(key, value, operator)
     result = nil
-
+    
     if operator.is_a?(Hash) && (operator = operator[value.to_sym]).present?
       if value == "present"
         result = key.public_send(operator)
