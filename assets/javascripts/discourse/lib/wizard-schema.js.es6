@@ -142,7 +142,7 @@ const action = {
       custom_fields: null
     },
     watch_categories: {
-      category: null,
+      categories: null,
       mute_remainder: null
     },
     add_to_group: {
@@ -162,8 +162,9 @@ const action = {
     'recipient',
     'profile_updates',
     'group',
-    'mute_remainder',
-    'url'
+    'url',
+    'categories',
+    'mute_remainder'
   ],
   advanced: [
     'code',
