@@ -116,6 +116,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
         :post,
         :post_builder,
         :post_template,
+        :notification_level,
         title: mapped_params,
         category: mapped_params,
         tags: mapped_params,

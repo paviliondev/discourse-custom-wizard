@@ -143,6 +143,7 @@ const action = {
     },
     watch_categories: {
       categories: null,
+      notification_level: null,
       mute_remainder: null
     },
     add_to_group: {
@@ -164,6 +165,7 @@ const action = {
     'group',
     'url',
     'categories',
+   // 'notification_level',
     'mute_remainder'
   ],
   advanced: [
@@ -186,7 +188,8 @@ const wizardSchema = {
   wizard,
   step,
   field,
-  action
+  action,
+
 }
 
 export function buildFieldTypes(types) {

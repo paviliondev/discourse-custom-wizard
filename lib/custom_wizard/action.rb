@@ -141,6 +141,8 @@ class CustomWizard::Action
       user: user
     ).perform
 
+    notification_level = action['notification_level']
+
     mute_remainder = CustomWizard::Mapper.new(
       inputs: action['mute_remainder'],
       data: data,
@@ -149,7 +151,7 @@ class CustomWizard::Action
 
     Category.all.each do |category|
       if watched_categories.include?(category.id.to_s)
-       CategoryUser.set_notification_level_for_category(user, CategoryUser.notification_levels[:watching], category.id)
+       CategoryUser.set_notification_level_for_category(user, CategoryUser.notification_levels[notification_level.to_sym], category.id)
       elsif mute_remainder
         CategoryUser.set_notification_level_for_category(user, CategoryUser.notification_levels[:muted], category.id)
       end

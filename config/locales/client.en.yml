@@ -210,8 +210,16 @@ en:
             key: "field"
           watch_categories:
             label: "Watch Categories"
-            mute_remainder: "Mute Remainder"
             categories: "Categories"
+            mute_remainder: "Mute Remainder"
+            notification_level:
+              label: "Notification Level"
+              regular: "Normal"
+              watching: "Watching"
+              tracking: "Tracking"
+              watching_first_post: "Watching First Post"
+              muted: "Muted"
+            select_a_notification_level: "Select level"
           post_builder:
             checkbox: "Post Builder"
             label: "Builder"
