@@ -304,24 +304,7 @@
     </div>
   </div>
 
-  <div class="setting">
-    <div class="setting-label">
-      <label>{{i18n "admin.wizard.action.watch_categories.notification_level.label"}}</label>
-    </div>
-
-    <div class="setting-value">
-      {{combo-box
-        value=action.notification_level
-        content=availableNotificationLevels
-        onChange=(action (mut action.notification_level))
-        options=(hash
-          isDisabled=action.custom_title_enabled
-          none='admin.wizard.action.watch_categories.select_a_notification_level'
-        )}}
-    </div>
-  </div>
-
-  <div class="setting">
+  <div class="setting full field-mapper-setting">
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.watch_categories.mute_remainder"}}</label>
     </div>
@@ -335,6 +318,23 @@
           context='action'
           wizardFieldSelection=true
           userFieldSelection='key,value'
+        )}}
+    </div>
+  </div>
+
+  <div class="setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.watch_categories.notification_level.label"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{combo-box
+        value=action.notification_level
+        content=availableNotificationLevels
+        onChange=(action (mut action.notification_level))
+        options=(hash
+          isDisabled=action.custom_title_enabled
+          none='admin.wizard.action.watch_categories.select_a_notification_level'
         )}}
     </div>
   </div>
