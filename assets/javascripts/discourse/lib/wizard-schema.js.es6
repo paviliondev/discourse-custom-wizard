@@ -165,7 +165,6 @@ const action = {
     'group',
     'url',
     'categories',
-   // 'notification_level',
     'mute_remainder'
   ],
   advanced: [
