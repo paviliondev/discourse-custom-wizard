@@ -5,6 +5,7 @@ import { computed } from "@ember/object";
 import wizardSchema from '../lib/wizard-schema';
 import UndoChanges from '../mixins/undo-changes';
 import Component from "@ember/component";
+import { notificationLevels } from '../lib/wizard';
 
 export default Component.extend(UndoChanges, {
   componentType: 'action',
@@ -12,6 +13,7 @@ export default Component.extend(UndoChanges, {
   visible: computed('currentActionId', function() { return this.action.id === this.currentActionId }),
   createTopic: equal('action.type', 'create_topic'),
   updateProfile: equal('action.type', 'update_profile'),
+  watchCategories: equal('action.type', 'watch_categories'),
   sendMessage: equal('action.type', 'send_message'),
   openComposer: equal('action.type', 'open_composer'),
   sendToApi: equal('action.type', 'send_to_api'),
@@ -29,6 +31,12 @@ export default Component.extend(UndoChanges, {
     return {
       id: type,
       name: I18n.t(`admin.wizard.action.${type}.label`)
+    };
+  }),
+  availableNotificationLevels: notificationLevels.map((type, index) => {
+    return {
+      id: type,
+      name:  I18n.t(`admin.wizard.action.watch_categories.notification_level.${type}`)
     };
   }),
   

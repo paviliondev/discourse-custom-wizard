@@ -49,6 +49,14 @@ const userProperties = [
   'trust_level'
 ];
 
+const notificationLevels = [
+  'regular',
+  'watching',
+  'tracking',
+  'watching_first_post',
+  'muted'
+];
+
 function listProperties(type, opts={}) {
   let properties = Object.keys(wizardSchema[type].basic);
   
@@ -106,5 +114,6 @@ export {
   snakeCase,
   userProperties,
   listProperties,
+  notificationLevels,
   wizardFieldList
 };

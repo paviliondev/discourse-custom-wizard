@@ -133,6 +133,36 @@ class CustomWizard::Action
     end
   end
 
+  def watch_categories
+
+    watched_categories = CustomWizard::Mapper.new(
+      inputs: action['categories'],
+      data: data,
+      user: user
+    ).perform
+
+    notification_level = action['notification_level']
+
+    if notification_level.blank?
+      log_error("Notifcation Level was not set! Exiting wizard action")
+      return
+    end
+
+    mute_remainder = CustomWizard::Mapper.new(
+      inputs: action['mute_remainder'],
+      data: data,
+      user: user
+    ).perform
+
+    Category.all.each do |category|
+      if watched_categories.present? && watched_categories.include?(category.id.to_s)
+       CategoryUser.set_notification_level_for_category(user, CategoryUser.notification_levels[notification_level.to_sym], category.id)
+      elsif mute_remainder
+        CategoryUser.set_notification_level_for_category(user, CategoryUser.notification_levels[:muted], category.id)
+      end
+    end
+  end
+
   def send_to_api
     api_body = nil
 
