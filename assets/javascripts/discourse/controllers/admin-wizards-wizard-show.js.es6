@@ -9,6 +9,7 @@ import { scheduleOnce, later } from "@ember/runloop";
 import Controller from "@ember/controller";
 import copyText from "discourse/lib/copy-text";
 import CustomWizard from '../models/custom-wizard';
+import I18n from "I18n";
 
 export default Controller.extend({
   hasName: notEmpty('wizard.name'),

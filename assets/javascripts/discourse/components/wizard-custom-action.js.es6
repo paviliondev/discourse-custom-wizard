@@ -6,6 +6,7 @@ import wizardSchema from '../lib/wizard-schema';
 import UndoChanges from '../mixins/undo-changes';
 import Component from "@ember/component";
 import { notificationLevels } from '../lib/wizard';
+import I18n from "I18n";
 
 export default Component.extend(UndoChanges, {
   componentType: 'action',

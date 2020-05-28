@@ -6,6 +6,7 @@ import { defaultSelectionType, selectionTypes } from '../lib/wizard-mapper';
 import { snakeCase, generateName, userProperties } from '../lib/wizard';
 import Component from "@ember/component";
 import { bind, later } from "@ember/runloop";
+import I18n from "I18n";
 
 export default Component.extend({
   classNameBindings: [':mapper-selector', 'activeType'],
