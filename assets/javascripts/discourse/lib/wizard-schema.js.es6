@@ -146,6 +146,11 @@ const action = {
       notification_level: null,
       mute_remainder: null
     },
+    send_to_api: {
+      api: null,
+      api_endpoint: null,
+      api_body: null
+    },
     add_to_group: {
       group: null
     },
