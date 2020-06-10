@@ -188,7 +188,7 @@ class CustomWizard::Mapper
   
   def map_user_field_options(value)
     if value.include?(User::USER_FIELD_PREFIX)
-      if field = UserField.find(value.split('_').last)
+      if field = UserField.find_by(id: value.split('_').last)
         field.user_field_options.map(&:value)
       end
     end

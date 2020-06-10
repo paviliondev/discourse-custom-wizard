@@ -258,7 +258,9 @@ class CustomWizard::Builder
         }
       ).perform
             
-      if content.present?          
+      if content.present? &&
+         content[:result].present?
+         
         if content[:type] == 'association'
           content[:result] = content[:result].map do |item|
             { 
