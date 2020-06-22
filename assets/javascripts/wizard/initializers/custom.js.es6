@@ -23,7 +23,7 @@ export default {
     const Store = requirejs("discourse/models/store").default;
     const registerRawHelpers = requirejs("discourse-common/lib/raw-handlebars-helpers").registerRawHelpers;
     const RawHandlebars = requirejs("discourse-common/lib/raw-handlebars").default;
-    const Site = requirejs("discourse/models/site").default;
+    const Site = requirejs("discourse/plugins/discourse-custom-wizard/wizard/models/site").default;
     const RestAdapter = requirejs("discourse/adapters/rest").default;
     
     Discourse.Model = EmberObject.extend();
