@@ -63,7 +63,8 @@ export default Component.extend(UndoChanges, {
     if (this.isDropdown) {
       options.wizardFieldSelection = 'key,value';
       options.userFieldOptionsSelection = 'output';
-      options.inputTypes = 'association,assignment';
+      options.textSelection = 'key,value,output';
+      options.inputTypes = 'conditional,association,assignment';
       options.pairConnector = 'association';
       options.keyPlaceholder = 'admin.wizard.key';
       options.valuePlaceholder = 'admin.wizard.value';
