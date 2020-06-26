@@ -91,6 +91,7 @@
 //= require discourse/app/components/input-tip
 //= require discourse/app/components/date-picker
 //= require discourse/app/components/text-field
+//= require discourse/app/components/d-textarea
 
 //= require discourse/app/templates/components/conditional-loading-spinner
 //= require discourse/app/templates/components/d-button
