@@ -163,6 +163,7 @@ en:
             category: Category
             group: Group
             user_selector: User Selector
+            date: Date
         
         connector:
           and: "and"
