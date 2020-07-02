@@ -97,19 +97,20 @@ class CustomWizard::Action
   end
 
   def update_profile
-    return unless (profile_updates = action['profile_updates']).length
     params = {}
     
-    profile_updates.first[:pairs].each do |pair|
-      if allowed_profile_field?(pair['key'])
-        key = cast_profile_key(pair['key'])
-        value = cast_profile_value(mapper.map_field(pair['value'], pair['value_type']), pair['key']) 
-        
-        if user_field?(pair['key'])
-          params[:custom_fields] ||= {}
-          params[:custom_fields][key] = value
-        else
-          params[key.to_sym] = value
+    if (profile_updates = action['profile_updates'])
+      profile_updates.first[:pairs].each do |pair|
+        if allowed_profile_field?(pair['key'])
+          key = cast_profile_key(pair['key'])
+          value = cast_profile_value(mapper.map_field(pair['value'], pair['value_type']), pair['key']) 
+          
+          if user_field?(pair['key'])
+            params[:custom_fields] ||= {}
+            params[:custom_fields][key] = value
+          else
+            params[key.to_sym] = value
+          end
         end
       end
     end
