@@ -47,7 +47,9 @@ const userProperties = [
   'website',
   'bio_raw',
   'trust_level',
-  'email_level'
+  'email_level',
+  'email_messages_level',
+  'email_digests'
 ];
 
 const notificationLevels = [
