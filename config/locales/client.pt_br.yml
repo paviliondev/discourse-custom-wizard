@@ -1,0 +1,425 @@
+en:
+  js:
+    wizard:
+      complete_custom: "Complete o {{name}}"
+
+  admin_js:
+    admin:
+      wizard:
+        label: "Assistente"
+        nav_label: "Assistentes"
+        select: "Selecione um assistente"
+        create: "Crie um Assistente"
+        name: "Nome"
+        name_placeholder: "Nome do Assistente"
+        background: "Fundo"
+        background_placeholder: "#hex"
+        save_submissions: "Salvar"
+        save_submissions_label: "Salvar submissões do assistente."
+        multiple_submissions: "Múltiplas"
+        multiple_submissions_label: "Usuários podem submeter múltiplas vezes."
+        after_signup: "Cadastro"
+        after_signup_label: "Usuários encaminhados ao assistente após o cadastro."
+        after_time: "Tempo"
+        after_time_label: "Usuários encaminhados ao assistente após a data de início:"
+        after_time_time_label: "Data de início"
+        after_time_modal:
+          title: "Hora de início do assistente"
+          date: "Data"
+          time: "Hora"
+          done: "Selecionar data"
+          clear: "Apagar"
+        required: "Obrigatório"
+        required_label: "Usuário não podem pular o assistente."
+        prompt_completion: "Pronto"
+        prompt_completion_label: "Usuário pronto para completar o assistente."
+        restart_on_revisit: "Recomeçar"
+        restart_on_revisit_label: "Apagar as submissões a cada visita."
+        theme_id: "Tema"
+        no_theme: "Select a Theme (optional)"
+        save: "Save Changes"
+        remove: "Delete Wizard"
+        add: "Add"
+        url: "Url"
+        key: "Key"
+        value: "Value"
+        profile: "profile"
+        translation: "Translation"
+        translation_placeholder: "key"
+        type: "Type"
+        none: "Make a selection"              
+        submission_key: 'submission key'
+        param_key: 'param'
+        group: "Group"
+        permitted: "Permitted"
+        advanced: "Advanced"
+        undo: "Undo"
+        clear: "Clear"
+        select_type: "Select a type"
+        
+        message:
+          wizard:
+            select: "Select a wizard, or create a new one"
+            edit: "You're editing a wizard"
+            create: "You're creating a new wizard"
+            documentation: "Check out the wizard documentation"
+            contact: "Contact the developer"
+          field:
+            type: "Select a field type"
+            edit: "You're editing a field"
+            documentation: "Check out the field documentation"
+          action:
+            type: "Select an action type"
+            edit: "You're editing an action"
+            documentation: "Check out the action documentation"
+        
+        editor:
+          show: "Show"
+          hide: "Hide"
+          preview: "{{action}} Preview"
+          popover: "{{action}} Fields"
+        
+        input:
+          conditional: 
+            name: 'if'
+            output: 'then'
+          assignment:
+            name: 'set'
+          association:
+            name: 'map'
+          validation:
+            name: 'ensure'
+  
+        selector:
+          label:
+            text: "text"
+            wizard_field: "wizard field"
+            user_field: "user field"
+            user_field_options: "user field options"
+            user: "user"
+            category: "category"
+            tag: "tag"
+            group: "group"
+            list: "list"
+
+          placeholder:
+            text: "Enter text"
+            property: "Select property"
+            wizard_field: "Select field"
+            user_field: "Select field"
+            user_field_options: "Select field"
+            user: "Select user"
+            category: "Select category"
+            tag: "Select tag"
+            group: "Select group"
+            list: "Enter item"
+            
+        error:
+          failed: "failed to save wizard"
+          required: "{{type}} requires {{property}}"
+          invalid: "{{property}} is invalid"
+          dependent: "{{property}} is dependent on {{dependent}}"
+          conflict: "{{type}} with {{property}} '{{value}}' already exists"
+          after_time: "After time invalid"
+        
+        step:
+          header: "Steps"
+          title: "Title"
+          banner: "Banner"
+          description: "Description"
+          required_data:
+            label: "Required"
+            not_permitted_message: "Message shown when required data not present"
+          permitted_params:
+            label: "Params"
+        
+        field:
+          header: "Fields"
+          label: "Label"
+          description: "Description"
+          image: "Image"
+          image_placeholder: "Image url"
+          required: "Required"
+          required_label: "Field is Required"
+          min_length: "Min Length"
+          min_length_placeholder: "Minimum length in characters"
+          file_types: "File Types"
+          limit: "Limit"
+          property: "Property"
+          prefill: "Prefill"
+          content: "Content"
+          
+          type:
+            text: "Text"
+            textarea: Textarea
+            composer: Composer
+            text_only: Text Only
+            number: Number
+            checkbox: Checkbox
+            url: Url
+            upload: Upload
+            dropdown: Dropdown
+            tag: Tag
+            category: Category
+            group: Group
+            user_selector: User Selector
+            date: Date
+        
+        connector:
+          and: "and"
+          or: "or"
+          then: "then"
+          set: "set"
+          equal: '='
+          greater: '>'
+          less: '<'
+          greater_or_equal: '>='
+          less_or_equal: '<='
+          regex: '=~'
+          association: '→'
+          is: 'is'
+        
+        action:
+          header: "Actions"
+          include: "Include Fields"
+          title: "Title"
+          post: "Post"
+          topic_attr: "Topic Attribute"
+          interpolate_fields: "Insert wizard fields using the field_id in w{}. Insert user fields using field key in u{}."
+          
+          run_after: 
+            label: "Run After"
+            wizard_completion: "Wizard Completion"
+          custom_fields:
+            label: "Custom"
+            key: "field"
+          skip_redirect:
+            label: "Redirect"
+            description: "Don't redirect the user to this {{type}} after the wizard completes"
+          send_message:
+            label: "Send Message"
+            recipient: "Recipient"
+          create_topic:
+            label: "Create Topic"
+            category: "Category"
+            tags: "Tags"
+          open_composer:
+            label: "Open Composer"
+          update_profile:
+            label: "Update Profile"
+            setting: "Fields"
+            key: "field"
+          watch_categories:
+            label: "Watch Categories"
+            categories: "Categories"
+            mute_remainder: "Mute Remainder"
+            notification_level:
+              label: "Notification Level"
+              regular: "Normal"
+              watching: "Watching"
+              tracking: "Tracking"
+              watching_first_post: "Watching First Post"
+              muted: "Muted"
+            select_a_notification_level: "Select level"
+          post_builder:
+            checkbox: "Post Builder"
+            label: "Builder"
+            user_properties: "User Properties"
+            wizard_fields: "Wizard Fields"
+            placeholder: "Insert wizard fields using the field_id in w{}. Insert user properties using property in u{}."
+          add_to_group:
+            label: "Add to Group"
+          route_to:
+            label: "Route To"
+            url: "Url"
+            code: "Code"
+          send_to_api:
+            label: "Send to API"
+            api: "API"
+            endpoint: "Endpoint"
+            select_an_api: "Select an API"
+            select_an_endpoint: "Select an endpoint"
+            body: "Body"
+            body_placeholder: "JSON"
+        
+        submissions:
+          nav_label: "Submissions"
+          title: "{{name}} Submissions"
+          download: "Download"
+
+        api:
+          label: "API"
+          nav_label: 'APIs'
+          select: "Select API"
+          create: "Create API"
+          new: 'New API'
+          name: "Name (can't be changed)"
+          name_placeholder: 'Underscored'
+          title: 'Title'
+          title_placeholder: 'Display name'
+          remove: 'Delete'
+          save: "Save"
+
+          auth:
+            label: "Authorization"
+            btn: 'Authorize'
+            settings: "Settings"
+            status: "Status"
+            redirect_uri: "Redirect url"
+            type: 'Type'
+            type_none: 'Select a type'
+            url: "Authorization url"
+            token_url: "Token url"
+            client_id: 'Client id'
+            client_secret: 'Client secret'
+            username: 'username'
+            password: 'password'
+            params:
+              label: 'Params'
+              new: 'New param'
+
+          status:
+            label: "Status"
+            authorized: 'Authorized'
+            not_authorized: "Not authorized"
+            code: "Code"
+            access_token: "Access token"
+            refresh_token: "Refresh token"
+            expires_at: "Expires at"
+            refresh_at: "Refresh at"
+
+          endpoint:
+            label: "Endpoints"
+            add: "Add endpoint"
+            name: "Endpoint name"
+            method: "Select a method"
+            url: "Enter a url"
+            content_type: "Select a content type"
+            success_codes: "Select success codes"
+
+          log:
+            label: "Logs"
+            
+        log:
+          nav_label: "Logs"
+
+        transfer:
+          nav_label: "Transfer"
+          export:
+            label: "Export"
+            none_selected: "Please select atleast one wizard"
+          import:
+            label: "Import"
+            logs: "Import logs for {{fileName}}"
+            success: 'Wizard "{{id}}" saved successfully'
+            failure: 'Wizard "{{id}}" could not be saved'
+            no_file: "Please choose a file to import"
+            file_size_error: "The file must be JSON and 512kb or less"
+
+  wizard_js:
+    group:
+      select: "Select a group"
+
+    location:
+      name:
+        title: "Name (optional)"
+        desc: "e.g. P. Sherman Dentist"
+      street:
+        title: "Number and Street"
+        desc: "e.g. 42 Wallaby Way"
+      postalcode:
+        title: "Postal Code (Zip)"
+        desc: "e.g. 2090"
+      neighbourhood:
+        title: "Neighbourhood"
+        desc: "e.g. Cremorne Point"
+      city:
+        title: "City, Town or Village"
+        desc: "e.g. Sydney"
+      coordinates: "Coordinates"
+      lat:
+        title: "Latitude"
+        desc: "e.g. -31.9456702"
+      lon:
+        title: "Longitude"
+        desc: "e.g. 115.8626477"
+      country_code:
+        title: "Country"
+        placeholder: "Select a Country"
+      query:
+        title: "Address"
+        desc: "e.g. 42 Wallaby Way, Sydney."
+      geo:
+        desc: "Locations provided by {{provider}}"
+        btn:
+          label: "Find Location"
+        results: "Locations"
+        no_results: "No results. Please double check the spelling."
+        show_map: "Show Map"
+      validation:
+        neighbourhood: "Please enter a neighbourhood."
+        city: "Please enter a city, town or village."
+        street: "Please enter a Number and Street."
+        postalcode: "Please enter a Postal Code (Zip)."
+        countrycode: "Please select a country."
+        coordinates: "Please complete the set of coordinates."
+        geo_location: "Search and select a result."
+
+    select_kit:
+      default_header_text: Select...
+      no_content: No matches found
+      filter_placeholder: Search...
+      filter_placeholder_with_any: Search or create...
+      create: "Create: '{{content}}'"
+      max_content_reached:
+        one: "You can only select {{count}} item."
+        other: "You can only select {{count}} items."
+      min_content_not_reached:
+        one: "Select at least {{count}} item."
+        other: "Select at least {{count}} items."
+
+    wizard:
+      completed: "You have completed this wizard."
+      not_permitted: "You are not permitted to access this wizard."
+      none: "There is no wizard here."
+      return_to_site: "Return to {{siteName}}"
+      requires_login: "You need to be logged in to access this wizard."
+      reset: "Reset this wizard."
+      step_not_permitted: "You're not permitted to view this step."
+
+    wizard_composer:
+      show_preview: "Preview Post"
+      hide_preview: "Edit Post"
+      quote_post_title: "Quote whole post"
+      bold_label: "B"
+      bold_title: "Strong"
+      bold_text: "strong text"
+      italic_label: "I"
+      italic_title: "Emphasis"
+      italic_text: "emphasized text"
+      link_title: "Hyperlink"
+      link_description: "enter link description here"
+      link_dialog_title: "Insert Hyperlink"
+      link_optional_text: "optional title"
+      link_url_placeholder: "http://example.com"
+      quote_title: "Blockquote"
+      quote_text: "Blockquote"
+      blockquote_text: "Blockquote"
+      code_title: "Preformatted text"
+      code_text: "indent preformatted text by 4 spaces"
+      paste_code_text: "type or paste code here"
+      upload_title: "Upload"
+      upload_description: "enter upload description here"
+      olist_title: "Numbered List"
+      ulist_title: "Bulleted List"
+      list_item: "List item"
+      toggle_direction: "Toggle Direction"
+      help: "Markdown Editing Help"
+      collapse: "minimize the composer panel"
+      abandon: "close composer and discard draft"
+      modal_ok: "OK"
+      modal_cancel: "Cancel"
+      cant_send_pm: "Sorry, you can't send a message to %{username}."
+      yourself_confirm:
+        title: "Did you forget to add recipients?"
+        body: "Right now this message is only being sent to yourself!"
