@@ -1,0 +1,32 @@
+pt_br:
+  admin:
+    wizard:
+      submissions:
+        no_user: "excluído (id: %{id})"
+
+  wizard:
+    custom_title: "Assistente"
+    field:
+      too_short: "%{label} precisa ter no mínimo %{min} caracteres"
+      required: "%{label} é obrigatório."
+      not_url: "%{label} precisa ser uma url válida"
+      invalid_file: "%{label} precisa ser um %{types}"
+    
+    none: "Não conseguimos encontrar um assistente neste endereço."
+    no_skip: "O Assistente não pode ser pulado"
+    export:
+      error:
+        select_one: "Por favor selecione pelo menos um assistente"
+    
+    import:
+      error:
+        no_file: "Nenhum arquivo selecionado"
+        file_large: "Arquivo muito grande"
+        invalid_json: "Arquivo não é um arquivo JSON válido"
+        no_valid_wizards: "Arquivo não contém nenhum assistente válido"
+
+  site_settings:
+    custom_wizard_enabled: "Habilitar Assistentes Customizados."
+    wizard_redirect_exclude_paths: "Rotas excluídas da redireção do assistente."
+    wizard_recognised_image_upload_formats: "Tipo de arquivo que resultará no upload mostrando uma imagem de prévia"
+    wizard_apis_enabled: "Habilitar ferramentas API (experimental)."
