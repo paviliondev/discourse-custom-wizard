@@ -16,7 +16,7 @@ en:
     no_skip: "Wizard can't be skipped"
     export:
       error:
-        select_one: "Please select atleast one wizard"
+        select_one: "Please select at least one wizard"
     
     import:
       error:
