@@ -1,4 +1,4 @@
-pt_BR:
+pt_br:
   js:
     wizard:
       complete_custom: "Complete o {{name}}"
