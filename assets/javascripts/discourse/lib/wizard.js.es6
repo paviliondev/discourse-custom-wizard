@@ -46,7 +46,16 @@ const userProperties = [
   'location',
   'website',
   'bio_raw',
-  'trust_level'
+  'trust_level',
+  'email_level'
+];
+
+const notificationLevels = [
+  'regular',
+  'watching',
+  'tracking',
+  'watching_first_post',
+  'muted'
 ];
 
 function listProperties(type, opts={}) {
@@ -106,5 +115,6 @@ export {
   snakeCase,
   userProperties,
   listProperties,
+  notificationLevels,
   wizardFieldList
 };

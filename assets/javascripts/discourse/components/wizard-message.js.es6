@@ -1,5 +1,6 @@
 import { default as discourseComputed } from 'discourse-common/utils/decorators';
 import Component from "@ember/component";
+import I18n from "I18n";
 
 export default Component.extend({
   classNames: 'wizard-message',

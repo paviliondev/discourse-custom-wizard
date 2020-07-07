@@ -5,6 +5,7 @@ import { default as discourseComputed } from 'discourse-common/utils/decorators'
 import { not, and, equal } from "@ember/object/computed";
 import { selectKitContent } from '../lib/wizard';
 import Controller from "@ember/controller";
+import I18n from "I18n";
 
 export default Controller.extend({
   queryParams: ['refresh_list'],

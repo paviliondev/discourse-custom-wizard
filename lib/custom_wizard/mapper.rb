@@ -1,7 +1,7 @@
 class CustomWizard::Mapper
   attr_accessor :inputs, :data, :user
   
-  USER_FIELDS = ['name', 'username', 'email', 'date_of_birth', 'title', 'locale', 'trust_level']
+  USER_FIELDS = ['name', 'username', 'email', 'date_of_birth', 'title', 'locale', 'trust_level', 'email_level']
   PROFILE_FIELDS = ['location', 'website', 'bio_raw']
   
   def self.user_fields
@@ -188,7 +188,7 @@ class CustomWizard::Mapper
   
   def map_user_field_options(value)
     if value.include?(User::USER_FIELD_PREFIX)
-      if field = UserField.find(value.split('_').last)
+      if field = UserField.find_by(id: value.split('_').last)
         field.user_field_options.map(&:value)
       end
     end

@@ -1,6 +1,7 @@
 import { default as computed, observes } from 'discourse-common/utils/decorators';
 import { renderAvatar } from 'discourse/helpers/user-avatar';
 import userSearch from '../lib/user-search';
+import I18n from "I18n";
 
 const template = function(params) {
   const options = params.options;

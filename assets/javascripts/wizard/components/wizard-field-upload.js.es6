@@ -1,5 +1,6 @@
 import getUrl from "discourse-common/lib/get-url";
 import { getToken } from "wizard/lib/ajax";
+import I18n from "I18n";
 
 export default Ember.Component.extend({
   classNames: ["wizard-field-upload"],

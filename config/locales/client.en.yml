@@ -163,6 +163,7 @@ en:
             category: Category
             group: Group
             user_selector: User Selector
+            date: Date
         
         connector:
           and: "and"
@@ -208,6 +209,18 @@ en:
             label: "Update Profile"
             setting: "Fields"
             key: "field"
+          watch_categories:
+            label: "Watch Categories"
+            categories: "Categories"
+            mute_remainder: "Mute Remainder"
+            notification_level:
+              label: "Notification Level"
+              regular: "Normal"
+              watching: "Watching"
+              tracking: "Tracking"
+              watching_first_post: "Watching First Post"
+              muted: "Muted"
+            select_a_notification_level: "Select level"
           post_builder:
             checkbox: "Post Builder"
             label: "Builder"

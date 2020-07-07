@@ -11,6 +11,7 @@ class CustomWizard::Field
         min_length: nil
       },
       text_only: {},
+      date: {},
       number: {},
       checkbox: {},
       url: {

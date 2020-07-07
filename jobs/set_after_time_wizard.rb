@@ -2,7 +2,7 @@ module Jobs
   class SetAfterTimeWizard < ::Jobs::Base
     def execute(args)
       if SiteSetting.custom_wizard_enabled
-        wizard = CustomWizard::Wizard.find(args[:wizard_id])
+        wizard = CustomWizard::Wizard.create(args[:wizard_id])
         
         if wizard && wizard.after_time
           user_ids = []

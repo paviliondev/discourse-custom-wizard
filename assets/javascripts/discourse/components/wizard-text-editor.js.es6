@@ -3,6 +3,7 @@ import { notEmpty } from "@ember/object/computed";
 import { userProperties } from '../lib/wizard';
 import { scheduleOnce } from "@ember/runloop";
 import Component from "@ember/component";
+import I18n from "I18n";
 
 export default Component.extend({
   classNames: 'wizard-text-editor',

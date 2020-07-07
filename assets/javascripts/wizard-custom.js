@@ -91,10 +91,12 @@
 //= require discourse/app/components/input-tip
 //= require discourse/app/components/date-picker
 //= require discourse/app/components/text-field
+//= require discourse/app/components/d-textarea
 
 //= require discourse/app/templates/components/conditional-loading-spinner
 //= require discourse/app/templates/components/d-button
 //= require discourse/app/templates/components/d-editor
+//= require discourse/app/templates/components/date-picker
 //= require discourse/app/templates/components/emoji-picker
 //= require discourse/app/templates/components/popup-input-tip
 //= require discourse/app/templates/category-tag-autocomplete

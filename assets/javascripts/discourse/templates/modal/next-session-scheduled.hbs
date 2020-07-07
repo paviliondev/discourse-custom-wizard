@@ -1,24 +1,16 @@
 {{#d-modal-body class="next-session-time-modal" title=title}}
-  <div class="date-time-card">
-	  <div class="modal-date-time-set">
-      <div class="modal-date-area">
-        <label class="input-group-label">
-          {{i18n "admin.wizard.after_time_modal.date"}}
-        </label>
-        {{date-picker value=date containerId="date-container"}}
-      </div>
-      <div class="modal-time-area">
-        <label class="input-group-label">
-          {{i18n "admin.wizard.after_time_modal.time"}}
-        </label>
-        <input type="text" id="time-picker"/>
-      </div>
-    </div>
-    <div id="date-container"/>
-  </div>
+  {{date-time-input
+    date=bufferedDateTime
+    onChange=(action "dateTimeChanged")
+    showTime=true
+    clearable=true
+  }}
 {{/d-modal-body}}
 
 <div class="modal-footer">
-  {{d-button action="submit" class="btn-primary" label="admin.wizard.after_time_modal.done" disabled=submitDisabled}}
-  <a class="clear" {{action 'clear'}}>{{i18n 'admin.wizard.after_time_modal.clear'}}</a>
+  {{d-button
+    action="submit"
+    class="btn-primary"
+    label="admin.wizard.after_time_modal.done"
+    disabled=submitDisabled}}
 </div>

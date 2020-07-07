@@ -258,7 +258,9 @@ class CustomWizard::Builder
         }
       ).perform
             
-      if content.present?          
+      if content.present? &&
+         content[:result].present?
+         
         if content[:type] == 'association'
           content[:result] = content[:result].map do |item|
             { 
@@ -324,6 +326,10 @@ class CustomWizard::Builder
     if type === 'upload' && value.present? && !validate_file_type(value, file_types)
       updater.errors.add(id, I18n.t('wizard.field.invalid_file', label: label, types: file_types))
     end
+    
+    if type === 'date' && value.present? && !validate_date(value)
+      updater.errors.add(id, I18n.t('wizard.field.invalid_date'))
+    end
 
     CustomWizard::Builder.field_validators.each do |validator|
       if type === validator[:type]
@@ -336,6 +342,15 @@ class CustomWizard::Builder
     file_types.split(',')
       .map { |t| t.gsub('.', '') }
       .include?(File.extname(value['original_filename'])[1..-1])
+  end
+  
+  def validate_date(value)
+    begin
+      Date.parse(value)
+      true
+    rescue ArgumentError
+      false
+    end
   end
 
   def is_text_type(field)

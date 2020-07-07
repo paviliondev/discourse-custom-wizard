@@ -1,3 +1,5 @@
+import I18n from "I18n";
+
 export default Ember.Route.extend({
   model(params) {
     const appModel = this.modelFor('custom');
