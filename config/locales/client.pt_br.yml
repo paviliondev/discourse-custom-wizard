@@ -1,0 +1,425 @@
+pt_br:
+  js:
+    wizard:
+      complete_custom: "Complete o {{name}}"
+
+  admin_js:
+    admin:
+      wizard:
+        label: "Assistente"
+        nav_label: "Assistentes"
+        select: "Selecione um assistente"
+        create: "Crie um Assistente"
+        name: "Nome"
+        name_placeholder: "Nome do Assistente"
+        background: "Fundo"
+        background_placeholder: "#hex"
+        save_submissions: "Salvar"
+        save_submissions_label: "Salvar submissões do assistente."
+        multiple_submissions: "Múltiplas"
+        multiple_submissions_label: "Usuários podem submeter múltiplas vezes."
+        after_signup: "Cadastro"
+        after_signup_label: "Usuários encaminhados ao assistente após o cadastro."
+        after_time: "Tempo"
+        after_time_label: "Usuários encaminhados ao assistente após a data de início:"
+        after_time_time_label: "Data de início"
+        after_time_modal:
+          title: "Hora de início do assistente"
+          date: "Data"
+          time: "Hora"
+          done: "Selecionar data"
+          clear: "Apagar"
+        required: "Obrigatório"
+        required_label: "Usuário não podem pular o assistente."
+        prompt_completion: "Pronto"
+        prompt_completion_label: "Usuário pronto para completar o assistente."
+        restart_on_revisit: "Recomeçar"
+        restart_on_revisit_label: "Apagar as submissões a cada visita."
+        theme_id: "Tema"
+        no_theme: "Selecione um Tema (opcional)"
+        save: "Salvar Mudanças"
+        remove: "Excluir Assistente"
+        add: "Adicionar"
+        url: "Url"
+        key: "Chave"
+        value: "Valor"
+        profile: "perfil"
+        translation: "Tradução"
+        translation_placeholder: "chave"
+        type: "Tipo"
+        none: "Fazer uma seleção"              
+        submission_key: 'chave de submissão'
+        param_key: 'param'
+        group: "Grupo"
+        permitted: "Permitido"
+        advanced: "Advançado"
+        undo: "Refazer"
+        clear: "Apagar"
+        select_type: "Selecione um Tipo"
+        
+        message:
+          wizard:
+            select: "Selecione um assistente, ou crie um novo"
+            edit: "Você está editando um assistente"
+            create: "Você está criando um novo assistente"
+            documentation: "Verifique a documentação do assistente"
+            contact: "Entre em contato com o desenvolvedor"
+          field:
+            type: "Selecione um tipo de campo"
+            edit: "Você está editando um campo"
+            documentation: "Verifique a documentação do campo"
+          action:
+            type: "Selecione um tipo de ação"
+            edit: "Você está editando uma ação"
+            documentation: "Verifique a documentação da ação"
+        
+        editor:
+          show: "Mostrar"
+          hide: "Esconder"
+          preview: "{{action}} Pré-vizualizar"
+          popover: "{{action}} Campos"
+        
+        input:
+          conditional: 
+            name: 'se'
+            output: 'então'
+          assignment:
+            name: 'definir'
+          association:
+            name: 'map'
+          validation:
+            name: 'certifique'
+  
+        selector:
+          label:
+            text: "texto"
+            wizard_field: "campo do assistente"
+            user_field: "campo de usuário"
+            user_field_options: "opção do campo de usuário"
+            user: "usuário"
+            category: "categoria"
+            tag: "tag"
+            group: "grupo"
+            list: "lista"
+
+          placeholder:
+            text: "Insira o texto"
+            property: "Selecione a propriedade"
+            wizard_field: "Selecione o campo"
+            user_field: "Selecione o campo"
+            user_field_options: "Selecione o campo"
+            user: "Selecione o usuário"
+            category: "Selecione a categoria"
+            tag: "Selecione a tag"
+            group: "Selecione o grupo"
+            list: "Insira o item"
+            
+        error:
+          failed: "falha no salvamento do assistente"
+          required: "{{type}} requer {{property}}"
+          invalid: "{{property}} é inválido"
+          dependent: "{{property}} depende do {{dependent}}"
+          conflict: "{{type}} com {{property}} '{{value}}' já existe"
+          after_time: "Após data inválida"
+        
+        step:
+          header: "Passos"
+          title: "Título"
+          banner: "Banner"
+          description: "Descrição"
+          required_data:
+            label: "Obrigatório"
+            not_permitted_message: "Mensagem apresentada quando o campo obrigatório não estiver completo"
+          permitted_params:
+            label: "Params"
+        
+        field:
+          header: "Campos"
+          label: "Etiqueta"
+          description: "Descrição"
+          image: "Imagem"
+          image_placeholder: "url da Imagem"
+          required: "Obrigatório"
+          required_label: "Campo Obrigatório"
+          min_length: "Comprimento mínimo"
+          min_length_placeholder: "Comprimento mínimo em caracteres"
+          file_types: "Tipos de arquivo"
+          limit: "Limite"
+          property: "Propriedade"
+          prefill: "Preencher"
+          content: "Conteúdo"
+          
+          type:
+            text: "Texto"
+            textarea: Área do texto
+            composer: Compositor
+            text_only: Apenas texto
+            number: Número
+            checkbox: Caixa de seleção
+            url: Url
+            upload: Upload
+            dropdown: Suspenso
+            tag: Tag
+            category: Categoria
+            group: Grupo
+            user_selector: Selecionador de usuário
+            date: Data
+        
+        connector:
+          and: "e"
+          or: "ou"
+          then: "então"
+          set: "definir"
+          equal: '='
+          greater: '>'
+          less: '<'
+          greater_or_equal: '>='
+          less_or_equal: '<='
+          regex: '=~'
+          association: '→'
+          is: 'é'
+        
+        action:
+          header: "Ações"
+          include: "Campos Inclusos"
+          title: "Título"
+          post: "Post"
+          topic_attr: "Atribuição ao Tópico"
+          interpolate_fields: "Insira os campos do assistente usando o field_id em w{}. Insira os campos de usuário usando o campo chave em u{}."
+          
+          run_after: 
+            label: "Executar Após"
+            wizard_completion: "Finalizar o Assistente"
+          custom_fields:
+            label: "Personalizado"
+            key: "campo"
+          skip_redirect:
+            label: "Redirecionar"
+            description: "Não redirecionar o usuáriodo tipo {{type}} após finalizar o assistente"
+          send_message:
+            label: "Enviar Mensagem"
+            recipient: "Destinatário"
+          create_topic:
+            label: "Criar um Tópico"
+            category: "Categoria"
+            tags: "Tags"
+          open_composer:
+            label: "Abrir Compositor"
+          update_profile:
+            label: "Atualizar Perfil"
+            setting: "Campos"
+            key: "campo"
+          watch_categories:
+            label: "Observando Categorias"
+            categories: "Categorias"
+            mute_remainder: "Silenciar Restante"
+            notification_level:
+              label: "Nível da Notificação"
+              regular: "Normal"
+              watching: "Observando"
+              tracking: "Monitorando"
+              watching_first_post: "Observando Primeiro Post"
+              muted: "Silenciado"
+            select_a_notification_level: "Selecionar Nível"
+          post_builder:
+            checkbox: "Criador de Post"
+            label: "Criador"
+            user_properties: "Propriedades do usuário"
+            wizard_fields: "Campos do Assistente"
+            placeholder: "Insira os campos do assistente usando o field_id em w{}. Insira os campos de usuário usando o campo chave em u{}."
+          add_to_group:
+            label: "Adicionar ao Grupo"
+          route_to:
+            label: "Encaminhar para"
+            url: "Url"
+            code: "Código"
+          send_to_api:
+            label: "Enviar para API"
+            api: "API"
+            endpoint: "Ponto de destino"
+            select_an_api: "Selecionar uma API"
+            select_an_endpoint: "Selecionar um ponto de destino"
+            body: "Corpo"
+            body_placeholder: "JSON"
+        
+        submissions:
+          nav_label: "Submissões"
+          title: "{{name}} Submissões"
+          download: "Download"
+
+        api:
+          label: "API"
+          nav_label: 'APIs'
+          select: "Selecionar API"
+          create: "Criar API"
+          new: 'Nova API'
+          name: "Nome (não pode ser mudado)"
+          name_placeholder: 'Sublinhado'
+          title: 'Título'
+          title_placeholder: 'Nome de exibição'
+          remove: 'Excluir'
+          save: "Salvar"
+
+          auth:
+            label: "Autorização"
+            btn: 'Autorizar'
+            settings: "Configurações"
+            status: "Estado"
+            redirect_uri: "Url para redirecionar"
+            type: 'Tipo'
+            type_none: 'Selecione um tipo'
+            url: "Url de Autorização"
+            token_url: "Token url"
+            client_id: 'Client id'
+            client_secret: 'Client senha'
+            username: 'nome de usuário'
+            password: 'senha'
+            params:
+              label: 'Params'
+              new: 'Novo param'
+
+          status:
+            label: "Estado"
+            authorized: 'Autorizado'
+            not_authorized: "Não autorizado"
+            code: "Código"
+            access_token: "Token de acesso"
+            refresh_token: "Atualizar token"
+            expires_at: "Expira em"
+            refresh_at: "Atualiza em"
+
+          endpoint:
+            label: "Destino"
+            add: "Adicionar destino"
+            name: "Nome do destino"
+            method: "Selecionar um método"
+            url: "Inserir url"
+            content_type: "Selecionar um tipo de conteúdo"
+            success_codes: "Selecionar um código de sucesso"
+
+          log:
+            label: "Logs"
+            
+        log:
+          nav_label: "Logs"
+
+        transfer:
+          nav_label: "Transferir"
+          export:
+            label: "Exportar"
+            none_selected: "Por favor selecione pelo menos um assistente"
+          import:
+            label: "Importar"
+            logs: "Importar logs de {{fileName}}"
+            success: 'Assistente "{{id}}" salvo com sucesso'
+            failure: 'Assistente "{{id}}" não pode ser salvo'
+            no_file: "Por favor selecione um arquivo para importar"
+            file_size_error: "O arquivo deve ser JSON com 512kb ou menos"
+
+  wizard_js:
+    group:
+      select: "Selecionar um grupo"
+
+    location:
+      name:
+        title: "Nome (opcional)"
+        desc: "ex. P. Sherman Dentist"
+      street:
+        title: "Rua e Número"
+        desc: "ex. 42 Wallaby Way"
+      postalcode:
+        title: "Código Postal (CEP)"
+        desc: "ex. 2090"
+      neighbourhood:
+        title: "Bairro"
+        desc: "ex. Cremorne Point"
+      city:
+        title: "Cidade ou vilarejo"
+        desc: "ex. Sydney"
+      coordinates: "Coordinates"
+      lat:
+        title: "Latitude"
+        desc: "ex. -31.9456702"
+      lon:
+        title: "Longitude"
+        desc: "ex. 115.8626477"
+      country_code:
+        title: "País"
+        placeholder: "Selecione um País"
+      query:
+        title: "Endereço"
+        desc: "ex. 42 Wallaby Way, Sydney."
+      geo:
+        desc: "Localidades oferecidas por {{provider}}"
+        btn:
+          label: "Procurar Local"
+        results: "Locais"
+        no_results: "Sem resultados. Por favor verifique a escrita."
+        show_map: "Mostrar Mapa"
+      validation:
+        neighbourhood: "Por favor insira um bairro."
+        city: "Por favor insira uma cidade ou vilarejo."
+        street: "Por favor insira uma Rua e Número."
+        postalcode: "Por favor insira o Código Postal (CEP)."
+        countrycode: "Por favor insira um País."
+        coordinates: "Por favor complete as coordenadas."
+        geo_location: "Procurar e selecionar um resultado."
+
+    select_kit:
+      default_header_text: Selecione...
+      no_content: Sem resultados
+      filter_placeholder: Procurar...
+      filter_placeholder_with_any: Procurar ou criar...
+      create: "Criar: '{{content}}'"
+      max_content_reached:
+        one: "Você pode selecionar apenas {{count}} item."
+        other: "Você pode selecionar apenas {{count}} items."
+      min_content_not_reached:
+        one: "Selecione no mínimo {{count}} item."
+        other: "Selecione no mínimo {{count}} items."
+
+    wizard:
+      completed: "Você completou esse assistente."
+      not_permitted: "Você não está permitido para acessar esse assistente."
+      none: "Não existe nehnum assistente aqui."
+      return_to_site: "Voltar para {{siteName}}"
+      requires_login: "Você precisa estar logado para acessar esee assistente."
+      reset: "Reiniciar esse assistente."
+      step_not_permitted: "Você não está permitido para vizualizar esse passo."
+
+    wizard_composer:
+      show_preview: "Pré-vizualizar post"
+      hide_preview: "Editar Post"
+      quote_post_title: "Citar todo o post"
+      bold_label: "B"
+      bold_title: "Negrito"
+      bold_text: "texto em negrito"
+      italic_label: "I"
+      italic_title: "Ênfase"
+      italic_text: "texto ênfasado"
+      link_title: "Hiperlink"
+      link_description: "insira a descrição do link aqui"
+      link_dialog_title: "Inserir Hiperlink"
+      link_optional_text: "título opcional"
+      link_url_placeholder: "http://example.com.br"
+      quote_title: "Bloquear citação"
+      quote_text: "Bloquear citação"
+      blockquote_text: "Bloquear citação"
+      code_title: "Texto pré-formatado"
+      code_text: "identar o texto pré-formatado em 4 espaços"
+      paste_code_text: "digite ou cole o código aqui"
+      upload_title: "Upload"
+      upload_description: "Insira a descrição do upload aqui"
+      olist_title: "Lista enumerada"
+      ulist_title: "Lista com marcadores"
+      list_item: "Item da lista"
+      toggle_direction: "Alternar direção"
+      help: "Marcar ajuda na edição"
+      collapse: "minimizar o painel compositor"
+      abandon: "fechar o compositor e descartar o rasucnho"
+      modal_ok: "OK"
+      modal_cancel: "Cancelar"
+      cant_send_pm: "Desculpe, você não pode enviar uma mensagem para %{username}."
+      yourself_confirm:
+        title: "Será que você esqueceu de adicionar os destinatátios?"
+        body: "Agora essa mensagem será enviada apenas para você mesmo!"
