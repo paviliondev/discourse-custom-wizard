@@ -6,7 +6,7 @@ export default {
 
   initialize(app) {
     if (window.location.pathname.indexOf('/w/') < 0) return;
-    
+
     const EmberObject = requirejs('@ember/object').default;
     const Router = requirejs('wizard/router').default;
     const ApplicationRoute = requirejs('wizard/routes/application').default;
@@ -25,12 +25,10 @@ export default {
     const RawHandlebars = requirejs("discourse-common/lib/raw-handlebars").default;
     const Site = requirejs("discourse/plugins/discourse-custom-wizard/wizard/models/site").default;
     const RestAdapter = requirejs("discourse/adapters/rest").default;
-    
+
     Discourse.Model = EmberObject.extend();
     Discourse.__container__ = app.__container__;
-    Discourse.getURLWithCDN = getUrl;
-    Discourse.getURL = getUrl;
-        
+
     registerRawHelpers(RawHandlebars, Handlebars);
 
     // IE11 Polyfill - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries#Polyfill

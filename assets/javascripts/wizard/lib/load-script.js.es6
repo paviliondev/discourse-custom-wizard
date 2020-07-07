@@ -1,4 +1,6 @@
 import { ajax } from 'wizard/lib/ajax';
+import getURL from "discourse-common/lib/get-url";
+
 const _loaded = {};
 const _loading = {};
 
@@ -45,7 +47,7 @@ export default function loadScript(url, opts) {
 
 
   return new Ember.RSVP.Promise(function(resolve) {
-    url = Discourse.getURL(url);
+    url = getURL(url);
 
     // If we already loaded this url
     if (_loaded[url]) { return resolve(); }
