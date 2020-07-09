@@ -157,6 +157,14 @@ const action = {
     route_to: {
       url: null,
       code: null
+    },
+    create_category: {
+      name: null,
+      slug: null,
+      color: null,
+      text_color: "FFFFFF",
+      parent_category_id: null,
+      permissions: null
     }
   },
   mapped: [
@@ -170,7 +178,13 @@ const action = {
     'group',
     'url',
     'categories',
-    'mute_remainder'
+    'mute_remainder',
+    'name',
+    'slug',
+    'color',
+    'text_color',
+    'parent_category_id',
+    'permittions'
   ],
   advanced: [
     'code',

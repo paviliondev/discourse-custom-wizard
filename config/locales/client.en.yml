@@ -241,6 +241,14 @@ en:
             select_an_endpoint: "Select an endpoint"
             body: "Body"
             body_placeholder: "JSON"
+          create_category:
+            label: "Create Category"
+            name: Name
+            slug: Slug
+            color: Color
+            text_color: Text color
+            parent_category: Parent Category
+            permissions: Permissions
         
         submissions:
           nav_label: "Submissions"
