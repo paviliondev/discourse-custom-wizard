@@ -87,15 +87,17 @@ after_initialize do
   ].each do |path|
     load File.expand_path(path, __FILE__)
   end
-  
+
   add_class_method(:wizard, :user_requires_completion?) do |user|
     wizard_result = self.new(user).requires_completion?
     return wizard_result if wizard_result
 
     custom_redirect = false
+    is_first_login = user.first_seen_at.blank? ||
+      user.first_seen_at === user.last_seen_at
 
     if user &&
-       user.first_seen_at.blank? &&
+       is_first_login &&
        wizard = CustomWizard::Wizard.after_signup(user)
 
       if !wizard.completed?
@@ -106,7 +108,7 @@ after_initialize do
 
     !!custom_redirect
   end
-    
+
   add_to_class(:users_controller, :wizard_path) do
     if custom_wizard_redirect = current_user.custom_fields['redirect_to_wizard']
       "#{Discourse.base_url}/w/#{custom_wizard_redirect.dasherize}"
@@ -124,13 +126,13 @@ after_initialize do
       CustomWizard::Wizard.set_wizard_redirect(wizard.id, user)
     end
   end
-  
+
   add_to_class(:application_controller, :redirect_to_wizard_if_required) do
     wizard_id = current_user.custom_fields['redirect_to_wizard']
     @excluded_routes ||= SiteSetting.wizard_redirect_exclude_paths.split('|') + ['/w/']
     url = request.referer || request.original_url
 
-    if request.format === 'text/html' && !@excluded_routes.any? {|str| /#{str}/ =~ url} && wizard_id
+    if request.format === 'text/html' && !@excluded_routes.any? { |str| /#{str}/ =~ url } && wizard_id
       if request.referer !~ /\/w\// && request.referer !~ /\/invites\//
         CustomWizard::Wizard.set_submission_redirect(current_user, wizard_id, request.referer)
       end
@@ -140,29 +142,29 @@ after_initialize do
       end
     end
   end
-  
+
   add_to_serializer(:site, :include_wizard_required?) do
     scope.is_admin? && Wizard.new(scope.user).requires_completion?
   end
-  
+
   add_to_serializer(:site, :complete_custom_wizard) do
     if scope.user && requires_completion = CustomWizard::Wizard.prompt_completion(scope.user)
-      requires_completion.map {|w| { name: w[:name], url: "/w/#{w[:id]}"} }
+      requires_completion.map { |w| { name: w[:name], url: "/w/#{w[:id]}" } }
     end
   end
 
   add_to_serializer(:site, :include_complete_custom_wizard?) do
     complete_custom_wizard.present?
   end
-  
+
   add_model_callback(:application_controller, :before_action) do
     redirect_to_wizard_if_required if current_user
   end
-  
+
   ::ExtraLocalesController.prepend ExtraLocalesControllerCustomWizard
   ::InvitesController.prepend InvitesControllerCustomWizard
   ::Wizard::Field.prepend CustomWizardFieldExtension
   ::Wizard::Step.prepend CustomWizardStepExtension
-  
+
   DiscourseEvent.trigger(:custom_wizard_ready)
 end
