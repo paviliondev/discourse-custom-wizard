@@ -249,6 +249,17 @@ en:
             text_color: Text color
             parent_category: Parent Category
             permissions: Permissions
+          create_group:
+            label: Create Group
+            name: Name
+            full_name: Full Name
+            title: Title
+            bio_raw: About
+            grant_trust_level: Automatic Trust Level
+            mentionable_level: Mentionable Level
+            messageable_level: Messageable Level
+            visibility_level: Visibility Level
+            members_visibility_level: Members Visibility Level
         
         submissions:
           nav_label: "Submissions"

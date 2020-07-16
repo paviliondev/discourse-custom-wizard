@@ -136,7 +136,16 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
         color: mapped_params,
         text_color: mapped_params,
         parent_category_id: mapped_params,
-        permissions: mapped_params
+        permissions: mapped_params,
+        full_name: mapped_params,
+        bio_raw: mapped_params,
+        title: mapped_params,
+        bio_raw: mapped_params,
+        grant_trust_level: mapped_params,
+        mentionable_level: mapped_params,
+        messageable_level: mapped_params,
+        visibility_level: mapped_params,
+        members_visibility_level: mapped_params
       ]
     )
   end

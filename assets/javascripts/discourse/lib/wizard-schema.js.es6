@@ -165,6 +165,17 @@ const action = {
       text_color: "FFFFFF",
       parent_category_id: null,
       permissions: null
+    },
+    create_group: {
+      name: null,
+      full_name: null,
+      title: null,
+      bio_raw: null,
+      grant_trust_level: null,
+      mentionable_level: null,
+      messageable_level: null,
+      visibility_level: null,
+      members_visibility_level: null
     }
   },
   mapped: [

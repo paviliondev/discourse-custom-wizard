@@ -297,8 +297,6 @@ class CustomWizard::Action
   def create_category
     guardian.ensure_can_create!(Category)
     
-    byebug
-
     category =
       begin
         Category.new(new_category_params.merge(user: user))
