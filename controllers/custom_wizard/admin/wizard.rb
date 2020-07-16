@@ -101,6 +101,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
           :type,
           :min_length,
           :file_types,
+          :format,
           :limit,
           :property,
           prefill: mapped_params,

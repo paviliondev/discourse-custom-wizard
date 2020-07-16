@@ -26,6 +26,11 @@ export default Component.extend(UndoChanges, {
   messageUrl: 'https://thepavilion.io/t/2809',
   
   @discourseComputed('field.type')
+  isDateTime(type) {
+    return ['date_time', 'date', 'time'].indexOf(type) > -1;
+  },
+  
+  @discourseComputed('field.type')
   messageKey(type) {
     let key = 'type';
     if (type) {

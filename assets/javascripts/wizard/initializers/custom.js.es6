@@ -171,7 +171,7 @@ export default {
             fields[f.id] = f.value;
           }
         });
-
+        
         return ajax({
           url: `/w/${wizardId}/steps/${this.get('id')}`,
           type: 'PUT',
@@ -241,7 +241,10 @@ export default {
       'text_only',
       'composer',
       'category',
-      'group'
+      'group',
+      'date',
+      'time',
+      'date_time'
     ];
 
     FieldModel.reopen({
@@ -269,7 +272,7 @@ export default {
         } else if (type === 'url') {
           valid = true;
         }
-            
+                    
         this.setValid(valid);
 
         return valid;

@@ -5,6 +5,7 @@ module CustomWizardFieldExtension
               :key,
               :min_length,
               :file_types,
+              :format,
               :limit,
               :property,
               :content
@@ -17,6 +18,7 @@ module CustomWizardFieldExtension
     @key = attrs[:key]
     @min_length = attrs[:min_length]
     @file_types = attrs[:file_types]
+    @format = attrs[:format]
     @limit = attrs[:limit]
     @property = attrs[:property]
     @content = attrs[:content]
