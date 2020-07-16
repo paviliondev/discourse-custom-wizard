@@ -255,6 +255,8 @@ en:
             full_name: Full Name
             title: Title
             bio_raw: About
+            owner_usernames: Owners
+            usernames: Members
             grant_trust_level: Automatic Trust Level
             mentionable_level: Mentionable Level
             messageable_level: Messageable Level

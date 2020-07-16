@@ -281,12 +281,12 @@ class CustomWizard::Action
     
     group =
       begin
-        Group.new(new_group_params.merge(user: user))
+        Group.new(new_group_params)
       rescue ArgumentError => e
         raise Discourse::InvalidParameters, "Invalid group params"
       end
-
-    if group.update(new_group_params)
+    
+    if group.save
       GroupActionLogger.new(user, group).log_change_group_settings
       log_success("Group created", group.name)
     else
@@ -395,18 +395,26 @@ class CustomWizard::Action
       name
       full_name
       title
+      bio_raw
+      owner_usernames
+      usernames
       mentionable_level
       messageable_level
       visibility_level
       members_visibility_level
       grant_trust_level
     ).each do |attr|
-      if action["group_#{attr}"].present?
-        params[attr.to_sym] = CustomWizard::Mapper.new(
-          inputs: action["group_#{attr}"],
+      if action[attr].present?        
+        value = CustomWizard::Mapper.new(
+          inputs: action[attr],
           data: data,
           user: user
         ).perform
+        
+        value = value.parameterize(separator: '_') if attr === "name"
+        value = value.to_i if attr.include?("_level")
+        
+        params[attr.to_sym] = value
       end
     end
     
@@ -424,27 +432,38 @@ class CustomWizard::Action
       parent_category_id
       permissions
     ).each do |attr|
-      if action[attr].present?
-        params[attr.to_sym] = CustomWizard::Mapper.new(
+      if action[attr].present?        
+        value = CustomWizard::Mapper.new(
           inputs: action[attr],
           data: data,
           user: user
         ).perform
-      end
-    end
-    
-    if params[:parent_category_id].present?
-      params[:parent_category_id] = params[:parent_category_id][0]
-    end
-    
-    if params[:permissions].present?
-      permissions = {}
-      params[:permissions].each do |p|
-        if group = Group.find_by(id: p[:key][0])
-          permissions[group.name] = p[:value].to_i
+        
+        if attr === "parent_category_id" && value.is_a?(Array)
+          value = value[0]
         end
+        
+        if attr === "permissions" && value.is_a?(Array)
+          permissions = value
+          value = {}
+          
+          permissions.each do |p|
+            k = p[:key]
+            v = p[:value].to_i
+            
+            if k.is_a?(Array)
+              group = Group.find_by(id: k[0])
+              k = group.name
+            else
+              k = k.parameterize(separator: '_')
+            end
+            
+            value[k] = v 
+          end
+        end
+        
+        params[attr.to_sym] = value
       end
-      params[:permissions] = permissions
     end
     
     add_custom_fields(params)

@@ -415,6 +415,44 @@
   </div>
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.create_group.owner_usernames"}}</label>
+    </div>
+    
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.owner_usernames
+        property='owner_usernames'
+        onUpdate=(action 'mappedFieldUpdated')
+        options=(hash
+          textSelection=true
+          wizardFieldSelection=true
+          userFieldSelection=true
+          userSelection='output'
+          context='action'
+        )}}
+    </div>
+  </div>
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.create_group.usernames"}}</label>
+    </div>
+    
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.usernames
+        property='usernames'
+        onUpdate=(action 'mappedFieldUpdated')
+        options=(hash
+          textSelection=true
+          wizardFieldSelection=true
+          userFieldSelection=true
+          userSelection='output'
+          context='action'
+        )}}
+    </div>
+  </div>
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
       <label>{{i18n "admin.wizard.action.create_group.grant_trust_level"}}</label>
     </div>
     

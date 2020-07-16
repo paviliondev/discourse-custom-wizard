@@ -171,6 +171,8 @@ const action = {
       full_name: null,
       title: null,
       bio_raw: null,
+      owner_usernames: null,
+      usernames: null,
       grant_trust_level: null,
       mentionable_level: null,
       messageable_level: null,
@@ -195,7 +197,16 @@ const action = {
     'color',
     'text_color',
     'parent_category_id',
-    'permittions'
+    'permissions',
+    'full_name',
+    'bio_raw',
+    'owner_usernames',
+    'usernames',
+    'grant_trust_level',
+    'mentionable_level',
+    'messageable_level',
+    'visibility_level',
+    'members_visibility_level'
   ],
   advanced: [
     'code',
