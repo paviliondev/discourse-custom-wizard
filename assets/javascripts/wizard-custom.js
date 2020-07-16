@@ -19,9 +19,8 @@
 //= require discourse/app/lib/formatter
 //= require discourse/app/lib/quote
 //= require discourse/app/lib/link-mentions
-//= require discourse/app/lib/link-category-hashtags
+//= require discourse/app/lib/link-hashtags
 //= require discourse/app/lib/category-hashtags
-//= require discourse/app/lib/link-tag-hashtag
 //= require discourse/app/lib/tag-hashtags
 //= require discourse/app/lib/uploads
 //= require discourse/app/lib/category-tag-search

@@ -21,7 +21,7 @@ Discourse.unofficial_plugins.each do |plugin|
       result << "
         (function() {
           if ('Wizard' in window) {
-            Discourse.RAW_TEMPLATES['javascripts/#{name}'] = requirejs('discourse-common/lib/raw-handlebars').template(#{compiled});
+            window.__DISCOURSE_RAW_TEMPLATES['javascripts/#{name}'] = requirejs('discourse-common/lib/raw-handlebars').template(#{compiled});
           }
         })();
       "
