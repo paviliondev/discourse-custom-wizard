@@ -130,7 +130,23 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
         mute_remainder: mapped_params,
         profile_updates: mapped_params,
         group: mapped_params,
-        url: mapped_params
+        url: mapped_params,
+        name: mapped_params,
+        slug: mapped_params,
+        color: mapped_params,
+        text_color: mapped_params,
+        parent_category_id: mapped_params,
+        permissions: mapped_params,
+        full_name: mapped_params,
+        title: mapped_params,
+        bio_raw: mapped_params,
+        usernames: mapped_params,
+        owner_usernames: mapped_params,
+        grant_trust_level: mapped_params,
+        mentionable_level: mapped_params,
+        messageable_level: mapped_params,
+        visibility_level: mapped_params,
+        members_visibility_level: mapped_params
       ]
     )
   end

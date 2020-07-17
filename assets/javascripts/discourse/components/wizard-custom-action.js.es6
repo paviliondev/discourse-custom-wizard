@@ -20,6 +20,8 @@ export default Component.extend(UndoChanges, {
   sendToApi: equal('action.type', 'send_to_api'),
   addToGroup: equal('action.type', 'add_to_group'),
   routeTo: equal('action.type', 'route_to'),
+  createCategory: equal('action.type', 'create_category'),
+  createGroup: equal('action.type', 'create_group'),
   apiEmpty: empty('action.api'),
   groupPropertyTypes: selectKitContent(['id', 'name']),
   hasAdvanced: or('hasCustomFields', 'routeTo'),

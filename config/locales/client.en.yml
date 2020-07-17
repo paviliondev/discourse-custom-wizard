@@ -241,6 +241,27 @@ en:
             select_an_endpoint: "Select an endpoint"
             body: "Body"
             body_placeholder: "JSON"
+          create_category:
+            label: "Create Category"
+            name: Name
+            slug: Slug
+            color: Color
+            text_color: Text color
+            parent_category: Parent Category
+            permissions: Permissions
+          create_group:
+            label: Create Group
+            name: Name
+            full_name: Full Name
+            title: Title
+            bio_raw: About
+            owner_usernames: Owners
+            usernames: Members
+            grant_trust_level: Automatic Trust Level
+            mentionable_level: Mentionable Level
+            messageable_level: Messageable Level
+            visibility_level: Visibility Level
+            members_visibility_level: Members Visibility Level
         
         submissions:
           nav_label: "Submissions"

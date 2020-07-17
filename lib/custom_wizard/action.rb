@@ -2,12 +2,14 @@ class CustomWizard::Action
   attr_accessor :data,
                 :action,
                 :user,
+                :guardian,
                 :result
   
   def initialize(params)
     @wizard = params[:wizard]
     @action = params[:action]
     @user = params[:user]
+    @guardian = Guardian.new(@user)
     @data = params[:data]
     @log = []
     @result = CustomWizard::ActionResult.new
@@ -274,6 +276,42 @@ class CustomWizard::Action
     log_info("route: #{route_to}")
   end
   
+  def create_group
+    guardian.ensure_can_create!(Group)
+    
+    group =
+      begin
+        Group.new(new_group_params)
+      rescue ArgumentError => e
+        raise Discourse::InvalidParameters, "Invalid group params"
+      end
+    
+    if group.save
+      GroupActionLogger.new(user, group).log_change_group_settings
+      log_success("Group created", group.name)
+    else
+      log_error("Group creation failed")
+    end
+  end
+  
+  def create_category
+    guardian.ensure_can_create!(Category)
+    
+    category =
+      begin
+        Category.new(new_category_params.merge(user: user))
+      rescue ArgumentError => e
+        raise Discourse::InvalidParameters, "Invalid category params"
+      end
+      
+    if category.save
+      StaffActionLogger.new(user).log_category_creation(category)
+      log_success("Category created", category.name)
+    else
+      log_error("Category creation failed")
+    end
+  end
+  
   private
   
   def action_category
@@ -346,6 +384,97 @@ class CustomWizard::Action
     params[:raw] = action['post_builder'] ?
       mapper.interpolate(action['post_template']) :
       data[action['post']]
+    
+    add_custom_fields(params)
+  end
+  
+  def new_group_params
+    params = {}
+    
+    %w(
+      name
+      full_name
+      title
+      bio_raw
+      owner_usernames
+      usernames
+      mentionable_level
+      messageable_level
+      visibility_level
+      members_visibility_level
+      grant_trust_level
+    ).each do |attr|
+      input = action[attr]
+      
+      if attr === "name" && input.blank?
+        raise ArgumentError.new
+      end
+      
+      if attr === "full_name" && input.blank?
+        input = action["name"]
+      end
+      
+      if input.present?        
+        value = CustomWizard::Mapper.new(
+          inputs: input,
+          data: data,
+          user: user
+        ).perform
+        
+        value = value.parameterize(separator: '_') if attr === "name"
+        value = value.to_i if attr.include?("_level")
+        
+        params[attr.to_sym] = value
+      end
+    end
+    
+    add_custom_fields(params)
+  end
+  
+  def new_category_params
+    params = {}
+    
+    %w(
+      name
+      slug
+      color
+      text_color
+      parent_category_id
+      permissions
+    ).each do |attr|
+      if action[attr].present?        
+        value = CustomWizard::Mapper.new(
+          inputs: action[attr],
+          data: data,
+          user: user
+        ).perform
+        
+        if attr === "parent_category_id" && value.is_a?(Array)
+          value = value[0]
+        end
+        
+        if attr === "permissions" && value.is_a?(Array)
+          permissions = value
+          value = {}
+          
+          permissions.each do |p|
+            k = p[:key]
+            v = p[:value].to_i
+            
+            if k.is_a?(Array)
+              group = Group.find_by(id: k[0])
+              k = group.name
+            else
+              k = k.parameterize(separator: '_')
+            end
+            
+            value[k] = v 
+          end
+        end
+        
+        params[attr.to_sym] = value
+      end
+    end
     
     add_custom_fields(params)
   end
