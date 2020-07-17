@@ -1,5 +1,5 @@
 class CustomWizard::ActionResult
-  attr_accessor :success, :handler
+  attr_accessor :success, :handler, :output
 
   def initialize
     @success = false

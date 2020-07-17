@@ -94,6 +94,7 @@ en:
           label:
             text: "text"
             wizard_field: "wizard field"
+            wizard_action: "wizard action"
             user_field: "user field"
             user_field_options: "user field options"
             user: "user"
@@ -106,6 +107,7 @@ en:
             text: "Enter text"
             property: "Select property"
             wizard_field: "Select field"
+            wizard_action: "Select action"
             user_field: "Select field"
             user_field_options: "Select field"
             user: "Select user"
@@ -226,6 +228,7 @@ en:
             label: "Builder"
             user_properties: "User Properties"
             wizard_fields: "Wizard Fields"
+            wizard_actions: "Wizard Actions"
             placeholder: "Insert wizard fields using the field_id in w{}. Insert user properties using property in u{}."
           add_to_group:
             label: "Add to Group"

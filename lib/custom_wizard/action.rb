@@ -24,6 +24,10 @@ class CustomWizard::Action
       @result.handler.enqueue_jobs
     end
     
+    if @result.success? && @result.output.present?
+      data[action['id']] = @result.output
+    end
+    
     save_log
   end
   
@@ -51,6 +55,7 @@ class CustomWizard::Action
       if creator.errors.blank?
         log_success("created topic", "id: #{post.topic.id}")
         result.handler = creator
+        result.output = post.topic.id
       end
     else
       log_error("invalid topic params", "title: #{params[:title]}; post: #{params[:raw]}")
@@ -89,6 +94,7 @@ class CustomWizard::Action
       if creator.errors.blank?
         log_success("created message", "id: #{post.topic.id}")
         result.handler = creator
+        result.output = post.topic.id
       end
     else
       log_error(
@@ -289,6 +295,7 @@ class CustomWizard::Action
     if group.save
       GroupActionLogger.new(user, group).log_change_group_settings
       log_success("Group created", group.name)
+      result.output = group.name
     else
       log_error("Group creation failed")
     end
@@ -307,6 +314,7 @@ class CustomWizard::Action
     if category.save
       StaffActionLogger.new(user).log_category_creation(category)
       log_success("Category created", category.name)
+      result.output = category.id
     else
       log_error("Category creation failed")
     end
