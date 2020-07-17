@@ -404,9 +404,19 @@ class CustomWizard::Action
       members_visibility_level
       grant_trust_level
     ).each do |attr|
-      if action[attr].present?        
+      input = action[attr]
+      
+      if attr === "name" && input.blank?
+        raise ArgumentError.new
+      end
+      
+      if attr === "full_name" && input.blank?
+        input = action["name"]
+      end
+      
+      if input.present?        
         value = CustomWizard::Mapper.new(
-          inputs: action[attr],
+          inputs: input,
           data: data,
           user: user
         ).perform
