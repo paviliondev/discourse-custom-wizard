@@ -26,7 +26,7 @@ export default Component.extend(UndoChanges, {
   groupPropertyTypes: selectKitContent(['id', 'name']),
   hasAdvanced: or('hasCustomFields', 'routeTo'),
   showAdvanced: and('hasAdvanced', 'action.type'),
-  hasCustomFields: or('basicTopicFields', 'updateProfile'),
+  hasCustomFields: or('basicTopicFields', 'updateProfile', 'createGroup', 'createCategory'),
   basicTopicFields: or('createTopic', 'sendMessage', 'openComposer'),
   publicTopicFields: or('createTopic', 'openComposer'),
   showSkipRedirect: or('createTopic', 'sendMessage'),

@@ -164,7 +164,8 @@ const action = {
       color: null,
       text_color: "FFFFFF",
       parent_category_id: null,
-      permissions: null
+      permissions: null,
+      custom_fields: null
     },
     create_group: {
       name: null,
@@ -177,7 +178,8 @@ const action = {
       mentionable_level: null,
       messageable_level: null,
       visibility_level: null,
-      members_visibility_level: null
+      members_visibility_level: null,
+      custom_fields: null
     }
   },
   mapped: [
