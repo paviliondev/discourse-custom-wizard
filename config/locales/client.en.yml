@@ -223,6 +223,8 @@ en:
               watching_first_post: "Watching First Post"
               muted: "Muted"
             select_a_notification_level: "Select level"
+            wizard_user: "Wizard User"
+            usernames: "Users"
           post_builder:
             checkbox: "Post Builder"
             label: "Builder"

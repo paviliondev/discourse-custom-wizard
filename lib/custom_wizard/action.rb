@@ -143,17 +143,18 @@ class CustomWizard::Action
   end
 
   def watch_categories
-
     watched_categories = CustomWizard::Mapper.new(
       inputs: action['categories'],
       data: data,
       user: user
     ).perform
+        
+    watched_categories = [*watched_categories].map(&:to_i)
 
     notification_level = action['notification_level']
 
     if notification_level.blank?
-      log_error("Notifcation Level was not set! Exiting wizard action")
+      log_error("Notifcation Level was not set. Exiting wizard action")
       return
     end
 
@@ -162,12 +163,52 @@ class CustomWizard::Action
       data: data,
       user: user
     ).perform
+    
+    users = []
+    
+    if action['usernames']
+      mapped_users = CustomWizard::Mapper.new(
+        inputs: action['usernames'],
+        data: data,
+        user: user
+      ).perform
+      
+      if mapped_users.present?
+        mapped_users = mapped_users.split(',')
+          .map { |username| User.find_by(username: username) }
+        users.push(*mapped_users)
+      end
+    end
+    
+    if ActiveRecord::Type::Boolean.new.cast(action['wizard_user'])
+      users.push(user)
+    end
 
-    Category.all.each do |category|
-      if watched_categories.present? && watched_categories.include?(category.id.to_s)
-       CategoryUser.set_notification_level_for_category(user, CategoryUser.notification_levels[notification_level.to_sym], category.id)
-      elsif mute_remainder
-        CategoryUser.set_notification_level_for_category(user, CategoryUser.notification_levels[:muted], category.id)
+    category_ids = Category.all.pluck(:id)
+    set_level = CategoryUser.notification_levels[notification_level.to_sym]
+    mute_level = CategoryUser.notification_levels[:muted]
+            
+    users.each do |user|
+      category_ids.each do |category_id|
+        new_level = nil
+        
+        if watched_categories.include?(category_id) && set_level != nil
+          new_level = set_level
+        elsif mute_remainder
+          new_level = mute_level
+        end
+        
+        if new_level
+          CategoryUser.set_notification_level_for_category(user, new_level, category_id)
+        end
+      end
+      
+      if watched_categories.any?
+        log_success("#{user.username} notifications for #{watched_categories} set to #{set_level}")
+      end
+      
+      if mute_remainder
+        log_success("#{user.username} notifications for all other categories muted")
       end
     end
   end
