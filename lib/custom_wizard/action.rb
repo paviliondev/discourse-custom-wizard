@@ -149,9 +149,7 @@ class CustomWizard::Action
       user: user
     ).perform
         
-    unless watched_categories.is_a?(Array)
-      watched_categories = [watched_categories]
-    end
+    watched_categories = [*watched_categories].map(&:to_i)
 
     notification_level = action['notification_level']
 
