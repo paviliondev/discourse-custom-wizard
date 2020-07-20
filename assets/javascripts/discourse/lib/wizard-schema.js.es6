@@ -115,6 +115,7 @@ const action = {
       post_template: null,
       category: null,
       tags: null,
+      visible: null,
       custom_fields: null,
       skip_redirect: null
     },
@@ -188,6 +189,7 @@ const action = {
     'title',
     'category',
     'tags',
+    'visible',
     'custom_fields',
     'required',
     'recipient',

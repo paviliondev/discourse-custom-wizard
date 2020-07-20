@@ -205,6 +205,7 @@ en:
             label: "Create Topic"
             category: "Category"
             tags: "Tags"
+            visible: "Visible"
           open_composer:
             label: "Open Composer"
           update_profile:

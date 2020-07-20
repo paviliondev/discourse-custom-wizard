@@ -125,6 +125,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
         category: mapped_params,
         tags: mapped_params,
         custom_fields: mapped_params,
+        visible: mapped_params,
         required: mapped_params,
         recipient: mapped_params,
         categories: mapped_params,

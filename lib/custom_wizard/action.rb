@@ -36,12 +36,9 @@ class CustomWizard::Action
   end
   
   def create_topic
-    params = basic_topic_params
+    params = basic_topic_params.merge(public_topic_params)
             
     if params[:title].present? && params[:raw].present?
-      params[:category] = action_category
-      params[:tags] = action_tags
-      
       creator = PostCreator.new(user, params)
       post = creator.create
             
@@ -437,6 +434,32 @@ class CustomWizard::Action
     add_custom_fields(params)
   end
   
+  def public_topic_params
+    params = {}
+    
+    if (category = action_category)
+      params[:category] = category
+    end
+    
+    if (tags = action_tags)
+      params[:tags] = tags
+    end
+    
+    if public_topic_fields.any?
+      public_topic_fields.each do |field|
+        unless action[field].nil? || action[field] == ""
+          params[field.to_sym] = CustomWizard::Mapper.new(
+            inputs: action[field],
+            data: data,
+            user: user
+          ).perform
+        end
+      end
+    end
+    
+    params
+  end
+  
   def new_group_params
     params = {}
     
@@ -530,6 +553,10 @@ class CustomWizard::Action
   
   def creates_post?
     [:create_topic, :send_message].include?(action['type'].to_sym)
+  end
+  
+  def public_topic_fields
+    ['visible']
   end
   
   def profile_url_fields
