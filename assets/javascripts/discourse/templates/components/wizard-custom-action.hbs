@@ -297,6 +297,7 @@
         options=(hash
           textSelection='key,value'
           wizardFieldSelection=true
+          wizardActionSelection=true
           userFieldSelection='key,value'
           categorySelection='output'
           context='action'
@@ -335,6 +336,35 @@
         options=(hash
           isDisabled=action.custom_title_enabled
           none='admin.wizard.action.watch_categories.select_a_notification_level'
+        )}}
+    </div>
+  </div>
+  
+  <div class="setting full">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.watch_categories.wizard_user"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{input type="checkbox" checked=action.wizard_user}}
+    </div>
+  </div>
+  
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.watch_categories.usernames"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.usernames
+        property='usernames'
+        onUpdate=(action 'mappedFieldUpdated')
+        options=(hash
+          context='action'
+          wizardFieldSelection=true
+          userFieldSelection='key,value'
+          userSelection='output'
         )}}
     </div>
   </div>

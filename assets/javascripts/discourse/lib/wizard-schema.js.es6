@@ -144,7 +144,9 @@ const action = {
     watch_categories: {
       categories: null,
       notification_level: null,
-      mute_remainder: null
+      mute_remainder: null,
+      wizard_user: true,
+      usernames: null
     },
     send_to_api: {
       api: null,

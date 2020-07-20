@@ -120,6 +120,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
         :api,
         :api_endpoint,
         :api_body,
+        :wizard_user,
         title: mapped_params,
         category: mapped_params,
         tags: mapped_params,
