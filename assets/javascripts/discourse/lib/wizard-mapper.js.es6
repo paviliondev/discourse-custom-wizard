@@ -80,6 +80,7 @@ const selectionTypes = [
   'text',
   'list',
   'wizardField',
+  'wizardAction',
   'userField',
   'userFieldOptions',
   'group',

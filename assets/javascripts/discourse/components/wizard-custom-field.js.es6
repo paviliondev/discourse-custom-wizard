@@ -17,7 +17,7 @@ export default Component.extend(UndoChanges, {
   isText: equal('field.type', 'text'),
   isTextarea: equal('field.type', 'textarea'),
   isUrl: equal('field.type', 'url'),
-  showPrefill: or('isCategory', 'isTag', 'isGroup', 'isDropdown'),
+  showPrefill: or('isText', 'isCategory', 'isTag', 'isGroup', 'isDropdown'),
   showContent: or('isCategory', 'isTag', 'isGroup', 'isDropdown'),
   showLimit: or('isCategory', 'isTag'),
   showMinLength: or('isText', 'isTextarea', 'isUrl', 'isComposer'),

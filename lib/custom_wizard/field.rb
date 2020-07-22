@@ -2,10 +2,12 @@ class CustomWizard::Field
   def self.types
     @types ||= {
       text: {
-        min_length: nil
+        min_length: nil,
+        prefill: nil
       },
       textarea: {
-        min_length: nil
+        min_length: nil,
+        prefill: nil
       },
       composer: {
         min_length: nil

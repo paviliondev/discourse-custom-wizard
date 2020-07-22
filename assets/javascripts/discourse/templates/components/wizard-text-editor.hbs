@@ -28,6 +28,13 @@
             {{wizardFieldList}}
           </label>
         {{/if}}
+        
+        {{#if hasWizardActions}}
+          <label>
+            {{i18n 'admin.wizard.action.post_builder.wizard_actions'}}
+            {{wizardActionList}}
+          </label>
+        {{/if}}
       </div>
     {{/if}}
   {{/if}}

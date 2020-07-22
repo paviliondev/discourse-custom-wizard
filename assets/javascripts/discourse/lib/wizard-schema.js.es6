@@ -115,6 +115,7 @@ const action = {
       post_template: null,
       category: null,
       tags: null,
+      visible: null,
       custom_fields: null,
       skip_redirect: null
     },
@@ -144,7 +145,9 @@ const action = {
     watch_categories: {
       categories: null,
       notification_level: null,
-      mute_remainder: null
+      mute_remainder: null,
+      wizard_user: true,
+      usernames: null
     },
     send_to_api: {
       api: null,
@@ -157,12 +160,36 @@ const action = {
     route_to: {
       url: null,
       code: null
+    },
+    create_category: {
+      name: null,
+      slug: null,
+      color: null,
+      text_color: "FFFFFF",
+      parent_category_id: null,
+      permissions: null,
+      custom_fields: null
+    },
+    create_group: {
+      name: null,
+      full_name: null,
+      title: null,
+      bio_raw: null,
+      owner_usernames: null,
+      usernames: null,
+      grant_trust_level: null,
+      mentionable_level: null,
+      messageable_level: null,
+      visibility_level: null,
+      members_visibility_level: null,
+      custom_fields: null
     }
   },
   mapped: [
     'title',
     'category',
     'tags',
+    'visible',
     'custom_fields',
     'required',
     'recipient',
@@ -170,7 +197,22 @@ const action = {
     'group',
     'url',
     'categories',
-    'mute_remainder'
+    'mute_remainder',
+    'name',
+    'slug',
+    'color',
+    'text_color',
+    'parent_category_id',
+    'permissions',
+    'full_name',
+    'bio_raw',
+    'owner_usernames',
+    'usernames',
+    'grant_trust_level',
+    'mentionable_level',
+    'messageable_level',
+    'visibility_level',
+    'members_visibility_level'
   ],
   advanced: [
     'code',

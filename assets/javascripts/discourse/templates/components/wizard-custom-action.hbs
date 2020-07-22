@@ -139,6 +139,24 @@
         )}}
     </div>
   </div>
+  
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.create_topic.visible"}}</label>
+    </div>
+    
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.visible
+        property='visible'
+        onUpdate=(action 'mappedFieldUpdated')
+        options=(hash
+          wizardFieldSelection=true
+          userFieldSelection=true
+          context='action'
+        )}}
+    </div>
+  </div>
 {{/if}}
 
 {{#if sendMessage}}  
@@ -297,6 +315,7 @@
         options=(hash
           textSelection='key,value'
           wizardFieldSelection=true
+          wizardActionSelection=true
           userFieldSelection='key,value'
           categorySelection='output'
           context='action'
@@ -335,6 +354,358 @@
         options=(hash
           isDisabled=action.custom_title_enabled
           none='admin.wizard.action.watch_categories.select_a_notification_level'
+        )}}
+    </div>
+  </div>
+  
+  <div class="setting full">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.watch_categories.wizard_user"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{input type="checkbox" checked=action.wizard_user}}
+    </div>
+  </div>
+  
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.watch_categories.usernames"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.usernames
+        property='usernames'
+        onUpdate=(action 'mappedFieldUpdated')
+        options=(hash
+          context='action'
+          wizardFieldSelection=true
+          userFieldSelection='key,value'
+          userSelection='output'
+        )}}
+    </div>
+  </div>
+{{/if}}
+
+{{#if createGroup}}
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.create_group.name"}}</label>
+    </div>
+    
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.name
+        property='name'
+        onUpdate=(action 'mappedFieldUpdated')
+        options=(hash
+          textSelection=true
+          wizardFieldSelection=true
+          userFieldSelection=true
+          context='action'
+        )}}
+    </div>
+  </div>
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.create_group.full_name"}}</label>
+    </div>
+    
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.full_name
+        property='full_name'
+        onUpdate=(action 'mappedFieldUpdated')
+        options=(hash
+          textSelection=true
+          wizardFieldSelection=true
+          userFieldSelection=true
+          context='action'
+        )}}
+    </div>
+  </div>
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.create_group.title"}}</label>
+    </div>
+    
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.title
+        property='title'
+        onUpdate=(action 'mappedFieldUpdated')
+        options=(hash
+          textSelection=true
+          wizardFieldSelection=true
+          userFieldSelection=true
+          context='action'
+        )}}
+    </div>
+  </div>
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.create_group.bio_raw"}}</label>
+    </div>
+    
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.bio_raw
+        property='bio_raw'
+        onUpdate=(action 'mappedFieldUpdated')
+        options=(hash
+          textSelection=true
+          wizardFieldSelection=true
+          userFieldSelection=true
+          context='action'
+        )}}
+    </div>
+  </div>
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.create_group.owner_usernames"}}</label>
+    </div>
+    
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.owner_usernames
+        property='owner_usernames'
+        onUpdate=(action 'mappedFieldUpdated')
+        options=(hash
+          textSelection=true
+          wizardFieldSelection=true
+          userFieldSelection=true
+          userSelection='output'
+          context='action'
+        )}}
+    </div>
+  </div>
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.create_group.usernames"}}</label>
+    </div>
+    
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.usernames
+        property='usernames'
+        onUpdate=(action 'mappedFieldUpdated')
+        options=(hash
+          textSelection=true
+          wizardFieldSelection=true
+          userFieldSelection=true
+          userSelection='output'
+          context='action'
+        )}}
+    </div>
+  </div>
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.create_group.grant_trust_level"}}</label>
+    </div>
+    
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.grant_trust_level
+        property='grant_trust_level'
+        onUpdate=(action 'mappedFieldUpdated')
+        options=(hash
+          textSelection=true
+          wizardFieldSelection=true
+          userFieldSelection=true
+          context='action'
+        )}}
+    </div>
+  </div>
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.create_group.mentionable_level"}}</label>
+    </div>
+    
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.mentionable_level
+        property='mentionable_level'
+        onUpdate=(action 'mappedFieldUpdated')
+        options=(hash
+          textSelection=true
+          wizardFieldSelection=true
+          userFieldSelection=true
+          context='action'
+        )}}
+    </div>
+  </div>
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.create_group.messageable_level"}}</label>
+    </div>
+    
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.messageable_level
+        property='messageable_level'
+        onUpdate=(action 'mappedFieldUpdated')
+        options=(hash
+          textSelection=true
+          wizardFieldSelection=true
+          userFieldSelection=true
+          context='action'
+        )}}
+    </div>
+  </div>
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.create_group.visibility_level"}}</label>
+    </div>
+    
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.visibility_level
+        property='visibility_level'
+        onUpdate=(action 'mappedFieldUpdated')
+        options=(hash
+          textSelection=true
+          wizardFieldSelection=true
+          userFieldSelection=true
+          context='action'
+        )}}
+    </div>
+  </div>  
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.create_group.members_visibility_level"}}</label>
+    </div>
+    
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.members_visibility_level
+        property='members_visibility_level'
+        onUpdate=(action 'mappedFieldUpdated')
+        options=(hash
+          textSelection=true
+          wizardFieldSelection=true
+          userFieldSelection=true
+          context='action'
+        )}}
+    </div>
+  </div>
+{{/if}}
+
+{{#if createCategory}}
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.create_category.name"}}</label>
+    </div>
+    
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.name
+        property='name'
+        onUpdate=(action 'mappedFieldUpdated')
+        options=(hash
+          textSelection='key,value'
+          wizardFieldSelection=true
+          userFieldSelection='key,value'
+          context='action'
+        )}}
+    </div>
+  </div>
+  
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.create_category.slug"}}</label>
+    </div>
+    
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.slug
+        property='slug'
+        onUpdate=(action 'mappedFieldUpdated')
+        options=(hash
+          textSelection=true
+          wizardFieldSelection=true
+          userFieldSelection='key,value'
+          context='action'
+        )}}
+    </div>
+  </div>
+  
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.create_category.color"}}</label>
+    </div>
+    
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.color
+        property='color'
+        onUpdate=(action 'mappedFieldUpdated')
+        options=(hash
+          textSelection=true
+          wizardFieldSelection=true
+          userFieldSelection='key,value'
+          context='action'
+        )}}
+    </div>
+  </div>
+  
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.create_category.text_color"}}</label>
+    </div>
+    
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.text_color
+        property='text_color'
+        onUpdate=(action 'mappedFieldUpdated')
+        options=(hash
+          textSelection=true
+          wizardFieldSelection=true
+          userFieldSelection='key,value'
+          context='action'
+        )}}
+    </div>
+  </div>
+  
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.create_category.parent_category"}}</label>
+    </div>
+    
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.parent_category_id
+        property='parent_category_id'
+        onUpdate=(action 'mappedFieldUpdated')
+        options=(hash
+          textSelection='key,value'
+          wizardFieldSelection=true
+          userFieldSelection='key,value'
+          categorySelection='output'
+          context='action'
+        )}}
+    </div>
+  </div>
+  
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.create_category.permissions"}}</label>
+    </div>
+    
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.permissions
+        property='permissions'
+        onUpdate=(action 'mappedFieldUpdated')
+        options=(hash
+          inputTypes='association'
+          textSelection=true
+          wizardFieldSelection=true
+          wizardActionSelection='key'
+          userFieldSelection=true
+          groupSelection='key'
+          context='action'
         )}}
     </div>
   </div>

@@ -13,6 +13,7 @@ export default Component.extend({
   
   showText: computed('activeType', function() { return this.showInput('text') }),
   showWizardField: computed('activeType', function() { return this.showInput('wizardField') }),
+  showWizardAction: computed('activeType', function() { return this.showInput('wizardAction') }),
   showUserField: computed('activeType', function() { return this.showInput('userField') }),
   showUserFieldOptions: computed('activeType', function() { return this.showInput('userFieldOptions') }),
   showCategory: computed('activeType', function() { return this.showInput('category') }),
@@ -22,6 +23,7 @@ export default Component.extend({
   showList: computed('activeType', function() { return this.showInput('list') }),
   textEnabled: computed('options.textSelection', 'inputType', function() { return this.optionEnabled('textSelection') }),
   wizardFieldEnabled: computed('options.wizardFieldSelection', 'inputType', function() { return this.optionEnabled('wizardFieldSelection') }),
+  wizardActionEnabled: computed('options.wizardActionSelection', 'inputType', function() { return this.optionEnabled('wizardActionSelection') }),
   userFieldEnabled: computed('options.userFieldSelection', 'inputType', function() { return this.optionEnabled('userFieldSelection') }),
   userFieldOptionsEnabled: computed('options.userFieldOptionsSelection', 'inputType', function() { return this.optionEnabled('userFieldOptionsSelection') }),
   categoryEnabled: computed('options.categorySelection', 'inputType', function() { return this.optionEnabled('categorySelection') }),
@@ -32,7 +34,7 @@ export default Component.extend({
   
   groups: alias('site.groups'),
   categories: alias('site.categories'),
-  showComboBox: or('showWizardField', 'showUserField', 'showUserFieldOptions'),
+  showComboBox: or('showWizardField', 'showWizardAction', 'showUserField', 'showUserFieldOptions'),
   showMultiSelect: or('showCategory', 'showGroup'),
   hasTypes: gt('selectorTypes.length', 1),
   showTypes: false,
@@ -73,20 +75,48 @@ export default Component.extend({
     return type ? I18n.t(`admin.wizard.selector.label.${snakeCase(type)}`) : null;
   },
   
-  comboBoxAllowAny: alias('showWizardField'),
+  comboBoxAllowAny: or('showWizardField', 'showWizardAction'),
   
-  @discourseComputed('activeType')
-  comboBoxContent(activeType) {
-    const controller = getOwner(this).lookup('controller:admin-wizards-wizard-show');
-    const wizardFields = controller.wizardFields;
-    const userFields = controller.userFields;
+  @discourseComputed
+  showController() {
+    return getOwner(this).lookup('controller:admin-wizards-wizard-show');
+  },
+  
+  @discourseComputed(
+    'activeType',
+    'showController.wizardFields.[]',
+    'showController.wizard.actions.[]',
+    'showController.userFields.[]',
+    'showController.currentField.id',
+    'showController.currentAction.id'
+  )
+  comboBoxContent(
+    activeType,
+    wizardFields,
+    wizardActions,
+    userFields,
+    currentFieldId,
+    currentActionId
+  ) {
     let content;
     
     if (activeType === 'wizardField') {
       content = wizardFields;
       
       if (this.options.context === 'field') {
-        content = content.filter(field => field.id !== controller.currentField.id);
+        content = content.filter(field => field.id !== currentFieldId);
+      }
+    }
+    
+    if (activeType === 'wizardAction') {
+      content = wizardActions.map(a => ({
+        id: a.id,
+        label: `${generateName(a.type)} (${a.id})`,
+        type: a.type
+      }));
+            
+      if (this.options.context === 'action') {
+        content = content.filter(a => a.id !== currentActionId);
       }
     }
     
