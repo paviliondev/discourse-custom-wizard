@@ -317,6 +317,10 @@ input.date-picker {
   padding: 6px;
 }
 
+.d-date-time-input {
+  display: flex;
+}
+
 .step-message {
   text-align: center;
   transition: all .2s;
