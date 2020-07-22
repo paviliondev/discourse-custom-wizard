@@ -249,6 +249,7 @@ class CustomWizard::Mapper
   end
   
   def recurse(data, keys)
+    return nil if data.nil?
     k = keys.shift
     result = data[k]
     keys.empty? ? result : self.recurse(result, keys)

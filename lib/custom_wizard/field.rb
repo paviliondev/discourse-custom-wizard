@@ -13,7 +13,15 @@ class CustomWizard::Field
         min_length: nil
       },
       text_only: {},
-      date: {},
+      date: {
+        format: "YYYY-MM-DD"
+      },
+      time: {
+        format: "HH:mm"
+      },
+      date_time: {
+        format: ""
+      },
       number: {},
       checkbox: {},
       url: {

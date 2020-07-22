@@ -150,6 +150,9 @@ en:
           property: "Property"
           prefill: "Prefill"
           content: "Content"
+          date_time_format: 
+            label: "Format"
+            instructions: "<a href='https://momentjs.com/docs/#/displaying/format/' target='_blank'>Moment.js format</a>"
           
           type:
             text: "Text"
@@ -166,6 +169,8 @@ en:
             group: Group
             user_selector: User Selector
             date: Date
+            time: Time
+            date_time: Date & Time
         
         connector:
           and: "and"
