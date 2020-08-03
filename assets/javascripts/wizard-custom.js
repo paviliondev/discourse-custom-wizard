@@ -19,9 +19,8 @@
 //= require discourse/app/lib/formatter
 //= require discourse/app/lib/quote
 //= require discourse/app/lib/link-mentions
-//= require discourse/app/lib/link-category-hashtags
+//= require discourse/app/lib/link-hashtags
 //= require discourse/app/lib/category-hashtags
-//= require discourse/app/lib/link-tag-hashtag
 //= require discourse/app/lib/tag-hashtags
 //= require discourse/app/lib/uploads
 //= require discourse/app/lib/category-tag-search
@@ -90,6 +89,9 @@
 //= require discourse/app/components/emoji-picker
 //= require discourse/app/components/input-tip
 //= require discourse/app/components/date-picker
+//= require discourse/app/components/time-input
+//= require discourse/app/components/date-input
+//= require discourse/app/components/date-time-input
 //= require discourse/app/components/text-field
 //= require discourse/app/components/d-textarea
 
@@ -97,6 +99,9 @@
 //= require discourse/app/templates/components/d-button
 //= require discourse/app/templates/components/d-editor
 //= require discourse/app/templates/components/date-picker
+//= require discourse/app/templates/components/date-input
+//= require discourse/app/templates/components/time-input
+//= require discourse/app/templates/components/date-time-input
 //= require discourse/app/templates/components/emoji-picker
 //= require discourse/app/templates/components/popup-input-tip
 //= require discourse/app/templates/category-tag-autocomplete

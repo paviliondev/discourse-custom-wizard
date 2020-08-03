@@ -187,6 +187,10 @@ class CustomWizard::Mapper
   def map_wizard_field(value)
     data && !data.key?("submitted_at") && data[value]
   end
+  
+  def map_wizard_action(value)
+    data && !data.key?("submitted_at") && data[value]
+  end
 
   def map_user_field(value)
     if value.include?(User::USER_FIELD_PREFIX)
@@ -245,6 +249,7 @@ class CustomWizard::Mapper
   end
   
   def recurse(data, keys)
+    return nil if data.nil?
     k = keys.shift
     result = data[k]
     keys.empty? ? result : self.recurse(result, keys)

@@ -4,6 +4,7 @@ class CustomWizard::FieldSerializer < ::WizardFieldSerializer
   
   attributes :image,
              :file_types,
+             :format,
              :limit,
              :property,
              :content
@@ -32,6 +33,10 @@ class CustomWizard::FieldSerializer < ::WizardFieldSerializer
 
   def file_types
     object.file_types
+  end
+  
+  def format
+    object.format
   end
   
   def limit

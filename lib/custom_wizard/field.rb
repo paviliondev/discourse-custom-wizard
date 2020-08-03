@@ -2,16 +2,26 @@ class CustomWizard::Field
   def self.types
     @types ||= {
       text: {
-        min_length: nil
+        min_length: nil,
+        prefill: nil
       },
       textarea: {
-        min_length: nil
+        min_length: nil,
+        prefill: nil
       },
       composer: {
         min_length: nil
       },
       text_only: {},
-      date: {},
+      date: {
+        format: "YYYY-MM-DD"
+      },
+      time: {
+        format: "HH:mm"
+      },
+      date_time: {
+        format: ""
+      },
       number: {},
       checkbox: {},
       url: {

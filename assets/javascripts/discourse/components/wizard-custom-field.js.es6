@@ -17,13 +17,18 @@ export default Component.extend(UndoChanges, {
   isText: equal('field.type', 'text'),
   isTextarea: equal('field.type', 'textarea'),
   isUrl: equal('field.type', 'url'),
-  showPrefill: or('isCategory', 'isTag', 'isGroup', 'isDropdown'),
+  showPrefill: or('isText', 'isCategory', 'isTag', 'isGroup', 'isDropdown'),
   showContent: or('isCategory', 'isTag', 'isGroup', 'isDropdown'),
   showLimit: or('isCategory', 'isTag'),
   showMinLength: or('isText', 'isTextarea', 'isUrl', 'isComposer'),
   categoryPropertyTypes: selectKitContent(['id', 'slug']),
   showAdvanced: alias('field.type'),
   messageUrl: 'https://thepavilion.io/t/2809',
+  
+  @discourseComputed('field.type')
+  isDateTime(type) {
+    return ['date_time', 'date', 'time'].indexOf(type) > -1;
+  },
   
   @discourseComputed('field.type')
   messageKey(type) {

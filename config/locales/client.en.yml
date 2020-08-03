@@ -94,6 +94,7 @@ en:
           label:
             text: "text"
             wizard_field: "wizard field"
+            wizard_action: "wizard action"
             user_field: "user field"
             user_field_options: "user field options"
             user: "user"
@@ -106,6 +107,7 @@ en:
             text: "Enter text"
             property: "Select property"
             wizard_field: "Select field"
+            wizard_action: "Select action"
             user_field: "Select field"
             user_field_options: "Select field"
             user: "Select user"
@@ -148,6 +150,9 @@ en:
           property: "Property"
           prefill: "Prefill"
           content: "Content"
+          date_time_format: 
+            label: "Format"
+            instructions: "<a href='https://momentjs.com/docs/#/displaying/format/' target='_blank'>Moment.js format</a>"
           
           type:
             text: "Text"
@@ -164,6 +169,8 @@ en:
             group: Group
             user_selector: User Selector
             date: Date
+            time: Time
+            date_time: Date & Time
         
         connector:
           and: "and"
@@ -203,6 +210,7 @@ en:
             label: "Create Topic"
             category: "Category"
             tags: "Tags"
+            visible: "Visible"
           open_composer:
             label: "Open Composer"
           update_profile:
@@ -221,11 +229,14 @@ en:
               watching_first_post: "Watching First Post"
               muted: "Muted"
             select_a_notification_level: "Select level"
+            wizard_user: "Wizard User"
+            usernames: "Users"
           post_builder:
             checkbox: "Post Builder"
             label: "Builder"
             user_properties: "User Properties"
             wizard_fields: "Wizard Fields"
+            wizard_actions: "Wizard Actions"
             placeholder: "Insert wizard fields using the field_id in w{}. Insert user properties using property in u{}."
           add_to_group:
             label: "Add to Group"
@@ -241,6 +252,27 @@ en:
             select_an_endpoint: "Select an endpoint"
             body: "Body"
             body_placeholder: "JSON"
+          create_category:
+            label: "Create Category"
+            name: Name
+            slug: Slug
+            color: Color
+            text_color: Text color
+            parent_category: Parent Category
+            permissions: Permissions
+          create_group:
+            label: Create Group
+            name: Name
+            full_name: Full Name
+            title: Title
+            bio_raw: About
+            owner_usernames: Owners
+            usernames: Members
+            grant_trust_level: Automatic Trust Level
+            mentionable_level: Mentionable Level
+            messageable_level: Messageable Level
+            visibility_level: Visibility Level
+            members_visibility_level: Members Visibility Level
         
         submissions:
           nav_label: "Submissions"

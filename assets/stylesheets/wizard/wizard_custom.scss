@@ -300,6 +300,27 @@
   }
 }
 
+input.date-picker {
+  font-size: 1.1487em;
+  padding: 6px;
+  border: 1px solid $primary;
+  transition: border-color 0.5s;
+}
+
+.pika-single.is-bound {
+  width: fit-content;
+  position: absolute !important;
+}
+
+.d-time-input .select-kit.combo-box .select-kit-header {
+  font-size: 1.1487em;
+  padding: 6px;
+}
+
+.d-date-time-input {
+  display: flex;
+}
+
 .step-message {
   text-align: center;
   transition: all .2s;

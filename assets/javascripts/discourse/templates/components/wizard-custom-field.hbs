@@ -110,6 +110,19 @@
   </div>
 {{/if}}
 
+{{#if isDateTime}}
+  <div class="setting">
+    <div class="setting-label">
+      <label>{{{i18n 'admin.wizard.field.date_time_format.label'}}}</label>
+    </div>
+    
+    <div class="setting-value">
+      {{input value=field.format class="medium"}}
+      <label>{{{i18n 'admin.wizard.field.date_time_format.instructions'}}}</label>
+    </div>
+  </div>
+{{/if}}
+
 {{#if showPrefill}}
   <div class="setting full field-mapper-setting">
     <div class="setting-label">

@@ -46,7 +46,7 @@ export default Controller.extend({
       I18n.t('admin.wizard.after_time_time_label');
   },
   
-  @discourseComputed('currentStep.id', 'wizard.save_submissions', 'wizard.steps.@each.fields[]')
+  @discourseComputed('currentStep.id', 'wizard.save_submissions', 'currentStep.fields.@each.label')
   wizardFields(currentStepId, saveSubmissions) {
     let steps = this.wizard.steps;
     if (!saveSubmissions) {

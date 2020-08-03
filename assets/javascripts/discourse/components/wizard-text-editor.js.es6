@@ -11,6 +11,7 @@ export default Component.extend({
   previewEnabled: true,
   fieldsEnabled: true,
   hasWizardFields: notEmpty('wizardFieldList'),
+  hasWizardActions: notEmpty('wizardActionList'),
   
   didReceiveAttrs() {
     this._super(...arguments);
@@ -44,6 +45,11 @@ export default Component.extend({
   @discourseComputed('wizardFields')
   wizardFieldList(wizardFields) {
     return wizardFields.map((f) => ` w{${f.id}}`);
+  },
+  
+  @discourseComputed('wizardActions')
+  wizardActionList(wizardActions) {
+    return wizardActions.map((a) => ` w{${a.id}}`);
   },
   
   actions: {
