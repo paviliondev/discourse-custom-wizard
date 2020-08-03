@@ -22,6 +22,7 @@ export default {
     const Singleton = requirejs("discourse/mixins/singleton").default;
     const Store = requirejs("discourse/models/store").default;
     const registerRawHelpers = requirejs("discourse-common/lib/raw-handlebars-helpers").registerRawHelpers;
+    const createHelperContext = requirejs("discourse-common/lib/helpers").createHelperContext;
     const RawHandlebars = requirejs("discourse-common/lib/raw-handlebars").default;
     const Site = requirejs("discourse/plugins/discourse-custom-wizard/wizard/models/site").default;
     const RestAdapter = requirejs("discourse/adapters/rest").default;
@@ -49,6 +50,7 @@ export default {
 
     const siteSettings = Wizard.SiteSettings;
     app.register("site-settings:main", siteSettings, { instantiate: false });
+    createHelperContext(siteSettings);
     targets.forEach(t => app.inject(t, "siteSettings", "site-settings:main"));
     
     app.register("service:store", Store);
