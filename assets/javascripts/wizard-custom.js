@@ -34,6 +34,7 @@
 //= require discourse/app/lib/put-cursor-at-end
 //= require discourse/app/lib/safari-hacks
 //= require discourse/app/lib/preload-store
+//= require discourse/app/lib/topic-fancy-title
 
 //= require discourse/app/mixins/singleton
 
