@@ -94,6 +94,7 @@
 //= require discourse/app/components/date-time-input
 //= require discourse/app/components/text-field
 //= require discourse/app/components/d-textarea
+//= require discourse/app/components/topic-list
 
 //= require discourse/app/templates/components/conditional-loading-spinner
 //= require discourse/app/templates/components/d-button
