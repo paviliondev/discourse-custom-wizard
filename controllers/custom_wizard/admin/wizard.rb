@@ -141,7 +141,6 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
         parent_category_id: mapped_params,
         permissions: mapped_params,
         full_name: mapped_params,
-        title: mapped_params,
         bio_raw: mapped_params,
         usernames: mapped_params,
         owner_usernames: mapped_params,
