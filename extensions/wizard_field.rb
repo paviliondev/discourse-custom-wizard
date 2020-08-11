@@ -25,6 +25,6 @@ module CustomWizardFieldExtension
   end
 
   def label
-    @label ||= PrettyText.cook(@attrs[:label])
+    @label ||= @attrs[:label]
   end
 end
