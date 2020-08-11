@@ -171,6 +171,7 @@ en:
             date: Date
             time: Time
             date_time: Date & Time
+            item_chooser: Item Chooser
         
         connector:
           and: "and"

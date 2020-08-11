@@ -49,7 +49,8 @@ class CustomWizard::Field
         prefill: nil,
         content: nil
       },
-      user_selector: {}
+      user_selector: {},
+      item_chooser: {}
     }
   end
 

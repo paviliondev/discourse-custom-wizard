@@ -53,6 +53,7 @@ after_initialize do
     ../controllers/custom_wizard/wizard.rb
     ../controllers/custom_wizard/steps.rb
     ../controllers/custom_wizard/transfer.rb
+    ../controllers/custom_wizard/item.rb
     ../jobs/clear_after_time_wizard.rb
     ../jobs/refresh_api_access_token.rb
     ../jobs/set_after_time_wizard.rb
@@ -61,6 +62,7 @@ after_initialize do
     ../lib/custom_wizard/builder.rb
     ../lib/custom_wizard/field.rb
     ../lib/custom_wizard/mapper.rb
+    ../lib/custom_wizard/item.rb
     ../lib/custom_wizard/log.rb
     ../lib/custom_wizard/step_updater.rb
     ../lib/custom_wizard/validator.rb
