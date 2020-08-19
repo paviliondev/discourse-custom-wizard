@@ -344,7 +344,7 @@
   }
 
   .buttons .error {
-    color: $danger;
+    color: var(--danger);
 
     .fa {
       margin-right: 5px;
@@ -509,7 +509,7 @@
     top: 50%;
     width: 9999px;
     height: 1px;
-    background: $tertiary;
+    background: var(--tertiary);
   }
 
   > span:before {

@@ -17,7 +17,7 @@
 
     .field-description {
       flex: 1;
-      color: $primary;
+      color: var(--primary);
       margin-top: 0;
 
       p {
@@ -35,7 +35,7 @@
     &.invalid {
       textarea, input[type=text], input[type=checkbox], .select-kit {
         padding: 3px;
-        border: 4px solid $danger;
+        border: 4px solid var(--danger);
       }
     }
   }
@@ -75,12 +75,6 @@
   .wizard-step-form .wizard-btn {
     display: block;
     margin: 20px 0;
-    color: var(--primary);
-    background: var(--primary-low);
-    
-    &.primary {
-      background: $tertiary;
-    }
   }
 
   .wizard-image-row {
@@ -130,7 +124,7 @@
   input.date-picker {
     font-size: 1.1487em;
     padding: 6px;
-    border: 1px solid $primary;
+    border: 1px solid var(--primary);
     transition: border-color 0.5s;
   }
 

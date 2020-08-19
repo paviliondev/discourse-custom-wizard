@@ -113,7 +113,7 @@
   
   .wizard-progress {
     .screen {
-      background-color: $tertiary;
+      background-color: var(--tertiary);
     }
   }
 
@@ -124,18 +124,18 @@
     padding: 20px;
 
     &.success {
-      background-color: $success;
-      color: $secondary;
+      background-color: var(--success);
+      color: var(--secondary);
     }
 
     &.error {
-      background-color: $danger;
-      color: $secondary;
+      background-color: var(--danger);
+      color: var(--secondary);
     }
 
     &.not-permitted {
-      background-color: $danger;
-      color: $secondary;
+      background-color: var(--danger);
+      color: var(--secondary);
     }
     
     .text {

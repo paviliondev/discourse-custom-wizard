@@ -2,8 +2,8 @@ div.ac-wrap {
   overflow: visible;
   max-height: 150px;
   min-height: 34px;
-  background-color: $secondary;
-  border: 1px solid $primary-medium;
+  background-color: var(--secondary);
+  border: 1px solid var(--primary-medium);
   padding: 5px 4px 1px 4px;
 
   div.item {
@@ -88,13 +88,16 @@ img.avatar {
         
         span.username {
           color: var(--primary);
+          vertical-align: middle;
         }
         span.name {
           font-size: $font-down-1;
           vertical-align: middle;
+          margin-left: 5px;
+          color: var(--primary);
         }
         &.selected {
-          background-color: var(--tertiary-low);
+          background-color: var(--tertiary);
         }
         &:hover {
           background-color: var(--highlight-low);
@@ -145,11 +148,11 @@ img.avatar {
 
 .ac-form-result {
   cursor: pointer;
-  background-color: $secondary;
+  background-color: var(--secondary);
   display: flex;
 
   &:hover, &.selected {
-    background-color: $tertiary;
+    background-color: var(--tertiary);
     color: white;
 
     label {

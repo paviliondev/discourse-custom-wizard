@@ -88,14 +88,6 @@ after_initialize do
     load File.expand_path(path, __FILE__)
   end
   
-  reloadable_patch do
-    full_path = File.dirname(@path) << "/assets/stylesheets/wizard/wizard_custom.scss"
-    DiscoursePluginRegistry.register_asset(full_path, {}, "wizard_custom")
-    Stylesheet::Importer.register_import("wizard_custom") do
-      import_files(DiscoursePluginRegistry.stylesheets["wizard_custom"])
-    end
-  end
-  
   add_class_method(:wizard, :user_requires_completion?) do |user|
     wizard_result = self.new(user).requires_completion?
     return wizard_result if wizard_result
@@ -171,6 +163,8 @@ after_initialize do
   ::InvitesController.prepend InvitesControllerCustomWizard
   ::Wizard::Field.prepend CustomWizardFieldExtension
   ::Wizard::Step.prepend CustomWizardStepExtension
+  
+  CustomWizard::Wizard.register_styles
   
   DiscourseEvent.trigger(:custom_wizard_ready)
 end

@@ -364,4 +364,12 @@ class CustomWizard::Wizard
       false
     end
   end
+  
+  def self.register_styles
+    full_path = "#{Rails.root}/plugins/discourse-custom-wizard/assets/stylesheets/wizard/wizard_custom.scss"
+    DiscoursePluginRegistry.register_asset(full_path, {}, "wizard_custom")
+    Stylesheet::Importer.register_import("wizard_custom") do
+      import_files(DiscoursePluginRegistry.stylesheets["wizard_custom"])
+    end
+  end
 end

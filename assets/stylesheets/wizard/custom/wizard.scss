@@ -1,10 +1,10 @@
 .custom-wizard {
-  background-color: $secondary;
-  color: $primary;
+  background-color: var(--secondary);
+  color: var(--primary);
   font-size: 1.1em;
   
   .wizard-column {
-    background-color: $secondary;
+    background-color: var(--secondary);
     
     .wizard-field .input-area {
       margin: 0.5em 0;
@@ -15,7 +15,7 @@
     }
     
     .wizard-footer {
-      background-color: $secondary;
+      background-color: var(--secondary);
     }
   }
   
@@ -28,14 +28,26 @@
     margin-right: 10px;
   }
   
+  .wizard-column .wizard-btn {
+    color: var(--primary);
+    background: var(--primary-low);
+    cursor: pointer;
+    
+    &.primary,
+    &.next {
+      color: var(--secondary);
+      background: var(--tertiary);
+    }
+  }
+  
   .wizard-column .wizard-step-footer button.wizard-btn.done,
   .wizard-column .wizard-step-footer button.wizard-btn.finish {
-    color: $primary;
-    background-color: $success;
+    color: var(--secondary);
+    background-color: var(--success);
   }
   
   .wizard-column .action-link {
-    color: $tertiary;
+    color: var(--tertiary);
   }
 }
 
