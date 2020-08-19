@@ -1,0 +1,60 @@
+.custom-wizard {
+  background-color: $secondary;
+  color: $primary;
+  font-size: 1.1em;
+  
+  .wizard-column {
+    background-color: $secondary;
+    
+    .wizard-field .input-area {
+      margin: 0.5em 0;
+    }
+
+    .wizard-column-contents h1 {
+      margin: 0
+    }
+    
+    .wizard-footer {
+      background-color: $secondary;
+    }
+  }
+  
+  .wizard-buttons > a, .wizard-buttons > button, .spinner {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .spinner.small {
+    margin-right: 10px;
+  }
+  
+  .wizard-column .wizard-step-footer button.wizard-btn.done,
+  .wizard-column .wizard-step-footer button.wizard-btn.finish {
+    color: $primary;
+    background-color: $success;
+  }
+  
+  .wizard-column .action-link {
+    color: $tertiary;
+  }
+}
+
+.no-access-gutter {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* IE11 hacks */
+
+@media all and (-ms-high-contrast:none) {
+  .custom-wizard {
+    div.wizard-step-contents {
+      display: block;
+    }
+
+    div.wizard-progress {
+      visibility: hidden;
+    }
+  }
+}
