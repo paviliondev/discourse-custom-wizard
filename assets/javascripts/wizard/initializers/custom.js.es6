@@ -50,7 +50,7 @@ export default {
 
     const siteSettings = Wizard.SiteSettings;
     app.register("site-settings:main", siteSettings, { instantiate: false });
-    createHelperContext(siteSettings);
+    createHelperContext({ siteSettings });
     targets.forEach(t => app.inject(t, "siteSettings", "site-settings:main"));
     
     app.register("service:store", Store);
