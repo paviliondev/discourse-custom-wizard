@@ -1,5 +1,3 @@
-@import 'wizard_variables';
-
 .d-editor-container {
   display: flex;
   flex-grow: 1;
@@ -27,8 +25,8 @@
 .d-editor .d-editor-modal {
   min-width: 400px;
   position: absolute;
-  background-color: $secondary;
-  border: 1px solid $primary;
+  background-color: var(--secondary);
+  border: 1px solid var(--primary);
   padding: 1em;
   top: 25px;
 
@@ -54,8 +52,8 @@
 
 .d-editor-textarea-wrapper,
 .d-editor-preview-wrapper {
-  background-color: $secondary;
-  border: 1px solid #919191;
+  background-color: var(--secondary);
+  border: 1px solid var(--primary-medium);
   flex: 1;
 }
 
@@ -80,11 +78,11 @@
   border-bottom: none;
   min-height: 30px;
   padding-left: 3px;
-  border-bottom: 1px solid #e9e9e9;
+  border-bottom: 1px solid var(--primary-low);
 
   button {
     background-color: transparent;
-    color: $primary;
+    color: var(--primary);
   }
 
   .btn:not(.no-text) {
@@ -104,7 +102,7 @@
   width: 1px;
   height: 20px;
   margin: 0 5px;
-  background-color: $primary;
+  background-color: var(--primary);
   display: inline-block;
 }
 
@@ -151,7 +149,7 @@
 
 .composing-whisper .d-editor-preview {
   font-style: italic;
-  color: $primary !important;
+  color: var(--primary) !important;
 }
 
 .d-editor-preview > *:first-child {

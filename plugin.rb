@@ -164,5 +164,7 @@ after_initialize do
   ::Wizard::Field.prepend CustomWizardFieldExtension
   ::Wizard::Step.prepend CustomWizardStepExtension
   
+  CustomWizard::Wizard.register_styles
+  
   DiscourseEvent.trigger(:custom_wizard_ready)
 end

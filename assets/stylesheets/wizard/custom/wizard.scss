@@ -1,0 +1,72 @@
+.custom-wizard {
+  background-color: var(--secondary);
+  color: var(--primary);
+  font-size: 1.1em;
+  
+  .wizard-column {
+    background-color: var(--secondary);
+    
+    .wizard-field .input-area {
+      margin: 0.5em 0;
+    }
+
+    .wizard-column-contents h1 {
+      margin: 0
+    }
+    
+    .wizard-footer {
+      background-color: var(--secondary);
+    }
+  }
+  
+  .wizard-buttons > a, .wizard-buttons > button, .spinner {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .spinner.small {
+    margin-right: 10px;
+  }
+  
+  .wizard-column .wizard-btn {
+    color: var(--primary);
+    background: var(--primary-low);
+    cursor: pointer;
+    
+    &.primary,
+    &.next {
+      color: var(--secondary);
+      background: var(--tertiary);
+    }
+  }
+  
+  .wizard-column .wizard-step-footer button.wizard-btn.done,
+  .wizard-column .wizard-step-footer button.wizard-btn.finish {
+    color: var(--secondary);
+    background-color: var(--success);
+  }
+  
+  .wizard-column .action-link {
+    color: var(--tertiary);
+  }
+}
+
+.no-access-gutter {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* IE11 hacks */
+
+@media all and (-ms-high-contrast:none) {
+  .custom-wizard {
+    div.wizard-step-contents {
+      display: block;
+    }
+
+    div.wizard-progress {
+      visibility: hidden;
+    }
+  }
+}

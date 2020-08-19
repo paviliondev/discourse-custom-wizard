@@ -1,0 +1,151 @@
+.custom-wizard {
+  .wizard-step-contents {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: initial;
+    height: initial;
+    margin-bottom: 10px;
+  }
+
+  .wizard-step-title {
+    flex: 0;
+    
+    p {
+      margin: 0 0 0.5em 0;
+    }
+  }
+
+  img.emoji {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+  }
+
+  .wizard-step-description {
+    flex: 0;
+    margin-bottom: 0;
+
+    p {
+      line-height: 1.7;
+
+      img {
+        @extend img.emoji;
+      }
+    }
+
+    i {
+      margin-right: 7px;
+    }
+
+    ul li {
+      margin: 10px 0;
+    }
+
+    .image-container {
+      padding: 0 20px;
+      margin: 50px 0;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+
+      a {
+        cursor: pointer;
+      }
+
+      span {
+        display: block;
+        text-align: center;
+        max-width: 140px;
+      }
+
+      &.group {
+        padding: 0;
+        margin: 0;
+        width: 130px;
+        height: 130px;
+      }
+    }
+
+    img.large {
+      width: 150;
+      padding: 25px;;
+    }
+
+    img.small {
+      width: 100;
+      padding: 15px;
+    }
+
+    img.x-small {
+      width: 50px;
+      height: 50px;
+      padding: 3px;
+    }
+
+    label {
+      display: block;
+      text-align: center;
+    }
+
+    .inline-list > * {
+      display: inline-block;
+    }
+  }
+
+  .wizard-step-banner {
+    width: initial;
+    margin-bottom: 1em;
+
+    img {
+      max-height: 300px;
+    }
+  }
+
+  .wizard-step-form {
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+    max-height: initial;
+    width: 100%;
+  }
+  
+  .wizard-progress {
+    .screen {
+      background-color: var(--tertiary);
+    }
+  }
+
+  .step-message {
+    text-align: center;
+    transition: all .2s;
+    z-index: 2;
+    padding: 20px;
+
+    &.success {
+      background-color: var(--success);
+      color: var(--secondary);
+    }
+
+    &.error {
+      background-color: var(--danger);
+      color: var(--secondary);
+    }
+
+    &.not-permitted {
+      background-color: var(--danger);
+      color: var(--secondary);
+    }
+    
+    .text {
+      display: inline-block;
+    }
+    
+    .reset-wizard {
+      margin-top: 20px;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+}

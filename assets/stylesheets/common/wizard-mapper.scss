@@ -128,7 +128,7 @@
     align-items: center;
     
     &.active {
-      color: $tertiary;
+      color: var(--tertiary);
       text-decoration: underline;
     }
     

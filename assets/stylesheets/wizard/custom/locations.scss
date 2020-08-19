@@ -1,5 +1,3 @@
-@import "wizard_variables";
-
 .location-form-instructions {
   color: #919191;
   margin: 5px 0;
@@ -48,7 +46,7 @@
   }
 
   .address + .coordinates {
-    border-left: 1px solid $primary-low;
+    border-left: 1px solid var(--primary-low);
     padding-left: 20px;
   }
   
@@ -76,7 +74,7 @@
 
 input.input-location, div.input-location {
   max-height: 150px;
-  background-color: $secondary;
+  background-color: var(--secondary);
   box-shadow: none;
   box-sizing: border-box;
   margin: 0;
@@ -127,11 +125,11 @@ input.input-location, div.input-location {
 
 .location-form-result {
   cursor: pointer;
-  background-color: $secondary;
+  background-color: var(--secondary);
   display: flex;
 
   &:hover, &.selected {
-    background-color: $tertiary;
+    background-color: var(--tertiary);
     color: white;
 
     label {
@@ -161,7 +159,7 @@ input.input-location, div.input-location {
   }
 
   ul {
-    background-color: dark-light-diff($primary, $secondary, 97%, -65%);
+    background-color: var(--primary-very-low);
     border: 1px solid #e9e9e9;
     margin: 0;
     padding: 0;
