@@ -1,7 +1,4 @@
 input {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
   display: inline-block;
   padding: 4px 10px;
   margin-bottom: 9px;
@@ -12,7 +9,6 @@ input {
   border: 1px solid var(--primary-medium);
   border-radius: 0;
   box-sizing: border-box;
-  min-height: 30px;
 }
 
 textarea {
