@@ -122,6 +122,7 @@
 //= require template_include.js
 //= require caret_position.js
 //= require popper.js
+//= require bootbox.js
 
 //= require ./wizard/custom-wizard
 //= require_tree ./wizard/components
