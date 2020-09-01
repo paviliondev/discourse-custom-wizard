@@ -48,6 +48,13 @@ export default {
       };
 
     $.fn.autocomplete = autocomplete;
+    
+    Object.keys(Ember.TEMPLATES).forEach(k => {
+    if (k.indexOf("select-kit") === 0) {
+        let template = Ember.TEMPLATES[k];
+        define(k, () => template);
+      }
+    });
 
     const targets = ["controller", "component", "route", "model", "adapter"];
 
