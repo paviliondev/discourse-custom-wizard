@@ -26,10 +26,13 @@ export default {
     const RawHandlebars = requirejs("discourse-common/lib/raw-handlebars").default;
     const Site = requirejs("discourse/plugins/discourse-custom-wizard/wizard/models/site").default;
     const RestAdapter = requirejs("discourse/adapters/rest").default;
+    const Session = requirejs("discourse/models/session").default;
+    const setDefaultOwner = requirejs("discourse-common/lib/get-owner").setDefaultOwner;
 
+    const container = app.__container__;
     Discourse.Model = EmberObject.extend();
-    Discourse.__container__ = app.__container__;
-
+    Discourse.__container__ = container;
+    setDefaultOwner(container);
     registerRawHelpers(RawHandlebars, Handlebars);
 
     // IE11 Polyfill - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries#Polyfill
@@ -64,6 +67,14 @@ export default {
     targets.forEach(t => app.inject(t, "site", "site:main"));
         
     site.set('can_create_tag', false);
+    
+    let context = {
+      siteSettings: container.lookup("site-settings:main"),
+      currentUser: container.lookup("current-user:main"),
+      site: container.lookup("site:main"),
+      session: container.lookup("session:main"),
+    };
+    createHelperContext(context);
         
     Router.reopen({
       rootURL: getUrl('/w/')
