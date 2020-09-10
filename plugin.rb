@@ -18,7 +18,6 @@ config.assets.paths << "#{plugin_asset_path}/stylesheets/wizard"
 
 if Rails.env.production?
   config.assets.precompile += %w{
-    wizard-preload.js
     wizard-custom-guest.js
     wizard-custom-lib.js
     wizard-custom.js
