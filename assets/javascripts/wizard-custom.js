@@ -36,6 +36,8 @@
 //= require discourse/app/lib/preload-store
 //= require discourse/app/lib/topic-fancy-title
 //= require discourse/app/lib/cookie
+//= require discourse/app/lib/public-js-versions
+//= require discourse/app/lib/load-oneboxes
 
 //= require discourse/app/mixins/singleton
 
