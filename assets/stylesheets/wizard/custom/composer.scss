@@ -42,11 +42,11 @@
   }
 }
 
-#reply-control.show-preview .d-editor-textarea-wrapper {
+.wizard-field-composer.show-preview .d-editor-textarea-wrapper {
   display: none;
 }
 
-.custom-wizard #reply-control .toggle-preview {
+.custom-wizard .wizard-field-composer .toggle-preview {
   margin-top: 20px;
 }
 

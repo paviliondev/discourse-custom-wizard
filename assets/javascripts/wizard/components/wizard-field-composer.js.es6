@@ -3,8 +3,7 @@ import EmberObject from "@ember/object";
 
 export default Ember.Component.extend({
   showPreview: false,
-  elementId: "reply-control",
-  classNameBindings: ["showPreview:show-preview:hide-preview"],
+  classNameBindings: [":wizard-field-composer", "showPreview:show-preview:hide-preview"],
   
   didInsertElement() {
     this.set('composer', EmberObject.create({
