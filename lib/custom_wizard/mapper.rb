@@ -137,8 +137,10 @@ class CustomWizard::Mapper
       elsif ["true", "false"].include?(value)
         result = key.public_send(operator, ActiveRecord::Type::Boolean.new.cast(value))
       end
-    else
+    elsif [key, value, operator].all? { |i| !i.nil? }
       result = key.public_send(operator, value)
+    else
+      result = false
     end
     
     if operator == '=~'
