@@ -89,6 +89,8 @@ after_initialize do
   end
 
   add_class_method(:wizard, :user_requires_completion?) do |user|
+    return false unless user
+
     wizard_result = self.new(user).requires_completion?
     return wizard_result if wizard_result
 
