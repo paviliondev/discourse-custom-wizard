@@ -320,9 +320,7 @@ class CustomWizard::Action
     log_info("route: #{route_to}")
   end
   
-  def create_group
-    guardian.ensure_can_create!(Group)
-    
+  def create_group    
     group =
       begin
         Group.new(new_group_params)
@@ -339,9 +337,7 @@ class CustomWizard::Action
     end
   end
   
-  def create_category
-    guardian.ensure_can_create!(Category)
-    
+  def create_category    
     category =
       begin
         Category.new(new_category_params.merge(user: user))
