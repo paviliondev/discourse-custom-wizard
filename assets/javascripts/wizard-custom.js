@@ -40,8 +40,11 @@
 //= require discourse/app/lib/load-oneboxes
 
 //= require discourse/app/mixins/singleton
+//= require discourse/app/mixins/upload
 
 //= require discourse/app/adapters/rest
+
+//= require message-bus
 
 //= require discourse/app/models/login-method
 //= require discourse/app/models/permission-type

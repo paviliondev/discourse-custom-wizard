@@ -28,7 +28,7 @@ export default {
     const RestAdapter = requirejs("discourse/adapters/rest").default;
     const Session = requirejs("discourse/models/session").default;
     const setDefaultOwner = requirejs("discourse-common/lib/get-owner").setDefaultOwner;
-
+    const messageBus = requirejs('message-bus-client').default;
     const container = app.__container__;
     Discourse.Model = EmberObject.extend();
     Discourse.__container__ = container;
@@ -62,7 +62,10 @@ export default {
     app.register("site-settings:main", siteSettings, { instantiate: false });
     createHelperContext({ siteSettings });
     targets.forEach(t => app.inject(t, "siteSettings", "site-settings:main"));
-    
+
+    app.register("message-bus:main", messageBus, { instantiate: false });
+    targets.forEach(t => app.inject(t, "messageBus", "message-bus:main"));
+
     app.register("service:store", Store);
     targets.forEach(t => app.inject(t, "store", "service:store"));
     targets.forEach(t => app.inject(t, "appEvents", "service:app-events"));
