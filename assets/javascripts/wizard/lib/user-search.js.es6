@@ -1,5 +1,6 @@
 import { CANCELLED_STATUS } from 'discourse/lib/autocomplete';
 import getUrl from 'discourse-common/lib/get-url';
+import discourseDebounce from "discourse/lib/debounce";
 
 var cache = {},
     cacheTopicId,
@@ -39,7 +40,7 @@ function performSearch(term, topicId, includeGroups, includeMentionableGroups, i
   });
 }
 
-var debouncedSearch = _.debounce(performSearch, 300);
+var debouncedSearch = discourseDebounce(performSearch, 300);
 
 function organizeResults(r, options) {
   if (r === CANCELLED_STATUS) { return r; }
