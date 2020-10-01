@@ -1,5 +1,8 @@
 @import "common/foundation/colors";
 @import "common/foundation/variables";
+@import "common/base/code_highlighting";
+@import "common/base/modal";
+@import "desktop/modal";
 @import "custom/base";
 @import "custom/wizard";
 @import "custom/step";
@@ -9,5 +12,3 @@
 @import "custom/composer";
 @import "custom/events";
 @import "custom/locations";
-
-

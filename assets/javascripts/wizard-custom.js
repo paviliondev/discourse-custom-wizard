@@ -38,6 +38,7 @@
 //= require discourse/app/lib/cookie
 //= require discourse/app/lib/public-js-versions
 //= require discourse/app/lib/load-oneboxes
+//= require discourse/app/lib/highlight-syntax
 
 //= require discourse/app/mixins/singleton
 //= require discourse/app/mixins/upload
@@ -128,6 +129,7 @@
 //= require template_include.js
 //= require caret_position.js
 //= require popper.js
+//= require bootstrap-modal.js
 //= require bootbox.js
 //= require discourse-shims
 
