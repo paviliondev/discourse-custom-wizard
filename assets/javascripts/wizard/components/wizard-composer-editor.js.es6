@@ -13,6 +13,7 @@ export default ComposerEditor.extend({
   classNameBindings: ["fieldClass"],
   allowUpload: true,
   showLink: false,
+  showHyperlinkBox: false,
   topic: null,
   showToolbar: true,
   focusTarget: "reply",
@@ -127,10 +128,27 @@ export default ComposerEditor.extend({
           sendAction: this.showUploadModal,
         });
       }
+
+      const component = this;
+      toolbar.addButton({
+        id: "link",
+        group: "insertions",
+        shortcut: "K",
+        trimLeading: true,
+        sendAction: (event) => component.set("showHyperlinkBox", true),
+      });
     },
     previewUpdated($preview) {
       highlightSyntax($preview[0], this.siteSettings, this.session);
       this._super(...arguments);
+    },
+    addLink(linkName, linkUrl) {
+      let link = `[${linkName}](${linkUrl})`;
+      this.appEvents.trigger("composer:insert-text", link);
+      this.set("showHyperlinkBox", false);
+    },
+    hideBox() {
+      this.set("showHyperlinkBox", false);
     },
   },
 });

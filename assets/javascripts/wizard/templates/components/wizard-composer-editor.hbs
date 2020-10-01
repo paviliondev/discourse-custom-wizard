@@ -16,3 +16,9 @@
   outletArgs=(hash composer=composer editorType="composer")}}
 
   {{input class="wizard-composer-upload hidden-upload-field" disabled=uploading type="file" multiple=true }}
+
+  {{#if showHyperlinkBox}}
+    {{wizard-composer-hyperlink
+      addLink=(action 'addLink')
+      hideBox=(action 'hideBox')}}
+  {{/if}}
