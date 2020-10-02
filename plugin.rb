@@ -21,8 +21,8 @@ if Rails.env.production?
     wizard-custom-guest.js
     wizard-custom-globals.js
     wizard-custom.js
-    wizard-plugin.js
     wizard-custom-start.js
+    wizard-plugin.js.erb
     wizard-raw-templates.js.erb
   }
 end
