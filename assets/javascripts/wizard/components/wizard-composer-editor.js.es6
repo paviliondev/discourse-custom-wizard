@@ -33,7 +33,6 @@ export default ComposerEditor.extend({
     const $preview = $(this.element.querySelector(".d-editor-preview-wrapper"));
 
     if (this.siteSettings.enable_mentions) {
-      console.log('initializing autocomplete', findRawTemplate("user-selector-autocomplete"))
       $input.autocomplete({
         template: findRawTemplate("user-selector-autocomplete"),
         dataSource: (term) => this.userSearchTerm.call(this, term),

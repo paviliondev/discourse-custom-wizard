@@ -81,6 +81,7 @@
 //= require discourse/app/helpers/user-avatar
 //= require discourse/app/helpers/format-username
 //= require discourse/app/helpers/share-url
+//= require discourse/app/helpers/decorate-username-selector
 //= require discourse-common/addon/helpers/component-for-collection
 //= require discourse-common/addon/helpers/component-for-row
 //= require discourse-common/addon/lib/raw-templates
