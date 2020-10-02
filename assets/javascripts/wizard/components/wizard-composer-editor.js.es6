@@ -3,7 +3,11 @@ import { default as computed, on } from "discourse-common/utils/decorators";
 import { findRawTemplate } from "discourse-common/lib/raw-templates";
 import { throttle } from "@ember/runloop";
 import { scheduleOnce } from "@ember/runloop";
-import { safariHacksDisabled } from "discourse/lib/utilities";
+import {
+  safariHacksDisabled,
+  caretPosition,
+  inCodeBlock,
+} from "discourse/lib/utilities";
 import highlightSyntax from "discourse/lib/highlight-syntax";
 import { getToken } from "wizard/lib/ajax";
 import { validateUploadedFiles } from "discourse/lib/uploads";
@@ -29,14 +33,18 @@ export default ComposerEditor.extend({
     const $preview = $(this.element.querySelector(".d-editor-preview-wrapper"));
 
     if (this.siteSettings.enable_mentions) {
+      console.log('initializing autocomplete', findRawTemplate("user-selector-autocomplete"))
       $input.autocomplete({
         template: findRawTemplate("user-selector-autocomplete"),
         dataSource: (term) => this.userSearchTerm.call(this, term),
         key: "@",
         transformComplete: (v) => v.username || v.name,
-        afterComplete() {
+        afterComplete: (value) => {
+          this.composer.set("reply", value);
           scheduleOnce("afterRender", () => $input.blur().focus());
         },
+        triggerRule: (textarea) =>
+          !inCodeBlock(textarea.value, caretPosition(textarea))
       });
     }
 

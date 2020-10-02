@@ -8,24 +8,30 @@ Discourse.unofficial_plugins.each do |plugin|
     files = []
     
     plugin.each_globbed_asset do |f, is_dir|
-      files.push(f) if f.include? "raw.hbs"
+      files.push(f) if f.include? "hbr"
     end
     
-    Dir.glob("#{Rails.root}/app/assets/javascripts/discourse/templates/*.raw.hbs").each do |f|
+    Dir.glob("#{Rails.root}/app/assets/javascripts/discourse/app/templates/*.hbr").each do |f|
       files.push(f)
     end
     
     files.each do |f|
-      name = File.basename(f, ".raw.hbs")
+      name = File.basename(f, ".hbr")
       compiled = Barber::Precompiler.new().compile(File.read(f))
       result << "
         (function() {
-          if ('Wizard' in window) {
-            window.__DISCOURSE_RAW_TEMPLATES['javascripts/#{name}'] = requirejs('discourse-common/lib/raw-handlebars').template(#{compiled});
-          }
+          const { addRawTemplate } = requirejs('discourse-common/lib/raw-templates');
+          addRawTemplate(#{compiled});
         })();
       "
     end
+    
+    result << "
+      (function() {
+        const rawTemplates = requirejs('discourse-common/lib/raw-templates');
+        window.__DISCOURSE_RAW_TEMPLATES = rawTemplates.__DISCOURSE_RAW_TEMPLATES;
+      })();
+    "
   end
 end
 result

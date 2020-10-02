@@ -117,6 +117,7 @@
 //= require discourse/app/templates/emoji-selector-autocomplete
 //= require discourse/app/templates/user-selector-autocomplete
 
+//= require discourse/app/initializers/jquery-plugins
 //= require discourse/app/pre-initializers/sniff-capabilities
 
 //= require ember-addons/decorator-alias
