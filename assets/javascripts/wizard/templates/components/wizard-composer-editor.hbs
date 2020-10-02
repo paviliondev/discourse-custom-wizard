@@ -6,11 +6,33 @@
   markdownOptions=markdownOptions
   extraButtons=(action "extraButtons")
   importQuote=(action "importQuote")
-  showUploadModal=showUploadModal
+  showUploadModal=(action "showUploadModal")
   togglePreview=(action "togglePreview")
   validation=validation
   loading=composer.loading
   showLink=showLink
-  composerEvents=true
+  wizardComposerEvents=true
+  fieldId=fieldId
   disabled=disableTextarea
   outletArgs=(hash composer=composer editorType="composer")}}
+
+{{input
+  class="wizard-composer-upload hidden-upload-field"
+  disabled=isUploading
+  type="file"
+  multiple=true}}
+
+{{#if showHyperlinkBox}}
+  {{wizard-composer-hyperlink
+    addLink=(action 'addLink')
+    hideBox=(action 'hideBox')}}
+{{/if}}
+
+{{#if isUploading}}
+  <div id="file-uploading">
+    {{loading-spinner size="small"}}<span>{{i18n "upload_selector.uploading"}} {{uploadProgress}}%</span>
+    {{#if isCancellable}}
+      <a href id="cancel-file-upload" {{action "cancelUpload"}}>{{d-icon "times"}}</a>
+    {{/if}}
+  </div>
+{{/if}}

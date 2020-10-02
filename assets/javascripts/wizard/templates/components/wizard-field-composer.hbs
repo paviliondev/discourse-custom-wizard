@@ -1,10 +1,12 @@
-{{wizard-composer-editor replyPlaceholder=field.placeholder
-                         composer=composer
-                         groupsMentioned=(action "groupsMentioned")
-                         cannotSeeMention=(action "cannotSeeMention")
-                         importQuote=(action "importQuote")
-                         togglePreview=(action "togglePreview")
-                         afterRefresh=(action "afterRefresh")}}
+{{wizard-composer-editor
+  replyPlaceholder=field.placeholder
+  fieldId=field.id
+  composer=composer
+  groupsMentioned=(action "groupsMentioned")
+  cannotSeeMention=(action "cannotSeeMention")
+  importQuote=(action "importQuote")
+  togglePreview=(action "togglePreview")
+  afterRefresh=(action "afterRefresh")}}
 
 <button class='wizard-btn toggle-preview' {{action 'togglePreview'}}>
   <span class="d-button-label">{{i18n togglePreviewLabel}}</span>

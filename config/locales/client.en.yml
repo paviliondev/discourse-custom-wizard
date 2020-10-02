@@ -455,3 +455,10 @@ en:
       yourself_confirm:
         title: "Did you forget to add recipients?"
         body: "Right now this message is only being sent to yourself!"
+      insert_hyperlink:
+        heading: "Insert Hyperlink"
+        ok: "Ok"
+        cancel: "Cancel"
+        placeholder:
+          link_name: "Link Text"
+          link_url: "Link Url"

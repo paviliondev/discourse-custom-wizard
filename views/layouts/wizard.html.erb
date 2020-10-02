@@ -10,7 +10,8 @@
     <%= preload_script "ember_jquery" %>
     <%= preload_script "wizard-vendor" %>
     <%= preload_script "wizard-application" %>
-    <%= preload_script "wizard-custom-lib" %>
+    <%= preload_script "wizard-custom-globals" %>
+    <%= preload_script "wizard-raw-templates" %>
     <%= preload_script "wizard-custom" %>
     <%= preload_script "wizard-plugin" %>
     <%= preload_script "pretty-text-bundle" %>
@@ -22,6 +23,8 @@
     <%- end %>
 
     <%= server_plugin_outlet "custom_wizard" %>
+
+    <%= tag.meta id: 'data-discourse-setup', data: client_side_setup_data %>
 
     <meta name="discourse_theme_ids" content="<%= theme_ids&.join(",") %>">
     <meta name="discourse-base-uri" content="<%= Discourse.base_uri %>">
@@ -39,7 +42,6 @@
 
     <%- if current_user %>
       <%= preload_script 'wizard-custom-start' %>
-      <%= preload_script 'wizard-raw-templates' %>
     <%- else %>
       <%= preload_script 'wizard-custom-guest' %>
     <%- end %>

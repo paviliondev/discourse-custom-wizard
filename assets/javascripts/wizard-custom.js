@@ -38,10 +38,14 @@
 //= require discourse/app/lib/cookie
 //= require discourse/app/lib/public-js-versions
 //= require discourse/app/lib/load-oneboxes
+//= require discourse/app/lib/highlight-syntax
 
 //= require discourse/app/mixins/singleton
+//= require discourse/app/mixins/upload
 
 //= require discourse/app/adapters/rest
+
+//= require message-bus
 
 //= require discourse/app/models/login-method
 //= require discourse/app/models/permission-type
@@ -77,6 +81,7 @@
 //= require discourse/app/helpers/user-avatar
 //= require discourse/app/helpers/format-username
 //= require discourse/app/helpers/share-url
+//= require discourse/app/helpers/decorate-username-selector
 //= require discourse-common/addon/helpers/component-for-collection
 //= require discourse-common/addon/helpers/component-for-row
 //= require discourse-common/addon/lib/raw-templates
@@ -113,6 +118,7 @@
 //= require discourse/app/templates/emoji-selector-autocomplete
 //= require discourse/app/templates/user-selector-autocomplete
 
+//= require discourse/app/initializers/jquery-plugins
 //= require discourse/app/pre-initializers/sniff-capabilities
 
 //= require ember-addons/decorator-alias
@@ -126,6 +132,7 @@
 //= require template_include.js
 //= require caret_position.js
 //= require popper.js
+//= require bootstrap-modal.js
 //= require bootbox.js
 //= require discourse-shims
 
