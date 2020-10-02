@@ -5,16 +5,6 @@ export default Ember.Application.extend({
   Resolver: buildResolver("wizard"),
 
   start() {
-    Object.keys(requirejs._eak_seen).forEach(key => {
-      if (/\/initializers\//.test(key)) {
-        const module = requirejs(key, null, null, true);
-        if (!module) {
-          throw new Error(key + " must export an initializer.");
-        }
-        this.initializer(module.default);
-      }
-    });
-    
     Object.keys(requirejs._eak_seen).forEach((key) => {
       if (/\/pre\-initializers\//.test(key)) {
         const module = requirejs(key, null, null, true);
@@ -29,6 +19,16 @@ export default Ember.Application.extend({
         };
 
         this.initializer(init);
+      }
+    });
+    
+    Object.keys(requirejs._eak_seen).forEach(key => {
+      if (/\/initializers\//.test(key)) {
+        const module = requirejs(key, null, null, true);
+        if (!module) {
+          throw new Error(key + " must export an initializer.");
+        }
+        this.initializer(module.default);
       }
     });
   }

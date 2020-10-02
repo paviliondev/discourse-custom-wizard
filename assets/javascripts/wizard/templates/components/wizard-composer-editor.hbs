@@ -6,18 +6,19 @@
   markdownOptions=markdownOptions
   extraButtons=(action "extraButtons")
   importQuote=(action "importQuote")
-  showUploadModal=showUploadModal
+  showUploadModal=(action "showUploadModal")
   togglePreview=(action "togglePreview")
   validation=validation
   loading=composer.loading
   showLink=showLink
-  composerEvents=true
+  wizardComposerEvents=true
+  fieldId=fieldId
   disabled=disableTextarea
   outletArgs=(hash composer=composer editorType="composer")}}
 
 {{input
   class="wizard-composer-upload hidden-upload-field"
-  disabled=uploading
+  disabled=isUploading
   type="file"
   multiple=true}}
 
