@@ -54,6 +54,7 @@ export default ComposerEditor.extend({
   showUploadModal() {
     $(".wizard-composer-upload").trigger("click");
   },
+  
   _setUploadPlaceholderSend() {
     if (!this.composer.get("reply")) {
       this.composer.set("reply", "");
@@ -64,7 +65,9 @@ export default ComposerEditor.extend({
   _bindUploadTarget() {
     this._super(...arguments);
     const $element = $(this.element);
+    
     $element.off("fileuploadsubmit");
+    
     $element.on("fileuploadsubmit", (e, data) => {
       const max = this.siteSettings.simultaneous_uploads;
 
@@ -116,7 +119,33 @@ export default ComposerEditor.extend({
 
       return isUploading;
     });
+    
+    $element.on("fileuploadprogressall", (e, data) => {
+      this.set(
+        "uploadProgress",
+        parseInt((data.loaded / data.total) * 100, 10)
+      );
+    });
+    
+    $element.on("fileuploadfail", (e, data) => {
+      this._setUploadPlaceholderDone(data);
+      this._resetUpload(true);
+
+      const userCancelled = this._xhr && this._xhr._userCancelled;
+      this._xhr = null;
+
+      if (!userCancelled) {
+        displayErrorForUpload(data, this.siteSettings);
+      }
+    });
   },
+  
+  click(e) {
+    if ($(e.target).hasClass('wizard-composer-hyperlink')) {
+      this.set('showHyperlinkBox', false);
+    }
+  },
+  
   actions: {
     extraButtons(toolbar) {
       if (this.allowUpload && this.uploadIcon && !this.site.mobileView) {
@@ -135,18 +164,22 @@ export default ComposerEditor.extend({
         group: "insertions",
         shortcut: "K",
         trimLeading: true,
+        unshift: true,
         sendAction: (event) => component.set("showHyperlinkBox", true),
       });
     },
+    
     previewUpdated($preview) {
       highlightSyntax($preview[0], this.siteSettings, this.session);
       this._super(...arguments);
     },
+    
     addLink(linkName, linkUrl) {
       let link = `[${linkName}](${linkUrl})`;
       this.appEvents.trigger("composer:insert-text", link);
       this.set("showHyperlinkBox", false);
     },
+    
     hideBox() {
       this.set("showHyperlinkBox", false);
     },
