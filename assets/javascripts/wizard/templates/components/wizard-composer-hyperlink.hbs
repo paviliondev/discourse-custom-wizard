@@ -1,0 +1,21 @@
+<div class="wizard-composer-hyperlink-contents">
+  <h3>{{i18n "wizard_composer.insert_hyperlink.heading"}}</h3>
+  {{input
+    class="composer-link-name"
+    placeholder=(i18n 'wizard_composer.insert_hyperlink.placeholder.link_name')
+    type="text"
+    value=linkName}}
+  {{input
+    class="composer-link-url"
+    placeholder=(i18n 'wizard_composer.insert_hyperlink.placeholder.link_url')
+    type="text"
+    value=linkUrl}}
+  {{d-button
+    label="wizard_composer.insert_hyperlink.ok"
+    class="add-link btn-primary"
+    click=(action 'addLink')}}
+  {{d-button
+    label="wizard_composer.insert_hyperlink.cancel"
+    class="hide-hyperlink-box btn-danger"
+    click=(action 'hideBox')}}
+</div>

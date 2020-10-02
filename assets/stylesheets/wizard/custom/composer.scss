@@ -42,6 +42,10 @@
   }
 }
 
+.wizard-field-composer .wmd-controls {
+  position: relative;
+}
+
 .wizard-field-composer.show-preview .d-editor-textarea-wrapper {
   display: none;
 }
@@ -55,6 +59,7 @@
   background-color: var(--secondary);
   border: 1px solid var(--primary-medium);
   flex: 1;
+  max-width: unset;
 }
 
 .d-editor-textarea-wrapper {
@@ -182,4 +187,46 @@
 
 .d-editor-button-bar .btn {
   border: none;
+  font-size: 0.9em;
+}
+
+.wizard-composer-upload {
+  display: none;
+}
+
+.wizard-composer-hyperlink {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba($primary, 0.8);
+}
+
+.wizard-composer-hyperlink-contents {
+  background-color: $secondary;
+  padding: 20px;
+  
+  h3 {
+    margin-top: 0;
+  }
+  
+  .composer-link-url,
+  .composer-link-name {
+    display: block;
+    min-width: 450px;
+  }
+}
+
+.hide-hyperlink-box, .add-link {
+  display: inline;
+}
+
+#file-uploading {
+  position: absolute;
+  bottom: -40px;
+  right: 0;
 }
