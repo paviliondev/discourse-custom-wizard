@@ -1,3 +1,4 @@
+import CustomWizard from "../models/custom";
 
 export default {
   name: "custom-wizard-step",
