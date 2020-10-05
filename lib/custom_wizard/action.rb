@@ -69,13 +69,29 @@ class CustomWizard::Action
     end
     
     params = basic_topic_params
-    params[:target_usernames] = CustomWizard::Mapper.new(
+    
+    targets = CustomWizard::Mapper.new(
       inputs: action['recipient'],
       data: data,
-      user: user
+      user: user,
+      multiple: true
     ).perform
+    
+    targets.each do |target|
+      if Group.find_by(name: target)
+        params[:target_group_names] = target
+      elsif User.find_by_username(target)
+        params[:target_usernames] = target
+      else
+        #
+      end
+    end
         
-    if params[:title].present? && params[:raw].present? && params[:target_usernames].present?
+    if params[:title].present? &&
+       params[:raw].present? &&
+       (params[:target_usernames].present? ||
+        params[:target_group_names].present?)
+       
       params[:archetype] = Archetype.private_message
       
       creator = PostCreator.new(user, params)
