@@ -1,5 +1,5 @@
 import ComposerEditor from "discourse/components/composer-editor";
-import { default as computed, on } from "discourse-common/utils/decorators";
+import { default as discourseComputed, on } from "discourse-common/utils/decorators";
 import { findRawTemplate } from "discourse-common/lib/raw-templates";
 import { throttle } from "@ember/runloop";
 import { scheduleOnce, next } from "@ember/runloop";
@@ -14,9 +14,8 @@ import {
   validateUploadedFiles,
   getUploadMarkdown
 } from "discourse/lib/uploads";
-import {
-  cacheShortUploadUrl,
-} from "pretty-text/upload-short-url";
+import { cacheShortUploadUrl } from "pretty-text/upload-short-url";
+import { alias } from "@ember/object/computed";
 
 const uploadMarkdownResolvers = [];
 
@@ -34,6 +33,7 @@ export default ComposerEditor.extend({
   uploadIcon: "upload",
   popupMenuOptions: [],
   draftStatus: "null",
+  replyPlaceholder: alias("field.placeholder"),
 
   @on("didInsertElement")
   _composerEditorInit() {
@@ -64,6 +64,13 @@ export default ComposerEditor.extend({
     }
 
     this._bindUploadTarget();
+  },
+  
+  @discourseComputed
+  allowedFileTypes() {
+    return this.siteSettings.authorized_extensions.split('|')
+      .map(ext => "." + ext)
+      .join(',')
   },
   
   _setUploadPlaceholderSend() {
@@ -157,7 +164,7 @@ export default ComposerEditor.extend({
       this._setUploadPlaceholderSend(data);
 
       this.appEvents.trigger("wizard-editor:insert-text", {
-        fieldId: this.fieldId,
+        fieldId: this.field.id,
         text: this.uploadPlaceholder
       });
       
@@ -181,7 +188,7 @@ export default ComposerEditor.extend({
         cacheShortUploadUrl(upload.short_url, upload);
         this.appEvents.trigger(
           "wizard-editor:replace-text", {
-            fieldId: this.fieldId,
+            fieldId: this.field.id,
             oldVal: this.uploadPlaceholder.trim(),
             newVal: markdown 
           }
@@ -208,7 +215,7 @@ export default ComposerEditor.extend({
       if (removePlaceholder) {
         this.appEvents.trigger(
           "wizard-editor:replace-text", {
-            fieldId: this.fieldId,
+            fieldId: this.field.id,
             oldVal: this.uploadPlaceholder,
             newVal: ""
           }
@@ -240,7 +247,7 @@ export default ComposerEditor.extend({
           this.appEvents.trigger(
             "wizard-editor:replace-text", 
             {
-              fieldId: this.fieldId,
+              fieldId: this.field.id,
               oldVal: matchingPlaceholder[index],
               newVal: replacement,
               options: {
@@ -295,7 +302,7 @@ export default ComposerEditor.extend({
     addLink(linkName, linkUrl) {
       let link = `[${linkName}](${linkUrl})`;
       this.appEvents.trigger("wizard-editor:insert-text", {
-        fieldId: this.fieldId,
+        fieldId: this.field.id,
         text: link
       });
       this.set("showHyperlinkBox", false);

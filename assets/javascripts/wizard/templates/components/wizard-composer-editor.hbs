@@ -12,7 +12,7 @@
   loading=composer.loading
   showLink=showLink
   wizardComposerEvents=true
-  fieldId=fieldId
+  fieldId=field.id
   disabled=disableTextarea
   outletArgs=(hash composer=composer editorType="composer")}}
 
@@ -20,6 +20,7 @@
   class="wizard-composer-upload hidden-upload-field"
   disabled=isUploading
   type="file"
+  accept=allowedFileTypes
   multiple=true}}
 
 {{#if showHyperlinkBox}}
