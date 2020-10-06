@@ -16,6 +16,7 @@ import {
 } from "discourse/lib/uploads";
 import { cacheShortUploadUrl } from "pretty-text/upload-short-url";
 import { alias } from "@ember/object/computed";
+import { uploadIcon } from "discourse/lib/uploads";
 
 const uploadMarkdownResolvers = [];
 
@@ -30,7 +31,6 @@ export default ComposerEditor.extend({
   focusTarget: "reply",
   canWhisper: false,
   lastValidatedAt: "lastValidatedAt",
-  uploadIcon: "upload",
   popupMenuOptions: [],
   draftStatus: "null",
   replyPlaceholder: alias("field.placeholder"),
@@ -71,6 +71,11 @@ export default ComposerEditor.extend({
     return this.siteSettings.authorized_extensions.split('|')
       .map(ext => "." + ext)
       .join(',')
+  },
+  
+  @discourseComputed('currentUser')
+  uploadIcon(currentUser) {
+    return uploadIcon(false, this.siteSettings);
   },
   
   _setUploadPlaceholderSend() {
