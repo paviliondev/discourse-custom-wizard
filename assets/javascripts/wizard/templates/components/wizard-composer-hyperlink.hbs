@@ -1,21 +1,21 @@
 <div class="wizard-composer-hyperlink-contents">
-  <h3>{{i18n "wizard_composer.insert_hyperlink.heading"}}</h3>
+  <h3>{{i18n "composer.link_dialog_title"}}</h3>
   {{input
     class="composer-link-name"
-    placeholder=(i18n 'wizard_composer.insert_hyperlink.placeholder.link_name')
+    placeholder=(i18n 'composer.link_optional_text')
     type="text"
     value=linkName}}
   {{input
     class="composer-link-url"
-    placeholder=(i18n 'wizard_composer.insert_hyperlink.placeholder.link_url')
+    placeholder=(i18n 'composer.link_url_placeholder')
     type="text"
     value=linkUrl}}
   {{d-button
-    label="wizard_composer.insert_hyperlink.ok"
+    label="wizard_composer.modal_ok"
     class="add-link btn-primary"
     click=(action 'addLink')}}
   {{d-button
-    label="wizard_composer.insert_hyperlink.cancel"
+    label="wizard_composer.modal_cancel"
     class="hide-hyperlink-box btn-danger"
     click=(action 'hideBox')}}
 </div>
