@@ -1,0 +1,33 @@
+<div class="admin-wizard-controls">
+  <h3>{{i18n 'admin.wizard.custom_fields.nav_label'}}</h3>
+  
+  {{d-button
+    label="add"
+    icon="plus"
+    action="addField"}}
+</div>
+
+<div class="admin-wizard-container">
+  {{#if model}}
+    <table>
+      <tr>
+        {{#each fieldKeys as |key|}}
+          <th>{{i18n (concat "admin.wizard.custom_fields." key)}}</th>
+        {{/each}}
+      </tr>
+      {{#each customFields as |field|}}
+        <tr>
+          {{#if field.new}}
+            <td>{{combo-box value=field.klass content=classes onChange=(action (mut field.klass))}}</td>
+            <td>{{input value=field.name}}</td>
+            <td>{{combo-box value=field.type content=types onChange=(action (mut field.type))}}</td>
+          {{else}}
+            {{#each-in field as |k v|}}
+              <td>{{v}}</td>
+            {{/each-in}}
+          {{/if}}
+        </tr>
+      {{/each}}
+    </table>
+  {{/if}}
+</div>

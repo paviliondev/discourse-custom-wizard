@@ -274,6 +274,12 @@ en:
             visibility_level: Visibility Level
             members_visibility_level: Members Visibility Level
         
+        custom_fields:
+          nav_label: "Custom Fields"
+          klass: "Class"
+          name: "Name"
+          type: "Type"
+        
         submissions:
           nav_label: "Submissions"
           title: "{{name}} Submissions"
