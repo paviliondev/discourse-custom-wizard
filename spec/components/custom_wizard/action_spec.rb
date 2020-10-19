@@ -1,17 +1,27 @@
+require 'rails_helper'
+
 describe CustomWizard::Action do
-  let(:create_topic_action) {{"id":"create_topic","type":"create_topic","title":"text","post":"textarea"}}
-  let(:send_message_action) {{"id":"send_message","type":"send_message","title":"text","post":"textarea","username":"angus"}}
-  let(:route_to_action) {{"id":"route_to","type":"route_to","url":"https://google.com"}}
-  let(:open_composer_action) {{"id":"open_composer","type":"open_composer","title":"text","post":"textarea"}}
-  let(:add_to_group_action) {{"id":"add_to_group","type":"add_to_group","group_id":"dropdown_groups"}}
+  fab!(:user) { Fabricate(:user, name: "Angus", username: 'angus', email: "angus@email.com", trust_level: TrustLevel[2]) }
+  fab!(:category) { Fabricate(:category, name: 'cat1', slug: 'cat-slug') }
+  fab!(:group) { Fabricate(:group) }
+  
+  before do
+    Group.refresh_automatic_group!(:trust_level_2)
+    template = JSON.parse(File.open(
+      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
+    ).read)
+    CustomWizard::Wizard.add_wizard(template)
+    @wizard = CustomWizard::Wizard.create('super_mega_fun_wizard', user)
+  end
   
   it 'creates a topic' do
-    template['steps'][0]['fields'] = [text_field, textarea_field]
-    template['steps'][0]["actions"] = [create_topic_action]
-    updater = run_update(template, nil,
-      text: "Topic Title",
-      textarea: "topic body"
-    )
+    built_wizard = CustomWizard::Builder.new(@wizard.id, user).build
+    updater = built_wizard.create_updater(built_wizard.steps[0].id,
+      step_1_field_1: "Topic Title",
+      step_1_field_2: "topic body"
+    ).update
+    updater2 = built_wizard.create_updater(built_wizard.steps[1].id, {}).update
+    
     topic = Topic.where(title: "Topic Title")
     
     expect(topic.exists?).to eq(true)
@@ -22,71 +32,102 @@ describe CustomWizard::Action do
   end
   
   it 'sends a message' do
-    fields = [text_field, textarea_field]
+    User.create(username: 'angus1', email: "angus1@email.com")
     
-    if extra_field
-      fields.push(extra_field)
-    end
-        
-    template['steps'][0]['fields'] = fields
-    template['steps'][0]["actions"] = [send_message_action.merge(extra_action_opts)]
-    
-    run_update(template, nil,
-      text: "Message Title",
-      textarea: "message body"
-    )
+    built_wizard = CustomWizard::Builder.new(@wizard.id, user).build
+    built_wizard.create_updater(built_wizard.steps[0].id, {}).update
+    built_wizard.create_updater(built_wizard.steps[1].id, {}).update
     
     topic = Topic.where(
       archetype: Archetype.private_message,
-      title: "Message Title"
+      title: "Message title"
     )
     
-    expect(topic.exists?).to eq(true)
-    expect(
-      topic.first.topic_allowed_users.first.user.username
-    ).to eq('angus')
-    expect(Post.where(
+    post = Post.where(
       topic_id: topic.pluck(:id),
-      raw: "message body"
-    ).exists?).to eq(true)
+      raw: "I will interpolate some wizard fields"
+    )
+        
+    expect(topic.exists?).to eq(true)
+    expect(topic.first.topic_allowed_users.first.user.username).to eq('angus1')
+    expect(post.exists?).to eq(true)
   end
   
   it 'updates a profile' do
-    run_update(template, template['steps'][1]['id'], name: "Sally")
-    expect(user.name).to eq('Sally')
+    built_wizard = CustomWizard::Builder.new(@wizard.id, user).build
+    upload = Upload.create!(
+      url: '/images/image.png',
+      original_filename: 'image.png',
+      filesize: 100,
+      user_id: -1,
+    )
+    steps = built_wizard.steps
+    built_wizard.create_updater(steps[0].id, {}).update
+    built_wizard.create_updater(steps[1].id,
+      step_2_field_7: upload.as_json,
+    ).update
+    expect(user.profile_background_upload.id).to eq(upload.id)
   end
   
   it 'opens a composer' do
-    template['steps'][0]['fields'] = [text_field, textarea_field]
-    template['steps'][0]["actions"] = [open_composer_action]
+    built_wizard = CustomWizard::Builder.new(@wizard.id, user).build
+    built_wizard.create_updater(built_wizard.steps[0].id, step_1_field_1: "Text input").update
     
-    updater = run_update(template, nil,
-      text: "Topic Title",
-      textarea: "topic body"
-    )
+    updater = built_wizard.create_updater(built_wizard.steps[1].id, {})
+    updater.update
     
-    expect(updater.result.blank?).to eq(true)              
+    submissions = PluginStore.get("super_mega_fun_wizard_submissions", user.id)
+    category = Category.find_by(id: submissions.first['action_8'])
     
-    updater = run_update(template, template['steps'][1]['id'])
-    
-    expect(updater.result[:redirect_on_complete]).to eq(
-      "/new-topic?title=Topic%20Title&body=topic%20body"
+    expect(updater.result[:redirect_on_next]).to eq(
+      "/new-topic?title=Title%20of%20the%20composer%20topic&body=I%20am%20interpolating%20some%20user%20fields%20Angus%20angus%20angus@email.com&category=#{category.slug}/#{category.id}&tags=tag1"
     )
   end
   
-  it 'adds a user to a group' do          
-    template['steps'][0]['fields'] = [dropdown_groups_field]
-    template['steps'][0]["actions"] = [add_to_group_action]
-              
-    updater = run_update(template, nil, dropdown_groups: group.id)
+  it 'creates a category' do
+    built_wizard = CustomWizard::Builder.new(@wizard.id, user).build
+    built_wizard.create_updater(built_wizard.steps[0].id, step_1_field_1: "Text input").update
+    built_wizard.create_updater(built_wizard.steps[1].id, {}).update
+    submissions = PluginStore.get("super_mega_fun_wizard_submissions", user.id)    
+    expect(Category.where(id: submissions.first['action_8']).exists?).to eq(true)
+  end
+  
+  it 'creates a group' do
+    built_wizard = CustomWizard::Builder.new(@wizard.id, user).build
+    step_id = built_wizard.steps[0].id
+    updater = built_wizard.create_updater(step_id, step_1_field_1: "Text input").update
+    submissions = PluginStore.get("super_mega_fun_wizard_submissions", user.id)
+    expect(Group.where(name: submissions.first['action_9']).exists?).to eq(true)
+  end
+  
+  it 'adds a user to a group' do
+    built_wizard = CustomWizard::Builder.new(@wizard.id, user).build
+    step_id = built_wizard.steps[0].id
+    updater = built_wizard.create_updater(step_id, step_1_field_1: "Text input").update
+    submissions = PluginStore.get("super_mega_fun_wizard_submissions", user.id)
+    group = Group.find_by(name: submissions.first['action_9'])
     expect(group.users.first.username).to eq('angus')
   end
   
+  it 'watches categories' do
+    built_wizard = CustomWizard::Builder.new(@wizard.id, user).build
+    built_wizard.create_updater(built_wizard.steps[0].id, step_1_field_1: "Text input").update
+    built_wizard.create_updater(built_wizard.steps[1].id, {}).update
+    submissions = PluginStore.get("super_mega_fun_wizard_submissions", user.id)
+    expect(CategoryUser.where(
+      category_id: submissions.first['action_8'],
+      user_id: user.id
+    ).first.notification_level).to eq(2)
+    expect(CategoryUser.where(
+      category_id: category.id,
+      user_id: user.id
+    ).first.notification_level).to eq(0)
+  end
+  
   it 're-routes a user' do
-    template['steps'][0]["actions"] = [route_to_action]
-    updater = run_update(template, nil, {})
-    expect(updater.result[:redirect_on_next]).to eq(
-      "https://google.com"
-    )
+    built_wizard = CustomWizard::Builder.new(@wizard.id, user).build
+    updater = built_wizard.create_updater(built_wizard.steps.last.id, {})
+    updater.update
+    expect(updater.result[:redirect_on_complete]).to eq("https://google.com")
   end
 end

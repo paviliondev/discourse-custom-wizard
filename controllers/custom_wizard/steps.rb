@@ -11,11 +11,11 @@ class CustomWizard::StepsController < ::ApplicationController
       permitted[:fields] = params[:fields].select { |k, v| field_ids.include? k }
       permitted.permit!
     end
-
+    
     wizard = CustomWizard::Builder.new(permitted[:wizard_id].underscore, current_user).build
     updater = wizard.create_updater(permitted[:step_id], permitted[:fields])
     updater.update
-
+    
     if updater.success?
       result = success_json
       result.merge!(updater.result) if updater.result

@@ -133,7 +133,7 @@ class CustomWizard::Builder
               validate_field(field, updater, step_template) if field['type'] != 'text_only'
             end
           end
-                    
+                              
           next if updater.errors.any?
 
           CustomWizard::Builder.step_handlers.each do |handler|
@@ -156,10 +156,10 @@ class CustomWizard::Builder
                     
           if @actions.present?
             @actions.each do |action|
-              
+                            
               if (action['run_after'] === updater.step.id) ||
                  (final_step && (!action['run_after'] || (action['run_after'] === 'wizard_completion')))
-
+                        
                 CustomWizard::Action.new(
                   wizard: @wizard,
                   action: action,
@@ -217,7 +217,7 @@ class CustomWizard::Builder
       submission = @submissions.last
       params[:value] = submission[field_template['id']] if submission[field_template['id']]
     end
-    
+        
     params[:value] = prefill_field(field_template, step_template) || params[:value]
     
     if field_template['type'] === 'group' && params[:value].present?
@@ -339,7 +339,7 @@ class CustomWizard::Builder
     if type === 'time' && value.present? && !validate_time(value)
       updater.errors.add(id, I18n.t('wizard.field.invalid_time'))
     end 
-
+    
     CustomWizard::Builder.field_validators.each do |validator|
       if type === validator[:type]
         validator[:block].call(field, updater, step_template)

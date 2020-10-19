@@ -48,7 +48,7 @@ class CustomWizard::Mapper
     inputs.each do |input|
       input_type = input['type']
       pairs = input['pairs']
-
+      
       if (input_type === 'conditional' && validate_pairs(pairs)) || input_type === 'assignment'
         output = input['output']
         output_type = input['output_type']
