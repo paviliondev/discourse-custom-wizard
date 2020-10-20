@@ -42,6 +42,7 @@ after_initialize do
     ../controllers/custom_wizard/admin/submissions.rb
     ../controllers/custom_wizard/admin/api.rb
     ../controllers/custom_wizard/admin/logs.rb
+    ../controllers/custom_wizard/admin/custom_fields.rb
     ../controllers/custom_wizard/wizard.rb
     ../controllers/custom_wizard/steps.rb
     ../controllers/custom_wizard/transfer.rb
@@ -51,6 +52,7 @@ after_initialize do
     ../lib/custom_wizard/action_result.rb
     ../lib/custom_wizard/action.rb
     ../lib/custom_wizard/builder.rb
+    ../lib/custom_wizard/custom_field.rb
     ../lib/custom_wizard/field.rb
     ../lib/custom_wizard/mapper.rb
     ../lib/custom_wizard/log.rb
@@ -68,6 +70,7 @@ after_initialize do
     ../serializers/custom_wizard/api_serializer.rb
     ../serializers/custom_wizard/basic_api_serializer.rb
     ../serializers/custom_wizard/basic_wizard_serializer.rb
+    ../serializers/custom_wizard/custom_field_serializer.rb
     ../serializers/custom_wizard/wizard_field_serializer.rb
     ../serializers/custom_wizard/wizard_step_serializer.rb
     ../serializers/custom_wizard/wizard_serializer.rb
@@ -159,6 +162,27 @@ after_initialize do
   ::Wizard::Step.prepend CustomWizardStepExtension
   
   CustomWizard::Wizard.register_styles
+  
+  CustomWizard::CustomField.list.each do |field|
+    self.send("register_#{field.klass}_custom_field_type", field.name, field.type.to_sym)
+    
+    add_to_class(field.klass.to_sym, field.name.to_sym) do
+      custom_fields[field.name]
+    end
+    
+    if field.serializers.any?
+      field.serializers.each do |klass|
+        klass = klass.to_sym
+        add_to_serializer(klass, field.name.to_sym) do
+          if klass == :topic_view
+            object.topic.send(field.name)
+          else
+            object.send(field.name)
+          end
+        end
+      end
+    end
+  end
   
   DiscourseEvent.trigger(:custom_wizard_ready)
 end

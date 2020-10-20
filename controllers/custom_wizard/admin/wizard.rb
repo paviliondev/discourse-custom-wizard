@@ -7,7 +7,8 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
         CustomWizard::Wizard.list,
         each_serializer: CustomWizard::BasicWizardSerializer
       ),
-      field_types: CustomWizard::Field.types
+      field_types: CustomWizard::Field.types,
+      custom_fields: custom_field_list
     )
   end
   

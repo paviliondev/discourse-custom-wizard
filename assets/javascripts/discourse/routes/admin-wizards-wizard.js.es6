@@ -1,6 +1,7 @@
 import DiscourseRoute from "discourse/routes/discourse";
 import { buildFieldTypes } from '../lib/wizard-schema';
-import { set } from "@ember/object";
+import EmberObject, { set } from "@ember/object";
+import { A } from "@ember/array";
 import { all } from "rsvp";
 import { ajax } from 'discourse/lib/ajax';
 
@@ -62,7 +63,8 @@ export default DiscourseRoute.extend({
   setupController(controller, model) {
     controller.setProperties({
       wizardList: model.wizard_list,
-      wizardId: this.currentWizard()
+      wizardId: this.currentWizard(),
+      custom_fields: A(model.custom_fields.map(f => EmberObject.create(f)))
     });
   },
   
