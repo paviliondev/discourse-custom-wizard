@@ -761,7 +761,7 @@
         </div>
       {{/if}}
       
-      {{#if showSkipRedirect}}
+      {{#if showPostAdvanced}}
         <div class="setting full">
           <div class="setting-label">
             <label>{{i18n "admin.wizard.action.skip_redirect.label"}}</label>
@@ -772,6 +772,20 @@
             
             <span>
               {{i18n 'admin.wizard.action.skip_redirect.description' type='topic'}}
+            </span>
+          </div>
+        </div>
+        
+        <div class="setting full">
+          <div class="setting-label">
+            <label>{{i18n "admin.wizard.action.suppress_notifications.label"}}</label>
+          </div>
+          
+          <div class="setting-value">
+            {{input type='checkbox' checked=action.suppress_notifications}}
+            
+            <span>
+              {{i18n 'admin.wizard.action.suppress_notifications.description' type='topic'}}
             </span>
           </div>
         </div>

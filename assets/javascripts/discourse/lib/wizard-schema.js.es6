@@ -117,7 +117,8 @@ const action = {
       tags: null,
       visible: null,
       custom_fields: null,
-      skip_redirect: null
+      skip_redirect: null,
+      suppress_notifications: null,
     },
     send_message: {
       title: null,
@@ -127,7 +128,8 @@ const action = {
       skip_redirect: null,
       custom_fields: null,
       required: null,
-      recipient: null
+      recipient: null,
+      suppress_notifications: null
     },
     open_composer: {
       title: null,
@@ -218,6 +220,7 @@ const action = {
     'code',
     'custom_fields',
     'skip_redirect',
+    'suppress_notifications',
     'required'
   ],
   required: [

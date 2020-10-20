@@ -203,6 +203,9 @@ en:
           skip_redirect:
             label: "Redirect"
             description: "Don't redirect the user to this {{type}} after the wizard completes"
+          suppress_notifications:
+            label: "Suppress Notifications"
+            description: "Suppress normal notifications triggered by post creation"
           send_message:
             label: "Send Message"
             recipient: "Recipient"
