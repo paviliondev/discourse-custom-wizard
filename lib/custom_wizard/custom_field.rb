@@ -53,7 +53,7 @@ class ::CustomWizard::CustomField
         add_error("Unsupported class: #{value}")
       end
       
-      if attr == 'serializers' && (SERIALIZERS & value).empty?
+      if attr == 'serializers' && value.present? && (SERIALIZERS & value).empty?
         add_error("Unsupported serializer: #{value}")
       end
       
