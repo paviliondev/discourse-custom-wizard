@@ -4,8 +4,7 @@ import { ajax } from 'discourse/lib/ajax';
 import { popupAjaxError } from 'discourse/lib/ajax-error';
 
 export default Controller.extend({
-  fieldKeys: ['klass', 'name', 'type'],
-  classes: ['topic', 'user', 'group'],
+  fieldKeys: ['klass', 'type', 'serializers', 'name'],
   
   actions: {
     addField() {
@@ -16,13 +15,28 @@ export default Controller.extend({
       );
     },
     
-    saveFields() {      
+    removeField(field) {
+      this.get('customFields').removeObject(field);
+    },
+    
+    saveFields() {
+      this.set('saving', true);
       ajax(`/admin/wizards/custom-fields`, {
         type: 'PUT',
-        data: {
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify({
           custom_fields: this.customFields
+        })
+      }).then(result => {
+        if (result.success) {
+          this.set('saveIcon', 'check');
+        } else {
+          this.set('saveIcon', 'times');
         }
-      }).catch(popupAjaxError)
+        setTimeout(() => this.set('saveIcon', ''), 5000);
+      }).finally(() => this.set('saving', false))
+        .catch(popupAjaxError);
     }
   }
 });

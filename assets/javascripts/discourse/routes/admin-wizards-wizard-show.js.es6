@@ -2,6 +2,7 @@ import CustomWizard from '../models/custom-wizard';
 import { ajax } from 'discourse/lib/ajax';
 import DiscourseRoute from "discourse/routes/discourse";
 import I18n from "I18n";
+import { selectKitContent } from '../lib/wizard';
 
 export default DiscourseRoute.extend({
   model(params) {
@@ -32,6 +33,7 @@ export default DiscourseRoute.extend({
       wizardList: parentModel.wizard_list,
       fieldTypes,
       userFields: parentModel.userFields,
+      customFields: selectKitContent(parentModel.custom_fields.map(f => f.name)),
       apis: parentModel.apis,
       themes: parentModel.themes,
       wizard,

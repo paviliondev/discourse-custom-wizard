@@ -86,7 +86,8 @@ const selectionTypes = [
   'group',
   'category',
   'tag',
-  'user'
+  'user',
+  'customField'
 ]
 
 function defaultSelectionType(inputType, options = {}) {

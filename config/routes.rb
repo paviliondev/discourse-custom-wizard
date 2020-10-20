@@ -19,6 +19,9 @@ Discourse::Application.routes.append do
     put 'admin/wizards/wizard/:wizard_id' => 'admin_wizard#save'
     delete 'admin/wizards/wizard/:wizard_id' => 'admin_wizard#remove'
     
+    get 'admin/wizards/custom-fields' => 'admin_custom_fields#index'
+    put 'admin/wizards/custom-fields' => 'admin_custom_fields#update'
+    
     get 'admin/wizards/submissions' => 'admin_submissions#index'
     get 'admin/wizards/submissions/:wizard_id' => 'admin_submissions#show'
     get 'admin/wizards/submissions/:wizard_id/download' => 'admin_submissions#download'

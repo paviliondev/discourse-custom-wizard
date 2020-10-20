@@ -535,3 +535,21 @@
   background-color: $secondary;
   border: 1px solid $primary-medium;
 }
+
+.admin-wizards-custom-fields {
+  .select-kit {
+    width: 200px;
+  }
+  
+  .select-kit.multi-select {
+    width: 250px;
+  }
+  
+  input[type="text"] {
+    margin: 0;
+  }
+  
+  td:last-of-type {
+    text-align: right;
+  }
+}

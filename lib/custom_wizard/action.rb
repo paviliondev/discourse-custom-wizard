@@ -60,12 +60,18 @@ class CustomWizard::Action
   end
   
   def send_message
-    if action['required'].present? && data[action['required']].blank?
-      log_error(
-        "required not present",
-        "required: #{action['required']}; data: #{data[action['required']]}"
-      )
-      return
+
+    if action['required'].present?
+      required = CustomWizard::Mapper.new(
+        inputs: action['required'],
+        data: data,
+        user: user
+      ).perform
+            
+      if required.blank?
+        log_error("required input not present")
+        return
+      end
     end
     
     params = basic_topic_params
@@ -410,17 +416,32 @@ class CustomWizard::Action
         user: user
       ).perform
       
+      registered_fields = CustomWizard::CustomField.list
+      
       field_map.each do |field|
         keyArr = field[:key].split('.')
         value = field[:value]
         
-        if keyArr.first === 'topic'
+        if keyArr.length > 1
+          klass = keyArr.first
+          name = keyArr.last
+        else
+          name = keyArr.first
+        end
+         
+        
+        registered = registered_fields.select { |f| f.name == name }
+        if registered.first.present?
+          klass = registered.first.klass
+        end
+                
+        if klass === 'topic'
           params[:topic_opts] ||= {}
           params[:topic_opts][:custom_fields] ||= {}
-          params[:topic_opts][:custom_fields][keyArr.last] = value
+          params[:topic_opts][:custom_fields][name] = value
         else
           params[:custom_fields] ||= {}
-          params[:custom_fields][keyArr.last.to_sym] = value
+          params[:custom_fields][name] = value
         end
       end
     end

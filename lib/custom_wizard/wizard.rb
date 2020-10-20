@@ -320,10 +320,6 @@ class CustomWizard::Wizard
         Jobs.cancel_scheduled_job(:set_after_time_wizard, wizard_id: wizard[:id])
         Jobs.enqueue(:clear_after_time_wizard, wizard_id: wizard[:id])
       end
-      
-      if serialize_fields.present?
-        
-      end
     end
     
     wizard[:id]

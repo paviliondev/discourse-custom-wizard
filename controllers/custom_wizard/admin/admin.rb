@@ -10,4 +10,8 @@ class CustomWizard::AdminController < ::Admin::AdminController
     params.require(:wizard_id)
     @wizard = CustomWizard::Wizard.create(params[:wizard_id].underscore)
   end
+  
+  def custom_field_list
+    serialize_data(CustomWizard::CustomField.list, CustomWizard::CustomFieldSerializer)
+  end
 end

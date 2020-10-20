@@ -1,18 +1,19 @@
-class CustomWizard::CustomFieldsController < CustomWizard::AdminController
+class CustomWizard::AdminCustomFieldsController < CustomWizard::AdminController
   def index
-    render_custom_field_list
+    render_json_dump(custom_field_list)
   end
   
-  def update
-    field_data = params[:custom_fields]
+  def update        
+    custom_fields = custom_field_params[:custom_fields].map do |data|
+      CustomWizard::CustomField.new(data.to_h)
+    end
     
-    custom_fields = field_data.map { |data| CustomWizard::CustomFields.new(data) }
-    
-    custom_fields.each do |field_data|
+    custom_fields.each do |custom_field|
       custom_field.validate
       
       unless custom_field.valid?
-        raise Discourse::InvalidParameters, "Invalid field: '#{custom_field.name}'"
+        raise Discourse::InvalidParameters,
+          custom_field.errors.full_messages.join("\n\n")
       end
     end
     
@@ -25,16 +26,22 @@ class CustomWizard::CustomFieldsController < CustomWizard::AdminController
     end
     
     if all_fields_saved
-      render_custom_field_list
+      render json: success_json
     else
       render json: error_json
     end
   end
   
-  def render_custom_field_list
-    render_serialized(
-      CustomWizard::CustomFields.list,
-      CustomWizard::CustomFieldsSerializer
+  private
+  
+  def custom_field_params
+    params.permit(
+      custom_fields: [
+        :klass,
+        :name,
+        :type,
+        serializers: []
+      ]
     )
   end
 end
