@@ -26,6 +26,7 @@ class CustomWizard::AdminCustomFieldsController < CustomWizard::AdminController
     end
     
     if all_fields_saved
+      CustomWizard::CustomField.register_fields
       render json: success_json
     else
       render json: error_json

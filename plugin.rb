@@ -163,26 +163,7 @@ after_initialize do
   
   CustomWizard::Wizard.register_styles
   
-  CustomWizard::CustomField.list.each do |field|
-    self.send("register_#{field.klass}_custom_field_type", field.name, field.type.to_sym)
-    
-    add_to_class(field.klass.to_sym, field.name.to_sym) do
-      custom_fields[field.name]
-    end
-    
-    if field.serializers.any?
-      field.serializers.each do |klass|
-        klass = klass.to_sym
-        add_to_serializer(klass, field.name.to_sym) do
-          if klass == :topic_view
-            object.topic.send(field.name)
-          else
-            object.send(field.name)
-          end
-        end
-      end
-    end
-  end
+  CustomWizard::CustomField.register_fields
   
   DiscourseEvent.trigger(:custom_wizard_ready)
 end

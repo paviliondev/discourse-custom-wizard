@@ -79,4 +79,32 @@ class ::CustomWizard::CustomField
         self.new(data)
       end
   end
+  
+  def self.register_fields
+    self.list.each do |field|      
+      klass = field.klass.classify.constantize
+      
+      klass.register_custom_field_type(field.name, field.type.to_sym)
+      
+      klass.define_method(field.name) do
+        custom_fields[field.name] 
+      end
+      
+      if field.serializers.any?
+        field.serializers.each do |serializer|
+          serializer_klass = "#{serializer}_serializer".classify.constantize
+          
+          serializer_klass.class_eval { attributes(field.name.to_sym) }
+          
+          serializer_klass.define_method(field.name) do
+            if serializer == 'topic_view'
+              object.topic.send(field.name)
+            else
+              object.send(field.name)
+            end
+          end
+        end
+      end      
+    end
+  end
 end
