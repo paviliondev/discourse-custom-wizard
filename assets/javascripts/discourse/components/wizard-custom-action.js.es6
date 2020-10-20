@@ -29,7 +29,7 @@ export default Component.extend(UndoChanges, {
   hasCustomFields: or('basicTopicFields', 'updateProfile', 'createGroup', 'createCategory'),
   basicTopicFields: or('createTopic', 'sendMessage', 'openComposer'),
   publicTopicFields: or('createTopic', 'openComposer'),
-  showSkipRedirect: or('createTopic', 'sendMessage'),
+  showPostAdvanced: or('createTopic', 'sendMessage'),
   actionTypes: Object.keys(wizardSchema.action.types).map(type => {
     return {
       id: type,

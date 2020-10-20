@@ -114,6 +114,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
         :type,
         :code,
         :skip_redirect,
+        :suppress_notifications,
         :post,
         :post_builder,
         :post_template,

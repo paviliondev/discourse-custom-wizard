@@ -443,6 +443,8 @@ class CustomWizard::Action
       mapper.interpolate(action['post_template']) :
       data[action['post']]
     
+    params[:import_mode] = ActiveRecord::Type::Boolean.new.cast(action['suppress_notifications'])
+    
     add_custom_fields(params)
   end
   
