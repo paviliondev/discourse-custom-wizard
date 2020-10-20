@@ -4,7 +4,7 @@ class ::CustomWizard::CustomField
   
   CLASSES ||= ["topic", "group", "category", "post"]
   SERIALIZERS ||= ["topic_view", "topic_list_item", "post", "basic_category"]
-  TYPES ||= ["string", "boolean", "json"]
+  TYPES ||= ["string", "boolean", "integer", "json"]
   ATTRS ||= ["name", "klass", "type", "serializers"]
   KEY ||= "custom_wizard_custom_fields"
   

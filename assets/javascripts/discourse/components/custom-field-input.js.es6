@@ -15,7 +15,7 @@ export default Component.extend({
   postSerializers: ['post'],
   categorySerializers: ['basic_category', 'topic_view', 'topic_list_item'],
   klassContent: generateContent(['topic', 'post', 'group', 'category'], 'klass'),
-  typeContent: generateContent(['string', 'boolean', 'json'], 'type'),
+  typeContent: generateContent(['string', 'boolean', 'integer', 'json'], 'type'),
   showInputs: or('field.new', 'field.edit'),
   
   @discourseComputed('field.klass')

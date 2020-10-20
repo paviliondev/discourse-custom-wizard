@@ -290,6 +290,7 @@ en:
             label: "Type"
             select: "Select a type"
             string: "String"
+            integer: "Integer"
             boolean: "Boolean"
             json: "JSON"
           klass:
