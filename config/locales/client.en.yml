@@ -295,6 +295,8 @@ en:
           klass:
             label: "Class"
             select: "Select a class"
+            post: "Post"
+            category: "Category"
             topic: "Topic"
             group: "Group"
             user: "User"
@@ -303,6 +305,8 @@ en:
             select: "Select serializers"
             topic_view: "Topic View"
             topic_list_item: "Topic List Item"
+            basic_category: "Category"
+            post: "Post"
             
         submissions:
           nav_label: "Submissions"
