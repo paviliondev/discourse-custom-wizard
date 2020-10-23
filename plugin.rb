@@ -162,8 +162,31 @@ after_initialize do
   ::Wizard::Step.prepend CustomWizardStepExtension
   
   CustomWizard::Wizard.register_styles
+    
+  CustomWizard::CustomField::CLASSES.each do |klass|
+    add_model_callback(klass.to_sym, :after_initialize) do
+      CustomWizard::CustomField.list_by('klass', klass).each do |field|
+        klass.classify
+          .constantize
+          .register_custom_field_type(field.name, field.type.to_sym)
+      end
+    end
+  end
   
-  CustomWizard::CustomField.register_fields
-  
+  CustomWizard::CustomField::SERIALIZERS.each do |serializer_klass|
+    "#{serializer_klass}_serializer".classify.constantize.class_eval do
+      CustomWizard::CustomField.list_by('serializers', serializer_klass).each do |field|
+        attributes(field.name.to_sym)
+        class_eval %{def #{field.name}
+          if "#{serializer_klass}" == "topic_view"
+            object.topic.custom_fields["#{field.name}"]
+          else
+            object.custom_fields["#{field.name}"]
+          end
+        end}
+      end
+    end
+  end
+
   DiscourseEvent.trigger(:custom_wizard_ready)
 end
