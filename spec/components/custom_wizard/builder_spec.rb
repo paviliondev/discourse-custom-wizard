@@ -3,19 +3,45 @@
 require 'rails_helper'
 
 describe CustomWizard::Builder do
-  fab!(:user) { Fabricate(:user, username: 'angus', email: "angus@email.com", trust_level: TrustLevel[2]) }
-  fab!(:new_user) { Fabricate(:user, trust_level: 0) }
+  fab!(:trusted_user) {
+    Fabricate(
+      :user,
+      username: 'angus',
+      email: "angus@email.com",
+      trust_level: TrustLevel[3]
+    ) 
+  }
+  fab!(:user) { Fabricate(:user) }
   fab!(:category1) { Fabricate(:category, name: 'cat1') }
   fab!(:category2) { Fabricate(:category, name: 'cat2') }
   fab!(:group) { Fabricate(:group) }
   
-  before do
-    Group.refresh_automatic_group!(:trust_level_2)
-    template = JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
+  let(:required_data_json) {
+    JSON.parse(File.open(
+      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard/required_data.json"
     ).read)
-    CustomWizard::Wizard.add_wizard(template)
-    @wizard = CustomWizard::Wizard.create('super_mega_fun_wizard', user)
+  }
+  
+  let(:permitted_json) {
+    JSON.parse(File.open(
+      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard/permitted.json"
+    ).read)
+  }
+  
+  let(:permitted_param_json) {
+    JSON.parse(File.open(
+      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/step/permitted_params.json"
+    ).read)
+  }
+  
+  before do
+    Group.refresh_automatic_group!(:trust_level_3)
+    CustomWizard::Template.add(
+      JSON.parse(File.open(
+          "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
+      ).read)
+    )
+    @template = CustomWizard::Template.find('super_mega_fun_wizard')
   end
   
   context 'disabled' do
@@ -24,7 +50,9 @@ describe CustomWizard::Builder do
     end
     
     it "returns nil" do
-      expect(CustomWizard::Builder.new(@wizard.id, user).build).to eq(nil)
+      expect(
+        CustomWizard::Builder.new(@template[:id], user).build
+      ).to eq(nil)
     end
   end
   
@@ -33,150 +61,276 @@ describe CustomWizard::Builder do
       SiteSetting.custom_wizard_enabled = true
     end
     
+    it "returns wizard metadata" do
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      expect(wizard.id).to eq("super_mega_fun_wizard")
+      expect(wizard.name).to eq("Super Mega Fun Wizard")
+      expect(wizard.background).to eq("#333333")
+    end
+    
     it "returns steps" do
       expect(
-        CustomWizard::Builder.new(@wizard.id, user).build.steps.length
-      ).to eq(2)
-    end
-    
-    it 'returns no steps if multiple submissions are disabled and user has completed' do
-      wizard_template = CustomWizard::Wizard.find(@wizard.id)
-      wizard_template[:multiple_submissions] = false
-      CustomWizard::Wizard.save(wizard_template)
-      
-      history_params = {
-        action: UserHistory.actions[:custom_wizard_step],
-        acting_user_id: user.id,
-        context: @wizard.id
-      }
-      @wizard.steps.each do |step|
-        UserHistory.create!(history_params.merge(subject: step.id))
-      end
-      
-      built_wizard = CustomWizard::Builder.new(@wizard.id, user).build
-      expect(
-        CustomWizard::Builder.new(@wizard.id, user).build.steps.length
-      ).to eq(0)
-    end
-    
-    it 'returns no steps if user is not permitted' do
-      expect(
-        CustomWizard::Builder.new(@wizard.id, new_user).build.steps.length
-      ).to eq(0)
-    end
-    
-    it 'returns steps if user is permitted' do
-      expect(
-        CustomWizard::Builder.new(@wizard.id, user).build.steps.length
+        CustomWizard::Builder.new(@template[:id], user).build
+          .steps.length
       ).to eq(3)
     end
     
-    it 'returns a wizard with prefilled data if user has partially completed it' do
-      expect(
-        CustomWizard::Builder.new(@wizard.id, user)
-          .build
-          .steps[0].fields[0].value
-      ).to eq('I am prefilled')
-    end
-    
-    it 'returns a wizard with no prefilled data if options include reset' do
-      PluginStore.set("super_mega_fun_wizard_submissions", user.id, {
-        text: 'Input into text',
-      })
-      expect(
-        CustomWizard::Builder.new(@wizard.id, user)
-          .build(reset: true)
-          .steps[0].fields[0].value
-      ).to eq(nil)
-    end
-    
-    context 'building steps' do
-      it 'returns step metadata' do
-        expect(
-          CustomWizard::Builder.new(@wizard.id, user)
-            .build(reset: true)
-            .steps[0]
-        ).to eq('Super Mega Fun Wizard')
+    context "with multiple submissions disabled" do
+      before do
+        @template[:multiple_submissions] = false
+        CustomWizard::Template.save(@template.as_json)
       end
       
-      it 'saves permitted params' do
-        @wizard.steps[0].permitted_params = permitted_params
-        built_wizard = CustomWizard::Builder.new(@wizard.id, user).build({}, param_key: 'param_value')
-        submissions = PluginStore.get("super_mega_fun_wizard_submissions", user.id)
-        expect(submissions[0]['submission_param_key']).to eq('param_value')
+      it 'returns steps if user has not completed it' do
+        expect(
+          CustomWizard::Builder.new(@template[:id], user).build
+            .steps.length
+        ).to eq(3)
       end
       
-      it 'is not permitted if required data is not present' do
-        @wizard.steps[0].required_data = required_data
+      it 'returns no steps if user has completed it' do
+        @template[:steps].each do |step|
+          UserHistory.create!(
+            {
+              action: UserHistory.actions[:custom_wizard_step],
+              acting_user_id: user.id,
+              context: @template[:id]
+            }.merge(
+              subject: step[:id]
+            )
+          )
+        end
+        
         expect(
-          CustomWizard::Builder.new(@wizard.id, user).build.steps[0].permitted
+          CustomWizard::Builder.new(@template[:id], user).build
+            .steps.length
+        ).to eq(0)
+      end
+    end
+    
+    context "with restricted permissions" do
+      before do
+        @template[:permitted] = permitted_json["permitted"]
+        CustomWizard::Template.save(@template.as_json)
+      end
+      
+      it 'is not permitted if user is not in permitted group' do
+        expect(
+          CustomWizard::Builder.new(@template[:id], user).build
+            .permitted?
         ).to eq(false)
       end
       
-      it 'it shows required data message if required data has message' do
-        @wizard.steps[0].required_data = required_data
-        @wizard.steps[0].required_data_message = "Data is required"
-        PluginStore.set("super_mega_fun_wizard_submissions", user.id,
-          text: 'Input into text',
-        )
-        built_wizard = CustomWizard::Builder.new(@wizard.id, user).build
-        expect(built_wizard.steps[0].permitted).to eq(false)
-        expect(built_wizard.steps[0].permitted_message).to eq("Data is required")
+      it 'user cannot access if not permitted' do
+        expect(
+          CustomWizard::Builder.new(@template[:id], user).build
+            .can_access?
+        ).to eq(false)
       end
       
-      it 'is permitted if required data is present' do
-        @wizard.steps[0].required_data = required_data
-        PluginStore.set('super_mega_fun_wizard_submissions', user.id,
-          text: "Input into text"
-        )
+      it 'returns wizard metadata if user is not permitted' do
         expect(
-          CustomWizard::Builder.new(@wizard.id, user).build.steps[0].permitted
+          CustomWizard::Builder.new(@template[:id], user).build
+            .name
+        ).to eq("Super Mega Fun Wizard")
+      end
+      
+      it 'returns no steps if user is not permitted' do
+        expect(
+          CustomWizard::Builder.new(@template[:id], user).build
+            .steps.length
+        ).to eq(0)
+      end
+      
+      it 'is permitted if user is in permitted group' do
+        expect(
+          CustomWizard::Builder.new(@template[:id], trusted_user).build
+            .permitted?
         ).to eq(true)
       end
       
-      it 'returns field metadata' do
-        built_wizard = CustomWizard::Builder.new(@wizard.id, user).build
-        expect(built_wizard.steps[0].fields[0].label).to eq("<p>Name</p>")
-        expect(built_wizard.steps[0].fields[0].type).to eq("text")
+      it 'user can access if permitted' do
+        expect(
+          CustomWizard::Builder.new(@template[:id], trusted_user).build
+            .can_access?
+        ).to eq(true)
       end
       
-      it 'returns fields' do
-        @wizard.steps[0].fields[1] = checkbox_field
-        built_wizard = CustomWizard::Builder.new(@wizard.id, user).build
-        expect(built_wizard.steps[0].fields.length).to eq(2)
+      it 'returns steps if user is permitted' do
+        expect(
+          CustomWizard::Builder.new(@template[:id], trusted_user).build
+            .steps.length
+        ).to eq(3)
+      end
+    end
+    
+    it 'returns prefilled data' do
+      expect(
+        CustomWizard::Builder.new(@template[:id], user).build
+          .steps.first
+          .fields.first
+          .value
+      ).to eq('I am prefilled')
+    end
+    
+    context "user has partially completed" do
+      before do
+        PluginStore.set("super_mega_fun_wizard_submissions", user.id,
+          step_1_field_1: 'I am a user submission'
+        )
+      end
+      
+      it 'returns saved submissions' do
+        expect(
+          CustomWizard::Builder.new(@template[:id], user).build
+            .steps.first
+            .fields.first
+            .value
+        ).to eq('I am a user submission')
+      end
+      
+      context "restart is enabled" do
+        before do
+          @template[:restart_on_revisit] = true
+          CustomWizard::Template.save(@template.as_json)
+        end
+        
+        it 'does not return saved submissions' do
+          expect(
+            CustomWizard::Builder.new(@template[:id], user).build
+              .steps.first
+              .fields.first
+              .value
+          ).to eq('I am prefilled')
+        end
+      end
+    end
+
+    context 'building step' do
+      it 'returns step metadata' do
+        first_step = CustomWizard::Builder.new(@template[:id], user)
+          .build(reset: true)
+          .steps.first
+        
+        expect(first_step.id).to eq("step_1")
+        expect(first_step.title).to eq("Text")
+        expect(first_step.description).to eq("<p>Text inputs!</p>")
+      end
+      
+      context 'with required data' do
+        before do
+          @template[:steps][0][:required_data] = required_data_json['required_data']
+          @template[:steps][0][:required_data_message] = required_data_json['required_data_message']
+          CustomWizard::Template.save(@template.as_json)
+        end
+        
+        it 'is not permitted if required data is not present' do
+          expect(
+            CustomWizard::Builder.new(@template[:id], user).build
+            .steps.first
+            .permitted
+          ).to eq(false)
+        end
+        
+        it 'it shows required data message' do
+          expect(
+            CustomWizard::Builder.new(@template[:id], user).build
+              .steps.first
+              .permitted_message
+          ).to eq("Missing required data")
+        end
+        
+        it 'is permitted if required data is present' do
+          PluginStore.set('super_mega_fun_wizard_submissions', user.id,
+            required_data: "required_value"
+          )
+          expect(
+            CustomWizard::Builder.new(@template[:id], user).build
+              .steps.first
+              .permitted
+          ).to eq(true)
+        end
+      end
+      
+      context "with permitted params" do
+        before do
+          @template[:steps][0][:permitted_params] = permitted_param_json['permitted_params']
+          CustomWizard::Template.save(@template.as_json)
+        end
+        
+        it 'saves permitted params' do
+          CustomWizard::Builder.new(@template[:id], user).build({},
+            param: 'param_value'
+          ) 
+          expect(
+            PluginStore.get("super_mega_fun_wizard_submissions", user.id)
+              .first['saved_param']
+          ).to eq('param_value')
+        end
+      end
+    end
+    
+    context 'building field' do
+      it 'returns field metadata' do
+        wizard = CustomWizard::Builder.new(@template[:id], user).build
+        field = wizard.steps.first.fields.first
+        
+        expect(field.label).to eq("<p>Text</p>")
+        expect(field.type).to eq("text")
+        expect(field.id).to eq("step_1_field_1")
+        expect(field.min_length).to eq("3")
+      end
+      
+      it 'returns all step fields' do
+        expect(
+          CustomWizard::Builder.new(@template[:id], user)
+            .build
+            .steps.first
+            .fields.length
+        ).to eq(4)
       end
     end
     
     context 'on update' do
+      def perform_update(step_id, submission)
+        wizard = CustomWizard::Builder.new(@template[:id], user).build
+        updater = wizard.create_updater(step_id, submission)
+        updater.update
+        updater
+      end
+      
       it 'saves submissions' do
-        built_wizard = CustomWizard::Builder.new(@wizard.id, user).build
-        built_wizard.create_updater(built_wizard.steps[0].id,
-          step_1_field_1: 'Text input'
-        ).update
+        perform_update('step_1', step_1_field_1: 'Text input')
         expect(
           PluginStore.get("super_mega_fun_wizard_submissions", user.id)
             .first['step_1_field_1']
         ).to eq('Text input')
       end
       
+      context 'save submissions disabled' do
+        before do
+          @template[:save_submissions] = false
+          CustomWizard::Template.save(@template.as_json)
+        end
+        
+        it "does not save submissions" do
+          perform_update('step_1', step_1_field_1: 'Text input')
+          expect(
+            PluginStore.get("super_mega_fun_wizard_submissions", user.id)
+          ).to eq(nil)
+        end
+      end
+      
       context 'validation' do
         it 'applies min length' do
-          @wizard.steps[0].fields[0].min_length = 10
-          built_wizard = CustomWizard::Builder.new(@wizard.id, user).build
-          updater = built_wizard.create_updater(built_wizard.steps[0].id,
-            step_1_field_1: 'Te'
-          ).update
-          expect(updater.errors.messages[:text].first).to eq(
-            I18n.t('wizard.field.too_short', label: 'Text', min: 3)
-          ) 
+          expect(
+            perform_update('step_1', step_1_field_1: 'Te')
+              .errors.messages[:step_1_field_1].first
+          ).to eq(I18n.t('wizard.field.too_short', label: 'Text', min: 3))
         end
         
         it 'standardises boolean entries' do
-          @wizard.steps[0].fields[0] = checkbox_field
-          built_wizard = CustomWizard::Builder.new(@wizard.id, user).build
-          updater = built_wizard.create_updater(built_wizard.steps[1].id,
-            step_2_field_5: 'false'
-          ).update
+          perform_update('step_2', step_2_field_5: 'false')
           expect(
             PluginStore.get("super_mega_fun_wizard_submissions", user.id)
               .first['step_2_field_5']
@@ -184,12 +338,13 @@ describe CustomWizard::Builder do
         end
         
         it 'requires required fields' do
-          @wizard.steps[0].fields[0]['required'] = true
-          built_wizard = CustomWizard::Builder.new(@wizard.id, user).build
-          updater = built_wizard.create_updater(built_wizard.steps.second.id).update
+          @template[:steps][0][:fields][1][:required] = true
+          CustomWizard::Template.save(@template.as_json)
+          
           expect(
-            updater.errors.messages[:step_1_field_1].first
-          ).to eq(I18n.t('wizard.field.required', label: 'Text')) 
+            perform_update('step_1', step_1_field_2: nil)
+              .errors.messages[:step_1_field_2].first
+          ).to eq(I18n.t('wizard.field.required', label: 'Textarea')) 
         end
       end
     end

@@ -7,20 +7,23 @@ describe CustomWizard::Action do
   
   before do
     Group.refresh_automatic_group!(:trust_level_2)
-    template = JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-    ).read)
-    CustomWizard::Wizard.add_wizard(template)
-    @wizard = CustomWizard::Wizard.create('super_mega_fun_wizard', user)
+    CustomWizard::Template.add(
+      JSON.parse(File.open(
+          "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
+      ).read)
+    )
+    @template = CustomWizard::Template.find('super_mega_fun_wizard')
   end
   
   it 'creates a topic' do
-    built_wizard = CustomWizard::Builder.new(@wizard.id, user).build
-    updater = built_wizard.create_updater(built_wizard.steps[0].id,
+    wizard = CustomWizard::Builder.new(@template[:id], user).build
+        
+    updater = wizard.create_updater(
+      wizard.steps[0].id,
       step_1_field_1: "Topic Title",
       step_1_field_2: "topic body"
     ).update
-    updater2 = built_wizard.create_updater(built_wizard.steps[1].id, {}).update
+    updater2 = wizard.create_updater(wizard.steps[1].id, {}).update
     
     topic = Topic.where(title: "Topic Title")
     
@@ -34,9 +37,9 @@ describe CustomWizard::Action do
   it 'sends a message' do
     User.create(username: 'angus1', email: "angus1@email.com")
     
-    built_wizard = CustomWizard::Builder.new(@wizard.id, user).build
-    built_wizard.create_updater(built_wizard.steps[0].id, {}).update
-    built_wizard.create_updater(built_wizard.steps[1].id, {}).update
+    wizard = CustomWizard::Builder.new(@template[:id], user).build
+    wizard.create_updater(wizard.steps[0].id, {}).update
+    wizard.create_updater(wizard.steps[1].id, {}).update
     
     topic = Topic.where(
       archetype: Archetype.private_message,
@@ -54,26 +57,26 @@ describe CustomWizard::Action do
   end
   
   it 'updates a profile' do
-    built_wizard = CustomWizard::Builder.new(@wizard.id, user).build
+    wizard = CustomWizard::Builder.new(@template[:id], user).build
     upload = Upload.create!(
       url: '/images/image.png',
       original_filename: 'image.png',
       filesize: 100,
       user_id: -1,
     )
-    steps = built_wizard.steps
-    built_wizard.create_updater(steps[0].id, {}).update
-    built_wizard.create_updater(steps[1].id,
-      step_2_field_7: upload.as_json,
+    steps = wizard.steps
+    wizard.create_updater(steps[0].id, {}).update
+    wizard.create_updater(steps[1].id,
+      step_2_field_7: upload.as_json
     ).update
     expect(user.profile_background_upload.id).to eq(upload.id)
   end
   
   it 'opens a composer' do
-    built_wizard = CustomWizard::Builder.new(@wizard.id, user).build
-    built_wizard.create_updater(built_wizard.steps[0].id, step_1_field_1: "Text input").update
+    wizard = CustomWizard::Builder.new(@template[:id], user).build
+    wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
     
-    updater = built_wizard.create_updater(built_wizard.steps[1].id, {})
+    updater = wizard.create_updater(wizard.steps[1].id, {})
     updater.update
     
     submissions = PluginStore.get("super_mega_fun_wizard_submissions", user.id)
@@ -85,34 +88,34 @@ describe CustomWizard::Action do
   end
   
   it 'creates a category' do
-    built_wizard = CustomWizard::Builder.new(@wizard.id, user).build
-    built_wizard.create_updater(built_wizard.steps[0].id, step_1_field_1: "Text input").update
-    built_wizard.create_updater(built_wizard.steps[1].id, {}).update
+    wizard = CustomWizard::Builder.new(@template[:id], user).build
+    wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
+    wizard.create_updater(wizard.steps[1].id, {}).update
     submissions = PluginStore.get("super_mega_fun_wizard_submissions", user.id)    
     expect(Category.where(id: submissions.first['action_8']).exists?).to eq(true)
   end
   
   it 'creates a group' do
-    built_wizard = CustomWizard::Builder.new(@wizard.id, user).build
-    step_id = built_wizard.steps[0].id
-    updater = built_wizard.create_updater(step_id, step_1_field_1: "Text input").update
+    wizard = CustomWizard::Builder.new(@template[:id], user).build
+    step_id = wizard.steps[0].id
+    updater = wizard.create_updater(step_id, step_1_field_1: "Text input").update
     submissions = PluginStore.get("super_mega_fun_wizard_submissions", user.id)
     expect(Group.where(name: submissions.first['action_9']).exists?).to eq(true)
   end
   
   it 'adds a user to a group' do
-    built_wizard = CustomWizard::Builder.new(@wizard.id, user).build
-    step_id = built_wizard.steps[0].id
-    updater = built_wizard.create_updater(step_id, step_1_field_1: "Text input").update
+    wizard = CustomWizard::Builder.new(@template[:id], user).build
+    step_id = wizard.steps[0].id
+    updater = wizard.create_updater(step_id, step_1_field_1: "Text input").update
     submissions = PluginStore.get("super_mega_fun_wizard_submissions", user.id)
     group = Group.find_by(name: submissions.first['action_9'])
     expect(group.users.first.username).to eq('angus')
   end
   
   it 'watches categories' do
-    built_wizard = CustomWizard::Builder.new(@wizard.id, user).build
-    built_wizard.create_updater(built_wizard.steps[0].id, step_1_field_1: "Text input").update
-    built_wizard.create_updater(built_wizard.steps[1].id, {}).update
+    wizard = CustomWizard::Builder.new(@template[:id], user).build
+    wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
+    wizard.create_updater(wizard.steps[1].id, {}).update
     submissions = PluginStore.get("super_mega_fun_wizard_submissions", user.id)
     expect(CategoryUser.where(
       category_id: submissions.first['action_8'],
@@ -125,8 +128,8 @@ describe CustomWizard::Action do
   end
   
   it 're-routes a user' do
-    built_wizard = CustomWizard::Builder.new(@wizard.id, user).build
-    updater = built_wizard.create_updater(built_wizard.steps.last.id, {})
+    wizard = CustomWizard::Builder.new(@template[:id], user).build
+    updater = wizard.create_updater(wizard.steps.last.id, {})
     updater.update
     expect(updater.result[:redirect_on_complete]).to eq("https://google.com")
   end

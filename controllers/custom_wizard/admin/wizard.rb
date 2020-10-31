@@ -4,7 +4,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
   def index
     render_json_dump(
       wizard_list: ActiveModel::ArraySerializer.new(
-        CustomWizard::Wizard.list,
+        CustomWizard::Template.list,
         each_serializer: CustomWizard::BasicWizardSerializer
       ),
       field_types: CustomWizard::Field.types
@@ -14,7 +14,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
   def show
     params.require(:wizard_id)
     
-    if data = CustomWizard::Wizard.find(params[:wizard_id].underscore)
+    if data = CustomWizard::Template.find(params[:wizard_id].underscore)
       render json: data.as_json
     else
       render json: { none: true }
@@ -22,8 +22,11 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
   end
   
   def remove
-    CustomWizard::Wizard.remove(@wizard.id)
-    render json: success_json
+    if CustomWizard::Template.remove(@wizard.id)
+      render json: success_json
+    else
+      render json: failed_json
+    end
   end
 
   def save
@@ -36,7 +39,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
     if validation[:error]
       render json: { error: validation[:error] }
     else      
-      if wizard_id = CustomWizard::Wizard.save(validation[:wizard])
+      if wizard_id = CustomWizard::Template.save(validation[:wizard])
         render json: success_json.merge(wizard_id: wizard_id)
       else
         render json: failed_json

@@ -1,19 +1,30 @@
 class CustomWizard::StepsController < ::ApplicationController
   before_action :ensure_logged_in
+  before_action :ensure_can_update
 
   def update
     params.require(:step_id)
     params.require(:wizard_id)
-    field_ids = CustomWizard::Wizard.field_ids(params[:wizard_id], params[:step_id])
+    
+    wizard = @builder.build
+    step = wizard.steps.select { |s| s.id == update_params[:step_id] }.first
 
-    permitted = params.permit(:wizard_id, :step_id)
-    if params[:fields]
-      permitted[:fields] = params[:fields].select { |k, v| field_ids.include? k }
-      permitted.permit!
+    if !step || step.fields.blank?
+      raise Discourse::InvalidParameters.new(:step_id)
     end
     
-    wizard = CustomWizard::Builder.new(permitted[:wizard_id].underscore, current_user).build
-    updater = wizard.create_updater(permitted[:step_id], permitted[:fields])
+    field_ids = step.fields.map(&:id)
+    
+    if params[:fields]
+      permitted_fields = params[:fields].select { |k, v| field_ids.include? k }
+      update_params[:fields] = permitted_fields
+      update_params.permit!
+    end
+    
+    updater = wizard.create_updater(
+      update_params[:step_id],
+      update_params[:fields]
+    )
     updater.update
     
     if updater.success?
@@ -28,5 +39,26 @@ class CustomWizard::StepsController < ::ApplicationController
       end
       render json: { errors: errors }, status: 422
     end
+  end
+  
+  private
+  
+  def ensure_can_update
+    @builder = CustomWizard::Builder.new(
+      update_params[:wizard_id].underscore,
+      current_user
+    )
+    
+    if @builder.nil?
+      raise Discourse::InvalidParameters.new(:wizard_id)
+    end
+    
+    if !@builder.wizard || !@builder.wizard.can_access?
+      raise Discourse::InvalidAccess.new
+    end
+  end
+  
+  def update_params
+    params.permit(:wizard_id, :step_id)
   end
 end

@@ -1,0 +1,18 @@
+{
+  "required_data_message": "Missing required data",
+  "required_data": [
+    {
+      "type": "validation",
+      "pairs": [
+        {
+          "index": 0,
+          "key": "required_data",
+          "key_type": "text",
+          "value": "required_value",
+          "value_type": "text",
+          "connector": "equal"
+        }
+      ]
+    }
+  ]
+}

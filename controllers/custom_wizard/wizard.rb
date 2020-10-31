@@ -24,7 +24,7 @@ class CustomWizard::WizardController < ::ApplicationController
         
         if builder.wizard.present?
           builder_opts = {}
-          builder_opts[:reset] = params[:reset] || builder.wizard.restart_on_revisit
+          builder_opts[:reset] = params[:reset]
           built_wizard = builder.build(builder_opts, params)
           
           render_serialized(built_wizard, ::CustomWizard::WizardSerializer, root: false)

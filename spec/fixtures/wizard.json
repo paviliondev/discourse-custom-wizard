@@ -7,16 +7,6 @@
   "after_signup": false,
   "prompt_completion": true,
   "theme_id": 2,
-  "permitted": [
-    {
-      "type": "assignment",
-      "output_type": "group",
-      "output_connector": "set",
-      "output": [
-        12
-      ]
-    }
-  ],
   "steps": [
     {
       "id": "step_1",

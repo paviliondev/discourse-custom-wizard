@@ -1,0 +1,17 @@
+{
+  "permitted_params": [
+    {
+      "type": "association",
+      "pairs": [
+        {
+          "index": 0,
+          "key": "param",
+          "key_type": "text",
+          "value": "saved_param",
+          "value_type": "text",
+          "connector": "association"
+        }
+      ]
+    }
+  ]
+}

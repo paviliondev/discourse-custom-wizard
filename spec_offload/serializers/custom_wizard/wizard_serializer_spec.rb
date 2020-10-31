@@ -10,7 +10,7 @@ describe CustomWizard::WizardSerializer do
     template = JSON.parse(File.open(
       "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
     ).read)
-    CustomWizard::Wizard.add_wizard(template)
+    CustomWizard::Template.add(template)
     @wizard = CustomWizard::Wizard.create('super_mega_fun_wizard', user)
   end
   

@@ -95,7 +95,7 @@ class CustomWizard::Validator
   end
   
   def check_id(object, type)
-    if type === :wizard && @opts[:create] && CustomWizard::Wizard.exists?(object[:id])
+    if type === :wizard && @opts[:create] && CustomWizard::Template.exists?(object[:id])
       @error = {
         type: 'conflict',
         params: { type: type, property: 'id', value: object[:id] }

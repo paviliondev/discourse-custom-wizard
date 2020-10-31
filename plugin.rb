@@ -55,6 +55,7 @@ after_initialize do
     ../lib/custom_wizard/mapper.rb
     ../lib/custom_wizard/log.rb
     ../lib/custom_wizard/step_updater.rb
+    ../lib/custom_wizard/template.rb
     ../lib/custom_wizard/validator.rb
     ../lib/custom_wizard/wizard.rb
     ../lib/custom_wizard/api/api.rb
@@ -158,7 +159,11 @@ after_initialize do
   ::Wizard::Field.prepend CustomWizardFieldExtension
   ::Wizard::Step.prepend CustomWizardStepExtension
   
-  CustomWizard::Wizard.register_styles
+  full_path = "#{Rails.root}/plugins/discourse-custom-wizard/assets/stylesheets/wizard/wizard_custom.scss"
+  DiscoursePluginRegistry.register_asset(full_path, {}, "wizard_custom")
+  Stylesheet::Importer.register_import("wizard_custom") do
+    import_files(DiscoursePluginRegistry.stylesheets["wizard_custom"])
+  end
   
   DiscourseEvent.trigger(:custom_wizard_ready)
 end
