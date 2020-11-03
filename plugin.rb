@@ -1,6 +1,6 @@
 # name: discourse-custom-wizard
 # about: Create custom wizards
-# version: 0.2
+# version: 0.3
 # authors: Angus McLeod
 # url: https://github.com/angusmcleod/discourse-custom-wizard
 
