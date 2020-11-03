@@ -43,6 +43,7 @@ after_initialize do
     ../controllers/custom_wizard/admin/api.rb
     ../controllers/custom_wizard/admin/logs.rb
     ../controllers/custom_wizard/admin/transfer.rb
+    ../controllers/custom_wizard/admin/custom_fields.rb
     ../controllers/custom_wizard/wizard.rb
     ../controllers/custom_wizard/steps.rb
     ../jobs/clear_after_time_wizard.rb
@@ -51,6 +52,7 @@ after_initialize do
     ../lib/custom_wizard/action_result.rb
     ../lib/custom_wizard/action.rb
     ../lib/custom_wizard/builder.rb
+    ../lib/custom_wizard/custom_field.rb
     ../lib/custom_wizard/field.rb
     ../lib/custom_wizard/mapper.rb
     ../lib/custom_wizard/log.rb
@@ -69,6 +71,7 @@ after_initialize do
     ../serializers/custom_wizard/api_serializer.rb
     ../serializers/custom_wizard/basic_api_serializer.rb
     ../serializers/custom_wizard/basic_wizard_serializer.rb
+    ../serializers/custom_wizard/custom_field_serializer.rb
     ../serializers/custom_wizard/wizard_field_serializer.rb
     ../serializers/custom_wizard/wizard_step_serializer.rb
     ../serializers/custom_wizard/wizard_serializer.rb
@@ -164,5 +167,30 @@ after_initialize do
     import_files(DiscoursePluginRegistry.stylesheets["wizard_custom"])
   end
   
+  CustomWizard::CustomField::CLASSES.each do |klass|
+    add_model_callback(klass.to_sym, :after_initialize) do
+      CustomWizard::CustomField.list_by('klass', klass).each do |field|
+        klass.classify
+          .constantize
+          .register_custom_field_type(field.name, field.type.to_sym)
+      end
+    end
+  end
+  
+  CustomWizard::CustomField::SERIALIZERS.each do |serializer_klass|
+    "#{serializer_klass}_serializer".classify.constantize.class_eval do
+      CustomWizard::CustomField.list_by('serializers', serializer_klass).each do |field|
+        attributes(field.name.to_sym)
+        class_eval %{def #{field.name}
+          if "#{serializer_klass}" == "topic_view"
+            object.topic.custom_fields["#{field.name}"]
+          else
+            object.custom_fields["#{field.name}"]
+          end
+        end}
+      end
+    end
+  end
+
   DiscourseEvent.trigger(:custom_wizard_ready)
 end

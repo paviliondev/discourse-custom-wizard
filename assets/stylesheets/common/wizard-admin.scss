@@ -535,3 +535,35 @@
   background-color: $secondary;
   border: 1px solid $primary-medium;
 }
+
+.admin-wizards-custom-fields {
+  .select-kit {
+    width: 200px;
+  }
+  
+  .select-kit.multi-select {
+    width: 200px;
+    
+    .choices .choice,
+    .select-kit-filter .filter-input {
+      height: 25px;
+      min-height: 25px;
+    }
+  }
+  
+  input[type="text"] {
+    margin: 0;
+  }
+  
+  td {
+    vertical-align: top;
+  }
+  
+  td:not(:last-of-type) {
+    min-width: 230px;
+  }
+  
+  td:last-of-type {
+    text-align: right;
+  }
+}

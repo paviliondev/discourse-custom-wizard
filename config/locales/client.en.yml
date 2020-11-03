@@ -102,6 +102,7 @@ en:
             tag: "tag"
             group: "group"
             list: "list"
+            custom_field: "custom field"
 
           placeholder:
             text: "Enter text"
@@ -115,6 +116,7 @@ en:
             tag: "Select tag"
             group: "Select group"
             list: "Enter item"
+            custom_field: "Select field"
             
         error:
           failed: "failed to save wizard"
@@ -203,6 +205,9 @@ en:
           skip_redirect:
             label: "Redirect"
             description: "Don't redirect the user to this {{type}} after the wizard completes"
+          suppress_notifications:
+            label: "Suppress Notifications"
+            description: "Suppress normal notifications triggered by post creation"
           send_message:
             label: "Send Message"
             recipient: "Recipient"
@@ -274,6 +279,36 @@ en:
             visibility_level: Visibility Level
             members_visibility_level: Members Visibility Level
         
+        custom_field:
+          nav_label: "Custom Fields"
+          add: "Add Custom Field"
+          save: "Save Custom Fields"
+          name:
+            label: "Name"
+            select: "Enter a name"
+          type:
+            label: "Type"
+            select: "Select a type"
+            string: "String"
+            integer: "Integer"
+            boolean: "Boolean"
+            json: "JSON"
+          klass:
+            label: "Class"
+            select: "Select a class"
+            post: "Post"
+            category: "Category"
+            topic: "Topic"
+            group: "Group"
+            user: "User"
+          serializers:
+            label: "Serializers"
+            select: "Select serializers"
+            topic_view: "Topic View"
+            topic_list_item: "Topic List Item"
+            basic_category: "Category"
+            post: "Post"
+            
         submissions:
           nav_label: "Submissions"
           title: "{{name}} Submissions"

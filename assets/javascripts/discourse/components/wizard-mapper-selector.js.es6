@@ -21,9 +21,11 @@ export default Component.extend({
   showGroup: computed('activeType', function() { return this.showInput('group') }),
   showUser: computed('activeType', function() { return this.showInput('user') }),
   showList: computed('activeType', function() { return this.showInput('list') }),
+  showCustomField: computed('activeType', function() { return this.showInput('customField') }),
   textEnabled: computed('options.textSelection', 'inputType', function() { return this.optionEnabled('textSelection') }),
   wizardFieldEnabled: computed('options.wizardFieldSelection', 'inputType', function() { return this.optionEnabled('wizardFieldSelection') }),
   wizardActionEnabled: computed('options.wizardActionSelection', 'inputType', function() { return this.optionEnabled('wizardActionSelection') }),
+  customFieldEnabled: computed('options.customFieldSelection', 'inputType', function() { return this.optionEnabled('customFieldSelection') }),
   userFieldEnabled: computed('options.userFieldSelection', 'inputType', function() { return this.optionEnabled('userFieldSelection') }),
   userFieldOptionsEnabled: computed('options.userFieldOptionsSelection', 'inputType', function() { return this.optionEnabled('userFieldOptionsSelection') }),
   categoryEnabled: computed('options.categorySelection', 'inputType', function() { return this.optionEnabled('categorySelection') }),
@@ -34,7 +36,7 @@ export default Component.extend({
   
   groups: alias('site.groups'),
   categories: alias('site.categories'),
-  showComboBox: or('showWizardField', 'showWizardAction', 'showUserField', 'showUserFieldOptions'),
+  showComboBox: or('showWizardField', 'showWizardAction', 'showUserField', 'showUserFieldOptions', 'showCustomField'),
   showMultiSelect: or('showCategory', 'showGroup'),
   hasTypes: gt('selectorTypes.length', 1),
   showTypes: false,
@@ -88,7 +90,8 @@ export default Component.extend({
     'showController.wizard.actions.[]',
     'showController.userFields.[]',
     'showController.currentField.id',
-    'showController.currentAction.id'
+    'showController.currentAction.id',
+    'showController.customFields'
   )
   comboBoxContent(
     activeType,
@@ -96,7 +99,8 @@ export default Component.extend({
     wizardActions,
     userFields,
     currentFieldId,
-    currentActionId
+    currentActionId,
+    customFields
   ) {
     let content;
     
@@ -137,6 +141,10 @@ export default Component.extend({
     
     if (activeType === 'userFieldOptions') {
       content = userFields;
+    }
+    
+    if (activeType === 'customField') {
+      content = customFields;
     }
     
     return content;

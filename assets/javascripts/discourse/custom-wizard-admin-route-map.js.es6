@@ -7,6 +7,8 @@ export default {
         this.route('adminWizardsWizardShow', { path: '/:wizardId/', resetNamespace: true });
       });
       
+      this.route('adminWizardsCustomFields', { path: '/custom-fields', resetNamespace: true });
+      
       this.route('adminWizardsSubmissions', { path: '/submissions', resetNamespace: true }, function() {
         this.route('adminWizardsSubmissionsShow', { path: '/:wizardId/', resetNamespace: true });
       })

@@ -1,0 +1,44 @@
+{{#if showInputs}}
+  <td>
+    {{combo-box
+      value=field.klass
+      content=klassContent
+      none="admin.wizard.custom_field.klass.select"
+      onChange=(action (mut field.klass))}}
+  </td>
+  <td>
+    {{combo-box
+      value=field.type
+      content=typeContent
+      none="admin.wizard.custom_field.type.select"
+      onChange=(action (mut field.type))}}
+  </td>
+  <td>
+    {{multi-select
+      value=field.serializers
+      content=serializerContent
+      none="admin.wizard.custom_field.serializers.select"
+      onChange=(action (mut field.serializers))}}
+  </td>
+  <td>
+    {{input
+      value=field.name
+      placeholder=(i18n "admin.wizard.custom_field.klass.select")}}
+  </td>
+  <td>
+    {{d-button action="close" icon="times"}}
+  </td>
+{{else}}
+  <td><label>{{field.klass}}</label></td>
+  <td><label>{{field.type}}</label></td>
+  <td>
+    {{#each field.serializers as |serializer|}}
+      <label>{{serializer}}</label>
+    {{/each}}
+  </td>
+  <td><label>{{field.name}}</label></td>
+  <td>
+    {{d-button action="edit" icon="pencil-alt"}}
+    {{d-button action="close" icon="times"}}
+  </td>
+{{/if}}
