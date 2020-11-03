@@ -1,0 +1,10 @@
+{
+  "id": "field_id",
+  "label": "Field Label",
+  "image": "field_image_url.png",
+  "description": "Field description",
+  "required": true,
+  "key": "field.locale.key",
+  "type": "field_type",
+  "content": []
+}

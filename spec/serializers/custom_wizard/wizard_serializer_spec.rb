@@ -2,48 +2,85 @@
 
 require 'rails_helper'
 
-describe CustomWizardSerializer do
+describe CustomWizard::WizardSerializer do
   fab!(:user) { Fabricate(:user) }
   fab!(:category) { Fabricate(:category) }
 
-  let!(:template) do
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-    ).read)
+  before do
+    CustomWizard::Template.save(
+      JSON.parse(File.open(
+        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
+      ).read),
+    skip_jobs: true)
+    @template = CustomWizard::Template.find('super_mega_fun_wizard')
   end
   
-  let(:category_field) {{"id": "category","type": "category","limit": "1","label": "Category"}}
-  
-  def build_wizard(t = template, u = user, build_opts = {}, params = {})
-    CustomWizard::Wizard.add_wizard(t)
-    CustomWizard::Builder.new('welcome', u).build(build_opts, params)
-  end
-
   it 'should return the wizard attributes' do
-    json = CustomWizardSerializer.new(build_wizard, scope: Guardian.new(user)).as_json
-    expect(json[:custom_wizard][:id]).to eq("welcome")
-    expect(json[:custom_wizard][:name]).to eq("Welcome")
-    expect(json[:custom_wizard][:background]).to eq("#006da3")
-    expect(json[:custom_wizard][:required]).to eq(false)
-    expect(json[:custom_wizard][:min_trust]).to eq(1)
+    json = CustomWizard::WizardSerializer.new(
+      CustomWizard::Builder.new(@template[:id], user).build,
+      scope: Guardian.new(user)
+    ).as_json
+    expect(json[:wizard][:id]).to eq("super_mega_fun_wizard")
+    expect(json[:wizard][:name]).to eq("Super Mega Fun Wizard")
+    expect(json[:wizard][:background]).to eq("#333333")
+    expect(json[:wizard][:required]).to eq(false)
+  end
+  
+  it 'should return the wizard steps' do
+    json = CustomWizard::WizardSerializer.new(
+      CustomWizard::Builder.new(@template[:id], user).build,
+      scope: Guardian.new(user)
+    ).as_json
+    expect(json[:wizard][:steps].length).to eq(3)
   end
   
   it "should return the wizard user attributes" do
-    json = CustomWizardSerializer.new(build_wizard, scope: Guardian.new(user)).as_json
-    expect(json[:custom_wizard][:permitted]).to eq(true)
-    expect(json[:custom_wizard][:user]).to eq(BasicUserSerializer.new(user, root: false).as_json)
+    json = CustomWizard::WizardSerializer.new(
+      CustomWizard::Builder.new(@template[:id], user).build,
+      scope: Guardian.new(user)
+    ).as_json
+    expect(
+      json[:wizard][:user]
+    ).to eq(BasicUserSerializer.new(user, root: false).as_json)
   end
   
-  it "should not return category attributes if there are no category fields" do
-    json = CustomWizardSerializer.new(build_wizard, scope: Guardian.new(user)).as_json
-    expect(json[:custom_wizard][:categories].present?).to eq(false)
-    expect(json[:custom_wizard][:uncategorized_category_id].present?).to eq(false)
+  it "should not return categories if there are no category fields" do
+    @template[:steps][2][:fields].delete_at(2)
+    CustomWizard::Template.save(@template)
+    
+    json = CustomWizard::WizardSerializer.new(
+      CustomWizard::Builder.new(@template[:id], user).build,
+      scope: Guardian.new(user)
+    ).as_json
+    expect(json[:wizard][:categories].present?).to eq(false)
+    expect(json[:wizard][:uncategorized_category_id].present?).to eq(false)
   end 
   
-  it "should return category attributes if there is a category selector field" do
-    template['steps'][0]['fields'][0] = category_field
-    json = CustomWizardSerializer.new(build_wizard(template), scope: Guardian.new(user)).as_json
-    expect(json[:custom_wizard][:categories].present?).to eq(true)
-    expect(json[:custom_wizard][:uncategorized_category_id].present?).to eq(true)
+  it "should return categories if there is a category selector field" do
+    json = CustomWizard::WizardSerializer.new(
+      CustomWizard::Builder.new(@template[:id], user).build,
+      scope: Guardian.new(user)
+    ).as_json
+    expect(json[:wizard][:categories].present?).to eq(true)
+    expect(json[:wizard][:uncategorized_category_id].present?).to eq(true)
+  end
+  
+  it 'should return groups if there is a group selector field' do
+    json = CustomWizard::WizardSerializer.new(
+      CustomWizard::Builder.new(@template[:id], user).build,
+      scope: Guardian.new(user)
+    ).as_json
+    expect(json[:wizard][:groups].length).to eq(8)
+  end
+  
+  it 'should not return groups if there is not a group selector field' do
+    @template[:steps][2][:fields].delete_at(3)
+    CustomWizard::Template.save(@template)
+    
+    json = CustomWizard::WizardSerializer.new(
+      CustomWizard::Builder.new(@template[:id], user).build,
+      scope: Guardian.new(user)
+    ).as_json
+    expect(json[:wizard][:groups].present?).to eq(false)
   end
 end

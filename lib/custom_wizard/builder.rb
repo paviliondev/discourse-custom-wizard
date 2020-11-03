@@ -2,13 +2,13 @@ class CustomWizard::Builder
   attr_accessor :wizard, :updater, :submissions
 
   def initialize(wizard_id, user=nil)
-    params = CustomWizard::Wizard.find(wizard_id)
-    return nil if params.blank?
+    template = CustomWizard::Template.find(wizard_id)
+    return nil if template.blank?
     
-    @wizard = CustomWizard::Wizard.new(params, user)
-    @steps = params['steps'] || []
-    @actions = params['actions'] || []
-    @submissions = @wizard.submissions if user && @wizard
+    @wizard = CustomWizard::Wizard.new(template, user)
+    @steps = template['steps'] || []
+    @actions = template['actions'] || []
+    @submissions = @wizard.submissions
   end
 
   def self.sorted_handlers
@@ -48,12 +48,26 @@ class CustomWizard::Builder
     return nil if !SiteSetting.custom_wizard_enabled || !@wizard
     return @wizard if !@wizard.can_access?
     
-    reset_submissions if build_opts[:reset]
+    build_opts[:reset] = build_opts[:reset] || @wizard.restart_on_revisit
 
     @steps.each do |step_template|
       @wizard.append_step(step_template['id']) do |step|
+        step.permitted = true
+        
+        if step_template['required_data']
+          step = ensure_required_data(step, step_template)
+        end
+              
+        if !step.permitted
+          if step_template['required_data_message']
+            step.permitted_message = step_template['required_data_message'] 
+          end
+          next
+        end
+        
         step.title = step_template['title'] if step_template['title']
         step.banner = step_template['banner'] if step_template['banner']
+        step.key = step_template['key'] if step_template['key']
         
         if step_template['description']
           step.description = mapper.interpolate(
@@ -63,59 +77,8 @@ class CustomWizard::Builder
           ) 
         end
         
-        step.key = step_template['key'] if step_template['key']
-        step.permitted = true
-
         if permitted_params = step_template['permitted_params']
-          permitted_data = {}
-
-          permitted_params.each do |p|
-            pair = p['pairs'].first
-            params_key = pair['key'].to_sym
-            submission_key = pair['value'].to_sym
-            permitted_data[submission_key] = params[params_key] if params[params_key]
-          end
-
-          if permitted_data.present?
-            current_data = @submissions.last || {}
-            save_submissions(current_data.merge(permitted_data), false)
-          end
-        end
-
-        if (required_data = step_template['required_data']).present?
-          has_required_data = true
-          
-          required_data.each do |required|
-            required['pairs'].each do |pair|
-              if pair['key'].blank? || pair['value'].blank?
-                has_required_data = false
-              end
-            end
-          end
-          
-          if has_required_data
-            if !@submissions.last
-              step.permitted = false
-            else
-              required_data.each do |required|
-                pairs = required['pairs'].map do |p| 
-                  p['key'] = @submissions.last[p['key']]
-                end
-                
-                unless mapper.validate_pairs(pairs)
-                  step.permitted = false
-                end
-              end
-            end
-            
-            if !step.permitted
-              if step_template['required_data_message']
-                step.permitted_message = step_template['required_data_message'] 
-              end
-              
-              next
-            end
-          end
+          save_permitted_params(permitted_params, params)
         end
 
         if step_template['fields'] && step_template['fields'].length
@@ -133,7 +96,7 @@ class CustomWizard::Builder
               validate_field(field, updater, step_template) if field['type'] != 'text_only'
             end
           end
-                    
+                              
           next if updater.errors.any?
 
           CustomWizard::Builder.step_handlers.each do |handler|
@@ -146,9 +109,7 @@ class CustomWizard::Builder
 
           data = updater.fields
 
-          ## if the wizard has data from the previous steps make that accessible to the actions.
-          if @submissions && @submissions.last && !@submissions.last.key?("submitted_at")
-            submission = @submissions.last
+          if submission = @wizard.current_submission
             data = submission.merge(data)
           end
           
@@ -156,10 +117,10 @@ class CustomWizard::Builder
                     
           if @actions.present?
             @actions.each do |action|
-              
+                            
               if (action['run_after'] === updater.step.id) ||
                  (final_step && (!action['run_after'] || (action['run_after'] === 'wizard_completion')))
-
+                        
                 CustomWizard::Action.new(
                   wizard: @wizard,
                   action: action,
@@ -169,29 +130,31 @@ class CustomWizard::Builder
               end
             end
           end
-                    
-          if route_to = data['route_to']
-            data.delete('route_to')
-          end
-
-          if @wizard.save_submissions && updater.errors.empty?
-            save_submissions(data, final_step)
-          elsif final_step
-            PluginStore.remove("#{@wizard.id}_submissions", @wizard.user.id)
-          end
-
-          if final_step && @wizard.id === @wizard.user.custom_fields['redirect_to_wizard']
-            @wizard.user.custom_fields.delete('redirect_to_wizard');
-            @wizard.user.save_custom_fields(true)
-          end
-
+          
           if updater.errors.empty?
+            if route_to = data['route_to']
+              data.delete('route_to')
+            end
+            
+            if @wizard.save_submissions
+              save_submissions(data, final_step)
+            end
+            
             if final_step
+              if @wizard.id == @wizard.user.custom_fields['redirect_to_wizard']
+                @wizard.user.custom_fields.delete('redirect_to_wizard');
+                @wizard.user.save_custom_fields(true)
+              end
+              
               redirect_url = route_to || data['redirect_on_complete'] || data["redirect_to"]
               updater.result[:redirect_on_complete] = redirect_url
             elsif route_to
               updater.result[:redirect_on_next] = route_to
             end
+            
+            true
+          else
+            false
           end
         end
       end
@@ -211,14 +174,12 @@ class CustomWizard::Builder
     params[:description] = field_template['description'] if field_template['description']
     params[:image] = field_template['image'] if field_template['image']
     params[:key] = field_template['key'] if field_template['key']
-
-    ## Load previously submitted values
-    if !build_opts[:reset] && @submissions.last && !@submissions.last.key?("submitted_at")
-      submission = @submissions.last
+    params[:min_length] = field_template['min_length'] if field_template['min_length']
+    params[:value] = prefill_field(field_template, step_template)
+    
+    if !build_opts[:reset] && (submission = @wizard.current_submission)
       params[:value] = submission[field_template['id']] if submission[field_template['id']]
     end
-    
-    params[:value] = prefill_field(field_template, step_template) || params[:value]
     
     if field_template['type'] === 'group' && params[:value].present?
       params[:value] = params[:value].first
@@ -339,7 +300,7 @@ class CustomWizard::Builder
     if type === 'time' && value.present? && !validate_time(value)
       updater.errors.add(id, I18n.t('wizard.field.invalid_time'))
     end 
-
+    
     CustomWizard::Builder.field_validators.each do |validator|
       if type === validator[:type]
         validator[:block].call(field, updater, step_template)
@@ -395,13 +356,47 @@ class CustomWizard::Builder
     if data.present?
       @submissions.pop(1) if @wizard.unfinished?
       @submissions.push(data)
-      PluginStore.set("#{@wizard.id}_submissions", @wizard.user.id, @submissions)
+      @wizard.set_submissions(@submissions)
     end
   end
+  
+  def save_permitted_params(permitted_params, params)
+    permitted_data = {}
 
-  def reset_submissions
-    @submissions.pop(1) if @wizard.unfinished?
-    PluginStore.set("#{@wizard.id}_submissions", @wizard.user.id, @submissions)
-    @wizard.reset
+    permitted_params.each do |pp|
+      pair = pp['pairs'].first
+      params_key = pair['key'].to_sym
+      submission_key = pair['value'].to_sym
+      permitted_data[submission_key] = params[params_key] if params[params_key]
+    end
+
+    if permitted_data.present?
+      current_data = @submissions.last || {}
+      save_submissions(current_data.merge(permitted_data), false)
+    end
+  end
+  
+  def ensure_required_data(step, step_template)
+    step_template['required_data'].each do |required|
+      pairs = required['pairs'].select do |pair|
+        pair['key'].present? && pair['value'].present?
+      end
+      
+      if pairs.any? && !@submissions.last
+        step.permitted = false
+        break
+      end
+      
+      pairs.each do |pair| 
+        pair['key'] = @submissions.last[pair['key']]
+      end
+            
+      if !mapper.validate_pairs(pairs)
+        step.permitted = false
+        break
+      end
+    end
+    
+    step
   end
 end

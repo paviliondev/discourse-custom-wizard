@@ -26,6 +26,11 @@ en:
         file_large: "File too large"
         invalid_json: "File is not a valid json file"
         no_valid_wizards: "File doesn't contain any valid wizards"
+    
+    validation:
+      required: "%{property} is required"
+      conflict: "Wizard with %{wizard_id} already exists"
+      after_time: "After time setting is invalid"
 
   site_settings:
     custom_wizard_enabled: "Enable custom wizards."

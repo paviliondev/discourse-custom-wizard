@@ -42,10 +42,10 @@ after_initialize do
     ../controllers/custom_wizard/admin/submissions.rb
     ../controllers/custom_wizard/admin/api.rb
     ../controllers/custom_wizard/admin/logs.rb
+    ../controllers/custom_wizard/admin/transfer.rb
     ../controllers/custom_wizard/admin/custom_fields.rb
     ../controllers/custom_wizard/wizard.rb
     ../controllers/custom_wizard/steps.rb
-    ../controllers/custom_wizard/transfer.rb
     ../jobs/clear_after_time_wizard.rb
     ../jobs/refresh_api_access_token.rb
     ../jobs/set_after_time_wizard.rb
@@ -57,6 +57,7 @@ after_initialize do
     ../lib/custom_wizard/mapper.rb
     ../lib/custom_wizard/log.rb
     ../lib/custom_wizard/step_updater.rb
+    ../lib/custom_wizard/template.rb
     ../lib/custom_wizard/validator.rb
     ../lib/custom_wizard/wizard.rb
     ../lib/custom_wizard/api/api.rb
@@ -130,8 +131,7 @@ after_initialize do
       if request.referer !~ /\/w\// && request.referer !~ /\/invites\//
         CustomWizard::Wizard.set_submission_redirect(current_user, wizard_id, request.referer)
       end
-
-      if CustomWizard::Wizard.exists?(wizard_id)
+      if CustomWizard::Template.exists?(wizard_id)
         redirect_to "/w/#{wizard_id.dasherize}"
       end
     end
@@ -161,8 +161,12 @@ after_initialize do
   ::Wizard::Field.prepend CustomWizardFieldExtension
   ::Wizard::Step.prepend CustomWizardStepExtension
   
-  CustomWizard::Wizard.register_styles
-    
+  full_path = "#{Rails.root}/plugins/discourse-custom-wizard/assets/stylesheets/wizard/wizard_custom.scss"
+  DiscoursePluginRegistry.register_asset(full_path, {}, "wizard_custom")
+  Stylesheet::Importer.register_import("wizard_custom") do
+    import_files(DiscoursePluginRegistry.stylesheets["wizard_custom"])
+  end
+  
   CustomWizard::CustomField::CLASSES.each do |klass|
     add_model_callback(klass.to_sym, :after_initialize) do
       CustomWizard::CustomField.list_by('klass', klass).each do |field|

@@ -1,48 +1,515 @@
 {
-  "id": "welcome",
-  "name": "Welcome",
-  "background": "#006da3",
+  "id": "super_mega_fun_wizard",
+  "name": "Super Mega Fun Wizard",
+  "background": "#333333",
   "save_submissions": true,
   "multiple_submissions": true,
-  "after_signup": true,
-  "min_trust": 1,
-  "theme_id": 4,
+  "after_signup": false,
+  "prompt_completion": true,
+  "theme_id": 2,
   "steps": [
     {
-      "id": "welcome",
-      "title": "Welcome to Pavilion",
-      "raw_description": "Hey there, thanks for signing up.\n\nWe're Pavilion, an international freelancer cooperative that specialises in online communities.\n\nThis site is our own community, where we work with our clients, users of our open source work and our broader community.\n\n",
-      "description": "<p>Hey there, thanks for signing up.</p>\n<p>We’re Pavilion, an international freelancer cooperative that specialises in online communities.</p>\n<p>This site is our own community, where we work with our clients, users of our open source work and our broader community.</p>",
+      "id": "step_1",
+      "title": "Text",
+      "raw_description": "Text inputs!",
       "fields": [
         {
-          "id": "name",
+          "id": "step_1_field_1",
+          "label": "Text",
+          "description": "Text field description.",
           "type": "text",
-          "label": "Name"
+          "min_length": "3",
+          "prefill": [
+            {
+              "type": "assignment",
+              "output": "I am prefilled",
+              "output_type": "text",
+              "output_connector": "set"
+            }
+          ]
+        },
+        {
+          "id": "step_1_field_2",
+          "label": "Textarea",
+          "type": "textarea",
+          "min_length": ""
+        },
+        {
+          "id": "step_1_field_3",
+          "label": "Composer",
+          "type": "composer"
+        },
+        {
+          "id": "step_1_field_4",
+          "label": "I'm only text",
+          "description": "",
+          "type": "text_only"
+        }
+      ],
+      "description": "<p>Text inputs!</p>"
+    },
+    {
+      "id": "step_2",
+      "title": "Values",
+      "raw_description": "Because I couldn't think of another name for this step :)",
+      "fields": [
+        {
+          "id": "step_2_field_1",
+          "label": "Date",
+          "type": "date",
+          "format": "YYYY-MM-DD"
+        },
+        {
+          "id": "step_2_field_2",
+          "label": "Time",
+          "type": "time",
+          "format": "HH:mm"
+        },
+        {
+          "id": "step_2_field_3",
+          "label": "Date & Time",
+          "type": "date_time",
+          "format": ""
+        },
+        {
+          "id": "step_2_field_4",
+          "label": "Number",
+          "type": "number"
+        },
+        {
+          "id": "step_2_field_5",
+          "label": "Checkbox",
+          "type": "checkbox"
+        },
+        {
+          "id": "step_2_field_7",
+          "label": "Upload",
+          "type": "upload",
+          "file_types": ".jpg,.png"
+        }
+      ],
+      "description": "<p>Because I couldn’t think of another name for this step <img src=\"/images/emoji/twitter/slight_smile.png?v=9\" title=\":slight_smile:\" class=\"emoji\" alt=\":slight_smile:\"></p>"
+    },
+    {
+      "id": "step_3",
+      "title": "Combo-boxes",
+      "raw_description": "Unfortunately not the edible type :sushi: ",
+      "fields": [
+        {
+          "id": "step_3_field_1",
+          "label": "Custom Dropdown",
+          "type": "dropdown",
+          "content": [
+            {
+              "type": "association",
+              "pairs": [
+                {
+                  "index": 0,
+                  "key": "choice1",
+                  "key_type": "text",
+                  "value": "Choice 1",
+                  "value_type": "text",
+                  "connector": "equal"
+                },
+                {
+                  "index": 1,
+                  "key": "choice2",
+                  "key_type": "text",
+                  "value": "Choice 2",
+                  "value_type": "text",
+                  "connector": "association"
+                },
+                {
+                  "index": 2,
+                  "key": "choice3",
+                  "key_type": "text",
+                  "value": "Choice 3",
+                  "value_type": "text",
+                  "connector": "association"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "step_3_field_2",
+          "label": "Tag",
+          "type": "tag"
+        },
+        {
+          "id": "step_3_field_3",
+          "label": "Category",
+          "type": "category",
+          "limit": 1,
+          "property": "id"
+        },
+        {
+          "id": "step_3_field_4",
+          "label": "Group",
+          "type": "group"
+        },
+        {
+          "id": "step_3_field_5",
+          "label": "User Selector",
+          "description": "",
+          "type": "user_selector"
+        }
+      ],
+      "description": "<p>Unfortunately not the edible type <img src=\"/images/emoji/twitter/sushi.png?v=9\" title=\":sushi:\" class=\"emoji\" alt=\":sushi:\"></p>"
+    }
+  ],
+  "actions": [
+    {
+      "id": "action_9",
+      "run_after": "step_1",
+      "type": "create_group",
+      "title": [
+        {
+          "type": "assignment",
+          "output": "New Group Member",
+          "output_type": "text",
+          "output_connector": "set"
+        }
+      ],
+      "custom_fields": [
+        {
+          "type": "association",
+          "pairs": [
+            {
+              "index": 0,
+              "key": "group_custom_field",
+              "key_type": "text",
+              "value": "step_3_field_1",
+              "value_type": "wizard_field",
+              "connector": "association"
+            }
+          ]
+        }
+      ],
+      "name": [
+        {
+          "type": "assignment",
+          "output": "step_1_field_1",
+          "output_type": "wizard_field",
+          "output_connector": "set"
+        }
+      ],
+      "full_name": [
+        {
+          "type": "assignment",
+          "output": "step_1_field_1",
+          "output_type": "wizard_field",
+          "output_connector": "set"
+        }
+      ],
+      "usernames": [
+        {
+          "type": "assignment",
+          "output_type": "user",
+          "output_connector": "set",
+          "output": [
+            "angus1"
+          ]
+        }
+      ],
+      "owner_usernames": [
+        {
+          "type": "assignment",
+          "output_type": "user",
+          "output_connector": "set",
+          "output": [
+            "angus"
+          ]
+        }
+      ],
+      "grant_trust_level": [
+        {
+          "type": "assignment",
+          "output": "3",
+          "output_type": "text",
+          "output_connector": "set"
+        }
+      ],
+      "mentionable_level": [
+        {
+          "type": "assignment",
+          "output": "1",
+          "output_type": "text",
+          "output_connector": "set"
+        }
+      ],
+      "messageable_level": [
+        {
+          "type": "assignment",
+          "output": "2",
+          "output_type": "text",
+          "output_connector": "set"
+        }
+      ],
+      "visibility_level": [
+        {
+          "type": "assignment",
+          "output": "3",
+          "output_type": "text",
+          "output_connector": "set"
+        }
+      ],
+      "members_visibility_level": [
+        {
+          "type": "assignment",
+          "output": "99",
+          "output_type": "text",
+          "output_connector": "set"
         }
       ]
     },
     {
-      "id": "about_you",
-      "title": "Tell us about you",
-      "raw_description": "We'd like to know a little more about you. Add a your name and your website below. This will update your user profile.",
-      "description": "<p>We’d like to know a little more about you. Add a your name and your website below. This will update your user profile.</p>",
-      "fields": [
+      "id": "action_6",
+      "run_after": "step_1",
+      "type": "add_to_group",
+      "group": [
         {
-          "id": "website",
-          "label": "Website",
-          "type": "text"
+          "type": "assignment",
+          "output": "action_9",
+          "output_type": "wizard_action",
+          "output_connector": "set"
         }
-      ],
-      "actions": [
+      ]
+    },
+    {
+      "id": "action_8",
+      "run_after": "step_1",
+      "type": "create_category",
+      "custom_fields": [
         {
-          "id": "update_profile",
-          "type": "update_profile",
-          "profile_updates": [
+          "type": "association",
+          "pairs": [
             {
-              "key": "name",
-              "value": "name"
+              "index": 0,
+              "key": "category_custom_field",
+              "key_type": "text",
+              "value": "CC Val",
+              "value_type": "text",
+              "connector": "association"
             }
           ]
+        }
+      ],
+      "name": [
+        {
+          "type": "assignment",
+          "output": "step_1_field_1",
+          "output_type": "wizard_field",
+          "output_connector": "set"
+        }
+      ],
+      "slug": [
+        {
+          "type": "assignment",
+          "output": "step_1_field_1",
+          "output_type": "wizard_field",
+          "output_connector": "set"
+        }
+      ],
+      "permissions": [
+        {
+          "type": "association",
+          "pairs": [
+            {
+              "index": 0,
+              "key": "action_9",
+              "key_type": "wizard_action",
+              "value": "2",
+              "value_type": "text",
+              "connector": "association"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "action_5",
+      "run_after": "step_1",
+      "type": "watch_categories",
+      "notification_level": "tracking",
+      "wizard_user": true,
+      "categories": [
+        {
+          "type": "assignment",
+          "output": "action_8",
+          "output_type": "wizard_action",
+          "output_connector": "set"
+        }
+      ],
+      "mute_remainder": [
+        {
+          "type": "assignment",
+          "output": "true",
+          "output_type": "text",
+          "output_connector": "set"
+        }
+      ]
+    },
+    {
+      "id": "action_1",
+      "run_after": "step_3",
+      "type": "create_topic",
+      "skip_redirect": true,
+      "post": "step_1_field_2",
+      "title": [
+        {
+          "type": "assignment",
+          "output": "step_1_field_1",
+          "output_type": "wizard_field",
+          "output_connector": "set"
+        }
+      ],
+      "category": [
+        {
+          "type": "assignment",
+          "output": "step_3_field_3",
+          "output_type": "wizard_field",
+          "output_connector": "set"
+        }
+      ],
+      "tags": [
+        {
+          "type": "assignment",
+          "output": "step_3_field_2",
+          "output_type": "wizard_field",
+          "output_connector": "set"
+        }
+      ],
+      "custom_fields": [
+        {
+          "type": "association",
+          "pairs": [
+            {
+              "index": 0,
+              "key": "custom_field_1",
+              "key_type": "text",
+              "value": "title",
+              "value_type": "user_field",
+              "connector": "association"
+            }
+          ]
+        }
+      ],
+      "visible": [
+        {
+          "type": "conditional",
+          "output": "true",
+          "output_type": "text",
+          "output_connector": "then",
+          "pairs": [
+            {
+              "index": 0,
+              "key": "name",
+              "key_type": "user_field",
+              "value": "Angus",
+              "value_type": "text",
+              "connector": "equal"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "action_4",
+      "run_after": "step_2",
+      "type": "update_profile",
+      "profile_updates": [
+        {
+          "type": "association",
+          "pairs": [
+            {
+              "index": 0,
+              "key": "profile_background",
+              "key_type": "user_field",
+              "value": "step_2_field_7",
+              "value_type": "wizard_field",
+              "connector": "association"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "action_2",
+      "run_after": "step_2",
+      "type": "send_message",
+      "post_builder": true,
+      "post_template": "I will interpolate some wizard fields w{step_1_field_1} w{step_1_field_2}",
+      "title": [
+        {
+          "type": "assignment",
+          "output": "Message title",
+          "output_type": "text",
+          "output_connector": "set"
+        }
+      ],
+      "recipient": [
+        {
+          "type": "assignment",
+          "output_type": "user",
+          "output_connector": "set",
+          "output": [
+            "angus1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "action_3",
+      "run_after": "step_2",
+      "type": "open_composer",
+      "post_builder": true,
+      "post_template": "I am interpolating some user fields u{name} u{username} u{email}",
+      "title": [
+        {
+          "type": "assignment",
+          "output": "Title of the composer topic",
+          "output_type": "text",
+          "output_connector": "set"
+        }
+      ],
+      "category": [
+        {
+          "type": "assignment",
+          "output": "action_8",
+          "output_type": "wizard_action",
+          "output_connector": "set",
+          "pairs": [
+            {
+              "index": 0,
+              "key": "step_2_field_5",
+              "key_type": "wizard_field",
+              "value": "true",
+              "value_type": "text",
+              "connector": "is"
+            }
+          ]
+        }
+      ],
+      "tags": [
+        {
+          "type": "assignment",
+          "output": "tag1",
+          "output_type": "text",
+          "output_connector": "set"
+        }
+      ]
+    },
+    {
+      "id": "action_10",
+      "run_after": "wizard_completion",
+      "type": "route_to",
+      "url": [
+        {
+          "type": "assignment",
+          "output": "https://google.com",
+          "output_type": "text",
+          "output_connector": "set"
         }
       ]
     }

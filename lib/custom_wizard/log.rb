@@ -29,9 +29,12 @@ class CustomWizard::Log
     ").order("value::json->>'date' DESC")
   end
   
-  def self.list(page = 0)
-    self.list_query.limit(PAGE_LIMIT)
-      .offset(page * PAGE_LIMIT)
+  def self.list(page = 0, limit = nil)
+    limit = limit.to_i > 0 ? limit.to_i : PAGE_LIMIT
+    page = page.to_i
+    
+    self.list_query.limit(limit)
+      .offset(page * limit)
       .map { |r| self.new(JSON.parse(r.value)) }
   end
 end

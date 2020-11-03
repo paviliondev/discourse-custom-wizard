@@ -1,0 +1,10 @@
+{
+  "id": "step_1",
+  "title": "Text",
+  "description": "Step description",
+  "image": "step_image_url.png",
+  "key": "step.locale.key",
+  "fields": [],
+  "required_data": [],
+  "permitted": []
+}

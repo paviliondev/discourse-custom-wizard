@@ -36,8 +36,8 @@ Discourse::Application.routes.append do
     
     get 'admin/wizards/logs' => 'admin_logs#index'
     
-    get 'admin/wizards/transfer' => 'transfer#index'
-    get 'admin/wizards/transfer/export' => 'transfer#export'
-    post 'admin/wizards/transfer/import' => 'transfer#import'
+    get 'admin/wizards/transfer' => 'admin_transfer#index'
+    get 'admin/wizards/transfer/export' => 'admin_transfer#export'
+    post 'admin/wizards/transfer/import' => 'admin_transfer#import'
   end
 end

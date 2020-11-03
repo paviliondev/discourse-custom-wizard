@@ -3,7 +3,7 @@ module Jobs
     def execute(args)
       if SiteSetting.custom_wizard_enabled
         wizard = CustomWizard::Wizard.create(args[:wizard_id])
-        
+                
         if wizard && wizard.after_time
           user_ids = []
 

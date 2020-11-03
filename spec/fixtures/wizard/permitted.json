@@ -1,0 +1,12 @@
+{
+  "permitted": [
+    {
+      "type": "assignment",
+      "output_type": "group",
+      "output_connector": "set",
+      "output": [
+        13
+      ]
+    }
+  ]
+}

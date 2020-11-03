@@ -57,10 +57,10 @@ class CustomWizard::Field
     @require_assets ||= {}
   end
 
-  def self.add_assets(type, plugin = nil, asset_paths = [], opts={})
+  def self.register(type, plugin = nil, asset_paths = [], opts={})
     if type
-      types[type] ||= {}
-      types[type] = opts[:type_opts] if opts[:type_opts].present?
+      types[type.to_sym] ||= {}
+      types[type.to_sym] = opts[:type_opts] if opts[:type_opts].present?
     end
 
     if plugin && asset_paths

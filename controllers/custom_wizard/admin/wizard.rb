@@ -4,7 +4,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
   def index
     render_json_dump(
       wizard_list: ActiveModel::ArraySerializer.new(
-        CustomWizard::Wizard.list,
+        CustomWizard::Wizard.list(current_user),
         each_serializer: CustomWizard::BasicWizardSerializer
       ),
       field_types: CustomWizard::Field.types,
@@ -15,7 +15,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
   def show
     params.require(:wizard_id)
     
-    if data = CustomWizard::Wizard.find(params[:wizard_id].underscore)
+    if data = CustomWizard::Template.find(params[:wizard_id].underscore)
       render json: data.as_json
     else
       render json: { none: true }
@@ -23,25 +23,21 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
   end
   
   def remove
-    CustomWizard::Wizard.remove(@wizard.id)
-    render json: success_json
+    if CustomWizard::Template.remove(@wizard.id)
+      render json: success_json
+    else
+      render json: failed_json
+    end
   end
 
   def save
-    opts = {}
-    opts[:create] = params[:create] if params[:create]
+    template = CustomWizard::Template.new(save_wizard_params.to_h)
+    wizard_id = template.save(create: params[:create])
             
-    validator = CustomWizard::Validator.new(save_wizard_params.to_h, opts)
-    validation = validator.perform
-
-    if validation[:error]
-      render json: { error: validation[:error] }
+    if template.errors.any?
+      render json: failed_json.merge(errors: result.errors.full_messages)
     else      
-      if wizard_id = CustomWizard::Wizard.save(validation[:wizard])
-        render json: success_json.merge(wizard_id: wizard_id)
-      else
-        render json: failed_json
-      end
+      render json: success_json.merge(wizard_id: wizard_id)
     end
   end
   
