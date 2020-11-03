@@ -7,31 +7,62 @@ describe CustomWizard::Action do
   
   before do
     Group.refresh_automatic_group!(:trust_level_2)
-    CustomWizard::Template.add(
+    CustomWizard::Template.save(
       JSON.parse(File.open(
-          "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-      ).read)
-    )
+        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
+      ).read),
+    skip_jobs: true)
     @template = CustomWizard::Template.find('super_mega_fun_wizard')
   end
   
-  it 'creates a topic' do
-    wizard = CustomWizard::Builder.new(@template[:id], user).build
-        
-    updater = wizard.create_updater(
-      wizard.steps[0].id,
-      step_1_field_1: "Topic Title",
-      step_1_field_2: "topic body"
-    ).update
-    updater2 = wizard.create_updater(wizard.steps[1].id, {}).update
+  context "creating a topic" do
+  
+  end
+  
+  context 'creating a topic' do
+    it "works" do
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      wizard.create_updater(
+        wizard.steps.first.id,
+        step_1_field_1: "Topic Title",
+        step_1_field_2: "topic body"
+      ).update
+      wizard.create_updater(wizard.steps.second.id, {}).update
+      wizard.create_updater(wizard.steps.last.id,
+        step_3_field_3: category.id
+      ).update
+      
+      topic = Topic.where(
+        title: "Topic Title",
+        category_id: category.id
+      )
+      expect(topic.exists?).to eq(true)
+      expect(Post.where(
+        topic_id: topic.pluck(:id),
+        raw: "topic body"
+      ).exists?).to eq(true)
+    end
     
-    topic = Topic.where(title: "Topic Title")
-    
-    expect(topic.exists?).to eq(true)
-    expect(Post.where(
-      topic_id: topic.pluck(:id),
-      raw: "topic body"
-    ).exists?).to eq(true)
+    it "fails silently without basic topic inputs" do
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      wizard.create_updater(
+        wizard.steps.first.id,
+        step_1_field_2: "topic body"
+      ).update
+      wizard.create_updater(wizard.steps.second.id, {}).update
+      updater = wizard.create_updater(wizard.steps.last.id, {})
+      updater.update
+      
+      expect(updater.success?).to eq(true)
+      expect(UserHistory.where(
+        acting_user_id: user.id,
+        context: "super_mega_fun_wizard",
+        subject: "step_3"
+      ).exists?).to eq(true)
+      expect(Post.where(
+        raw: "topic body"
+      ).exists?).to eq(false)
+    end
   end
   
   it 'sends a message' do
@@ -79,8 +110,7 @@ describe CustomWizard::Action do
     updater = wizard.create_updater(wizard.steps[1].id, {})
     updater.update
     
-    submissions = PluginStore.get("super_mega_fun_wizard_submissions", user.id)
-    category = Category.find_by(id: submissions.first['action_8'])
+    category = Category.find_by(id: wizard.current_submission['action_8'])
     
     expect(updater.result[:redirect_on_next]).to eq(
       "/new-topic?title=Title%20of%20the%20composer%20topic&body=I%20am%20interpolating%20some%20user%20fields%20Angus%20angus%20angus@email.com&category=#{category.slug}/#{category.id}&tags=tag1"
@@ -91,24 +121,21 @@ describe CustomWizard::Action do
     wizard = CustomWizard::Builder.new(@template[:id], user).build
     wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
     wizard.create_updater(wizard.steps[1].id, {}).update
-    submissions = PluginStore.get("super_mega_fun_wizard_submissions", user.id)    
-    expect(Category.where(id: submissions.first['action_8']).exists?).to eq(true)
+    expect(Category.where(id: wizard.current_submission['action_8']).exists?).to eq(true)
   end
   
   it 'creates a group' do
     wizard = CustomWizard::Builder.new(@template[:id], user).build
     step_id = wizard.steps[0].id
     updater = wizard.create_updater(step_id, step_1_field_1: "Text input").update
-    submissions = PluginStore.get("super_mega_fun_wizard_submissions", user.id)
-    expect(Group.where(name: submissions.first['action_9']).exists?).to eq(true)
+    expect(Group.where(name: wizard.current_submission['action_9']).exists?).to eq(true)
   end
   
   it 'adds a user to a group' do
     wizard = CustomWizard::Builder.new(@template[:id], user).build
     step_id = wizard.steps[0].id
     updater = wizard.create_updater(step_id, step_1_field_1: "Text input").update
-    submissions = PluginStore.get("super_mega_fun_wizard_submissions", user.id)
-    group = Group.find_by(name: submissions.first['action_9'])
+    group = Group.find_by(name: wizard.current_submission['action_9'])
     expect(group.users.first.username).to eq('angus')
   end
   
@@ -116,9 +143,8 @@ describe CustomWizard::Action do
     wizard = CustomWizard::Builder.new(@template[:id], user).build
     wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
     wizard.create_updater(wizard.steps[1].id, {}).update
-    submissions = PluginStore.get("super_mega_fun_wizard_submissions", user.id)
     expect(CategoryUser.where(
-      category_id: submissions.first['action_8'],
+      category_id: wizard.current_submission['action_8'],
       user_id: user.id
     ).first.notification_level).to eq(2)
     expect(CategoryUser.where(

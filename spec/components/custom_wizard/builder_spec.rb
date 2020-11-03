@@ -18,7 +18,7 @@ describe CustomWizard::Builder do
   
   let(:required_data_json) {
     JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard/required_data.json"
+      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/step/required_data.json"
     ).read)
   }
   
@@ -36,11 +36,11 @@ describe CustomWizard::Builder do
   
   before do
     Group.refresh_automatic_group!(:trust_level_3)
-    CustomWizard::Template.add(
+    CustomWizard::Template.save(
       JSON.parse(File.open(
-          "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-      ).read)
-    )
+        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
+      ).read),
+    skip_jobs: true)
     @template = CustomWizard::Template.find('super_mega_fun_wizard')
   end
   
@@ -175,9 +175,8 @@ describe CustomWizard::Builder do
     
     context "user has partially completed" do
       before do
-        PluginStore.set("super_mega_fun_wizard_submissions", user.id,
-          step_1_field_1: 'I am a user submission'
-        )
+        wizard = CustomWizard::Wizard.new(@template, user)
+        wizard.set_submissions(step_1_field_1: 'I am a user submission')
       end
       
       it 'returns saved submissions' do
@@ -241,7 +240,7 @@ describe CustomWizard::Builder do
         end
         
         it 'is permitted if required data is present' do
-          PluginStore.set('super_mega_fun_wizard_submissions', user.id,
+          CustomWizard::Wizard.set_submissions('super_mega_fun_wizard', user,
             required_data: "required_value"
           )
           expect(
@@ -259,13 +258,10 @@ describe CustomWizard::Builder do
         end
         
         it 'saves permitted params' do
-          CustomWizard::Builder.new(@template[:id], user).build({},
+          wizard = CustomWizard::Builder.new(@template[:id], user).build({},
             param: 'param_value'
           ) 
-          expect(
-            PluginStore.get("super_mega_fun_wizard_submissions", user.id)
-              .first['saved_param']
-          ).to eq('param_value')
+          expect(wizard.current_submission['saved_param']).to eq('param_value')
         end
       end
     end
@@ -302,7 +298,7 @@ describe CustomWizard::Builder do
       it 'saves submissions' do
         perform_update('step_1', step_1_field_1: 'Text input')
         expect(
-          PluginStore.get("super_mega_fun_wizard_submissions", user.id)
+          CustomWizard::Wizard.submissions(@template[:id], user)
             .first['step_1_field_1']
         ).to eq('Text input')
       end
@@ -316,7 +312,7 @@ describe CustomWizard::Builder do
         it "does not save submissions" do
           perform_update('step_1', step_1_field_1: 'Text input')
           expect(
-            PluginStore.get("super_mega_fun_wizard_submissions", user.id)
+            CustomWizard::Wizard.submissions(@template[:id], user).first
           ).to eq(nil)
         end
       end
@@ -332,7 +328,7 @@ describe CustomWizard::Builder do
         it 'standardises boolean entries' do
           perform_update('step_2', step_2_field_5: 'false')
           expect(
-            PluginStore.get("super_mega_fun_wizard_submissions", user.id)
+            CustomWizard::Wizard.submissions(@template[:id], user)
               .first['step_2_field_5']
           ).to eq(false)
         end

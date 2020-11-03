@@ -9,5 +9,6 @@ class CustomWizard::AdminController < ::Admin::AdminController
   def find_wizard
     params.require(:wizard_id)
     @wizard = CustomWizard::Wizard.create(params[:wizard_id].underscore)
+    raise Discourse::InvalidParameters.new(:wizard_id) unless @wizard
   end
 end

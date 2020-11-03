@@ -144,7 +144,7 @@ class CustomWizard::Mapper
     end
     
     if operator == '=~'
-      result == 0 ? true : false
+      result.nil? ? false : true
     else
       result
     end

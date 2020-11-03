@@ -15,22 +15,24 @@ class CustomWizard::StepsController < ::ApplicationController
     
     field_ids = step.fields.map(&:id)
     
+    update = update_params.to_h
+    
     if params[:fields]
-      permitted_fields = params[:fields].select { |k, v| field_ids.include? k }
-      update_params[:fields] = permitted_fields
-      update_params.permit!
+      update[:fields] = {}
+      
+      params[:fields].each do |k, v|
+        update[:fields][k] = v if field_ids.include? k
+      end
     end
     
-    updater = wizard.create_updater(
-      update_params[:step_id],
-      update_params[:fields]
-    )
+    updater = wizard.create_updater(update[:step_id], update[:fields])
     updater.update
-    
+        
     if updater.success?
       result = success_json
       result.merge!(updater.result) if updater.result
       result[:refresh_required] = true if updater.refresh_required?
+      
       render json: result
     else
       errors = []

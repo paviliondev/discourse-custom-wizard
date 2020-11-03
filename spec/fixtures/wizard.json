@@ -16,6 +16,7 @@
         {
           "id": "step_1_field_1",
           "label": "Text",
+          "description": "Text field description.",
           "type": "text",
           "min_length": "3",
           "prefill": [
@@ -351,7 +352,7 @@
     },
     {
       "id": "action_1",
-      "run_after": "step_2",
+      "run_after": "step_3",
       "type": "create_topic",
       "skip_redirect": true,
       "post": "step_1_field_2",

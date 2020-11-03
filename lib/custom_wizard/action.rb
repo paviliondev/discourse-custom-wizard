@@ -267,7 +267,7 @@ class CustomWizard::Action
       url += "&body=#{params[:raw]}"
             
       if category_id = action_category
-        if category_id && category = Category.find(category_id)
+        if category = Category.find_by(id: category_id)
           url += "&category=#{category.full_slug('/')}"
         end
       end
@@ -412,6 +412,8 @@ class CustomWizard::Action
       data: data,
       user: user
     ).perform
+    
+    return false unless output.present?
         
     if output.is_a?(Array)
       output.first
@@ -428,6 +430,8 @@ class CustomWizard::Action
       data: data,
       user: user,
     ).perform
+    
+    return false unless output.present?
         
     if output.is_a?(Array)
       output.flatten
@@ -483,11 +487,11 @@ class CustomWizard::Action
   def public_topic_params
     params = {}
     
-    if (category = action_category)
+    if category = action_category
       params[:category] = category
     end
     
-    if (tags = action_tags)
+    if tags = action_tags
       params[:tags] = tags
     end
     

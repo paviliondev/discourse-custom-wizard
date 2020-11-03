@@ -1,0 +1,264 @@
+{
+  "assignment": [
+    {
+      "type": "assignment",
+      "output_type": "group",
+      "output_connector": "set",
+      "output": [
+        13
+      ]
+    }
+  ],
+  "assignment_text": [
+    {
+      "type": "assignment",
+      "output_type": "text",
+      "output_connector": "set",
+      "output": "Value"
+    }
+  ],
+  "assignment_user_field": [
+    {
+      "type": "assignment",
+      "output_type": "user_field",
+      "output_connector": "set",
+      "output": "name"
+    }
+  ],
+  "assignment_user_field_options": [
+    {
+      "type": "assignment",
+      "output_type": "user_field_options",
+      "output_connector": "set",
+      "output": "user_field_3"
+    }
+  ],
+  "assignment_wizard_field": [
+    {
+      "type": "assignment",
+      "output_type": "wizard_field",
+      "output_connector": "set",
+      "output": "input_1"
+    }
+  ],
+  "assignment_wizard_action": [
+    {
+      "type": "assignment",
+      "output_type": "wizard_action",
+      "output_connector": "set",
+      "output": "input_2"
+    }
+  ],
+  "interpolate_user_field": [
+    {
+      "type": "assignment",
+      "output_type": "text",
+      "output_connector": "set",
+      "output": "Name: u{name}"
+    }
+  ],
+  "interpolate_wizard_field": [
+    {
+      "type": "assignment",
+      "output_type": "text",
+      "output_connector": "set",
+      "output": "Input 1: w{input_1}"
+    }
+  ],
+  "interpolate_timestamp": [
+    {
+      "type": "assignment",
+      "output_type": "text",
+      "output_connector": "set",
+      "output": "Time: v{time}"
+    }
+  ],
+  "validation": [
+    {
+      "type": "validation",
+      "pairs": [
+        {
+          "index": 0,
+          "key": "input_1",
+          "key_type": "wizard_field",
+          "value": "value 1",
+          "value_type": "text",
+          "connector": "equal"
+        },
+        {
+          "index": 1,
+          "key": "input_2",
+          "key_type": "wizard_field",
+          "value": "value 2",
+          "value_type": "text",
+          "connector": "equal"
+        }
+      ]
+    }
+  ],
+  "association": [
+    {
+      "type": "association",
+      "pairs": [
+        {
+          "index": 0,
+          "key": "choice1",
+          "key_type": "text",
+          "value": "Choice 1",
+          "value_type": "text",
+          "connector": "equal"
+        },
+        {
+          "index": 1,
+          "key": "choice2",
+          "key_type": "text",
+          "value": "Choice 2",
+          "value_type": "text",
+          "connector": "association"
+        },
+        {
+          "index": 2,
+          "key": "choice3",
+          "key_type": "text",
+          "value": "Choice 3",
+          "value_type": "text",
+          "connector": "association"
+        }
+      ]
+    }
+  ],
+  "conditional": [
+    {
+      "type": "conditional",
+      "output": "true",
+      "output_type": "text",
+      "output_connector": "then",
+      "pairs": [
+        {
+          "index": 0,
+          "key": "name",
+          "key_type": "user_field",
+          "value": "Angus",
+          "value_type": "text",
+          "connector": "equal"
+        }
+      ]
+    }
+  ],
+  "conditional_multiple_pairs": [
+    {
+      "type": "conditional",
+      "output": "true",
+      "output_type": "text",
+      "output_connector": "then",
+      "pairs": [
+        {
+          "index": 0,
+          "key": "name",
+          "key_type": "user_field",
+          "value": "Angus",
+          "value_type": "text",
+          "connector": "equal"
+        },
+        {
+          "index": 1,
+          "key": "email",
+          "key_type": "user_field",
+          "value": "angus@email.com",
+          "value_type": "text",
+          "connector": "equal"
+        }
+      ]
+    }
+  ],
+  "greater_than_pair": [
+    {
+      "type": "validation",
+      "pairs": [
+        {
+          "index": 0,
+          "key": "trust_level",
+          "key_type": "user_field",
+          "value": "2",
+          "value_type": "text",
+          "connector": "greater"
+        }
+      ]
+    }
+  ],
+  "less_than_pair": [
+    {
+      "type": "validation",
+      "pairs": [
+        {
+          "index": 0,
+          "key": "trust_level",
+          "key_type": "user_field",
+          "value": "2",
+          "value_type": "text",
+          "connector": "less"
+        }
+      ]
+    }
+  ],
+  "greater_than_or_equal_pair": [
+    {
+      "type": "validation",
+      "pairs": [
+        {
+          "index": 0,
+          "key": "trust_level",
+          "key_type": "user_field",
+          "value": "1",
+          "value_type": "text",
+          "connector": "greater_or_equal"
+        }
+      ]
+    }
+  ],
+  "less_than_or_equal_pair": [
+    {
+      "type": "validation",
+      "pairs": [
+        {
+          "index": 0,
+          "key": "trust_level",
+          "key_type": "user_field",
+          "value": "3",
+          "value_type": "text",
+          "connector": "less_or_equal"
+        }
+      ]
+    }
+  ],
+  "regex_pair": [
+    {
+      "type": "validation",
+      "pairs": [
+        {
+          "index": 0,
+          "key": "email",
+          "key_type": "user_field",
+          "value": "@email.com",
+          "value_type": "text",
+          "connector": "regex"
+        }
+      ]
+    }
+  ],
+  "shorthand_pair": [
+    {
+      "type": "validation",
+      "pairs": [
+        {
+          "index": 0,
+          "key": "bio_raw",
+          "key_type": "user_field",
+          "value": "present",
+          "value_type": "text",
+          "connector": "is"
+        }
+      ]
+    }
+  ]
+}

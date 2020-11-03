@@ -49,7 +49,6 @@ class CustomWizard::Builder
     return @wizard if !@wizard.can_access?
     
     build_opts[:reset] = build_opts[:reset] || @wizard.restart_on_revisit
-    reset_submissions if build_opts[:reset]
 
     @steps.each do |step_template|
       @wizard.append_step(step_template['id']) do |step|
@@ -110,9 +109,7 @@ class CustomWizard::Builder
 
           data = updater.fields
 
-          ## if the wizard has data from the previous steps make that accessible to the actions.
-          if @submissions && @submissions.last && !@submissions.last.key?("submitted_at")
-            submission = @submissions.last
+          if submission = @wizard.current_submission
             data = submission.merge(data)
           end
           
@@ -133,29 +130,31 @@ class CustomWizard::Builder
               end
             end
           end
-                    
-          if route_to = data['route_to']
-            data.delete('route_to')
-          end
-
-          if @wizard.save_submissions && updater.errors.empty?
-            save_submissions(data, final_step)
-          elsif final_step
-            PluginStore.remove("#{@wizard.id}_submissions", @wizard.user.id)
-          end
-
-          if final_step && @wizard.id === @wizard.user.custom_fields['redirect_to_wizard']
-            @wizard.user.custom_fields.delete('redirect_to_wizard');
-            @wizard.user.save_custom_fields(true)
-          end
-
+          
           if updater.errors.empty?
+            if route_to = data['route_to']
+              data.delete('route_to')
+            end
+            
+            if @wizard.save_submissions
+              save_submissions(data, final_step)
+            end
+            
             if final_step
+              if @wizard.id == @wizard.user.custom_fields['redirect_to_wizard']
+                @wizard.user.custom_fields.delete('redirect_to_wizard');
+                @wizard.user.save_custom_fields(true)
+              end
+              
               redirect_url = route_to || data['redirect_on_complete'] || data["redirect_to"]
               updater.result[:redirect_on_complete] = redirect_url
             elsif route_to
               updater.result[:redirect_on_next] = route_to
             end
+            
+            true
+          else
+            false
           end
         end
       end
@@ -177,10 +176,8 @@ class CustomWizard::Builder
     params[:key] = field_template['key'] if field_template['key']
     params[:min_length] = field_template['min_length'] if field_template['min_length']
     params[:value] = prefill_field(field_template, step_template)
-
-    ## Load previously submitted values
-    if !build_opts[:reset] && @submissions.last && !@submissions.last.key?("submitted_at")
-      submission = @submissions.last
+    
+    if !build_opts[:reset] && (submission = @wizard.current_submission)
       params[:value] = submission[field_template['id']] if submission[field_template['id']]
     end
     
@@ -359,14 +356,8 @@ class CustomWizard::Builder
     if data.present?
       @submissions.pop(1) if @wizard.unfinished?
       @submissions.push(data)
-      PluginStore.set("#{@wizard.id}_submissions", @wizard.user.id, @submissions)
+      @wizard.set_submissions(@submissions)
     end
-  end
-
-  def reset_submissions
-    @submissions.pop(1) if @wizard.unfinished?
-    PluginStore.set("#{@wizard.id}_submissions", @wizard.user.id, @submissions)
-    @wizard.reset
   end
   
   def save_permitted_params(permitted_params, params)

@@ -1,52 +1,38 @@
 class CustomWizard::Validator
+  include HasErrors
   
-  def initialize(params, opts={})
-    @params = params
+  def initialize(data, opts={})
+    @data = data
     @opts = opts
-    @error = nil
   end
   
   def perform
-    params = @params
+    data = @data
             
-    check_id(params, :wizard)
-    check_required(params, :wizard)
-    check_depdendent(params, :wizard)
-    
-    after_time = nil
-        
-    if !@error && @params[:after_time]
-      validate_after_time
-    end
+    check_id(data, :wizard)
+    check_required(data, :wizard)
+    validate_after_time
             
-    if !@error
-      params[:steps].each do |step|
-        check_required(step, :step)
-        check_depdendent(step, :step)
-        break if @error.present?
-        
-        if params[:fields].present?
-          params[:fields].each do |field|
-            check_required(field, :field)
-            check_depdendent(field, :field)
-            break if @error.present?
-          end
-        end
-      end
+    data[:steps].each do |step|
+      check_required(step, :step)
       
-      if params[:actions].present?
-        params[:actions].each do |action|
-          check_required(action, :action)
-          check_depdendent(action, :action)
-          break if @error.present?
+      if data[:fields].present?
+        data[:fields].each do |field|
+          check_required(field, :field)
         end
       end
     end
+    
+    if data[:actions].present?
+      data[:actions].each do |action|
+        check_required(action, :action)
+      end
+    end
         
-    if @error
-      { error: @error }
+    if errors.any? 
+      false
     else
-      { wizard: params }
+      true
     end
   end
   
@@ -59,54 +45,28 @@ class CustomWizard::Validator
     }
   end
   
-  def self.dependent
-    {
-      wizard: {
-        after_time: 'after_time_scheduled'
-      },
-      step: {},
-      field: {},
-      action: {}
-    }
-  end
-  
   private
   
   def check_required(object, type)
     CustomWizard::Validator.required[type].each do |property|      
       if object[property].blank?
-        @error = {
-          type: 'required',
-          params: { type: type, property: property }
-        }
+        errors.add :validation, I18n.t("wizard.validation.required", property: property) 
       end
     end
   end
-  
-  def check_depdendent(object, type)
-    CustomWizard::Validator.dependent[type].each do |property, dependent|
-      if object[property] && object[dependent].blank?
-        @error = {
-          type: 'dependent',
-          params: { property: property, dependent: dependent }
-        }
-      end
-    end
-  end
-  
+
   def check_id(object, type)
     if type === :wizard && @opts[:create] && CustomWizard::Template.exists?(object[:id])
-      @error = {
-        type: 'conflict',
-        params: { type: type, property: 'id', value: object[:id] }
-      }
+      errors.add :validation, I18n.t("wizard.validation.conflict", id: object[:id])
     end
   end
   
-  def validate_after_time    
-    wizard = CustomWizard::Wizard.create(@params[:id]) if !@opts[:create]
+  def validate_after_time
+    return unless @data[:after_time]
+    
+    wizard = CustomWizard::Wizard.create(@data[:id]) if !@opts[:create]
     current_time = wizard.present? ? wizard.after_time_scheduled : nil
-    new_time = @params[:after_time_scheduled]
+    new_time = @data[:after_time_scheduled]
     
     begin
       active_time = Time.parse(new_time.present? ? new_time : current_time).utc
@@ -115,7 +75,7 @@ class CustomWizard::Validator
     end
 
     if invalid_time || active_time.blank? || active_time < Time.now.utc
-      @error = { type: 'after_time' }
+      errors.add :validation, I18n.t("wizard.validation.after_time")
     end
   end
 end

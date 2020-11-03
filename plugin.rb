@@ -42,9 +42,9 @@ after_initialize do
     ../controllers/custom_wizard/admin/submissions.rb
     ../controllers/custom_wizard/admin/api.rb
     ../controllers/custom_wizard/admin/logs.rb
+    ../controllers/custom_wizard/admin/transfer.rb
     ../controllers/custom_wizard/wizard.rb
     ../controllers/custom_wizard/steps.rb
-    ../controllers/custom_wizard/transfer.rb
     ../jobs/clear_after_time_wizard.rb
     ../jobs/refresh_api_access_token.rb
     ../jobs/set_after_time_wizard.rb
@@ -128,8 +128,7 @@ after_initialize do
       if request.referer !~ /\/w\// && request.referer !~ /\/invites\//
         CustomWizard::Wizard.set_submission_redirect(current_user, wizard_id, request.referer)
       end
-
-      if CustomWizard::Wizard.exists?(wizard_id)
+      if CustomWizard::Template.exists?(wizard_id)
         redirect_to "/w/#{wizard_id.dasherize}"
       end
     end
