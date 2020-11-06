@@ -9,17 +9,13 @@ class CustomWizard::StepsController < ::ApplicationController
     wizard = @builder.build
     step = wizard.steps.select { |s| s.id == update_params[:step_id] }.first
 
-    if !step || step.fields.blank?
-      raise Discourse::InvalidParameters.new(:step_id)
-    end
-    
-    field_ids = step.fields.map(&:id)
+    raise Discourse::InvalidParameters.new(:step_id) if !step
     
     update = update_params.to_h
-    
+  
+    update[:fields] = {}
     if params[:fields]
-      update[:fields] = {}
-      
+      field_ids = step.fields.map(&:id)
       params[:fields].each do |k, v|
         update[:fields][k] = v if field_ids.include? k
       end
