@@ -1,6 +1,6 @@
 <div class="admin-wizard-controls">
   <h3>{{i18n 'admin.wizard.custom_field.nav_label'}}</h3>
-  
+    
   <div class="buttons">
     {{#if saving}}
       {{loading-spinner size="small"}}
@@ -18,6 +18,11 @@
       action="addField"}}
   </div>
 </div>
+
+{{wizard-message
+  key='create'
+  url=documentationUrl
+  component='custom_fields'}}
 
 <div class="admin-wizard-container">
   {{#if customFields}}

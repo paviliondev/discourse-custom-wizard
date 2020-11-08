@@ -167,29 +167,44 @@ after_initialize do
     import_files(DiscoursePluginRegistry.stylesheets["wizard_custom"])
   end
   
-  CustomWizard::CustomField::CLASSES.each do |klass|
-    add_model_callback(klass.to_sym, :after_initialize) do
-      CustomWizard::CustomField.list_by('klass', klass).each do |field|
-        klass.classify
+  CustomWizard::CustomField::CLASSES.keys.each do |klass|
+    add_model_callback(klass, :after_initialize) do
+      CustomWizard::CustomField.list_by(:klass, klass.to_s).each do |field|
+        klass.to_s
+          .classify
           .constantize
           .register_custom_field_type(field.name, field.type.to_sym)
       end
     end
   end
   
-  CustomWizard::CustomField::SERIALIZERS.each do |serializer_klass|
-    "#{serializer_klass}_serializer".classify.constantize.class_eval do
-      CustomWizard::CustomField.list_by('serializers', serializer_klass).each do |field|
-        attributes(field.name.to_sym)
-        class_eval %{def #{field.name}
-          if "#{serializer_klass}" == "topic_view"
-            object.topic.custom_fields["#{field.name}"]
+  module CustomWizardCustomFieldSerialization
+    def attributes(*args)
+      hash = super
+      @cw_klass = self.class.name.underscore.gsub("_serializer", "")
+      
+      if cw_fields.any?
+        cw_fields.each do |field|
+          if @cw_klass == "topic_view"
+            hash[field.name.to_sym] = object.topic.custom_fields["#{field.name}"]
           else
-            object.custom_fields["#{field.name}"]
+            hash[field.name.to_sym] = object.custom_fields["#{field.name}"]
           end
-        end}
+        end
       end
+      
+      hash
     end
+    
+    private
+  
+    def cw_fields
+      @cw_fields ||= CustomWizard::CustomField.list_by(:serializers, @cw_klass)
+    end
+  end
+  
+  CustomWizard::CustomField.serializers.each do |serializer_klass|
+    "#{serializer_klass}_serializer".classify.constantize.prepend CustomWizardCustomFieldSerialization
   end
 
   DiscourseEvent.trigger(:custom_wizard_ready)

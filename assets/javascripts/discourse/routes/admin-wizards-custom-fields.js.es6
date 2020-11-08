@@ -1,13 +1,14 @@
 import DiscourseRoute from "discourse/routes/discourse";
-import { ajax } from 'discourse/lib/ajax';
+import CustomWizardCustomField from "../models/custom-wizard-custom-field";
 import { A } from "@ember/array";
 
 export default DiscourseRoute.extend({
   model() {
-    return ajax('/admin/wizards/custom-fields');
+    return CustomWizardCustomField.listFields();
   },
   
   setupController(controller, model) {
-    controller.set('customFields', A(model || []));
+    const customFields = A(model || []);
+    controller.set('customFields', customFields);
   }
 });

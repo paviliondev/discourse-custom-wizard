@@ -1,0 +1,37 @@
+{
+  "custom_fields": [
+    {
+      "klass": "topic",
+      "name": "topic_field_1",
+      "type": "boolean",
+      "serializers": [
+        "topic_list_item",
+        "topic_view"
+      ]
+    },
+    {
+      "klass": "post",
+      "name": "post_field_1",
+      "type": "integer",
+      "serializers": [
+        "post"
+      ]
+    },
+    {
+      "klass": "category",
+      "name": "category_field_1",
+      "type": "json",
+      "serializers": [
+        "basic_category"
+      ]
+    },
+    {
+      "klass": "group",
+      "name": "group_field_1",
+      "type": "string",
+      "serializers": [
+        "basic_group"
+      ]
+    }
+  ]
+}

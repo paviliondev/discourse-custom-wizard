@@ -6,6 +6,18 @@ en:
 
   wizard:
     custom_title: "Wizard"
+    
+    custom_field:
+      error:
+        required_attribute: "'%{attr}' is a required attribute"
+        unsupported_class: "'%{class}' is not a supported class"
+        unsupported_serializers: "'%{serializers}' are not supported serializers for '%{class}'"
+        unsupported_type: "%{type} is not a supported custom field type"
+        name_invalid: "'%{name}' is not a valid custom field name"
+        name_too_short: "'%{name}' is too short for a custom field name (min length is #{min_length})"
+        name_already_taken: "'%{value}' is already taken as a custom field name"
+        save_default: "Failed to save custom field '%{name}'"
+    
     field:
       too_short: "%{label} must be at least %{min} characters"
       required: "%{label} is required."

@@ -14,6 +14,9 @@ describe ExtraLocalesControllerCustomWizard, type: :request do
   end
   
   it "returns locales when requested by wizard" do
+    @controller.request = ActionController::TestRequest.create(@controller.class)
+    @controller.request.env['HTTP_REFERER'] = "/w/super-mega-fun-wizard"
+
     expect(
       ExtraLocalesController.url("wizard")
     ).to eq(

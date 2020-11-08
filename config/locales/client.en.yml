@@ -72,6 +72,9 @@ en:
             type: "Select an action type"
             edit: "You're editing an action"
             documentation: "Check out the action documentation"
+          custom_fields:
+            create: "Create or edit a custom field record"
+            documentation: Check out the custom field documentation
         
         editor:
           show: "Show"
