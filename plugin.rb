@@ -76,7 +76,6 @@ after_initialize do
     ../serializers/custom_wizard/wizard_step_serializer.rb
     ../serializers/custom_wizard/wizard_serializer.rb
     ../serializers/custom_wizard/log_serializer.rb
-    ../extensions/extra_locales_controller.rb
     ../extensions/invites_controller.rb
     ../extensions/users_controller.rb
     ../extensions/wizard_field.rb
@@ -155,7 +154,6 @@ after_initialize do
     redirect_to_wizard_if_required if current_user
   end
   
-  ::ExtraLocalesController.prepend ExtraLocalesControllerCustomWizard
   ::InvitesController.prepend InvitesControllerCustomWizard
   ::UsersController.prepend CustomWizardUsersController
   ::Wizard::Field.prepend CustomWizardFieldExtension
