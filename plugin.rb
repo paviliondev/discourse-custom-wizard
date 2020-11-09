@@ -80,6 +80,8 @@ after_initialize do
     ../extensions/users_controller.rb
     ../extensions/wizard_field.rb
     ../extensions/wizard_step.rb
+    ../extensions/custom_field/preloader.rb
+    ../extensions/custom_field/serializer.rb
   ].each do |path|
     load File.expand_path(path, __FILE__)
   end
@@ -174,35 +176,12 @@ after_initialize do
           .register_custom_field_type(field.name, field.type.to_sym)
       end
     end
-  end
-  
-  module CustomWizardCustomFieldSerialization
-    def attributes(*args)
-      hash = super
-      @cw_klass = self.class.name.underscore.gsub("_serializer", "")
-      
-      if cw_fields.any?
-        cw_fields.each do |field|
-          if @cw_klass == "topic_view"
-            hash[field.name.to_sym] = object.topic.custom_fields["#{field.name}"]
-          else
-            hash[field.name.to_sym] = object.custom_fields["#{field.name}"]
-          end
-        end
-      end
-      
-      hash
-    end
     
-    private
-  
-    def cw_fields
-      @cw_fields ||= CustomWizard::CustomField.list_by(:serializers, @cw_klass)
-    end
+    klass.to_s.classify.constantize.singleton_class.prepend CustomWizardCustomFieldPreloader
   end
   
   CustomWizard::CustomField.serializers.each do |serializer_klass|
-    "#{serializer_klass}_serializer".classify.constantize.prepend CustomWizardCustomFieldSerialization
+    "#{serializer_klass}_serializer".classify.constantize.prepend CustomWizardCustomFieldSerializer
   end
 
   DiscourseEvent.trigger(:custom_wizard_ready)
