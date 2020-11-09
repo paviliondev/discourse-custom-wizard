@@ -386,7 +386,7 @@ en:
           nav_label: "Logs"
 
         manager:
-          nav_label: Manage
+          nav_label: Manager
           title: Manage Wizards
           export: Export
           import: Import
