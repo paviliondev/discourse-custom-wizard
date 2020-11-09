@@ -2,7 +2,7 @@
 # about: Create custom wizards
 # version: 0.5.0
 # authors: Angus McLeod
-# url: https://github.com/angusmcleod/discourse-custom-wizard
+# url: https://github.com/paviliondev/discourse-custom-wizard
 
 register_asset 'stylesheets/common/wizard-admin.scss'
 register_asset 'stylesheets/common/wizard-mapper.scss'
