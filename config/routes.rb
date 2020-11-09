@@ -21,6 +21,7 @@ Discourse::Application.routes.append do
     
     get 'admin/wizards/custom-fields' => 'admin_custom_fields#index'
     put 'admin/wizards/custom-fields' => 'admin_custom_fields#update'
+    delete 'admin/wizards/custom-fields/:name' => 'admin_custom_fields#destroy'
     
     get 'admin/wizards/submissions' => 'admin_submissions#index'
     get 'admin/wizards/submissions/:wizard_id' => 'admin_submissions#show'

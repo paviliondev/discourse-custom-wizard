@@ -23,6 +23,12 @@ CustomWizardCustomField.reopenClass({
         custom_fields: customFields
       })
     }).catch(popupAjaxError);
+  },
+  
+  removeField(field) {
+    return ajax(`${basePath}/${field.name}`, {
+      type: 'DELETE'
+    }).catch(popupAjaxError);
   }
 });
 

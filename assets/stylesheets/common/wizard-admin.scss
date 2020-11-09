@@ -589,6 +589,11 @@
   
   td {
     vertical-align: top;
+    
+    label {
+      margin: 0;
+      line-height: 30px;
+    }
   }
   
   td:not(:last-of-type) {

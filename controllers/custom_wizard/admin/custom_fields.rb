@@ -12,16 +12,21 @@ class CustomWizard::AdminCustomFieldsController < CustomWizard::AdminController
       
       if saved_field = CustomWizard::CustomField.find(field_param[:name])
         CustomWizard::CustomField::ATTRS.each do |attr|
-          field_data[attr] = field_param[attr] || saved_field.send(attr)
+          field_data[attr] = saved_field.send(attr)
         end
         field_id = saved_field.id
       end
-            
-      fields_to_save.push(CustomWizard::CustomField.new(field_id, field_data))
+      
+      CustomWizard::CustomField::ATTRS.each do |attr|
+        field_data[attr] = field_param[attr]
+      end
+      
+      field = CustomWizard::CustomField.new(field_id, field_data)
+      fields_to_save.push(field)
     end
     
     PluginStoreRow.transaction do
-      fields_to_save.each do |field| 
+      fields_to_save.each do |field|
         unless field.save
           raise ActiveRecord::Rollback.new,
             field.errors.any? ?
@@ -32,6 +37,16 @@ class CustomWizard::AdminCustomFieldsController < CustomWizard::AdminController
     end
 
     render json: success_json
+  end
+  
+  def destroy
+    params.require(:name)
+    
+    if CustomWizard::CustomField.destroy(params[:name])
+      render json: success_json
+    else
+      render json: failed_json
+    end
   end
   
   private

@@ -50,7 +50,7 @@ class ::CustomWizard::CustomField
       end
       
       if self.class.save_to_store(id, key, data)
-        self.class.reset
+        self.class.invalidate_cache
         true
       else
         false
@@ -65,8 +65,10 @@ class ::CustomWizard::CustomField
       value = send(attr)
       i18n_key = "wizard.custom_field.error"
       
-      if REQUIRED.include?(attr) && value.blank?
-        I18n.t("#{i18n_key}.required_attribute", attr: attr)
+      if value.blank?
+        if REQUIRED.include?(attr)
+          add_error(I18n.t("#{i18n_key}.required_attribute", attr: attr))
+        end
         next
       end
       
@@ -157,7 +159,7 @@ class ::CustomWizard::CustomField
     new(record.id, data)
   end
   
-  def self.save_to_store(id = nil, key, data)
+  def self.save_to_store(id = nil, key, data)    
     if id
       record = PluginStoreRow.find_by(id: id, plugin_name: NAMESPACE, key: key)
       return false if !record
@@ -169,5 +171,21 @@ class ::CustomWizard::CustomField
       record.value = data.to_json
       record.save
     end
+  end
+  
+  def self.destroy(name)
+    if exists?(name)
+      PluginStoreRow.where(plugin_name: NAMESPACE, key: name).destroy_all
+      invalidate_cache
+      true
+    else
+      false
+    end
+  end
+  
+  def self.invalidate_cache
+    self.reset
+    Discourse.clear_readonly!
+    Discourse.request_refresh!
   end
 end

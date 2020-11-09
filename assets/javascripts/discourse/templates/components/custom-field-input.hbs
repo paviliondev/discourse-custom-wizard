@@ -39,6 +39,14 @@
   <td><label>{{field.name}}</label></td>
   <td>
     {{d-button action="edit" icon="pencil-alt"}}
-    {{d-button action="close" icon="times"}}
+    {{#if field.edit}}
+      {{d-button action="close" icon="times"}}
+    {{else}}
+      {{#if destroying}}
+        {{loading-spinner size="small"}}
+      {{else}}
+        {{d-button action="destroy" icon="trash-alt"}}
+      {{/if}}
+    {{/if}}
   </td>
 {{/if}}

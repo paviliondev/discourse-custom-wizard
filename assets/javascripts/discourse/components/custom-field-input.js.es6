@@ -13,7 +13,8 @@ export default Component.extend({
   tagName: 'tr',
   topicSerializers: ['topic_view', 'topic_list_item'],
   postSerializers: ['post'],
-  categorySerializers: ['basic_category', 'topic_view', 'topic_list_item'],
+  groupSerializers: ['basic_group'],
+  categorySerializers: ['basic_category'],
   klassContent: generateContent(['topic', 'post', 'group', 'category'], 'klass'),
   typeContent: generateContent(['string', 'boolean', 'integer', 'json'], 'type'),
   showInputs: or('field.new', 'field.edit'),
@@ -37,9 +38,12 @@ export default Component.extend({
     close() {
       if (this.field.edit) {
         this.set('field.edit', false);
-      } else {
-        this.removeField(this.field);
       }
+    },
+    
+    destroy() {
+      this.set('removing', true);
+      this.removeField(this.field);
     }
   }
 });

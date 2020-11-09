@@ -11,12 +11,8 @@ export default Controller.extend({
   actions: {
     addField() {
       this.get('customFields').pushObject(
-        CustomWizardCustomField.create()
+        CustomWizardCustomField.create({ edit: true })
       );
-    },
-    
-    removeField(field) {
-      this.get('customFields').removeObject(field);
     },
     
     saveFields() {
@@ -29,8 +25,16 @@ export default Controller.extend({
             this.set('saveIcon', 'times');
           }
           setTimeout(() => this.set('saveIcon', ''), 5000);
+          this.get('customFields').setEach('edit', false);
         }).finally(() => {
           this.set('saving', false);
+        });
+    },
+    
+    removeField(field) {
+      CustomWizardCustomField.removeField(field)
+        .then(result => {
+          this.get('customFields').removeObject(field);
         });
     }
   }
