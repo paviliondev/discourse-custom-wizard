@@ -19,7 +19,7 @@ module CustomWizardCustomFieldSerializer
   private
 
   def cw_fields
-    @cw_fields ||= CustomWizard::CustomField.list_by(:serializers, @cw_klass)
+    CustomWizard::CustomField.list_by(:serializers, @cw_klass)
   end
   
   def get_cw_class

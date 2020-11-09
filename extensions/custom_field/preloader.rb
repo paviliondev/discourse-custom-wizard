@@ -12,6 +12,6 @@ module CustomWizardCustomFieldPreloader
   end
   
   def cw_fields
-    @cw_fields ||= CustomWizard::CustomField.list_by(:klass, @cw_klass)
+    CustomWizard::CustomField.list_by(:klass, @cw_klass)
   end
 end
