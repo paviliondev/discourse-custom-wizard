@@ -1,0 +1,83 @@
+<div class="admin-wizard-controls">
+  <h3>{{i18n 'admin.wizard.manager.title'}}</h3>
+  
+  <div class="buttons">
+    {{#if filename}}
+      <div class="filename">
+        <a {{action 'clearFile'}}>
+          {{d-icon 'times'}}
+        </a>
+        <span>{{filename}}</span>
+      </div>
+    {{/if}}
+    
+    {{input
+      id='file-upload'
+      type="file"
+      accept="application/json"
+      change=(action "setFile")}}
+    {{d-button
+      id="upload-button"
+      label="admin.wizard.manager.upload"
+      action=(action "upload")}}
+    {{d-button
+      id="import-button"
+      label="admin.wizard.manager.import"
+      action=(action "import")
+      disabled=importDisabled}}
+    {{d-button
+      id="export-button"
+      label="admin.wizard.manager.export"
+      action=(action "export")
+      disabled=exportDisabled}}
+    {{d-button
+      id="destroy-button"
+      label="admin.wizard.manager.destroy"
+      action=(action "destroy")
+      disabled=destoryDisabled}}
+  </div>
+</div>
+
+{{wizard-message
+  key=messageKey
+  url=messageUrl
+  type=messageType
+  opts=messageOpts
+  items=messageItems
+  loading=loading
+  component='manager'}}
+
+<div class="admin-wizard-container">
+  <table class="table grid">
+    <thead>
+      <tr>
+        <th>{{i18n 'admin.wizard.label'}}</th>
+        <th class="control-column">{{i18n 'admin.wizard.manager.export'}}</th>
+        <th class="control-column">{{i18n 'admin.wizard.manager.destroy'}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each wizards as |wizard|}}
+        <tr data-wizard-id={{dasherize wizard.id}}>
+          <td>
+            {{#link-to "adminWizardsWizardShow" (dasherize wizard.id)}}
+              {{wizard.name}}
+            {{/link-to}}
+          </td>
+          <td class="control-column">
+            {{input 
+              type="checkbox"
+              class="export"
+              change=(action 'selectWizard')}}
+          </td>
+          <td class="control-column">
+            {{input 
+              type="checkbox"
+              class="destroy"
+              change=(action 'selectWizard')}}
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

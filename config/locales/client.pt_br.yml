@@ -303,7 +303,7 @@ pt_br:
         log:
           nav_label: "Logs"
 
-        transfer:
+        manager:
           nav_label: "Transferir"
           export:
             label: "Exportar"

@@ -1,0 +1,60 @@
+.admin-wizards-manager .admin-wizard-controls {
+  display: flex;
+  justify-content: flex-start;
+  
+  h3 {
+    margin-bottom: 0;
+  }
+  
+  .buttons {
+    display: flex;
+    margin-left: auto;
+    
+    > * {
+      margin-left: 10px;
+    }
+    
+    #import-button:enabled,
+    #export-button:enabled {
+      background-color: $tertiary;
+      color: $secondary;
+    }
+    
+    #destroy-button:enabled {
+      background-color: $danger;
+      color: $secondary;
+    }
+  }
+  
+  #file-upload {
+    display: none;
+  }
+  
+  .filename {
+    padding: 0 10px;
+    border: 1px solid $primary;
+    display: inline-flex;
+    height: 28px;
+    line-height: 28px;
+    
+    a {
+      color: $primary;
+      margin-right: 5px;
+      display: inline-flex;
+      align-items: center;
+    }
+  }
+}
+
+.wizard-list-select {
+  list-style-type: none;
+}
+
+.wizard-action-buttons {
+  flex-direction: column;
+}
+
+.control-column {
+  width: 100px;
+  text-align: center;
+}

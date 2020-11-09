@@ -1,5 +1,5 @@
 @import 'wizard-mapper';
-@import 'wizard-transfer';
+@import 'wizard-manager';
 @import 'wizard-api';
 
 .admin-wizard-controls {
@@ -20,10 +20,19 @@
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   
   .message-block {
     .d-icon {
       margin-right: 4px;
+    }
+    
+    .d-icon-check-circle {
+      color: var(--success);
+    }
+    
+    .d-icon-times-circle {
+      color: var(--danger);
     }
     
     a + a {
@@ -31,11 +40,30 @@
       padding-left: 5px;
       margin-left: 5px;
     }
+    
+    .message {
+      white-space: nowrap;
+    }
+    
+    .list-colon {
+      margin-right: 5px;
+    }
+    
+    ul {
+      list-style: none;
+      margin: 0;
+      
+      span.action {
+        margin-left: 5px;
+      }
+    }
   }
   
   & + div {
     margin-top: 30px;
   }
+  
+  
 }
 
 .wizard-submissions {

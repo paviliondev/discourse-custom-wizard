@@ -36,6 +36,8 @@ class CustomWizard::Template
   def self.remove(wizard_id)
     wizard = CustomWizard::Wizard.create(wizard_id)
     
+    return false if !wizard
+    
     ActiveRecord::Base.transaction do      
       PluginStore.remove('custom_wizard', wizard.id)
       
@@ -44,6 +46,8 @@ class CustomWizard::Template
         Jobs.enqueue(:clear_after_time_wizard, wizard_id: wizard_id)
       end
     end
+    
+    true
   end
   
   def self.exists?(wizard_id)

@@ -15,4 +15,8 @@ class CustomWizard::AdminController < ::Admin::AdminController
   def custom_field_list
     serialize_data(CustomWizard::CustomField.list, CustomWizard::CustomFieldSerializer)
   end
+  
+  def render_error(message)
+    render json: failed_json.merge(error: message)
+  end
 end

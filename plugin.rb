@@ -42,7 +42,7 @@ after_initialize do
     ../controllers/custom_wizard/admin/submissions.rb
     ../controllers/custom_wizard/admin/api.rb
     ../controllers/custom_wizard/admin/logs.rb
-    ../controllers/custom_wizard/admin/transfer.rb
+    ../controllers/custom_wizard/admin/manager.rb
     ../controllers/custom_wizard/admin/custom_fields.rb
     ../controllers/custom_wizard/wizard.rb
     ../controllers/custom_wizard/steps.rb

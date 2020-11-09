@@ -25,6 +25,15 @@ describe Jobs::ClearAfterTimeWizard do
     
     CustomWizard::Template.save(after_time_template)
     
+    Jobs::SetAfterTimeWizard.new.execute(wizard_id: 'super_mega_fun_wizard')
+        
+    expect(
+      UserCustomField.where(
+        name: 'redirect_to_wizard',
+        value: 'super_mega_fun_wizard'
+      ).length
+    ).to eq(3)
+    
     described_class.new.execute(wizard_id: 'super_mega_fun_wizard')
     
     expect(

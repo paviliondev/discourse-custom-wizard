@@ -1,5 +1,6 @@
 class CustomWizard::Validator
   include HasErrors
+  include ActiveModel::Model
   
   def initialize(data, opts={})
     @data = data
@@ -50,14 +51,14 @@ class CustomWizard::Validator
   def check_required(object, type)
     CustomWizard::Validator.required[type].each do |property|      
       if object[property].blank?
-        errors.add :validation, I18n.t("wizard.validation.required", property: property) 
+        errors.add :base, I18n.t("wizard.validation.required", property: property) 
       end
     end
   end
 
   def check_id(object, type)
     if type === :wizard && @opts[:create] && CustomWizard::Template.exists?(object[:id])
-      errors.add :validation, I18n.t("wizard.validation.conflict", id: object[:id])
+      errors.add :base, I18n.t("wizard.validation.conflict", wizard_id: object[:id])
     end
   end
   
@@ -75,7 +76,7 @@ class CustomWizard::Validator
     end
 
     if invalid_time || active_time.blank? || active_time < Time.now.utc
-      errors.add :validation, I18n.t("wizard.validation.after_time")
+      errors.add :base, I18n.t("wizard.validation.after_time")
     end
   end
 end

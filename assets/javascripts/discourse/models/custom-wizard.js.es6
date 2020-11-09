@@ -4,6 +4,7 @@ import { buildProperties, present, mapped } from '../lib/wizard-json';
 import { listProperties, camelCase, snakeCase } from '../lib/wizard';
 import wizardSchema from '../lib/wizard-schema';
 import { Promise } from "rsvp";
+import { popupAjaxError } from 'discourse/lib/ajax-error';
 
 const CustomWizard = EmberObject.extend({
   save(opts) {
@@ -185,7 +186,7 @@ const CustomWizard = EmberObject.extend({
   remove() {
     return ajax(`/admin/wizards/wizard/${this.id}`, {
       type: 'DELETE'
-    }).then(() => this.destroy());
+    }).then(() => this.destroy()).catch(popupAjaxError);
   }
 });
 
@@ -195,13 +196,13 @@ CustomWizard.reopenClass({
       type: 'GET'
     }).then(result => {
       return result.wizard_list;
-    });
+    }).catch(popupAjaxError);
   },
 
   submissions(wizardId) {
     return ajax(`/admin/wizards/submissions/${wizardId}`, {
       type: "GET"
-    });
+    }).catch(popupAjaxError);
   },
 
   create(wizardJson = {}) {
