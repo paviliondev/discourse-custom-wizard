@@ -106,13 +106,13 @@ export default Component.extend({
       }
       
       this.saveField(data).then((result) => {
+        this.set('saving', false);
         if (result.success) {
-          this.set('saveIcon', 'check');
+          this.set('field.edit', false);
         } else {
           this.set('saveIcon', 'times');
         }
         setTimeout(() => this.set('saveIcon', null), 10000);
-        this.set('saving', false);
       });
     }
   }

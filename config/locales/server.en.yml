@@ -15,7 +15,7 @@ en:
         unsupported_type: "%{type} is not a supported custom field type"
         name_invalid: "'%{name}' is not a valid custom field name"
         name_too_short: "'%{name}' is too short for a custom field name (min length is #{min_length})"
-        name_already_taken: "'%{value}' is already taken as a custom field name"
+        name_already_taken: "'%{name}' is already taken as a custom field name"
         save_default: "Failed to save custom field '%{name}'"
     
     field:
