@@ -17,7 +17,7 @@ describe CustomWizard::CustomFieldSerializer do
     end
     
     json = CustomWizard::CustomFieldSerializer.new(
-      CustomWizard::CustomField.find("topic_field_1"),
+      CustomWizard::CustomField.find_by_name("topic_field_1"),
       scope: Guardian.new(user),
       root: false
     ).as_json

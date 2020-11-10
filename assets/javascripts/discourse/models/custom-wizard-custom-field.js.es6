@@ -14,18 +14,16 @@ CustomWizardCustomField.reopenClass({
     return ajax(basePath).catch(popupAjaxError);
   },
   
-  saveFields(customFields) {
+  saveField(customField) {
     return ajax(basePath, {
       type: 'PUT',
-      dataType: 'json',
-      contentType: 'application/json',
-      data: JSON.stringify({
-        custom_fields: customFields
-      })
+      data: {
+        custom_field: customField
+      }
     }).catch(popupAjaxError);
   },
   
-  removeField(field) {
+  destroyField(field) {
     return ajax(`${basePath}/${field.name}`, {
       type: 'DELETE'
     }).catch(popupAjaxError);

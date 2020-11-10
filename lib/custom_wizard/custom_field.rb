@@ -7,7 +7,7 @@ class ::CustomWizard::CustomField
   attr_reader :id
   
   ATTRS ||= ["name", "klass", "type", "serializers"]
-  REQUIRED ||= ["name", "klass"]
+  REQUIRED ||= ["name", "klass", "type"]
   NAMESPACE ||= "custom_wizard_custom_fields"
   NAME_MIN_LENGTH ||= 3
   
@@ -143,11 +143,21 @@ class ::CustomWizard::CustomField
     PluginStoreRow.where(plugin_name: NAMESPACE, key: name).exists?
   end
   
-  def self.find(name)
-    records = PluginStoreRow.where(plugin_name: NAMESPACE, key: name)
+  def self.find(field_id)
+    record = PluginStoreRow.find_by(id: field_id, plugin_name: NAMESPACE)
     
-    if records.exists?
-      create_from_store(records.first)
+    if record
+      create_from_store(record)
+    else
+      false
+    end
+  end
+  
+  def self.find_by_name(name)
+    record = PluginStoreRow.find_by(key: name, plugin_name: NAMESPACE)
+    
+    if record
+      create_from_store(record)
     else
       false
     end
@@ -161,8 +171,9 @@ class ::CustomWizard::CustomField
   
   def self.save_to_store(id = nil, key, data)    
     if id
-      record = PluginStoreRow.find_by(id: id, plugin_name: NAMESPACE, key: key)
+      record = PluginStoreRow.find_by(id: id, plugin_name: NAMESPACE)
       return false if !record
+      record.key = key
       record.value = data.to_json
       record.save
     else

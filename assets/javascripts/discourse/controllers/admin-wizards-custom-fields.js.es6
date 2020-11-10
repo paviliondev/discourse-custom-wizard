@@ -3,8 +3,10 @@ import EmberObject from '@ember/object';
 import { ajax } from 'discourse/lib/ajax';
 import { popupAjaxError } from 'discourse/lib/ajax-error';
 import CustomWizardCustomField from "../models/custom-wizard-custom-field";
+import { default as discourseComputed } from 'discourse-common/utils/decorators';
 
 export default Controller.extend({
+  messageKey: 'create',
   fieldKeys: ['klass', 'type', 'serializers', 'name'],
   documentationUrl: "https://thepavilion.io/t/3572",
   
@@ -15,24 +17,36 @@ export default Controller.extend({
       );
     },
     
-    saveFields() {
-      this.set('saving', true);
-      CustomWizardCustomField.saveFields(this.customFields)
+    saveField(field) {
+      return CustomWizardCustomField.saveField(field)
         .then(result => {
           if (result.success) {
-            this.set('saveIcon', 'check');
-          } else {
-            this.set('saveIcon', 'times');
+            this.setProperties({
+              messageKey: 'saved',
+              messageType: 'success'
+            });
+          } else {            
+            if (result.messages) {
+              this.setProperties({
+                messageKey: 'error',
+                messageType: 'error',
+                messageOpts: { messages: result.messages }
+              })
+            }
           }
-          setTimeout(() => this.set('saveIcon', ''), 5000);
-          this.get('customFields').setEach('edit', false);
-        }).finally(() => {
-          this.set('saving', false);
+          
+          setTimeout(() => this.setProperties({
+            messageKey: 'create',
+            messageType: null,
+            messageOpts: null
+          }), 10000);
+          
+          return result;
         });
     },
     
     removeField(field) {
-      CustomWizardCustomField.removeField(field)
+      return CustomWizardCustomField.destroyField(field)
         .then(result => {
           this.get('customFields').removeObject(field);
         });

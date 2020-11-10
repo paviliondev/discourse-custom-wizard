@@ -13,40 +13,51 @@
       none="admin.wizard.custom_field.type.select"
       onChange=(action (mut field.type))}}
   </td>
-  <td>
+  <td class="multi-select">
     {{multi-select
       value=field.serializers
       content=serializerContent
       none="admin.wizard.custom_field.serializers.select"
       onChange=(action (mut field.serializers))}}
   </td>
-  <td>
+  <td class="input">
     {{input
       value=field.name
-      placeholder=(i18n "admin.wizard.custom_field.klass.select")}}
+      placeholder=(i18n "admin.wizard.custom_field.name.select")}}
   </td>
-  <td>
-    {{d-button action="close" icon="times"}}
+  <td class="actions">
+    {{#if loading}}
+      {{loading-spinner size="small"}}
+    {{else}}
+      {{#if saveIcon}}
+        {{d-icon saveIcon}}
+      {{/if}}
+    {{/if}}
+    {{d-button
+      action="destroy"
+      icon="trash-alt"
+      class="destroy"
+      disabled=destroyDisabled}}
+    {{d-button
+      icon="save"
+      action="save"
+      disabled=saveDisabled
+      class="save"}}
+    {{d-button
+      action="close"
+      icon="times"
+      disabled=closeDisabled}}
   </td>
 {{else}}
   <td><label>{{field.klass}}</label></td>
   <td><label>{{field.type}}</label></td>
-  <td>
+  <td class="multi-select">
     {{#each field.serializers as |serializer|}}
       <label>{{serializer}}</label>
     {{/each}}
   </td>
-  <td><label>{{field.name}}</label></td>
-  <td>
+  <td class="input"><label>{{field.name}}</label></td>
+  <td class="actions">
     {{d-button action="edit" icon="pencil-alt"}}
-    {{#if field.edit}}
-      {{d-button action="close" icon="times"}}
-    {{else}}
-      {{#if destroying}}
-        {{loading-spinner size="small"}}
-      {{else}}
-        {{d-button action="destroy" icon="trash-alt"}}
-      {{/if}}
-    {{/if}}
   </td>
 {{/if}}

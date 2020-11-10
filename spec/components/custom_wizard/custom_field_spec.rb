@@ -31,7 +31,7 @@ describe CustomWizard::CustomField do
     
     updated_field_json = custom_field_json['custom_fields'][0]
     updated_field_json['serializers'] = ["topic_view"]
-    existing_field = CustomWizard::CustomField.find(updated_field_json["name"])
+    existing_field = CustomWizard::CustomField.find_by_name(updated_field_json["name"])
     updated_field = CustomWizard::CustomField.new(existing_field.id, updated_field_json)
     
     expect(updated_field.save).to eq(true)

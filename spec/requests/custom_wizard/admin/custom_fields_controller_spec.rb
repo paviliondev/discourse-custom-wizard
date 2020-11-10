@@ -21,12 +21,26 @@ describe CustomWizard::AdminCustomFieldsController do
     expect(response.parsed_body.length).to eq(4)
   end
   
-  it "updates the list of custom fields" do
-    custom_field_json['custom_fields'][0]['type'] = 'string'
-    put "/admin/wizards/custom-fields.json", params: custom_field_json
+  it "saves custom fields" do
+    topic_field = CustomWizard::CustomField.find_by_name('topic_field_1')
+    topic_field_json = topic_field.as_json
+    topic_field_json['type'] = 'string'
+        
+    put "/admin/wizards/custom-fields.json", params: {
+      custom_field: topic_field_json
+    }
     expect(response.status).to eq(200)
     expect(
-      CustomWizard::CustomField.find('topic_field_1').type
+      CustomWizard::CustomField.find_by_name('topic_field_1').type
     ).to eq('string')
+  end
+  
+  it "destroys custom fields" do
+    topic_field = custom_field_json['custom_fields'][0]
+    delete "/admin/wizards/custom-fields/#{topic_field["name"]}.json"
+    expect(response.status).to eq(200)
+    expect(
+      CustomWizard::CustomField.exists?('topic_field_1')
+    ).to eq(false)
   end
 end

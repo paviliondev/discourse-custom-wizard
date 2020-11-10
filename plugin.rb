@@ -31,6 +31,7 @@ if respond_to?(:register_svg_icon)
   register_svg_icon "far-calendar"
   register_svg_icon "chevron-right"
   register_svg_icon "chevron-left"
+  register_svg_icon "save"
 end
 
 after_initialize do

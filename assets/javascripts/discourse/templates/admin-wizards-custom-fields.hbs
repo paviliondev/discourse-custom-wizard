@@ -2,16 +2,6 @@
   <h3>{{i18n 'admin.wizard.custom_field.nav_label'}}</h3>
     
   <div class="buttons">
-    {{#if saving}}
-      {{loading-spinner size="small"}}
-    {{else}}
-      {{#if saveIcon}}
-        {{d-icon saveIcon}}
-      {{/if}}
-    {{/if}}
-    {{d-button
-      label="admin.wizard.custom_field.save"
-      action="saveFields"}}
     {{d-button
       label="admin.wizard.custom_field.add"
       icon="plus"
@@ -20,7 +10,9 @@
 </div>
 
 {{wizard-message
-  key='create'
+  key=messageKey
+  opts=messageOpts
+  type=messageType
   url=documentationUrl
   component='custom_fields'}}
 
@@ -36,7 +28,8 @@
       {{#each customFields as |field|}}
         {{custom-field-input
           field=field
-          removeField=(action 'removeField')}}
+          removeField=(action 'removeField')
+          saveField=(action 'saveField')}}
       {{/each}}
     </table>
   {{/if}}

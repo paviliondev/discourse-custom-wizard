@@ -1,6 +1,7 @@
 @import 'wizard-mapper';
 @import 'wizard-manager';
 @import 'wizard-api';
+@import 'common/components/buttons';
 
 .admin-wizard-controls {
   display: flex;
@@ -565,16 +566,35 @@
 }
 
 .admin-wizards-custom-fields {
+  .admin-wizard-controls {
+    .buttons {
+      display: flex;
+      align-items: center;
+      
+      button.btn {
+        margin-left: 10px;
+      }
+    }  
+  }
+  
+  .btn.save:enabled {
+    @extend .btn-primary;
+  }
+  
+  .btn.destroy {
+    @extend .btn-danger;
+  }
+  
   h3 {
     margin-bottom: 0;
   }
   
   .select-kit {
-    width: 200px;
+    width: 150px;
   }
   
   .select-kit.multi-select {
-    width: 200px;
+    width: 300px;
     
     .choices .choice,
     .select-kit-filter .filter-input {
@@ -587,20 +607,39 @@
     margin: 0;
   }
   
-  td {
-    vertical-align: top;
-    
-    label {
-      margin: 0;
-      line-height: 30px;
+  table {
+    td {
+      vertical-align: top;
+      
+      label {
+        margin: 0;
+        line-height: 30px;
+        display: inline-block;
+        margin-right: 10px;
+      }
     }
-  }
-  
-  td:not(:last-of-type) {
-    min-width: 230px;
-  }
-  
-  td:last-of-type {
-    text-align: right;
+    
+    td {
+      min-width: 170px;
+      width: 170px;
+    }
+    
+    td.multi-select {
+      min-width: 300px;
+    }
+    
+    td.input {
+      min-width: 210px;
+      width: 210px;
+    }
+    
+    td.actions {
+      min-width: 100px;
+      text-align: right;
+      
+      button.btn {
+        margin-left: 5px !important;
+      }
+    }
   }
 }
