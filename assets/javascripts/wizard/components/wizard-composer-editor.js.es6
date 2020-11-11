@@ -88,7 +88,13 @@ export default ComposerEditor.extend({
   _bindUploadTarget() {
     this._super(...arguments);
     const $element = $(this.element);
-    
+    // adding dropZone property post initialization
+    $element.fileupload(
+      'option',
+      'dropZone',
+      $element
+    );
+
     $element.off("fileuploadsubmit");
     
     $element.on("fileuploadsubmit", (e, data) => {
