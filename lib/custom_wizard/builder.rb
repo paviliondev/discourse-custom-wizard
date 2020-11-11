@@ -333,7 +333,7 @@ class CustomWizard::Builder
   end
 
   def is_text_type(field)
-    ['text', 'textarea'].include? field['type']
+    ['text', 'textarea', 'composer'].include? field['type']
   end
 
   def is_url_type(field)
