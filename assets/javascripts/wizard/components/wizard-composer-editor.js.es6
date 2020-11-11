@@ -1,5 +1,8 @@
 import ComposerEditor from "discourse/components/composer-editor";
-import { default as discourseComputed, on } from "discourse-common/utils/decorators";
+import {
+  default as discourseComputed,
+  on,
+} from "discourse-common/utils/decorators";
 import { findRawTemplate } from "discourse-common/lib/raw-templates";
 import { throttle } from "@ember/runloop";
 import { scheduleOnce, next } from "@ember/runloop";
@@ -12,7 +15,7 @@ import highlightSyntax from "discourse/lib/highlight-syntax";
 import { getToken } from "wizard/lib/ajax";
 import {
   validateUploadedFiles,
-  getUploadMarkdown
+  getUploadMarkdown,
 } from "discourse/lib/uploads";
 import { cacheShortUploadUrl } from "pretty-text/upload-short-url";
 import { alias } from "@ember/object/computed";
@@ -51,7 +54,7 @@ export default ComposerEditor.extend({
           scheduleOnce("afterRender", () => $input.blur().focus());
         },
         triggerRule: (textarea) =>
-          !inCodeBlock(textarea.value, caretPosition(textarea))
+          !inCodeBlock(textarea.value, caretPosition(textarea)),
       });
     }
 
@@ -65,19 +68,20 @@ export default ComposerEditor.extend({
 
     this._bindUploadTarget();
   },
-  
+
   @discourseComputed
   allowedFileTypes() {
-    return this.siteSettings.authorized_extensions.split('|')
-      .map(ext => "." + ext)
-      .join(',')
+    return this.siteSettings.authorized_extensions
+      .split("|")
+      .map((ext) => "." + ext)
+      .join(",");
   },
-  
-  @discourseComputed('currentUser')
+
+  @discourseComputed("currentUser")
   uploadIcon(currentUser) {
     return uploadIcon(false, this.siteSettings);
   },
-  
+
   _setUploadPlaceholderSend() {
     if (!this.composer.get("reply")) {
       this.composer.set("reply", "");
@@ -89,14 +93,10 @@ export default ComposerEditor.extend({
     this._super(...arguments);
     const $element = $(this.element);
     // adding dropZone property post initialization
-    $element.fileupload(
-      'option',
-      'dropZone',
-      $element
-    );
+    $element.fileupload("option", "dropZone", $element);
 
     $element.off("fileuploadsubmit");
-    
+
     $element.on("fileuploadsubmit", (e, data) => {
       const max = this.siteSettings.simultaneous_uploads;
 
@@ -148,26 +148,26 @@ export default ComposerEditor.extend({
 
       return isUploading;
     });
-    
+
     $element.on("fileuploadprogressall", (e, data) => {
       this.set(
         "uploadProgress",
         parseInt((data.loaded / data.total) * 100, 10)
       );
     });
-    
+
     $element.on("fileuploadfail", (e, data) => {
       this._setUploadPlaceholderDone(data);
       this._resetUpload(true);
 
       const userCancelled = this._xhr && this._xhr._userCancelled;
       this._xhr = null;
-      
+
       if (!userCancelled) {
         displayErrorForUpload(data, this.siteSettings);
       }
     });
-    
+
     $element.on("fileuploadsend", (e, data) => {
       this._pasted = false;
       this._validUploads++;
@@ -176,20 +176,20 @@ export default ComposerEditor.extend({
 
       this.appEvents.trigger("wizard-editor:insert-text", {
         fieldId: this.field.id,
-        text: this.uploadPlaceholder
+        text: this.uploadPlaceholder,
       });
-      
+
       if (data.xhr && data.originalFiles.length === 1) {
         this.set("isCancellable", true);
         this._xhr = data.xhr();
       }
     });
-    
+
     $element.on("fileuploaddone", (e, data) => {
       let upload = data.result;
-      
+
       this._setUploadPlaceholderDone(data);
-            
+
       if (!this._xhr || !this._xhr._userCancelled) {
         const markdown = uploadMarkdownResolvers.reduce(
           (md, resolver) => resolver(upload) || md,
@@ -197,20 +197,18 @@ export default ComposerEditor.extend({
         );
 
         cacheShortUploadUrl(upload.short_url, upload);
-        this.appEvents.trigger(
-          "wizard-editor:replace-text", {
-            fieldId: this.field.id,
-            oldVal: this.uploadPlaceholder.trim(),
-            newVal: markdown 
-          }
-        );
+        this.appEvents.trigger("wizard-editor:replace-text", {
+          fieldId: this.field.id,
+          oldVal: this.uploadPlaceholder.trim(),
+          newVal: markdown,
+        });
         this._resetUpload(false);
       } else {
         this._resetUpload(true);
       }
     });
   },
-  
+
   _resetUpload(removePlaceholder) {
     next(() => {
       if (this._validUploads > 0) {
@@ -224,18 +222,16 @@ export default ComposerEditor.extend({
         });
       }
       if (removePlaceholder) {
-        this.appEvents.trigger(
-          "wizard-editor:replace-text", {
-            fieldId: this.field.id,
-            oldVal: this.uploadPlaceholder,
-            newVal: ""
-          }
-        );
+        this.appEvents.trigger("wizard-editor:replace-text", {
+          fieldId: this.field.id,
+          oldVal: this.uploadPlaceholder,
+          newVal: "",
+        });
       }
       this._resetUploadFilenamePlaceholder();
     });
   },
-  
+
   _registerImageScaleButtonClick($preview) {
     const imageScaleRegex = /!\[(.*?)\|(\d{1,4}x\d{1,4})(,\s*\d{1,3}%)?(.*?)\]\((upload:\/\/.*?)\)(?!(.*`))/g;
     $preview.off("click", ".scale-btn").on("click", ".scale-btn", (e) => {
@@ -245,7 +241,7 @@ export default ComposerEditor.extend({
       const matchingPlaceholder = this.get("composer.reply").match(
         imageScaleRegex
       );
-      
+
       if (matchingPlaceholder) {
         const match = matchingPlaceholder[index];
 
@@ -254,19 +250,16 @@ export default ComposerEditor.extend({
             imageScaleRegex,
             `![$1|$2, ${scale}%$4]($5)`
           );
-          
-          this.appEvents.trigger(
-            "wizard-editor:replace-text", 
-            {
-              fieldId: this.field.id,
-              oldVal: matchingPlaceholder[index],
-              newVal: replacement,
-              options: {
-                regex: imageScaleRegex,
-                index
-              }
-            }
-          );
+
+          this.appEvents.trigger("wizard-editor:replace-text", {
+            fieldId: this.field.id,
+            oldVal: matchingPlaceholder[index],
+            newVal: replacement,
+            options: {
+              regex: imageScaleRegex,
+              index,
+            },
+          });
         }
       }
 
@@ -274,17 +267,17 @@ export default ComposerEditor.extend({
       return;
     });
   },
-  
+
   click(e) {
-    if ($(e.target).hasClass('wizard-composer-hyperlink')) {
-      this.set('showHyperlinkBox', false);
+    if ($(e.target).hasClass("wizard-composer-hyperlink")) {
+      this.set("showHyperlinkBox", false);
     }
   },
-  
+
   actions: {
     extraButtons(toolbar) {
       const component = this;
-      
+
       if (this.allowUpload && this.uploadIcon && !this.site.mobileView) {
         toolbar.addButton({
           id: "upload",
@@ -304,27 +297,27 @@ export default ComposerEditor.extend({
         sendAction: (event) => component.set("showHyperlinkBox", true),
       });
     },
-    
+
     previewUpdated($preview) {
       highlightSyntax($preview[0], this.siteSettings, this.session);
       this._super(...arguments);
     },
-    
+
     addLink(linkName, linkUrl) {
       let link = `[${linkName}](${linkUrl})`;
       this.appEvents.trigger("wizard-editor:insert-text", {
         fieldId: this.field.id,
-        text: link
+        text: link,
       });
       this.set("showHyperlinkBox", false);
     },
-    
+
     hideBox() {
       this.set("showHyperlinkBox", false);
     },
-    
+
     showUploadModal() {
       $(this.element.querySelector(".wizard-composer-upload")).trigger("click");
-    }
+    },
   },
 });
