@@ -318,11 +318,26 @@ describe CustomWizard::Builder do
       end
       
       context 'validation' do
-        it 'applies min length' do
+        it 'applies min length to fields that support min length' do
+          min_length = 3
+          
+          @template[:steps][0][:fields][0][:min_length] = min_length
+          @template[:steps][0][:fields][1][:min_length] = min_length
+          @template[:steps][0][:fields][2][:min_length] = min_length
+          CustomWizard::Template.save(@template.as_json)
+          
           expect(
             perform_update('step_1', step_1_field_1: 'Te')
               .errors.messages[:step_1_field_1].first
-          ).to eq(I18n.t('wizard.field.too_short', label: 'Text', min: 3))
+          ).to eq(I18n.t('wizard.field.too_short', label: 'Text', min: min_length))
+          expect(
+            perform_update('step_1', step_1_field_2: 'Te')
+              .errors.messages[:step_1_field_2].first
+          ).to eq(I18n.t('wizard.field.too_short', label: 'Textarea', min: min_length))
+          expect(
+            perform_update('step_1', step_1_field_3: 'Te')
+              .errors.messages[:step_1_field_3].first
+          ).to eq(I18n.t('wizard.field.too_short', label: 'Composer', min: min_length))
         end
         
         it 'standardises boolean entries' do
