@@ -21,7 +21,7 @@ export default Component.extend(UndoChanges, {
   showPrefill: or('isText', 'isCategory', 'isTag', 'isGroup', 'isDropdown'),
   showContent: or('isCategory', 'isTag', 'isGroup', 'isDropdown'),
   showLimit: or('isCategory', 'isTag'),
-  showMinLength: or('isText', 'isTextarea', 'isUrl', 'isComposer'),
+  showMinLength: or('isText', 'isTextarea', 'isComposer'),
   categoryPropertyTypes: selectKitContent(['id', 'slug']),
   showAdvanced: alias('field.type'),
   messageUrl: 'https://thepavilion.io/t/2809',
