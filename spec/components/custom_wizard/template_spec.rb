@@ -13,11 +13,6 @@ describe CustomWizard::Template do
       "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard/permitted.json"
     ).read)
   }
-  let(:after_time) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard/after_time.json"
-    ).read).with_indifferent_access
-  }
   
   before do
     CustomWizard::Template.save(template_json, skip_jobs: true)
@@ -88,13 +83,15 @@ describe CustomWizard::Template do
   context "after time setting" do
     before do
       freeze_time Time.now
+      @scheduled_time = (Time.now + 3.hours).iso8601
+      
       @after_time_template = template_json.dup
-      @after_time_template["after_time"] = after_time['after_time']
-      @after_time_template["after_time_scheduled"] = after_time['after_time_scheduled']
+      @after_time_template["after_time"] = true
+      @after_time_template["after_time_scheduled"] = @scheduled_time
     end
     
     it 'if enabled queues jobs after wizard is saved' do      
-      expect_enqueued_with(job: :set_after_time_wizard, at: Time.parse(after_time['after_time_scheduled']).utc) do
+      expect_enqueued_with(job: :set_after_time_wizard, at: Time.parse(@scheduled_time).utc) do
         CustomWizard::Template.save(@after_time_template)
       end
     end

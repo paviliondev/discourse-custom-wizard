@@ -11,12 +11,6 @@ describe CustomWizard::Wizard do
     ).read)
   }
   
-  let(:after_time) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard/after_time.json"
-    ).read)
-  }
-  
   let(:permitted_json) {
     JSON.parse(File.open(
       "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard/permitted.json"
@@ -84,8 +78,8 @@ describe CustomWizard::Wizard do
     progress_step("step_2")
     progress_step("step_3")
     
-    template_json['after_time'] = after_time['after_time']
-    template_json['after_time_scheduled'] = after_time['after_time_scheduled']
+    template_json['after_time'] = true
+    template_json['after_time_scheduled'] = Time.now + 3.hours
     
     wizard = CustomWizard::Wizard.new(template_json, user)
     

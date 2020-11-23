@@ -9,12 +9,6 @@ describe CustomWizard::Validator do
     ).read).with_indifferent_access
   }
   
-  let(:after_time) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard/after_time.json"
-    ).read).with_indifferent_access
-  }
-  
   it "validates valid templates" do
     expect(
       CustomWizard::Validator.new(template).perform
@@ -36,15 +30,15 @@ describe CustomWizard::Validator do
   end
   
   it "validates after time settings" do
-    template[:after_time] = after_time[:after_time]
-    template[:after_time_scheduled] = after_time[:after_time_scheduled]
+    template[:after_time] = true
+    template[:after_time_scheduled] = (Time.now + 3.hours).iso8601
     expect(
       CustomWizard::Validator.new(template).perform
     ).to eq(true)
   end
   
   it "invalidates invalid after time settings" do
-    template[:after_time] = after_time[:after_time]
+    template[:after_time] = true
     template[:after_time_scheduled] = "not a time"
     expect(
       CustomWizard::Validator.new(template).perform

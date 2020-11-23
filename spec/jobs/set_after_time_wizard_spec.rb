@@ -12,16 +12,11 @@ describe Jobs::SetAfterTimeWizard do
       "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
     ).read).with_indifferent_access
   }
-  let(:after_time) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard/after_time.json"
-    ).read).with_indifferent_access
-  }
 
   it "sets wizard redirect for all users " do
     after_time_template = template.dup
-    after_time_template["after_time"] = after_time['after_time']
-    after_time_template["after_time_scheduled"] = after_time['after_time_scheduled']
+    after_time_template["after_time"] = true
+    after_time_template["after_time_scheduled"] = (Time.now + 3.hours).iso8601
     
     CustomWizard::Template.save(after_time_template)
     
