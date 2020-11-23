@@ -1,16 +1,11 @@
 module ExtraLocalesControllerCustomWizard
-  def show
-    if request.referer && URI(request.referer).path.include?('/w/')
-      bundle = params[:bundle]
-        
-      if params[:v]&.size == 32
-        hash = ::ExtraLocalesController.bundle_js_hash(bundle)
-        immutable_for(1.year) if hash == params[:v]
-      end
-      
-      render plain: ::ExtraLocalesController.bundle_js(bundle), content_type: "application/javascript"
-    else
-      super
+  private def valid_bundle?(bundle)
+    super || begin
+      return false unless bundle =~ /wizard/ && request.referer =~ /\/w\//
+      path = URI(request.referer).path
+      wizard_id = path.split('/w/').last
+      wizard = CustomWizard::Wizard.create(wizard_id.underscore, current_user)
+      wizard && wizard.can_access?
     end
   end
 end
