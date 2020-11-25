@@ -34,8 +34,7 @@
     
     &.invalid {
       textarea, input[type=text], input[type=checkbox], .select-kit {
-        padding: 3px;
-        border: 4px solid var(--danger);
+        outline: 4px solid var(--danger);
       }
     }
   }
@@ -51,6 +50,7 @@
       input {
         cursor: pointer;
         transform: scale(1.3);
+        margin-bottom: 0;
       }
     }
 
