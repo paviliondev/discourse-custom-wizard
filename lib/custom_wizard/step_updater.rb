@@ -1,14 +1,14 @@
 class CustomWizard::StepUpdater
   include ActiveModel::Model
 
-  attr_accessor :refresh_required, :fields, :result, :step
+  attr_accessor :refresh_required, :submission, :result, :step
 
-  def initialize(current_user, wizard, step, fields)
+  def initialize(current_user, wizard, step, submission)
     @current_user = current_user
     @wizard = wizard
     @step = step
     @refresh_required = false
-    @fields = fields.to_h.with_indifferent_access
+    @submission = submission.to_h.with_indifferent_access
     @result = {}
   end
 
@@ -37,5 +37,9 @@ class CustomWizard::StepUpdater
 
   def refresh_required?
     @refresh_required
+  end
+  
+  def validate
+    CustomWizard::UpdateValidator.new(self).perform
   end
 end

@@ -1,5 +1,6 @@
 module CustomWizardFieldExtension
-  attr_reader :label,
+  attr_reader :raw,
+              :label,
               :description,
               :image,
               :key,
@@ -12,7 +13,7 @@ module CustomWizardFieldExtension
               
   def initialize(attrs)
     super
-    @attrs = attrs || {}
+    @raw = attrs || {}
     @description = attrs[:description]
     @image = attrs[:image]
     @key = attrs[:key]
@@ -25,6 +26,6 @@ module CustomWizardFieldExtension
   end
 
   def label
-    @label ||= PrettyText.cook(@attrs[:label])
+    @label ||= PrettyText.cook(@raw[:label])
   end
 end

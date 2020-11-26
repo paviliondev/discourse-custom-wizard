@@ -107,10 +107,10 @@ class CustomWizard::Wizard
     end
   end
 
-  def create_updater(step_id, inputs)
+  def create_updater(step_id, submission)
     step = @steps.find { |s| s.id == step_id }
     wizard = self
-    CustomWizard::StepUpdater.new(user, wizard, step, inputs)
+    CustomWizard::StepUpdater.new(user, wizard, step, submission)
   end
 
   def unfinished?

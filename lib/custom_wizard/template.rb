@@ -90,7 +90,7 @@ class CustomWizard::Template
   end
   
   def validate_data
-    validator = CustomWizard::Validator.new(@data, @opts)
+    validator = CustomWizard::TemplateValidator.new(@data, @opts)
     validator.perform
     add_errors_from(validator)
   end

@@ -23,19 +23,6 @@ class CustomWizard::Builder
     sorted_handlers << { priority: priority, wizard_id: wizard_id, block: block }
     @sorted_handlers.sort_by! { |h| -h[:priority] }
   end
-
-  def self.sorted_field_validators
-    @sorted_field_validators ||= []
-  end
-
-  def self.field_validators
-    sorted_field_validators.map { |h| { type: h[:type], block: h[:block] } }
-  end
-
-  def self.add_field_validator(priority = 0, type, &block)
-    sorted_field_validators << { priority: priority, type: type, block: block }
-    @sorted_field_validators.sort_by! { |h| -h[:priority] }
-  end
   
   def mapper
     CustomWizard::Mapper.new(
@@ -91,11 +78,7 @@ class CustomWizard::Builder
           @updater = updater
           user = @wizard.user
           
-          if step_template['fields'] && step_template['fields'].length
-            step_template['fields'].each do |field|
-              validate_field(field, updater, step_template) if field['type'] != 'text_only'
-            end
-          end
+          updater.validate
                               
           next if updater.errors.any?
 
@@ -107,10 +90,10 @@ class CustomWizard::Builder
 
           next if updater.errors.any?
 
-          data = updater.fields
+          submission = updater.submission
 
-          if submission = @wizard.current_submission
-            data = submission.merge(data)
+          if current_submission = @wizard.current_submission
+            submission = current_submission.merge(submission)
           end
           
           final_step = updater.step.next.nil?
@@ -125,19 +108,19 @@ class CustomWizard::Builder
                   wizard: @wizard,
                   action: action,
                   user: user,
-                  data: data
+                  data: submission
                 ).perform
               end
             end
           end
           
           if updater.errors.empty?
-            if route_to = data['route_to']
-              data.delete('route_to')
+            if route_to = submission['route_to']
+              submission.delete('route_to')
             end
             
             if @wizard.save_submissions
-              save_submissions(data, final_step)
+              save_submissions(submission, final_step)
             end
             
             if final_step
@@ -146,7 +129,7 @@ class CustomWizard::Builder
                 @wizard.user.save_custom_fields(true)
               end
               
-              redirect_url = route_to || data['redirect_on_complete'] || data["redirect_to"]
+              redirect_url = route_to || submission['redirect_on_complete'] || submission["redirect_to"]
               updater.result[:redirect_on_complete] = redirect_url
             elsif route_to
               updater.result[:redirect_on_next] = route_to
@@ -261,101 +244,18 @@ class CustomWizard::Builder
     end
   end
 
-  def validate_field(field, updater, step_template)
-    value = updater.fields[field['id']]
-    min_length = false
-    
-    label = field['label'] || I18n.t("#{field['key']}.label")
-    type = field['type']
-    required = field['required']
-    id = field['id'].to_s
-    min_length = field['min_length'] if is_text_type(field)
-    file_types = field['file_types']
-    format = field['format']
-    
-    if required && !value
-      updater.errors.add(id, I18n.t('wizard.field.required', label: label))
-    end
-
-    if min_length && value.is_a?(String) && value.strip.length < min_length.to_i
-      updater.errors.add(id, I18n.t('wizard.field.too_short', label: label, min: min_length.to_i))
-    end
-
-    if is_url_type(field) && !check_if_url(value)
-      updater.errors.add(id, I18n.t('wizard.field.not_url', label: label))
-    end
-
-    if type === 'checkbox'
-      updater.fields[id] = standardise_boolean(value)
-    end
-    
-    if type === 'upload' && value.present? && !validate_file_type(value, file_types)
-      updater.errors.add(id, I18n.t('wizard.field.invalid_file', label: label, types: file_types))
-    end
-    
-    if ['date', 'date_time'].include?(type) && value.present? && !validate_date(value)
-      updater.errors.add(id, I18n.t('wizard.field.invalid_date'))
-    end
-    
-    if type === 'time' && value.present? && !validate_time(value)
-      updater.errors.add(id, I18n.t('wizard.field.invalid_time'))
-    end 
-    
-    CustomWizard::Builder.field_validators.each do |validator|
-      if type === validator[:type]
-        validator[:block].call(field, updater, step_template)
-      end
-    end
-  end
-  
-  def validate_file_type(value, file_types)
-    file_types.split(',')
-      .map { |t| t.gsub('.', '') }
-      .include?(File.extname(value['original_filename'])[1..-1])
-  end
-  
-  def validate_date(value)
-    begin
-      Date.parse(value)
-      true
-    rescue ArgumentError
-      false
-    end
-  end
-  
-  def validate_time(value)
-    begin
-      Time.parse(value)
-      true
-    rescue ArgumentError
-      false
-    end
-  end
-
-  def is_text_type(field)
-    ['text', 'textarea', 'composer'].include? field['type']
-  end
-
-  def is_url_type(field)
-    ['url'].include? field['type']
-  end
-
-  def check_if_url(value)
-    value =~ URI::regexp
-  end
-
   def standardise_boolean(value)
     ActiveRecord::Type::Boolean.new.cast(value)
   end
 
-  def save_submissions(data, final_step)
+  def save_submissions(submission, final_step)
     if final_step
-      data['submitted_at'] = Time.now.iso8601
+      submission['submitted_at'] = Time.now.iso8601
     end
 
-    if data.present?
+    if submission.present?
       @submissions.pop(1) if @wizard.unfinished?
-      @submissions.push(data)
+      @submissions.push(submission)
       @wizard.set_submissions(@submissions)
     end
   end

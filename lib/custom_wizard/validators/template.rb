@@ -1,4 +1,4 @@
-class CustomWizard::Validator
+class CustomWizard::TemplateValidator
   include HasErrors
   include ActiveModel::Model
   
@@ -49,7 +49,7 @@ class CustomWizard::Validator
   private
   
   def check_required(object, type)
-    CustomWizard::Validator.required[type].each do |property|      
+    CustomWizard::TemplateValidator.required[type].each do |property|      
       if object[property].blank?
         errors.add :base, I18n.t("wizard.validation.required", property: property) 
       end

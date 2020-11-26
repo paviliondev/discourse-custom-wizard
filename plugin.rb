@@ -50,6 +50,8 @@ after_initialize do
     ../jobs/clear_after_time_wizard.rb
     ../jobs/refresh_api_access_token.rb
     ../jobs/set_after_time_wizard.rb
+    ../lib/custom_wizard/validators/template.rb
+    ../lib/custom_wizard/validators/update.rb
     ../lib/custom_wizard/action_result.rb
     ../lib/custom_wizard/action.rb
     ../lib/custom_wizard/builder.rb
@@ -59,7 +61,6 @@ after_initialize do
     ../lib/custom_wizard/log.rb
     ../lib/custom_wizard/step_updater.rb
     ../lib/custom_wizard/template.rb
-    ../lib/custom_wizard/validator.rb
     ../lib/custom_wizard/wizard.rb
     ../lib/custom_wizard/api/api.rb
     ../lib/custom_wizard/api/authorization.rb

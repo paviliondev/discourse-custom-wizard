@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe CustomWizard::Validator do
+describe CustomWizard::TemplateValidator do
   fab!(:user) { Fabricate(:user) }
   
   let(:template) {
@@ -11,21 +11,21 @@ describe CustomWizard::Validator do
   
   it "validates valid templates" do
     expect(
-      CustomWizard::Validator.new(template).perform
+      CustomWizard::TemplateValidator.new(template).perform
     ).to eq(true)
   end
   
   it "invalidates templates without required attributes" do
     template.delete(:id)
     expect(
-      CustomWizard::Validator.new(template).perform
+      CustomWizard::TemplateValidator.new(template).perform
     ).to eq(false)
   end
   
   it "invalidates templates with duplicate ids if creating a new template" do
     CustomWizard::Template.save(template)
     expect(
-      CustomWizard::Validator.new(template, create: true).perform
+      CustomWizard::TemplateValidator.new(template, create: true).perform
     ).to eq(false)
   end
   
@@ -33,7 +33,7 @@ describe CustomWizard::Validator do
     template[:after_time] = true
     template[:after_time_scheduled] = (Time.now + 3.hours).iso8601
     expect(
-      CustomWizard::Validator.new(template).perform
+      CustomWizard::TemplateValidator.new(template).perform
     ).to eq(true)
   end
   
@@ -41,7 +41,7 @@ describe CustomWizard::Validator do
     template[:after_time] = true
     template[:after_time_scheduled] = "not a time"
     expect(
-      CustomWizard::Validator.new(template).perform
+      CustomWizard::TemplateValidator.new(template).perform
     ).to eq(false)
   end
 end
