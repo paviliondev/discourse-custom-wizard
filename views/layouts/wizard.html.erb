@@ -19,6 +19,7 @@
     <%= csrf_meta_tags %>
 
     <%- unless customization_disabled? %>
+      <%= theme_translations_lookup %>
       <%= raw theme_lookup("head_tag") %>
     <%- end %>
 

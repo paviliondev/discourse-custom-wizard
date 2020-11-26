@@ -1,7 +1,7 @@
 import { default as computed, observes } from 'discourse-common/utils/decorators';
 import { renderAvatar } from 'discourse/helpers/user-avatar';
 import userSearch from '../lib/user-search';
-import I18n from "I18n";
+import WizardI18n from "../lib/wizard-i18n";
 
 const template = function(params) {
   const options = params.options;
@@ -35,7 +35,7 @@ export default Ember.TextField.extend({
 
   @computed("placeholderKey")
   placeholder(placeholderKey) {
-    return placeholderKey ? I18n.t(placeholderKey) : "";
+    return placeholderKey ? WizardI18n(placeholderKey) : "";
   },
 
   @observes('usernames')

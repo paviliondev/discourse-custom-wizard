@@ -2,7 +2,7 @@
 
 import computed from "discourse-common/utils/decorators";
 import { siteDir, isRTL, isLTR } from "discourse/lib/text-direction";
-import I18n from "I18n";
+import WizardI18n from "../lib/wizard-i18n";
 
 export default Ember.TextField.extend({
   attributeBindings: ['autocorrect', 'autocapitalize', 'autofocus', 'maxLength', 'dir'],
@@ -34,6 +34,6 @@ export default Ember.TextField.extend({
 
   @computed("placeholderKey")
   placeholder(placeholderKey) {
-    return placeholderKey ? I18n.t(placeholderKey) : "";
+    return placeholderKey ? WizardI18n(placeholderKey) : "";
   }
 });

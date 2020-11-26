@@ -20,6 +20,7 @@ import {
 import { cacheShortUploadUrl } from "pretty-text/upload-short-url";
 import { alias } from "@ember/object/computed";
 import { uploadIcon } from "discourse/lib/uploads";
+import WizardI18n from '../lib/wizard-i18n';
 
 const uploadMarkdownResolvers = [];
 
@@ -103,7 +104,7 @@ export default ComposerEditor.extend({
       // Limit the number of simultaneous uploads
       if (max > 0 && data.files.length > max) {
         bootbox.alert(
-          I18n.t("post.errors.too_many_dragged_and_dropped_files", { max })
+          WizardI18n("post.errors.too_many_dragged_and_dropped_files", { max })
         );
         return false;
       }
