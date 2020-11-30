@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../../plugin_helper'
 
 describe CustomWizard::WizardController do
   fab!(:user) {

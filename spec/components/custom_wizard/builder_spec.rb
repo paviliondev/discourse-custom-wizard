@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require_relative '../../plugin_helper'
 
 describe CustomWizard::Builder do
   fab!(:trusted_user) {

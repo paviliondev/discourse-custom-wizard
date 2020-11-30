@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../plugin_helper'
 
 describe CustomWizardFieldExtension do
   let(:field_hash) do

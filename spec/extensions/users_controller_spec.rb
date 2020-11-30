@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../plugin_helper'
 
 describe CustomWizardUsersController, type: :request do
   let(:template) do

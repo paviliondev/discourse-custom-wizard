@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../../../plugin_helper'
 
 describe CustomWizard::AdminWizardController do
   fab!(:admin_user) {Fabricate(:user, admin: true)}

@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../plugin_helper'
 
 describe InvitesControllerCustomWizard, type: :request do
   fab!(:topic) { Fabricate(:topic) }

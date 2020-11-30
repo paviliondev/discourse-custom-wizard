@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../../plugin_helper'
 
 describe CustomWizard::UpdateValidator do
   fab!(:user) { Fabricate(:user) }

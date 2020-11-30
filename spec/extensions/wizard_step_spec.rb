@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../plugin_helper'
 
 describe CustomWizardStepExtension do
   let(:step_hash) do
