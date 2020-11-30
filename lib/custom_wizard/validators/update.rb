@@ -54,7 +54,7 @@ class ::CustomWizard::UpdateValidator
     
     self.class.field_validators.each do |validator|
       if type === validator[:type]
-        validator[:block].call(field, value, @updater, @step_template)
+        validator[:block].call(field, value, @updater)
       end
     end
   end
