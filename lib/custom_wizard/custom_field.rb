@@ -122,6 +122,7 @@ class ::CustomWizard::CustomField
   
   def self.reset
     @list = nil
+    @any = nil
   end
   
   def self.list
@@ -198,5 +199,17 @@ class ::CustomWizard::CustomField
     self.reset
     Discourse.clear_readonly!
     Discourse.request_refresh!
+  end
+  
+  def self.any?
+    if @any.nil?
+      @any = PluginStoreRow.where(plugin_name: NAMESPACE).exists?
+    else
+      @any
+    end
+  end
+  
+  def self.enabled?
+    any?
   end
 end

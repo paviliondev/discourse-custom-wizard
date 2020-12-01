@@ -175,4 +175,15 @@ describe CustomWizard::CustomField do
       expect(CustomWizard::CustomField.list_by(:klass, 'topic').length).to eq(1)
     end
   end
+  
+  it "is enabled if there are custom fields" do
+    custom_field_json['custom_fields'].each do |field_json|
+      CustomWizard::CustomField.new(nil, field_json).save
+    end
+    expect(CustomWizard::CustomField.enabled?).to eq(true)
+  end
+  
+  it "is not enabled if there are no custom fields" do
+    expect(CustomWizard::CustomField.enabled?).to eq(false)
+  end
 end

@@ -173,11 +173,13 @@ after_initialize do
   
   CustomWizard::CustomField::CLASSES.keys.each do |klass|
     add_model_callback(klass, :after_initialize) do
-      CustomWizard::CustomField.list_by(:klass, klass.to_s).each do |field|
-        klass.to_s
-          .classify
-          .constantize
-          .register_custom_field_type(field.name, field.type.to_sym)
+      if CustomWizard::CustomField.enabled?
+        CustomWizard::CustomField.list_by(:klass, klass.to_s).each do |field|
+          klass.to_s
+            .classify
+            .constantize
+            .register_custom_field_type(field.name, field.type.to_sym)
+        end
       end
     end
     

@@ -1,14 +1,17 @@
 module CustomWizardCustomFieldSerializer
   def attributes(*args)
     hash = super
-    @cw_klass = get_cw_class
     
-    if cw_fields.any?
-      cw_fields.each do |field|
-        if @cw_klass == "topic_view"
-          hash[field.name.to_sym] = object.topic.custom_fields["#{field.name}"]
-        else
-          hash[field.name.to_sym] = object.custom_fields["#{field.name}"]
+    if cw_fields_enabled?
+      @cw_klass = get_cw_class
+      
+      if cw_fields.any?
+        cw_fields.each do |field|
+          if @cw_klass == "topic_view"
+            hash[field.name.to_sym] = object.topic.custom_fields["#{field.name}"]
+          else
+            hash[field.name.to_sym] = object.custom_fields["#{field.name}"]
+          end
         end
       end
     end
@@ -17,6 +20,10 @@ module CustomWizardCustomFieldSerializer
   end
   
   private
+  
+  def cw_fields_enabled?
+    SiteSetting.custom_wizard_enabled && CustomWizard::CustomField.enabled?
+  end
 
   def cw_fields
     CustomWizard::CustomField.list_by(:serializers, @cw_klass)
