@@ -20,10 +20,6 @@ class CustomWizard::Action
       self.send(action['type'].to_sym)
     end
         
-    if creates_post? && @result.success?
-      @result.handler.enqueue_jobs
-    end
-    
     if @result.success? && @result.output.present?
       data[action['id']] = @result.output
     end
@@ -39,20 +35,20 @@ class CustomWizard::Action
     params = basic_topic_params.merge(public_topic_params)
             
     if params[:title].present? && params[:raw].present?
-      creator = PostCreator.new(user, params)
-      post = creator.create
-            
-      if creator.errors.present?
-        messages = creator.errors.full_messages.join(" ")
+      manager = NewPostManager.new(user, params)
+      post_result = manager.perform
+
+      if post_result.errors.present?
+        messages = post_result.errors.full_messages.join(" ")
         log_error("failed to create", messages)
       elsif action['skip_redirect'].blank?
-        data['redirect_on_complete'] = post.topic.url
+        data['redirect_on_complete'] = post_result.post.topic.url
       end
       
-      if creator.errors.blank?
-        log_success("created topic", "id: #{post.topic.id}")
-        result.handler = creator
-        result.output = post.topic.id
+      if post_result.errors.blank?
+        log_success("created topic", "id: #{post_result.post.topic.id}")
+        result.handler = manager
+        result.output = post_result.post.topic.id
       end
     else
       log_error("invalid topic params", "title: #{params[:title]}; post: #{params[:raw]}")
@@ -105,20 +101,20 @@ class CustomWizard::Action
        
       params[:archetype] = Archetype.private_message
       
-      creator = PostCreator.new(user, params)
-      post = creator.create
+      manager = NewPostManager.new(user, params)
+      post_result = manager.perform
 
-      if creator.errors.present?
-        messages = creator.errors.full_messages.join(" ")
+      if post_result.errors.present?
+        messages = post_result.errors.full_messages.join(" ")
         log_error("failed to create message", messages)
       elsif action['skip_redirect'].blank?
-        data['redirect_on_complete'] = post.topic.url
+        data['redirect_on_complete'] = post_result.post.topic.url
       end
       
-      if creator.errors.blank?
-        log_success("created message", "id: #{post.topic.id}")
-        result.handler = creator
-        result.output = post.topic.id
+      if post_result.errors.blank?
+        log_success("created message", "id: #{post_result.post.topic.id}")
+        result.handler = manager
+        result.output = post_result.post.topic.id
       end
     else
       log_error(
