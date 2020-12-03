@@ -282,7 +282,7 @@ class CustomWizard::Action
         url += "&tags=#{tags.join(',')}"
       end
       
-      route_to = Discourse.base_uri + URI.encode(url)
+      route_to = Discourse.base_uri + UrlHelper.encode(url)
       data['route_to'] = route_to
       
       log_info("route: #{route_to}")
@@ -354,7 +354,7 @@ class CustomWizard::Action
       url += "&#{action['code']}=#{data[action['code']]}"
     end
     
-    route_to = URI.encode(url)
+    route_to = UrlHelper.encode(url)
     data['route_to'] = route_to
     
     log_info("route: #{route_to}")
