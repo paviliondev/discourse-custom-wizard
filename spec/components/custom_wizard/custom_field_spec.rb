@@ -184,6 +184,7 @@ describe CustomWizard::CustomField do
   end
   
   it "is not enabled if there are no custom fields" do
+    CustomWizard::CustomField.invalidate_cache
     expect(CustomWizard::CustomField.enabled?).to eq(false)
   end
 end
