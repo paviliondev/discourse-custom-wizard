@@ -454,7 +454,7 @@ class CustomWizard::Action
         user: user
       ).perform
       
-      registered_fields = CustomWizard::CustomField.list
+      registered_fields = CustomWizard::CustomField.cached_list
       
       field_map.each do |field|
         keyArr = field[:key].split('.')
@@ -468,9 +468,9 @@ class CustomWizard::Action
         end
          
         
-        registered = registered_fields.select { |f| f.name == name }
+        registered = registered_fields.select { |f| f[:name] == name }
         if registered.first.present?
-          klass = registered.first.klass
+          klass = registered.first[:klass]
         end
                 
         if klass === 'topic'

@@ -4,7 +4,7 @@ module CustomWizardCustomFieldPreloader
       @cw_klass = objects.first.class.name.underscore
       if cw_fields.any?
         cw_fields.each do |field|
-          fields << field.name
+          fields << field[:name]
         end
       end
     end

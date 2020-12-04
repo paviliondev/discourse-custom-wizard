@@ -55,6 +55,7 @@ after_initialize do
     ../lib/custom_wizard/action_result.rb
     ../lib/custom_wizard/action.rb
     ../lib/custom_wizard/builder.rb
+    ../lib/custom_wizard/cache.rb
     ../lib/custom_wizard/custom_field.rb
     ../lib/custom_wizard/field.rb
     ../lib/custom_wizard/mapper.rb
@@ -178,7 +179,7 @@ after_initialize do
           klass.to_s
             .classify
             .constantize
-            .register_custom_field_type(field.name, field.type.to_sym)
+            .register_custom_field_type(field[:name], field[:type].to_sym)
         end
       end
     end

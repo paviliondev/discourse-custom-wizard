@@ -10,6 +10,10 @@ describe CustomWizard::CustomField do
     ).read)
   }
   
+  before do
+    CustomWizard::CustomField.invalidate_cache
+  end
+  
   it "saves custom field records" do
     custom_field_json['custom_fields'].each do |field_json|
       custom_field = CustomWizard::CustomField.new(nil, field_json)
@@ -184,7 +188,6 @@ describe CustomWizard::CustomField do
   end
   
   it "is not enabled if there are no custom fields" do
-    CustomWizard::CustomField.invalidate_cache
     expect(CustomWizard::CustomField.enabled?).to eq(false)
   end
 end

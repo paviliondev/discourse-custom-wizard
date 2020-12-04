@@ -8,9 +8,9 @@ module CustomWizardCustomFieldSerializer
       if cw_fields.any?
         cw_fields.each do |field|
           if @cw_klass == "topic_view"
-            hash[field.name.to_sym] = object.topic.custom_fields["#{field.name}"]
+            hash[field[:name].to_sym] = object.topic.custom_fields["#{field[:name]}"]
           else
-            hash[field.name.to_sym] = object.custom_fields["#{field.name}"]
+            hash[field[:name].to_sym] = object.custom_fields["#{field[:name]}"]
           end
         end
       end

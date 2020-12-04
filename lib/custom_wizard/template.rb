@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CustomWizard::Template
   include HasErrors
   
@@ -19,7 +21,7 @@ class CustomWizard::Template
         
     ActiveRecord::Base.transaction do
       schedule_save_jobs unless opts[:skip_jobs]
-      PluginStore.set('custom_wizard', @data[:id], @data)
+      PluginStore.set(CustomWizard::PLUGIN_NAME, @data[:id], @data)
     end
     
     @data[:id]
@@ -30,7 +32,7 @@ class CustomWizard::Template
   end
   
   def self.find(wizard_id)
-    PluginStore.get('custom_wizard', wizard_id)
+    PluginStore.get(CustomWizard::PLUGIN_NAME, wizard_id)
   end
   
   def self.remove(wizard_id)
@@ -39,7 +41,7 @@ class CustomWizard::Template
     return false if !wizard
     
     ActiveRecord::Base.transaction do      
-      PluginStore.remove('custom_wizard', wizard.id)
+      PluginStore.remove(CustomWizard::PLUGIN_NAME, wizard.id)
       
       if wizard.after_time
         Jobs.cancel_scheduled_job(:set_after_time_wizard)

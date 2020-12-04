@@ -18,6 +18,7 @@ class ::CustomWizard::CustomField
     post: ["post"]
   }
   TYPES ||= ["string", "boolean", "integer", "json"]
+  LIST_CACHE_KEY ||= 'custom_field_list'
   
   def self.serializers
     CLASSES.values.flatten.uniq
@@ -120,22 +121,29 @@ class ::CustomWizard::CustomField
     errors.blank?
   end
   
-  def self.reset
-    @list = nil
-    @any = nil
-  end
-  
   def self.list
-    @list ||= PluginStoreRow.where(plugin_name: NAMESPACE)
-      .map { |record| create_from_store(record) }
+    PluginStoreRow.where(plugin_name: NAMESPACE).map do |record|
+      create_from_store(record)
+    end
   end
   
-  def self.list_by(attr, value)
-    self.list.select do |cf|
+  def self.cached_list
+    ::CustomWizard::Cache.wrap(LIST_CACHE_KEY) do
+      PluginStoreRow.where(plugin_name: NAMESPACE).map do |record|
+        create_from_store(record).as_json.with_indifferent_access
+      end
+    end
+  end
+  
+  def self.list_by(attr, value, cached: true)
+    attr = attr.to_sym
+    fields = cached ? cached_list : list
+    
+    fields.select do |cf|
       if attr == :serializers
-        cf.send(attr).include?(value)
+        cf[attr].include?(value)
       else
-        cf.send(attr) == value
+        cf[attr] == value
       end
     end
   end
@@ -196,17 +204,13 @@ class ::CustomWizard::CustomField
   end
   
   def self.invalidate_cache
-    self.reset
+    CustomWizard::Cache.new(LIST_CACHE_KEY).delete
     Discourse.clear_readonly!
     Discourse.request_refresh!
   end
   
   def self.any?
-    if @any.nil?
-      @any = PluginStoreRow.where(plugin_name: NAMESPACE).exists?
-    else
-      @any
-    end
+    cached_list.length > 0
   end
   
   def self.enabled?
