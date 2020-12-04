@@ -15,10 +15,6 @@ describe CustomWizard::Action do
     @template = CustomWizard::Template.find('super_mega_fun_wizard')
   end
   
-  context "creating a topic" do
-  
-  end
-  
   context 'creating a topic' do
     it "works" do
       wizard = CustomWizard::Builder.new(@template[:id], user).build
