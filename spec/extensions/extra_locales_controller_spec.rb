@@ -36,13 +36,13 @@ describe ExtraLocalesControllerCustomWizard, type: :request do
     expect(response.status).to eq(200)
   end
   
-  it "doesnt return wizard locales if user cant access wizard" do
+  it "return wizard locales if user cant access wizard" do
     template[:permitted] = permitted["permitted"]
     CustomWizard::Template.save(template.as_json)
     
     sign_in(new_user)
     get @locale_url, headers: { 'REFERER' => "/w/super-mega-fun-wizard" }
-    expect(response.status).to eq(403)
+    expect(response.status).to eq(200)
   end
   
   it "doesnt return wizard locales to non-staff when requested outside of wizard" do
