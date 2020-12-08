@@ -3,17 +3,17 @@ class CustomWizard::Field
     @types ||= {
       text: {
         min_length: nil,
-        max_length:nil,
+        max_length: nil,
         prefill: nil
       },
       textarea: {
         min_length: nil,
-        max_length:nil,
+        max_length: nil,
         prefill: nil
       },
       composer: {
         min_length: nil,
-        max_length:nil,
+        max_length: nil,
       },
       text_only: {},
       date: {
