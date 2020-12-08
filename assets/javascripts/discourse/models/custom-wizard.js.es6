@@ -8,7 +8,7 @@ import { popupAjaxError } from 'discourse/lib/ajax-error';
 
 const CustomWizard = EmberObject.extend({
   save(opts) {
-    return new Promise((resolve, reject) => {      
+    return new Promise((resolve, reject) => {
       let wizard = this.buildJson(this, 'wizard');
       
       if (wizard.error) {

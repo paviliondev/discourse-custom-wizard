@@ -49,7 +49,32 @@ describe CustomWizard::UpdateValidator do
       updater.errors.messages[:step_1_field_3].first
     ).to eq(I18n.t('wizard.field.too_short', label: 'Composer', min: min_length))
   end
-  
+
+  it 'applies max length to text type fields' do
+    max_length = 100
+
+    @template[:steps][0][:fields][0][:max_length] = max_length
+    @template[:steps][0][:fields][1][:max_length] = max_length
+    @template[:steps][0][:fields][2][:max_length] = max_length
+
+    CustomWizard::Template.save(@template)
+    long_string = "Our Competitive Capability solution offers platforms a suite of wholesale offerings. In the future, will you be able to effectively revolutionize synergies in your business? In the emerging market space, industry is ethically investing its mission critical executive searches. Key players will take ownership of their capabilities by iteratively right-sizing world-class visibilities. "
+    updater = perform_validation('step_1', step_1_field_1: long_string)
+    expect(
+      updater.errors.messages[:step_1_field_1].first
+    ).to eq(I18n.t('wizard.field.too_long', label: 'Text', max: max_length))
+
+    updater = perform_validation('step_1', step_1_field_2: long_string)
+    expect(
+      updater.errors.messages[:step_1_field_2].first
+    ).to eq(I18n.t('wizard.field.too_long', label: 'Textarea', max: max_length))
+
+    updater = perform_validation('step_1', step_1_field_3: long_string)
+    expect(
+      updater.errors.messages[:step_1_field_3].first
+    ).to eq(I18n.t('wizard.field.too_long', label: 'Composer', max: max_length))
+  end
+
   it 'standardises boolean entries' do
     updater = perform_validation('step_2', step_2_field_5: 'false')
     expect(updater.submission['step_2_field_5']).to eq(false)

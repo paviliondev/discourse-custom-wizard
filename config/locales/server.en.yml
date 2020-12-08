@@ -20,6 +20,7 @@ en:
     
     field:
       too_short: "%{label} must be at least %{min} characters"
+      too_long: "%{label} must not be more than %{max} characters"
       required: "%{label} is required."
       not_url: "%{label} must be a valid url"
       invalid_file: "%{label} must be a %{types}"

@@ -70,7 +70,7 @@
   url=messageUrl
   component='field'}}
 
-{{#if showMinLength}}
+{{#if showLengthControls}}
   <div class="setting">
     <div class="setting-label">
       <label>{{i18n 'admin.wizard.field.min_length'}}</label>
@@ -81,6 +81,20 @@
         type="number"
         name="min_length"
         value=field.min_length
+        class="small"}}
+    </div>
+  </div>
+
+   <div class="setting full">
+    <div class="setting-label">
+      <label>{{i18n 'admin.wizard.field.max_length'}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{input
+        type="number"
+        name="max_length"
+        value=field.max_length
         class="small"}}
     </div>
   </div>
