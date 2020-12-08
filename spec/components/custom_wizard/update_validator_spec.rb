@@ -73,6 +73,23 @@ describe CustomWizard::UpdateValidator do
     expect(
       updater.errors.messages[:step_1_field_3].first
     ).to eq(I18n.t('wizard.field.too_long', label: 'Composer', max: max_length))
+
+    hundred_chars_string = "This is a line, exactly hundred characters long and not more even a single character more than that."
+    updater = perform_validation('step_1', step_1_field_1: hundred_chars_string)
+    expect(
+      updater.errors.messages[:step_1_field_1].first
+    ).to eq(nil)
+
+    updater = perform_validation('step_1', step_1_field_2: hundred_chars_string)
+    expect(
+      updater.errors.messages[:step_1_field_2].first
+    ).to eq(nil)
+
+    updater = perform_validation('step_1', step_1_field_3: hundred_chars_string)
+    expect(
+      updater.errors.messages[:step_1_field_3].first
+    ).to eq(nil)
+
   end
 
   it 'standardises boolean entries' do
