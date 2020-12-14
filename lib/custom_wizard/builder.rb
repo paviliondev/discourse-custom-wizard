@@ -158,6 +158,7 @@ class CustomWizard::Builder
     params[:image] = field_template['image'] if field_template['image']
     params[:key] = field_template['key'] if field_template['key']
     params[:min_length] = field_template['min_length'] if field_template['min_length']
+    params[:max_length] = field_template['max_length'] if field_template['max_length']
     params[:value] = prefill_field(field_template, step_template)
     
     if !build_opts[:reset] && (submission = @wizard.current_submission)

@@ -164,6 +164,8 @@ en:
           required_label: "Field is Required"
           min_length: "Min Length"
           min_length_placeholder: "Minimum length in characters"
+          max_length: "Max Length"
+          max_length_placeholder: "Maximum length in characters"
           file_types: "File Types"
           limit: "Limit"
           property: "Property"
