@@ -50,7 +50,7 @@ describe CustomWizard::UpdateValidator do
     ).to eq(I18n.t('wizard.field.too_short', label: 'Composer', min: min_length))
   end
 
-  it 'applies max length to text type fields' do
+  it 'prevents submission if the length is over the max length' do
     max_length = 100
 
     @template[:steps][0][:fields][0][:max_length] = max_length
@@ -73,7 +73,16 @@ describe CustomWizard::UpdateValidator do
     expect(
       updater.errors.messages[:step_1_field_3].first
     ).to eq(I18n.t('wizard.field.too_long', label: 'Composer', max: max_length))
+  end
 
+  it "allows submission if the length is under or equal to the max length" do
+    max_length = 100
+
+    @template[:steps][0][:fields][0][:max_length] = max_length
+    @template[:steps][0][:fields][1][:max_length] = max_length
+    @template[:steps][0][:fields][2][:max_length] = max_length
+
+    CustomWizard::Template.save(@template)
     hundred_chars_string = "This is a line, exactly hundred characters long and not more even a single character more than that."
     updater = perform_validation('step_1', step_1_field_1: hundred_chars_string)
     expect(
@@ -89,7 +98,6 @@ describe CustomWizard::UpdateValidator do
     expect(
       updater.errors.messages[:step_1_field_3].first
     ).to eq(nil)
-
   end
 
   it 'standardises boolean entries' do
