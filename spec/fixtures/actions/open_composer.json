@@ -1,0 +1,14 @@
+{
+  "id": "open_composer_action",
+  "type": "open_composer",
+  "title": [
+    {
+      "type": "assignment",
+      "output": "Title content",
+      "output_type": "text",
+      "output_connector": "set"
+    }
+  ],
+  "post_builder": true,
+  "post_template": "Post content"
+}

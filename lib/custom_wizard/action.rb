@@ -269,8 +269,8 @@ class CustomWizard::Action
     params = basic_topic_params
                 
     if params[:title].present? && params[:raw].present?
-      url = "/new-topic?title=#{params[:title]}"
-      url += "&body=#{params[:raw]}"
+      url = "/new-topic?title=#{encode_query_param(params[:title])}"
+      url += "&body=#{encode_query_param(params[:raw])}"
             
       if category_id = action_category
         if category = Category.find_by(id: category_id)
@@ -282,10 +282,10 @@ class CustomWizard::Action
         url += "&tags=#{tags.join(',')}"
       end
       
-      route_to = Discourse.base_uri + UrlHelper.encode(url)
-      data['route_to'] = route_to
+      route_to = Discourse.base_uri + url
+      @result.output = data['route_to'] = route_to
       
-      log_info("route: #{route_to}")
+      log_success("route: #{route_to}")
     else
       log_error("invalid composer params", "title: #{params[:title]}; post: #{params[:raw]}")
     end    
@@ -689,6 +689,10 @@ class CustomWizard::Action
     user.uploaded_avatar_id = upload_id
     user.save!
     user.user_avatar.save!
+  end
+  
+  def encode_query_param(param)
+    Addressable::URI.encode_component(param, Addressable::URI::CharacterClasses::UNRESERVED)
   end
   
   def log_success(message, detail = nil)

@@ -5,6 +5,12 @@ describe CustomWizard::Action do
   fab!(:category) { Fabricate(:category, name: 'cat1', slug: 'cat-slug') }
   fab!(:group) { Fabricate(:group) }
   
+  let(:open_composer) {
+    JSON.parse(File.open(
+      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/actions/open_composer.json"
+    ).read)
+  }
+  
   before do
     Group.refresh_automatic_group!(:trust_level_2)
     CustomWizard::Template.save(
@@ -99,18 +105,42 @@ describe CustomWizard::Action do
     expect(user.profile_background_upload.id).to eq(upload.id)
   end
   
-  it 'opens a composer' do
-    wizard = CustomWizard::Builder.new(@template[:id], user).build
-    wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
+  context "open composer" do
+    it 'works' do
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
+      
+      updater = wizard.create_updater(wizard.steps[1].id, {})
+      updater.update
+      
+      category = Category.find_by(id: wizard.current_submission['action_8'])
+      
+      expect(updater.result[:redirect_on_next]).to eq(
+        "/new-topic?title=Title%20of%20the%20composer%20topic&body=I%20am%20interpolating%20some%20user%20fields%20Angus%20angus%20angus%40email.com&category=#{category.slug}/#{category.id}&tags=tag1"
+      )
+    end
     
-    updater = wizard.create_updater(wizard.steps[1].id, {})
-    updater.update
-    
-    category = Category.find_by(id: wizard.current_submission['action_8'])
-    
-    expect(updater.result[:redirect_on_next]).to eq(
-      "/new-topic?title=Title%20of%20the%20composer%20topic&body=I%20am%20interpolating%20some%20user%20fields%20Angus%20angus%20angus@email.com&category=#{category.slug}/#{category.id}&tags=tag1"
-    )
+    it 'encodes special characters in the title and body' do
+      open_composer['title'][0]['output'] = "Title that's special $"
+      open_composer['post_template'] = "Body & more body & more body"
+      
+      wizard = CustomWizard::Wizard.new(@template, user)
+      
+      action = CustomWizard::Action.new(
+        wizard: wizard,
+        action: open_composer,
+        user: user,
+        data: {}
+      )
+      action.perform
+            
+      expect(action.result.success?).to eq(true)
+      
+      decoded_output = CGI.parse(URI.parse(action.result.output).query)
+      
+      expect(decoded_output['title'][0]).to eq("Title that's special $")
+      expect(decoded_output['body'][0]).to eq("Body & more body & more body")
+    end
   end
   
   it 'creates a category' do
