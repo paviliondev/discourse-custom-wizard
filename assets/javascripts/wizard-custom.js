@@ -14,7 +14,6 @@
 //= require discourse/app/lib/notification-levels
 //= require discourse/app/lib/computed
 //= require discourse/app/lib/user-search
-//= require discourse/app/lib/debounce
 //= require discourse/app/lib/text
 //= require discourse/app/lib/formatter
 //= require discourse/app/lib/quote
@@ -85,6 +84,7 @@
 //= require discourse-common/addon/helpers/component-for-collection
 //= require discourse-common/addon/helpers/component-for-row
 //= require discourse-common/addon/lib/raw-templates
+//= require discourse-common/lib/debounce
 //= require discourse/app/helpers/discourse-tag
 
 //= require discourse/app/services/app-events
