@@ -1,6 +1,6 @@
 import { CANCELLED_STATUS } from 'discourse/lib/autocomplete';
+import { debounce } from "@ember/runloop";
 import getUrl from 'discourse-common/lib/get-url';
-import discourseDebounce from "discourse/lib/debounce";
 
 var cache = {},
     cacheTopicId,
@@ -39,8 +39,6 @@ function performSearch(term, topicId, includeGroups, includeMentionableGroups, i
     resultsFn(returnVal);
   });
 }
-
-var debouncedSearch = discourseDebounce(performSearch, 300);
 
 function organizeResults(r, options) {
   if (r === CANCELLED_STATUS) { return r; }
@@ -119,17 +117,25 @@ export default function userSearch(options) {
       resolve(CANCELLED_STATUS);
     }, 5000);
 
-    debouncedSearch(term,
-        topicId,
-        includeGroups,
-        includeMentionableGroups,
-        includeMessageableGroups,
-        allowedUsers,
-        group,
-        function(r) {
-          clearTimeout(clearPromise);
-          resolve(organizeResults(r, options));
-        });
-
+    // TODO: Use discouseDebounce after it is available on stable.
+    debounce(
+      this,
+      function() {
+        performSearch(
+          term,
+          topicId,
+          includeGroups,
+          includeMentionableGroups,
+          includeMessageableGroups,
+          allowedUsers,
+          group,
+          function(r) {
+            clearTimeout(clearPromise);
+            resolve(organizeResults(r, options));
+          }
+        )
+      },
+      300
+    )
   });
 }

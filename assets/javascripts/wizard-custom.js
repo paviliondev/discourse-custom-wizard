@@ -14,7 +14,6 @@
 //= require discourse/app/lib/notification-levels
 //= require discourse/app/lib/computed
 //= require discourse/app/lib/user-search
-//= require discourse/app/lib/debounce
 //= require discourse/app/lib/text
 //= require discourse/app/lib/formatter
 //= require discourse/app/lib/quote
