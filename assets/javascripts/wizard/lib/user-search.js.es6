@@ -1,6 +1,5 @@
 import { CANCELLED_STATUS } from 'discourse/lib/autocomplete';
 import { debounce } from "@ember/runloop";
-import discourseDebounce from "discourse-common/lib/debounce";
 import getUrl from 'discourse-common/lib/get-url';
 
 var cache = {},
@@ -118,10 +117,8 @@ export default function userSearch(options) {
       resolve(CANCELLED_STATUS);
     }, 5000);
 
-    // TODO: Use discouseDebounce after the 2.7 release.
-    let debounceFunc = discourseDebounce || debounce;
-
-    debounceFunc(
+    // TODO: Use discouseDebounce after it is available on stable.
+    debounce(
       this,
       function() {
         performSearch(
@@ -140,4 +137,5 @@ export default function userSearch(options) {
       },
       300
     )
+  });
 }

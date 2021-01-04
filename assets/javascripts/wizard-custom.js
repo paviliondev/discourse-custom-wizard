@@ -84,7 +84,6 @@
 //= require discourse-common/addon/helpers/component-for-collection
 //= require discourse-common/addon/helpers/component-for-row
 //= require discourse-common/addon/lib/raw-templates
-//= require discourse-common/lib/debounce
 //= require discourse/app/helpers/discourse-tag
 
 //= require discourse/app/services/app-events
