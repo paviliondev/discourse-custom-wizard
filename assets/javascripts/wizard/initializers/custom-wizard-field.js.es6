@@ -15,6 +15,10 @@ export default {
     FieldComponent.reopen({
       classNameBindings: ["field.id"],
 
+      textType: function() {
+        return ['text', 'textarea', 'composer'].includes(this.get('field.type'));
+      }.property("field.type"),
+
       cookedDescription: function () {
         return cook(this.get("field.description"));
       }.property("field.description"),
