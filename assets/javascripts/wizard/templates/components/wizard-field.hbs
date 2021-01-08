@@ -16,6 +16,10 @@
   </div>
 {{/if}}
 
+{{#if textType}}
+  {{char-counter field.value}}
+{{/if}}
+
 {{#if field.errorDescription}}
   <div class='field-error-description'>{{{field.errorDescription}}}</div>
 {{/if}}

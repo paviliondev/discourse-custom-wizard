@@ -469,6 +469,8 @@ en:
       requires_login: "You need to be logged in to access this wizard."
       reset: "Reset this wizard."
       step_not_permitted: "You're not permitted to view this step."
+      characters: "Characters"
+      character: "Character"
 
     wizard_composer:
       show_preview: "Preview Post"
