@@ -6,6 +6,7 @@ module CustomWizardFieldExtension
               :key,
               :min_length,
               :max_length,
+              :char_counter,
               :file_types,
               :format,
               :limit,
@@ -20,6 +21,7 @@ module CustomWizardFieldExtension
     @key = attrs[:key]
     @min_length = attrs[:min_length]
     @max_length = attrs[:max_length]
+    @char_counter = attrs[:char_counter]
     @file_types = attrs[:file_types]
     @format = attrs[:format]
     @limit = attrs[:limit]

@@ -98,6 +98,19 @@
         class="small"}}
     </div>
   </div>
+
+  <div class="setting">
+    <div class="setting-label">
+      <label>{{i18n 'admin.wizard.field.char_counter'}}</label>
+    </div>
+
+    <div class="setting-value">
+      <span>{{i18n 'admin.wizard.field.char_counter_placeholder'}}</span>
+      {{input
+        type="checkbox"
+        checked=field.char_counter}}
+    </div>
+  </div>
 {{/if}}
 
 {{#if isUpload}}

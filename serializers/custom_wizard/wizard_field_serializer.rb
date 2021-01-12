@@ -7,7 +7,8 @@ class CustomWizard::FieldSerializer < ::WizardFieldSerializer
              :format,
              :limit,
              :property,
-             :content
+             :content,
+             :char_counter
                
   def label
     return object.label if object.label.present?
@@ -53,5 +54,9 @@ class CustomWizard::FieldSerializer < ::WizardFieldSerializer
   
   def include_choices?
     object.choices.present?
+  end
+
+  def char_counter
+    object.char_counter
   end
 end

@@ -16,8 +16,10 @@
   </div>
 {{/if}}
 
-{{#if textType}}
-  {{char-counter field.value}}
+{{#if field.char_counter}}
+  {{#if textType}}
+    {{char-counter field.value}}
+  {{/if}}
 {{/if}}
 
 {{#if field.errorDescription}}

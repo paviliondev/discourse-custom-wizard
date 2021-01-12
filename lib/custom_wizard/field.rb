@@ -4,16 +4,19 @@ class CustomWizard::Field
       text: {
         min_length: nil,
         max_length: nil,
-        prefill: nil
+        prefill: nil,
+        char_counter: nil
       },
       textarea: {
         min_length: nil,
         max_length: nil,
-        prefill: nil
+        prefill: nil,
+        char_counter: nil
       },
       composer: {
         min_length: nil,
         max_length: nil,
+        char_counter: nil
       },
       text_only: {},
       date: {
