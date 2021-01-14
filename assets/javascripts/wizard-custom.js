@@ -44,6 +44,8 @@
 
 //= require discourse/app/adapters/rest
 
+//= require message-bus
+
 //= require discourse/app/models/login-method
 //= require discourse/app/models/permission-type
 //= require discourse/app/models/archetype

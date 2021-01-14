@@ -35,6 +35,10 @@
   </head>
 
   <body class='custom-wizard'>
+    <%- unless customization_disabled? %>
+      <%= raw theme_lookup("header") %>
+    <%- end %>
+    
     <div id='custom-wizard-main'></div>
 
     <%- unless customization_disabled? %>
