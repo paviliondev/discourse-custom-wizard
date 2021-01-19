@@ -10,7 +10,8 @@ module CustomWizardFieldExtension
               :format,
               :limit,
               :property,
-              :content
+              :content,
+              :number
               
   def initialize(attrs)
     super
@@ -25,6 +26,7 @@ module CustomWizardFieldExtension
     @limit = attrs[:limit]
     @property = attrs[:property]
     @content = attrs[:content]
+    @number = attrs[:number]
   end
 
   def label

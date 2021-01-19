@@ -7,8 +7,9 @@ class CustomWizard::FieldSerializer < ::WizardFieldSerializer
              :format,
              :limit,
              :property,
-             :content
-               
+             :content,
+             :number
+
   def label
     return object.label if object.label.present?
     I18n.t("#{object.key || i18n_key}.label", default: '')
@@ -53,5 +54,9 @@ class CustomWizard::FieldSerializer < ::WizardFieldSerializer
   
   def include_choices?
     object.choices.present?
+  end
+  
+  def number
+    object.number
   end
 end
