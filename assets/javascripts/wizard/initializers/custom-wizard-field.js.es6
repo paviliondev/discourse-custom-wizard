@@ -18,7 +18,7 @@ export default {
 
       @discourseComputed("field.type")
       textType(fieldType) {
-        return ['text', 'textarea', 'composer'].includes(fieldType);
+        return ['text', 'textarea'].includes(fieldType);
       },
 
       cookedDescription: function () {

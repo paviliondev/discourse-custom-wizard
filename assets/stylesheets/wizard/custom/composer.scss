@@ -50,10 +50,6 @@
   display: none;
 }
 
-.custom-wizard .wizard-field-composer .toggle-preview {
-  margin-top: 20px;
-}
-
 .d-editor-textarea-wrapper,
 .d-editor-preview-wrapper {
   background-color: var(--secondary);
@@ -229,4 +225,11 @@
   position: absolute;
   bottom: -40px;
   right: 0;
+}
+
+.bottom-bar {
+  display: flex;
+  justify-content:space-between;
+  margin-top: 20px;
+  align-items: center;
 }
