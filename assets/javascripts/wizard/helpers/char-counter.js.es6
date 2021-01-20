@@ -3,14 +3,13 @@ import I18n from "I18n";
 
 export default registerUnbound("char-counter", function(body, maxLength) {
     let bodyLength = body ? body.length : 0; 
-    let length = maxLength || bodyLength;
-    let characterString = length == 1 ? 'wizard.character' : 'wizard.characters';
     let finalString;
 
-    if(maxLength) {
-       finalString = `<div class="body-length">${bodyLength} / ${maxLength} ${ I18n.t(characterString)}</div>`;
+    if (maxLength) {
+       finalString = `<div class="body-length">${bodyLength} / ${I18n.t('wizard.x_characters', { count: parseInt(maxLength) })}</div>`;
     } else {
-       finalString = `<div class="body-length">${bodyLength} ${ I18n.t(characterString)}</div>`;
+       finalString = `<div class="body-length">${I18n.t('wizard.x_characters', { count: parseInt(bodyLength) })}</div>`;
     }
+
   return new Handlebars.SafeString(finalString);
 });
