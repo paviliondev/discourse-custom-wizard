@@ -8,6 +8,8 @@ class CustomWizard::FieldSerializer < ::WizardFieldSerializer
              :limit,
              :property,
              :content,
+             :max_length,
+             :char_counter,
              :number
 
   def label
@@ -55,7 +57,15 @@ class CustomWizard::FieldSerializer < ::WizardFieldSerializer
   def include_choices?
     object.choices.present?
   end
-  
+
+  def max_length
+    object.max_length
+  end
+
+  def char_counter
+    object.char_counter
+  end
+
   def number
     object.number
   end

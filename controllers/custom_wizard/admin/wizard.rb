@@ -98,6 +98,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
           :type,
           :min_length,
           :max_length,
+          :char_counter,
           :file_types,
           :format,
           :limit,

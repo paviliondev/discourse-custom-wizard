@@ -16,6 +16,12 @@
   </div>
 {{/if}}
 
+{{#if field.char_counter}}
+  {{#if textType}}
+    {{char-counter field.value field.max_length}}
+  {{/if}}
+{{/if}}
+
 {{#if field.errorDescription}}
   <div class='field-error-description'>{{{field.errorDescription}}}</div>
 {{/if}}

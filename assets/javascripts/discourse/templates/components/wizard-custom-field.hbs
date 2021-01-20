@@ -70,7 +70,7 @@
   url=messageUrl
   component='field'}}
 
-{{#if showLengthControls}}
+{{#if isTextType}}
   <div class="setting">
     <div class="setting-label">
       <label>{{i18n 'admin.wizard.field.min_length'}}</label>
@@ -96,6 +96,19 @@
         name="max_length"
         value=field.max_length
         class="small"}}
+    </div>
+  </div>
+
+  <div class="setting">
+    <div class="setting-label">
+      <label>{{i18n 'admin.wizard.field.char_counter'}}</label>
+    </div>
+
+    <div class="setting-value">
+      <span>{{i18n 'admin.wizard.field.char_counter_placeholder'}}</span>
+      {{input
+        type="checkbox"
+        checked=field.char_counter}}
     </div>
   </div>
 {{/if}}

@@ -166,6 +166,8 @@ en:
           min_length_placeholder: "Minimum length in characters"
           max_length: "Max Length"
           max_length_placeholder: "Maximum length in characters"
+          char_counter: "Character Counter"
+          char_counter_placeholder: "Display Character Counter"
           file_types: "File Types"
           limit: "Limit"
           property: "Property"
@@ -469,6 +471,9 @@ en:
       requires_login: "You need to be logged in to access this wizard."
       reset: "Reset this wizard."
       step_not_permitted: "You're not permitted to view this step."
+      x_characters:
+        one: "%{count} Character"
+        other: "%{count} Characters"
 
     wizard_composer:
       show_preview: "Preview Post"

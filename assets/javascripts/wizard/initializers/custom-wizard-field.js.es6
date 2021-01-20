@@ -1,4 +1,5 @@
 import { dasherize } from "@ember/string";
+import discourseComputed from "discourse-common/utils/decorators";
 
 export default {
   name: "custom-wizard-field",
@@ -14,6 +15,11 @@ export default {
     
     FieldComponent.reopen({
       classNameBindings: ["field.id"],
+
+      @discourseComputed("field.type")
+      textType(fieldType) {
+        return ['text', 'textarea'].includes(fieldType);
+      },
 
       cookedDescription: function () {
         return cook(this.get("field.description"));
