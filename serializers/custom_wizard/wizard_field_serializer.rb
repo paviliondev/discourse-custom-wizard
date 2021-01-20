@@ -9,8 +9,9 @@ class CustomWizard::FieldSerializer < ::WizardFieldSerializer
              :property,
              :content,
              :max_length,
-             :char_counter
-               
+             :char_counter,
+             :number
+
   def label
     return object.label if object.label.present?
     I18n.t("#{object.key || i18n_key}.label", default: '')
@@ -63,5 +64,9 @@ class CustomWizard::FieldSerializer < ::WizardFieldSerializer
 
   def char_counter
     object.char_counter
+  end
+
+  def number
+    object.number
   end
 end

@@ -8,6 +8,7 @@ export default {
     const StepComponent = requirejs("wizard/components/wizard-step").default;
     const ajax = requirejs("wizard/lib/ajax").ajax;
     const getUrl = requirejs("discourse-common/lib/get-url").default;
+    const discourseComputed = requirejs("discourse-common/utils/decorators").default;
     const cook = requirejs("discourse/plugins/discourse-custom-wizard/wizard/lib/text-lite").cook;
     
     StepModel.reopen({
@@ -112,6 +113,16 @@ export default {
         if (!src) return;
         return getUrl(src);
       }.property("step.banner"),
+      
+      @discourseComputed('step.fields.[]')
+      primaryButtonIndex(fields) {
+        return fields.length + 1;
+      },
+      
+      @discourseComputed('step.fields.[]')
+      secondaryButtonIndex(fields) {
+        return fields.length + 2;
+      },
 
       handleMessage: function () {
         const message = this.get("step.message");

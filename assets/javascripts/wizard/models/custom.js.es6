@@ -56,7 +56,24 @@ export function findCustomWizard(wizardId, params = {}) {
     if (!wizard.completed) {
       wizard.steps = wizard.steps.map(step => {
         const stepObj = Step.create(step);
+        
+        stepObj.fields.sort((a, b) => {
+          return parseFloat(a.number) - parseFloat(b.number);
+        });
+        
+        let tabindex = 1;
+        stepObj.fields.forEach((f, i) => {
+          f.tabindex = tabindex;
+          
+          if (['date_time'].includes(f.type)) {
+            tabindex = tabindex + 2;
+          } else {
+            tabindex++;
+          }
+        });
+        
         stepObj.fields = stepObj.fields.map(f => WizardField.create(f));
+        
         return stepObj;
       });
     }

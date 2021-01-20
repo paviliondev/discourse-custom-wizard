@@ -14,7 +14,7 @@
   {{/if}}
 
   {{#wizard-step-form step=step}}
-    {{#each step.fields as |field|}}
+    {{#each step.fields as |field index|}}
       {{wizard-field field=field step=step wizard=wizard}}
     {{/each}}
   {{/wizard-step-form}}
@@ -34,22 +34,22 @@
       {{loading-spinner size='small'}}
     {{else}}
       {{#if showQuitButton}}
-        <a href {{action "quit"}} class='action-link quit' tabindex="11">{{wizard-i18n "wizard.quit"}}</a>
+        <a href {{action "quit"}} class='action-link quit' tabindex="{{secondaryButtonIndex}}">{{wizard-i18n "wizard.quit"}}</a>
       {{/if}}
       {{#if showBackButton}}
-        <a href {{action "backStep"}} class='action-link back' tabindex="11">{{wizard-i18n "wizard.back"}}</a>
+        <a href {{action "backStep"}} class='action-link back' tabindex="{{secondaryButtonIndex}}">{{wizard-i18n "wizard.back"}}</a>
       {{/if}}
     {{/if}}
 
     {{#if showNextButton}}
-      <button class='wizard-btn next primary' {{action "nextStep"}} disabled={{saving}} tabindex="10">
+      <button class='wizard-btn next primary' {{action "nextStep"}} disabled={{saving}} tabindex="{{primaryButtonIndex}}">
         {{wizard-i18n "wizard.next"}}
         {{d-icon "chevron-right"}}
       </button>
     {{/if}}
 
     {{#if showDoneButton}}
-      <button class='wizard-btn done' {{action "done"}} disabled={{saving}} tabindex="10">
+      <button class='wizard-btn done' {{action "done"}} disabled={{saving}} tabindex="{{primaryButtonIndex}}">
         {{wizard-i18n "wizard.done"}}
       </button>
     {{/if}}

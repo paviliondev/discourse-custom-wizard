@@ -69,8 +69,8 @@ class CustomWizard::Builder
         end
 
         if step_template['fields'] && step_template['fields'].length
-          step_template['fields'].each do |field_template|
-            append_field(step, step_template, field_template, build_opts)
+          step_template['fields'].each_with_index do |field_template, index|
+            append_field(step, step_template, field_template, build_opts, index)
           end
         end
 
@@ -146,11 +146,12 @@ class CustomWizard::Builder
     @wizard
   end
 
-  def append_field(step, step_template, field_template, build_opts)
+  def append_field(step, step_template, field_template, build_opts, index)
     params = {
       id: field_template['id'],
       type: field_template['type'],
-      required: field_template['required']
+      required: field_template['required'],
+      number: index + 1
     }
     
     params[:label] = field_template['label'] if field_template['label']
