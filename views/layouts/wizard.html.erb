@@ -28,7 +28,7 @@
     <%= tag.meta id: 'data-discourse-setup', data: client_side_setup_data %>
 
     <meta name="discourse_theme_ids" content="<%= theme_ids&.join(",") %>">
-    <meta name="discourse-base-uri" content="<%= Discourse.base_uri %>">
+    <meta name="discourse-base-uri" content="<%= Discourse.base_path %>">
 
     <%= render partial: "layouts/head" %>
     <title><%= wizard_page_title %></title>
