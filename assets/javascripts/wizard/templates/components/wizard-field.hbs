@@ -10,11 +10,13 @@
   <div class='field-description'>{{cookedDescription}}</div>
 {{/if}}
 
-{{#if inputComponentName}}
-  <div class='input-area'>
-    {{component inputComponentName field=field step=step fieldClass=fieldClass wizard=wizard}}
-  </div>
-{{/if}}
+{{#field-validators field=field as |validators|}}
+  {{#if inputComponentName}}
+    <div class='input-area'>
+      {{component inputComponentName field=field step=step fieldClass=fieldClass wizard=wizard focusOut=validators.perform}}
+    </div>
+  {{/if}}
+{{/field-validators}}
 
 {{#if field.char_counter}}
   {{#if textType}}
