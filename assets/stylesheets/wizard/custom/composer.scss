@@ -132,7 +132,7 @@
 .d-editor-input {
   border: 0;
   padding: 10px;
-  height: 100%;
+  height: unset; // overrides core css
   overflow-x: hidden;
   resize: none;
 }
