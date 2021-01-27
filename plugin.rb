@@ -58,6 +58,7 @@ after_initialize do
     ../lib/custom_wizard/cache.rb
     ../lib/custom_wizard/custom_field.rb
     ../lib/custom_wizard/field.rb
+    ../lib/custom_wizard/realtime_validation.rb
     ../lib/custom_wizard/mapper.rb
     ../lib/custom_wizard/log.rb
     ../lib/custom_wizard/step_updater.rb

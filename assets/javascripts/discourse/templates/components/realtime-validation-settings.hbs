@@ -1,0 +1,15 @@
+<div>
+    <label>{{i18n 'admin.wizard.field.validations.header'}}</label>
+</div>
+
+{{#each validations as |validation|}}
+      <span class="setting-title">
+          {{i18n (concat 'admin.wizard.field.validations.' validation)}} {{input type="checkbox" }}
+      </span>
+      <div>
+        {{input type="radio"}} :before
+      </div> 
+      <div>
+        {{input type="radio"}} :after
+      </div> 
+{{/each}}

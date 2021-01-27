@@ -4,6 +4,7 @@ import { computed } from "@ember/object";
 import { selectKitContent } from '../lib/wizard';
 import UndoChanges from '../mixins/undo-changes';
 import Component from "@ember/component";
+import wizardSchema from '../lib/wizard-schema';
 
 export default Component.extend(UndoChanges, {
   componentType: 'field',
@@ -26,6 +27,18 @@ export default Component.extend(UndoChanges, {
   showAdvanced: alias('field.type'),
   messageUrl: 'https://thepavilion.io/t/2809',
   
+  @discourseComputed('field.type')
+  validations(type) {
+    const applicableToField = [];
+    for(let validation in wizardSchema.field.validations) {
+      if (wizardSchema.field.validations[validation].includes(type)) {
+        applicableToField.push(validation);
+      }
+    }
+
+    return applicableToField;
+  },
+
   @discourseComputed('field.type')
   isDateTime(type) {
     return ['date_time', 'date', 'time'].indexOf(type) > -1;

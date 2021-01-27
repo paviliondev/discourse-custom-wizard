@@ -8,6 +8,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
         each_serializer: CustomWizard::BasicWizardSerializer
       ),
       field_types: CustomWizard::Field.types,
+      realtime_validations: CustomWizard::RealtimeValidation.types,
       custom_fields: custom_field_list
     )
   end

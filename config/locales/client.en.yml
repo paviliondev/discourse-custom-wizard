@@ -176,6 +176,9 @@ en:
           date_time_format: 
             label: "Format"
             instructions: "<a href='https://momentjs.com/docs/#/displaying/format/' target='_blank'>Moment.js format</a>"
+          validations:
+            header: "Realtime Validation Settings"
+            suggested_topics: "Suggested Topics"
           
           type:
             text: "Text"
