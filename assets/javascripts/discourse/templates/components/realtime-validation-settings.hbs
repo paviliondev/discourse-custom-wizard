@@ -1,15 +1,15 @@
 <div>
     <label>{{i18n 'admin.wizard.field.validations.header'}}</label>
 </div>
-
-{{#each validations as |validation|}}
-      <span class="setting-title">
-          {{i18n (concat 'admin.wizard.field.validations.' validation)}} {{input type="checkbox" }}
-      </span>
-      <div>
-        {{input type="radio"}} :before
-      </div> 
-      <div>
-        {{input type="radio"}} :after
-      </div> 
-{{/each}}
+{{#each-in field.validations as |name props|}}
+  <span class="setting-title">
+    {{i18n (concat 'admin.wizard.field.validations.' name)}}
+    {{input type="checkbox" checked=props.status }}
+  </span>
+  <div>
+    {{radio-button name=(concat name field.id) value="above" selection=props.position}} {{i18n 'admin.wizard.field.validations.above'}}
+  </div>
+  <div>
+    {{radio-button name=(concat name field.id) value="below" selection=props.position}} {{i18n 'admin.wizard.field.validations.below'}}
+  </div>
+{{/each-in}}

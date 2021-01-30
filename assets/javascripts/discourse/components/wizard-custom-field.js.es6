@@ -31,8 +31,8 @@ export default Component.extend(UndoChanges, {
   validations(type) {
     const applicableToField = [];
     for(let validation in wizardSchema.field.validations) {
-      if (wizardSchema.field.validations[validation].includes(type)) {
-        applicableToField.push(validation);
+      if (wizardSchema.field.validations[validation]["type"] === type) {
+        applicableToField.push(validation)
       }
     }
 

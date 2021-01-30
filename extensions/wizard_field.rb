@@ -4,6 +4,7 @@ module CustomWizardFieldExtension
               :description,
               :image,
               :key,
+              :validations,
               :min_length,
               :max_length,
               :char_counter,
@@ -20,6 +21,7 @@ module CustomWizardFieldExtension
     @description = attrs[:description]
     @image = attrs[:image]
     @key = attrs[:key]
+    @validations = attrs[:validations]
     @min_length = attrs[:min_length]
     @max_length = attrs[:max_length]
     @char_counter = attrs[:char_counter]

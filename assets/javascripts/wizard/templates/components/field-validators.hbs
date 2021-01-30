@@ -1,13 +1,13 @@
 {{#if field.validations}}
-    {{#each field.validations.top as |validation|}}
-        {{validation.component field=field perform=perform}}
-    {{/each}}
+    {{#each-in field.validations.above as |name validation|}}
+        {{component validation.component field=field}}
+    {{/each-in}}
 
-    {{yield (hash perform=(action 'perform')) }}
+    {{yield (hash perform=(action 'perform'))}}
 
-    {{#each field.validations.bottom as |validation|}}
-        {{validation.component field=field perform=perform}}
-    {{/each}}
+    {{#each-in field.validations.below as |name validation|}}
+        {{component validation.component field=field}}
+    {{/each-in}}
 {{else}}
     {{yield}}
 {{/if}}

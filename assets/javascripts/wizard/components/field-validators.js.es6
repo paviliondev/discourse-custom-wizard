@@ -3,7 +3,7 @@ import { observes } from "discourse-common/utils/decorators";
 export default Component.extend({
     actions:{
         perform() {
-            this.toggleProperty('performValidation');
+            this.appEvents.trigger('custom-wizard:validate');
         }
-    }
+    },
 });

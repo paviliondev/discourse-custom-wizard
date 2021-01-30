@@ -9,8 +9,11 @@ export default Component.extend({
     isValid: null,
     isInvalid: not('isValid'),
     layoutName: 'components/validator', // useful for sharing the template with extending components
-    @observes('perform')
-    performValidation() {
-      this.validate();
+    didInsertElement() {
+      this.appEvents.on('custom-wizard:validate', this, this.validate);
     },
+
+    willDestroyElement() {
+      this.appEvents.off('custom-wizard:validate', this, this.validate);
+    }
 });

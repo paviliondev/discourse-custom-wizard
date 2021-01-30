@@ -64,7 +64,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
       output: [],
     ]
   end
-  
+
   def save_wizard_params
     params.require(:wizard).permit(
       :id,
@@ -105,7 +105,8 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
           :limit,
           :property,
           prefill: mapped_params,
-          content: mapped_params
+          content: mapped_params,
+          validations: {},
         ]
       ],
       actions: [

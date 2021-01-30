@@ -179,6 +179,8 @@ en:
           validations:
             header: "Realtime Validation Settings"
             suggested_topics: "Suggested Topics"
+            above: "Above"
+            below: "Below"
           
           type:
             text: "Text"
