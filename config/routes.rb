@@ -4,6 +4,7 @@ CustomWizard::Engine.routes.draw do
   get ':wizard_id/steps' => 'wizard#index'
   get ':wizard_id/steps/:step_id' => 'wizard#index'
   put ':wizard_id/steps/:step_id' => 'steps#update'
+  put 'realtime_validation' => 'realtime_validation#validate'
 end
 
 Discourse::Application.routes.append do

@@ -3,8 +3,8 @@
 </div>
 {{#each-in field.validations as |name props|}}
   <span class="setting-title">
-    {{i18n (concat 'admin.wizard.field.validations.' name)}}
     {{input type="checkbox" checked=props.status }}
+    {{i18n (concat 'admin.wizard.field.validations.' name)}}
   </span>
   <div>
     {{radio-button name=(concat name field.id) value="above" selection=props.position}} {{i18n 'admin.wizard.field.validations.above'}}
