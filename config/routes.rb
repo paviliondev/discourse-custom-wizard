@@ -4,12 +4,12 @@ CustomWizard::Engine.routes.draw do
   get ':wizard_id/steps' => 'wizard#index'
   get ':wizard_id/steps/:step_id' => 'wizard#index'
   put ':wizard_id/steps/:step_id' => 'steps#update'
-  put 'realtime_validation' => 'realtime_validation#validate'
 end
 
 Discourse::Application.routes.append do
   mount ::CustomWizard::Engine, at: 'w'
   post 'wizard/authorization/callback' => "custom_wizard/authorization#callback"
+  get 'realtime_validations' => 'custom_wizard/realtime_validations#validate'
 
   scope module: 'custom_wizard', constraints: AdminConstraint.new do
     get 'admin/wizards' => 'admin#index'

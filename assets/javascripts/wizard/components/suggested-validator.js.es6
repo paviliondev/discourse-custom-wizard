@@ -1,20 +1,53 @@
 import WizardFieldValidator from "../../wizard/components/validator";
-import { ajax } from "discourse/lib/ajax";
-import { getToken } from "wizard/lib/ajax";
-import { getOwner } from "discourse-common/lib/get-owner";
-import discourseComputed from "discourse-common/utils/decorators";
+import { deepMerge } from "discourse-common/lib/object";
+import { observes } from "discourse-common/utils/decorators";
+import { cancel, later } from "@ember/runloop";
+import { A } from '@ember/array';
+import EmberObject from "@ember/object";
 
 export default WizardFieldValidator.extend({
     validMessageKey: 'hello',
     invalidMessageKey: 'world',
+    similarTopics: [],
+
     validate() {
-        this.backendValidate({title: this.get("field.value")}).then(response => {
-            console.log(response)
-        })
+    },
+    @observes("field.value")
+    customValidate(){
+        const lastKeyUp = new Date();
+        this._lastKeyUp = lastKeyUp;
+
+        // One second from now, check to see if the last key was hit when
+        // we recorded it. If it was, the user paused typing.
+        cancel(this._lastKeyTimeout);
+        this._lastKeyTimeout = later(() => {
+        if (lastKeyUp !== this._lastKeyUp) {
+            return;
+        }
+
+        this.updateSimilarTopics();
+        }, 1000);
     },
 
+    updateSimilarTopics(){
+        this.backendValidate({
+            title: this.get("field.value"),
+            categories: this.get('validation.categories'),
+            date_after: this.get('validation.date_after')
+        }).then((result) => {
+            const similarTopics = A(deepMerge(result['topics'], result['similar_topics']));
+            similarTopics.forEach(function(topic, index) {
+                similarTopics[index] = EmberObject.create(topic);
+            });
+
+            this.set('similarTopics', similarTopics);
+        });
+    },
     init() {
         this._super(...arguments);
        
+    },
+    actions: {
+        closeMessage(){}
     }
 });

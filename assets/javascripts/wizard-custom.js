@@ -144,3 +144,29 @@
 //= require_tree ./wizard/models
 //= require_tree ./wizard/routes
 //= require_tree ./wizard/templates
+
+//= require discourse/app/components/mount-widget
+//= require discourse/app/widgets/widget
+//= require discourse/app/widgets/hooks
+//= require discourse/app/widgets/decorator-helper
+//= require discourse/app/widgets/connector
+//= require discourse/app/widgets/post-cooked
+//= require discourse/app/lib/highlight-html
+//= require discourse/app/lib/highlight-search
+//= require discourse/app/lib/constants
+//= require discourse/app/lib/click-track
+//= require discourse/app/helpers/loading-spinner
+//= require discourse/app/widgets/raw-html
+//= require discourse/app/lib/dirty-keys
+
+//= require discourse/app/widgets/search-menu
+//= require discourse/app/widgets/search-menu-results
+//= require discourse/app/widgets/post
+//= require discourse/app/helpers/node
+//= require discourse/app/widgets/post-stream
+
+//= require discourse/app/lib/posts-with-placeholders
+//= require discourse/app/lib/transform-post
+//= require discourse/app/helpers/category-link
+//= require discourse/app/lib/render-tags
+//= require discourse/app/helpers/topic-status-icons

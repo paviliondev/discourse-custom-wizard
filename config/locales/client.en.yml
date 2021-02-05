@@ -178,9 +178,11 @@ en:
             instructions: "<a href='https://momentjs.com/docs/#/displaying/format/' target='_blank'>Moment.js format</a>"
           validations:
             header: "Realtime Validation Settings"
-            suggested_topics: "Suggested Topics"
+            similar_topics: "Similar Topics"
             above: "Above"
             below: "Below"
+            categories: "Categories"
+            date_after: "Date After"
           
           type:
             text: "Text"

@@ -13,7 +13,7 @@
 {{#field-validators field=field as |validators|}}
   {{#if inputComponentName}}
     <div class='input-area'>
-      {{component inputComponentName field=field step=step fieldClass=fieldClass wizard=wizard focusOut=validators.perform}}
+      {{component inputComponentName field=field step=step fieldClass=fieldClass wizard=wizard }}
     </div>
   {{/if}}
 {{/field-validators}}
