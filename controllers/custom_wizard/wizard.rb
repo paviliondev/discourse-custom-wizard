@@ -4,7 +4,7 @@ class CustomWizard::WizardController < ::ApplicationController
   
   before_action :ensure_plugin_enabled
   helper_method :wizard_page_title
-  helper_method :theme_ids
+  helper_method :wizard_theme_ids
 
   def wizard
     CustomWizard::Wizard.create(params[:wizard_id].underscore, current_user)
@@ -14,7 +14,7 @@ class CustomWizard::WizardController < ::ApplicationController
     wizard ? (wizard.name || wizard.id) : I18n.t('wizard.custom_title')
   end
 
-  def theme_ids
+  def wizard_theme_ids
     wizard ? [wizard.theme_id] : nil
   end
 
