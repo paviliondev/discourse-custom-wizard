@@ -273,9 +273,7 @@ class CustomWizard::Action
       url += "&body=#{encode_query_param(params[:raw])}"
             
       if category_id = action_category
-        if category = Category.find_by(id: category_id)
-          url += "&category=#{category.full_slug('/')}"
-        end
+        url += "&category_id=#{category_id}"
       end
       
       if tags = action_tags
