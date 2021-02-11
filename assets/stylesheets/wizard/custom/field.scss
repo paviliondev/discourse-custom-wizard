@@ -156,3 +156,17 @@
     min-width: 220px;
   }
 }
+
+.wizard-similar-topics {
+  background-color: var(--tertiary-low);
+  padding: 5px;
+  .title {
+    color: var(--primary);
+  }
+  
+  .blurb {
+    margin-left: 0.5em;
+    color: var(--primary-high);
+    font-size: $font-down-1;
+  }
+}

@@ -48,6 +48,8 @@ export default WizardFieldValidator.extend({
        
     },
     actions: {
-        closeMessage(){}
+        closeMessage(){
+            this.set('showMessage', false);
+        }
     }
 });

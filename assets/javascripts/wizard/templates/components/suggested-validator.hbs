@@ -1,10 +1,9 @@
 {{#if similarTopics}}
-  <a href {{action 'closeMessage' message}} class="close">{{d-icon "times"}}</a>
-  <h3>{{i18n "composer.similar_topics"}}</h3>
-
-
-  <ul class="topics">
-    {{mount-widget widget="search-result-topic" args=(hash results=similarTopics)}}
-  </ul>
+  <h3>{{i18n 'realtime_validations.similar_topics_heading'}}</h3>
+  <div class="wizard-similar-topics">
+  {{#each similarTopics as |similarTopic|}}
+    {{wizard-similar-topic topic=similarTopic}}
+  {{/each}}
+  </div>
 {{/if}}
 
