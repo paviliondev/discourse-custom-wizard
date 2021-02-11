@@ -1,7 +1,7 @@
 class CustomWizard::RealtimeValidation
     cattr_accessor :types
       @@types ||= {
-        similar_topics: { types: [:text], component: "suggested-validator", backend: true, required_params: [] }
+        similar_topics: { types: [:text], component: "similar-topics-validator", backend: true, required_params: [] }
       }
 
       class SimilarTopic
