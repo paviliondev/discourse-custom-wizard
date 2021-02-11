@@ -17,7 +17,7 @@ export default Component.extend({
         // set a function that can be called as often as it need to
         // from the derived component
         this.backendValidate = (params) => {
-          return ajax('/realtime_validations', {
+          return ajax('/realtime-validations', {
             data: {
                 validation: this.get('name'),
                 authenticity_token: getToken(),
