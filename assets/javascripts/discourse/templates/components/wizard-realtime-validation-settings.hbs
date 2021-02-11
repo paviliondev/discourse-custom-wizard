@@ -6,27 +6,31 @@
     {{input type="checkbox" checked=props.status }}
     {{i18n (concat 'admin.wizard.field.validations.' name) }}
   </span>
-  <div class="setting full">
+  <div class="validation-container">
+    <div class="validation-section">
     <span class="setting-label">{{i18n 'admin.wizard.field.validations.categories'}}</span>
     <div class="setting-value">
         {{category-selector
             categories=(get this (concat 'validationBuffer.' name '.categories'))
-            onChange=(action 'updateValidationCategories' name props) }}
+            onChange=(action 'updateValidationCategories' name props)
+            class="wizard" }}
     </div>
-  </div>
-    <div class="setting full">
-        <span class="setting-label">{{i18n 'admin.wizard.field.validations.date_after'}}</span>
-        <div class="setting-value">
-          {{date-picker-past
-                value=(readonly props.date_after)
-                containerId="date-container"
-                onSelect=(action (mut props.date_after))}}
-        </div>
     </div>
-  <div>
-    {{radio-button name=(concat name field.id) value="above" selection=props.position}} {{i18n 'admin.wizard.field.validations.above'}}
-  </div>
-  <div>
-    {{radio-button name=(concat name field.id) value="below" selection=props.position}} {{i18n 'admin.wizard.field.validations.below'}}
+  <div class="validation-section">
+      <span class="setting-label">{{i18n 'admin.wizard.field.validations.date_after'}}</span>
+      <div class="setting-value">
+        {{date-picker-past
+              value=(readonly props.date_after)
+              containerId="date-container"
+              onSelect=(action (mut props.date_after))}}
+      </div>
+    </div>
+    <div class="validation-section">
+      <span class="setting-label">{{i18n 'admin.wizard.field.validations.position'}}</span>
+      <div class="setting-value">
+        {{radio-button name=(concat name field.id) value="above" selection=props.position}} {{i18n 'admin.wizard.field.validations.above'}}
+        {{radio-button name=(concat name field.id) value="below" selection=props.position}} {{i18n 'admin.wizard.field.validations.below'}}
+      </div>
+    </div>
   </div>
 {{/each-in}}

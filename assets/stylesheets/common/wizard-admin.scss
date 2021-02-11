@@ -643,3 +643,14 @@
     }
   }
 }
+
+.validation-container {
+  display: flex;
+  .validation-section {
+    width: 250px;
+  }
+}
+
+.wizard.category-selector {
+  width: 200px !important;
+}
