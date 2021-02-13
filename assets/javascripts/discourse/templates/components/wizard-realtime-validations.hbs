@@ -1,36 +1,48 @@
-<div>
-    <label>{{i18n 'admin.wizard.field.validations.header'}}</label>
-</div>
-{{#each-in field.validations as |name props|}}
-  <span class="setting-title">
-    {{input type="checkbox" checked=props.status }}
-    {{i18n 'admin.wizard.field.validations.enable' validation_type=(i18n (concat 'admin.wizard.field.validations.' name))}}
-  </span>
-  <div class="validation-container">
-    <div class="validation-section">
-    <span class="setting-label">{{i18n 'admin.wizard.field.validations.categories'}}</span>
-    <div class="setting-value">
-        {{category-selector
-            categories=(get this (concat 'validationBuffer.' name '.categories'))
-            onChange=(action 'updateValidationCategories' name props)
-            class="wizard" }}
-    </div>
-    </div>
-  <div class="validation-section">
-      <span class="setting-label">{{i18n 'admin.wizard.field.validations.date_after'}}</span>
-      <div class="setting-value">
-        {{date-picker-past
-              value=(readonly props.date_after)
-              containerId="date-container"
-              onSelect=(action (mut props.date_after))}}
+<h3>{{i18n 'admin.wizard.field.validations.header'}}</h3>
+
+<ul>
+  {{#each-in field.validations as |name props|}}
+    <li>
+      <span class="setting-title">
+        {{input type="checkbox" checked=props.status }}
+        {{i18n 'admin.wizard.field.validations.enable'
+          validation_type=(i18n (concat 'admin.wizard.field.validations.' name))}}
+      </span>
+      <div class="validation-container">
+        <div class="validation-section">
+          <div class="setting-label">
+            <label>{{i18n 'admin.wizard.field.validations.categories'}}</label>
+          </div>
+          <div class="setting-value">
+            {{category-selector
+                categories=(get this (concat 'validationBuffer.' name '.categories'))
+                onChange=(action 'updateValidationCategories' name props)
+                class="wizard"}}
+          </div>
+        </div>
+        <div class="validation-section">
+          <div class="setting-label">
+            <label>{{i18n 'admin.wizard.field.validations.date_after'}}</label>
+          </div>
+          <div class="setting-value">
+            {{date-picker-past
+                value=(readonly props.date_after)
+                containerId="date-container"
+                onSelect=(action (mut props.date_after))}}
+          </div>
+        </div>
+        <div class="validation-section">
+          <div class="setting-label">
+            <label>{{i18n 'admin.wizard.field.validations.position'}}</label>
+          </div>
+          <div class="setting-value">
+            {{radio-button name=(concat name field.id) value="above" selection=props.position}}
+            {{i18n 'admin.wizard.field.validations.above'}}
+            {{radio-button name=(concat name field.id) value="below" selection=props.position}}
+            {{i18n 'admin.wizard.field.validations.below'}}
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="validation-section">
-      <span class="setting-label">{{i18n 'admin.wizard.field.validations.position'}}</span>
-      <div class="setting-value">
-        {{radio-button name=(concat name field.id) value="above" selection=props.position}} {{i18n 'admin.wizard.field.validations.above'}}
-        {{radio-button name=(concat name field.id) value="below" selection=props.position}} {{i18n 'admin.wizard.field.validations.below'}}
-      </div>
-    </div>
-  </div>
-{{/each-in}}
+    </li>
+  {{/each-in}}
+</ul>

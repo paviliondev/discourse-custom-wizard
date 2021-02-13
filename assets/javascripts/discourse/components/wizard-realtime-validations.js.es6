@@ -4,6 +4,8 @@ import { cloneJSON } from "discourse-common/lib/object";
 import Category from "discourse/models/category";
 
 export default Component.extend({
+  classNames: ['realtime-validations'],
+  
     init(){
         this._super(...arguments);
         if (!this.validations) return;

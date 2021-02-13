@@ -644,8 +644,15 @@
   }
 }
 
+.realtime-validations ul {
+  list-style: none;
+  margin: 0;
+}
+
 .validation-container {
   display: flex;
+  padding: 1em 0;
+  
   .validation-section {
     width: 250px;
   }
