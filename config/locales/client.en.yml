@@ -177,7 +177,7 @@ en:
             label: "Format"
             instructions: "<a href='https://momentjs.com/docs/#/displaying/format/' target='_blank'>Moment.js format</a>"
           validations:
-            header: "Realtime Validation Settings"
+            header: "Realtime Validations"
             enable: "Enable %{validation_type}"
             similar_topics: "Similar Topics"
             position: "Position"
