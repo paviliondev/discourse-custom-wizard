@@ -6,8 +6,6 @@ import { A } from '@ember/array';
 import EmberObject from "@ember/object";
 
 export default WizardFieldValidator.extend({
-    validMessageKey: 'hello',
-    invalidMessageKey: 'world',
     similarTopics: [],
 
     validate() {
