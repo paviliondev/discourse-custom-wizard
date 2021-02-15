@@ -4,9 +4,9 @@
   {{#each-in field.validations as |name props|}}
     <li>
       <span class="setting-title">
-        {{input type="checkbox" checked=props.status }}
-        {{i18n 'admin.wizard.field.validations.enable'
-          validation_type=(i18n (concat 'admin.wizard.field.validations.' name))}}
+        <h4>{{i18n (concat 'admin.wizard.field.validations.' name)}}</h4>
+        {{input type="checkbox" checked=props.status}}
+        {{i18n 'admin.wizard.field.validations.enabled'}}
       </span>
       <div class="validation-container">
         <div class="validation-section">
