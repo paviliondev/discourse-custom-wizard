@@ -9,6 +9,7 @@ export default WizardFieldValidator.extend({
   similarTopics: [],
 
   validate() {},
+
   @observes("field.value")
   customValidate() {
     const lastKeyUp = new Date();
@@ -42,9 +43,7 @@ export default WizardFieldValidator.extend({
       this.set("similarTopics", similarTopics);
     });
   },
-  init() {
-    this._super(...arguments);
-  },
+
   actions: {
     closeMessage() {
       this.set("showMessage", false);
