@@ -32,6 +32,6 @@ class CustomWizard::RealtimeValidation
     topics.select! { |t| categories.include?(t.category.id.to_s) } if categories.present?
     topics.select! { |t| t.created_at > DateTime.parse(date_after) } if date_after.present?
     topics.map! { |t| SimilarTopic.new(t) }
-    ::ActiveModel::ArraySerializer.new(topics, each_serializer: SimilarTopicSerializer, root: :similar_topics, rest_serializer: true, scope: ::Guardian.new(current_user))
+    { items: topics, serializer: SimilarTopicSerializer, opts: { root: :similar_topics } }
   end
 end
