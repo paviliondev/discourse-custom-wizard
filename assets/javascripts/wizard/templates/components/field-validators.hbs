@@ -3,11 +3,11 @@
     {{component validation.component field=field name=name validation=validation}}
   {{/each-in}}
 
-{{yield (hash perform=(action 'perform'))}}
+  {{yield (hash perform=(action 'perform'))}}
 
-{{#each-in field.validations.below as |name validation|}}
-  {{component validation.component field=field name=name validation=validation}}
-{{/each-in}}
+  {{#each-in field.validations.below as |name validation|}}
+    {{component validation.component field=field name=name validation=validation}}
+  {{/each-in}}
 {{else}}
   {{yield}}
 {{/if}}
