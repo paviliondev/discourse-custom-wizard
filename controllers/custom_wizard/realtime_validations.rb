@@ -2,10 +2,17 @@
 
 class CustomWizard::RealtimeValidationsController < ::ApplicationController
   def validate
-    params.require(:validation)
-    params.require(::CustomWizard::RealtimeValidation.types[params[:validation].to_sym][:required_params])
-
-    result = ::CustomWizard::RealtimeValidation.send(params[:validation], params, current_user)
-    render_serialized(result[:items], result[:serializer], result[:opts])
+    klass_str = "CustomWizard::RealtimeValidation::#{validation_params[:type].camelize}"
+    result = klass_str.constantize.new(current_user).perform(validation_params)
+    render_serialized(result.items, "#{klass_str}Serializer".constantize, result.serializer_opts)
+  end
+  
+  private
+  
+  def validation_params
+    params.require(:type)
+    settings = ::CustomWizard::RealtimeValidation.types[params[:type].to_sym]
+    params.require(settings[:required_params]) if settings[:required_params].present?
+    params
   end
 end

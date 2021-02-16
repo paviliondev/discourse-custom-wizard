@@ -61,10 +61,10 @@ class CustomWizard::FieldSerializer < ::WizardFieldSerializer
 
   def validations
     validations = {}
-    object.validations&.each do |name, props|
+    object.validations&.each do |type, props|
       next unless props["status"]
       validations[props["position"]] ||= {}
-      validations[props["position"]][name] = props.merge CustomWizard::RealtimeValidation.types[name.to_sym]
+      validations[props["position"]][type] = props.merge CustomWizard::RealtimeValidation.types[type.to_sym]
     end
 
     validations

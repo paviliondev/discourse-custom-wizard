@@ -1,15 +1,17 @@
 import Component from "@ember/component";
-import { not } from "@ember/object/computed";
+import { equal } from "@ember/object/computed";
 import { ajax } from "discourse/lib/ajax";
 import { getToken } from "wizard/lib/ajax";
 
 export default Component.extend({
+  classNames: ['validator'],
   classNameBindings: ["isValid", "isInvalid"],
   validMessageKey: null,
   invalidMessageKey: null,
   isValid: null,
-  isInvalid: not("isValid"),
+  isInvalid: equal("isValid", false),
   layoutName: "components/validator", // useful for sharing the template with extending components
+  
   init() {
     this._super(...arguments);
 
@@ -19,7 +21,7 @@ export default Component.extend({
       this.backendValidate = (params) => {
         return ajax("/realtime-validations", {
           data: {
-            validation: this.get("name"),
+            type: this.get("type"),
             authenticity_token: getToken(),
             ...params,
           },

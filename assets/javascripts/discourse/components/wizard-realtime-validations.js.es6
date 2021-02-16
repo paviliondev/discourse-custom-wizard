@@ -12,6 +12,7 @@ export default Component.extend({
 
     if (!this.field.validations) {
       const validations = {};
+      
       this.validations.forEach((validation) => {
         validations[validation] = {};
       });
@@ -32,10 +33,10 @@ export default Component.extend({
   },
 
   actions: {
-    updateValidationCategories(name, validation, categories) {
-      this.set(`validationBuffer.${name}.categories`, categories);
+    updateValidationCategories(type, validation, categories) {
+      this.set(`validationBuffer.${type}.categories`, categories);
       this.set(
-        `field.validations.${name}.categories`,
+        `field.validations.${type}.categories`,
         categories.map((category) => category.id)
       );
     },

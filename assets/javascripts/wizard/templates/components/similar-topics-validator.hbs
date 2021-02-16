@@ -1,8 +1,16 @@
-{{#if similarTopics}}
-  <h3>{{i18n 'realtime_validations.similar_topics_heading'}}</h3>
-  <div class="wizard-similar-topics">
-  {{#each similarTopics as |similarTopic|}}
-    {{wizard-similar-topic topic=similarTopic}}
-  {{/each}}
-  </div>
+{{#if loading}}
+  <label>{{i18n 'realtime_validations.similar_topics.loading'}}</label>
+{{else if hasSimilarTopics}}
+  <label>{{i18n 'realtime_validations.similar_topics.results'}}</label>
+  <ul class="wizard-similar-topics">
+    {{#each similarTopics as |similarTopic|}}
+      <li>{{wizard-similar-topic topic=similarTopic}}</li>
+    {{/each}}
+  </ul>
+{{else if noSimilarTopics}}
+  <label>{{i18n 'realtime_validations.similar_topics.no_results'}}</label>
+{{else if showDefault}}
+  <label>{{i18n 'realtime_validations.similar_topics.default'}}</label>
+{{else}}
+  <label></label>
 {{/if}}

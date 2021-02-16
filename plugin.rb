@@ -60,6 +60,8 @@ after_initialize do
     ../lib/custom_wizard/custom_field.rb
     ../lib/custom_wizard/field.rb
     ../lib/custom_wizard/realtime_validation.rb
+    ../lib/custom_wizard/realtime_validations/result.rb
+    ../lib/custom_wizard/realtime_validations/similar_topics.rb
     ../lib/custom_wizard/mapper.rb
     ../lib/custom_wizard/log.rb
     ../lib/custom_wizard/step_updater.rb
@@ -81,6 +83,7 @@ after_initialize do
     ../serializers/custom_wizard/wizard_step_serializer.rb
     ../serializers/custom_wizard/wizard_serializer.rb
     ../serializers/custom_wizard/log_serializer.rb
+    ../serializers/custom_wizard/realtime_validation/similar_topics_serializer.rb
     ../extensions/extra_locales_controller.rb
     ../extensions/invites_controller.rb
     ../extensions/users_controller.rb

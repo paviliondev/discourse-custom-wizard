@@ -1,10 +1,10 @@
 <h3>{{i18n 'admin.wizard.field.validations.header'}}</h3>
 
 <ul>
-  {{#each-in field.validations as |name props|}}
+  {{#each-in field.validations as |type props|}}
     <li>
       <span class="setting-title">
-        <h4>{{i18n (concat 'admin.wizard.field.validations.' name)}}</h4>
+        <h4>{{i18n (concat 'admin.wizard.field.validations.' type)}}</h4>
         {{input type="checkbox" checked=props.status}}
         {{i18n 'admin.wizard.field.validations.enabled'}}
       </span>
@@ -15,8 +15,8 @@
           </div>
           <div class="setting-value">
             {{category-selector
-                categories=(get this (concat 'validationBuffer.' name '.categories'))
-                onChange=(action 'updateValidationCategories' name props)
+                categories=(get this (concat 'validationBuffer.' type '.categories'))
+                onChange=(action 'updateValidationCategories' type props)
                 class="wizard"}}
           </div>
         </div>
@@ -36,9 +36,9 @@
             <label>{{i18n 'admin.wizard.field.validations.position'}}</label>
           </div>
           <div class="setting-value">
-            {{radio-button name=(concat name field.id) value="above" selection=props.position}}
+            {{radio-button name=(concat type field.id) value="above" selection=props.position}}
             {{i18n 'admin.wizard.field.validations.above'}}
-            {{radio-button name=(concat name field.id) value="below" selection=props.position}}
+            {{radio-button name=(concat type field.id) value="below" selection=props.position}}
             {{i18n 'admin.wizard.field.validations.below'}}
           </div>
         </div>

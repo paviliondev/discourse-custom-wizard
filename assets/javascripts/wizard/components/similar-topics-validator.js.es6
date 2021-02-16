@@ -3,15 +3,34 @@ import { deepMerge } from "discourse-common/lib/object";
 import { observes } from "discourse-common/utils/decorators";
 import { cancel, later } from "@ember/runloop";
 import { A } from "@ember/array";
-import EmberObject from "@ember/object";
+import EmberObject, { computed } from "@ember/object";
+import { notEmpty, and, equal, empty } from "@ember/object/computed";
 
 export default WizardFieldValidator.extend({
-  similarTopics: [],
+  classNames: ['similar-topics-validator'],
+  similarTopics: null,
+  hasInput: notEmpty('field.value'),
+  hasSimilarTopics: notEmpty('similarTopics'),
+  hasNotSearched: equal('similarTopics', null),
+  noSimilarTopics: computed('similarTopics', function() {
+    return this.similarTopics !== null && this.similarTopics.length == 0;
+  }),
+  showDefault: and('hasNotSearched', 'hasInput'),
 
   validate() {},
 
   @observes("field.value")
   customValidate() {
+    const field = this.field;
+    
+    if (!field.value) return;
+    const value = field.value;
+    
+    if (value && value.length < 5) {
+      this.set('similarTopics', null);
+      return;
+    }
+    
     const lastKeyUp = new Date();
     this._lastKeyUp = lastKeyUp;
 
@@ -22,12 +41,14 @@ export default WizardFieldValidator.extend({
       if (lastKeyUp !== this._lastKeyUp) {
         return;
       }
-
+      
       this.updateSimilarTopics();
     }, 1000);
   },
 
   updateSimilarTopics() {
+    this.set('updating', true);
+    
     this.backendValidate({
       title: this.get("field.value"),
       categories: this.get("validation.categories"),
@@ -41,7 +62,7 @@ export default WizardFieldValidator.extend({
       });
 
       this.set("similarTopics", similarTopics);
-    });
+    }).finally(() => this.set('updating', false));
   },
 
   actions: {
