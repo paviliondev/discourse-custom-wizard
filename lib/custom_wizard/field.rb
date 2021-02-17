@@ -5,7 +5,8 @@ class CustomWizard::Field
         min_length: nil,
         max_length: nil,
         prefill: nil,
-        char_counter: nil
+        char_counter: nil,
+        validations: nil
       },
       textarea: {
         min_length: nil,

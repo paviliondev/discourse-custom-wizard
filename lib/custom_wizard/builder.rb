@@ -158,6 +158,7 @@ class CustomWizard::Builder
     params[:description] = field_template['description'] if field_template['description']
     params[:image] = field_template['image'] if field_template['image']
     params[:key] = field_template['key'] if field_template['key']
+    params[:validations] = field_template['validations'] if field_template['validations']
     params[:min_length] = field_template['min_length'] if field_template['min_length']
     params[:max_length] = field_template['max_length'] if field_template['max_length']
     params[:char_counter] = field_template['char_counter'] if field_template['char_counter']

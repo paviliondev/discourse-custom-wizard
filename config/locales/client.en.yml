@@ -176,6 +176,15 @@ en:
           date_time_format: 
             label: "Format"
             instructions: "<a href='https://momentjs.com/docs/#/displaying/format/' target='_blank'>Moment.js format</a>"
+          validations:
+            header: "Realtime Validations"
+            enabled: "Enabled"
+            similar_topics: "Similar Topics"
+            position: "Position"
+            above: "Above"
+            below: "Below"
+            categories: "Categories"
+            date_after: "Date After"
           
           type:
             text: "Text"
@@ -511,3 +520,11 @@ en:
       yourself_confirm:
         title: "Did you forget to add recipients?"
         body: "Right now this message is only being sent to yourself!"
+    
+    realtime_validations:
+      similar_topics:
+        default: "When you stop typing we'll look for similar topics."
+        results: "Your topic is similar to..."
+        no_results: "No similar topics."
+        loading: "Looking for similar topics..."
+        show: "show"

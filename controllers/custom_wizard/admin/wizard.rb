@@ -8,6 +8,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
         each_serializer: CustomWizard::BasicWizardSerializer
       ),
       field_types: CustomWizard::Field.types,
+      realtime_validations: CustomWizard::RealtimeValidation.types,
       custom_fields: custom_field_list
     )
   end
@@ -63,7 +64,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
       output: [],
     ]
   end
-  
+
   def save_wizard_params
     params.require(:wizard).permit(
       :id,
@@ -104,7 +105,8 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
           :limit,
           :property,
           prefill: mapped_params,
-          content: mapped_params
+          content: mapped_params,
+          validations: {},
         ]
       ],
       actions: [

@@ -244,6 +244,10 @@ export function buildFieldTypes(types) {
   wizardSchema.field.types = types;
 }
 
+export function buildFieldValidations(validations) {
+  wizardSchema.field.validations = validations;
+}
+
 if (Discourse.SiteSettings.wizard_apis_enabled) {
   wizardSchema.action.types.send_to_api = {
     api: null,

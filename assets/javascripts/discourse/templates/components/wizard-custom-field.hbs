@@ -219,6 +219,9 @@
         </div>
       </div>
       
+      {{#if validations}}
+        {{wizard-realtime-validations field=field validations=validations}}
+      {{/if}}
     </div>
   {{/if}}
 {{/if}}

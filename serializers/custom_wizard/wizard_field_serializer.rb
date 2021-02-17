@@ -8,6 +8,7 @@ class CustomWizard::FieldSerializer < ::WizardFieldSerializer
              :limit,
              :property,
              :content,
+             :validations,
              :max_length,
              :char_counter,
              :number
@@ -56,6 +57,17 @@ class CustomWizard::FieldSerializer < ::WizardFieldSerializer
   
   def include_choices?
     object.choices.present?
+  end
+
+  def validations
+    validations = {}
+    object.validations&.each do |type, props|
+      next unless props["status"]
+      validations[props["position"]] ||= {}
+      validations[props["position"]][type] = props.merge CustomWizard::RealtimeValidation.types[type.to_sym]
+    end
+
+    validations
   end
 
   def max_length

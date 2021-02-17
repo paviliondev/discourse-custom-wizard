@@ -643,3 +643,31 @@
     }
   }
 }
+
+.realtime-validations > ul {
+  list-style: none;
+  margin: 0;
+
+  > li {
+    background-color: var(--primary-low);
+    padding: 1em;
+    margin: 0 0 1em 0;
+    
+    input {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.validation-container {
+  display: flex;
+  padding: 1em 0;
+  
+  .validation-section {
+    width: 250px;
+  }
+}
+
+.wizard.category-selector {
+  width: 200px !important;
+}

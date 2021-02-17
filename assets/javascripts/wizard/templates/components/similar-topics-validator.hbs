@@ -1,0 +1,12 @@
+{{#if loading}}
+  <label>{{i18n 'realtime_validations.similar_topics.loading'}}</label>
+{{else if showSimilarTopics}}
+  <label>{{i18n 'realtime_validations.similar_topics.results'}}</label>
+  {{wizard-similar-topics topics=similarTopics}}
+{{else if showNoSimilarTopics}}
+  <label>{{i18n 'realtime_validations.similar_topics.no_results'}}</label>
+{{else if showDefault}}
+  <label>{{i18n 'realtime_validations.similar_topics.default'}}</label>
+{{else}}
+  <label></label>
+{{/if}}
