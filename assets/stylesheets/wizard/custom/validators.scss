@@ -17,6 +17,7 @@
   box-shadow: shadow("dropdown");
   width: 100%;
   box-sizing: border-box;
+  z-index: 100;
   
   .title {
     color: var(--primary);
