@@ -15,8 +15,16 @@ export default WizardFieldValidator.extend({
   noSimilarTopics: computed('similarTopics', function() {
     return this.similarTopics !== null && this.similarTopics.length == 0;
   }),
-  showDefault: and('hasNotSearched', 'hasInput'),
-
+  showDefault: computed('hasNotSearched', 'hasInput', 'typing', function() {
+    return this.hasInput && (this.hasNotSearched || this.typing);
+  }),
+  showSimilarTopics: computed('typing', 'hasSimilarTopics', function() {
+    return this.hasSimilarTopics && !this.typing;
+  }),
+  showNoSimilarTopics: computed('typing', 'noSimilarTopics', function() {
+    return this.noSimilarTopics && !this.typing;
+  }),
+  
   validate() {},
 
   @observes("field.value")
@@ -25,6 +33,8 @@ export default WizardFieldValidator.extend({
     
     if (!field.value) return;
     const value = field.value;
+    
+    this.set("typing", true);
     
     if (value && value.length < 5) {
       this.set('similarTopics', null);
@@ -41,6 +51,7 @@ export default WizardFieldValidator.extend({
       if (lastKeyUp !== this._lastKeyUp) {
         return;
       }
+      this.set("typing", false);
       
       this.updateSimilarTopics();
     }, 1000);

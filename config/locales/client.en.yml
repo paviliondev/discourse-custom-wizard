@@ -520,9 +520,11 @@ en:
       yourself_confirm:
         title: "Did you forget to add recipients?"
         body: "Right now this message is only being sent to yourself!"
+    
     realtime_validations:
       similar_topics:
         default: "When you stop typing we'll look for similar topics."
         results: "Your topic is similar to..."
         no_results: "No similar topics."
         loading: "Looking for similar topics..."
+        show: "show"

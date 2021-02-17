@@ -1,31 +1,40 @@
 .similar-topics-validator {
   position: relative;
+  display: flex;
   
   label {
     min-height: 20px;
-    display: inline-block;
   }
 }
 
 .wizard-similar-topics {
-  background-color: var(--tertiary-low);
-  padding: 5px;
-  margin: 0;
-  list-style: none;
-  position: absolute;
-  top: 25px;
-  box-shadow: shadow("dropdown");
-  width: 100%;
-  box-sizing: border-box;
-  z-index: 100;
+  margin-left: 3px;
   
-  .title {
-    color: var(--primary);
+  ul {
+    background-color: var(--tertiary-low);
+    padding: 5px;
+    margin: 0;
+    list-style: none;
+    position: absolute;
+    left: 0;
+    top: 25px;
+    box-shadow: shadow("dropdown");
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 100;
+    
+    .title {
+      color: var(--primary);
+    }
+    
+    .blurb {
+      margin-left: 0.5em;
+      color: var(--primary-high);
+      font-size: $font-down-1;
+    }
   }
   
-  .blurb {
-    margin-left: 0.5em;
-    color: var(--primary-high);
-    font-size: $font-down-1;
+  .show-topics {
+    cursor: pointer;
   }
 }

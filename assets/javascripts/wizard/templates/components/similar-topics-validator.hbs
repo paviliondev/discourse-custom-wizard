@@ -1,13 +1,9 @@
 {{#if loading}}
   <label>{{i18n 'realtime_validations.similar_topics.loading'}}</label>
-{{else if hasSimilarTopics}}
+{{else if showSimilarTopics}}
   <label>{{i18n 'realtime_validations.similar_topics.results'}}</label>
-  <ul class="wizard-similar-topics">
-    {{#each similarTopics as |similarTopic|}}
-      <li>{{wizard-similar-topic topic=similarTopic}}</li>
-    {{/each}}
-  </ul>
-{{else if noSimilarTopics}}
+  {{wizard-similar-topics topics=similarTopics}}
+{{else if showNoSimilarTopics}}
   <label>{{i18n 'realtime_validations.similar_topics.no_results'}}</label>
 {{else if showDefault}}
   <label>{{i18n 'realtime_validations.similar_topics.default'}}</label>
