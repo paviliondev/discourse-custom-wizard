@@ -116,7 +116,7 @@ describe CustomWizard::Action do
       category = Category.find_by(id: wizard.current_submission['action_8'])
       
       expect(updater.result[:redirect_on_next]).to eq(
-        "/new-topic?title=Title%20of%20the%20composer%20topic&body=I%20am%20interpolating%20some%20user%20fields%20Angus%20angus%20angus%40email.com&category=#{category.slug}/#{category.id}&tags=tag1"
+        "/new-topic?title=Title%20of%20the%20composer%20topic&body=I%20am%20interpolating%20some%20user%20fields%20Angus%20angus%20angus%40email.com&category_id=#{category.id}&tags=tag1"
       )
     end
     
