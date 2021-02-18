@@ -223,8 +223,10 @@
 
 #file-uploading {
   position: absolute;
-  bottom: -40px;
-  right: 0;
+  bottom: 1px;
+  right: 1px;
+  padding: 10px;
+  background-color: $secondary;
 }
 
 .bottom-bar {
