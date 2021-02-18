@@ -6,7 +6,11 @@
 {{else if showNoSimilarTopics}}
   <label>{{i18n 'realtime_validations.similar_topics.no_results'}}</label>
 {{else if showDefault}}
-  <label>{{i18n 'realtime_validations.similar_topics.default'}}</label>
+  {{#if hasValidationCategories}}
+    <label>{{{i18n 'realtime_validations.similar_topics.default_categories' catLinks=catLinks}}}</label>
+  {{else}}
+    <label>{{i18n 'realtime_validations.similar_topics.default'}}</label>
+  {{/if}}
 {{else}}
   <label></label>
 {{/if}}

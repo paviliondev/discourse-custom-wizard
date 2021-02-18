@@ -192,7 +192,11 @@ class CustomWizard::Builder
       params[:property] = field_template['property']
     end
         
-    if field_template['type'] === 'category'
+    if field_template['type'] === 'category' || (
+          field_template['validations'] &&
+          field_template['validations']['similar_topics'] &&
+          field_template['validations']['similar_topics']['categories'].present?
+        )
       @wizard.needs_categories = true
     end
     

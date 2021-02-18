@@ -9,10 +9,12 @@
   .badge-category {
     display: inline-flex;
     align-items: baseline;
+    
     .category-name {
       text-overflow: ellipsis;
       overflow: hidden;
     }
+    
     .d-icon {
       margin-right: 3px;
       width: 0.74em;
@@ -22,7 +24,8 @@
   }
 
   &.bullet {
-    margin-right: 12px;
+    margin-right: 8px;
+    
     span.badge-category {
       color: var(--primary-high);
       overflow: hidden;
@@ -31,6 +34,7 @@
         color: $header-primary;
       }
     }
+    
     .badge-category-parent-bg,
     .badge-category-bg {
       flex: 0 0 auto;
@@ -39,6 +43,7 @@
       margin-right: 5px;
       display: inline-block;
     }
+    
     .badge-category-parent-bg {
       width: 5px;
       margin-right: 0;
@@ -46,6 +51,7 @@
         width: 5px;
       }
     }
+    
     .d-icon {
       color: var(--primary-medium);
     }
@@ -55,9 +61,11 @@
     margin-right: 5px;
     padding: 2px 4px 2px 4px;
     display: inline-flex;
+    
     span {
       overflow: hidden;
       text-overflow: ellipsis;
+      
       &.badge-category-bg,
       &.badge-category-parent-bg {
         position: absolute;
@@ -69,9 +77,11 @@
 
       &.badge-category-parent-bg {
         width: calc(100% - 5px);
+        
         & + .badge-category-bg {
           left: 5px;
           width: calc(100% - 5px);
+          
           & + .badge-category {
             margin-left: 5px;
           }
@@ -82,6 +92,7 @@
         position: relative;
       }
     }
+    
     + .topic-header-extra {
       padding: 2px 4px 2px 4px;
     }

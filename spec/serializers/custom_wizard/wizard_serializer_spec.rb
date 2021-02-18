@@ -5,6 +5,12 @@ require_relative '../../plugin_helper'
 describe CustomWizard::WizardSerializer do
   fab!(:user) { Fabricate(:user) }
   fab!(:category) { Fabricate(:category) }
+  
+  let(:similar_topics_validation) {
+    JSON.parse(File.open(
+      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/field/validation/similar_topics.json"
+    ).read)
+  }
 
   before do
     CustomWizard::Template.save(
@@ -57,6 +63,18 @@ describe CustomWizard::WizardSerializer do
   end 
   
   it "should return categories if there is a category selector field" do
+    json = CustomWizard::WizardSerializer.new(
+      CustomWizard::Builder.new(@template[:id], user).build,
+      scope: Guardian.new(user)
+    ).as_json
+    expect(json[:wizard][:categories].present?).to eq(true)
+    expect(json[:wizard][:uncategorized_category_id].present?).to eq(true)
+  end
+  
+  it "should return categories if there is a similar topics validation scoped to category(s)" do
+    @template[:steps][0][:fields][0][:validations] = similar_topics_validation[:validations]
+    CustomWizard::Template.save(@template)
+    
     json = CustomWizard::WizardSerializer.new(
       CustomWizard::Builder.new(@template[:id], user).build,
       scope: Guardian.new(user)

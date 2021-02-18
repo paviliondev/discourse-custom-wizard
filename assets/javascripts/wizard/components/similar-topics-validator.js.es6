@@ -5,6 +5,8 @@ import { cancel, later } from "@ember/runloop";
 import { A } from "@ember/array";
 import EmberObject, { computed } from "@ember/object";
 import { notEmpty, and, equal, empty } from "@ember/object/computed";
+import discourseComputed from "discourse-common/utils/decorators";
+import { categoryBadgeHTML } from "discourse/helpers/category-link";
 
 export default WizardFieldValidator.extend({
   classNames: ['similar-topics-validator'],
@@ -24,6 +26,17 @@ export default WizardFieldValidator.extend({
   showNoSimilarTopics: computed('typing', 'noSimilarTopics', function() {
     return this.noSimilarTopics && !this.typing;
   }),
+  hasValidationCategories: notEmpty('validationCategories'),
+  
+  @discourseComputed('validation.categories')
+  validationCategories(categoryIds) {
+    return categoryIds.map(id => this.site.categoriesById[id]);
+  },
+  
+  @discourseComputed('validationCategories')
+  catLinks(categories) {
+    return categories.map(category => categoryBadgeHTML(category)).join("");
+  },
   
   validate() {},
 
