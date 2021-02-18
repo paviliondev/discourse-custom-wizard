@@ -233,3 +233,32 @@
   margin-top: 20px;
   align-items: center;
 }
+
+.cooked table,
+.d-editor-preview table {
+  border-collapse: collapse;
+
+  tr {
+    border-bottom: 1px solid var(--primary-low);
+    &.highlighted {
+      animation: background-fade-highlight 2.5s ease-out;
+    }
+  }
+
+  thead {
+    th {
+      text-align: left;
+      padding: 0.5em;
+      font-weight: bold;
+      color: var(--primary);
+    }
+  }
+
+  tbody {
+    border-top: 3px solid var(--primary-low);
+  }
+
+  td {
+    padding: 3px 3px 3px 0.5em;
+  }
+}
