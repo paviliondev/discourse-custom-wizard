@@ -209,6 +209,11 @@
 
 .admin-wizard-buttons {
   margin-top: 20px;
+  display: flex;
+  
+  .btn {
+    margin-right: 1em;
+  }
 }
 
 .admin-wizard-container.settings {
@@ -470,6 +475,10 @@
       align-items: center;
       margin-bottom: 10px;
       margin-right: 10px;
+    }
+    
+    .btn {
+      height: 32px;
     }
   }
 
