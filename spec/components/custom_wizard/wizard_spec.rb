@@ -29,11 +29,11 @@ describe CustomWizard::Wizard do
     end
   end
   
-  def progress_step(step_id, acting_user = user)
+  def progress_step(step_id, acting_user: user, wizard: @wizard)
     UserHistory.create(
       action: UserHistory.actions[:custom_wizard_step],
       acting_user_id: acting_user.id,
-      context: @wizard.id,
+      context: wizard.id,
       subject: step_id
     )
   end    
@@ -117,9 +117,9 @@ describe CustomWizard::Wizard do
   end
   
   it "lets a permitted user access a complete wizard with multiple submissions" do
-    progress_step("step_1", trusted_user)
-    progress_step("step_2", trusted_user)
-    progress_step("step_3", trusted_user)
+    progress_step("step_1", acting_user: trusted_user)
+    progress_step("step_2", acting_user: trusted_user)
+    progress_step("step_3", acting_user: trusted_user)
     
     expect(
       CustomWizard::Wizard.new(@permitted_template, trusted_user).can_access?
@@ -127,9 +127,9 @@ describe CustomWizard::Wizard do
   end
   
   it "does not let an unpermitted user access a complete wizard without multiple submissions" do
-    progress_step("step_1", trusted_user)
-    progress_step("step_2", trusted_user)
-    progress_step("step_3", trusted_user)
+    progress_step("step_1", acting_user: trusted_user)
+    progress_step("step_2", acting_user: trusted_user)
+    progress_step("step_3", acting_user: trusted_user)
     
     @permitted_template['multiple_submissions'] = false
     
@@ -189,6 +189,7 @@ describe CustomWizard::Wizard do
       template_json_3 = template_json.dup
       template_json_3["id"] = 'super_mega_fun_wizard_3'
       template_json_3["after_signup"] = true
+      template_json_3["prompt_completion"] = true
       CustomWizard::Template.save(template_json_3, skip_jobs: true)
     end
     
@@ -203,6 +204,14 @@ describe CustomWizard::Wizard do
     
     it "lists prompt completion wizards" do
       expect(CustomWizard::Wizard.prompt_completion(user).length).to eq(2)
+    end
+    
+    it "prompt completion does not include wizards user has completed" do
+      wizard_2 = CustomWizard::Wizard.new(CustomWizard::Template.find('super_mega_fun_wizard_2'), user)
+      progress_step("step_1", wizard: wizard_2)
+      progress_step("step_2", wizard: wizard_2)
+      progress_step("step_3", wizard: wizard_2)
+      expect(CustomWizard::Wizard.prompt_completion(user).length).to eq(1)
     end
   end
   
