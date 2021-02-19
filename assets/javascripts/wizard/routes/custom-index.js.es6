@@ -1,17 +1,19 @@
+import { getWizard } from '../models/custom';
+
 export default Ember.Route.extend({
   beforeModel() {
-    const appModel = this.modelFor('custom');
-    if (appModel && appModel.permitted && !appModel.completed && appModel.start) {
-      this.replaceWith('custom.step', appModel.start);
+    const wizard = getWizard();
+    if (wizard && wizard.permitted && !wizard.completed && wizard.start) {
+      this.replaceWith('custom.step', wizard.start);
     }
   },
 
   model() {
-    return this.modelFor('custom');
+    return getWizard();
   },
 
   setupController(controller, model) {
-    if (model) {
+    if (model && model.id) {
       const completed = model.get('completed');
       const permitted = model.get('permitted');
       const wizardId = model.get('id');

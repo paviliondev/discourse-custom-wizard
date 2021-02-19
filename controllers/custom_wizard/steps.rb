@@ -6,8 +6,7 @@ class CustomWizard::StepsController < ::ApplicationController
     params.require(:step_id)
     params.require(:wizard_id)
     
-    wizard = @builder.build
-    step = wizard.steps.select { |s| s.id == update_params[:step_id] }.first
+    step = @builder.steps.select { |s| s['id'] == update_params[:step_id] }.first
 
     raise Discourse::InvalidParameters.new(:step_id) if !step
     
@@ -15,20 +14,28 @@ class CustomWizard::StepsController < ::ApplicationController
   
     update[:fields] = {}
     if params[:fields]
-      field_ids = step.fields.map(&:id)
+      field_ids = step['fields'].map{ |f| f['id'] }
       params[:fields].each do |k, v|
         update[:fields][k] = v if field_ids.include? k
       end
     end
     
-    updater = wizard.create_updater(update[:step_id], update[:fields])
+    @builder.build
+        
+    updater = @builder.wizard.create_updater(update[:step_id], update[:fields])
     updater.update
         
     if updater.success?
+      updated_wizard = CustomWizard::Builder.new(
+        update_params[:wizard_id].underscore,
+        current_user
+      ).build
+                  
       result = success_json
       result.merge!(updater.result) if updater.result
       result[:refresh_required] = true if updater.refresh_required?
-      
+      result[:wizard] = ::CustomWizard::WizardSerializer.new(updated_wizard, root: false).as_json
+            
       render json: result
     else
       errors = []

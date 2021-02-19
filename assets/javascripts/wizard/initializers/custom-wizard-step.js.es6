@@ -1,3 +1,5 @@
+import CustomWizard, { updateWizard } from '../models/custom';
+
 export default {
   name: "custom-wizard-step",
   initialize(app) {
@@ -134,10 +136,17 @@ export default {
         this.get("step")
           .save()
           .then((response) => {
-            if (this.get("finalStep")) {
+            const wizard = CustomWizard.build(response['wizard']);
+            const lastStep = wizard.steps[wizard.steps.length - 1];
+            const stepIndex = wizard.steps.map(s => s.id).indexOf(this.step.id);
+            const nextStep = wizard.steps[stepIndex + 1];
+                        
+            updateWizard(wizard);
+            
+            if (lastStep.id == this.step.id) {
               CustomWizard.finished(response);
             } else {
-              this.sendAction("goNext", response);
+              this.sendAction("goNext", response, nextStep);
             }
           })
           .catch(() => this.animateInvalidFields())
@@ -152,7 +161,6 @@ export default {
         },
 
         done() {
-          this.set("finalStep", true);
           this.send("nextStep");
         },
 

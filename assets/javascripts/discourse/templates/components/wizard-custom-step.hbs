@@ -1,3 +1,23 @@
+<div class="setting full field-mapper-setting">
+  <div class="setting-label">
+    <label>{{i18n 'admin.wizard.step.condition.label'}}</label>
+  </div>
+  <div class="setting-value">
+    {{wizard-mapper
+      inputs=step.condition
+      options=(hash
+        inputTypes='validation'
+        wizardFieldSelection=true
+        userFieldSelection=true
+        customFieldSelection=true
+        wizardActionSelection=true
+        groupSelection=true
+        textSelection=true
+        context='step'
+      )}}
+  </div>
+</div>
+
 <div class="setting">
   <div class="setting-label">
     <label>{{i18n 'admin.wizard.step.title'}}</label>

@@ -1,5 +1,5 @@
 class CustomWizard::Builder
-  attr_accessor :wizard, :updater, :submissions
+  attr_accessor :wizard, :updater, :submissions, :steps
 
   def initialize(wizard_id, user=nil)
     template = CustomWizard::Template.find(wizard_id)
@@ -38,6 +38,16 @@ class CustomWizard::Builder
     build_opts[:reset] = build_opts[:reset] || @wizard.restart_on_revisit
 
     @steps.each do |step_template|
+      
+      if step_template['condition']
+        passed = CustomWizard::Mapper.new(
+          inputs: step_template['condition'],
+          user: @wizard.user,
+          data: @submissions.last
+        ).perform
+        next if !passed
+      end
+      
       @wizard.append_step(step_template['id']) do |step|
         step.permitted = true
         

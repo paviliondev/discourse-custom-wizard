@@ -89,6 +89,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
         :required_data_message,
         required_data: mapped_params,
         permitted_params: mapped_params,
+        condition: mapped_params,
         fields: [
           :id,
           :label,

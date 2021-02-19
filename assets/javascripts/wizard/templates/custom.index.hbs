@@ -1,5 +1,5 @@
 {{#if noWizard}}
-  {{wizard-no-access text=(wizard-i18n 'wizard.none') wizardId=wizardId}}
+  {{wizard-no-access text=(wizard-i18n 'wizard.none')}}
 {{else}}
   {{#if requiresLogin}}
     {{wizard-no-access text=(wizard-i18n 'wizard.requires_login') wizardId=wizardId}}

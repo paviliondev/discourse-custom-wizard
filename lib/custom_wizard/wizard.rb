@@ -198,7 +198,7 @@ class CustomWizard::Wizard
   end
   
   def submissions
-    Array.wrap(PluginStore.get("#{id}_submissions", user.id))
+    @submissions ||= Array.wrap(PluginStore.get("#{id}_submissions", user.id))
   end
   
   def current_submission
@@ -210,6 +210,7 @@ class CustomWizard::Wizard
   end
   
   def set_submissions(submissions)
+    @submissions = nil
     PluginStore.set("#{id}_submissions", user.id, Array.wrap(submissions))
   end
   
@@ -272,7 +273,7 @@ class CustomWizard::Wizard
   end
 
   def self.set_submission_redirect(user, wizard_id, url)
-    PluginStore.set("#{wizard_id.underscore}_submissions", user.id, [{ redirect_to: url }])
+    set_submissions(wizard_id, user, [{ redirect_to: url }])
   end
 
   def self.set_wizard_redirect(wizard_id, user)

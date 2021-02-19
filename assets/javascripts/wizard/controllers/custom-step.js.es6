@@ -3,15 +3,14 @@ import getUrl from 'discourse-common/lib/get-url';
 
 export default StepController.extend({
   actions: {
-    goNext(response) {
-      const next = this.get('step.next');
+    goNext(response, nextStep) {      
       if (response.redirect_on_next) {
         window.location.href = response.redirect_on_next;
       } else if (response.refresh_required) {
         const id = this.get('wizard.id');
         window.location.href = getUrl(`/w/${id}/steps/${next}`);
       } else {
-        this.transitionToRoute('custom.step', next);
+        this.transitionToRoute('custom.step', nextStep);
       }
     },
 

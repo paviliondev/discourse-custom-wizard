@@ -153,6 +153,8 @@ en:
             not_permitted_message: "Message shown when required data not present"
           permitted_params:
             label: "Params"
+          condition:
+            label: "Condition"
         
         field:
           header: "Fields"
