@@ -21,5 +21,5 @@ export default Controller.extend({
     return key;  
   },
   
-  messageUrl: "https://thepavilion.io/c/knowledge/custom-wizard"
+  messageUrl: "https://thepavilion.io/c/knowledge/discourse/custom-wizard"
 });
