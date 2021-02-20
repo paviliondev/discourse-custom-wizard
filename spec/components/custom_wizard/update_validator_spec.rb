@@ -10,11 +10,7 @@ describe CustomWizard::UpdateValidator do
   }
   
   before do
-    CustomWizard::Template.save(
-      JSON.parse(File.open(
-        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-      ).read),
-    skip_jobs: true)
+    CustomWizard::Template.save(template, skip_jobs: true)
     @template = CustomWizard::Template.find('super_mega_fun_wizard')
   end
   
@@ -113,5 +109,26 @@ describe CustomWizard::UpdateValidator do
     expect(
       updater.errors.messages[:step_1_field_2].first
     ).to eq(I18n.t('wizard.field.required', label: 'Textarea')) 
+  end
+  
+  it 'validates url fields' do
+    updater = perform_validation('step_2', step_2_field_6: 'https://discourse.com')
+    expect(
+      updater.errors.messages[:step_2_field_6].first
+    ).to eq(nil)
+  end
+  
+  it 'does not validate url fields with non-url inputs' do
+    updater = perform_validation('step_2', step_2_field_6: 'discourse')
+    expect(
+      updater.errors.messages[:step_2_field_6].first
+    ).to eq(I18n.t('wizard.field.not_url', label: 'Url'))
+  end
+  
+  it 'validates empty url fields' do
+    updater = perform_validation('step_2', step_2_field_6: '')
+    expect(
+      updater.errors.messages[:step_2_field_6].first
+    ).to eq(nil)
   end
 end

@@ -82,6 +82,11 @@
           "type": "checkbox"
         },
         {
+          "id": "step_2_field_6",
+          "label": "Url",
+          "type": "url"
+        },
+        {
           "id": "step_2_field_7",
           "label": "Upload",
           "type": "upload",

@@ -1,3 +1,5 @@
+require 'addressable/uri'
+
 class ::CustomWizard::UpdateValidator
   attr_reader :updater
   
@@ -37,7 +39,7 @@ class ::CustomWizard::UpdateValidator
       @updater.errors.add(field_id, I18n.t('wizard.field.too_long', label: label, max: max_length.to_i))
     end
 
-    if is_url_type(field) && !check_if_url(value)
+    if is_url_type(field) && value.present? && !check_if_url(value)
       @updater.errors.add(field_id, I18n.t('wizard.field.not_url', label: label))
     end
 
@@ -110,9 +112,14 @@ class ::CustomWizard::UpdateValidator
   def is_url_type(field)
     ['url'].include? field.type
   end
-
-  def check_if_url(value)
-    value =~ URI::regexp
+  
+  SCHEMES ||= %w(http https)
+  
+  def check_if_url(url)
+    parsed = Addressable::URI.parse(url) or return false
+    SCHEMES.include?(parsed.scheme)
+  rescue Addressable::URI::InvalidURIError
+    false
   end
   
   def standardise_boolean(value)
