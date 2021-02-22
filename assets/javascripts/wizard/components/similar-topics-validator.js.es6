@@ -7,6 +7,7 @@ import EmberObject, { computed } from "@ember/object";
 import { notEmpty, and, equal, empty } from "@ember/object/computed";
 import discourseComputed from "discourse-common/utils/decorators";
 import { categoryBadgeHTML } from "discourse/helpers/category-link";
+import { dasherize } from "@ember/string";
 
 export default WizardFieldValidator.extend({
   classNames: ['similar-topics-validator'],
@@ -69,6 +70,13 @@ export default WizardFieldValidator.extend({
       default:
         return false;
     }
+  },
+
+  @discourseComputed('currentState')
+  currentStateClass (currentState) {
+    if (currentState) return `similar-topics-${dasherize(currentState)}`;
+
+    return "similar-topics";
   },
 
   @discourseComputed('currentState')
