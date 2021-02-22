@@ -47,7 +47,7 @@ export default WizardFieldValidator.extend({
     'showNoSimilarTopics',
     'showValidationCategories',
     'showDefault'
-   )
+  )
   currentState(
     loading,
     showSimilarTopics,
