@@ -30,7 +30,9 @@ export default WizardFieldValidator.extend({
   
   @discourseComputed('validation.categories')
   validationCategories(categoryIds) {
-    return categoryIds.map(id => this.site.categoriesById[id]);
+    if (categoryIds) return categoryIds.map(id => this.site.categoriesById[id]);
+
+    return A();
   },
   
   @discourseComputed('validationCategories')
