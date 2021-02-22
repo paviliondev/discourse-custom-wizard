@@ -27,6 +27,7 @@ export default WizardFieldValidator.extend({
     return this.noSimilarTopics && !this.typing;
   }),
   hasValidationCategories: notEmpty('validationCategories'),
+  showValidationCategories: and('showDefault', 'hasValidationCategories'),
   
   @discourseComputed('validation.categories')
   validationCategories(categoryIds) {
@@ -39,7 +40,44 @@ export default WizardFieldValidator.extend({
   catLinks(categories) {
     return categories.map(category => categoryBadgeHTML(category)).join("");
   },
-  
+
+  @discourseComputed(
+    'loading',
+    'showSimilarTopics',
+    'showNoSimilarTopics',
+    'showValidationCategories',
+    'showDefault'
+   )
+  currentState(
+    loading,
+    showSimilarTopics,
+    showNoSimilarTopics,
+    showValidationCategories,
+    showDefault
+  ) {
+    switch (true) {
+      case loading:
+        return 'loading';
+      case showSimilarTopics:
+        return 'results';
+      case showNoSimilarTopics:
+        return 'no_results';
+      case showValidationCategories:
+        return 'default_categories';
+      case showDefault:
+        return 'default';
+      default:
+        return false;
+    }
+  },
+
+  @discourseComputed('currentState')
+  currentStateLabel (currentState) {
+    if (currentState) return `realtime_validations.similar_topics.${currentState}`;
+
+    return false;
+  },
+
   validate() {},
 
   @observes("field.value")

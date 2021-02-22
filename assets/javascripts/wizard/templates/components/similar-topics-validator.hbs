@@ -1,16 +1,13 @@
-{{#if loading}}
-  <label>{{i18n 'realtime_validations.similar_topics.loading'}}</label>
-{{else if showSimilarTopics}}
-  <label>{{i18n 'realtime_validations.similar_topics.results'}}</label>
-  {{wizard-similar-topics topics=similarTopics}}
-{{else if showNoSimilarTopics}}
-  <label>{{i18n 'realtime_validations.similar_topics.no_results'}}</label>
-{{else if showDefault}}
-  {{#if hasValidationCategories}}
-    <label>{{{i18n 'realtime_validations.similar_topics.default_categories' catLinks=catLinks}}}</label>
-  {{else}}
-    <label>{{i18n 'realtime_validations.similar_topics.default'}}</label>
+<label>
+  {{#if currentState}}
+    {{#if showValidationCategories}}
+      {{html-safe (i18n currentStateLabel catLinks=catLinks)}}
+    {{else}}
+      {{i18n currentStateLabel}}
+    {{/if}}
   {{/if}}
-{{else}}
-  <label></label>
+</label>
+
+{{#if showSimilarTopics}}
+  {{wizard-similar-topics topics=similarTopics}}
 {{/if}}
