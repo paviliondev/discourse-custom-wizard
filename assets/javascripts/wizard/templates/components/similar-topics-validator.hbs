@@ -1,9 +1,9 @@
 <label>
   {{#if currentState}}
     {{#if showValidationCategories}}
-      {{html-safe (i18n currentStateLabel catLinks=catLinks)}}
+      {{html-safe (i18n currentStateKey catLinks=catLinks)}}
     {{else}}
-      {{i18n currentStateLabel}}
+      {{i18n currentStateKey}}
     {{/if}}
   {{/if}}
 </label>

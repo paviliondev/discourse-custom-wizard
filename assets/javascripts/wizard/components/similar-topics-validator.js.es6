@@ -72,7 +72,7 @@ export default WizardFieldValidator.extend({
   },
 
   @discourseComputed('currentState')
-  currentStateLabel (currentState) {
+  currentStateKey (currentState) {
     if (currentState) return `realtime_validations.similar_topics.${currentState}`;
 
     return false;
