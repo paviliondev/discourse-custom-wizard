@@ -8,12 +8,12 @@
   position: absolute;
   background-color: black;
   opacity: 0.8;
-  z-index: z("modal","overlay");
+  z-index: z("modal", "overlay");
 }
 
 .d-editor-modals {
   position: absolute;
-  z-index: z("modal","content");
+  z-index: z("modal", "content");
 }
 
 .d-editor {
@@ -171,7 +171,7 @@
     resize: vertical;
     flex: initial;
   }
-  
+
   textarea {
     min-height: calc(200px - 32px);
   }
@@ -205,11 +205,11 @@
 .wizard-composer-hyperlink-contents {
   background-color: $secondary;
   padding: 20px;
-  
+
   h3 {
     margin-top: 0;
   }
-  
+
   .composer-link-url,
   .composer-link-name {
     display: block;
@@ -217,7 +217,8 @@
   }
 }
 
-.hide-hyperlink-box, .add-link {
+.hide-hyperlink-box,
+.add-link {
   display: inline;
 }
 
@@ -231,7 +232,7 @@
 
 .bottom-bar {
   display: flex;
-  justify-content:space-between;
+  justify-content: space-between;
   margin-top: 20px;
   align-items: center;
 }

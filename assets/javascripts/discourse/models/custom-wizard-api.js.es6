@@ -1,15 +1,19 @@
-import { ajax } from 'discourse/lib/ajax';
-import { default as discourseComputed } from 'discourse-common/utils/decorators';
+import { ajax } from "discourse/lib/ajax";
+import { default as discourseComputed } from "discourse-common/utils/decorators";
 import EmberObject from "@ember/object";
 import { A } from "@ember/array";
 
 const CustomWizardApi = EmberObject.extend({
-  @discourseComputed('name')
+  @discourseComputed("name")
   redirectUri(name) {
     let nameParam = name.toString().dasherize();
-    const baseUrl = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '');
+    const baseUrl =
+      location.protocol +
+      "//" +
+      location.hostname +
+      (location.port ? ":" + location.port : "");
     return baseUrl + `/admin/wizards/apis/${nameParam}/redirect`;
-  }
+  },
 });
 
 CustomWizardApi.reopenClass({
@@ -38,7 +42,7 @@ CustomWizardApi.reopenClass({
       tokenRefreshAt: authorization.token_refresh_at,
       endpoints: A(endpoints),
       isNew: params.isNew,
-      log: params.log
+      log: params.log,
     });
 
     return api;
@@ -46,19 +50,19 @@ CustomWizardApi.reopenClass({
 
   find(name) {
     return ajax(`/admin/wizards/api/${name}`, {
-      type: 'GET'
-    }).then(result => {
+      type: "GET",
+    }).then((result) => {
       return CustomWizardApi.create(result);
     });
   },
 
   list() {
     return ajax("/admin/wizards/api", {
-      type: 'GET'
-    }).then(result => {
+      type: "GET",
+    }).then((result) => {
       return result;
     });
-  }
+  },
 });
 
 export default CustomWizardApi;

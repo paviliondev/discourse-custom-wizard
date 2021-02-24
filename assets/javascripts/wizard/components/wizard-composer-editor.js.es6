@@ -20,7 +20,7 @@ import {
 import { cacheShortUploadUrl } from "pretty-text/upload-short-url";
 import { alias } from "@ember/object/computed";
 import { uploadIcon } from "discourse/lib/uploads";
-import WizardI18n from '../lib/wizard-i18n';
+import WizardI18n from "../lib/wizard-i18n";
 
 const uploadMarkdownResolvers = [];
 

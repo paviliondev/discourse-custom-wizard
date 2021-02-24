@@ -12,7 +12,7 @@ export default Component.extend({
 
     if (!this.field.validations) {
       const validations = {};
-      
+
       this.validations.forEach((validation) => {
         validations[validation] = {};
       });

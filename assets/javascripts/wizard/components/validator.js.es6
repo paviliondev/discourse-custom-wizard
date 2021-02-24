@@ -4,14 +4,14 @@ import { ajax } from "discourse/lib/ajax";
 import { getToken } from "wizard/lib/ajax";
 
 export default Component.extend({
-  classNames: ['validator'],
+  classNames: ["validator"],
   classNameBindings: ["isValid", "isInvalid"],
   validMessageKey: null,
   invalidMessageKey: null,
   isValid: null,
   isInvalid: equal("isValid", false),
   layoutName: "components/validator", // useful for sharing the template with extending components
-  
+
   init() {
     this._super(...arguments);
 

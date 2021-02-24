@@ -29,7 +29,7 @@ div.ac-wrap {
   input[type="text"] {
     border: 0;
   }
-  
+
   .remove-link {
     margin-left: 4px;
     font-size: $font-down-1;
@@ -38,7 +38,7 @@ div.ac-wrap {
     border-radius: 12px;
     box-sizing: border-box;
     border: 1px solid var(--primary-low);
-    
+
     &:hover {
       background-color: var(--danger-low);
       border: 1px solid var(--danger-medium);
@@ -85,7 +85,7 @@ img.avatar {
         img {
           margin-right: 5px;
         }
-        
+
         span.username {
           color: var(--primary);
           vertical-align: middle;
@@ -129,7 +129,8 @@ img.avatar {
     top: 30px !important;
     box-sizing: border-box;
 
-    li, .no-results {
+    li,
+    .no-results {
       padding: 10px;
     }
 
@@ -151,7 +152,8 @@ img.avatar {
   background-color: var(--secondary);
   display: flex;
 
-  &:hover, &.selected {
+  &:hover,
+  &.selected {
     background-color: var(--tertiary);
     color: white;
 
