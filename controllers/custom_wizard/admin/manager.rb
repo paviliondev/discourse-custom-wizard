@@ -4,19 +4,19 @@ class CustomWizard::AdminManagerController < CustomWizard::AdminController
 
   def export
     templates = []
-    
+
     @wizard_ids.each do |wizard_id|
       if template = CustomWizard::Template.find(wizard_id)
         templates.push(template)
       end
     end
-    
+
     if templates.empty?
       return render_error(I18n.t('wizard.export.error.invalid_wizards'))
     end
-    
+
     basename = SiteSetting.title.parameterize || 'discourse'
-    time = Time.now.to_i 
+    time = Time.now.to_i
     filename = "#{basename}-wizards-#{time}.json"
 
     send_data templates.to_json,
@@ -27,31 +27,31 @@ class CustomWizard::AdminManagerController < CustomWizard::AdminController
 
   def import
     file = File.read(params['file'].tempfile)
-    
+
     if file.nil?
       return render_error(I18n.t('wizard.export.error.no_file'))
     end
 
     file_size = file.size
     max_file_size = 512 * 1024
-    
+
     if max_file_size < file_size
       return render_error(I18n.t('wizard.import.error.file_large'))
     end
-        
+
     begin
       template_json = JSON.parse file
     rescue JSON::ParserError
       return render_error(I18n.t('wizard.import.error.invalid_json'))
     end
-    
+
     imported = []
     failures = []
-    
+
     template_json.each do |json|
       template = CustomWizard::Template.new(json)
       template.save(skip_jobs: true, create: true)
-            
+
       if template.errors.any?
         failures.push(
           id: json['id'],
@@ -70,14 +70,14 @@ class CustomWizard::AdminManagerController < CustomWizard::AdminController
       failures: failures
     )
   end
-  
+
   def destroy
     destroyed = []
     failures = []
-    
+
     @wizard_ids.each do |wizard_id|
       template = CustomWizard::Template.find(wizard_id)
-      
+
       if template && CustomWizard::Template.remove(wizard_id)
         destroyed.push(
           id: wizard_id,
@@ -90,22 +90,22 @@ class CustomWizard::AdminManagerController < CustomWizard::AdminController
         )
       end
     end
-    
+
     render json: success_json.merge(
       destroyed: destroyed,
       failures: failures
     )
   end
-  
+
   private
-  
+
   def get_wizard_ids
     if params['wizard_ids'].blank?
       return render_error(I18n.t('wizard.export.error.select_one'))
     end
-    
+
     wizard_ids = []
-    
+
     params['wizard_ids'].each do |wizard_id|
       begin
         wizard_ids.push(wizard_id.underscore)
@@ -113,11 +113,11 @@ class CustomWizard::AdminManagerController < CustomWizard::AdminController
         #
       end
     end
-    
+
     if wizard_ids.empty?
       return render_error(I18n.t('wizard.export.error.invalid_wizards'))
     end
-    
+
     @wizard_ids = wizard_ids
   end
 end

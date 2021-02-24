@@ -6,7 +6,7 @@ describe CustomWizardFieldExtension do
       "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/field/field.json"
     ).read).with_indifferent_access
   end
-  
+
   it "adds custom field attributes" do
     field = Wizard::Field.new(field_hash)
     expect(field.id).to eq("field_id")
@@ -17,5 +17,5 @@ describe CustomWizardFieldExtension do
     expect(field.key).to eq("field.locale.key")
     expect(field.type).to eq("field_type")
     expect(field.content).to eq([])
-  end    
+  end
 end

@@ -10,11 +10,11 @@ module CustomWizardCustomFieldPreloader
     end
     super(objects, fields)
   end
-  
+
   def cw_fields_enabled?
     SiteSetting.custom_wizard_enabled && CustomWizard::CustomField.enabled?
   end
-  
+
   def cw_fields
     CustomWizard::CustomField.list_by(:klass, @cw_klass)
   end

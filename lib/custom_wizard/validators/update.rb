@@ -2,20 +2,20 @@ require 'addressable/uri'
 
 class ::CustomWizard::UpdateValidator
   attr_reader :updater
-  
+
   def initialize(updater)
     @updater = updater
   end
-  
+
   def perform
     updater.step.fields.each do |field|
       validate_field(field)
     end
   end
-  
+
   def validate_field(field)
     return if field.type == 'text_only'
-    
+
     field_id = field.id.to_s
     value = @updater.submission[field_id]
     min_length = false
@@ -26,7 +26,7 @@ class ::CustomWizard::UpdateValidator
     max_length = field.max_length if is_text_type(field)
     file_types = field.file_types
     format = field.format
-    
+
     if required && !value
       @updater.errors.add(field_id, I18n.t('wizard.field.required', label: label))
     end
@@ -46,26 +46,26 @@ class ::CustomWizard::UpdateValidator
     if type === 'checkbox'
       @updater.submission[field_id] = standardise_boolean(value)
     end
-    
+
     if type === 'upload' && value.present? && !validate_file_type(value, file_types)
       @updater.errors.add(field_id, I18n.t('wizard.field.invalid_file', label: label, types: file_types))
     end
-    
+
     if ['date', 'date_time'].include?(type) && value.present? && !validate_date(value)
       @updater.errors.add(field_id, I18n.t('wizard.field.invalid_date'))
     end
-    
+
     if type === 'time' && value.present? && !validate_time(value)
       @updater.errors.add(field_id, I18n.t('wizard.field.invalid_time'))
-    end 
-    
+    end
+
     self.class.field_validators.each do |validator|
       if type === validator[:type]
         validator[:block].call(field, value, @updater)
       end
     end
   end
-  
+
   def self.sorted_field_validators
     @sorted_field_validators ||= []
   end
@@ -78,15 +78,15 @@ class ::CustomWizard::UpdateValidator
     sorted_field_validators << { priority: priority, type: type, block: block }
     @sorted_field_validators.sort_by! { |h| -h[:priority] }
   end
-  
+
   private
-  
+
   def validate_file_type(value, file_types)
     file_types.split(',')
       .map { |t| t.gsub('.', '') }
       .include?(File.extname(value['original_filename'])[1..-1])
   end
-  
+
   def validate_date(value)
     begin
       Date.parse(value)
@@ -95,7 +95,7 @@ class ::CustomWizard::UpdateValidator
       false
     end
   end
-  
+
   def validate_time(value)
     begin
       Time.parse(value)
@@ -112,16 +112,16 @@ class ::CustomWizard::UpdateValidator
   def is_url_type(field)
     ['url'].include? field.type
   end
-  
+
   SCHEMES ||= %w(http https)
-  
+
   def check_if_url(url)
     parsed = Addressable::URI.parse(url) or return false
     SCHEMES.include?(parsed.scheme)
   rescue Addressable::URI::InvalidURIError
     false
   end
-  
+
   def standardise_boolean(value)
     ActiveRecord::Type::Boolean.new.cast(value)
   end

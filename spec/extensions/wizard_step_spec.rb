@@ -6,9 +6,9 @@ describe CustomWizardStepExtension do
       "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/step/step.json"
     ).read).with_indifferent_access
   end
-  
+
   it "adds custom step attributes" do
-    step = Wizard::Step.new(step_hash[:id])    
+    step = Wizard::Step.new(step_hash[:id])
     [
       :title,
       :description,
@@ -19,5 +19,5 @@ describe CustomWizardStepExtension do
       step.send("#{attr.to_s}=", step_hash[attr])
       expect(step.send(attr)).to eq(step_hash[attr])
     end
-  end    
+  end
 end

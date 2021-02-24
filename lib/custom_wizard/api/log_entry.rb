@@ -12,7 +12,7 @@ class CustomWizard::Api::LogEntry
                 :name,
                 :avatar_template
 
-  def initialize(api_name, data={})
+  def initialize(api_name, data = {})
     @api_name = api_name
 
     data.each do |k, v|
@@ -38,7 +38,7 @@ class CustomWizard::Api::LogEntry
     self.get(api_name, log_id)
   end
 
-  def self.get(api_name, log_id, opts={})
+  def self.get(api_name, log_id, opts = {})
     return nil if !log_id
 
     if data = PluginStore.get("custom_wizard_api_#{api_name}", "log_#{log_id}")

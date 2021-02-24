@@ -1,6 +1,6 @@
 class CustomWizard::AdminWizardController < CustomWizard::AdminController
   before_action :find_wizard, only: [:show, :remove]
-  
+
   def index
     render_json_dump(
       wizard_list: ActiveModel::ArraySerializer.new(
@@ -12,17 +12,17 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
       custom_fields: custom_field_list
     )
   end
-  
+
   def show
     params.require(:wizard_id)
-    
+
     if data = CustomWizard::Template.find(params[:wizard_id].underscore)
       render json: data.as_json
     else
       render json: { none: true }
     end
   end
-  
+
   def remove
     if CustomWizard::Template.remove(@wizard.id)
       render json: success_json
@@ -34,16 +34,16 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
   def save
     template = CustomWizard::Template.new(save_wizard_params.to_h)
     wizard_id = template.save(create: params[:create])
-            
+
     if template.errors.any?
       render json: failed_json.merge(errors: result.errors.full_messages)
-    else      
+    else
       render json: success_json.merge(wizard_id: wizard_id)
     end
   end
-  
+
   private
-  
+
   def mapped_params
     [
       :type,

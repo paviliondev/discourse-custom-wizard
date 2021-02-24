@@ -14,7 +14,7 @@ module CustomWizardFieldExtension
               :property,
               :content,
               :number
-              
+
   def initialize(attrs)
     super
     @raw = attrs || {}

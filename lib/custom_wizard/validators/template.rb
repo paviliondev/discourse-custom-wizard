@@ -1,42 +1,42 @@
 class CustomWizard::TemplateValidator
   include HasErrors
   include ActiveModel::Model
-  
-  def initialize(data, opts={})
+
+  def initialize(data, opts = {})
     @data = data
     @opts = opts
   end
-  
+
   def perform
     data = @data
-            
+
     check_id(data, :wizard)
     check_required(data, :wizard)
     validate_after_time
-            
+
     data[:steps].each do |step|
       check_required(step, :step)
-      
+
       if data[:fields].present?
         data[:fields].each do |field|
           check_required(field, :field)
         end
       end
     end
-    
+
     if data[:actions].present?
       data[:actions].each do |action|
         check_required(action, :action)
       end
     end
-        
-    if errors.any? 
+
+    if errors.any?
       false
     else
       true
     end
   end
-  
+
   def self.required
     {
       wizard: ['id', 'name', 'steps'],
@@ -45,13 +45,13 @@ class CustomWizard::TemplateValidator
       action: ['id', 'type']
     }
   end
-  
+
   private
-  
+
   def check_required(object, type)
-    CustomWizard::TemplateValidator.required[type].each do |property|      
+    CustomWizard::TemplateValidator.required[type].each do |property|
       if object[property].blank?
-        errors.add :base, I18n.t("wizard.validation.required", property: property) 
+        errors.add :base, I18n.t("wizard.validation.required", property: property)
       end
     end
   end
@@ -61,14 +61,14 @@ class CustomWizard::TemplateValidator
       errors.add :base, I18n.t("wizard.validation.conflict", wizard_id: object[:id])
     end
   end
-  
+
   def validate_after_time
     return unless @data[:after_time]
-    
+
     wizard = CustomWizard::Wizard.create(@data[:id]) if !@opts[:create]
     current_time = wizard.present? ? wizard.after_time_scheduled : nil
     new_time = @data[:after_time_scheduled]
-    
+
     begin
       active_time = Time.parse(new_time.present? ? new_time : current_time).utc
     rescue ArgumentError

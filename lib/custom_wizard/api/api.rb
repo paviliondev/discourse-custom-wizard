@@ -4,7 +4,7 @@ class CustomWizard::Api
   attr_accessor :name,
                 :title
 
-  def initialize(name, data={})
+  def initialize(name, data = {})
     @name = name
     data.each do |k, v|
       self.send "#{k}=", v if self.respond_to?(k)

@@ -13,7 +13,7 @@ describe CustomWizard::FieldSerializer do
     skip_jobs: true)
     @wizard = CustomWizard::Builder.new("super_mega_fun_wizard", user).build
   end
-  
+
   it "should return basic field attributes" do
     json_array = ActiveModel::ArraySerializer.new(
       @wizard.steps.first.fields,
@@ -24,7 +24,7 @@ describe CustomWizard::FieldSerializer do
     expect(json_array[0][:label]).to eq("<p>Text</p>")
     expect(json_array[0][:description]).to eq("Text field description.")
   end
-  
+
   it "should return optional field attributes" do
     json_array = ActiveModel::ArraySerializer.new(
       @wizard.steps.second.fields,

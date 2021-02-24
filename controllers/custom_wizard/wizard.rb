@@ -1,7 +1,7 @@
 class CustomWizard::WizardController < ::ApplicationController
   prepend_view_path(Rails.root.join('plugins', 'discourse-custom-wizard', 'views'))
   layout 'wizard'
-  
+
   before_action :ensure_plugin_enabled
   helper_method :wizard_page_title
   helper_method :wizard_theme_ids
@@ -22,12 +22,12 @@ class CustomWizard::WizardController < ::ApplicationController
     respond_to do |format|
       format.json do
         builder = CustomWizard::Builder.new(params[:wizard_id].underscore, current_user)
-        
+
         if builder.wizard.present?
           builder_opts = {}
           builder_opts[:reset] = params[:reset]
           built_wizard = builder.build(builder_opts, params)
-          
+
           render_serialized(built_wizard, ::CustomWizard::WizardSerializer, root: false)
         else
           render json: { error: I18n.t('wizard.none') }
@@ -39,14 +39,14 @@ class CustomWizard::WizardController < ::ApplicationController
 
   def skip
     params.require(:wizard_id)
-    
+
     if wizard.required && !wizard.completed? && wizard.permitted?
       return render json: { error: I18n.t('wizard.no_skip') }
     end
 
     result = success_json
     user = current_user
-    
+
     if user
       submission = wizard.current_submission
       if submission && submission['redirect_to']
@@ -61,9 +61,9 @@ class CustomWizard::WizardController < ::ApplicationController
 
     render json: result
   end
-  
+
   private
-  
+
   def ensure_plugin_enabled
     unless SiteSetting.custom_wizard_enabled
       redirect_to path("/")

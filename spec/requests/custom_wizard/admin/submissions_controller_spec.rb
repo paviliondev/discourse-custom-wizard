@@ -1,16 +1,16 @@
 require_relative '../../../plugin_helper'
 
 describe CustomWizard::AdminSubmissionsController do
-  fab!(:admin_user) {Fabricate(:user, admin: true)}
-  fab!(:user1) {Fabricate(:user)}
-  fab!(:user2) {Fabricate(:user)}
-  
+  fab!(:admin_user) { Fabricate(:user, admin: true) }
+  fab!(:user1) { Fabricate(:user) }
+  fab!(:user2) { Fabricate(:user) }
+
   let(:template) {
     JSON.parse(File.open(
       "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
     ).read)
   }
-  
+
   before do
     CustomWizard::Template.save(template, skip_jobs: true)
     CustomWizard::Wizard.set_submissions(template['id'], user1,
@@ -27,17 +27,17 @@ describe CustomWizard::AdminSubmissionsController do
     expect(response.parsed_body.length).to eq(1)
     expect(response.parsed_body.first['id']).to eq(template['id'])
   end
-  
+
   it "returns the all user's submissions for a wizard" do
     get "/admin/wizards/submissions/#{template['id']}.json"
     expect(response.parsed_body['submissions'].length).to eq(2)
   end
-  
+
   it "returns the all user's submissions for a wizard" do
     get "/admin/wizards/submissions/#{template['id']}.json"
     expect(response.parsed_body['submissions'].length).to eq(2)
   end
-  
+
   it "downloads all user submissions" do
     get "/admin/wizards/submissions/#{template['id']}/download"
     expect(response.parsed_body.length).to eq(2)

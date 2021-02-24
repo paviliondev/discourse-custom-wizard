@@ -85,7 +85,7 @@ class CustomWizard::AdminApiController < CustomWizard::AdminController
     CustomWizard::Api::Authorization.set(params[:name], code: params[:code])
     CustomWizard::Api::Authorization.get_token(params[:name])
 
-    return redirect_to path('/admin/wizards/apis/' + params[:name])
+    redirect_to path('/admin/wizards/apis/' + params[:name])
   end
 
   private
