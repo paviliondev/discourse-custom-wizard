@@ -21,8 +21,9 @@ class CustomWizard::RealtimeValidation::SimilarTopics
     title = params[:title]
     raw = params[:raw]
     categories = params[:categories]
-    date_after = params[:date_after]
-        
+    n_value = params[:n_value]
+    time_unit = params[:time_unit]
+
     result = CustomWizard::RealtimeValidation::Result.new(:similar_topic)
     
     if title.length < SiteSetting.min_title_similar_length || !Topic.count_exceeds_minimum?
@@ -31,7 +32,12 @@ class CustomWizard::RealtimeValidation::SimilarTopics
 
     topics = Topic.similar_to(title, raw, user).to_a
     topics.select! { |t| categories.include?(t.category.id.to_s) } if categories.present?
-    topics.select! { |t| t.created_at > DateTime.parse(date_after) } if date_after.present?
+
+    if n_value.present? and time_unit.present?
+      if n_value.to_i > 0
+        topics.select! { |t| t.created_at >= n_value.to_i.send(time_unit).ago }
+      end
+    end
     topics.map! { |t| SimilarTopic.new(t) }
     
     result.items = topics
