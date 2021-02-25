@@ -30,7 +30,7 @@ describe ::CustomWizard::RealtimeValidation::SimilarTopics do
     expect(result.items.length).to eq(1)
   end
 
-  it "filters topics based on Time After setting" do
+  it "filters topics based on Max Topic Age setting" do
     topic.update!(created_at: 23.hours.ago)
     cat_topic.update!(created_at: 2.days.ago)
 

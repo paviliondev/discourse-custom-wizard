@@ -184,7 +184,7 @@ en:
             above: "Above"
             below: "Below"
             categories: "Categories"
-            time_after: "Time After"
+            max_topic_age: "Max Topic Age"
             time_units:
               days: "Days"
               weeks: "Weeks"
