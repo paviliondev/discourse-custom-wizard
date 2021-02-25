@@ -35,7 +35,7 @@ describe ::CustomWizard::RealtimeValidation::SimilarTopics do
     cat_topic.update!(created_at: 2.days.ago)
 
     validation = ::CustomWizard::RealtimeValidation::SimilarTopics.new(user)
-    result = validation.perform({ title: "matching similar", n_value: 1, time_unit: "days" })
+    result = validation.perform({ title: "matching similar", time_n_value: 1, time_unit: "days" })
     expect(result.items.length).to eq(1)
   end
 end
