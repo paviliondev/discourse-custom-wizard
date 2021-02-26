@@ -36,6 +36,7 @@ class CustomWizard::RealtimeValidation::SimilarTopics
     if time_n_value.to_i > 0 && time_unit.present?
       topics.select! { |t| t.created_at >= time_n_value.to_i.send(time_unit).ago }
     end
+
     topics.map! { |t| SimilarTopic.new(t) }
     
     result.items = topics
