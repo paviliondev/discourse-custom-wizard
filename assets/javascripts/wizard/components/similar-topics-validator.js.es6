@@ -124,7 +124,8 @@ export default WizardFieldValidator.extend({
     this.backendValidate({
       title: this.get("field.value"),
       categories: this.get("validation.categories"),
-      date_after: this.get("validation.date_after"),
+      time_unit: this.get("validation.time_unit"),
+      time_n_value: this.get("validation.time_n_value")
     }).then((result) => {
       const similarTopics = A(
         deepMerge(result["topics"], result["similar_topics"])
