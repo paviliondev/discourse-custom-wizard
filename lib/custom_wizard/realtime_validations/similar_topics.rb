@@ -33,10 +33,8 @@ class CustomWizard::RealtimeValidation::SimilarTopics
     topics = Topic.similar_to(title, raw, user).to_a
     topics.select! { |t| categories.include?(t.category.id.to_s) } if categories.present?
 
-    if time_n_value.present? and time_unit.present?
-      if time_n_value.to_i > 0
-        topics.select! { |t| t.created_at >= time_n_value.to_i.send(time_unit).ago }
-      end
+    if time_n_value.to_i > 0 && time_unit.present?
+      topics.select! { |t| t.created_at >= time_n_value.to_i.send(time_unit).ago }
     end
     topics.map! { |t| SimilarTopic.new(t) }
     
