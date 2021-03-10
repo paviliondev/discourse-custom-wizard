@@ -2,7 +2,7 @@
 
 class CustomWizard::RealtimeValidation
   cattr_accessor :types
-  
+
   @@types ||= {
     similar_topics: {
       types: [:text],

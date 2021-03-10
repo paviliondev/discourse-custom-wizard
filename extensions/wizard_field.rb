@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module CustomWizardFieldExtension
   attr_reader :raw,
               :label,
@@ -14,7 +15,7 @@ module CustomWizardFieldExtension
               :property,
               :content,
               :number
-              
+
   def initialize(attrs)
     super
     @raw = attrs || {}

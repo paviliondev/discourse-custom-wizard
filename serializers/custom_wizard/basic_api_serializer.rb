@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CustomWizard::BasicApiSerializer < ::ApplicationSerializer
   attributes :name,
              :title,

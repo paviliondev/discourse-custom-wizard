@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require_relative '../../plugin_helper'
 
 describe CustomWizard::Log do
@@ -6,19 +7,19 @@ describe CustomWizard::Log do
     CustomWizard::Log.create("Second log message")
     CustomWizard::Log.create("Third log message")
   end
-  
+
   it "creates logs" do
     expect(
       CustomWizard::Log.list.length
     ).to eq(3)
   end
-  
+
   it "lists logs by time created" do
     expect(
       CustomWizard::Log.list.first.message
     ).to eq("Third log message")
   end
-  
+
   it "paginates logs" do
     expect(
       CustomWizard::Log.list(0, 2).length

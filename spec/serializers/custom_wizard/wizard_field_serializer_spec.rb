@@ -13,7 +13,7 @@ describe CustomWizard::FieldSerializer do
     skip_jobs: true)
     @wizard = CustomWizard::Builder.new("super_mega_fun_wizard", user).build
   end
-  
+
   it "should return basic field attributes" do
     json_array = ActiveModel::ArraySerializer.new(
       @wizard.steps.first.fields,
@@ -24,7 +24,7 @@ describe CustomWizard::FieldSerializer do
     expect(json_array[0][:label]).to eq("<p>Text</p>")
     expect(json_array[0][:description]).to eq("Text field description.")
   end
-  
+
   it "should return optional field attributes" do
     json_array = ActiveModel::ArraySerializer.new(
       @wizard.steps.second.fields,
@@ -32,7 +32,7 @@ describe CustomWizard::FieldSerializer do
       scope: Guardian.new(user)
     ).as_json
     expect(json_array[0][:format]).to eq("YYYY-MM-DD")
-    expect(json_array[5][:file_types]).to eq(".jpg,.png")
-    expect(json_array[4][:number]).to eq(5)
+    expect(json_array[3][:number]).to eq(4)
+    expect(json_array[6][:file_types]).to eq(".jpg,.png")
   end
 end

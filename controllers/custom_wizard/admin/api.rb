@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CustomWizard::AdminApiController < CustomWizard::AdminController
   skip_before_action :check_xhr, only: [:redirect]
 
@@ -85,7 +86,7 @@ class CustomWizard::AdminApiController < CustomWizard::AdminController
     CustomWizard::Api::Authorization.set(params[:name], code: params[:code])
     CustomWizard::Api::Authorization.get_token(params[:name])
 
-    return redirect_to path('/admin/wizards/apis/' + params[:name])
+    redirect_to path('/admin/wizards/apis/' + params[:name])
   end
 
   private
