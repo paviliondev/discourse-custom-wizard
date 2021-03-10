@@ -3,6 +3,7 @@
 # version: 0.7.0
 # authors: Angus McLeod
 # url: https://github.com/paviliondev/discourse-custom-wizard
+# contact emails: angus@thepavilion.io
 
 register_asset 'stylesheets/common/wizard-admin.scss'
 register_asset 'stylesheets/common/wizard-mapper.scss'
