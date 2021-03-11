@@ -4,7 +4,7 @@ require_relative '../../plugin_helper'
 
 describe CustomWizard::BasicWizardSerializer do
   fab!(:user) { Fabricate(:user) }
-  
+
   it 'should return basic wizard attributes' do
     CustomWizard::Template.save(
       JSON.parse(File.open(

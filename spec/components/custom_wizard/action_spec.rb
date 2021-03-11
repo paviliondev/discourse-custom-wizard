@@ -4,13 +4,13 @@ describe CustomWizard::Action do
   fab!(:user) { Fabricate(:user, name: "Angus", username: 'angus', email: "angus@email.com", trust_level: TrustLevel[2]) }
   fab!(:category) { Fabricate(:category, name: 'cat1', slug: 'cat-slug') }
   fab!(:group) { Fabricate(:group) }
-  
+
   let(:open_composer) {
     JSON.parse(File.open(
       "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/actions/open_composer.json"
     ).read)
   }
-  
+
   before do
     Group.refresh_automatic_group!(:trust_level_2)
     CustomWizard::Template.save(
@@ -20,7 +20,7 @@ describe CustomWizard::Action do
     skip_jobs: true)
     @template = CustomWizard::Template.find('super_mega_fun_wizard')
   end
-  
+
   context 'creating a topic' do
     it "works" do
       wizard = CustomWizard::Builder.new(@template[:id], user).build
@@ -33,7 +33,7 @@ describe CustomWizard::Action do
       wizard.create_updater(wizard.steps.last.id,
         step_3_field_3: category.id
       ).update
-      
+
       topic = Topic.where(
         title: "Topic Title",
         category_id: category.id
@@ -44,7 +44,7 @@ describe CustomWizard::Action do
         raw: "topic body"
       ).exists?).to eq(true)
     end
-    
+
     it "fails silently without basic topic inputs" do
       wizard = CustomWizard::Builder.new(@template[:id], user).build
       wizard.create_updater(
@@ -54,7 +54,7 @@ describe CustomWizard::Action do
       wizard.create_updater(wizard.steps.second.id, {}).update
       updater = wizard.create_updater(wizard.steps.last.id, {})
       updater.update
-      
+
       expect(updater.success?).to eq(true)
       expect(UserHistory.where(
         acting_user_id: user.id,
@@ -66,29 +66,29 @@ describe CustomWizard::Action do
       ).exists?).to eq(false)
     end
   end
-  
+
   it 'sends a message' do
     User.create(username: 'angus1', email: "angus1@email.com")
-    
+
     wizard = CustomWizard::Builder.new(@template[:id], user).build
     wizard.create_updater(wizard.steps[0].id, {}).update
     wizard.create_updater(wizard.steps[1].id, {}).update
-    
+
     topic = Topic.where(
       archetype: Archetype.private_message,
       title: "Message title"
     )
-    
+
     post = Post.where(
       topic_id: topic.pluck(:id),
       raw: "I will interpolate some wizard fields"
     )
-        
+
     expect(topic.exists?).to eq(true)
     expect(topic.first.topic_allowed_users.first.user.username).to eq('angus1')
     expect(post.exists?).to eq(true)
   end
-  
+
   it 'updates a profile' do
     wizard = CustomWizard::Builder.new(@template[:id], user).build
     upload = Upload.create!(
@@ -104,28 +104,28 @@ describe CustomWizard::Action do
     ).update
     expect(user.profile_background_upload.id).to eq(upload.id)
   end
-  
+
   context "open composer" do
     it 'works' do
       wizard = CustomWizard::Builder.new(@template[:id], user).build
       wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
-      
+
       updater = wizard.create_updater(wizard.steps[1].id, {})
       updater.update
-      
+
       category = Category.find_by(id: wizard.current_submission['action_8'])
-      
+
       expect(updater.result[:redirect_on_next]).to eq(
         "/new-topic?title=Title%20of%20the%20composer%20topic&body=I%20am%20interpolating%20some%20user%20fields%20Angus%20angus%20angus%40email.com&category_id=#{category.id}&tags=tag1"
       )
     end
-    
+
     it 'encodes special characters in the title and body' do
       open_composer['title'][0]['output'] = "Title that's special $"
       open_composer['post_template'] = "Body & more body & more body"
-      
+
       wizard = CustomWizard::Wizard.new(@template, user)
-      
+
       action = CustomWizard::Action.new(
         wizard: wizard,
         action: open_composer,
@@ -133,30 +133,30 @@ describe CustomWizard::Action do
         data: {}
       )
       action.perform
-            
+
       expect(action.result.success?).to eq(true)
-      
+
       decoded_output = CGI.parse(URI.parse(action.result.output).query)
-      
+
       expect(decoded_output['title'][0]).to eq("Title that's special $")
       expect(decoded_output['body'][0]).to eq("Body & more body & more body")
     end
   end
-  
+
   it 'creates a category' do
     wizard = CustomWizard::Builder.new(@template[:id], user).build
     wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
     wizard.create_updater(wizard.steps[1].id, {}).update
     expect(Category.where(id: wizard.current_submission['action_8']).exists?).to eq(true)
   end
-  
+
   it 'creates a group' do
     wizard = CustomWizard::Builder.new(@template[:id], user).build
     step_id = wizard.steps[0].id
     updater = wizard.create_updater(step_id, step_1_field_1: "Text input").update
     expect(Group.where(name: wizard.current_submission['action_9']).exists?).to eq(true)
   end
-  
+
   it 'adds a user to a group' do
     wizard = CustomWizard::Builder.new(@template[:id], user).build
     step_id = wizard.steps[0].id
@@ -164,7 +164,7 @@ describe CustomWizard::Action do
     group = Group.find_by(name: wizard.current_submission['action_9'])
     expect(group.users.first.username).to eq('angus')
   end
-  
+
   it 'watches categories' do
     wizard = CustomWizard::Builder.new(@template[:id], user).build
     wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
@@ -178,7 +178,7 @@ describe CustomWizard::Action do
       user_id: user.id
     ).first.notification_level).to eq(0)
   end
-  
+
   it 're-routes a user' do
     wizard = CustomWizard::Builder.new(@template[:id], user).build
     updater = wizard.create_updater(wizard.steps.last.id, {})

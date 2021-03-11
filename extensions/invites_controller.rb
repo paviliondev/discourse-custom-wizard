@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module InvitesControllerCustomWizard
   def path(url)
     if ::Wizard.user_requires_completion?(@user)
