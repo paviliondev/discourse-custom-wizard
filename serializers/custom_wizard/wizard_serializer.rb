@@ -34,7 +34,7 @@ class CustomWizard::WizardSerializer < CustomWizard::BasicWizardSerializer
   end
 
   def include_start?
-    object.start && include_steps?
+    include_steps? && object.start
   end
 
   def include_steps?
