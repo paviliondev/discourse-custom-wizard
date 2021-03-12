@@ -33,6 +33,6 @@ describe CustomWizard::FieldSerializer do
     ).as_json
     expect(json_array[0][:format]).to eq("YYYY-MM-DD")
     expect(json_array[3][:number]).to eq(4)
-    expect(json_array[6][:file_types]).to eq(".jpg,.png")
+    expect(json_array[6][:file_types]).to eq(".jpg,.jpeg,.png")
   end
 end

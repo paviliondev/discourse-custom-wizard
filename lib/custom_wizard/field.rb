@@ -36,7 +36,7 @@ class CustomWizard::Field
         min_length: nil
       },
       upload: {
-        file_types: '.jpg,.png'
+        file_types: '.jpg,.jpeg,.png'
       },
       dropdown: {
         prefill: nil,
