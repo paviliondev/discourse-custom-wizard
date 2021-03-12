@@ -166,6 +166,7 @@ class CustomWizard::Wizard
 
     mapper.all? do |m|
       if m[:type] === 'assignment'
+        [*m[:result]].include?(Group::AUTO_GROUPS[:everyone]) ||
         GroupUser.exists?(group_id: m[:result], user_id: user.id)
       elsif m[:type] === 'validation'
         m[:result]

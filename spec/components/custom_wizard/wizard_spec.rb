@@ -98,6 +98,13 @@ describe CustomWizard::Wizard do
       CustomWizard::Wizard.new(@permitted_template, trusted_user).permitted?
     ).to eq(true)
   end
+  
+  it "permits everyone if everyone is permitted" do
+    @permitted_template['permitted'][0]['output'] = Group::AUTO_GROUPS[:everyone]
+    expect(
+      CustomWizard::Wizard.new(@permitted_template, user).permitted?
+    ).to eq(true)
+  end
 
   it "does not permit unpermitted users" do
     expect(
