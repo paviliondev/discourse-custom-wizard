@@ -174,9 +174,14 @@ after_initialize do
   ::Wizard::Step.prepend CustomWizardStepExtension
 
   full_path = "#{Rails.root}/plugins/discourse-custom-wizard/assets/stylesheets/wizard/wizard_custom.scss"
-  DiscoursePluginRegistry.register_asset(full_path, {}, "wizard_custom")
-  Stylesheet::Importer.register_import("wizard_custom") do
-    import_files(DiscoursePluginRegistry.stylesheets["wizard_custom"])
+  if Stylesheet::Importer.respond_to?(:plugin_assets)
+    Stylesheet::Importer.plugin_assets['wizard_custom'] = Set[full_path]
+  else
+    # legacy method, Discourse 2.7.0.beta5 and below
+    DiscoursePluginRegistry.register_asset(full_path, {}, "wizard_custom")
+    Stylesheet::Importer.register_import("wizard_custom") do
+      import_files(DiscoursePluginRegistry.stylesheets["wizard_custom"])
+    end
   end
 
   CustomWizard::CustomField::CLASSES.keys.each do |klass|
