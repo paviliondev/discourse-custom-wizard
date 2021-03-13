@@ -5,6 +5,12 @@ import { scheduleOnce } from "@ember/runloop";
 import Component from "@ember/component";
 import I18n from "I18n";
 
+const excludedUserProperties = [
+  'avatar',
+  'profile_background',
+  'card_background'
+];
+
 export default Component.extend({
   classNames: 'wizard-text-editor',
   barEnabled: true,
@@ -39,7 +45,8 @@ export default Component.extend({
   
   @discourseComputed()
   userPropertyList() {
-    return userProperties.map((f) => ` u{${f}}`);
+    return userProperties.filter((f) => !excludedUserProperties.includes(f))
+      .map((f) => ` u{${f}}`);
   },
   
   @discourseComputed('wizardFields')

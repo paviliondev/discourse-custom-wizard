@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CustomWizard::StepSerializer < ::WizardStepSerializer
-  
+
   attributes :permitted, :permitted_message
   has_many :fields, serializer: ::CustomWizard::FieldSerializer, embed: :objects
 
@@ -18,7 +18,7 @@ class CustomWizard::StepSerializer < ::WizardStepSerializer
   def permitted
     object.permitted
   end
-  
+
   def permitted_message
     object.permitted_message
   end

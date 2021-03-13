@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CustomWizard::Api::AuthorizationSerializer < ::ApplicationSerializer
   attributes :auth_type,
              :auth_url,

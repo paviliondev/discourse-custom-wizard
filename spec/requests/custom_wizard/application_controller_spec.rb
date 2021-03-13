@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require_relative '../../plugin_helper'
 
 describe ApplicationController do
@@ -7,7 +8,7 @@ describe ApplicationController do
       username: 'angus',
       email: "angus@email.com",
       trust_level: TrustLevel[3]
-    ) 
+    )
   }
 
   before do
@@ -18,23 +19,23 @@ describe ApplicationController do
     skip_jobs: true)
     @template = CustomWizard::Template.find('super_mega_fun_wizard')
   end
-  
+
   context "with signed in user" do
     before do
       sign_in(user)
     end
-    
+
     context "who is required to complete wizard" do
       before do
         user.custom_fields['redirect_to_wizard'] = 'super_mega_fun_wizard'
         user.save_custom_fields(true)
       end
-      
+
       it "redirects if user is required to complete a wizard" do
         get "/"
         expect(response).to redirect_to("/w/super-mega-fun-wizard")
       end
-      
+
       it "saves original destination of user" do
         get '/', headers: { 'REFERER' => "/t/2" }
         expect(
@@ -43,7 +44,7 @@ describe ApplicationController do
         ).to eq("/t/2")
       end
     end
-    
+
     context "who is not required to complete wizard" do
       it "does nothing" do
         get "/"
@@ -51,7 +52,7 @@ describe ApplicationController do
       end
     end
   end
-  
+
   context "with guest" do
     it "does nothing" do
       get "/"

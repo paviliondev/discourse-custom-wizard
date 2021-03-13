@@ -1,8 +1,10 @@
+# frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Create custom wizards
 # version: 0.7.0
 # authors: Angus McLeod
 # url: https://github.com/paviliondev/discourse-custom-wizard
+# contact emails: angus@thepavilion.io
 
 register_asset 'stylesheets/common/wizard-admin.scss'
 register_asset 'stylesheets/common/wizard-mapper.scss'
@@ -137,7 +139,7 @@ after_initialize do
     @excluded_routes ||= SiteSetting.wizard_redirect_exclude_paths.split('|') + ['/w/']
     url = request.referer || request.original_url
 
-    if request.format === 'text/html' && !@excluded_routes.any? {|str| /#{str}/ =~ url} && wizard_id
+    if request.format === 'text/html' && !@excluded_routes.any? { |str| /#{str}/ =~ url } && wizard_id
       if request.referer !~ /\/w\// && request.referer !~ /\/invites\//
         CustomWizard::Wizard.set_submission_redirect(current_user, wizard_id, request.referer)
       end
@@ -153,7 +155,7 @@ after_initialize do
 
   add_to_serializer(:site, :complete_custom_wizard) do
     if scope.user && requires_completion = CustomWizard::Wizard.prompt_completion(scope.user)
-      requires_completion.map {|w| { name: w[:name], url: "/w/#{w[:id]}"} }
+      requires_completion.map { |w| { name: w[:name], url: "/w/#{w[:id]}" } }
     end
   end
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CustomWizard::ActionResult
   attr_accessor :success, :handler, :output
 

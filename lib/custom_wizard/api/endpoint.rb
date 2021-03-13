@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CustomWizard::Api::Endpoint
   include ActiveModel::SerializerSupport
 
@@ -9,7 +10,7 @@ class CustomWizard::Api::Endpoint
                 :content_type,
                 :success_codes
 
-  def initialize(api_name, data={})
+  def initialize(api_name, data = {})
     @api_name = api_name
 
     data.each do |k, v|
@@ -35,7 +36,7 @@ class CustomWizard::Api::Endpoint
     self.get(api_name, endpoint_id)
   end
 
-  def self.get(api_name, endpoint_id, opts={})
+  def self.get(api_name, endpoint_id, opts = {})
     return nil if !endpoint_id
 
     if data = PluginStore.get("custom_wizard_api_#{api_name}", "endpoint_#{endpoint_id}")
@@ -68,7 +69,7 @@ class CustomWizard::Api::Endpoint
     endpoint = self.get(api_name, endpoint_id)
     auth_string = CustomWizard::Api::Authorization.authorization_string(api_name)
     content_type = endpoint.content_type
-    
+
     headers = {}
     headers["Authorization"] = auth_string if auth_string
     headers["Content-Type"] = content_type if content_type
@@ -82,13 +83,13 @@ class CustomWizard::Api::Endpoint
         body = JSON.generate(body)
       elsif content_type === "application/x-www-form-urlencoded"
         body = URI.encode_www_form(body)
-      end  
-      
+      end
+
       params[:body] = body
     end
 
     response = connection.request(params)
-    
+
     if endpoint.success_codes.include?(response.status)
       begin
         result = JSON.parse(response.body)
@@ -97,7 +98,7 @@ class CustomWizard::Api::Endpoint
       end
 
       CustomWizard::Api::LogEntry.set(api_name, log_params(user, 'SUCCESS', endpoint.url))
-      
+
       result
     else
       message = "API request failed"
@@ -105,7 +106,7 @@ class CustomWizard::Api::Endpoint
       { error: message }
     end
   end
-  
+
   def self.log_params(user, status, url, message = "")
     { time: Time.now, user_id: user.id, status: status, url: url, error: message }
   end
