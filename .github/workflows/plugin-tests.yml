@@ -131,3 +131,7 @@ jobs:
         if: matrix.build_type == 'frontend' && steps.check_qunit.outputs.files_exists == 'true'
         run: bundle exec rake plugin:qunit['${{ github.event.repository.name }}','1200000']
         timeout-minutes: 30
+
+      - name: Simplecov Report
+        if: matrix.build_type == 'backend'
+        run: COVERAGE=1 bin/rake plugin:spec[${{ github.event.repository.name }}]
