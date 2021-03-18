@@ -22,7 +22,7 @@
 
     <%- unless customization_disabled? %>
       <%= theme_translations_lookup %>
-      <%= raw theme_lookup("head_tag") %>
+      <%= raw wizard_theme_lookup("head_tag") %>
     <%- end %>
 
     <%= server_plugin_outlet "custom_wizard" %>
@@ -38,13 +38,13 @@
 
   <body class='custom-wizard'>
     <%- unless customization_disabled? %>
-      <%= raw theme_lookup("header") %>
+      <%= raw wizard_theme_lookup("header") %>
     <%- end %>
 
     <div id='custom-wizard-main'></div>
 
     <%- unless customization_disabled? %>
-      <%= raw theme_lookup("body_tag") %>
+      <%= raw wizard_theme_lookup("body_tag") %>
     <%- end %>
 
     <%- if current_user %>
