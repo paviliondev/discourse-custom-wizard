@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 class CustomWizard::WizardController < ::ApplicationController
+  include ApplicationHelper
   prepend_view_path(Rails.root.join('plugins', 'discourse-custom-wizard', 'views'))
   layout 'wizard'
 
   before_action :ensure_plugin_enabled
   helper_method :wizard_page_title
   helper_method :wizard_theme_ids
+  helper_method :wizard_theme_lookup
 
   def wizard
     CustomWizard::Wizard.create(params[:wizard_id].underscore, current_user)
@@ -17,6 +19,10 @@ class CustomWizard::WizardController < ::ApplicationController
 
   def wizard_theme_ids
     wizard ? [wizard.theme_id] : nil
+  end
+
+  def wizard_theme_lookup(name)
+    Theme.lookup_field(wizard_theme_ids, mobile_view? ? :mobile : :desktop, name)
   end
 
   def index
