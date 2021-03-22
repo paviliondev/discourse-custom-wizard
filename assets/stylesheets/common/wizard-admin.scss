@@ -209,6 +209,11 @@
 
 .admin-wizard-buttons {
   margin-top: 20px;
+  display: flex;
+  
+  .btn {
+    margin-right: 1em;
+  }
 }
 
 .admin-wizard-container.settings {
@@ -439,6 +444,11 @@
     
     .btn {
       margin-right: 10px;
+      color: $primary;
+      
+      &:hover {
+        color: $secondary;
+      }
     }
     
     .wizard-editor-gutter-popover {
@@ -470,6 +480,10 @@
       align-items: center;
       margin-bottom: 10px;
       margin-right: 10px;
+    }
+    
+    .btn {
+      height: 32px;
     }
   }
 
@@ -670,4 +684,14 @@
 
 .wizard.category-selector {
   width: 200px !important;
+}
+
+.time-n-value {
+  width: 70px;
+  vertical-align: middle;
+}
+
+.select-kit.time-unit-selector {
+  width: 80px;
+  vertical-align: middle;
 }

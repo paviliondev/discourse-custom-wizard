@@ -30,12 +30,12 @@ describe ::CustomWizard::RealtimeValidation::SimilarTopics do
     expect(result.items.length).to eq(1)
   end
 
-  it "filters topics based on created date" do
-    topic.update!(created_at: 1.day.ago)
+  it "filters topics based on Max Topic Age setting" do
+    topic.update!(created_at: 23.hours.ago)
     cat_topic.update!(created_at: 2.days.ago)
 
     validation = ::CustomWizard::RealtimeValidation::SimilarTopics.new(user)
-    result = validation.perform({ title: "matching similar", date_after:  1.day.ago.to_date.to_s })
+    result = validation.perform({ title: "matching similar", time_n_value: 1, time_unit: "days" })
     expect(result.items.length).to eq(1)
   end
 end

@@ -2,9 +2,25 @@ import Component from "@ember/component";
 import EmberObject from "@ember/object";
 import { cloneJSON } from "discourse-common/lib/object";
 import Category from "discourse/models/category";
+import discourseComputed from "discourse-common/utils/decorators";
+import I18n from "I18n";
 
 export default Component.extend({
   classNames: ["realtime-validations"],
+  @discourseComputed
+  timeUnits() {
+    return [
+      "days",
+      "weeks",
+      "months",
+      "years"
+    ].map((unit) => {
+        return {
+          id: unit,
+          name: I18n.t(`admin.wizard.field.validations.time_units.${unit}`)
+        }
+      });
+  },
 
   init() {
     this._super(...arguments);

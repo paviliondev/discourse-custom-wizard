@@ -5,7 +5,7 @@
   "save_submissions": true,
   "multiple_submissions": true,
   "after_signup": false,
-  "prompt_completion": true,
+  "prompt_completion": false,
   "theme_id": 2,
   "steps": [
     {
@@ -82,10 +82,15 @@
           "type": "checkbox"
         },
         {
+          "id": "step_2_field_6",
+          "label": "Url",
+          "type": "url"
+        },
+        {
           "id": "step_2_field_7",
           "label": "Upload",
           "type": "upload",
-          "file_types": ".jpg,.png"
+          "file_types": ".jpg,.jpeg,.png"
         }
       ],
       "description": "<p>Because I couldn’t think of another name for this step <img src=\"/images/emoji/twitter/slight_smile.png?v=9\" title=\":slight_smile:\" class=\"emoji\" alt=\":slight_smile:\"></p>"

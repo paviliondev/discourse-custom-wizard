@@ -1,13 +1,13 @@
 <html>
   <head>
     <%= discourse_color_scheme_stylesheets %>
-    
+
     <%= discourse_stylesheet_link_tag :wizard, theme_id: nil %>
     <%= discourse_stylesheet_link_tag :wizard_custom %>
     <%- if wizard_theme_ids.present? %>
       <%= discourse_stylesheet_link_tag (mobile_view? ? :mobile_theme : :desktop_theme), theme_ids: wizard_theme_ids %>
     <%- end %>
-    
+
     <%= preload_script "locales/#{I18n.locale}" %>
     <%= preload_script "ember_jquery" %>
     <%= preload_script "wizard-vendor" %>
@@ -22,7 +22,7 @@
 
     <%- unless customization_disabled? %>
       <%= theme_translations_lookup %>
-      <%= raw theme_lookup("head_tag") %>
+      <%= raw wizard_theme_lookup("head_tag") %>
     <%- end %>
 
     <%= server_plugin_outlet "custom_wizard" %>
@@ -30,7 +30,7 @@
     <%= tag.meta id: 'data-discourse-setup', data: client_side_setup_data %>
 
     <meta name="discourse_theme_ids" content="<%= wizard_theme_ids&.join(",") %>">
-    <meta name="discourse-base-uri" content="<%= Discourse.base_uri %>">
+    <meta name="discourse-base-uri" content="<%= Discourse.base_path %>">
 
     <%= render partial: "layouts/head" %>
     <title><%= wizard_page_title %></title>
@@ -38,13 +38,13 @@
 
   <body class='custom-wizard'>
     <%- unless customization_disabled? %>
-      <%= raw theme_lookup("header") %>
+      <%= raw wizard_theme_lookup("header") %>
     <%- end %>
-    
+
     <div id='custom-wizard-main'></div>
 
     <%- unless customization_disabled? %>
-      <%= raw theme_lookup("body_tag") %>
+      <%= raw wizard_theme_lookup("body_tag") %>
     <%- end %>
 
     <%- if current_user %>

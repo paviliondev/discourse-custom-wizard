@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Jobs
   class RefreshApiAccessToken < ::Jobs::Base
     def execute(args)

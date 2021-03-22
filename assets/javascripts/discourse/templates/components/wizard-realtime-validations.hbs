@@ -22,13 +22,15 @@
         </div>
         <div class="validation-section">
           <div class="setting-label">
-            <label>{{i18n 'admin.wizard.field.validations.date_after'}}</label>
+            <label>{{i18n 'admin.wizard.field.validations.max_topic_age'}}</label>
           </div>
           <div class="setting-value">
-            {{date-picker-past
-                value=(readonly props.date_after)
-                containerId="date-container"
-                onSelect=(action (mut props.date_after))}}
+            {{input type="number" class="time-n-value" value=props.time_n_value}}
+            {{combo-box
+                value=(readonly props.time_unit)
+                content=timeUnits
+                class="time-unit-selector"
+                onChange=(action (mut props.time_unit))}}
           </div>
         </div>
         <div class="validation-section">

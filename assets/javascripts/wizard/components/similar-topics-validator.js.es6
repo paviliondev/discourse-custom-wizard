@@ -7,6 +7,7 @@ import EmberObject, { computed } from "@ember/object";
 import { notEmpty, and, equal, empty } from "@ember/object/computed";
 import discourseComputed from "discourse-common/utils/decorators";
 import { categoryBadgeHTML } from "discourse/helpers/category-link";
+import { dasherize } from "@ember/string";
 
 export default WizardFieldValidator.extend({
   classNames: ['similar-topics-validator'],
@@ -27,17 +28,64 @@ export default WizardFieldValidator.extend({
     return this.noSimilarTopics && !this.typing;
   }),
   hasValidationCategories: notEmpty('validationCategories'),
+  showValidationCategories: and('showDefault', 'hasValidationCategories'),
   
   @discourseComputed('validation.categories')
   validationCategories(categoryIds) {
-    return categoryIds.map(id => this.site.categoriesById[id]);
+    if (categoryIds) return categoryIds.map(id => this.site.categoriesById[id]);
+
+    return A();
   },
   
   @discourseComputed('validationCategories')
   catLinks(categories) {
     return categories.map(category => categoryBadgeHTML(category)).join("");
   },
-  
+
+  @discourseComputed(
+    'loading',
+    'showSimilarTopics',
+    'showNoSimilarTopics',
+    'showValidationCategories',
+    'showDefault'
+  )
+  currentState(
+    loading,
+    showSimilarTopics,
+    showNoSimilarTopics,
+    showValidationCategories,
+    showDefault
+  ) {
+    switch (true) {
+      case loading:
+        return 'loading';
+      case showSimilarTopics:
+        return 'results';
+      case showNoSimilarTopics:
+        return 'no_results';
+      case showValidationCategories:
+        return 'default_categories';
+      case showDefault:
+        return 'default';
+      default:
+        return false;
+    }
+  },
+
+  @discourseComputed('currentState')
+  currentStateClass (currentState) {
+    if (currentState) return `similar-topics-${dasherize(currentState)}`;
+
+    return "similar-topics";
+  },
+
+  @discourseComputed('currentState')
+  currentStateKey (currentState) {
+    if (currentState) return `realtime_validations.similar_topics.${currentState}`;
+
+    return false;
+  },
+
   validate() {},
 
   @observes("field.value")
@@ -76,7 +124,8 @@ export default WizardFieldValidator.extend({
     this.backendValidate({
       title: this.get("field.value"),
       categories: this.get("validation.categories"),
-      date_after: this.get("validation.date_after"),
+      time_unit: this.get("validation.time_unit"),
+      time_n_value: this.get("validation.time_n_value")
     }).then((result) => {
       const similarTopics = A(
         deepMerge(result["topics"], result["similar_topics"])

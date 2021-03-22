@@ -12,6 +12,7 @@ export default {
     const getUrl = requirejs("discourse-common/lib/get-url").default;
     const discourseComputed = requirejs("discourse-common/utils/decorators").default;
     const cook = requirejs("discourse/plugins/discourse-custom-wizard/wizard/lib/text-lite").cook;
+    const { schedule } = requirejs("@ember/runloop");
     
     StepModel.reopen({
       save() {
@@ -73,9 +74,23 @@ export default {
     
     StepComponent.reopen({
       classNameBindings: ["step.id"],
+      
+      autoFocus() {
+        schedule("afterRender", () => {
+          const $invalid = $(
+            ".wizard-field.invalid:nth-of-type(1) .wizard-focusable"
+          );
+
+          if ($invalid.length) {
+            return $invalid.focus();
+          }
+          
+          $(".wizard-focusable:first").focus();
+        });
+      },
 
       animateInvalidFields() {
-        Ember.run.scheduleOnce("afterRender", () => {
+        schedule("afterRender", () => {
           let $element = $(".invalid input[type=text],.invalid textarea,.invalid input[type=checkbox],.invalid .select-kit");
 
           if ($element.length) {

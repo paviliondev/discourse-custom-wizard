@@ -186,7 +186,12 @@ en:
             above: "Above"
             below: "Below"
             categories: "Categories"
-            date_after: "Date After"
+            max_topic_age: "Max Topic Age"
+            time_units:
+              days: "Days"
+              weeks: "Weeks"
+              months: "Months"
+              years: "Years"
           
           type:
             text: "Text"

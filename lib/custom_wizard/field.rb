@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CustomWizard::Field
   def self.types
     @types ||= {
@@ -35,7 +36,7 @@ class CustomWizard::Field
         min_length: nil
       },
       upload: {
-        file_types: '.jpg,.png'
+        file_types: '.jpg,.jpeg,.png'
       },
       dropdown: {
         prefill: nil,
@@ -64,7 +65,7 @@ class CustomWizard::Field
     @require_assets ||= {}
   end
 
-  def self.register(type, plugin = nil, asset_paths = [], opts={})
+  def self.register(type, plugin = nil, asset_paths = [], opts = {})
     if type
       types[type.to_sym] ||= {}
       types[type.to_sym] = opts[:type_opts] if opts[:type_opts].present?

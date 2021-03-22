@@ -1,3 +1,3 @@
 # discourse-custom-wizard
 
-See further: https://meta.discourse.org/t/custom-wizard-plugin/73345
+See further: https://thepavilion.io/c/knowledge/discourse/custom-wizard/118

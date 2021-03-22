@@ -1,8 +1,10 @@
+# frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Create custom wizards
-# version: 0.6.0
+# version: 0.7.0
 # authors: Angus McLeod
 # url: https://github.com/paviliondev/discourse-custom-wizard
+# contact emails: angus@thepavilion.io
 
 register_asset 'stylesheets/common/wizard-admin.scss'
 register_asset 'stylesheets/common/wizard-mapper.scss'
@@ -94,7 +96,7 @@ after_initialize do
   ].each do |path|
     load File.expand_path(path, __FILE__)
   end
-  
+
   add_class_method(:wizard, :user_requires_completion?) do |user|
     wizard_result = self.new(user).requires_completion?
     return wizard_result if wizard_result
@@ -113,7 +115,7 @@ after_initialize do
 
     !!custom_redirect
   end
-    
+
   add_to_class(:users_controller, :wizard_path) do
     if custom_wizard_redirect = current_user.custom_fields['redirect_to_wizard']
       "#{Discourse.base_url}/w/#{custom_wizard_redirect.dasherize}"
@@ -131,13 +133,13 @@ after_initialize do
       CustomWizard::Wizard.set_wizard_redirect(wizard.id, user)
     end
   end
-  
+
   add_to_class(:application_controller, :redirect_to_wizard_if_required) do
     wizard_id = current_user.custom_fields['redirect_to_wizard']
     @excluded_routes ||= SiteSetting.wizard_redirect_exclude_paths.split('|') + ['/w/']
     url = request.referer || request.original_url
 
-    if request.format === 'text/html' && !@excluded_routes.any? {|str| /#{str}/ =~ url} && wizard_id
+    if request.format === 'text/html' && !@excluded_routes.any? { |str| /#{str}/ =~ url } && wizard_id
       if request.referer !~ /\/w\// && request.referer !~ /\/invites\//
         CustomWizard::Wizard.set_submission_redirect(current_user, wizard_id, request.referer)
       end
@@ -146,37 +148,42 @@ after_initialize do
       end
     end
   end
-  
+
   add_to_serializer(:site, :include_wizard_required?) do
     scope.is_admin? && Wizard.new(scope.user).requires_completion?
   end
-  
+
   add_to_serializer(:site, :complete_custom_wizard) do
     if scope.user && requires_completion = CustomWizard::Wizard.prompt_completion(scope.user)
-      requires_completion.map {|w| { name: w[:name], url: "/w/#{w[:id]}"} }
+      requires_completion.map { |w| { name: w[:name], url: "/w/#{w[:id]}" } }
     end
   end
 
   add_to_serializer(:site, :include_complete_custom_wizard?) do
     complete_custom_wizard.present?
   end
-  
+
   add_model_callback(:application_controller, :before_action) do
     redirect_to_wizard_if_required if current_user
   end
-  
+
   ::ExtraLocalesController.prepend ExtraLocalesControllerCustomWizard
   ::InvitesController.prepend InvitesControllerCustomWizard
   ::UsersController.prepend CustomWizardUsersController
   ::Wizard::Field.prepend CustomWizardFieldExtension
   ::Wizard::Step.prepend CustomWizardStepExtension
-  
+
   full_path = "#{Rails.root}/plugins/discourse-custom-wizard/assets/stylesheets/wizard/wizard_custom.scss"
-  DiscoursePluginRegistry.register_asset(full_path, {}, "wizard_custom")
-  Stylesheet::Importer.register_import("wizard_custom") do
-    import_files(DiscoursePluginRegistry.stylesheets["wizard_custom"])
+  if Stylesheet::Importer.respond_to?(:plugin_assets)
+    Stylesheet::Importer.plugin_assets['wizard_custom'] = Set[full_path]
+  else
+    # legacy method, Discourse 2.7.0.beta5 and below
+    DiscoursePluginRegistry.register_asset(full_path, {}, "wizard_custom")
+    Stylesheet::Importer.register_import("wizard_custom") do
+      import_files(DiscoursePluginRegistry.stylesheets["wizard_custom"])
+    end
   end
-  
+
   CustomWizard::CustomField::CLASSES.keys.each do |klass|
     add_model_callback(klass, :after_initialize) do
       if CustomWizard::CustomField.enabled?
@@ -188,10 +195,10 @@ after_initialize do
         end
       end
     end
-    
+
     klass.to_s.classify.constantize.singleton_class.prepend CustomWizardCustomFieldPreloader
   end
-  
+
   CustomWizard::CustomField.serializers.each do |serializer_klass|
     "#{serializer_klass}_serializer".classify.constantize.prepend CustomWizardCustomFieldSerializer
   end

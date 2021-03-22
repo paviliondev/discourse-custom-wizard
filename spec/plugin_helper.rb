@@ -7,6 +7,7 @@ if ENV['SIMPLECOV']
     root "plugins/discourse-custom-wizard"
     track_files "plugins/discourse-custom-wizard/**/*.rb"
     add_filter { |src| src.filename =~ /(\/spec\/|\/db\/|plugin\.rb|api)/ }
+    SimpleCov.minimum_coverage 80
   end
 end
 

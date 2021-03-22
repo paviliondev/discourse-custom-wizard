@@ -6,9 +6,9 @@ class CustomWizard::RealtimeValidationsController < ::ApplicationController
     result = klass_str.constantize.new(current_user).perform(validation_params)
     render_serialized(result.items, "#{klass_str}Serializer".constantize, result.serializer_opts)
   end
-  
+
   private
-  
+
   def validation_params
     params.require(:type)
     settings = ::CustomWizard::RealtimeValidation.types[params[:type].to_sym]

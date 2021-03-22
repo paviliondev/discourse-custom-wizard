@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CustomWizard::StepUpdater
   include ActiveModel::Model
 
@@ -17,9 +18,9 @@ class CustomWizard::StepUpdater
        @step.present? &&
        @step.updater.present? &&
        success?
-      
+
       @step.updater.call(self)
-      
+
       UserHistory.create(
         action: UserHistory.actions[:custom_wizard_step],
         acting_user_id: @current_user.id,
@@ -38,7 +39,7 @@ class CustomWizard::StepUpdater
   def refresh_required?
     @refresh_required
   end
-  
+
   def validate
     CustomWizard::UpdateValidator.new(self).perform
   end

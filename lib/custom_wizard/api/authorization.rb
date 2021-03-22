@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'excon'
 
 class CustomWizard::Api::Authorization
@@ -19,7 +20,7 @@ class CustomWizard::Api::Authorization
                 :username,
                 :password
 
-  def initialize(api_name, data={})
+  def initialize(api_name, data = {})
     @api_name = api_name
 
     data.each do |k, v|
@@ -106,18 +107,18 @@ class CustomWizard::Api::Authorization
 
     connection = Excon.new(
       authorization.token_url,
-      :headers => {
+      headers: {
         "Content-Type" => "application/x-www-form-urlencoded"
       },
-      :method => 'GET',
-      :query => URI.encode_www_form(body)
+      method: 'GET',
+      query: URI.encode_www_form(body)
     )
     begin
       result = connection.request()
-      log_params = {time: Time.now, user_id: 0, status: 'SUCCESS', url: authorization.token_url, error: ""}
+      log_params = { time: Time.now, user_id: 0, status: 'SUCCESS', url: authorization.token_url, error: "" }
       CustomWizard::Api::LogEntry.set(name, log_params)
     rescue SystemCallError => e
-      log_params = {time: Time.now, user_id: 0, status: 'FAILURE', url: authorization.token_url, error: "Token refresh request failed: #{e.inspect}"}
+      log_params = { time: Time.now, user_id: 0, status: 'FAILURE', url: authorization.token_url, error: "Token refresh request failed: #{e.inspect}" }
       CustomWizard::Api::LogEntry.set(name, log_params)
     end
 

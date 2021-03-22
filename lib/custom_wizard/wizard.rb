@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require_dependency 'wizard/step'
 require_dependency 'wizard/field'
 require_dependency 'wizard/step_updater'
@@ -29,10 +30,10 @@ class CustomWizard::Wizard
                 :user,
                 :first_step
 
-  def initialize(attrs = {}, user=nil)
+  def initialize(attrs = {}, user = nil)
     @user = user
     attrs = attrs.with_indifferent_access
-  
+
     @id = attrs['id']
     @name = attrs['name']
     @background = attrs['background']
@@ -48,21 +49,21 @@ class CustomWizard::Wizard
     @needs_categories = false
     @needs_groups = false
     @theme_id = attrs['theme_id']
-    
+
     if attrs['theme'].present?
       theme = ::Theme.find_by(name: attrs['theme'])
       @theme_id = theme.id if theme
     end
-    
+
     @first_step = nil
     @steps = []
     if attrs['steps'].present?
       @step_ids = attrs['steps'].map { |s| s['id'] }
     end
-    
+
     @actions = []
   end
-  
+
   def cast_bool(val)
     val.nil? ? false : ActiveRecord::Type::Boolean.new.cast(val)
   end
@@ -73,12 +74,12 @@ class CustomWizard::Wizard
 
   def append_step(step)
     step = create_step(step) if step.is_a?(String)
-    
+
     yield step if block_given?
 
     last_step = steps.last
     steps << step
-        
+
     if steps.size == 1
       @first_step = step
       step.index = 0
@@ -133,7 +134,7 @@ class CustomWizard::Wizard
 
   def completed?
     return nil if !user
-    
+
     history = ::UserHistory.where(
       acting_user_id: user.id,
       action: ::UserHistory.actions[:custom_wizard_step],
@@ -143,7 +144,7 @@ class CustomWizard::Wizard
     if after_time
       history = history.where("updated_at > ?", after_time_scheduled)
     end
-    
+
     completed = history.distinct.order(:subject).pluck(:subject)
     (step_ids - completed).empty?
   end
@@ -151,7 +152,7 @@ class CustomWizard::Wizard
   def permitted?
     return false unless user
     return true if user.admin? || permitted.blank?
-    
+
     mapper = CustomWizard::Mapper.new(
       inputs: permitted,
       user: user,
@@ -160,11 +161,12 @@ class CustomWizard::Wizard
         multiple: true
       }
     ).perform
-        
+
     return true if mapper.blank?
-    
+
     mapper.all? do |m|
       if m[:type] === 'assignment'
+        [*m[:result]].include?(Group::AUTO_GROUPS[:everyone]) ||
         GroupUser.exists?(group_id: m[:result], user_id: user.id)
       elsif m[:type] === 'validation'
         m[:result]
@@ -173,11 +175,11 @@ class CustomWizard::Wizard
       end
     end
   end
-  
+
   def can_access?
     return false unless user
     return true if user.admin
-    return permitted? && (multiple_submissions || !completed?)
+    permitted? && (multiple_submissions || !completed?)
   end
 
   def reset
@@ -188,19 +190,19 @@ class CustomWizard::Wizard
       subject: "reset"
     )
   end
-  
+
   def categories
     @categories ||= ::Site.new(Guardian.new(user)).categories
   end
-  
+
   def groups
     @groups ||= ::Site.new(Guardian.new(user)).groups
   end
-  
+
   def submissions
     @submissions ||= Array.wrap(PluginStore.get("#{id}_submissions", user.id))
   end
-  
+
   def current_submission
     if submissions.present? && !submissions.last.key?("submitted_at")
       submissions.last
@@ -208,20 +210,20 @@ class CustomWizard::Wizard
       nil
     end
   end
-  
+
   def set_submissions(submissions)
     @submissions = nil
     PluginStore.set("#{id}_submissions", user.id, Array.wrap(submissions))
   end
-  
+
   def self.submissions(wizard_id, user)
     new({ id: wizard_id }, user).submissions
   end
-  
+
   def self.set_submissions(wizard_id, user, submissions)
     new({ id: wizard_id }, user).set_submissions(submissions)
   end
-  
+
   def self.create(wizard_id, user = nil)
     if template = CustomWizard::Template.find(wizard_id)
       new(template.to_h, user)
@@ -229,13 +231,15 @@ class CustomWizard::Wizard
       false
     end
   end
-  
-  def self.list(user, template_opts: {})
+
+  def self.list(user, template_opts: {}, not_completed: false)
     return [] unless user
-    
+
     CustomWizard::Template.list(template_opts).reduce([]) do |result, template|
       wizard = new(template, user)
-      result.push(wizard) if wizard.can_access?
+      result.push(wizard) if wizard.can_access? && (
+        !not_completed || !wizard.completed?
+      )
       result
     end
   end
@@ -257,9 +261,9 @@ class CustomWizard::Wizard
       template_opts: {
         setting: 'prompt_completion',
         order: "(value::json ->> 'permitted') IS NOT NULL DESC"
-      }
+      },
+      not_completed: true
     )
-    
     if wizards.any?
       wizards.map do |w|
         {
@@ -278,7 +282,7 @@ class CustomWizard::Wizard
 
   def self.set_wizard_redirect(wizard_id, user)
     wizard = self.create(wizard_id, user)
-    
+
     if wizard.permitted?
       user.custom_fields['redirect_to_wizard'] = wizard_id
       user.save_custom_fields(true)

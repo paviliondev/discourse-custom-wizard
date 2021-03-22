@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CustomWizard::FieldSerializer < ::WizardFieldSerializer
-  
+
   attributes :image,
              :file_types,
              :format,
@@ -38,23 +38,23 @@ class CustomWizard::FieldSerializer < ::WizardFieldSerializer
   def file_types
     object.file_types
   end
-  
+
   def format
     object.format
   end
-  
+
   def limit
     object.limit
   end
-  
+
   def property
     object.property
   end
-  
+
   def content
     object.content
   end
-  
+
   def include_choices?
     object.choices.present?
   end

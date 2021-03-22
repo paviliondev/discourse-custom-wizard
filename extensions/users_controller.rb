@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module CustomWizardUsersController
   def account_created
     if current_user.present? &&
