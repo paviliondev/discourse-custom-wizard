@@ -6,9 +6,9 @@ export default DiscourseRoute.extend({
   model() {
     return CustomWizardCustomField.listFields();
   },
-  
+
   setupController(controller, model) {
     const customFields = A(model || []);
-    controller.set('customFields', customFields);
-  }
+    controller.set("customFields", customFields);
+  },
 });

@@ -2,16 +2,21 @@ export default {
   name: "custom-wizard-step",
   initialize(app) {
     if (window.location.pathname.indexOf("/w/") < 0) return;
-    
-    const CustomWizard = requirejs("discourse/plugins/discourse-custom-wizard/wizard/models/custom").default;
+
+    const CustomWizard = requirejs(
+      "discourse/plugins/discourse-custom-wizard/wizard/models/custom"
+    ).default;
     const StepModel = requirejs("wizard/models/step").default;
     const StepComponent = requirejs("wizard/components/wizard-step").default;
     const ajax = requirejs("wizard/lib/ajax").ajax;
     const getUrl = requirejs("discourse-common/lib/get-url").default;
-    const discourseComputed = requirejs("discourse-common/utils/decorators").default;
-    const cook = requirejs("discourse/plugins/discourse-custom-wizard/wizard/lib/text-lite").cook;
+    const discourseComputed = requirejs("discourse-common/utils/decorators")
+      .default;
+    const cook = requirejs(
+      "discourse/plugins/discourse-custom-wizard/wizard/lib/text-lite"
+    ).cook;
     const { schedule } = requirejs("@ember/runloop");
-    
+
     StepModel.reopen({
       save() {
         const wizardId = this.get("wizardId");
@@ -69,10 +74,10 @@ export default {
         Ember.run.later(() => this.set("message", null), 6000);
       },
     });
-    
+
     StepComponent.reopen({
       classNameBindings: ["step.id"],
-      
+
       autoFocus() {
         schedule("afterRender", () => {
           const $invalid = $(
@@ -82,14 +87,16 @@ export default {
           if ($invalid.length) {
             return $invalid.focus();
           }
-          
+
           $(".wizard-focusable:first").focus();
         });
       },
 
       animateInvalidFields() {
         schedule("afterRender", () => {
-          let $element = $(".invalid input[type=text],.invalid textarea,.invalid input[type=checkbox],.invalid .select-kit");
+          let $element = $(
+            ".invalid input[type=text],.invalid textarea,.invalid input[type=checkbox],.invalid .select-kit"
+          );
 
           if ($element.length) {
             $([document.documentElement, document.body]).animate(
@@ -128,13 +135,13 @@ export default {
         if (!src) return;
         return getUrl(src);
       }.property("step.banner"),
-      
-      @discourseComputed('step.fields.[]')
+
+      @discourseComputed("step.fields.[]")
       primaryButtonIndex(fields) {
         return fields.length + 1;
       },
-      
-      @discourseComputed('step.fields.[]')
+
+      @discourseComputed("step.fields.[]")
       secondaryButtonIndex(fields) {
         return fields.length + 2;
       },
@@ -176,5 +183,5 @@ export default {
         },
       },
     });
-  }
-}
+  },
+};

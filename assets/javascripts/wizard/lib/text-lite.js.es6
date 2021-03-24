@@ -1,5 +1,5 @@
-import loadScript from './load-script';
-import { default as PrettyText } from 'pretty-text/pretty-text';
+import loadScript from "./load-script";
+import { default as PrettyText } from "pretty-text/pretty-text";
 
 export function cook(text, options) {
   return new Handlebars.SafeString(new PrettyText(options).cook(text));
@@ -10,8 +10,8 @@ export function cook(text, options) {
 export function cookAsync(text, options) {
   if (Discourse.MarkdownItURL) {
     return loadScript(Discourse.MarkdownItURL)
-      .then(()=>cook(text, options))
-      .catch(e => Ember.Logger.error(e));
+      .then(() => cook(text, options))
+      .catch((e) => Ember.Logger.error(e));
   } else {
     return Ember.RSVP.Promise.resolve(cook(text));
   }

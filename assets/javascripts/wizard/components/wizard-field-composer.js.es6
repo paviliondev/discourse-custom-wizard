@@ -1,41 +1,47 @@
-import { default as computed, observes } from 'discourse-common/utils/decorators';
+import {
+  default as computed,
+  observes,
+} from "discourse-common/utils/decorators";
 import EmberObject from "@ember/object";
 
 export default Ember.Component.extend({
   showPreview: false,
-  classNameBindings: [":wizard-field-composer", "showPreview:show-preview:hide-preview"],
-  
+  classNameBindings: [
+    ":wizard-field-composer",
+    "showPreview:show-preview:hide-preview",
+  ],
+
   didInsertElement() {
-    this.set('composer', EmberObject.create({
-      loading: false,
-      reply: this.get('field.value')
-    }))
+    this.set(
+      "composer",
+      EmberObject.create({
+        loading: false,
+        reply: this.get("field.value"),
+      })
+    );
   },
-  
-  @observes('composer.reply')
+
+  @observes("composer.reply")
   setField() {
-    this.set('field.value', this.get('composer.reply'));
+    this.set("field.value", this.get("composer.reply"));
   },
-  
-  @computed('showPreview')
+
+  @computed("showPreview")
   togglePreviewLabel(showPreview) {
-    return showPreview ? 'wizard_composer.hide_preview' : 'wizard_composer.show_preview';
+    return showPreview
+      ? "wizard_composer.hide_preview"
+      : "wizard_composer.show_preview";
   },
 
   actions: {
     togglePreview() {
-      this.toggleProperty('showPreview');
+      this.toggleProperty("showPreview");
     },
-    
-    groupsMentioned() {
-    },
-    afterRefresh() {
-    },               
-    cannotSeeMention() {
-    },
-    importQuote() {
-    },
-    showUploadSelector() {
-    }
-  }
+
+    groupsMentioned() {},
+    afterRefresh() {},
+    cannotSeeMention() {},
+    importQuote() {},
+    showUploadSelector() {},
+  },
 });

@@ -9,17 +9,12 @@ export default Component.extend({
   classNames: ["realtime-validations"],
   @discourseComputed
   timeUnits() {
-    return [
-      "days",
-      "weeks",
-      "months",
-      "years"
-    ].map((unit) => {
-        return {
-          id: unit,
-          name: I18n.t(`admin.wizard.field.validations.time_units.${unit}`)
-        }
-      });
+    return ["days", "weeks", "months", "years"].map((unit) => {
+      return {
+        id: unit,
+        name: I18n.t(`admin.wizard.field.validations.time_units.${unit}`),
+      };
+    });
   },
 
   init() {
@@ -28,7 +23,7 @@ export default Component.extend({
 
     if (!this.field.validations) {
       const validations = {};
-      
+
       this.validations.forEach((validation) => {
         validations[validation] = {};
       });

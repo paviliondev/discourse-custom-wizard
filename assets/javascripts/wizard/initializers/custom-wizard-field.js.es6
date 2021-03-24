@@ -5,20 +5,22 @@ export default {
   name: "custom-wizard-field",
   initialize(app) {
     if (window.location.pathname.indexOf("/w/") < 0) return;
-    
+
     const FieldComponent = requirejs("wizard/components/wizard-field").default;
     const FieldModel = requirejs("wizard/models/wizard-field").default;
-    const { cook } = requirejs("discourse/plugins/discourse-custom-wizard/wizard/lib/text-lite");
+    const { cook } = requirejs(
+      "discourse/plugins/discourse-custom-wizard/wizard/lib/text-lite"
+    );
     const DEditor = requirejs("discourse/components/d-editor").default;
     const { clipboardHelpers } = requirejs("discourse/lib/utilities");
     const { toMarkdown } = requirejs("discourse/lib/to-markdown");
-    
+
     FieldComponent.reopen({
       classNameBindings: ["field.id"],
 
       @discourseComputed("field.type")
       textType(fieldType) {
-        return ['text', 'textarea'].includes(fieldType);
+        return ["text", "textarea"].includes(fieldType);
       },
 
       cookedDescription: function () {
@@ -81,35 +83,43 @@ export default {
         return valid;
       },
     });
-    
+
     const isInside = (text, regex) => {
       const matches = text.match(regex);
       return matches && matches.length % 2;
     };
-    
+
     DEditor.reopen({
       isComposer: true,
-      
+
       didInsertElement() {
         this._super();
         if (this.wizardComposerEvents) {
-          this.appEvents.on("wizard-editor:insert-text", this, "_wizardInsertText");
-          this.appEvents.on("wizard-editor:replace-text", this, "_wizardReplaceText");
+          this.appEvents.on(
+            "wizard-editor:insert-text",
+            this,
+            "_wizardInsertText"
+          );
+          this.appEvents.on(
+            "wizard-editor:replace-text",
+            this,
+            "_wizardReplaceText"
+          );
         }
       },
-      
+
       _wizardInsertText(args = {}) {
         if (args.fieldId === this.fieldId) {
           this._insertText(args.text, args.options);
         }
       },
-      
+
       _wizardReplaceText(args = {}) {
         if (args.fieldId === this.fieldId) {
-          this._replaceText(args.oldVal, args.newVal, args.opts = {});
+          this._replaceText(args.oldVal, args.newVal, (args.opts = {}));
         }
       },
-      
+
       paste(e) {
         if (!$(".d-editor-input").is(":focus")) {
           return;
@@ -140,7 +150,7 @@ export default {
           if (table) {
             this.appEvents.trigger("wizard-editor:insert-text", {
               fieldId: this.fieldId,
-              text: table
+              text: table,
             });
             handled = true;
           }
@@ -169,7 +179,7 @@ export default {
 
             this.appEvents.trigger("composer:insert-text", {
               fieldId: this.fieldId,
-              text: markdown
+              text: markdown,
             });
             handled = true;
           }
@@ -180,5 +190,5 @@ export default {
         }
       },
     });
-  }
-}
+  },
+};

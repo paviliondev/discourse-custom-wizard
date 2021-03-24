@@ -6,18 +6,27 @@ export default {
     const EmberObject = requirejs("@ember/object").default;
     const Router = requirejs("wizard/router").default;
     const ApplicationRoute = requirejs("wizard/routes/application").default;
-    const CustomWizard = requirejs("discourse/plugins/discourse-custom-wizard/wizard/models/custom").default;
+    const CustomWizard = requirejs(
+      "discourse/plugins/discourse-custom-wizard/wizard/models/custom"
+    ).default;
     const getUrl = requirejs("discourse-common/lib/get-url").default;
     const Store = requirejs("discourse/models/store").default;
-    const registerRawHelpers = requirejs("discourse-common/lib/raw-handlebars-helpers").registerRawHelpers;
-    const createHelperContext = requirejs("discourse-common/lib/helpers").createHelperContext;
-    const RawHandlebars = requirejs("discourse-common/lib/raw-handlebars").default;
-    const Site = requirejs("discourse/plugins/discourse-custom-wizard/wizard/models/site").default;
+    const registerRawHelpers = requirejs(
+      "discourse-common/lib/raw-handlebars-helpers"
+    ).registerRawHelpers;
+    const createHelperContext = requirejs("discourse-common/lib/helpers")
+      .createHelperContext;
+    const RawHandlebars = requirejs("discourse-common/lib/raw-handlebars")
+      .default;
+    const Site = requirejs(
+      "discourse/plugins/discourse-custom-wizard/wizard/models/site"
+    ).default;
     const RestAdapter = requirejs("discourse/adapters/rest").default;
     const Session = requirejs("discourse/models/session").default;
-    const setDefaultOwner = requirejs("discourse-common/lib/get-owner").setDefaultOwner;
+    const setDefaultOwner = requirejs("discourse-common/lib/get-owner")
+      .setDefaultOwner;
     const messageBus = requirejs("message-bus-client").default;
-    
+
     const container = app.__container__;
     Discourse.Model = EmberObject.extend();
     Discourse.__container__ = container;
@@ -66,7 +75,7 @@ export default {
     site.set("can_create_tag", false);
     app.register("session:main", Session.current(), { instantiate: false });
     targets.forEach((t) => app.inject(t, "session", "session:main"));
-    
+
     createHelperContext({
       siteSettings: container.lookup("site-settings:main"),
       currentUser: container.lookup("current-user:main"),
@@ -74,13 +83,13 @@ export default {
       session: container.lookup("session:main"),
       capabilities: container.lookup("capabilities:main"),
     });
-    
+
     const session = container.lookup("session:main");
     const setupData = document.getElementById("data-discourse-setup").dataset;
     session.set("highlightJsPath", setupData.highlightJsPath);
-    
+
     Router.reopen({
-      rootURL: getUrl("/w/")
+      rootURL: getUrl("/w/"),
     });
 
     Router.map(function () {
