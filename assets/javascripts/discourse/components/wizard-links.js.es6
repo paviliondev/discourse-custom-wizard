@@ -30,6 +30,7 @@ export default Component.extend({
     const items = this.items;
     const item = items.findBy('id', itemId);
     items.removeObject(item);
+    item.set('index', newIndex);
     items.insertAt(newIndex, item);
     scheduleOnce('afterRender', this, () => this.applySortable());
   },
@@ -71,25 +72,21 @@ export default Component.extend({
       const items = this.get('items');
       const itemType = this.itemType;
       let params = setWizardDefaults({}, itemType);
-      
+
       params.isNew = true;
-      
-      let next = 1;
-            
+
+      let index = 0;
       if (items.length) {
-        next = Math.max.apply(Math, items.map((i) => {
-          let parts = i.id.split('_');
-          let lastPart = parts[parts.length - 1];
-          return isNaN(lastPart) ? 0 : lastPart;
-        })) + 1;
+        index = items.length;
       }
-            
-      let id = `${itemType}_${next}`;
-      
+
+      params.index = index;
+
+      let id = `${itemType}_${index + 1}`;
       if (itemType === 'field') {
         id = `${this.parentId}_${id}`;
       }
-    
+
       params.id = id;
       
       let objectArrays = wizardSchema[itemType].objectArrays;
@@ -98,10 +95,10 @@ export default Component.extend({
           params[objectArrays[objectType].property] = A();
         });
       };
-          
+
       const newItem = EmberObject.create(params);
       items.pushObject(newItem);
-      
+
       this.set('current', newItem);
     },
 

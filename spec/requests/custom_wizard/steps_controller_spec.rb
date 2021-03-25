@@ -13,10 +13,13 @@ describe CustomWizard::StepsController do
 
   before do
     CustomWizard::Template.save(
-      JSON.parse(File.open(
+      JSON.parse(
+        File.open(
         "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-      ).read),
-    skip_jobs: true)
+        ).read
+      ),
+      skip_jobs: true
+    )
     sign_in(user)
   end
 

@@ -38,20 +38,13 @@ class CustomWizard::Builder
 
     build_opts[:reset] = build_opts[:reset] || @wizard.restart_on_revisit
 
-    @steps.each do |step_template|
-      
-      if step_template['condition']
-        passed = CustomWizard::Mapper.new(
-          inputs: step_template['condition'],
-          user: @wizard.user,
-          data: @submissions.last
-        ).perform
-        next if !passed
-      end
-      
-      @wizard.append_step(step_template['id']) do |step|
-        step.permitted = true
+    @steps.each do |step_template|    
+      next if !check_condition(step_template)
 
+      @wizard.append_step(step_template['id']) do |step|
+        step.index = step_template['index'] if step_template['index']
+
+        step.permitted = true
         if step_template['required_data']
           step = ensure_required_data(step, step_template)
         end
@@ -80,17 +73,19 @@ class CustomWizard::Builder
         end
 
         if step_template['fields'] && step_template['fields'].length
-          step_template['fields'].each_with_index do |field_template, index|
-            append_field(step, step_template, field_template, build_opts, index)
+          step_template['fields'].each do |field_template|
+            next if !check_condition(field_template)
+            append_field(step, step_template, field_template, build_opts)
           end
         end
+
+        step.update_field_order!
 
         step.on_update do |updater|
           @updater = updater
           user = @wizard.user
 
           updater.validate
-
           next if updater.errors.any?
 
           CustomWizard::Builder.step_handlers.each do |handler|
@@ -102,7 +97,6 @@ class CustomWizard::Builder
           next if updater.errors.any?
 
           submission = updater.submission
-
           if current_submission = @wizard.current_submission
             submission = current_submission.merge(submission)
           end
@@ -154,15 +148,16 @@ class CustomWizard::Builder
       end
     end
 
+    @wizard.update_step_order!
+
     @wizard
   end
 
-  def append_field(step, step_template, field_template, build_opts, index)
+  def append_field(step, step_template, field_template, build_opts)
     params = {
       id: field_template['id'],
       type: field_template['type'],
-      required: field_template['required'],
-      number: index + 1
+      required: field_template['required']
     }
 
     params[:label] = field_template['label'] if field_template['label']
@@ -260,6 +255,18 @@ class CustomWizard::Builder
         user: @wizard.user,
         data: @submissions.last
       ).perform
+    end
+  end
+  
+  def check_condition(template)
+    if template['condition'].present?
+      CustomWizard::Mapper.new(
+        inputs: template['condition'],
+        user: @wizard.user,
+        data: @submissions.last
+      ).perform
+    else
+      true
     end
   end
 

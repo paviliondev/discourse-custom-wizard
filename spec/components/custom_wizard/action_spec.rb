@@ -4,20 +4,26 @@ describe CustomWizard::Action do
   fab!(:user) { Fabricate(:user, name: "Angus", username: 'angus', email: "angus@email.com", trust_level: TrustLevel[2]) }
   fab!(:category) { Fabricate(:category, name: 'cat1', slug: 'cat-slug') }
   fab!(:group) { Fabricate(:group) }
+  
+  let(:wizard_template) {
+    JSON.parse(
+      File.open(
+        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
+      ).read
+    )
+  }
 
   let(:open_composer) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/actions/open_composer.json"
-    ).read)
+    JSON.parse(
+      File.open(
+        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/actions/open_composer.json"
+      ).read
+    )
   }
 
   before do
     Group.refresh_automatic_group!(:trust_level_2)
-    CustomWizard::Template.save(
-      JSON.parse(File.open(
-        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-      ).read),
-    skip_jobs: true)
+    CustomWizard::Template.save(wizard_template, skip_jobs: true)
     @template = CustomWizard::Template.find('super_mega_fun_wizard')
   end
 

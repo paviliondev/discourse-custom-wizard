@@ -68,8 +68,8 @@ class CustomWizard::Wizard
     val.nil? ? false : ActiveRecord::Type::Boolean.new.cast(val)
   end
 
-  def create_step(step_name)
-    ::Wizard::Step.new(step_name)
+  def create_step(step_id)
+    ::CustomWizard::Step.new(step_id)
   end
 
   def append_step(step)
@@ -77,16 +77,19 @@ class CustomWizard::Wizard
 
     yield step if block_given?
 
-    last_step = steps.last
     steps << step
+    step.index = (steps.size == 1 ? 0 : steps.size) if step.index.nil?
+  end
 
-    if steps.size == 1
-      @first_step = step
-      step.index = 0
-    elsif last_step.present?
+  def update_step_order!
+    steps.sort_by!(&:index)
+
+    steps.each_with_index do |step, index|
+      @first_step = step if index === 0      
+      last_step = steps[index - 1]
       last_step.next = step
       step.previous = last_step
-      step.index = last_step.index + 1
+      step.index = index
     end
   end
 
@@ -200,6 +203,7 @@ class CustomWizard::Wizard
   end
 
   def submissions
+    return nil unless user.present?
     @submissions ||= Array.wrap(PluginStore.get("#{id}_submissions", user.id))
   end
 

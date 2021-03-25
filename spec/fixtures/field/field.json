@@ -1,5 +1,6 @@
 {
   "id": "field_id",
+  "index": 0,
   "label": "Field Label",
   "image": "field_image_url.png",
   "description": "Field description",

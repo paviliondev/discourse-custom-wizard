@@ -67,6 +67,7 @@ after_initialize do
     ../lib/custom_wizard/mapper.rb
     ../lib/custom_wizard/log.rb
     ../lib/custom_wizard/step_updater.rb
+    ../lib/custom_wizard/step.rb
     ../lib/custom_wizard/template.rb
     ../lib/custom_wizard/wizard.rb
     ../lib/custom_wizard/api/api.rb
@@ -89,8 +90,6 @@ after_initialize do
     ../extensions/extra_locales_controller.rb
     ../extensions/invites_controller.rb
     ../extensions/users_controller.rb
-    ../extensions/wizard_field.rb
-    ../extensions/wizard_step.rb
     ../extensions/custom_field/preloader.rb
     ../extensions/custom_field/serializer.rb
   ].each do |path|
@@ -170,8 +169,6 @@ after_initialize do
   ::ExtraLocalesController.prepend ExtraLocalesControllerCustomWizard
   ::InvitesController.prepend InvitesControllerCustomWizard
   ::UsersController.prepend CustomWizardUsersController
-  ::Wizard::Field.prepend CustomWizardFieldExtension
-  ::Wizard::Step.prepend CustomWizardStepExtension
 
   full_path = "#{Rails.root}/plugins/discourse-custom-wizard/assets/stylesheets/wizard/wizard_custom.scss"
   if Stylesheet::Importer.respond_to?(:plugin_assets)

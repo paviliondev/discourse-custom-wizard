@@ -20,9 +20,11 @@ describe CustomWizard::FieldSerializer do
       each_serializer: CustomWizard::FieldSerializer,
       scope: Guardian.new(user)
     ).as_json
-    expect(json_array.length).to eq(4)
+
+    expect(json_array.size).to eq(4)
     expect(json_array[0][:label]).to eq("<p>Text</p>")
     expect(json_array[0][:description]).to eq("Text field description.")
+    expect(json_array[3][:index]).to eq(3)
   end
 
   it "should return optional field attributes" do
@@ -32,7 +34,6 @@ describe CustomWizard::FieldSerializer do
       scope: Guardian.new(user)
     ).as_json
     expect(json_array[0][:format]).to eq("YYYY-MM-DD")
-    expect(json_array[3][:number]).to eq(4)
     expect(json_array[6][:file_types]).to eq(".jpg,.jpeg,.png")
   end
 end

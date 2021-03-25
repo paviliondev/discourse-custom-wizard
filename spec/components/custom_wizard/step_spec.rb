@@ -1,16 +1,17 @@
 # frozen_string_literal: true
-require_relative '../plugin_helper'
+require_relative '../../plugin_helper'
 
-describe CustomWizardStepExtension do
+describe CustomWizard::Step do
   let(:step_hash) do
     JSON.parse(File.open(
       "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/step/step.json"
     ).read).with_indifferent_access
   end
 
-  it "adds custom step attributes" do
-    step = Wizard::Step.new(step_hash[:id])
+  it "initializes custom step attributes" do
+    step = CustomWizard::Step.new(step_hash[:id])
     [
+      :index,
       :title,
       :description,
       :key,

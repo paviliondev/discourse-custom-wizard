@@ -56,6 +56,8 @@ en:
         undo: "Undo"
         clear: "Clear"
         select_type: "Select a type"
+        condition: "Condition"
+        index: "Index"
         
         message:
           wizard:
@@ -153,8 +155,6 @@ en:
             not_permitted_message: "Message shown when required data not present"
           permitted_params:
             label: "Params"
-          condition:
-            label: "Condition"
         
         field:
           header: "Fields"

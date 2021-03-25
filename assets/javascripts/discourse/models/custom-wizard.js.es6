@@ -39,7 +39,7 @@ const CustomWizard = EmberObject.extend({
 
   buildJson(object, type, result = {}) {
     let objectType = object.type || null;
-    
+
     if (wizardSchema[type].types) {
       if (!objectType) {
         result.error = {
@@ -49,25 +49,25 @@ const CustomWizard = EmberObject.extend({
         return result;
       }
     }
-            
+      
     for (let property of listProperties(type, { objectType })) {
       let value = object.get(property);
-      
+
       result = this.validateValue(property, value, object, type, result);
-      
+
       if (result.error) {
         break;
       }
-        
+
       if (mapped(property, type)) {
         value = this.buildMappedJson(value);
       }
-            
+      
       if (value !== undefined && value !== null) {
         result[property] = value;
       }
     };
-    
+
     if (!result.error) {
       for (let arrayObjectType of Object.keys(wizardSchema[type].objectArrays)) {
         let arraySchema = wizardSchema[type].objectArrays[arrayObjectType];
@@ -129,9 +129,11 @@ const CustomWizard = EmberObject.extend({
     return result;
   },
 
-  buildMappedJson(inputs) {
-    if (!inputs || !inputs.length) return false;
+  buildMappedJson(value) {
+    if (typeof value === 'string' || Number.isInteger(value)) return value;
+    if (!value || !value.length) return false;
     
+    let inputs = value;
     let result = [];
       
     inputs.forEach(inpt => {

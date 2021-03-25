@@ -43,6 +43,7 @@ const wizard = {
 const step = {
   basic: {
     id: null,
+    index: null,
     title: null,
     key: null,
     banner: null,
@@ -55,7 +56,8 @@ const step = {
   mapped: [
     'required_data',
     'permitted_params',
-    'condition'
+    'condition',
+    'index'
   ],
   advanced: [
     'required_data',
@@ -77,17 +79,21 @@ const step = {
 const field = {
   basic: {
     id: null,
+    index: null,
     label: null,
     image: null,
     description: null,
     required: null,
     key: null,
-    type: null
+    type: null,
+    condition: null
   },
   types: {},
   mapped: [
     'prefill',
-    'content'
+    'content',
+    'condition',
+    'index'
   ],
   advanced: [
     'property',

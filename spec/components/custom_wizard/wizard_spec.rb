@@ -28,6 +28,8 @@ describe CustomWizard::Wizard do
     template_json['steps'].each do |step_template|
       @wizard.append_step(step_template['id'])
     end
+
+    @wizard.update_step_order!
   end
 
   def progress_step(step_id, acting_user: user, wizard: @wizard)
