@@ -1,6 +1,6 @@
 <label class={{currentStateClass}}>
   {{#if currentState}}
-    {{#if showValidationCategories}}
+    {{#if insufficientCharactersCategories}}
       {{html-safe (i18n currentStateKey catLinks=catLinks)}}
     {{else}}
       {{i18n currentStateKey}}

@@ -4,7 +4,7 @@ import { observes } from "discourse-common/utils/decorators";
 import { cancel, later } from "@ember/runloop";
 import { A } from "@ember/array";
 import EmberObject, { computed } from "@ember/object";
-import { notEmpty, and, equal, empty } from "@ember/object/computed";
+import { notEmpty, and, equal, empty, alias } from "@ember/object/computed";
 import discourseComputed from "discourse-common/utils/decorators";
 import { categoryBadgeHTML } from "discourse/helpers/category-link";
 import { dasherize } from "@ember/string";
@@ -12,7 +12,8 @@ import { dasherize } from "@ember/string";
 export default WizardFieldValidator.extend({
   classNames: ['similar-topics-validator'],
   similarTopics: null,
-  hasInput: notEmpty('field.value'),
+  input: alias('field.value'),
+  hasInput: notEmpty('input'),
   hasSimilarTopics: notEmpty('similarTopics'),
   hasNotSearched: equal('similarTopics', null),
   noSimilarTopics: computed('similarTopics', function() {
@@ -21,6 +22,9 @@ export default WizardFieldValidator.extend({
   showDefault: computed('hasNotSearched', 'hasInput', 'typing', function() {
     return this.hasInput && (this.hasNotSearched || this.typing);
   }),
+  insufficientCharacters: computed('typing', 'input', function() {
+    return this.hasInput && this.input.length < 5 && !this.typing;
+  }),
   showSimilarTopics: computed('typing', 'hasSimilarTopics', function() {
     return this.hasSimilarTopics && !this.typing;
   }),
@@ -28,7 +32,7 @@ export default WizardFieldValidator.extend({
     return this.noSimilarTopics && !this.typing;
   }),
   hasValidationCategories: notEmpty('validationCategories'),
-  showValidationCategories: and('showDefault', 'hasValidationCategories'),
+  insufficientCharactersCategories: and('insufficientCharacters', 'hasValidationCategories'),
   
   @discourseComputed('validation.categories')
   validationCategories(categoryIds) {
@@ -46,15 +50,15 @@ export default WizardFieldValidator.extend({
     'loading',
     'showSimilarTopics',
     'showNoSimilarTopics',
-    'showValidationCategories',
-    'showDefault'
+    'insufficientCharacters',
+    'insufficientCharactersCategories'
   )
   currentState(
     loading,
     showSimilarTopics,
     showNoSimilarTopics,
-    showValidationCategories,
-    showDefault
+    insufficientCharacters,
+    insufficientCharactersCategories
   ) {
     switch (true) {
       case loading:
@@ -63,10 +67,10 @@ export default WizardFieldValidator.extend({
         return 'results';
       case showNoSimilarTopics:
         return 'no_results';
-      case showValidationCategories:
-        return 'default_categories';
-      case showDefault:
-        return 'default';
+      case insufficientCharactersCategories:
+        return 'insufficient_characters_categories';
+      case insufficientCharacters:
+        return 'insufficient_characters';
       default:
         return false;
     }
@@ -97,11 +101,6 @@ export default WizardFieldValidator.extend({
     
     this.set("typing", true);
     
-    if (value && value.length < 5) {
-      this.set('similarTopics', null);
-      return;
-    }
-    
     const lastKeyUp = new Date();
     this._lastKeyUp = lastKeyUp;
 
@@ -113,7 +112,12 @@ export default WizardFieldValidator.extend({
         return;
       }
       this.set("typing", false);
-      
+
+      if (value && value.length < 5) {
+        this.set('similarTopics', null);
+        return;
+      }
+
       this.updateSimilarTopics();
     }, 1000);
   },
