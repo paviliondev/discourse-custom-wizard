@@ -4,7 +4,7 @@ import { observes } from "discourse-common/utils/decorators";
 import { cancel, later } from "@ember/runloop";
 import { A } from "@ember/array";
 import EmberObject, { computed } from "@ember/object";
-import { notEmpty, and, equal, empty, alias } from "@ember/object/computed";
+import { notEmpty, and, equal, empty } from "@ember/object/computed";
 import discourseComputed from "discourse-common/utils/decorators";
 import { categoryBadgeHTML } from "discourse/helpers/category-link";
 import { dasherize } from "@ember/string";
@@ -12,8 +12,7 @@ import { dasherize } from "@ember/string";
 export default WizardFieldValidator.extend({
   classNames: ['similar-topics-validator'],
   similarTopics: null,
-  input: alias('field.value'),
-  hasInput: notEmpty('input'),
+  hasInput: notEmpty('field.value'),
   hasSimilarTopics: notEmpty('similarTopics'),
   hasNotSearched: equal('similarTopics', null),
   noSimilarTopics: computed('similarTopics', function() {
@@ -22,8 +21,8 @@ export default WizardFieldValidator.extend({
   showDefault: computed('hasNotSearched', 'hasInput', 'typing', function() {
     return this.hasInput && (this.hasNotSearched || this.typing);
   }),
-  insufficientCharacters: computed('typing', 'input', function() {
-    return this.hasInput && this.input.length < 5 && !this.typing;
+  insufficientCharacters: computed('typing', 'field.value', function() {
+    return this.hasInput && this.field.value.length < 5 && !this.typing;
   }),
   showSimilarTopics: computed('typing', 'hasSimilarTopics', function() {
     return this.hasSimilarTopics && !this.typing;
