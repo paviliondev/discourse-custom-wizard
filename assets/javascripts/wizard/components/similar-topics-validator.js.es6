@@ -21,9 +21,6 @@ export default WizardFieldValidator.extend({
   showDefault: computed('hasNotSearched', 'hasInput', 'typing', function() {
     return this.hasInput && (this.hasNotSearched || this.typing);
   }),
-  insufficientCharacters: computed('typing', 'field.value', function() {
-    return this.hasInput && this.field.value.length < 5 && !this.typing;
-  }),
   showSimilarTopics: computed('typing', 'hasSimilarTopics', function() {
     return this.hasSimilarTopics && !this.typing;
   }),
@@ -31,6 +28,9 @@ export default WizardFieldValidator.extend({
     return this.noSimilarTopics && !this.typing;
   }),
   hasValidationCategories: notEmpty('validationCategories'),
+  insufficientCharacters: computed('typing', 'field.value', function() {
+    return this.hasInput && this.field.value.length < 5 && !this.typing;
+  }),
   insufficientCharactersCategories: and('insufficientCharacters', 'hasValidationCategories'),
   
   @discourseComputed('validation.categories')
