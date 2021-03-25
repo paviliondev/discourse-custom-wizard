@@ -92,7 +92,10 @@ export default WizardFieldValidator.extend({
   customValidate() {
     const field = this.field;
     
-    if (!field.value) return;
+    if (!field.value) {
+      this.set('similarTopics', null);
+      return;
+    }
     const value = field.value;
     
     this.set("typing", true);
