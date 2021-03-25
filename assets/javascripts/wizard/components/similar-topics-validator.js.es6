@@ -18,9 +18,6 @@ export default WizardFieldValidator.extend({
   noSimilarTopics: computed('similarTopics', function() {
     return this.similarTopics !== null && this.similarTopics.length == 0;
   }),
-  showDefault: computed('hasNotSearched', 'hasInput', 'typing', function() {
-    return this.hasInput && (this.hasNotSearched || this.typing);
-  }),
   showSimilarTopics: computed('typing', 'hasSimilarTopics', function() {
     return this.hasSimilarTopics && !this.typing;
   }),
