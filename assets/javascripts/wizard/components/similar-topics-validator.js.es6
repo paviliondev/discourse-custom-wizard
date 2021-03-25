@@ -18,9 +18,6 @@ export default WizardFieldValidator.extend({
   noSimilarTopics: computed('similarTopics', function() {
     return this.similarTopics !== null && this.similarTopics.length == 0;
   }),
-  showDefault: computed('hasNotSearched', 'hasInput', 'typing', function() {
-    return this.hasInput && (this.hasNotSearched || this.typing);
-  }),
   showSimilarTopics: computed('typing', 'hasSimilarTopics', function() {
     return this.hasSimilarTopics && !this.typing;
   }),
@@ -28,7 +25,10 @@ export default WizardFieldValidator.extend({
     return this.noSimilarTopics && !this.typing;
   }),
   hasValidationCategories: notEmpty('validationCategories'),
-  showValidationCategories: and('showDefault', 'hasValidationCategories'),
+  insufficientCharacters: computed('typing', 'field.value', function() {
+    return this.hasInput && this.field.value.length < 5 && !this.typing;
+  }),
+  insufficientCharactersCategories: and('insufficientCharacters', 'hasValidationCategories'),
   
   @discourseComputed('validation.categories')
   validationCategories(categoryIds) {
@@ -46,15 +46,15 @@ export default WizardFieldValidator.extend({
     'loading',
     'showSimilarTopics',
     'showNoSimilarTopics',
-    'showValidationCategories',
-    'showDefault'
+    'insufficientCharacters',
+    'insufficientCharactersCategories'
   )
   currentState(
     loading,
     showSimilarTopics,
     showNoSimilarTopics,
-    showValidationCategories,
-    showDefault
+    insufficientCharacters,
+    insufficientCharactersCategories
   ) {
     switch (true) {
       case loading:
@@ -63,10 +63,10 @@ export default WizardFieldValidator.extend({
         return 'results';
       case showNoSimilarTopics:
         return 'no_results';
-      case showValidationCategories:
-        return 'default_categories';
-      case showDefault:
-        return 'default';
+      case insufficientCharactersCategories:
+        return 'insufficient_characters_categories';
+      case insufficientCharacters:
+        return 'insufficient_characters';
       default:
         return false;
     }
@@ -97,11 +97,6 @@ export default WizardFieldValidator.extend({
     
     this.set("typing", true);
     
-    if (value && value.length < 5) {
-      this.set('similarTopics', null);
-      return;
-    }
-    
     const lastKeyUp = new Date();
     this._lastKeyUp = lastKeyUp;
 
@@ -113,7 +108,12 @@ export default WizardFieldValidator.extend({
         return;
       }
       this.set("typing", false);
-      
+
+      if (value && value.length < 5) {
+        this.set('similarTopics', null);
+        return;
+      }
+
       this.updateSimilarTopics();
     }, 1000);
   },

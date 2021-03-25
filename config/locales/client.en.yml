@@ -528,8 +528,8 @@ en:
     
     realtime_validations:
       similar_topics:
-        default: "When you stop typing we'll look for similar topics."
-        default_categories: "When you stop typing we'll look for similar topics in %{catLinks}"
+        insufficient_characters: "Type a minimum 5 characters to start looking for similar topics"
+        insufficient_characters_categories: "Type a minimum 5 characters to start looking for similar topics in %{catLinks}"
         results: "Your topic is similar to..."
         no_results: "No similar topics."
         loading: "Looking for similar topics..."
