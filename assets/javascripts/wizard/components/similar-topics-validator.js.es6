@@ -18,19 +18,19 @@ export default WizardFieldValidator.extend({
   noSimilarTopics: computed("similarTopics", function () {
     return this.similarTopics !== null && this.similarTopics.length == 0;
   }),
-  showDefault: computed("hasNotSearched", "hasInput", "typing", function () {
-    return this.hasInput && (this.hasNotSearched || this.typing);
-  }),
-  showSimilarTopics: computed("typing", "hasSimilarTopics", function () {
+  showSimilarTopics: computed('typing', 'hasSimilarTopics', function() {
     return this.hasSimilarTopics && !this.typing;
   }),
   showNoSimilarTopics: computed("typing", "noSimilarTopics", function () {
     return this.noSimilarTopics && !this.typing;
   }),
-  hasValidationCategories: notEmpty("validationCategories"),
-  showValidationCategories: and("showDefault", "hasValidationCategories"),
-
-  @discourseComputed("validation.categories")
+  hasValidationCategories: notEmpty('validationCategories'),
+  insufficientCharacters: computed('typing', 'field.value', function() {
+    return this.hasInput && this.field.value.length < 5 && !this.typing;
+  }),
+  insufficientCharactersCategories: and('insufficientCharacters', 'hasValidationCategories'),
+  
+  @discourseComputed('validation.categories')
   validationCategories(categoryIds) {
     if (categoryIds)
       return categoryIds.map((id) => this.site.categoriesById[id]);
@@ -44,18 +44,18 @@ export default WizardFieldValidator.extend({
   },
 
   @discourseComputed(
-    "loading",
-    "showSimilarTopics",
-    "showNoSimilarTopics",
-    "showValidationCategories",
-    "showDefault"
+    'loading',
+    'showSimilarTopics',
+    'showNoSimilarTopics',
+    'insufficientCharacters',
+    'insufficientCharactersCategories'
   )
   currentState(
     loading,
     showSimilarTopics,
     showNoSimilarTopics,
-    showValidationCategories,
-    showDefault
+    insufficientCharacters,
+    insufficientCharactersCategories
   ) {
     switch (true) {
       case loading:
@@ -63,11 +63,11 @@ export default WizardFieldValidator.extend({
       case showSimilarTopics:
         return "results";
       case showNoSimilarTopics:
-        return "no_results";
-      case showValidationCategories:
-        return "default_categories";
-      case showDefault:
-        return "default";
+        return 'no_results';
+      case insufficientCharactersCategories:
+        return 'insufficient_characters_categories';
+      case insufficientCharacters:
+        return 'insufficient_characters';
       default:
         return false;
     }
@@ -93,17 +93,15 @@ export default WizardFieldValidator.extend({
   @observes("field.value")
   customValidate() {
     const field = this.field;
-
-    if (!field.value) return;
-    const value = field.value;
-
-    this.set("typing", true);
-
-    if (value && value.length < 5) {
-      this.set("similarTopics", null);
+    
+    if (!field.value) {
+      this.set('similarTopics', null);
       return;
     }
-
+    const value = field.value;
+    
+    this.set("typing", true);
+    
     const lastKeyUp = new Date();
     this._lastKeyUp = lastKeyUp;
 
@@ -115,6 +113,11 @@ export default WizardFieldValidator.extend({
         return;
       }
       this.set("typing", false);
+
+      if (value && value.length < 5) {
+        this.set('similarTopics', null);
+        return;
+      }
 
       this.updateSimilarTopics();
     }, 1000);
