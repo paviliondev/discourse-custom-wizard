@@ -1,7 +1,7 @@
 import { buildResolver } from "discourse-common/resolver";
 
 export default Ember.Application.extend({
-  rootElement: '#custom-wizard-main',
+  rootElement: "#custom-wizard-main",
   Resolver: buildResolver("wizard"),
 
   start() {
@@ -11,7 +11,7 @@ export default Ember.Application.extend({
         if (!module) {
           throw new Error(key + " must export an initializer.");
         }
-        
+
         const init = module.default;
         const oldInitialize = init.initialize;
         init.initialize = () => {
@@ -21,8 +21,8 @@ export default Ember.Application.extend({
         this.initializer(init);
       }
     });
-    
-    Object.keys(requirejs._eak_seen).forEach(key => {
+
+    Object.keys(requirejs._eak_seen).forEach((key) => {
       if (/\/initializers\//.test(key)) {
         const module = requirejs(key, null, null, true);
         if (!module) {
@@ -31,5 +31,5 @@ export default Ember.Application.extend({
         this.initializer(module.default);
       }
     });
-  }
+  },
 });

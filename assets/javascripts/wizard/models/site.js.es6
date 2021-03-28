@@ -7,4 +7,4 @@ export default Site.reopenClass({
     const store = Discourse.__container__.lookup("service:store");
     return store.createRecord("site", {});
   },
-})
+});
