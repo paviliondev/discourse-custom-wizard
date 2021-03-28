@@ -6,6 +6,7 @@
 # url: https://github.com/paviliondev/discourse-custom-wizard
 # contact emails: angus@thepavilion.io
 
+gem 'liquid', '5.0.1', require: true
 register_asset 'stylesheets/common/wizard-admin.scss'
 register_asset 'stylesheets/common/wizard-mapper.scss'
 register_asset 'lib/jquery.timepicker.min.js'

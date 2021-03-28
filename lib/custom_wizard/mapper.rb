@@ -213,7 +213,7 @@ class CustomWizard::Mapper
     end
   end
 
-  def interpolate(string, opts = { user: true, wizard: true, value: true })
+  def interpolate(string, opts = { user: true, wizard: true, value: true, template: true })
     return string if string.blank?
 
     if opts[:user]
@@ -246,6 +246,11 @@ class CustomWizard::Mapper
 
         result
       end
+    end
+
+    if opts[:template]
+      template = Liquid::Template.parse(string)
+      string = template.render(data)
     end
 
     string
