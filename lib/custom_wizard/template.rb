@@ -9,7 +9,14 @@ class CustomWizard::Template
   def initialize(data)
     @data = data
   end
-
+  
+  ## 
+  # type:        step
+  # number:      4
+  # title:       Our new field is saved to the template
+  # description: The template is loaded into the wizard model when it is built,
+  #              our attribute has to be present, for it to build properly...
+  ##
   def save(opts = {})
     @opts = opts
 

@@ -57,6 +57,20 @@ const step = {
   },
 };
 
+
+/*
+ * unit:        custom_wizard:templates_and_builder
+ * type:        step
+ * number:      2
+ * title:       Add the attribute to the wizard schema
+ * description: Custom Wizard templates are modeled in the client via
+ *              the wizard-schema, which, along with the serialization in 
+ *              wizard-json and models/custom-wizard, models and serializes
+ *              data on the client. Normally when adding an attribute, you
+ *              just need to add it to the schema, for the rest of the
+ *              modeling and serialization to work.
+ */
+ 
 const field = {
   basic: {
     id: null,

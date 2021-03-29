@@ -8,6 +8,14 @@ class CustomWizard::TemplateValidator
     @opts = opts
   end
 
+  ## 
+  # type:        step
+  # number:      5
+  # title:       Add a validation
+  # description: If our new attribute requires validation, that should be
+  #              handled here, which is run before the template is saved 
+  #              to the database.      
+  ##
   def perform
     data = @data
 

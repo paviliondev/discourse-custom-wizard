@@ -6,6 +6,14 @@
 # url: https://github.com/paviliondev/discourse-custom-wizard
 # contact emails: angus@thepavilion.io
 
+## 
+# unit:        custom_wizard:templates_and_builder
+# type:        introduction
+# title:       Adding a new wizard field attribute.
+# description: In this unit, we'll learn about creating, editing, validating
+#              and building wizard templates by adding a new field attribute.
+##
+ 
 register_asset 'stylesheets/common/wizard-admin.scss'
 register_asset 'stylesheets/common/wizard-mapper.scss'
 register_asset 'lib/jquery.timepicker.min.js'
