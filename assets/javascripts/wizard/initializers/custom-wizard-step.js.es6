@@ -12,6 +12,7 @@ export default {
     const discourseComputed = requirejs("discourse-common/utils/decorators").default;
     const cook = requirejs("discourse/plugins/discourse-custom-wizard/wizard/lib/text-lite").cook;
     const { schedule } = requirejs("@ember/runloop");
+    const alias = requirejs("@ember/object/computed").alias;
     
     StepModel.reopen({
       save() {
@@ -144,23 +145,24 @@ export default {
         const message = this.get("step.message");
         this.sendAction("showMessage", message);
       }.observes("step.message"),
-
+      
+      showDoneButton: alias('step.final'),
+      
       advance() {
         this.set("saving", true);
         this.get("step")
           .save()
           .then((response) => {
             const wizard = CustomWizard.build(response['wizard']);
-            const lastStep = wizard.steps[wizard.steps.length - 1];
-            const stepIndex = wizard.steps.map(s => s.id).indexOf(this.step.id);
-            const nextStep = wizard.steps[stepIndex + 1];
-                        
             updateWizard(wizard);
             
-            if (lastStep.id == this.step.id) {
+            const stepIndex = wizard.steps.map(s => s.id).indexOf(this.step.id);
+            const step = wizard.steps[stepIndex];
+            
+            if (step.final) {
               CustomWizard.finished(response);
             } else {
-              this.sendAction("goNext", response, nextStep);
+              this.sendAction("goNext", response, wizard.steps[stepIndex + 1]);
             }
           })
           .catch(() => this.animateInvalidFields())

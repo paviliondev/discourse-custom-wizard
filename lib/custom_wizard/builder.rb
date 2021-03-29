@@ -101,7 +101,7 @@ class CustomWizard::Builder
             submission = current_submission.merge(submission)
           end
 
-          final_step = updater.step.next.nil?
+          final_step = updater.step.final?
 
           if @actions.present?
             @actions.each do |action|

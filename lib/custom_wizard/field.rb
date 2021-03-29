@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class CustomWizard::Field
+  include ActiveModel::SerializerSupport
 
   attr_reader :raw,
               :id,

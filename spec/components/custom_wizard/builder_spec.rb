@@ -15,21 +15,35 @@ describe CustomWizard::Builder do
   fab!(:group) { Fabricate(:group) }
 
   let(:required_data_json) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/step/required_data.json"
-    ).read)
+    JSON.parse(
+      File.open(
+        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/step/required_data.json"
+      ).read
+    )
   }
 
   let(:permitted_json) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard/permitted.json"
-    ).read)
+    JSON.parse(
+      File.open(
+        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard/permitted.json"
+      ).read
+    )
   }
 
   let(:permitted_param_json) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/step/permitted_params.json"
-    ).read)
+    JSON.parse(
+      File.open(
+        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/step/permitted_params.json"
+      ).read
+    )
+  }
+
+  let(:condition_json) {
+    JSON.parse(
+      File.open(
+        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard/condition.json"
+      ).read
+    )
   }
 
   before do
@@ -262,6 +276,23 @@ describe CustomWizard::Builder do
           expect(wizard.current_submission['saved_param']).to eq('param_value')
         end
       end
+
+      context "with condition" do
+        before do
+          @template[:steps][0][:condition] = condition_json['condition']
+          CustomWizard::Template.save(@template.as_json)
+        end
+        
+        it "adds step when condition is passed" do
+          wizard = CustomWizard::Builder.new(@template[:id], trusted_user).build
+          expect(wizard.steps.first.id).to eq(@template[:steps][0]['id'])
+        end
+        
+        it "does not add step when condition is not passed" do
+          wizard = CustomWizard::Builder.new(@template[:id], user).build
+          expect(wizard.steps.first.id).to eq(@template[:steps][1]['id'])
+        end
+      end
     end
 
     context 'building field' do
@@ -282,6 +313,23 @@ describe CustomWizard::Builder do
             .steps.first
             .fields.length
         ).to eq(4)
+      end
+
+      context "with condition" do
+        before do
+          @template[:steps][0][:fields][0][:condition] = condition_json['condition']
+          CustomWizard::Template.save(@template.as_json)
+        end
+
+        it "adds field when condition is passed" do
+          wizard = CustomWizard::Builder.new(@template[:id], trusted_user).build
+          expect(wizard.steps.first.fields.first.id).to eq(@template[:steps][0][:fields][0]['id'])
+        end
+
+        it "does not add field when condition is not passed" do
+          wizard = CustomWizard::Builder.new(@template[:id], user).build
+          expect(wizard.steps.first.fields.first.id).to eq(@template[:steps][0][:fields][1]['id'])
+        end
       end
     end
 

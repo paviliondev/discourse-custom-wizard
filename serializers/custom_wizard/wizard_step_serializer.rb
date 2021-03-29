@@ -10,7 +10,8 @@ class CustomWizard::StepSerializer < ::ApplicationSerializer
              :title,
              :banner,
              :permitted,
-             :permitted_message
+             :permitted_message,
+             :final
 
   has_many :fields, serializer: ::CustomWizard::FieldSerializer, embed: :objects
 

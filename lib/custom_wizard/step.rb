@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class CustomWizard::Step
+  include ActiveModel::SerializerSupport
 
   attr_reader :id,
               :updater
@@ -16,7 +17,8 @@ class CustomWizard::Step
                 :previous,
                 :banner,
                 :disabled,
-                :description_vars
+                :description_vars,
+                :final
 
   def initialize(id)
     @id = id
@@ -41,5 +43,9 @@ class CustomWizard::Step
 
   def update_field_order!
     @fields.sort_by!(&:index)
+  end
+  
+  def final?
+    ActiveModel::Type::Boolean.new.cast(final) || self.next.nil?
   end
 end

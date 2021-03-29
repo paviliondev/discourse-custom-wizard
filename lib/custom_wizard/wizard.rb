@@ -85,10 +85,13 @@ class CustomWizard::Wizard
     steps.sort_by!(&:index)
 
     steps.each_with_index do |step, index|
-      @first_step = step if index === 0      
-      last_step = steps[index - 1]
-      last_step.next = step
-      step.previous = last_step
+      if index === 0
+        @first_step = step    
+      else
+        last_step = steps[index - 1]
+        last_step.next = step
+        step.previous = last_step
+      end
       step.index = index
     end
   end

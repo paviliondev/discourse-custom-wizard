@@ -92,6 +92,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
         required_data: mapped_params,
         permitted_params: mapped_params,
         condition: mapped_params,
+        final: mapped_params,
         fields: [
           :id,
           :index,

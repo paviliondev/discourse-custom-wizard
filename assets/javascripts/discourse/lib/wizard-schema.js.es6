@@ -51,13 +51,15 @@ const step = {
     required_data: null,
     required_data_message: null,
     permitted_params: null,
-    condition: null
+    condition: null,
+    final: null
   },
   mapped: [
     'required_data',
     'permitted_params',
     'condition',
-    'index'
+    'index',
+    'final'
   ],
   advanced: [
     'required_data',
