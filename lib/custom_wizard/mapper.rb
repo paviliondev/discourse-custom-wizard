@@ -213,7 +213,7 @@ class CustomWizard::Mapper
     end
   end
 
-  def interpolate(string, opts = { user: true, wizard: true, value: true, template: true })
+  def interpolate(string, opts = { user: true, wizard: true, value: true, template: false })
     return string if string.blank?
 
     if opts[:user]
