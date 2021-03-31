@@ -127,6 +127,7 @@ export default WizardFieldValidator.extend({
   },
 
   updateSimilarTopics() {
+    this.set("similarTopics", null);
     this.set("updating", true);
 
     this.backendValidate({
