@@ -12,7 +12,7 @@ export default {
     const discourseComputed = requirejs("discourse-common/utils/decorators").default;
     const cook = requirejs("discourse/plugins/discourse-custom-wizard/wizard/lib/text-lite").cook;
     const { schedule } = requirejs("@ember/runloop");
-    const alias = requirejs("@ember/object/computed").alias;
+    const { alias, not } = requirejs("@ember/object/computed");
     
     StepModel.reopen({
       save() {
@@ -71,7 +71,7 @@ export default {
         Ember.run.later(() => this.set("message", null), 6000);
       },
     });
-    
+
     StepComponent.reopen({
       classNameBindings: ["step.id"],
       
@@ -146,6 +146,7 @@ export default {
         this.sendAction("showMessage", message);
       }.observes("step.message"),
       
+      showNextButton: not('step.final'),
       showDoneButton: alias('step.final'),
       
       advance() {

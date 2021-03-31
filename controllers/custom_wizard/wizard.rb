@@ -60,10 +60,7 @@ class CustomWizard::WizardController < ::ApplicationController
         result.merge!(redirect_to: submission['redirect_to'])
       end
 
-      if user.custom_fields['redirect_to_wizard'] === wizard.id
-        user.custom_fields.delete('redirect_to_wizard')
-        user.save_custom_fields(true)
-      end
+      wizard.final_cleanup!
     end
 
     render json: result

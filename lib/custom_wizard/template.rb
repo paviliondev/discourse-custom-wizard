@@ -4,10 +4,14 @@ class CustomWizard::Template
   include HasErrors
 
   attr_reader :data,
-              :opts
+              :opts,
+              :steps,
+              :actions
 
   def initialize(data)
     @data = data
+    @steps = data['steps'] || []
+    @actions = data['actions'] || []
   end
 
   def save(opts = {})
@@ -29,6 +33,14 @@ class CustomWizard::Template
 
   def self.save(data, opts = {})
     new(data).save(opts)
+  end
+
+  def self.create(wizard_id)
+    if data = find(wizard_id)
+      new(data)
+    else
+      nil
+    end
   end
 
   def self.find(wizard_id)

@@ -44,6 +44,7 @@ describe CustomWizard::Wizard do
       context: wizard.id,
       subject: step_id
     )
+    @wizard.update_step_order!
   end
 
   it "appends steps" do
@@ -82,9 +83,9 @@ describe CustomWizard::Wizard do
 
   it "determines the user's current step" do
     append_steps
-    expect(@wizard.start.id).to eq('step_1')
+    expect(@wizard.start).to eq('step_1')
     progress_step('step_1')
-    expect(@wizard.start.id).to eq('step_2')
+    expect(@wizard.start).to eq('step_2')
   end
 
   it "creates a step updater" do

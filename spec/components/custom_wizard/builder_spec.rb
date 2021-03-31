@@ -38,10 +38,10 @@ describe CustomWizard::Builder do
     )
   }
 
-  let(:condition_json) {
+  let(:user_condition_json) {
     JSON.parse(
       File.open(
-        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard/condition.json"
+        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/condition/user_condition.json"
       ).read
     )
   }
@@ -279,7 +279,7 @@ describe CustomWizard::Builder do
 
       context "with condition" do
         before do
-          @template[:steps][0][:condition] = condition_json['condition']
+          @template[:steps][0][:condition] = user_condition_json['condition']
           CustomWizard::Template.save(@template.as_json)
         end
         
@@ -317,7 +317,7 @@ describe CustomWizard::Builder do
 
       context "with condition" do
         before do
-          @template[:steps][0][:fields][0][:condition] = condition_json['condition']
+          @template[:steps][0][:fields][0][:condition] = user_condition_json['condition']
           CustomWizard::Template.save(@template.as_json)
         end
 

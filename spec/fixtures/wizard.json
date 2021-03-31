@@ -507,7 +507,7 @@
     },
     {
       "id": "action_10",
-      "run_after": "wizard_completion",
+      "run_after": "step_3",
       "type": "route_to",
       "url": [
         {

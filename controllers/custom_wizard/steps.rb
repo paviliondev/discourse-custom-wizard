@@ -7,37 +7,58 @@ class CustomWizard::StepsController < ::ApplicationController
     params.require(:step_id)
     params.require(:wizard_id)
 
-    step = @builder.steps.select { |s| s['id'] == update_params[:step_id] }.first
-
-    raise Discourse::InvalidParameters.new(:step_id) if !step
+    step_template = @builder.template.steps.select { |s| s['id'] == update_params[:step_id] }.first
+    raise Discourse::InvalidParameters.new(:step_id) if !step_template
 
     update = update_params.to_h
 
     update[:fields] = {}
     if params[:fields]
-      field_ids = step['fields'].map{ |f| f['id'] }
+      field_ids = step_template['fields'].map{ |f| f['id'] }
       params[:fields].each do |k, v|
         update[:fields][k] = v if field_ids.include? k
       end
     end
 
     @builder.build
-  
+
     updater = @builder.wizard.create_updater(update[:step_id], update[:fields])
     updater.update
+    @result = updater.result
 
     if updater.success?
-      updated_wizard = CustomWizard::Builder.new(
-        update_params[:wizard_id].underscore,
-        current_user
-      ).build
+      wizard_id = update_params[:wizard_id].underscore
+      builder = CustomWizard::Builder.new(wizard_id, current_user)
+      @wizard = builder.build
+
+      current_step = @wizard.find_step(update[:step_id])
+      current_submission = @wizard.current_submission
+
+      if current_step.final
+        builder.template.actions.each do |action_template|
+          if action_template['run_after'] === 'wizard_completion'
+            CustomWizard::Action.new(
+              action: action_template,
+              wizard: @wizard,
+              data: current_submission
+            ).perform
+          end
+        end
+
+        @wizard.save_submission(current_submission)
+
+        if redirect = get_redirect
+          updater.result[:redirect_on_complete] = redirect
+        end
+
+        @wizard.final_cleanup!
+      end
 
       result = success_json
-      result.merge!(updater.result) if updater.result
+      result.merge!(updater.result) if updater.result.present?
       result[:refresh_required] = true if updater.refresh_required?
-
       result[:wizard] = ::CustomWizard::WizardSerializer.new(
-        updated_wizard,
+        @wizard,
         scope: Guardian.new(current_user),
         root: false
       ).as_json
@@ -71,5 +92,14 @@ class CustomWizard::StepsController < ::ApplicationController
 
   def update_params
     params.permit(:wizard_id, :step_id)
+  end
+  
+  def get_redirect
+    return @result[:redirect_on_next] if @result[:redirect_on_next].present?
+
+    current_submission = @wizard.current_submission
+    return nil unless current_submission.present?
+    ## route_to set by actions, redirect_on_complete set by actions, redirect_to set at wizard entry
+    current_submission[:route_to] || current_submission[:redirect_on_complete] || current_submission[:redirect_to]
   end
 end

@@ -1,0 +1,17 @@
+{
+  "condition": [
+    {
+      "type": "validation",
+      "pairs": [
+        {
+          "index": 0,
+          "key": "step_1_field_1",
+          "key_type": "wizard_field",
+          "value": "Show me step 2",
+          "value_type": "text",
+          "connector": "equal"
+        }
+      ]
+    }
+  ]
+}

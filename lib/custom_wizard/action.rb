@@ -6,12 +6,12 @@ class CustomWizard::Action
                 :guardian,
                 :result
 
-  def initialize(params)
-    @wizard = params[:wizard]
-    @action = params[:action]
-    @user = params[:user]
+  def initialize(opts)
+    @wizard = opts[:wizard]
+    @action = opts[:action]
+    @user = @wizard.user
     @guardian = Guardian.new(@user)
-    @data = params[:data]
+    @data = opts[:data]
     @log = []
     @result = CustomWizard::ActionResult.new
   end

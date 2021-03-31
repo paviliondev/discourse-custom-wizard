@@ -26,9 +26,10 @@ class CustomWizard::Wizard
                 :needs_groups,
                 :steps,
                 :step_ids,
+                :first_step,
+                :start,
                 :actions,
-                :user,
-                :first_step
+                :user
 
   def initialize(attrs = {}, user = nil)
     @user = user
@@ -78,6 +79,7 @@ class CustomWizard::Wizard
     yield step if block_given?
 
     steps << step
+    step.wizard = self
     step.index = (steps.size == 1 ? 0 : steps.size) if step.index.nil?
   end
 
@@ -86,32 +88,38 @@ class CustomWizard::Wizard
 
     steps.each_with_index do |step, index|
       if index === 0
-        @first_step = step    
+        @first_step = step
+        @start = step.id
       else
         last_step = steps[index - 1]
         last_step.next = step
         step.previous = last_step
       end
+
       step.index = index
+
+      if step.previous && step.previous.id === last_completed_step_id
+        @start = step.id
+      end
     end
   end
 
-  def start
-    return nil if !user
-
-    if unfinished? && last_completed_step = ::UserHistory.where(
+  def last_completed_step_id    
+    if user && unfinished? && last_completed_step = ::UserHistory.where(
         acting_user_id: user.id,
         action: ::UserHistory.actions[:custom_wizard_step],
         context: id,
-        subject: steps.map(&:id)
+        subject: step_ids
       ).order("created_at").last
 
-      step_id = last_completed_step.subject
-      last_index = steps.index { |s| s.id == step_id }
-      steps[last_index + 1]
+      last_completed_step.subject
     else
-      @first_step
+      nil
     end
+  end
+  
+  def find_step(step_id)
+    steps.select { |step| step.id === step_id }.first
   end
 
   def create_updater(step_id, submission)
@@ -211,16 +219,36 @@ class CustomWizard::Wizard
   end
 
   def current_submission
-    if submissions.present? && !submissions.last.key?("submitted_at")
-      submissions.last
+    if submissions.present? && submissions.last.present? && !submissions.last.key?("submitted_at")
+      submissions.last.with_indifferent_access
     else
       nil
     end
   end
 
   def set_submissions(submissions)
-    @submissions = nil
     PluginStore.set("#{id}_submissions", user.id, Array.wrap(submissions))
+    @submissions = nil
+  end
+
+  def save_submission(submission)
+    return nil unless save_submissions
+
+    submissions.pop(1) if unfinished?
+    submissions.push(submission)
+    set_submissions(submissions)
+  end
+
+  def final_cleanup!
+    if id == user.custom_fields['redirect_to_wizard']
+      user.custom_fields.delete('redirect_to_wizard')
+      user.save_custom_fields(true)
+    end
+
+    if submission = current_submission
+      submission['submitted_at'] = Time.now.iso8601
+      save_submission(submission)
+    end
   end
 
   def self.submissions(wizard_id, user)

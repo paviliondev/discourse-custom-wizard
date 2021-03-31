@@ -1,15 +1,11 @@
 # frozen_string_literal: true
 class CustomWizard::Builder
-  attr_accessor :wizard, :updater, :submissions, :steps
+  attr_accessor :wizard, :updater, :template
 
   def initialize(wizard_id, user = nil)
-    template = CustomWizard::Template.find(wizard_id)
-    return nil if template.blank?
-
-    @wizard = CustomWizard::Wizard.new(template, user)
-    @steps = template['steps'] || []
-    @actions = template['actions'] || []
-    @submissions = @wizard.submissions
+    @template = CustomWizard::Template.create(wizard_id)
+    return nil if @template.nil?
+    @wizard = CustomWizard::Wizard.new(template.data, user)
   end
 
   def self.sorted_handlers
@@ -28,7 +24,7 @@ class CustomWizard::Builder
   def mapper
     CustomWizard::Mapper.new(
       user: @wizard.user,
-      data: @submissions.last
+      data: @wizard.current_submission
     )
   end
 
@@ -38,7 +34,7 @@ class CustomWizard::Builder
 
     build_opts[:reset] = build_opts[:reset] || @wizard.restart_on_revisit
 
-    @steps.each do |step_template|    
+    @template.steps.each do |step_template|    
       next if !check_condition(step_template)
 
       @wizard.append_step(step_template['id']) do |step|
@@ -83,7 +79,6 @@ class CustomWizard::Builder
 
         step.on_update do |updater|
           @updater = updater
-          user = @wizard.user
 
           updater.validate
           next if updater.errors.any?
@@ -93,26 +88,18 @@ class CustomWizard::Builder
               handler[:block].call(self)
             end
           end
-
           next if updater.errors.any?
+          
+          submission = (@wizard.current_submission || {})
+            .merge(updater.submission)
+            .with_indifferent_access
 
-          submission = updater.submission
-          if current_submission = @wizard.current_submission
-            submission = current_submission.merge(submission)
-          end
-
-          final_step = updater.step.final?
-
-          if @actions.present?
-            @actions.each do |action|
-
-              if (action['run_after'] === updater.step.id) ||
-                 (final_step && (!action['run_after'] || (action['run_after'] === 'wizard_completion')))
-
+          if @template.actions.present?
+            @template.actions.each do |action_template|
+              if action_template['run_after'] === updater.step.id
                 CustomWizard::Action.new(
+                  action: action_template,
                   wizard: @wizard,
-                  action: action,
-                  user: user,
                   data: submission
                 ).perform
               end
@@ -124,19 +111,9 @@ class CustomWizard::Builder
               submission.delete('route_to')
             end
 
-            if @wizard.save_submissions
-              save_submissions(submission, final_step)
-            end
+            @wizard.save_submission(submission)
 
-            if final_step
-              if @wizard.id == @wizard.user.custom_fields['redirect_to_wizard']
-                @wizard.user.custom_fields.delete('redirect_to_wizard')
-                @wizard.user.save_custom_fields(true)
-              end
-
-              redirect_url = route_to || submission['redirect_on_complete'] || submission["redirect_to"]
-              updater.result[:redirect_on_complete] = redirect_url
-            elsif route_to
+            if route_to
               updater.result[:redirect_on_next] = route_to
             end
 
@@ -147,9 +124,8 @@ class CustomWizard::Builder
         end
       end
     end
-
+  
     @wizard.update_step_order!
-
     @wizard
   end
 
@@ -214,7 +190,7 @@ class CustomWizard::Builder
       content = CustomWizard::Mapper.new(
         inputs: content_inputs,
         user: @wizard.user,
-        data: @submissions.last,
+        data: @wizard.current_submission,
         opts: {
           with_type: true
         }
@@ -253,7 +229,7 @@ class CustomWizard::Builder
       CustomWizard::Mapper.new(
         inputs: prefill,
         user: @wizard.user,
-        data: @submissions.last
+        data: @wizard.current_submission
       ).perform
     end
   end
@@ -263,7 +239,7 @@ class CustomWizard::Builder
       CustomWizard::Mapper.new(
         inputs: template['condition'],
         user: @wizard.user,
-        data: @submissions.last
+        data: @wizard.current_submission
       ).perform
     else
       true
@@ -274,32 +250,23 @@ class CustomWizard::Builder
     ActiveRecord::Type::Boolean.new.cast(value)
   end
 
-  def save_submissions(submission, final_step)
-    if final_step
-      submission['submitted_at'] = Time.now.iso8601
-    end
-
-    if submission.present?
-      @submissions.pop(1) if @wizard.unfinished?
-      @submissions.push(submission)
-      @wizard.set_submissions(@submissions)
-    end
-  end
-
   def save_permitted_params(permitted_params, params)
     permitted_data = {}
+    submission_key = nil
+    params_key = nil
+    submission = @wizard.current_submission || {}
 
     permitted_params.each do |pp|
       pair = pp['pairs'].first
       params_key = pair['key'].to_sym
       submission_key = pair['value'].to_sym
-      permitted_data[submission_key] = params[params_key] if params[params_key]
+      
+      if submission_key && params_key
+        submission[submission_key] = params[params_key]
+      end
     end
 
-    if permitted_data.present?
-      current_data = @submissions.last || {}
-      save_submissions(current_data.merge(permitted_data), false)
-    end
+    @wizard.save_submission(submission)
   end
 
   def ensure_required_data(step, step_template)
@@ -308,13 +275,13 @@ class CustomWizard::Builder
         pair['key'].present? && pair['value'].present?
       end
 
-      if pairs.any? && !@submissions.last
+      if pairs.any? && !@wizard.current_submission
         step.permitted = false
         break
       end
 
       pairs.each do |pair|
-        pair['key'] = @submissions.last[pair['key']]
+        pair['key'] = @wizard.current_submission[pair['key']]
       end
 
       if !mapper.validate_pairs(pairs)

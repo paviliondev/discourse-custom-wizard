@@ -18,7 +18,9 @@ class CustomWizard::Step
                 :banner,
                 :disabled,
                 :description_vars,
-                :final
+                :force_final,
+                :final,
+                :wizard
 
   def initialize(id)
     @id = id
@@ -45,7 +47,7 @@ class CustomWizard::Step
     @fields.sort_by!(&:index)
   end
   
-  def final?
-    ActiveModel::Type::Boolean.new.cast(final) || self.next.nil?
+  def final
+    ActiveModel::Type::Boolean.new.cast(force_final) || (index === wizard.steps.size - 1)
   end
 end
