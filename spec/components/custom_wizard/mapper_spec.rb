@@ -41,6 +41,17 @@ describe CustomWizard::Mapper do
       "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/mapper/data.json"
     ).read)
   }
+  let(:template_params) {
+    {
+      "step_1_field_1" => "Hello"
+    }
+  }
+  let(:template_mapper) {
+    CustomWizard::Mapper.new(
+      data: template_params,
+      user: user1
+    )
+  }
 
   it "maps values" do
     expect(CustomWizard::Mapper.new(
@@ -249,5 +260,51 @@ describe CustomWizard::Mapper do
       data: data,
       user: user1
     ).perform).to eq(false)
+  end
+
+  ## templating tests
+
+  it "passes the correct values to the template" do
+    template = "w{step_1_field_1}"
+
+    template = template.dup
+    result = template_mapper.interpolate(
+      template,
+      template: true,
+      user: true,
+      wizard: true,
+      value: true
+    )
+    expect(result).to eq(template_params["step_1_field_1"])
+  end
+
+  it "treats replaced values as string literals" do
+    template = '{{ "w{step_1_field_1}" | size }}'
+    result = template_mapper.interpolate(
+      template.dup,
+      template: true,
+      user: true,
+      wizard: true,
+      value: true
+    )
+    expect(result).to eq(template_params["step_1_field_1"].size.to_s)
+  end
+
+  it "allows the wizard values to be used inside conditionals" do
+    template = <<-LIQUID
+      {%- if "w{step_1_field_1}" contains "ello" -%}
+        Correct
+      {%- else -%}
+        Incorrect
+      {%-endif-%}
+    LIQUID
+    result = template_mapper.interpolate(
+      template.dup,
+      template: true,
+      user: true,
+      wizard: true,
+      value: true
+    )
+    expect(result).to eq("Correct")
   end
 end
