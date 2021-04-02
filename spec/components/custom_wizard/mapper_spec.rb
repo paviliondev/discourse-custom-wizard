@@ -262,49 +262,61 @@ describe CustomWizard::Mapper do
     ).perform).to eq(false)
   end
 
-  ## templating tests
+  context "Templating" do
+    it "passes the correct values to the template" do
+      template = "w{step_1_field_1}"
 
-  it "passes the correct values to the template" do
-    template = "w{step_1_field_1}"
+      template = template.dup
+      result = template_mapper.interpolate(
+        template,
+        template: true,
+        user: true,
+        wizard: true,
+        value: true
+      )
+      expect(result).to eq(template_params["step_1_field_1"])
+    end
 
-    template = template.dup
-    result = template_mapper.interpolate(
-      template,
-      template: true,
-      user: true,
-      wizard: true,
-      value: true
-    )
-    expect(result).to eq(template_params["step_1_field_1"])
-  end
+    it "treats replaced values as string literals" do
+      template = '{{ "w{step_1_field_1}" | size }}'
+      result = template_mapper.interpolate(
+        template.dup,
+        template: true,
+        user: true,
+        wizard: true,
+        value: true
+      )
+      expect(result).to eq(template_params["step_1_field_1"].size.to_s)
+    end
 
-  it "treats replaced values as string literals" do
-    template = '{{ "w{step_1_field_1}" | size }}'
-    result = template_mapper.interpolate(
-      template.dup,
-      template: true,
-      user: true,
-      wizard: true,
-      value: true
-    )
-    expect(result).to eq(template_params["step_1_field_1"].size.to_s)
-  end
+    it "allows the wizard values to be used inside conditionals" do
+      template = <<-LIQUID
+        {%- if "w{step_1_field_1}" contains "ello" -%}
+          Correct
+        {%- else -%}
+          Incorrect
+        {%-endif-%}
+      LIQUID
+      result = template_mapper.interpolate(
+        template.dup,
+        template: true,
+        user: true,
+        wizard: true,
+        value: true
+      )
+      expect(result).to eq("Correct")
+    end
 
-  it "allows the wizard values to be used inside conditionals" do
-    template = <<-LIQUID
-      {%- if "w{step_1_field_1}" contains "ello" -%}
-        Correct
-      {%- else -%}
-        Incorrect
-      {%-endif-%}
-    LIQUID
-    result = template_mapper.interpolate(
-      template.dup,
-      template: true,
-      user: true,
-      wizard: true,
-      value: true
-    )
-    expect(result).to eq("Correct")
+    it "can access data passed to render method as variable" do
+      template = "{{step_1_field_1.size}}"
+      result = template_mapper.interpolate(
+        template.dup,
+        template: true,
+        user: true,
+        wizard: true,
+        value: true
+      )
+      expect(result).to eq(template_params["step_1_field_1"].size.to_s)
+    end
   end
 end
