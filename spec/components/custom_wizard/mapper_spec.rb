@@ -46,9 +46,22 @@ describe CustomWizard::Mapper do
       "step_1_field_1" => "Hello"
     }
   }
+  let(:template_params_non_empty) {
+    {
+      "step_1_field_1" => nil,
+      "step_1_field_2" => "",
+      "step_1_field_3" => "Value"
+    }
+  }
   let(:template_mapper) {
     CustomWizard::Mapper.new(
       data: template_params,
+      user: user1
+    )
+  }
+  let(:template_mapper_non_empty) {
+    CustomWizard::Mapper.new(
+      data: template_params_non_empty,
       user: user1
     )
   }
@@ -317,6 +330,22 @@ describe CustomWizard::Mapper do
         value: true
       )
       expect(result).to eq(template_params["step_1_field_1"].size.to_s)
+    end
+
+    it "custom filter: 'first_non_empty' gives first non empty element from list" do
+      template = <<-LIQUID.strip
+        {%- assign entry = "" | first_non_empty: step_1_field_1, step_1_field_2, step_1_field_3 -%}
+        {{ entry }}
+      LIQUID
+
+      result = template_mapper_non_empty.interpolate(
+        template.dup,
+        template: true,
+        user: true,
+        wizard: true,
+        value: true
+      )
+      expect(result).to eq(template_params_non_empty["step_1_field_3"])
     end
   end
 end
