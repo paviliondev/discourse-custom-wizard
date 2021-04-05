@@ -97,7 +97,7 @@ after_initialize do
     load File.expand_path(path, __FILE__)
   end
 
-  add_to_class(::Sprockets::DirectiveProcessor, :process_require_tree_discourse_directive ) do |path = "."|
+  add_to_class(::Sprockets::DirectiveProcessor, :process_require_tree_discourse_directive) do |path = "."|
     discourse_asset_path = "#{Rails.root}/app/assets/javascripts/"
     path = File.expand_path(path, discourse_asset_path)
     stat = @environment.stat(path)
