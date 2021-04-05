@@ -97,6 +97,18 @@ after_initialize do
     load File.expand_path(path, __FILE__)
   end
 
+  add_to_class(::Sprockets::DirectiveProcessor, :process_require_tree_discourse_directive ) do |path = "."|
+    discourse_asset_path = "#{Rails.root}/app/assets/javascripts/"
+    path = File.expand_path(path, discourse_asset_path)
+    stat = @environment.stat(path)
+
+    if stat && stat.directory?
+      require_paths(*@environment.stat_sorted_tree_with_dependencies(path))
+    else
+      raise ArgumentError, "#{path} not found in discourse core"
+    end
+  end
+
   add_class_method(:wizard, :user_requires_completion?) do |user|
     wizard_result = self.new(user).requires_completion?
     return wizard_result if wizard_result
