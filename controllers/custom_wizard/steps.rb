@@ -60,6 +60,7 @@ class CustomWizard::StepsController < ::ApplicationController
 
         result[:final] = true
       else
+        result[:final] = false
         result[:next_step_id] = current_step.next.id
       end
 
