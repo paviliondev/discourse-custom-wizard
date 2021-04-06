@@ -1,16 +1,16 @@
 import WizardI18n from "../lib/wizard-i18n";
-import { getWizard } from '../models/custom';
+import { getWizard } from "../models/custom";
 
 export default Ember.Route.extend({
   beforeModel() {
-    this.set('wizard', getWizard())
+    this.set("wizard", getWizard());
   },
-  
+
   model(params) {
     const wizard = this.wizard;
-    
+
     if (wizard && wizard.steps) {
-      const step = wizard.steps.findBy('id', params.step_id);
+      const step = wizard.steps.findBy("id", params.step_id);
       return step ? step : wizard.steps[0];
     } else {
       return wizard;
@@ -18,14 +18,14 @@ export default Ember.Route.extend({
   },
 
   afterModel(model) {
-    if (model.completed) return this.transitionTo('index');
+    if (model.completed) return this.transitionTo("index");
     return model.set("wizardId", this.wizard.id);
   },
 
   setupController(controller, model) {
     let props = {
       step: model,
-      wizard: this.wizard
+      wizard: this.wizard,
     };
 
     if (!model.permitted) {

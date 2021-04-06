@@ -29,41 +29,43 @@ CustomWizard.reopenClass({
     }
     window.location.href = getUrl(url);
   },
-  
+
   build(wizardJson) {
     if (!wizardJson) return null;
 
     if (!wizardJson.completed && wizardJson.steps) {
-      wizardJson.steps = wizardJson.steps.map(step => {
-        const stepObj = Step.create(step);
+      wizardJson.steps = wizardJson.steps
+        .map((step) => {
+          const stepObj = Step.create(step);
 
-        stepObj.fields.sort((a, b) => {
-          return parseFloat(a.number) - parseFloat(b.number);
+          stepObj.fields.sort((a, b) => {
+            return parseFloat(a.number) - parseFloat(b.number);
+          });
+
+          let tabindex = 1;
+          stepObj.fields.forEach((f, i) => {
+            f.tabindex = tabindex;
+
+            if (["date_time"].includes(f.type)) {
+              tabindex = tabindex + 2;
+            } else {
+              tabindex++;
+            }
+          });
+
+          stepObj.fields = stepObj.fields.map((f) => WizardField.create(f));
+
+          return stepObj;
+        })
+        .sort((a, b) => {
+          return parseFloat(a.index) - parseFloat(b.index);
         });
-
-        let tabindex = 1;
-        stepObj.fields.forEach((f, i) => {
-          f.tabindex = tabindex;
-
-          if (["date_time"].includes(f.type)) {
-            tabindex = tabindex + 2;
-          } else {
-            tabindex++;
-          }
-        });
-
-        stepObj.fields = stepObj.fields.map((f) => WizardField.create(f));
-
-        return stepObj;
-      }).sort((a, b) => {
-        return parseFloat(a.index) - parseFloat(b.index);
-      });
     }
 
     if (wizardJson.categories) {
       let subcatMap = {};
       let categoriesById = {};
-      let categories = wizardJson.categories.map(c => {
+      let categories = wizardJson.categories.map((c) => {
         if (c.parent_category_id) {
           subcatMap[c.parent_category_id] =
             subcatMap[c.parent_category_id] || [];
@@ -86,36 +88,39 @@ CustomWizard.reopenClass({
         }
       });
 
-      Discourse.Site.currentProp('categoriesList', categories);
-      Discourse.Site.currentProp('sortedCategories', categories);
-      Discourse.Site.currentProp('listByActivity', categories);
-      Discourse.Site.currentProp('categoriesById', categoriesById);
-      Discourse.Site.currentProp('uncategorized_category_id', wizardJson.uncategorized_category_id);
+      Discourse.Site.currentProp("categoriesList", categories);
+      Discourse.Site.currentProp("sortedCategories", categories);
+      Discourse.Site.currentProp("listByActivity", categories);
+      Discourse.Site.currentProp("categoriesById", categoriesById);
+      Discourse.Site.currentProp(
+        "uncategorized_category_id",
+        wizardJson.uncategorized_category_id
+      );
     }
 
     return CustomWizard.create(wizardJson);
-  }
+  },
 });
 
 export function findCustomWizard(wizardId, params = {}) {
   let url = `/w/${wizardId}`;
 
-  let paramKeys = Object.keys(params).filter(k => {
-    if (k === 'wizard_id') return false;
+  let paramKeys = Object.keys(params).filter((k) => {
+    if (k === "wizard_id") return false;
     return !!params[k];
   });
 
   if (paramKeys.length) {
-    url += '?';
-    paramKeys.forEach((k,i) => {
+    url += "?";
+    paramKeys.forEach((k, i) => {
       if (i > 0) {
-        url += '&';
+        url += "&";
       }
       url += `${k}=${params[k]}`;
     });
   }
 
-  return ajax({ url, cache: false, dataType: 'json' }).then(result => {
+  return ajax({ url, cache: false, dataType: "json" }).then((result) => {
     return CustomWizard.build(result);
   });
 }

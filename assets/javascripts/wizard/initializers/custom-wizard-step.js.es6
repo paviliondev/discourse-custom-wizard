@@ -3,8 +3,12 @@ export default {
   initialize(app) {
     if (window.location.pathname.indexOf("/w/") < 0) return;
 
-    const CustomWizard = requirejs("discourse/plugins/discourse-custom-wizard/wizard/models/custom").default;
-    const updateWizard = requirejs("discourse/plugins/discourse-custom-wizard/wizard/models/custom").updateWizard;
+    const CustomWizard = requirejs(
+      "discourse/plugins/discourse-custom-wizard/wizard/models/custom"
+    ).default;
+    const updateWizard = requirejs(
+      "discourse/plugins/discourse-custom-wizard/wizard/models/custom"
+    ).updateWizard;
     const StepModel = requirejs("wizard/models/step").default;
     const StepComponent = requirejs("wizard/components/wizard-step").default;
     const ajax = requirejs("wizard/lib/ajax").ajax;
@@ -150,18 +154,18 @@ export default {
         const message = this.get("step.message");
         this.sendAction("showMessage", message);
       }.observes("step.message"),
-      
-      showNextButton: not('step.final'),
-      showDoneButton: alias('step.final'),
-      
+
+      showNextButton: not("step.final"),
+      showDoneButton: alias("step.final"),
+
       advance() {
         this.set("saving", true);
         this.get("step")
           .save()
           .then((response) => {
-            updateWizard(CustomWizard.build(response['wizard']));
+            updateWizard(CustomWizard.build(response["wizard"]));
 
-            if (response['final']) {
+            if (response["final"]) {
               CustomWizard.finished(response);
             } else {
               this.sendAction("goNext", response);

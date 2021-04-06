@@ -1,10 +1,10 @@
-import { getWizard } from '../models/custom';
+import { getWizard } from "../models/custom";
 
 export default Ember.Route.extend({
   beforeModel() {
     const wizard = getWizard();
     if (wizard && wizard.permitted && !wizard.completed && wizard.start) {
-      this.replaceWith('custom.step', wizard.start);
+      this.replaceWith("custom.step", wizard.start);
     }
   },
 
@@ -14,11 +14,11 @@ export default Ember.Route.extend({
 
   setupController(controller, model) {
     if (model && model.id) {
-      const completed = model.get('completed');
-      const permitted = model.get('permitted');
-      const wizardId = model.get('id');
-      const user = model.get('user');
-      const name = model.get('name');
+      const completed = model.get("completed");
+      const permitted = model.get("permitted");
+      const wizardId = model.get("id");
+      const user = model.get("user");
+      const name = model.get("name");
 
       controller.setProperties({
         requiresLogin: !user,
