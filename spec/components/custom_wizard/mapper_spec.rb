@@ -335,7 +335,6 @@ describe CustomWizard::Mapper do
         {%- assign entry = "" | first_non_empty: step_1_field_1, step_1_field_2, step_1_field_3 -%}
         {{ entry }}
       LIQUID
-
       result = template_mapper_non_empty.interpolate(
         template.dup,
         template: true,
