@@ -4,7 +4,7 @@ require_relative '../plugin_helper'
 describe InvitesControllerCustomWizard, type: :request do
   fab!(:topic) { Fabricate(:topic) }
   let(:invite) { Invite.generate(topic.user, email: "angus@mcleod.org", topic: topic) }
-  
+
   let(:template) do
     JSON.parse(File.open(
       "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"

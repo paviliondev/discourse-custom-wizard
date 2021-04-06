@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require_relative '../../plugin_helper'
 
 describe CustomWizard::Builder do
@@ -282,12 +283,12 @@ describe CustomWizard::Builder do
           @template[:steps][0][:condition] = user_condition_json['condition']
           CustomWizard::Template.save(@template.as_json)
         end
-        
+
         it "adds step when condition is passed" do
           wizard = CustomWizard::Builder.new(@template[:id], trusted_user).build
           expect(wizard.steps.first.id).to eq(@template[:steps][0]['id'])
         end
-        
+
         it "does not add step when condition is not passed" do
           wizard = CustomWizard::Builder.new(@template[:id], user).build
           expect(wizard.steps.first.id).to eq(@template[:steps][1]['id'])

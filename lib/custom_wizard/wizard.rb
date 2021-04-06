@@ -112,7 +112,7 @@ class CustomWizard::Wizard
     end
   end
 
-  def last_completed_step_id    
+  def last_completed_step_id
     if user && unfinished? && last_completed_step = ::UserHistory.where(
         acting_user_id: user.id,
         action: ::UserHistory.actions[:custom_wizard_step],
@@ -125,7 +125,7 @@ class CustomWizard::Wizard
       nil
     end
   end
-  
+
   def find_step(step_id)
     steps.select { |step| step.id === step_id }.first
   end

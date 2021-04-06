@@ -14,7 +14,7 @@ class CustomWizard::StepsController < ::ApplicationController
 
     update[:fields] = {}
     if params[:fields]
-      field_ids = step_template['fields'].map{ |f| f['id'] }
+      field_ids = step_template['fields'].map { |f| f['id'] }
       params[:fields].each do |k, v|
         update[:fields][k] = v if field_ids.include? k
       end
@@ -102,7 +102,7 @@ class CustomWizard::StepsController < ::ApplicationController
   def update_params
     params.permit(:wizard_id, :step_id)
   end
-  
+
   def get_redirect
     return @result[:redirect_on_next] if @result[:redirect_on_next].present?
 

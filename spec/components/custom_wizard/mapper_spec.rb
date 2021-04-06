@@ -88,7 +88,7 @@ describe CustomWizard::Mapper do
     it "does not map when one of multiple conditions are not met" do
       user1.email = "angus@other-email.com"
       user1.save
-      
+
       expect(CustomWizard::Mapper.new(
         inputs: inputs['conditional_multiple_pairs'],
         data: data,

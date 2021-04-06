@@ -76,7 +76,7 @@ describe CustomWizard::Wizard do
 
     expect(@wizard.steps.first.id).to eq("step_3")
     expect(@wizard.steps.last.id).to eq("step_1")
-    
+
     expect(@wizard.steps.first.next.id).to eq("step_2")
     expect(@wizard.steps.last.next).to eq(nil)
   end
@@ -140,7 +140,7 @@ describe CustomWizard::Wizard do
       CustomWizard::Wizard.new(@permitted_template, trusted_user).permitted?
     ).to eq(true)
   end
-  
+
   it "permits everyone if everyone is permitted" do
     @permitted_template['permitted'][0]['output'] = Group::AUTO_GROUPS[:everyone]
     expect(

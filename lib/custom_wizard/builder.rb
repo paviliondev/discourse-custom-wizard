@@ -189,7 +189,7 @@ class CustomWizard::Builder
       ).perform
     end
   end
-  
+
   def check_condition(template)
     if template['condition'].present?
       CustomWizard::Mapper.new(
@@ -201,10 +201,10 @@ class CustomWizard::Builder
       true
     end
   end
-  
+
   def check_if_permitted(step, step_template)
     step.permitted = true
-  
+
     if step_template['required_data']
       step = ensure_required_data(step, step_template)
     end
@@ -217,7 +217,7 @@ class CustomWizard::Builder
 
     step
   end
-  
+
   def add_step_attributes(step, step_template)
     %w(index title banner key force_final).each do |attr|
       step.send("#{attr}=", step_template[attr]) if step_template[attr]
@@ -230,10 +230,10 @@ class CustomWizard::Builder
         value: true
       )
     end
-    
+
     step
   end
-  
+
   def append_step_fields(step, step_template, build_opts)
     if step_template['fields'] && step_template['fields'].length
       step_template['fields'].each do |field_template|
@@ -241,7 +241,7 @@ class CustomWizard::Builder
         append_field(step, step_template, field_template, build_opts)
       end
     end
-    
+
     step.update_field_order!
     step
   end
@@ -252,7 +252,7 @@ class CustomWizard::Builder
 
   def save_permitted_params(step_template, params)
     return unless step_template['permitted_params'].present?
-    
+
     permitted_params = step_template['permitted_params']
     permitted_data = {}
     submission_key = nil
@@ -263,7 +263,7 @@ class CustomWizard::Builder
       pair = pp['pairs'].first
       params_key = pair['key'].to_sym
       submission_key = pair['value'].to_sym
-      
+
       if submission_key && params_key
         submission[submission_key] = params[params_key]
       end
@@ -295,7 +295,7 @@ class CustomWizard::Builder
 
     step
   end
-  
+
   def apply_step_handlers
     CustomWizard::Builder.step_handlers.each do |handler|
       if handler[:wizard_id] == @wizard.id
@@ -303,7 +303,7 @@ class CustomWizard::Builder
       end
     end
   end
-  
+
   def run_step_actions
     if @template.actions.present?
       @template.actions.each do |action_template|

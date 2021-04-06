@@ -79,10 +79,10 @@ describe CustomWizard::StepsController do
     expect(response.status).to eq(200)
     expect(response.parsed_body['wizard']['start']).to eq("step_3")
   end
-  
+
   it "runs completion actions if user has completed wizard" do
     new_template = wizard_template.dup
-    
+
     ## route_to action
     new_template['actions'].last['run_after'] = 'wizard_completion'
     new_template['steps'][1]['condition'] = wizard_field_condition_template['condition']
@@ -97,10 +97,10 @@ describe CustomWizard::StepsController do
     expect(response.status).to eq(200)
     expect(response.parsed_body['redirect_on_complete']).to eq("https://google.com")
   end
-  
+
   it "saves results of completion actions if user has completed wizard" do
     new_template = wizard_template.dup
-    
+
     ## Create group action
     new_template['actions'].first['run_after'] = 'wizard_completion'
     new_template['steps'][1]['condition'] = wizard_field_condition_template['condition']
@@ -115,17 +115,17 @@ describe CustomWizard::StepsController do
 
     put '/w/super-mega-fun-wizard/steps/step_3.json'
     expect(response.status).to eq(200)
-    
+
     wizard_id = response.parsed_body['wizard']['id']
     wizard = CustomWizard::Wizard.create(wizard_id, user)
     group_name = wizard.submissions.last['action_9']
     group = Group.find_by(name: group_name)
     expect(group.full_name).to eq("My cool group")
   end
-  
+
   it "detects the final step correctly" do
     new_template = wizard_template.dup
-    
+
     ## route_to action
     new_template['actions'].last['run_after'] = 'wizard_completion'
     new_template['steps'][1]['condition'] = wizard_field_condition_template['condition']

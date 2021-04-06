@@ -136,7 +136,7 @@ class CustomWizard::Template
       end
     end
   end
-  
+
   def remove_non_mapped_index(object)
     if !object[:index].is_a?(Array)
       object.delete(:index)

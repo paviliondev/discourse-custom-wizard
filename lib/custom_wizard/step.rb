@@ -51,6 +51,6 @@ class CustomWizard::Step
   def final?
     return true if force_final && final_conditional_step
     return true if final_step
-    return false
+    false
   end
 end
