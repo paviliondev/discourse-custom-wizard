@@ -123,6 +123,22 @@ export default Component.extend(UndoChanges, {
     return options;
   },
   
+  @discourseComputed('step.index')
+  fieldIndexOptions(stepIndex) {
+    const options = {
+      context: 'field',
+      userFieldSelection: true,
+      groupSelection: true
+    }
+
+    if (stepIndex > 0) {
+      options.wizardFieldSelection = true;
+      options.wizardActionSelection = true;
+    }
+
+    return options;
+  },
+
   actions: {    
     imageUploadDone(upload) {
       this.set("field.image", upload.url);

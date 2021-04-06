@@ -19,7 +19,8 @@ class CustomWizard::Step
                 :disabled,
                 :description_vars,
                 :force_final,
-                :final,
+                :final_step,
+                :final_conditional_step,
                 :wizard
 
   def initialize(id)
@@ -46,8 +47,10 @@ class CustomWizard::Step
   def update_field_order!
     @fields.sort_by!(&:index)
   end
-  
-  def final
-    ActiveModel::Type::Boolean.new.cast(force_final) || (index === wizard.steps.size - 1)
+
+  def final?
+    return true if force_final && final_conditional_step
+    return true if final_step
+    return false
   end
 end

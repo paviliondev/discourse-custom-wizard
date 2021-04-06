@@ -76,4 +76,8 @@ class CustomWizard::StepSerializer < ::ApplicationSerializer
   def permitted_message
     object.permitted_message
   end
+  
+  def final
+    object.final?
+  end
 end

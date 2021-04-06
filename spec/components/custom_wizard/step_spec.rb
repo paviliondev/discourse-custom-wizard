@@ -22,13 +22,13 @@ describe CustomWizard::Step do
     @step = CustomWizard::Step.new(step_hash[:id])
   end
 
-  it "adds custom fields" do
+  it "adds fields" do
     @step.add_field(field_hash)
     expect(@step.fields.size).to eq(1)
     expect(@step.fields.first.index).to eq(0)
   end
 
-  it "adds custom fields with custom indexes" do
+  it "adds fields with custom indexes" do
     field_hash[:index] = 2
     @step.add_field(field_hash)
     expect(@step.fields.first.index).to eq(2)

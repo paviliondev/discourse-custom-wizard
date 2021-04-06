@@ -154,16 +154,12 @@ export default {
         this.get("step")
           .save()
           .then((response) => {
-            const wizard = CustomWizard.build(response['wizard']);
-            updateWizard(wizard);
-            
-            const stepIndex = wizard.steps.map(s => s.id).indexOf(this.step.id);
-            const step = wizard.steps[stepIndex];
-            
-            if (step.final) {
+            updateWizard(CustomWizard.build(response['wizard']));
+
+            if (response['final']) {
               CustomWizard.finished(response);
             } else {
-              this.sendAction("goNext", response, wizard.steps[stepIndex + 1]);
+              this.sendAction("goNext", response);
             }
           })
           .catch(() => this.animateInvalidFields())

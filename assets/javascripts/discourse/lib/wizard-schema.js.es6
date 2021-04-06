@@ -52,14 +52,13 @@ const step = {
     required_data_message: null,
     permitted_params: null,
     condition: null,
-    final: null
+    force_final: false
   },
   mapped: [
     'required_data',
     'permitted_params',
     'condition',
-    'index',
-    'final'
+    'index'
   ],
   advanced: [
     'required_data',

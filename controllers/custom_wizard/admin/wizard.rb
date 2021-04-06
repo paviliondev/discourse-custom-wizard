@@ -89,10 +89,10 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
         :banner,
         :raw_description,
         :required_data_message,
+        :force_final,
         required_data: mapped_params,
         permitted_params: mapped_params,
         condition: mapped_params,
-        final: mapped_params,
         fields: [
           :id,
           :index,
@@ -112,6 +112,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
           prefill: mapped_params,
           content: mapped_params,
           condition: mapped_params,
+          index: mapped_params,
           validations: {},
         ]
       ],

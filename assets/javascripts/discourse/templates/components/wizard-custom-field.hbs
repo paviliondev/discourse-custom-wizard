@@ -182,23 +182,36 @@
   </div>
 {{/if}}
 
-<div class="setting full field-mapper-setting">
-  <div class="setting-label">
-    <label>{{i18n 'admin.wizard.condition'}}</label>
-  </div>
-  <div class="setting-value">
-    {{wizard-mapper
-      inputs=field.condition
-      options=fieldConditionOptions}}
-  </div>
-</div>
-
 {{#if showAdvanced}}
   {{wizard-advanced-toggle showAdvanced=field.showAdvanced}}
 
   {{#if field.showAdvanced}}
     <div class="advanced-settings">
-      
+
+      <div class="setting full field-mapper-setting">
+        <div class="setting-label">
+          <label>{{i18n 'admin.wizard.condition'}}</label>
+        </div>
+
+        <div class="setting-value">
+          {{wizard-mapper
+            inputs=field.condition
+            options=fieldConditionOptions}}
+        </div>
+      </div>
+
+      <div class="setting full field-mapper-setting">
+        <div class="setting-label">
+          <label>{{i18n 'admin.wizard.index'}}</label>
+        </div>
+
+        <div class="setting-value">
+          {{wizard-mapper
+            inputs=field.index
+            options=fieldIndexOptions}}
+        </div>
+      </div>
+
       {{#if isCategory}}
         <div class="setting">
           <div class="setting-label">

@@ -33,8 +33,13 @@ class CustomWizard::StepsController < ::ApplicationController
 
       current_step = @wizard.find_step(update[:step_id])
       current_submission = @wizard.current_submission
+      result = {}
 
-      if current_step.final
+      if current_step.final_conditional_step && !current_step.final_step
+        current_step.force_final = true
+      end
+
+      if current_step.final?
         builder.template.actions.each do |action_template|
           if action_template['run_after'] === 'wizard_completion'
             CustomWizard::Action.new(
@@ -52,9 +57,12 @@ class CustomWizard::StepsController < ::ApplicationController
         end
 
         @wizard.final_cleanup!
+
+        result[:final] = true
+      else
+        result[:next_step_id] = current_step.next.id
       end
 
-      result = success_json
       result.merge!(updater.result) if updater.result.present?
       result[:refresh_required] = true if updater.refresh_required?
       result[:wizard] = ::CustomWizard::WizardSerializer.new(

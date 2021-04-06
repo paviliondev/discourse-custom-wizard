@@ -34,88 +34,38 @@ class CustomWizard::Builder
 
     build_opts[:reset] = build_opts[:reset] || @wizard.restart_on_revisit
 
-    @template.steps.each do |step_template|    
+    @template.steps.each do |step_template|
       next if !check_condition(step_template)
 
       @wizard.append_step(step_template['id']) do |step|
-        step.index = step_template['index'] if step_template['index']
+        step = check_if_permitted(step, step_template)
+        next if !step.permitted
 
-        step.permitted = true
-        if step_template['required_data']
-          step = ensure_required_data(step, step_template)
-        end
-
-        if !step.permitted
-          if step_template['required_data_message']
-            step.permitted_message = step_template['required_data_message']
-          end
-          next
-        end
-
-        step.title = step_template['title'] if step_template['title']
-        step.banner = step_template['banner'] if step_template['banner']
-        step.key = step_template['key'] if step_template['key']
-
-        if step_template['description']
-          step.description = mapper.interpolate(
-            step_template['description'],
-            user: true,
-            value: true
-          )
-        end
-
-        if permitted_params = step_template['permitted_params']
-          save_permitted_params(permitted_params, params)
-        end
-
-        if step_template['fields'] && step_template['fields'].length
-          step_template['fields'].each do |field_template|
-            next if !check_condition(field_template)
-            append_field(step, step_template, field_template, build_opts)
-          end
-        end
-
-        step.update_field_order!
+        save_permitted_params(step_template, params)
+        step = add_step_attributes(step, step_template)
+        step = append_step_fields(step, step_template, build_opts)
 
         step.on_update do |updater|
           @updater = updater
-
-          updater.validate
-          next if updater.errors.any?
-
-          CustomWizard::Builder.step_handlers.each do |handler|
-            if handler[:wizard_id] == @wizard.id
-              handler[:block].call(self)
-            end
-          end
-          next if updater.errors.any?
-          
-          submission = (@wizard.current_submission || {})
-            .merge(updater.submission)
+          @submission = (@wizard.current_submission || {})
+            .merge(@updater.submission)
             .with_indifferent_access
 
-          if @template.actions.present?
-            @template.actions.each do |action_template|
-              if action_template['run_after'] === updater.step.id
-                CustomWizard::Action.new(
-                  action: action_template,
-                  wizard: @wizard,
-                  data: submission
-                ).perform
-              end
-            end
-          end
+          @updater.validate
+          next if @updater.errors.any?
 
-          if updater.errors.empty?
-            if route_to = submission['route_to']
-              submission.delete('route_to')
+          apply_step_handlers
+          next if @updater.errors.any?
+
+          run_step_actions
+
+          if @updater.errors.empty?
+            if route_to = @submission['route_to']
+              @submission.delete('route_to')
             end
 
-            @wizard.save_submission(submission)
-
-            if route_to
-              updater.result[:redirect_on_next] = route_to
-            end
+            @wizard.save_submission(@submission)
+            @updater.result[:redirect_on_next] = route_to if route_to
 
             true
           else
@@ -124,7 +74,7 @@ class CustomWizard::Builder
         end
       end
     end
-  
+
     @wizard.update_step_order!
     @wizard
   end
@@ -136,14 +86,10 @@ class CustomWizard::Builder
       required: field_template['required']
     }
 
-    params[:label] = field_template['label'] if field_template['label']
-    params[:description] = field_template['description'] if field_template['description']
-    params[:image] = field_template['image'] if field_template['image']
-    params[:key] = field_template['key'] if field_template['key']
-    params[:validations] = field_template['validations'] if field_template['validations']
-    params[:min_length] = field_template['min_length'] if field_template['min_length']
-    params[:max_length] = field_template['max_length'] if field_template['max_length']
-    params[:char_counter] = field_template['char_counter'] if field_template['char_counter']
+    %w(label description image key validations min_length max_length char_counter).each do |key|
+      params[key.to_sym] = field_template[key] if field_template[key]
+    end
+
     params[:value] = prefill_field(field_template, step_template)
 
     if !build_opts[:reset] && (submission = @wizard.current_submission)
@@ -221,6 +167,16 @@ class CustomWizard::Builder
       end
     end
 
+    if field_template['index'].present?
+      index = CustomWizard::Mapper.new(
+        inputs: field_template['index'],
+        user: @wizard.user,
+        data: @wizard.current_submission
+      ).perform
+
+      params[:index] = index.to_i unless index.nil?
+    end
+
     field = step.add_field(params)
   end
 
@@ -245,12 +201,59 @@ class CustomWizard::Builder
       true
     end
   end
+  
+  def check_if_permitted(step, step_template)
+    step.permitted = true
+  
+    if step_template['required_data']
+      step = ensure_required_data(step, step_template)
+    end
+
+    if !step.permitted
+      if step_template['required_data_message']
+        step.permitted_message = step_template['required_data_message']
+      end
+    end
+
+    step
+  end
+  
+  def add_step_attributes(step, step_template)
+    %w(index title banner key force_final).each do |attr|
+      step.send("#{attr}=", step_template[attr]) if step_template[attr]
+    end
+
+    if step_template['description']
+      step.description = mapper.interpolate(
+        step_template['description'],
+        user: true,
+        value: true
+      )
+    end
+    
+    step
+  end
+  
+  def append_step_fields(step, step_template, build_opts)
+    if step_template['fields'] && step_template['fields'].length
+      step_template['fields'].each do |field_template|
+        next if !check_condition(field_template)
+        append_field(step, step_template, field_template, build_opts)
+      end
+    end
+    
+    step.update_field_order!
+    step
+  end
 
   def standardise_boolean(value)
     ActiveRecord::Type::Boolean.new.cast(value)
   end
 
-  def save_permitted_params(permitted_params, params)
+  def save_permitted_params(step_template, params)
+    return unless step_template['permitted_params'].present?
+    
+    permitted_params = step_template['permitted_params']
     permitted_data = {}
     submission_key = nil
     params_key = nil
@@ -291,5 +294,27 @@ class CustomWizard::Builder
     end
 
     step
+  end
+  
+  def apply_step_handlers
+    CustomWizard::Builder.step_handlers.each do |handler|
+      if handler[:wizard_id] == @wizard.id
+        handler[:block].call(self)
+      end
+    end
+  end
+  
+  def run_step_actions
+    if @template.actions.present?
+      @template.actions.each do |action_template|
+        if action_template['run_after'] === updater.step.id
+          CustomWizard::Action.new(
+            action: action_template,
+            wizard: @wizard,
+            data: @submission
+          ).perform
+        end
+      end
+    end
   end
 end

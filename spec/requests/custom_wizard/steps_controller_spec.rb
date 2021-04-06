@@ -59,7 +59,7 @@ describe CustomWizard::StepsController do
 
     put '/w/super-mega-fun-wizard/steps/step_1.json', params: {
       fields: {
-        step_1_field_1: "Show me step 2"
+        step_1_field_1: "Condition will pass"
       }
     }
     expect(response.status).to eq(200)
@@ -73,7 +73,7 @@ describe CustomWizard::StepsController do
 
     put '/w/super-mega-fun-wizard/steps/step_1.json', params: {
       fields: {
-        step_1_field_1: "Don't show me step 2"
+        step_1_field_1: "Condition wont pass"
       }
     }
     expect(response.status).to eq(200)
@@ -91,7 +91,7 @@ describe CustomWizard::StepsController do
 
     put '/w/super-mega-fun-wizard/steps/step_1.json', params: {
       fields: {
-        step_1_field_1: "Don't show me step 2 or 3"
+        step_1_field_1: "Condition wont pass"
       }
     }
     expect(response.status).to eq(200)
@@ -121,5 +121,39 @@ describe CustomWizard::StepsController do
     group_name = wizard.submissions.last['action_9']
     group = Group.find_by(name: group_name)
     expect(group.full_name).to eq("My cool group")
+  end
+  
+  it "detects the final step correctly" do
+    new_template = wizard_template.dup
+    
+    ## route_to action
+    new_template['actions'].last['run_after'] = 'wizard_completion'
+    new_template['steps'][1]['condition'] = wizard_field_condition_template['condition']
+    new_template['steps'][2]['condition'] = wizard_field_condition_template['condition']
+
+    CustomWizard::Template.save(new_template, skip_jobs: true)
+
+    put '/w/super-mega-fun-wizard/steps/step_1.json', params: {
+      fields: {
+        step_1_field_1: "Condition will pass"
+      }
+    }
+    expect(response.status).to eq(200)
+    expect(response.parsed_body['final']).to eq(false)
+    expect(response.parsed_body['next_step_id']).to eq(new_template['steps'][1]['id'])
+
+    put '/w/super-mega-fun-wizard/steps/step_2.json', params: {
+      fields: {
+        step_1_field_1: "Condition will pass"
+      }
+    }
+    expect(response.status).to eq(200)
+    expect(response.parsed_body['final']).to eq(false)
+    expect(response.parsed_body['next_step_id']).to eq(new_template['steps'][2]['id'])
+
+    put '/w/super-mega-fun-wizard/steps/step_3.json'
+    expect(response.status).to eq(200)
+    expect(response.parsed_body['final']).to eq(true)
+    expect(response.parsed_body['redirect_on_complete']).to eq("https://google.com")
   end
 end
