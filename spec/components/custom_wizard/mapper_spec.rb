@@ -275,13 +275,11 @@ describe CustomWizard::Mapper do
     ).perform).to eq(false)
   end
 
-  context "Templating" do
+  context "Output Templating" do
     it "passes the correct values to the template" do
       template = "w{step_1_field_1}"
-
-      template = template.dup
       result = template_mapper.interpolate(
-        template,
+        template.dup,
         template: true,
         user: true,
         wizard: true,
