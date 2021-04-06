@@ -336,6 +336,18 @@ describe CustomWizard::Mapper do
       expect(result).to eq(template_params["step_1_field_1"].size.to_s)
     end
 
+    it "doesn't parse the template when template param is false" do
+      template = <<-LIQUID.strip
+        {{ "w{step_1_field_1}" | size}}
+      LIQUID
+      mapper = create_template_mapper(template_params, user1)
+      result = mapper.interpolate(
+        template.dup,
+        template: false,
+      )
+      expect(result).to eq(template)
+    end
+
     context "custom filter: 'first_non_empty'" do
       it "gives first non empty element from list" do
         template = <<-LIQUID.strip
