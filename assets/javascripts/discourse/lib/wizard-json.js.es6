@@ -1,14 +1,14 @@
-import { listProperties, camelCase, snakeCase } from '../lib/wizard';
-import wizardSchema from '../lib/wizard-schema';
-import EmberObject from '@ember/object';
+import { listProperties, camelCase, snakeCase } from "../lib/wizard";
+import wizardSchema from "../lib/wizard-schema";
+import EmberObject from "@ember/object";
 import { A } from "@ember/array";
 
 function present(val) {
   if (val === null || val === undefined) {
     return false;
-  } else if (typeof val === 'object') {
+  } else if (typeof val === "object") {
     return Object.keys(val).length !== 0;
-  } else if (typeof val === 'string' || val.constructor === Array) {
+  } else if (typeof val === "string" || val.constructor === Array) {
     return val && val.length;
   } else {
     return false;
@@ -20,7 +20,7 @@ function mapped(property, type) {
 }
 
 function castCase(property, value) {
-  return property.indexOf('_type') > -1 ? camelCase(value) : value;
+  return property.indexOf("_type") > -1 ? camelCase(value) : value;
 }
 
 function buildMappedProperty(value, property, type) {
@@ -80,29 +80,29 @@ function buildObject(json, type, objectIndex) {
   let props = {
     isNew: false
   }
-  
+
   Object.keys(json).forEach(prop => {
     props[prop] = buildProperty(json, prop, type, objectIndex);
   });
-    
+
   return EmberObject.create(props);
 }
 
 function buildObjectArray(json, type) {
   let array = A();
-  
+
   if (present(json)) {
     json.forEach((objJson, objectIndex) => {
       let object = buildObject(objJson, type, objectIndex);
-      
+  
       if (hasAdvancedProperties(object, type)) {
-        object.set('showAdvanced', true);
+        object.set("showAdvanced", true);
       }
-      
+
       array.pushObject(object);
     });
   }
-  
+
   return array;
 }
 
@@ -114,12 +114,12 @@ function buildBasicProperties(json, type, props, objectIndex = null) {
       props.showAdvanced = true;
     }
   });
-  
+
   return props;
 }
 
 function hasAdvancedProperties(object, type) {
-  return Object.keys(object).some(p => {
+  return Object.keys(object).some((p) => {
     return wizardSchema[type].advanced.indexOf(p) > -1 && present(object[p]);
   });
 }
@@ -127,59 +127,55 @@ function hasAdvancedProperties(object, type) {
 /// to be removed: necessary due to action array being moved from step to wizard
 function actionPatch(json) {
   let actions = json.actions || [];
-  
-  json.steps.forEach(step => {
+
+  json.steps.forEach((step) => {
     if (step.actions && step.actions.length) {
-      step.actions.forEach(action => {
-        action.run_after = 'wizard_completion';
+      step.actions.forEach((action) => {
+        action.run_after = "wizard_completion";
         actions.push(action);
       });
     }
   });
-  
+
   json.actions = actions;
-  
+
   return json;
 }
 ///
 
 function buildProperties(json) {
-  let props = { 
+  let props = {
     steps: A(),
-    actions: A()
+    actions: A(),
   };
-        
+
   if (present(json)) {
     props.existingId = true;
-    props = buildBasicProperties(json, 'wizard', props);
-    
+    props = buildBasicProperties(json, "wizard", props);
+
     if (present(json.steps)) {
       json.steps.forEach((stepJson, objectIndex) => {
         let stepProps = {
-          isNew: false
+          isNew: false,
         };
-        
+
         stepProps = buildBasicProperties(stepJson, 'step', stepProps, objectIndex);
         stepProps.fields = buildObjectArray(stepJson.fields, 'field');
-        
+
         props.steps.pushObject(EmberObject.create(stepProps));
       });
-    };
+    }
 
     json = actionPatch(json); // to be removed - see above
-    
-    props.actions = buildObjectArray(json.actions, 'action');
+
+    props.actions = buildObjectArray(json.actions, "action");
   } else {
-    listProperties('wizard').forEach(prop => {
+    listProperties("wizard").forEach((prop) => {
       props[prop] = wizardSchema.wizard.basic[prop];
     });
   }
-    
+
   return props;
 }
 
-export {
-  buildProperties,
-  present,
-  mapped
-}
+export { buildProperties, present, mapped };

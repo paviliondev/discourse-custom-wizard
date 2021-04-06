@@ -26,10 +26,10 @@ export default Ember.Route.extend({
         name,
         completed,
         notPermitted: !permitted,
-        wizardId
+        wizardId,
       });
     } else {
-      controller.set('noWizard', true);
+      controller.set("noWizard", true);
     }
-  }
+  },
 });

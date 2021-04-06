@@ -1,23 +1,23 @@
-import { default as computed } from 'discourse-common/utils/decorators';
-import getUrl from 'discourse-common/lib/get-url';
-import WizardField from 'wizard/models/wizard-field';
-import { ajax } from 'wizard/lib/ajax';
-import Step from 'wizard/models/step';
+import { default as computed } from "discourse-common/utils/decorators";
+import getUrl from "discourse-common/lib/get-url";
+import WizardField from "wizard/models/wizard-field";
+import { ajax } from "wizard/lib/ajax";
+import Step from "wizard/models/step";
 import EmberObject from "@ember/object";
 
 const CustomWizard = EmberObject.extend({
-  @computed('steps.length')
-  totalSteps: length => length,
+  @computed("steps.length")
+  totalSteps: (length) => length,
 
   skip() {
-    if (this.required && (!this.completed && this.permitted)) return;
+    if (this.required && !this.completed && this.permitted) return;
     CustomWizard.skip(this.id);
   },
 });
 
 CustomWizard.reopenClass({
   skip(wizardId) {
-    ajax({ url: `/w/${wizardId}/skip`, type: 'PUT' }).then((result) => {
+    ajax({ url: `/w/${wizardId}/skip`, type: "PUT" }).then((result) => {
       CustomWizard.finished(result);
     });
   },
@@ -36,24 +36,24 @@ CustomWizard.reopenClass({
     if (!wizardJson.completed && wizardJson.steps) {
       wizardJson.steps = wizardJson.steps.map(step => {
         const stepObj = Step.create(step);
-        
+
         stepObj.fields.sort((a, b) => {
           return parseFloat(a.number) - parseFloat(b.number);
         });
-        
+
         let tabindex = 1;
         stepObj.fields.forEach((f, i) => {
           f.tabindex = tabindex;
-          
-          if (['date_time'].includes(f.type)) {
+
+          if (["date_time"].includes(f.type)) {
             tabindex = tabindex + 2;
           } else {
             tabindex++;
           }
         });
-        
-        stepObj.fields = stepObj.fields.map(f => WizardField.create(f));
-        
+
+        stepObj.fields = stepObj.fields.map((f) => WizardField.create(f));
+
         return stepObj;
       }).sort((a, b) => {
         return parseFloat(a.index) - parseFloat(b.index);
@@ -73,10 +73,13 @@ CustomWizard.reopenClass({
       });
 
       // Associate the categories with their parents
-      categories.forEach(c => {
+      categories.forEach((c) => {
         let subcategoryIds = subcatMap[c.get("id")];
         if (subcategoryIds) {
-          c.set("subcategories", subcategoryIds.map(id => categoriesById[id]));
+          c.set(
+            "subcategories",
+            subcategoryIds.map((id) => categoriesById[id])
+          );
         }
         if (c.get("parent_category_id")) {
           c.set("parentCategory", categoriesById[c.get("parent_category_id")]);
@@ -115,7 +118,7 @@ export function findCustomWizard(wizardId, params = {}) {
   return ajax({ url, cache: false, dataType: 'json' }).then(result => {
     return CustomWizard.build(result);
   });
-};
+}
 
 var _wizard_store;
 

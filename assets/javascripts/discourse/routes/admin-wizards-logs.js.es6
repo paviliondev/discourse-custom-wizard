@@ -1,4 +1,4 @@
-import CustomWizardLogs from '../models/custom-wizard-logs';
+import CustomWizardLogs from "../models/custom-wizard-logs";
 import DiscourseRoute from "discourse/routes/discourse";
 
 export default DiscourseRoute.extend({
@@ -7,6 +7,6 @@ export default DiscourseRoute.extend({
   },
 
   setupController(controller, model) {
-    controller.set('logs', model);
-  }
-})
+    controller.set("logs", model);
+  },
+});

@@ -5,11 +5,11 @@ import { ajax } from 'wizard/lib/ajax';
 
 export default Ember.Route.extend({
   beforeModel(transition) {
-    this.set('queryParams', transition.intent.queryParams);
+    this.set("queryParams", transition.intent.queryParams);
   },
 
   model(params) {
-    return findCustomWizard(params.wizard_id, this.get('queryParams'));
+    return findCustomWizard(params.wizard_id, this.get("queryParams"));
   },
 
   afterModel(model) {
@@ -17,7 +17,7 @@ export default Ember.Route.extend({
         
     return ajax({
       url: `/site/settings`,
-      type: 'GET',
+      type: "GET",
     }).then((result) => {
       $.extend(Wizard.SiteSettings, result);
     });
@@ -27,7 +27,7 @@ export default Ember.Route.extend({
     const background = model ? model.get('background') : 'AliceBlue';
     Ember.run.scheduleOnce('afterRender', this, function(){
       $('body.custom-wizard').css('background', background);
-      
+
       if (model && model.id) {
         $('#custom-wizard-main').addClass(model.id.dasherize());
       }
@@ -35,7 +35,7 @@ export default Ember.Route.extend({
     controller.setProperties({
       customWizard: true,
       logoUrl: Wizard.SiteSettings.logo_small,
-      reset: null
+      reset: null,
     });
-  }
+  },
 });

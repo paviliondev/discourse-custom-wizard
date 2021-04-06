@@ -1,4 +1,4 @@
-import ValueList from 'admin/components/value-list';
+import ValueList from "admin/components/value-list";
 
 export default ValueList.extend({
   _saveValues() {
@@ -8,5 +8,5 @@ export default ValueList.extend({
     }
 
     this.onChange(this.collection.join(this.inputDelimiter || "\n"));
-  }
-})
+  },
+});
