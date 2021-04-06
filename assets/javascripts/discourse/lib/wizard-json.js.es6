@@ -25,63 +25,67 @@ function castCase(property, value) {
 
 function buildMappedProperty(value, property, type) {
   let inputs = [];
-      
-  value.forEach(inputJson => {
-    let input = {}
-    
-    Object.keys(inputJson).forEach(inputKey => {
-      if (inputKey === 'pairs') {
+
+  value.forEach((inputJson) => {
+    let input = {};
+
+    Object.keys(inputJson).forEach((inputKey) => {
+      if (inputKey === "pairs") {
         let pairs = [];
         let pairCount = inputJson.pairs.length;
-        
-        inputJson.pairs.forEach(pairJson => {
+
+        inputJson.pairs.forEach((pairJson) => {
           let pair = {};
-          
-          Object.keys(pairJson).forEach(pairKey => {
-            pair[pairKey] = castCase(pairKey,  pairJson[pairKey]);
+
+          Object.keys(pairJson).forEach((pairKey) => {
+            pair[pairKey] = castCase(pairKey, pairJson[pairKey]);
           });
-          
+
           pair.pairCount = pairCount;
-          
-          pairs.push(
-            EmberObject.create(pair)
-          );
+
+          pairs.push(EmberObject.create(pair));
         });
-        
+
         input.pairs = pairs;
       } else {
-        input[inputKey] = castCase(inputKey,  inputJson[inputKey]);
+        input[inputKey] = castCase(inputKey, inputJson[inputKey]);
       }
     });
-    
-    inputs.push(
-      EmberObject.create(input)
-    );
+
+    inputs.push(EmberObject.create(input));
   });
-  
+
   return A(inputs);
 }
 
 function buildProperty(json, property, type, objectIndex) {
   let value = json[property];
 
-  if (property === 'index' && (value === null || value === undefined) && objectIndex) {
+  if (
+    property === "index" &&
+    (value === null || value === undefined) &&
+    objectIndex
+  ) {
     return objectIndex;
   }
-  
-  if (!mapped(property, type) || !present(value) || !value.constructor === Array) {
+
+  if (
+    !mapped(property, type) ||
+    !present(value) ||
+    !value.constructor === Array
+  ) {
     return value;
   }
-  
+
   return buildMappedProperty(value, property, type);
 }
 
 function buildObject(json, type, objectIndex) {
   let props = {
-    isNew: false
-  }
+    isNew: false,
+  };
 
-  Object.keys(json).forEach(prop => {
+  Object.keys(json).forEach((prop) => {
     props[prop] = buildProperty(json, prop, type, objectIndex);
   });
 
@@ -94,7 +98,7 @@ function buildObjectArray(json, type) {
   if (present(json)) {
     json.forEach((objJson, objectIndex) => {
       let object = buildObject(objJson, type, objectIndex);
-  
+
       if (hasAdvancedProperties(object, type)) {
         object.set("showAdvanced", true);
       }
@@ -159,8 +163,13 @@ function buildProperties(json) {
           isNew: false,
         };
 
-        stepProps = buildBasicProperties(stepJson, 'step', stepProps, objectIndex);
-        stepProps.fields = buildObjectArray(stepJson.fields, 'field');
+        stepProps = buildBasicProperties(
+          stepJson,
+          "step",
+          stepProps,
+          objectIndex
+        );
+        stepProps.fields = buildObjectArray(stepJson.fields, "field");
 
         props.steps.pushObject(EmberObject.create(stepProps));
       });

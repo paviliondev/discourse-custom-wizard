@@ -66,7 +66,7 @@ const CustomWizard = EmberObject.extend({
       if (value !== undefined && value !== null) {
         result[property] = value;
       }
-    };
+    }
 
     if (!result.error) {
       for (let arrayObjectType of Object.keys(
@@ -132,7 +132,7 @@ const CustomWizard = EmberObject.extend({
   },
 
   buildMappedJson(value) {
-    if (typeof value === 'string' || Number.isInteger(value)) return value;
+    if (typeof value === "string" || Number.isInteger(value)) return value;
     if (!value || !value.length) return false;
 
     let inputs = value;

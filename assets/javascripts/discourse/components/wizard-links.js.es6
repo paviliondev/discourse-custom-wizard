@@ -38,7 +38,7 @@ export default Component.extend({
     const items = this.items;
     const item = items.findBy("id", itemId);
     items.removeObject(item);
-    item.set('index', newIndex);
+    item.set("index", newIndex);
     items.insertAt(newIndex, item);
     scheduleOnce("afterRender", this, () => this.applySortable());
   },
@@ -97,7 +97,7 @@ export default Component.extend({
       params.index = index;
 
       let id = `${itemType}_${index + 1}`;
-      if (itemType === 'field') {
+      if (itemType === "field") {
         id = `${this.parentId}_${id}`;
       }
 
@@ -108,12 +108,12 @@ export default Component.extend({
         Object.keys(objectArrays).forEach((objectType) => {
           params[objectArrays[objectType].property] = A();
         });
-      };
+      }
 
       const newItem = EmberObject.create(params);
       items.pushObject(newItem);
 
-      this.set('current', newItem);
+      this.set("current", newItem);
     },
 
     change(itemId) {

@@ -46,23 +46,12 @@ const step = {
     required_data_message: null,
     permitted_params: null,
     condition: null,
-    force_final: false
+    force_final: false,
   },
-  mapped: [
-    'required_data',
-    'permitted_params',
-    'condition',
-    'index'
-  ],
-  advanced: [
-    'required_data',
-    'permitted_params'
-  ],
-  required: [
-    'id'
-  ],
-  dependent: {
-  },
+  mapped: ["required_data", "permitted_params", "condition", "index"],
+  advanced: ["required_data", "permitted_params"],
+  required: ["id"],
+  dependent: {},
   mapped: ["required_data", "permitted_params"],
   advanced: ["required_data", "permitted_params"],
   required: ["id"],
@@ -85,28 +74,15 @@ const field = {
     required: null,
     key: null,
     type: null,
-    condition: null
+    condition: null,
   },
   types: {},
-  mapped: [
-    'prefill',
-    'content',
-    'condition',
-    'index'
-  ],
-  advanced: [
-    'property',
-    'key'
-  ],
-  required: [
-    'id',
-    'type'
-  ],
-  dependent: {
-  },
-  objectArrays: {
-  }
-}
+  mapped: ["prefill", "content", "condition", "index"],
+  advanced: ["property", "key"],
+  required: ["id", "type"],
+  dependent: {},
+  objectArrays: {},
+};
 
 const action = {
   basic: {
