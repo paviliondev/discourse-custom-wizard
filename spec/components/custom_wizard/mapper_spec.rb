@@ -284,7 +284,7 @@ describe CustomWizard::Mapper do
     ).perform).to eq(false)
   end
 
-  context "Output Templating" do
+  context "output templating" do
     it "passes the correct values to the template" do
       template = "w{step_1_field_1}"
       mapper = create_template_mapper(template_params, user1)
