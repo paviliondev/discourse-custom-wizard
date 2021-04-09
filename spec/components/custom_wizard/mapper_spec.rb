@@ -372,7 +372,7 @@ describe CustomWizard::Mapper do
         expect(result).to eq(template_params_non_empty["step_1_field_3"])
       end
 
-      it "gives first non empty element from list  when multiple non empty values present" do
+      it "gives first non empty element from list when multiple non empty values present" do
         template = <<-LIQUID.strip
           {%- assign entry = "" | first_non_empty: step_1_field_1, step_1_field_2, step_1_field_3 -%}
           {{ entry }}
