@@ -68,6 +68,13 @@ describe CustomWizard::Mapper do
     }
   }
 
+  def create_template_mapper(data, user)
+    CustomWizard::Mapper.new(
+      data: data,
+      user: user
+    )
+  end
+
   it "maps values" do
     expect(CustomWizard::Mapper.new(
       inputs: inputs['assignment'],
@@ -400,11 +407,4 @@ describe CustomWizard::Mapper do
       end
     end
   end
-end
-
-def create_template_mapper(data, user)
-  CustomWizard::Mapper.new(
-    data: data,
-    user: user
-  )
 end
