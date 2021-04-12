@@ -132,7 +132,9 @@ const CustomWizard = EmberObject.extend({
   },
 
   buildMappedJson(inputs) {
-    if (!inputs || !inputs.length) {return false;}
+    if (!inputs || !inputs.length) {
+      return false;
+    }
 
     let result = [];
 

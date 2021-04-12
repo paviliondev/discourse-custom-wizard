@@ -53,7 +53,9 @@ export default Component.extend({
     "items.@each.title"
   )
   links(current, items) {
-    if (!items) {return;}
+    if (!items) {
+      return;
+    }
 
     return items.map((item) => {
       if (item) {

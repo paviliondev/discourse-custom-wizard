@@ -67,16 +67,22 @@ export default Component.extend({
     "field.serializers"
   )
   saveDisabled(saving) {
-    if (saving) {return true;}
+    if (saving) {
+      return true;
+    }
 
     const originalField = this.originalField;
-    if (!originalField) {return false;}
+    if (!originalField) {
+      return false;
+    }
 
     return ["name", "klass", "type", "serializers"].every((attr) => {
       let current = this.get(attr);
       let original = originalField[attr];
 
-      if (!current) {return false;}
+      if (!current) {
+        return false;
+      }
 
       if (attr === "serializers") {
         return this.compareArrays(current, original);

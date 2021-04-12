@@ -1,6 +1,6 @@
 import {
   default as discourseComputed,
-  observes
+  observes,
 } from "discourse-common/utils/decorators";
 import { notEmpty } from "@ember/object/computed";
 import showModal from "discourse/lib/show-modal";

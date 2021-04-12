@@ -91,7 +91,9 @@ export default Component.extend(UndoChanges, {
 
   @discourseComputed("apis", "action.api")
   availableEndpoints(apis, api) {
-    if (!api) {return [];}
+    if (!api) {
+      return [];
+    }
     return apis.find((a) => a.name === api).endpoints;
   },
 });

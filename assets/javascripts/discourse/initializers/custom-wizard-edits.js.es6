@@ -5,7 +5,9 @@ export default {
   initialize(container) {
     const siteSettings = container.lookup("site-settings:main");
 
-    if (!siteSettings.custom_wizard_enabled) {return;}
+    if (!siteSettings.custom_wizard_enabled) {
+      return;
+    }
 
     const existing = DiscourseURL.routeTo;
     DiscourseURL.routeTo = function (path, opts) {

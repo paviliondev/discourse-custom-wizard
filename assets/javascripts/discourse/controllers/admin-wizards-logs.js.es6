@@ -11,7 +11,9 @@ export default Controller.extend({
   logs: [],
 
   loadLogs() {
-    if (!this.canLoadMore) {return;}
+    if (!this.canLoadMore) {
+      return;
+    }
 
     this.set("refreshing", true);
 

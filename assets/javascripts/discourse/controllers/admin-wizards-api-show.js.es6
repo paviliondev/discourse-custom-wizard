@@ -63,9 +63,12 @@ export default Controller.extend({
     clientSecret,
     threeLeggedOauth
   ) {
-    if (saveDisabled || !authType || !tokenUrl || !clientId || !clientSecret)
-      {return true;}
-    if (threeLeggedOauth) {return !authUrl;}
+    if (saveDisabled || !authType || !tokenUrl || !clientId || !clientSecret) {
+      return true;
+    }
+    if (threeLeggedOauth) {
+      return !authUrl;
+    }
     return false;
   },
 
@@ -149,13 +152,17 @@ export default Controller.extend({
       let refreshList = false; // eslint-disable-line
       let error;
 
-      if (!name || !authType) {return;}
+      if (!name || !authType) {
+        return;
+      }
 
       let data = {
         auth_type: authType,
       };
 
-      if (api.title) {data["title"] = api.title;}
+      if (api.title) {
+        data["title"] = api.title;
+      }
 
       const originalTitle = this.get("api.originalTitle");
       if (api.get("isNew") || (originalTitle && api.title !== originalTitle)) {
@@ -232,7 +239,9 @@ export default Controller.extend({
 
     remove() {
       const name = this.get("api.name");
-      if (!name) {return;}
+      if (!name) {
+        return;
+      }
 
       this.set("updating", true);
 
@@ -250,7 +259,9 @@ export default Controller.extend({
 
     clearLogs() {
       const name = this.get("api.name");
-      if (!name) {return;}
+      if (!name) {
+        return;
+      }
 
       ajax(`/admin/wizards/api/${name.underscore()}/logs`, {
         type: "DELETE",

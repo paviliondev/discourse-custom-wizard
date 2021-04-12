@@ -19,7 +19,9 @@ export default Component.extend({
 
   init() {
     this._super(...arguments);
-    if (!this.validations) {return;}
+    if (!this.validations) {
+      return;
+    }
 
     if (!this.field.validations) {
       const validations = {};

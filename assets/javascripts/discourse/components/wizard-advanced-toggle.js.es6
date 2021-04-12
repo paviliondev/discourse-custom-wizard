@@ -7,7 +7,9 @@ export default Component.extend({
   @discourseComputed("showAdvanced")
   toggleClass(showAdvanced) {
     let classes = "btn";
-    if (showAdvanced) {classes += " btn-primary";}
+    if (showAdvanced) {
+      classes += " btn-primary";
+    }
     return classes;
   },
 

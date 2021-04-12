@@ -2,7 +2,7 @@ import { alias, gt, or } from "@ember/object/computed";
 import { computed } from "@ember/object";
 import {
   default as discourseComputed,
-  observes
+  observes,
 } from "discourse-common/utils/decorators";
 import { getOwner } from "discourse-common/lib/get-owner";
 import { defaultSelectionType, selectionTypes } from "../lib/wizard-mapper";
@@ -134,7 +134,9 @@ export default Component.extend({
   },
 
   documentClick(e) {
-    if (this._state === "destroying") {return;}
+    if (this._state === "destroying") {
+      return;
+    }
     let $target = $(e.target);
 
     if (!$target.parents(".type-selector").length && this.showTypes) {
@@ -274,11 +276,17 @@ export default Component.extend({
 
   optionEnabled(type) {
     const options = this.options;
-    if (!options) {return false;}
+    if (!options) {
+      return false;
+    }
 
     const option = options[type];
-    if (option === true) {return true;}
-    if (typeof option !== "string") {return false;}
+    if (option === true) {
+      return true;
+    }
+    if (typeof option !== "string") {
+      return false;
+    }
 
     return option.split(",").filter((o) => {
       return [this.selectorType, this.inputType].indexOf(o) !== -1;
