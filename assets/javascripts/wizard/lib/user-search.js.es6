@@ -87,8 +87,9 @@ function organizeResults(r, options) {
       if (
         results.length > limit &&
         options.term.toLowerCase() !== g.name.toLowerCase()
-      )
-        {return false;}
+      ) {
+        return false;
+      }
       if (exclude.indexOf(g.name) === -1) {
         groups.push(g);
         results.push(g);

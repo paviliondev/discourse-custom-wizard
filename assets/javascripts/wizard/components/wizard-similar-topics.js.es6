@@ -15,7 +15,9 @@ export default Component.extend({
   },
 
   documentClick(e) {
-    if (this._state === "destroying") {return;}
+    if (this._state === "destroying") {
+      return;
+    }
     let $target = $(e.target);
 
     if (!$target.hasClass("show-topics")) {

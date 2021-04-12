@@ -1,7 +1,9 @@
 export default {
   name: "custom-routes",
   initialize(app) {
-    if (window.location.pathname.indexOf("/w/") < 0) {return;}
+    if (window.location.pathname.indexOf("/w/") < 0) {
+      return;
+    }
 
     const EmberObject = requirejs("@ember/object").default;
     const Router = requirejs("wizard/router").default;
@@ -37,7 +39,9 @@ export default {
         let ownProps = Object.keys(obj),
           i = ownProps.length,
           resArray = new Array(i); // preallocate the Array
-        while (i--) {resArray[i] = [ownProps[i], obj[ownProps[i]]];}
+        while (i--) {
+          resArray[i] = [ownProps[i], obj[ownProps[i]]];
+        }
 
         return resArray;
       };

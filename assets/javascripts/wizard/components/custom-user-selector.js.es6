@@ -45,8 +45,9 @@ export default Ember.TextField.extend({
 
   @observes("usernames")
   _update() {
-    if (this.get("canReceiveUpdates") === "true")
-      {this.didInsertElement({ updateData: true });}
+    if (this.get("canReceiveUpdates") === "true") {
+      this.didInsertElement({ updateData: true });
+    }
   },
 
   didInsertElement(opts) {
@@ -123,7 +124,9 @@ export default Ember.TextField.extend({
           self.set("hasGroups", hasGroups);
 
           selected = items;
-          if (self.get("onChangeCallback")) {self.sendAction("onChangeCallback");}
+          if (self.get("onChangeCallback")) {
+            self.sendAction("onChangeCallback");
+          }
         },
 
         reverseTransform(i) {

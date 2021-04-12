@@ -34,8 +34,9 @@ export default WizardFieldValidator.extend({
 
   @discourseComputed("validation.categories")
   validationCategories(categoryIds) {
-    if (categoryIds)
-      {return categoryIds.map((id) => this.site.categoriesById[id]);}
+    if (categoryIds) {
+      return categoryIds.map((id) => this.site.categoriesById[id]);
+    }
 
     return A();
   },
@@ -77,15 +78,18 @@ export default WizardFieldValidator.extend({
 
   @discourseComputed("currentState")
   currentStateClass(currentState) {
-    if (currentState) {return `similar-topics-${dasherize(currentState)}`;}
+    if (currentState) {
+      return `similar-topics-${dasherize(currentState)}`;
+    }
 
     return "similar-topics";
   },
 
   @discourseComputed("currentState")
   currentStateKey(currentState) {
-    if (currentState)
-      {return `realtime_validations.similar_topics.${currentState}`;}
+    if (currentState) {
+      return `realtime_validations.similar_topics.${currentState}`;
+    }
 
     return false;
   },

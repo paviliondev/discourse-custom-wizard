@@ -1,7 +1,9 @@
 export default {
   name: "custom-wizard-step",
   initialize() {
-    if (window.location.pathname.indexOf("/w/") < 0) {return;}
+    if (window.location.pathname.indexOf("/w/") < 0) {
+      return;
+    }
 
     const CustomWizard = requirejs(
       "discourse/plugins/discourse-custom-wizard/wizard/models/custom"
@@ -132,7 +134,9 @@ export default {
 
       bannerImage: function () {
         const src = this.get("step.banner");
-        if (!src) {return;}
+        if (!src) {
+          return;
+        }
         return getUrl(src);
       }.property("step.banner"),
 

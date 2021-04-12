@@ -12,7 +12,9 @@ export default Ember.Component.extend({
         [...value].reduce((result, v) => {
           let val =
             property === "id" ? Category.findById(v) : Category.findBySlug(v);
-          if (val) {result.push(val);}
+          if (val) {
+            result.push(val);
+          }
           return result;
         }, [])
       );

@@ -5,10 +5,7 @@ import {
 } from "discourse-common/utils/decorators";
 import { findRawTemplate } from "discourse-common/lib/raw-templates";
 import { next, scheduleOnce, throttle } from "@ember/runloop";
-import {
-  caretPosition,
-  inCodeBlock,
-} from "discourse/lib/utilities";
+import { caretPosition, inCodeBlock } from "discourse/lib/utilities";
 import highlightSyntax from "discourse/lib/highlight-syntax";
 import { getToken } from "wizard/lib/ajax";
 import {
