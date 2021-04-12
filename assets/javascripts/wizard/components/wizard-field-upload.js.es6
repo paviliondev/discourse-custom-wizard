@@ -20,10 +20,10 @@ export default Ember.Component.extend({
       formData: {
         synchronous: true,
         type: `wizard_${id}`,
-        authenticity_token: getToken()
+        authenticity_token: getToken(),
       },
       dataType: "json",
-      dropZone: $upload
+      dropZone: $upload,
     });
 
     $upload.on("fileuploadsubmit", () => this.set("uploading", true));
@@ -31,12 +31,16 @@ export default Ember.Component.extend({
     $upload.on("fileuploaddone", (e, response) => {
       this.setProperties({
         "field.value": response.result,
-        "uploading": false
+        uploading: false,
       });
-      if ( Discourse.SiteSettings.wizard_recognised_image_upload_formats.split('|').includes(response.result.extension)) {
+      if (
+        Discourse.SiteSettings.wizard_recognised_image_upload_formats
+          .split("|")
+          .includes(response.result.extension)
+      ) {
         this.setProperties({
-          "isImage": true
-        })
+          isImage: true,
+        });
       }
     });
 
@@ -51,9 +55,9 @@ export default Ember.Component.extend({
         title: "",
         text: message,
         type: "warning",
-        confirmButtonColor: "#6699ff"
+        confirmButtonColor: "#6699ff",
       });
       this.set("uploading", false);
     });
-  }
+  },
 });

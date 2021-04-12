@@ -1,9 +1,12 @@
-import { default as computed, observes } from 'discourse-common/utils/decorators';
-import { renderAvatar } from 'discourse/helpers/user-avatar';
-import userSearch from '../lib/user-search';
+import {
+  default as computed,
+  observes,
+} from "discourse-common/utils/decorators";
+import { renderAvatar } from "discourse/helpers/user-avatar";
+import userSearch from "../lib/user-search";
 import WizardI18n from "../lib/wizard-i18n";
 
-const template = function(params) {
+const template = function (params) {
   const options = params.options;
   let html = "<div class='autocomplete'>";
 
@@ -11,7 +14,7 @@ const template = function(params) {
     html += "<ul>";
     options.users.forEach((u) => {
       html += `<li><a href title="${u.name}">`;
-      html += renderAvatar(u, { imageSize: 'tiny' });
+      html += renderAvatar(u, { imageSize: "tiny" });
       html += `<span class='username'>${u.username}</span>`;
       if (u.name) {
         html += `<span class='name'>${u.name}</span>`;
@@ -19,7 +22,7 @@ const template = function(params) {
       html += `</a></li>`;
     });
     html += "</ul>";
-  };
+  }
 
   html += "</div>";
 
@@ -27,10 +30,10 @@ const template = function(params) {
 };
 
 export default Ember.TextField.extend({
-  attributeBindings: ['autofocus', 'maxLength'],
+  attributeBindings: ["autofocus", "maxLength"],
   autocorrect: false,
   autocapitalize: false,
-  name: 'user-selector',
+  name: "user-selector",
   id: "custom-member-selector",
 
   @computed("placeholderKey")
@@ -38,101 +41,107 @@ export default Ember.TextField.extend({
     return placeholderKey ? WizardI18n(placeholderKey) : "";
   },
 
-  @observes('usernames')
+  @observes("usernames")
   _update() {
-    if (this.get('canReceiveUpdates') === 'true')
-      this.didInsertElement({updateData: true});
+    if (this.get("canReceiveUpdates") === "true")
+      this.didInsertElement({ updateData: true });
   },
 
   didInsertElement(opts) {
     this._super();
     var self = this,
-        selected = [],
-        groups = [],
-        currentUser = this.currentUser,
-        includeMentionableGroups = this.get('includeMentionableGroups') === 'true',
-        includeMessageableGroups = this.get('includeMessageableGroups') === 'true',
-        includeGroups = this.get('includeGroups') === 'true',
-        allowedUsers = this.get('allowedUsers') === 'true';
+      selected = [],
+      groups = [],
+      currentUser = this.currentUser,
+      includeMentionableGroups =
+        this.get("includeMentionableGroups") === "true",
+      includeMessageableGroups =
+        this.get("includeMessageableGroups") === "true",
+      includeGroups = this.get("includeGroups") === "true",
+      allowedUsers = this.get("allowedUsers") === "true";
 
     function excludedUsernames() {
       // hack works around some issues with allowAny eventing
-      const usernames = self.get('single') ? [] : selected;
+      const usernames = self.get("single") ? [] : selected;
 
-      if (currentUser && self.get('excludeCurrentUser')) {
-        return usernames.concat([currentUser.get('username')]);
+      if (currentUser && self.get("excludeCurrentUser")) {
+        return usernames.concat([currentUser.get("username")]);
       }
       return usernames;
     }
 
-    $(this.element).val(this.get('usernames')).autocomplete({
-      template,
-      disabled: this.get('disabled'),
-      single: this.get('single'),
-      allowAny: this.get('allowAny'),
-      updateData: (opts && opts.updateData) ? opts.updateData : false,
+    $(this.element)
+      .val(this.get("usernames"))
+      .autocomplete({
+        template,
+        disabled: this.get("disabled"),
+        single: this.get("single"),
+        allowAny: this.get("allowAny"),
+        updateData: opts && opts.updateData ? opts.updateData : false,
 
-      dataSource(term) {
-        const termRegex = /[^a-zA-Z0-9_\-\.@\+]/;
+        dataSource(term) {
+          const termRegex = /[^a-zA-Z0-9_\-\.@\+]/;
 
-        var results = userSearch({
-          term: term.replace(termRegex, ''),
-          topicId: self.get('topicId'),
-          exclude: excludedUsernames(),
-          includeGroups,
-          allowedUsers,
-          includeMentionableGroups,
-          includeMessageableGroups
-        });
-
-        return results;
-      },
-
-      transformComplete(v) {
-        if (v.username || v.name) {
-          if (!v.username) { groups.push(v.name); }
-          return v.username || v.name;
-        } else {
-          var excludes = excludedUsernames();
-          return v.usernames.filter(function(item){
-            return excludes.indexOf(item) === -1;
+          var results = userSearch({
+            term: term.replace(termRegex, ""),
+            topicId: self.get("topicId"),
+            exclude: excludedUsernames(),
+            includeGroups,
+            allowedUsers,
+            includeMentionableGroups,
+            includeMessageableGroups,
           });
-        }
-      },
 
-      onChangeItems(items) {
-        var hasGroups = false;
-        items = items.map(function(i) {
-          if (groups.indexOf(i) > -1) { hasGroups = true; }
-          return i.username ? i.username : i;
-        });
-        self.set('usernames', items.join(","));
-        self.set('hasGroups', hasGroups);
+          return results;
+        },
 
-        selected = items;
-        if (self.get('onChangeCallback')) self.sendAction('onChangeCallback');
-      },
+        transformComplete(v) {
+          if (v.username || v.name) {
+            if (!v.username) {
+              groups.push(v.name);
+            }
+            return v.username || v.name;
+          } else {
+            var excludes = excludedUsernames();
+            return v.usernames.filter(function (item) {
+              return excludes.indexOf(item) === -1;
+            });
+          }
+        },
 
-      reverseTransform(i) {
-        return { username: i };
-      }
+        onChangeItems(items) {
+          var hasGroups = false;
+          items = items.map(function (i) {
+            if (groups.indexOf(i) > -1) {
+              hasGroups = true;
+            }
+            return i.username ? i.username : i;
+          });
+          self.set("usernames", items.join(","));
+          self.set("hasGroups", hasGroups);
 
-    });
+          selected = items;
+          if (self.get("onChangeCallback")) self.sendAction("onChangeCallback");
+        },
+
+        reverseTransform(i) {
+          return { username: i };
+        },
+      });
   },
 
   willDestroyElement() {
     this._super();
-    $(this.element).autocomplete('destroy');
+    $(this.element).autocomplete("destroy");
   },
 
   // THIS IS A HUGE HACK TO SUPPORT CLEARING THE INPUT
-  @observes('usernames')
-  _clearInput: function() {
+  @observes("usernames")
+  _clearInput: function () {
     if (arguments.length > 1) {
       if (Em.isEmpty(this.get("usernames"))) {
         $(this.element).parent().find("a").click();
       }
     }
-  }
-
+  },
 });

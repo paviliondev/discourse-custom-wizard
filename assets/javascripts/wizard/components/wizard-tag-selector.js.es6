@@ -1,4 +1,4 @@
-import TagChooser from 'select-kit/components/tag-chooser';
+import TagChooser from "select-kit/components/tag-chooser";
 import { makeArray } from "discourse-common/lib/helpers";
 
 export default TagChooser.extend({
@@ -7,5 +7,5 @@ export default TagChooser.extend({
       const whitelist = makeArray(context.whitelist);
       return !whitelist.length || whitelist.indexOf(tag.id) > 1;
     });
-  }
-})
+  },
+});

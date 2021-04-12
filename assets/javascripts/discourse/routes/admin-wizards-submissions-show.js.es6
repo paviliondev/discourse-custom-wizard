@@ -1,4 +1,4 @@
-import CustomWizard from '../models/custom-wizard';
+import CustomWizard from "../models/custom-wizard";
 import DiscourseRoute from "discourse/routes/discourse";
 
 export default DiscourseRoute.extend({
@@ -25,12 +25,12 @@ export default DiscourseRoute.extend({
         });
         submissions.push(submission);
       });
-      
+
       controller.setProperties({
         wizard: model.wizard,
         submissions,
-        fields
+        fields,
       });
     }
-  }
+  },
 });

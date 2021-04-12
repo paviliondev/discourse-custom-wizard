@@ -1,19 +1,19 @@
-import { default as discourseComputed } from 'discourse-common/utils/decorators';
-import Component from '@ember/component';
+import { default as discourseComputed } from "discourse-common/utils/decorators";
+import Component from "@ember/component";
 
 export default Component.extend({
-  classNames: 'wizard-advanced-toggle',
-  
-  @discourseComputed('showAdvanced')
+  classNames: "wizard-advanced-toggle",
+
+  @discourseComputed("showAdvanced")
   toggleClass(showAdvanced) {
-    let classes = 'btn'
-    if (showAdvanced) classes += ' btn-primary';
+    let classes = "btn";
+    if (showAdvanced) classes += " btn-primary";
     return classes;
   },
-  
+
   actions: {
     toggleAdvanced() {
-      this.toggleProperty('showAdvanced');
-    }
-  }
-})
+      this.toggleProperty("showAdvanced");
+    },
+  },
+});

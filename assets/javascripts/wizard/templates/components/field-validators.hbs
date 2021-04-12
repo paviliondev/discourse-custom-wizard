@@ -3,7 +3,7 @@
     {{component validation.component field=field type=type validation=validation}}
   {{/each-in}}
 
-  {{yield (hash perform=(action 'perform'))}}
+  {{yield (hash perform=(action 'perform') autocomplete="off")}}
 
   {{#each-in field.validations.below as |type validation|}}
     {{component validation.component field=field type=type validation=validation}}
