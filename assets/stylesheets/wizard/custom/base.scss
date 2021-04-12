@@ -15,7 +15,7 @@ textarea {
   height: auto;
   background-color: var(--secondary);
   border: 1px solid var(--primary-medium);
-  
+
   &:focus {
     border-color: var(--tertiary);
     box-shadow: shadow("focus");

@@ -1,15 +1,15 @@
-@import 'wizard-mapper';
-@import 'wizard-manager';
-@import 'wizard-api';
-@import 'common/components/buttons';
+@import "wizard-mapper";
+@import "wizard-manager";
+@import "wizard-api";
+@import "common/components/buttons";
 
 .admin-wizard-controls {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
-  
-  &+ .wizard-message + div {
+
+  & + .wizard-message + div {
     margin-top: 20px;
   }
 }
@@ -22,54 +22,52 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  
+
   .message-block {
     .d-icon {
       margin-right: 4px;
     }
-    
+
     .d-icon-check-circle {
       color: var(--success);
     }
-    
+
     .d-icon-times-circle {
       color: var(--danger);
     }
-    
+
     a + a {
       border-left: 1px solid $primary-medium;
       padding-left: 5px;
       margin-left: 5px;
     }
-    
+
     .message {
       white-space: nowrap;
     }
-    
+
     .list-colon {
       margin-right: 5px;
     }
-    
+
     ul {
       list-style: none;
       margin: 0;
-      
+
       span.action {
         margin-left: 5px;
       }
     }
   }
-  
+
   & + div {
     margin-top: 30px;
   }
-  
-  
 }
 
 .wizard-submissions {
   overflow: scroll;
-  
+
   table td {
     min-width: 150px;
   }
@@ -81,7 +79,7 @@
       margin: 0 7px;
     }
   }
-  
+
   .wizard-logs {
     .date {
       width: 100px;
@@ -125,11 +123,11 @@
 .wizard-custom-action {
   position: relative;
   display: none;
-  
+
   &.visible {
     display: flex;
   }
-  
+
   .undo-changes {
     position: absolute;
     top: 0;
@@ -139,11 +137,11 @@
 
 .admin-wizard-container.settings .wizard-basic-details {
   justify-content: initial;
-  
+
   .setting {
     width: auto;
     margin-right: 20px;
-    
+
     .setting-label {
       width: initial;
       min-width: initial;
@@ -153,7 +151,7 @@
 
 .wizard-header {
   margin-bottom: 20px;
-  
+
   &.large {
     font-size: 1.5em;
     min-height: 31px;
@@ -161,32 +159,32 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    
+
     input {
       margin-bottom: 0;
       width: 400px;
     }
-    
+
     label {
       margin-bottom: 0;
     }
-    
+
     .download-link {
       font-size: 1rem;
       line-height: 20px;
     }
-    
+
     .wizard-url {
       display: inline-flex;
       margin-left: 20px;
       max-width: 50%;
-      
+
       a {
         padding: 6px 12px;
         font-size: 1rem;
         background-color: $primary-low;
       }
-      
+
       button {
         font-size: 1rem;
       }
@@ -210,22 +208,21 @@
 .admin-wizard-buttons {
   margin-top: 20px;
   display: flex;
-  
+
   .btn {
     margin-right: 1em;
   }
 }
 
 .admin-wizard-container.settings {
-  
-  [class~='setting'] {
+  [class~="setting"] {
     display: inline-flex;
     align-items: flex-start;
     width: 48%;
     margin-bottom: 30px;
     padding-bottom: 0;
     position: relative;
-    
+
     &:last-of-type {
       margin-bottom: 0;
     }
@@ -241,7 +238,7 @@
       float: initial;
       width: initial;
       padding: 0;
-    
+
       label {
         font-size: 0.85em;
       }
@@ -253,97 +250,100 @@
       button {
         display: block;
       }
-      
-      input[type="text"], textarea {
+
+      input[type="text"],
+      textarea {
         width: 100%;
         box-sizing: border-box;
         margin-bottom: 0;
       }
-      
+
       input[type="number"] {
         margin-bottom: 0;
       }
-      
+
       input[disabled] {
         background-color: $primary-low;
         cursor: not-allowed;
       }
-      
+
       input.medium {
         width: 200px;
       }
-      
+
       input.small {
         width: 100px;
       }
-      
+
       .uploaded-image-preview {
         width: 100%;
         max-height: 100px;
         margin-bottom: 0;
       }
-      
+
       .image-upload-controls {
         label {
           font-size: 1em;
           margin: 0 5px 0 0;
         }
       }
-      
+
       > textarea {
         min-height: 100px;
         resize: vertical;
       }
-      
+
       input[type="checkbox"] {
         float: left;
         margin: 5px 7px 0 0;
       }
-      
-      .input .select-kit, > .select-kit {
+
+      .input .select-kit,
+      > .select-kit {
         max-width: 250px !important;
         min-width: 250px !important;
       }
     }
 
-    &.full, &.full-inline {
+    &.full,
+    &.full-inline {
       width: 100%;
 
       .setting-value {
         width: initial;
         float: none;
-        
+
         &.editor {
           .d-editor {
             margin-bottom: 5px;
           }
         }
-        
+
         .uploaded-image-preview {
           max-height: 200px;
         }
       }
     }
-    
+
     &.full-inline {
       .setting-value {
         display: flex;
         align-items: center;
-        
+
         input {
           margin: 0 7px 0 0;
         }
-        
+
         button {
           margin: 0 0 0 20px;
         }
       }
     }
-    
+
     &.field-mapper-setting {
       .setting-value {
         max-width: calc(100% - 80px);
-        
+
         .mapper-input {
           max-width: 100%;
           box-sizing: border-box;
@@ -359,17 +359,17 @@
       margin-top: 5px;
     }
   }
-  
+
   .advanced-settings {
     width: 100%;
     margin-top: 30px;
-    
-    [class~='setting']:first-of-type {
+
+    [class~="setting"]:first-of-type {
       border-top: none;
     }
   }
-  
-  .wizard-custom-action > [class~='setting']:first-of-type {
+
+  .wizard-custom-action > [class~="setting"]:first-of-type {
     margin-bottom: 0;
   }
 
@@ -406,20 +406,20 @@
     .d-editor-input {
       min-height: 150px;
     }
-    
+
     .d-editor-container {
       display: block;
     }
-    
+
     .d-editor-textarea-wrapper {
       display: grid;
       margin-bottom: 10px;
-      
+
       textarea {
         resize: vertical;
       }
     }
-    
+
     .d-editor-preview-wrapper {
       display: none;
       margin: 0 0 10px 0;
@@ -427,7 +427,7 @@
       background-color: $secondary;
       border: 1px solid $primary-medium;
       max-width: 100%;
-      
+
       &.force-preview {
         display: block;
       }
@@ -437,25 +437,25 @@
       margin: 0;
     }
   }
-  
+
   .wizard-editor-gutter {
     position: relative;
     display: flex;
-    
+
     .btn {
       margin-right: 10px;
       color: $primary;
-      
+
       &:hover {
         color: $secondary;
       }
     }
-    
+
     .wizard-editor-gutter-popover {
       position: absolute;
       padding: 10px;
       background-color: $secondary;
-      box-shadow: shadow('card');
+      box-shadow: shadow("card");
       z-index: 200;
       top: 40px;
     }
@@ -481,7 +481,7 @@
       margin-bottom: 10px;
       margin-right: 10px;
     }
-    
+
     .btn {
       height: 32px;
     }
@@ -505,11 +505,11 @@
 .required-data-message {
   display: inline-block;
   margin-top: 20px;
-  
+
   .label {
     margin-bottom: 5px;
   }
-  
+
   input {
     margin-bottom: 0;
   }
@@ -522,7 +522,7 @@
 
 .modal .modal-body.next-session-time-modal {
   overflow: visible;
-  
+
   .picker-container {
     position: absolute;
     top: 30px;
@@ -574,7 +574,9 @@
   width: 100%;
 }
 
-.add-mapper-input .btn, .btn-after-time, .wizard-editor-gutter .btn {
+.add-mapper-input .btn,
+.btn-after-time,
+.wizard-editor-gutter .btn {
   background-color: $secondary;
   border: 1px solid $primary-medium;
 }
@@ -584,47 +586,47 @@
     .buttons {
       display: flex;
       align-items: center;
-      
+
       button.btn {
         margin-left: 10px;
       }
-    }  
+    }
   }
-  
+
   .btn.save:enabled {
     @extend .btn-primary;
   }
-  
+
   .btn.destroy {
     @extend .btn-danger;
   }
-  
+
   h3 {
     margin-bottom: 0;
   }
-  
+
   .select-kit {
     width: 150px;
   }
-  
+
   .select-kit.multi-select {
     width: 300px;
-    
+
     .choices .choice,
     .select-kit-filter .filter-input {
       height: 25px;
       min-height: 25px;
     }
   }
-  
+
   input[type="text"] {
     margin: 0;
   }
-  
+
   table {
     td {
       vertical-align: top;
-      
+
       label {
         margin: 0;
         line-height: 30px;
@@ -632,25 +634,25 @@
         margin-right: 10px;
       }
     }
-    
+
     td {
       min-width: 170px;
       width: 170px;
     }
-    
+
     td.multi-select {
       min-width: 300px;
     }
-    
+
     td.input {
       min-width: 210px;
       width: 210px;
     }
-    
+
     td.actions {
       min-width: 100px;
       text-align: right;
-      
+
       button.btn {
         margin-left: 5px !important;
       }
@@ -666,7 +668,7 @@
     background-color: var(--primary-low);
     padding: 1em;
     margin: 0 0 1em 0;
-    
+
     input {
       margin-bottom: 0;
     }
@@ -676,7 +678,7 @@
 .validation-container {
   display: flex;
   padding: 1em 0;
-  
+
   .validation-section {
     width: 250px;
   }
