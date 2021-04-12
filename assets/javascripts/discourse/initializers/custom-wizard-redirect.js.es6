@@ -8,7 +8,9 @@ export default {
     const messageBus = container.lookup("message-bus:main");
     const siteSettings = container.lookup("site-settings:main");
 
-    if (!siteSettings.custom_wizard_enabled || !messageBus) return;
+    if (!siteSettings.custom_wizard_enabled || !messageBus) {
+      return;
+    }
 
     messageBus.subscribe("/redirect_to_wizard", function (wizardId) {
       const wizardUrl = window.location.origin + "/w/" + wizardId;

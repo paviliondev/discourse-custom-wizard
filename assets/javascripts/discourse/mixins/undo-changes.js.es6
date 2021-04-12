@@ -1,8 +1,7 @@
 import { listProperties } from "../lib/wizard";
 import { default as wizardSchema } from "../lib/wizard-schema";
-import { set, get } from "@ember/object";
+import { get, set } from "@ember/object";
 import Mixin from "@ember/object/mixin";
-import { observes } from "discourse-common/utils/decorators";
 import { deepEqual } from "discourse-common/lib/object";
 
 export default Mixin.create({
@@ -97,7 +96,6 @@ export default Mixin.create({
   actions: {
     undoChanges() {
       const componentType = this.componentType;
-      const original = this.get("originalObject");
       const obj = this.get(componentType);
 
       this.removeObservers(obj.type);
@@ -118,6 +116,7 @@ export default Mixin.create({
       this.setupObservers(type);
     },
 
+    // eslint-disable-next-line
     mappedFieldUpdated(property, mappedComponent, type) {
       const obj = this.get(this.componentType);
       obj.notifyPropertyChange(property);

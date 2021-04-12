@@ -8,7 +8,7 @@ export default DiscourseRoute.extend({
 
   setupController(controller, model) {
     const showParams = this.paramsFor("adminWizardsApiShow");
-    const apiName = showParams.name == "create" ? null : showParams.name;
+    const apiName = showParams.name === "create" ? null : showParams.name;
     const apiList = (model || []).map((api) => {
       return {
         id: api.name,
