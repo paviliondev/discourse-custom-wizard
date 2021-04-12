@@ -1,5 +1,5 @@
 import { default as discourseComputed } from "discourse-common/utils/decorators";
-import { equal, empty, or, and } from "@ember/object/computed";
+import { and, empty, equal, or } from "@ember/object/computed";
 import { generateName, selectKitContent } from "../lib/wizard";
 import { computed } from "@ember/object";
 import wizardSchema from "../lib/wizard-schema";
@@ -92,7 +92,7 @@ export default Component.extend(UndoChanges, {
 
   @discourseComputed("apis", "action.api")
   availableEndpoints(apis, api) {
-    if (!api) return [];
+    if (!api) {return [];}
     return apis.find((a) => a.name === api).endpoints;
   },
 });

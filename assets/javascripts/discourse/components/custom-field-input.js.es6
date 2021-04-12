@@ -1,6 +1,7 @@
 import Component from "@ember/component";
 import discourseComputed, { observes } from "discourse-common/utils/decorators";
-import { or, alias } from "@ember/object/computed";
+import { alias, or } from "@ember/object/computed";
+import I18n from "I18n";
 
 const generateContent = function (array, type) {
   return array.map((key) => ({
@@ -66,16 +67,16 @@ export default Component.extend({
     "field.serializers"
   )
   saveDisabled(saving) {
-    if (saving) return true;
+    if (saving) {return true;}
 
     const originalField = this.originalField;
-    if (!originalField) return false;
+    if (!originalField) {return false;}
 
     return ["name", "klass", "type", "serializers"].every((attr) => {
       let current = this.get(attr);
       let original = originalField[attr];
 
-      if (!current) return false;
+      if (!current) {return false;}
 
       if (attr == "serializers") {
         return this.compareArrays(current, original);

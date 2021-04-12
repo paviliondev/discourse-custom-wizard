@@ -1,4 +1,4 @@
-import { set, get } from "@ember/object";
+import { get, set } from "@ember/object";
 
 const wizard = {
   basic: {

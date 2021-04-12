@@ -3,13 +3,13 @@ import {
   observes,
   on,
 } from "discourse-common/utils/decorators";
-import { notEmpty, alias } from "@ember/object/computed";
+import { alias, notEmpty } from "@ember/object/computed";
 import showModal from "discourse/lib/show-modal";
 import { generateId, wizardFieldList } from "../lib/wizard";
 import { buildProperties } from "../lib/wizard-json";
 import { dasherize } from "@ember/string";
 import EmberObject from "@ember/object";
-import { scheduleOnce, later } from "@ember/runloop";
+import { later, scheduleOnce } from "@ember/runloop";
 import Controller from "@ember/controller";
 import copyText from "discourse/lib/copy-text";
 import CustomWizard from "../models/custom-wizard";

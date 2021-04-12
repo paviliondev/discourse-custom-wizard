@@ -1,5 +1,5 @@
 import { connectorContent } from "../lib/wizard-mapper";
-import { gt, or, alias } from "@ember/object/computed";
+import { alias, gt, or } from "@ember/object/computed";
 import { computed, observes } from "@ember/object";
 import Component from "@ember/component";
 

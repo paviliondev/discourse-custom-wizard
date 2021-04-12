@@ -1,6 +1,6 @@
 import { listProperties } from "../lib/wizard";
 import { default as wizardSchema } from "../lib/wizard-schema";
-import { set, get } from "@ember/object";
+import { get, set } from "@ember/object";
 import Mixin from "@ember/object/mixin";
 import { observes } from "discourse-common/utils/decorators";
 import { deepEqual } from "discourse-common/lib/object";
