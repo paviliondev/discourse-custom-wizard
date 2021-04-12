@@ -8,11 +8,11 @@
   afterRefresh=(action "afterRefresh")}}
 
 <div class="bottom-bar">
-<button class='wizard-btn toggle-preview' {{action 'togglePreview'}}>
-  <span class="d-button-label">{{wizard-i18n togglePreviewLabel}}</span>
-</button>
+  <button class="wizard-btn toggle-preview" {{action "togglePreview"}} type="button">
+    <span class="d-button-label">{{wizard-i18n togglePreviewLabel}}</span>
+  </button>
 
-{{#if field.char_counter}}
-  {{char-counter field.value field.max_length}}
-{{/if}}
+  {{#if field.char_counter}}
+    {{char-counter field.value field.max_length}}
+  {{/if}}
 </div>

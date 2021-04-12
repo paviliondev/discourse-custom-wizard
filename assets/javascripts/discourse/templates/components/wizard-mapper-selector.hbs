@@ -1,16 +1,16 @@
 <div class="type-selector">
   {{#if hasTypes}}
-    <a {{action "toggleTypes"}} class="active">
+    <a role="button" {{action "toggleTypes"}} class="active">
       {{activeTypeLabel}}
     </a>
-    
+
     {{#if showTypes}}
       <div class="selector-types">
         {{#each selectorTypes as |item|}}
           {{wizard-mapper-selector-type
             activeType=activeType
             item=item
-            toggle=(action 'toggleType')}}
+            toggle=(action "toggleType")}}
         {{/each}}
       </div>
     {{/if}}
@@ -38,7 +38,7 @@
         allowAny=comboBoxAllowAny
       )}}
   {{/if}}
-  
+
   {{#if showMultiSelect}}
     {{multi-select
       content=multiSelectContent
@@ -46,14 +46,14 @@
       onChange=(action "changeValue")
       options=multiSelectOptions}}
   {{/if}}
-  
+
   {{#if showList}}
     {{wizard-value-list
       values=value
       addKey=placeholderKey
       onChange=(action "changeValue")}}
   {{/if}}
-  
+
   {{#if showTag}}
     {{tag-chooser
       tags=value
@@ -63,10 +63,10 @@
         filterable=true
       )}}
   {{/if}}
-  
+
   {{#if showUser}}
-    {{user-selector 
-      includeMessageableGroups='true'
+    {{user-selector
+      includeMessageableGroups="true"
       placeholderKey=placeholderKey
       usernames=value
       autocomplete="discourse"
