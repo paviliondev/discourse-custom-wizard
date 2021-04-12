@@ -1,7 +1,7 @@
-/* eslint no-undef: 0 */
+/* eslint no-undef: 0*/
 
 import computed from "discourse-common/utils/decorators";
-import { siteDir, isRTL, isLTR } from "discourse/lib/text-direction";
+import { isLTR, isRTL, siteDir } from "discourse/lib/text-direction";
 import WizardI18n from "../lib/wizard-i18n";
 
 export default Ember.TextField.extend({

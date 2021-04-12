@@ -3,8 +3,8 @@ import discourseComputed from "discourse-common/utils/decorators";
 
 export default {
   name: "custom-wizard-field",
-  initialize(app) {
-    if (window.location.pathname.indexOf("/w/") < 0) return;
+  initialize() {
+    if (window.location.pathname.indexOf("/w/") < 0) {return;}
 
     const FieldComponent = requirejs("wizard/components/wizard-field").default;
     const FieldModel = requirejs("wizard/models/wizard-field").default;
@@ -30,7 +30,7 @@ export default {
       inputComponentName: function () {
         const type = this.get("field.type");
         const id = this.get("field.id");
-        if (["text_only"].includes(type)) return false;
+        if (["text_only"].includes(type)) {return false;}
         return dasherize(type === "component" ? id : `wizard-field-${type}`);
       }.property("field.type", "field.id"),
     });

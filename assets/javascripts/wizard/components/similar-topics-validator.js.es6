@@ -1,11 +1,10 @@
 import WizardFieldValidator from "../../wizard/components/validator";
 import { deepMerge } from "discourse-common/lib/object";
-import { observes } from "discourse-common/utils/decorators";
+import discourseComputed, { observes } from "discourse-common/utils/decorators";
 import { cancel, later } from "@ember/runloop";
 import { A } from "@ember/array";
 import EmberObject, { computed } from "@ember/object";
-import { notEmpty, and, equal, empty } from "@ember/object/computed";
-import discourseComputed from "discourse-common/utils/decorators";
+import { and, equal, notEmpty } from "@ember/object/computed";
 import { categoryBadgeHTML } from "discourse/helpers/category-link";
 import { dasherize } from "@ember/string";
 
@@ -16,7 +15,7 @@ export default WizardFieldValidator.extend({
   hasSimilarTopics: notEmpty("similarTopics"),
   hasNotSearched: equal("similarTopics", null),
   noSimilarTopics: computed("similarTopics", function () {
-    return this.similarTopics !== null && this.similarTopics.length == 0;
+    return this.similarTopics !== null && this.similarTopics.length === 0;
   }),
   showSimilarTopics: computed("typing", "hasSimilarTopics", function () {
     return this.hasSimilarTopics && !this.typing;
@@ -36,7 +35,7 @@ export default WizardFieldValidator.extend({
   @discourseComputed("validation.categories")
   validationCategories(categoryIds) {
     if (categoryIds)
-      return categoryIds.map((id) => this.site.categoriesById[id]);
+      {return categoryIds.map((id) => this.site.categoriesById[id]);}
 
     return A();
   },
@@ -78,7 +77,7 @@ export default WizardFieldValidator.extend({
 
   @discourseComputed("currentState")
   currentStateClass(currentState) {
-    if (currentState) return `similar-topics-${dasherize(currentState)}`;
+    if (currentState) {return `similar-topics-${dasherize(currentState)}`;}
 
     return "similar-topics";
   },
@@ -86,7 +85,7 @@ export default WizardFieldValidator.extend({
   @discourseComputed("currentState")
   currentStateKey(currentState) {
     if (currentState)
-      return `realtime_validations.similar_topics.${currentState}`;
+      {return `realtime_validations.similar_topics.${currentState}`;}
 
     return false;
   },

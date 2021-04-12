@@ -1,14 +1,11 @@
 export default {
   name: "custom-routes",
   initialize(app) {
-    if (window.location.pathname.indexOf("/w/") < 0) return;
+    if (window.location.pathname.indexOf("/w/") < 0) {return;}
 
     const EmberObject = requirejs("@ember/object").default;
     const Router = requirejs("wizard/router").default;
     const ApplicationRoute = requirejs("wizard/routes/application").default;
-    const CustomWizard = requirejs(
-      "discourse/plugins/discourse-custom-wizard/wizard/models/custom"
-    ).default;
     const getUrl = requirejs("discourse-common/lib/get-url").default;
     const Store = requirejs("discourse/models/store").default;
     const registerRawHelpers = requirejs(
@@ -18,6 +15,7 @@ export default {
       .createHelperContext;
     const RawHandlebars = requirejs("discourse-common/lib/raw-handlebars")
       .default;
+    const Handlebars = requirejs("handlebars").default;
     const Site = requirejs(
       "discourse/plugins/discourse-custom-wizard/wizard/models/site"
     ).default;
@@ -36,10 +34,10 @@ export default {
     // IE11 Polyfill - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries#Polyfill
     if (!Object.entries) {
       Object.entries = function (obj) {
-        var ownProps = Object.keys(obj),
+        let ownProps = Object.keys(obj),
           i = ownProps.length,
           resArray = new Array(i); // preallocate the Array
-        while (i--) resArray[i] = [ownProps[i], obj[ownProps[i]]];
+        while (i--) {resArray[i] = [ownProps[i], obj[ownProps[i]]];}
 
         return resArray;
       };
@@ -53,7 +51,7 @@ export default {
     });
 
     const targets = ["controller", "component", "route", "model", "adapter"];
-
+    /*eslint no-undef: 0*/
     const siteSettings = Wizard.SiteSettings;
     app.register("site-settings:main", siteSettings, { instantiate: false });
     createHelperContext({ siteSettings });

@@ -1,5 +1,6 @@
 import { registerUnbound } from "discourse-common/lib/helpers";
-import { longDate, number, relativeAge } from "discourse/lib/formatter";
+import { longDate, relativeAge } from "discourse/lib/formatter";
+import Handlebars from "handlebars";
 
 export default registerUnbound("date-node", function (dt) {
   if (typeof dt === "string") {

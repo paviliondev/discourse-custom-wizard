@@ -19,7 +19,7 @@ const translationExists = (key) => {
 
 const WizardI18n = (key, params = {}) => {
   const themeId = getThemeId();
-  if (!themeId) return I18n.t(key, params);
+  if (!themeId) {return I18n.t(key, params);}
 
   const themeKey = `theme_translations.${themeId}.${key}`;
 

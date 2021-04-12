@@ -2,7 +2,7 @@ import { CANCELLED_STATUS } from "discourse/lib/autocomplete";
 import { debounce } from "@ember/runloop";
 import getUrl from "discourse-common/lib/get-url";
 
-var cache = {},
+let cache = {},
   cacheTopicId,
   cacheTime,
   currentTerm,
@@ -18,7 +18,7 @@ function performSearch(
   group,
   resultsFn
 ) {
-  var cached = cache[term];
+  let cached = cache[term];
   if (cached) {
     resultsFn(cached);
     return;
@@ -37,7 +37,7 @@ function performSearch(
     },
   });
 
-  var returnVal = CANCELLED_STATUS;
+  let returnVal = CANCELLED_STATUS;
 
   oldSearch
     .then(function (r) {
@@ -59,7 +59,7 @@ function organizeResults(r, options) {
     return r;
   }
 
-  var exclude = options.exclude || [],
+  let exclude = options.exclude || [],
     limit = options.limit || 5,
     users = [],
     emails = [],
@@ -88,7 +88,7 @@ function organizeResults(r, options) {
         results.length > limit &&
         options.term.toLowerCase() !== g.name.toLowerCase()
       )
-        return false;
+        {return false;}
       if (exclude.indexOf(g.name) === -1) {
         groups.push(g);
         results.push(g);
@@ -104,7 +104,7 @@ function organizeResults(r, options) {
 }
 
 export default function userSearch(options) {
-  var term = options.term || "",
+  let term = options.term || "",
     includeGroups = options.includeGroups,
     includeMentionableGroups = options.includeMentionableGroups,
     includeMessageableGroups = options.includeMessageableGroups,
@@ -131,7 +131,7 @@ export default function userSearch(options) {
 
     cacheTopicId = topicId;
 
-    var clearPromise = setTimeout(function () {
+    let clearPromise = setTimeout(function () {
       resolve(CANCELLED_STATUS);
     }, 5000);
 

@@ -10,7 +10,7 @@ const CustomWizard = EmberObject.extend({
   totalSteps: (length) => length,
 
   skip() {
-    if (this.required && !this.completed && this.permitted) return;
+    if (this.required && !this.completed && this.permitted) {return;}
     CustomWizard.skip(this.id);
   },
 });
@@ -35,7 +35,7 @@ export function findCustomWizard(wizardId, params = {}) {
   let url = `/w/${wizardId}`;
 
   let paramKeys = Object.keys(params).filter((k) => {
-    if (k === "wizard_id") return false;
+    if (k === "wizard_id") {return false;}
     return !!params[k];
   });
 
@@ -51,7 +51,7 @@ export function findCustomWizard(wizardId, params = {}) {
 
   return ajax({ url, cache: false, dataType: "json" }).then((result) => {
     const wizard = result;
-    if (!wizard) return null;
+    if (!wizard) {return null;}
 
     if (!wizard.completed) {
       wizard.steps = wizard.steps.map((step) => {
@@ -62,7 +62,7 @@ export function findCustomWizard(wizardId, params = {}) {
         });
 
         let tabindex = 1;
-        stepObj.fields.forEach((f, i) => {
+        stepObj.fields.forEach((f) => {
           f.tabindex = tabindex;
 
           if (["date_time"].includes(f.type)) {
