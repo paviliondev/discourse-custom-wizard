@@ -49,7 +49,7 @@
     border-left: 1px solid var(--primary-low);
     padding-left: 20px;
   }
-  
+
   .control-group {
     display: inline-block;
     vertical-align: top;
@@ -72,7 +72,8 @@
   }
 }
 
-input.input-location, div.input-location {
+input.input-location,
+div.input-location {
   max-height: 150px;
   background-color: var(--secondary);
   box-shadow: none;
@@ -111,7 +112,8 @@ input.input-location, div.input-location {
       top: 30px !important;
       box-sizing: border-box;
 
-      li, .no-results {
+      li,
+      .no-results {
         padding: 10px;
       }
 
@@ -128,7 +130,8 @@ input.input-location, div.input-location {
   background-color: var(--secondary);
   display: flex;
 
-  &:hover, &.selected {
+  &:hover,
+  &.selected {
     background-color: var(--tertiary);
     color: white;
 
