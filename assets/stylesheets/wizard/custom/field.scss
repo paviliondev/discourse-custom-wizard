@@ -1,14 +1,14 @@
 .custom-wizard {
   .wizard-field {
     margin-bottom: 1em;
-    
+
     .field-label {
       font-weight: 800;
     }
-    
+
     .field-image {
       margin-bottom: 0.5em;
-      
+
       img {
         max-width: 100%;
         max-height: 150px;
@@ -31,9 +31,12 @@
         margin: 0 5px;
       }
     }
-    
+
     &.invalid {
-      textarea, input[type=text], input[type=checkbox], .select-kit {
+      textarea,
+      input[type="text"],
+      input[type="checkbox"],
+      .select-kit {
         outline: 4px solid var(--danger);
       }
     }
@@ -43,7 +46,7 @@
     display: flex;
     align-items: center;
 
-    &> .input-area {
+    & > .input-area {
       order: 0;
       margin: 15px 20px !important;
 
@@ -54,12 +57,12 @@
       }
     }
 
-    &> label.field-label {
+    & > label.field-label {
       order: 1;
       font-weight: 400;
     }
 
-    &> .field-description {
+    & > .field-description {
       margin-top: 0;
       order: 2;
     }
@@ -83,7 +86,7 @@
     }
   }
 
-  .wizard-image-preview  {
+  .wizard-image-preview {
     margin-top: 10px;
     max-width: 500px;
     max-height: 500px;
@@ -155,7 +158,7 @@
   .select-kit.combo-box.group-dropdown {
     min-width: 220px;
   }
-  
+
   .text-field input {
     margin-bottom: 0;
   }
