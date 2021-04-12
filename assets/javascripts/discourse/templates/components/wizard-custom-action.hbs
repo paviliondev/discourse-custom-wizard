@@ -232,7 +232,7 @@
     <div class="setting-value">
       {{combo-box
         value=action.api_endpoint
-        content=availableEndpoint
+        content=availableEndpoints
         onChange=(action (mut action.api_endpoint))
         options=(hash
           isDisabled=apiEmpty
