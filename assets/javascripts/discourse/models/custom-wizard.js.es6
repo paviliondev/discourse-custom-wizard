@@ -1,7 +1,7 @@
 import { ajax } from "discourse/lib/ajax";
 import EmberObject from "@ember/object";
 import { buildProperties, mapped, present } from "../lib/wizard-json";
-import { camelCase, listProperties, snakeCase } from "../lib/wizard";
+import { listProperties, snakeCase } from "../lib/wizard";
 import wizardSchema from "../lib/wizard-schema";
 import { Promise } from "rsvp";
 import { popupAjaxError } from "discourse/lib/ajax-error";

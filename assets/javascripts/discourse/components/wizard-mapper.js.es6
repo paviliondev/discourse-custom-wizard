@@ -1,10 +1,5 @@
-import { getOwner } from "discourse-common/lib/get-owner";
 import { newInput, selectionTypes } from "../lib/wizard-mapper";
-import {
-  default as discourseComputed,
-  observes,
-  on,
-} from "discourse-common/utils/decorators";
+import discourseComputed from "discourse-common/utils/decorators";
 import { later } from "@ember/runloop";
 import Component from "@ember/component";
 import { A } from "@ember/array";

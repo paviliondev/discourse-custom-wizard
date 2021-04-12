@@ -1,6 +1,4 @@
-import { default as computed } from "discourse-common/utils/decorators";
-import { popupAjaxError } from "discourse/lib/ajax-error";
-import { ajax } from "discourse/lib/ajax";
+import discourseComputed from "discourse-common/utils/decorators";
 import { notEmpty } from "@ember/object/computed";
 import CustomWizardLogs from "../models/custom-wizard-logs";
 import Controller from "@ember/controller";
@@ -27,7 +25,7 @@ export default Controller.extend({
       .finally(() => this.set("refreshing", false));
   },
 
-  @computed("hasLogs", "refreshing")
+  @discourseComputed("hasLogs", "refreshing")
   noResults(hasLogs, refreshing) {
     return !hasLogs && !refreshing;
   },

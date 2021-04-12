@@ -1,4 +1,3 @@
-import { withPluginApi } from "discourse/lib/plugin-api";
 import DiscourseURL from "discourse/lib/url";
 
 export default {

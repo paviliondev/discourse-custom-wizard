@@ -35,7 +35,7 @@ export default Component.extend({
   },
 
   @discourseComputed("field.klass")
-  serializerContent(klass, p2) {
+  serializerContent(klass) {
     const serializers = this.get(`${klass}Serializers`);
 
     if (serializers) {
@@ -78,10 +78,10 @@ export default Component.extend({
 
       if (!current) {return false;}
 
-      if (attr == "serializers") {
+      if (attr === "serializers") {
         return this.compareArrays(current, original);
       } else {
-        return current == original;
+        return current === original;
       }
     });
   },

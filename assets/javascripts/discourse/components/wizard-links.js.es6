@@ -9,7 +9,7 @@ import {
   default as wizardSchema,
 } from "../lib/wizard-schema";
 import { notEmpty } from "@ember/object/computed";
-import { bind, scheduleOnce } from "@ember/runloop";
+import { scheduleOnce } from "@ember/runloop";
 import EmberObject from "@ember/object";
 import Component from "@ember/component";
 import { A } from "@ember/array";

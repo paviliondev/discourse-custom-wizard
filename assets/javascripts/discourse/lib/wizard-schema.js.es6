@@ -225,7 +225,7 @@ if (Discourse.SiteSettings.wizard_apis_enabled) {
   };
 }
 
-export function setWizardDefaults(obj, itemType, opts = {}) {
+export function setWizardDefaults(obj, itemType) {
   const objSchema = wizardSchema[itemType];
   const basicDefaults = objSchema.basic;
 

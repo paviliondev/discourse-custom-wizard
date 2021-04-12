@@ -4,6 +4,13 @@ import I18n from "I18n";
 
 // Inputs
 
+const selectableInputTypes = [
+  'conditional',
+  'assignment',
+  'association',
+  'validation'
+];
+
 function defaultInputType(options = {}) {
   return options.inputTypes.split(",")[0];
 }

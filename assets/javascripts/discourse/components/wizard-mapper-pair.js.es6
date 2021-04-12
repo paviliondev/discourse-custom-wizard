@@ -1,6 +1,6 @@
 import { connectorContent } from "../lib/wizard-mapper";
-import { alias, gt, or } from "@ember/object/computed";
-import { computed, observes } from "@ember/object";
+import { alias, gt } from "@ember/object/computed";
+import { computed } from "@ember/object";
 import Component from "@ember/component";
 
 export default Component.extend({

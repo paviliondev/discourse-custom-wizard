@@ -146,7 +146,7 @@ export default Controller.extend({
       const api = this.get("api");
       const name = api.name;
       const authType = api.authType;
-      let refreshList = false;
+      let refreshList = false; // eslint-disable-line
       let error;
 
       if (!name || !authType) {return;}

@@ -1,4 +1,4 @@
-import { camelCase, listProperties, snakeCase } from "../lib/wizard";
+import { camelCase, listProperties } from "../lib/wizard";
 import wizardSchema from "../lib/wizard-schema";
 import EmberObject from "@ember/object";
 import { A } from "@ember/array";
