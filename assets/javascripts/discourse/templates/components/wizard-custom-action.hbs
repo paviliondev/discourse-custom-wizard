@@ -312,7 +312,7 @@
 
     <div class="setting-value">
       {{wizard-mapper
-        inputs=action.categorie
+        inputs=action.categories
         property="categories"
         onUpdate=(action "mappedFieldUpdated")
         options=(hash
@@ -352,7 +352,7 @@
     <div class="setting-value">
       {{combo-box
         value=action.notification_level
-        content=availableNotificationLevel
+        content=availableNotificationLevels
         onChange=(action (mut action.notification_level))
         options=(hash
           isDisabled=action.custom_title_enabled
@@ -378,7 +378,7 @@
 
     <div class="setting-value">
       {{wizard-mapper
-        inputs=action.username
+        inputs=action.usernames
         property="usernames"
         onUpdate=(action "mappedFieldUpdated")
         options=(hash
@@ -471,7 +471,7 @@
 
     <div class="setting-value">
       {{wizard-mapper
-        inputs=action.owner_username
+        inputs=action.owner_usernames
         property="owner_usernames"
         onUpdate=(action "mappedFieldUpdated")
         options=(hash
@@ -490,7 +490,7 @@
 
     <div class="setting-value">
       {{wizard-mapper
-        inputs=action.username
+        inputs=action.usernames
         property="usernames"
         onUpdate=(action "mappedFieldUpdated")
         options=(hash
@@ -698,7 +698,7 @@
 
     <div class="setting-value">
       {{wizard-mapper
-        inputs=action.permission
+        inputs=action.permissions
         property="permissions"
         onUpdate=(action "mappedFieldUpdated")
         options=(hash
@@ -728,7 +728,7 @@
 
           <div class="setting-value">
             {{wizard-mapper
-              inputs=action.custom_field
+              inputs=action.custom_fields
               property="custom_fields"
               onUpdate=(action "mappedFieldUpdated")
               options=(hash
