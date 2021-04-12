@@ -4,22 +4,18 @@ import {
   on,
 } from "discourse-common/utils/decorators";
 import { findRawTemplate } from "discourse-common/lib/raw-templates";
-import { throttle } from "@ember/runloop";
-import { scheduleOnce, next } from "@ember/runloop";
-import {
-  safariHacksDisabled,
-  caretPosition,
-  inCodeBlock,
-} from "discourse/lib/utilities";
+import { next, scheduleOnce, throttle } from "@ember/runloop";
+import { caretPosition, inCodeBlock } from "discourse/lib/utilities";
 import highlightSyntax from "discourse/lib/highlight-syntax";
 import { getToken } from "wizard/lib/ajax";
 import {
-  validateUploadedFiles,
+  displayErrorForUpload,
   getUploadMarkdown,
+  uploadIcon,
+  validateUploadedFiles,
 } from "discourse/lib/uploads";
 import { cacheShortUploadUrl } from "pretty-text/upload-short-url";
 import { alias } from "@ember/object/computed";
-import { uploadIcon } from "discourse/lib/uploads";
 import WizardI18n from "../lib/wizard-i18n";
 
 const uploadMarkdownResolvers = [];
@@ -78,8 +74,8 @@ export default ComposerEditor.extend({
       .join(",");
   },
 
-  @discourseComputed("currentUser")
-  uploadIcon(currentUser) {
+  @discourseComputed()
+  uploadIcon() {
     return uploadIcon(false, this.siteSettings);
   },
 
@@ -295,7 +291,7 @@ export default ComposerEditor.extend({
         shortcut: "K",
         trimLeading: true,
         unshift: true,
-        sendAction: (event) => component.set("showHyperlinkBox", true),
+        sendAction: () => component.set("showHyperlinkBox", true),
       });
     },
 

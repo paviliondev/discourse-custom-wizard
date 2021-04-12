@@ -5,6 +5,8 @@ import {
 import { renderAvatar } from "discourse/helpers/user-avatar";
 import userSearch from "../lib/user-search";
 import WizardI18n from "../lib/wizard-i18n";
+import Handlebars from "handlebars";
+import { isEmpty } from "@ember/utils";
 
 const template = function (params) {
   const options = params.options;
@@ -43,13 +45,14 @@ export default Ember.TextField.extend({
 
   @observes("usernames")
   _update() {
-    if (this.get("canReceiveUpdates") === "true")
+    if (this.get("canReceiveUpdates") === "true") {
       this.didInsertElement({ updateData: true });
+    }
   },
 
   didInsertElement(opts) {
     this._super();
-    var self = this,
+    let self = this,
       selected = [],
       groups = [],
       currentUser = this.currentUser,
@@ -82,7 +85,7 @@ export default Ember.TextField.extend({
         dataSource(term) {
           const termRegex = /[^a-zA-Z0-9_\-\.@\+]/;
 
-          var results = userSearch({
+          let results = userSearch({
             term: term.replace(termRegex, ""),
             topicId: self.get("topicId"),
             exclude: excludedUsernames(),
@@ -102,7 +105,7 @@ export default Ember.TextField.extend({
             }
             return v.username || v.name;
           } else {
-            var excludes = excludedUsernames();
+            let excludes = excludedUsernames();
             return v.usernames.filter(function (item) {
               return excludes.indexOf(item) === -1;
             });
@@ -110,7 +113,7 @@ export default Ember.TextField.extend({
         },
 
         onChangeItems(items) {
-          var hasGroups = false;
+          let hasGroups = false;
           items = items.map(function (i) {
             if (groups.indexOf(i) > -1) {
               hasGroups = true;
@@ -121,7 +124,9 @@ export default Ember.TextField.extend({
           self.set("hasGroups", hasGroups);
 
           selected = items;
-          if (self.get("onChangeCallback")) self.sendAction("onChangeCallback");
+          if (self.get("onChangeCallback")) {
+            self.sendAction("onChangeCallback");
+          }
         },
 
         reverseTransform(i) {
@@ -139,7 +144,7 @@ export default Ember.TextField.extend({
   @observes("usernames")
   _clearInput: function () {
     if (arguments.length > 1) {
-      if (Em.isEmpty(this.get("usernames"))) {
+      if (isEmpty(this.get("usernames"))) {
         $(this.element).parent().find("a").click();
       }
     }
