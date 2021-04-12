@@ -1,11 +1,10 @@
 import { default as discourseComputed } from "discourse-common/utils/decorators";
-import { equal, empty, or, and } from "@ember/object/computed";
-import { generateName, selectKitContent } from "../lib/wizard";
+import { and, empty, equal, or } from "@ember/object/computed";
+import { notificationLevels, selectKitContent } from "../lib/wizard";
 import { computed } from "@ember/object";
 import wizardSchema from "../lib/wizard-schema";
 import UndoChanges from "../mixins/undo-changes";
 import Component from "@ember/component";
-import { notificationLevels } from "../lib/wizard";
 import I18n from "I18n";
 
 export default Component.extend(UndoChanges, {
@@ -43,7 +42,7 @@ export default Component.extend(UndoChanges, {
       name: I18n.t(`admin.wizard.action.${type}.label`),
     };
   }),
-  availableNotificationLevels: notificationLevels.map((type, index) => {
+  availableNotificationLevels: notificationLevels.map((type) => {
     return {
       id: type,
       name: I18n.t(
@@ -92,7 +91,7 @@ export default Component.extend(UndoChanges, {
 
   @discourseComputed("apis", "action.api")
   availableEndpoints(apis, api) {
-    if (!api) return [];
+    if (!api) {return [];}
     return apis.find((a) => a.name === api).endpoints;
   },
 });

@@ -3,7 +3,6 @@ import { gt } from "@ember/object/computed";
 import { computed } from "@ember/object";
 import { defaultConnector } from "../lib/wizard-mapper";
 import { later } from "@ember/runloop";
-import { observes } from "discourse-common/utils/decorators";
 import I18n from "I18n";
 
 export default Component.extend({

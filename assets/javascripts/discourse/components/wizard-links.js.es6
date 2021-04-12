@@ -1,15 +1,15 @@
 import {
   default as discourseComputed,
-  on,
   observes,
+  on,
 } from "discourse-common/utils/decorators";
 import { generateName } from "../lib/wizard";
 import {
-  default as wizardSchema,
   setWizardDefaults,
+  default as wizardSchema,
 } from "../lib/wizard-schema";
 import { notEmpty } from "@ember/object/computed";
-import { scheduleOnce, bind } from "@ember/runloop";
+import { scheduleOnce } from "@ember/runloop";
 import EmberObject from "@ember/object";
 import Component from "@ember/component";
 import { A } from "@ember/array";
@@ -53,7 +53,7 @@ export default Component.extend({
     "items.@each.title"
   )
   links(current, items) {
-    if (!items) return;
+    if (!items) {return;}
 
     return items.map((item) => {
       if (item) {

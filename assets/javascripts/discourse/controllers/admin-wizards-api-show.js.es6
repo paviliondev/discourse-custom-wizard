@@ -2,7 +2,7 @@ import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import CustomWizardApi from "../models/custom-wizard-api";
 import { default as discourseComputed } from "discourse-common/utils/decorators";
-import { not, and, equal } from "@ember/object/computed";
+import { and, equal, not } from "@ember/object/computed";
 import { selectKitContent } from "../lib/wizard";
 import Controller from "@ember/controller";
 import I18n from "I18n";
@@ -64,8 +64,8 @@ export default Controller.extend({
     threeLeggedOauth
   ) {
     if (saveDisabled || !authType || !tokenUrl || !clientId || !clientSecret)
-      return true;
-    if (threeLeggedOauth) return !authUrl;
+      {return true;}
+    if (threeLeggedOauth) {return !authUrl;}
     return false;
   },
 
@@ -146,16 +146,16 @@ export default Controller.extend({
       const api = this.get("api");
       const name = api.name;
       const authType = api.authType;
-      let refreshList = false;
+      let refreshList = false; // eslint-disable-line
       let error;
 
-      if (!name || !authType) return;
+      if (!name || !authType) {return;}
 
       let data = {
         auth_type: authType,
       };
 
-      if (api.title) data["title"] = api.title;
+      if (api.title) {data["title"] = api.title;}
 
       const originalTitle = this.get("api.originalTitle");
       if (api.get("isNew") || (originalTitle && api.title !== originalTitle)) {
@@ -232,7 +232,7 @@ export default Controller.extend({
 
     remove() {
       const name = this.get("api.name");
-      if (!name) return;
+      if (!name) {return;}
 
       this.set("updating", true);
 
@@ -250,7 +250,7 @@ export default Controller.extend({
 
     clearLogs() {
       const name = this.get("api.name");
-      if (!name) return;
+      if (!name) {return;}
 
       ajax(`/admin/wizards/api/${name.underscore()}/logs`, {
         type: "DELETE",
