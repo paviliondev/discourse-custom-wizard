@@ -9,8 +9,6 @@
 gem 'liquid', '5.0.1', require: true
 register_asset 'stylesheets/common/wizard-admin.scss'
 register_asset 'stylesheets/common/wizard-mapper.scss'
-register_asset 'lib/jquery.timepicker.min.js'
-register_asset 'lib/jquery.timepicker.scss'
 
 enabled_site_setting :custom_wizard_enabled
 
