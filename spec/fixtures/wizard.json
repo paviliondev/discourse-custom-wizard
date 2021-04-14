@@ -485,7 +485,9 @@
           "output_connector": "set",
           "output": [
             "angus1",
-            "faiz"
+            "faiz",
+            "cool_group",
+            "cool_group_1"
           ]
         }
       ]

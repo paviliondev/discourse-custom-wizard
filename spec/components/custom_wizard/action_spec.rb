@@ -93,6 +93,8 @@ describe CustomWizard::Action do
     it 'allows using multiple PM targets' do
       User.create(username: 'angus1', email: "angus1@email.com")
       User.create(username: 'faiz', email: "faiz@email.com")
+      Group.create(name: "cool_group")
+      Group.create(name: 'cool_group_1')
       wizard = CustomWizard::Builder.new(@template[:id], user).build
       wizard.create_updater(wizard.steps[0].id, {}).update
       wizard.create_updater(wizard.steps[1].id, {}).update
@@ -108,6 +110,7 @@ describe CustomWizard::Action do
       )
       expect(topic.exists?).to eq(true)
       expect(topic.first.all_allowed_users.map(&:username)).to include('angus1', 'faiz')
+      expect(topic.first.allowed_groups.map(&:name)).to include('cool_group', 'cool_group_1')
       expect(post.exists?).to eq(true)
     end
   end
