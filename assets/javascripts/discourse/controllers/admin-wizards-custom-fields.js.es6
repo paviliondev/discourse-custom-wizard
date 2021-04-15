@@ -1,9 +1,5 @@
 import Controller from "@ember/controller";
-import EmberObject from "@ember/object";
-import { ajax } from "discourse/lib/ajax";
-import { popupAjaxError } from "discourse/lib/ajax-error";
 import CustomWizardCustomField from "../models/custom-wizard-custom-field";
-import { default as discourseComputed } from "discourse-common/utils/decorators";
 
 export default Controller.extend({
   messageKey: "create",
@@ -49,7 +45,7 @@ export default Controller.extend({
     },
 
     removeField(field) {
-      return CustomWizardCustomField.destroyField(field).then((result) => {
+      return CustomWizardCustomField.destroyField(field).then(() => {
         this.get("customFields").removeObject(field);
       });
     },

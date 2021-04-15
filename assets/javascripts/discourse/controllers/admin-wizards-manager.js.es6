@@ -1,8 +1,5 @@
 import Controller from "@ember/controller";
-import {
-  default as discourseComputed,
-  observes,
-} from "discourse-common/utils/decorators";
+import { observes } from "discourse-common/utils/decorators";
 import { empty } from "@ember/object/computed";
 import CustomWizardManager from "../models/custom-wizard-manager";
 import { A } from "@ember/array";
@@ -196,7 +193,7 @@ export default Controller.extend({
     },
 
     destroy() {
-      const destroyWizards = this.get("destroyWizards");
+      let destroyWizards = this.get("destroyWizards");
 
       if (!destroyWizards.length) {
         this.setMessage("error", "none_selected");
@@ -227,7 +224,7 @@ export default Controller.extend({
 
               if (result.destroyed.length) {
                 const destroyedIds = result.destroyed.map((d) => d.id);
-                const destroyWizards = this.get("destroyWizards");
+                destroyWizards = this.get("destroyWizards");
                 const wizards = this.get("wizards");
 
                 wizards.removeObjects(

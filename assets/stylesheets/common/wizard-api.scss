@@ -17,7 +17,8 @@
     text-align: right;
     vertical-align: middle;
 
-    > .d-icon, > .spinner {
+    > .d-icon,
+    > .spinner {
       margin-right: 7px;
     }
 
@@ -30,7 +31,7 @@
 
 .wizard-api-header {
   margin-top: 20px;
-  
+
   &.page {
     margin-bottom: 20px;
   }
@@ -103,15 +104,16 @@
 
   .endpoint {
     margin-top: 20px;
-    
-    .top, .bottom {
+
+    .top,
+    .bottom {
       display: flex;
     }
-    
+
     .top {
       margin-bottom: 15px;
     }
-    
+
     .combo-box {
       margin-right: 10px;
       width: 210px;
@@ -138,6 +140,6 @@
   margin-bottom: 20px;
 }
 
-.wizard-step-contents{
+.wizard-step-contents {
   height: unset !important;
 }

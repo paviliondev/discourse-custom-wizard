@@ -4,6 +4,13 @@ import I18n from "I18n";
 
 // Inputs
 
+const selectableInputTypes = [
+  "conditional",
+  "assignment",
+  "association",
+  "validation",
+];
+
 function defaultInputType(options = {}) {
   return options.inputTypes.split(",")[0];
 }
@@ -43,13 +50,23 @@ function defaultConnector(connectorType, inputType, options = {}) {
     return defaultInputType(options);
   }
   if (connectorType === "pair") {
-    if (inputType === "conditional") return "equal";
-    if (inputType === "association") return "association";
-    if (inputType === "validation") return "equal";
+    if (inputType === "conditional") {
+      return "equal";
+    }
+    if (inputType === "association") {
+      return "association";
+    }
+    if (inputType === "validation") {
+      return "equal";
+    }
   }
   if (connectorType === "output") {
-    if (inputType === "conditional") return "then";
-    if (inputType === "assignment") return "set";
+    if (inputType === "conditional") {
+      return "then";
+    }
+    if (inputType === "assignment") {
+      return "set";
+    }
   }
   return "equal";
 }

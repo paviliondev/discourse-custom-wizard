@@ -1,4 +1,4 @@
-/* eslint no-undef: 0 */
+/* eslint no-undef: 0*/
 
 import { findCustomWizard, updateCachedWizard } from "../models/custom";
 import { ajax } from "wizard/lib/ajax";

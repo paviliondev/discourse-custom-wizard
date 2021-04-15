@@ -6,10 +6,9 @@
 # url: https://github.com/paviliondev/discourse-custom-wizard
 # contact emails: angus@thepavilion.io
 
+gem 'liquid', '5.0.1', require: true
 register_asset 'stylesheets/common/wizard-admin.scss'
 register_asset 'stylesheets/common/wizard-mapper.scss'
-register_asset 'lib/jquery.timepicker.min.js'
-register_asset 'lib/jquery.timepicker.scss'
 
 enabled_site_setting :custom_wizard_enabled
 
@@ -74,6 +73,7 @@ after_initialize do
     ../lib/custom_wizard/api/authorization.rb
     ../lib/custom_wizard/api/endpoint.rb
     ../lib/custom_wizard/api/log_entry.rb
+    ../lib/custom_wizard/liquid_extensions/first_non_empty.rb
     ../serializers/custom_wizard/api/authorization_serializer.rb
     ../serializers/custom_wizard/api/basic_endpoint_serializer.rb
     ../serializers/custom_wizard/api/endpoint_serializer.rb
@@ -95,6 +95,8 @@ after_initialize do
   ].each do |path|
     load File.expand_path(path, __FILE__)
   end
+
+  Liquid::Template.register_filter(::CustomWizard::LiquidFilter::FirstNonEmpty)
 
   add_class_method(:wizard, :user_requires_completion?) do |user|
     wizard_result = self.new(user).requires_completion?

@@ -1,11 +1,11 @@
 import { computed, set } from "@ember/object";
-import { alias, equal, or, not } from "@ember/object/computed";
+import { alias, equal, not, or } from "@ember/object/computed";
 import {
-  newPair,
   connectorContent,
-  inputTypesContent,
-  defaultSelectionType,
   defaultConnector,
+  defaultSelectionType,
+  inputTypesContent,
+  newPair,
 } from "../lib/wizard-mapper";
 import Component from "@ember/component";
 import { observes } from "discourse-common/utils/decorators";

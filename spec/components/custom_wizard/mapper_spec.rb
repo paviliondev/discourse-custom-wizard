@@ -41,6 +41,39 @@ describe CustomWizard::Mapper do
       "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/mapper/data.json"
     ).read)
   }
+  let(:template_params) {
+    {
+      "step_1_field_1" => "Hello"
+    }
+  }
+  let(:template_params_empty) {
+    {
+      "step_1_field_1" => nil,
+      "step_1_field_2" => nil,
+      "step_1_field_3" => ""
+    }
+  }
+  let(:template_params_non_empty) {
+    {
+      "step_1_field_1" => nil,
+      "step_1_field_2" => "",
+      "step_1_field_3" => "Value"
+    }
+  }
+  let(:template_params_multiple_non_empty) {
+    {
+      "step_1_field_1" => nil,
+      "step_1_field_2" => "Value1",
+      "step_1_field_3" => "Value"
+    }
+  }
+
+  def create_template_mapper(data, user)
+    CustomWizard::Mapper.new(
+      data: data,
+      user: user
+    )
+  end
 
   it "maps values" do
     expect(CustomWizard::Mapper.new(
@@ -249,5 +282,129 @@ describe CustomWizard::Mapper do
       data: data,
       user: user1
     ).perform).to eq(false)
+  end
+
+  context "output templating" do
+    it "passes the correct values to the template" do
+      template = "w{step_1_field_1}"
+      mapper = create_template_mapper(template_params, user1)
+      result = mapper.interpolate(
+        template.dup,
+        template: true,
+        user: true,
+        wizard: true,
+        value: true
+      )
+      expect(result).to eq(template_params["step_1_field_1"])
+    end
+
+    it "treats replaced values as string literals" do
+      template = '{{ "w{step_1_field_1}" | size }}'
+      mapper = create_template_mapper(template_params, user1)
+      result = mapper.interpolate(
+        template.dup,
+        template: true,
+        user: true,
+        wizard: true,
+        value: true
+      )
+      expect(result).to eq(template_params["step_1_field_1"].size.to_s)
+    end
+
+    it "allows the wizard values to be used inside conditionals" do
+      template = <<-LIQUID
+        {%- if "w{step_1_field_1}" contains "ello" -%}
+          Correct
+        {%- else -%}
+          Incorrect
+        {%-endif-%}
+      LIQUID
+      mapper = create_template_mapper(template_params, user1)
+      result = mapper.interpolate(
+        template.dup,
+        template: true,
+        user: true,
+        wizard: true,
+        value: true
+      )
+      expect(result).to eq("Correct")
+    end
+
+    it "can access data passed to render method as variable" do
+      template = "{{step_1_field_1.size}}"
+      mapper = create_template_mapper(template_params, user1)
+      result = mapper.interpolate(
+        template.dup,
+        template: true,
+        user: true,
+        wizard: true,
+        value: true
+      )
+      expect(result).to eq(template_params["step_1_field_1"].size.to_s)
+    end
+
+    it "doesn't parse the template when template param is false" do
+      template = <<-LIQUID.strip
+        {{ "w{step_1_field_1}" | size}}
+      LIQUID
+      mapper = create_template_mapper(template_params, user1)
+      result = mapper.interpolate(
+        template.dup,
+        template: false,
+      )
+      expect(result).to eq(template)
+    end
+
+    context "custom filter: 'first_non_empty'" do
+      it "gives first non empty element from list" do
+        template = <<-LIQUID.strip
+          {%- assign entry = "" | first_non_empty: step_1_field_1, step_1_field_2, step_1_field_3 -%}
+          {{ entry }}
+        LIQUID
+        mapper = create_template_mapper(template_params_non_empty, user1)
+        result = mapper.interpolate(
+          template.dup,
+          template: true,
+          user: true,
+          wizard: true,
+          value: true
+        )
+        expect(result).to eq(template_params_non_empty["step_1_field_3"])
+      end
+
+      it "gives first non empty element from list when multiple non empty values present" do
+        template = <<-LIQUID.strip
+          {%- assign entry = "" | first_non_empty: step_1_field_1, step_1_field_2, step_1_field_3 -%}
+          {{ entry }}
+        LIQUID
+        mapper = create_template_mapper(template_params_multiple_non_empty, user1)
+        result = mapper.interpolate(
+          template.dup,
+          template: true,
+          user: true,
+          wizard: true,
+          value: true
+        )
+        expect(result).to eq(template_params_multiple_non_empty["step_1_field_2"])
+      end
+
+      it "gives empty if all elements are empty" do
+        template = <<-LIQUID.strip
+          {%- assign entry = "" | first_non_empty: step_1_field_1, step_1_field_2, step_1_field_3 -%}
+          {%- if entry -%}
+            {{ entry }}
+          {%- endif -%}
+        LIQUID
+        mapper = create_template_mapper(template_params_empty, user1)
+        result = mapper.interpolate(
+          template.dup,
+          template: true,
+          user: true,
+          wizard: true,
+          value: true
+        )
+        expect(result).to eq("")
+      end
+    end
   end
 end

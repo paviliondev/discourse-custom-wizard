@@ -10,7 +10,9 @@ const CustomWizard = EmberObject.extend({
   totalSteps: (length) => length,
 
   skip() {
-    if (this.required && !this.completed && this.permitted) return;
+    if (this.required && !this.completed && this.permitted) {
+      return;
+    }
     CustomWizard.skip(this.id);
   },
 });

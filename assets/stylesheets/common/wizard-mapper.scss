@@ -1,23 +1,23 @@
 .wizard-mapper {
   width: 100%;
-  
+
   .select-kit {
     min-width: initial;
     width: initial;
-    
+
     .select-kit-header {
       min-height: 30px;
     }
-    
+
     .choices .choice {
       height: 24px;
     }
   }
-  
+
   div.mapper-block:not(:last-of-type) {
     margin-right: 10px;
   }
-  
+
   > .mapper-connector.single {
     width: min-content;
     margin-bottom: 10px;
@@ -26,7 +26,7 @@
   }
 }
 
-[class~='mapper-input'] {
+[class~="mapper-input"] {
   display: flex;
   align-items: flex-start;
   width: min-content;
@@ -48,7 +48,7 @@
     background-color: $primary-low;
     border-color: #ddd;
   }
-  
+
   .output {
     position: relative;
   }
@@ -67,8 +67,9 @@
     font-size: 0.8em;
     border: 2px solid $primary-low;
   }
-  
-  &.association, &.validation {
+
+  &.association,
+  &.validation {
     padding-right: 27px;
   }
 }
@@ -80,12 +81,12 @@
 .mapper-connector {
   width: auto;
   min-width: 40px;
-  
+
   .select-kit .select-kit-header {
     display: flex;
     justify-content: center;
   }
-  
+
   &.single {
     height: 28px;
     background: $secondary;
@@ -94,7 +95,7 @@
     align-items: center;
     justify-content: center;
   }
-  
+
   .connector-single {
     padding: 0 5px;
   }
@@ -105,16 +106,19 @@
   max-width: 250px;
   min-width: 250px;
   position: relative;
-  
-  > input, .select-kit, .ac-wrap, .autocomplete.ac-user {
+
+  > input,
+  .select-kit,
+  .ac-wrap,
+  .autocomplete.ac-user {
     width: 250px !important;
   }
-  
+
   .input {
     width: 100%;
     transition: all 0.1s;
   }
-  
+
   .type-selector {
     position: absolute;
     top: -22px;
@@ -126,24 +130,24 @@
     margin-right: 4px;
     display: flex;
     align-items: center;
-    
+
     &.active {
       color: var(--tertiary);
       text-decoration: underline;
     }
-    
+
     &:last-of-type {
       margin-right: 0;
     }
-    
+
     .type-selector-icon {
       margin-left: 2px;
       font-size: 0.7em;
     }
   }
-  
+
   .selector-types {
-    box-shadow: shadow('dropdown');
+    box-shadow: shadow("dropdown");
     position: absolute;
     display: flex;
     background: $secondary;
@@ -152,19 +156,19 @@
     flex-direction: column;
     border: 1px solid $primary-low;
   }
-  
+
   .value-list .remove-value-btn {
     background: none;
     border: none;
-    
+
     .d-icon {
       color: $primary;
     }
   }
-  
+
   .select-kit-header .selected-name {
     max-width: 85%;
-    
+
     .name {
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -178,30 +182,30 @@
   flex-direction: column;
   align-items: center;
   position: relative;
-  
+
   .add-pair,
   .remove-pair,
   .join-pair {
     font-size: 0.9em;
   }
-  
+
   .add-pair {
     margin-top: 5px;
   }
-  
+
   .remove-pair {
     position: absolute;
     top: 5px;
     right: -20px;
   }
-  
+
   .join-pair {
     position: absolute;
     bottom: -25px;
     left: 50%;
     transform: translateX(-50%);
   }
-  
+
   .mapper-connector {
     min-width: 50px;
   }
@@ -211,7 +215,7 @@
   display: flex;
   align-items: flex-start;
   position: relative;
-  
+
   &:not(:first-of-type) {
     margin-top: 30px;
   }
