@@ -199,7 +199,7 @@ describe CustomWizard::StepsController do
     new_template['steps'][0]['condition'] = user_condition_template['condition']
     new_template['steps'][2]['condition'] = wizard_field_condition_template['condition']
     CustomWizard::Template.save(new_template, skip_jobs: true)
-  
+
     put '/w/super-mega-fun-wizard/steps/step_1.json', params: {
       fields: {
         step_1_field_1: "Condition will pass"
