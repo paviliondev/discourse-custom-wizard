@@ -18,9 +18,9 @@ class CustomWizard::Step
                 :banner,
                 :disabled,
                 :description_vars,
+                :last_step,
                 :force_final,
-                :final_step,
-                :final_conditional_step,
+                :conditional_final_step,
                 :wizard
 
   def initialize(id)
@@ -49,8 +49,8 @@ class CustomWizard::Step
   end
 
   def final?
-    return true if force_final && final_conditional_step
-    return true if final_step
+    return true if force_final && conditional_final_step
+    return true if last_step
     false
   end
 end

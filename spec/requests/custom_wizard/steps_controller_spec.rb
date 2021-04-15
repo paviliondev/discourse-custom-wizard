@@ -180,19 +180,44 @@ describe CustomWizard::StepsController do
     expect(group.full_name).to eq("My cool group")
   end
 
-  it "returns a final step" do
+  it "returns a final step without conditions" do
     put '/w/super-mega-fun-wizard/steps/step_1.json'
     expect(response.status).to eq(200)
+    expect(response.parsed_body['final']).to eq(false)
 
     put '/w/super-mega-fun-wizard/steps/step_2.json'
     expect(response.status).to eq(200)
+    expect(response.parsed_body['final']).to eq(false)
 
     put '/w/super-mega-fun-wizard/steps/step_3.json'
     expect(response.status).to eq(200)
     expect(response.parsed_body['final']).to eq(true)
   end
 
-  it "returns a conditional final step" do
+  it "returns the correct final step when the conditional final step and last step are the same" do
+    new_template = wizard_template.dup
+    new_template['steps'][0]['condition'] = user_condition_template['condition']
+    new_template['steps'][2]['condition'] = wizard_field_condition_template['condition']
+    CustomWizard::Template.save(new_template, skip_jobs: true)
+  
+    put '/w/super-mega-fun-wizard/steps/step_1.json', params: {
+      fields: {
+        step_1_field_1: "Condition will pass"
+      }
+    }
+    expect(response.status).to eq(200)
+    expect(response.parsed_body['final']).to eq(false)
+
+    put '/w/super-mega-fun-wizard/steps/step_2.json'
+    expect(response.status).to eq(200)
+    expect(response.parsed_body['final']).to eq(false)
+
+    put '/w/super-mega-fun-wizard/steps/step_3.json'
+    expect(response.status).to eq(200)
+    expect(response.parsed_body['final']).to eq(true)
+  end
+
+  it "returns the correct final step when the conditional final step and last step are different" do
     new_template = wizard_template.dup
     new_template['steps'][2]['condition'] = wizard_field_condition_template['condition']
     CustomWizard::Template.save(new_template, skip_jobs: true)
@@ -204,11 +229,9 @@ describe CustomWizard::StepsController do
     }
     expect(response.status).to eq(200)
     expect(response.parsed_body['final']).to eq(false)
-    expect(response.parsed_body['next_step_id']).to eq(new_template['steps'][1]['id'])
 
     put '/w/super-mega-fun-wizard/steps/step_2.json'
     expect(response.status).to eq(200)
     expect(response.parsed_body['final']).to eq(true)
-    expect(response.parsed_body['next_step_id']).to eq(nil)
   end
 end

@@ -29,7 +29,7 @@ class CustomWizard::StepsController < ::ApplicationController
       current_submission = @wizard.current_submission
       result = {}
 
-      if current_step.final_conditional_step && !current_step.final_step
+      if current_step.conditional_final_step && !current_step.last_step
         current_step.force_final = true
       end
 

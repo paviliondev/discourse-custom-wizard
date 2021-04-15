@@ -99,11 +99,11 @@ class CustomWizard::Wizard
       step.index = index
 
       if index === (steps.length - 1)
-        step.final_conditional_step = true
+        step.conditional_final_step = true
       end
 
       if index === (step_ids.length - 1)
-        step.final_step = true
+        step.last_step = true
       end
 
       if step.previous && step.previous.id === last_completed_step_id
