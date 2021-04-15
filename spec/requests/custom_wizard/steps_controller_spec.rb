@@ -234,4 +234,19 @@ describe CustomWizard::StepsController do
     expect(response.status).to eq(200)
     expect(response.parsed_body['final']).to eq(true)
   end
+  
+  it "returns the correct final step when the conditional final step is determined in the same action" do
+    new_template = wizard_template.dup
+    new_template['steps'][1]['condition'] = wizard_field_condition_template['condition']
+    new_template['steps'][2]['condition'] = wizard_field_condition_template['condition']
+    CustomWizard::Template.save(new_template, skip_jobs: true)
+
+    put '/w/super-mega-fun-wizard/steps/step_1.json', params: {
+      fields: {
+        step_1_field_1: "Condition will not pass"
+      }
+    }
+    expect(response.status).to eq(200)
+    expect(response.parsed_body['final']).to eq(true)
+  end
 end
