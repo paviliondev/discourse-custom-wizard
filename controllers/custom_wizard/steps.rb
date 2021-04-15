@@ -4,17 +4,11 @@ class CustomWizard::StepsController < ::ApplicationController
   before_action :ensure_can_update
 
   def update
-    params.require(:step_id)
-    params.require(:wizard_id)
-
-    step_template = @builder.template.steps.select { |s| s['id'] == update_params[:step_id] }.first
-    raise Discourse::InvalidParameters.new(:step_id) if !step_template
-
     update = update_params.to_h
 
     update[:fields] = {}
     if params[:fields]
-      field_ids = step_template['fields'].map { |f| f['id'] }
+      field_ids = @step_template['fields'].map { |f| f['id'] }
       params[:fields].each do |k, v|
         update[:fields][k] = v if field_ids.include? k
       end
@@ -27,7 +21,7 @@ class CustomWizard::StepsController < ::ApplicationController
     @result = updater.result
 
     if updater.success?
-      wizard_id = update_params[:wizard_id].underscore
+      wizard_id = update_params[:wizard_id]
       builder = CustomWizard::Builder.new(wizard_id, current_user)
       @wizard = builder.build
 
@@ -85,22 +79,23 @@ class CustomWizard::StepsController < ::ApplicationController
   private
 
   def ensure_can_update
-    @builder = CustomWizard::Builder.new(
-      update_params[:wizard_id].underscore,
-      current_user
-    )
+    @builder = CustomWizard::Builder.new(update_params[:wizard_id], current_user)
+    raise Discourse::InvalidParameters.new(:wizard_id) if @builder.template.nil?
+    raise Discourse::InvalidAccess.new if !@builder.wizard || !@builder.wizard.can_access?
 
-    if @builder.nil?
-      raise Discourse::InvalidParameters.new(:wizard_id)
-    end
-
-    if !@builder.wizard || !@builder.wizard.can_access?
-      raise Discourse::InvalidAccess.new
-    end
+    @step_template = @builder.template.steps.select do |s|
+      s['id'] == update_params[:step_id]
+    end.first
+    raise Discourse::InvalidParameters.new(:step_id) if !@step_template
+    raise Discourse::InvalidAccess.new if !@builder.check_condition(@step_template)
   end
 
   def update_params
-    params.permit(:wizard_id, :step_id)
+    @update_params || begin
+      params.require(:step_id)
+      params.require(:wizard_id)
+      params.permit(:wizard_id, :step_id).transform_values { |v| v.underscore }
+    end
   end
 
   def get_redirect
