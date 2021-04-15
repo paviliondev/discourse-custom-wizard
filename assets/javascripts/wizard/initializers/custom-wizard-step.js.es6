@@ -6,9 +6,9 @@ export default {
     const CustomWizard = requirejs(
       "discourse/plugins/discourse-custom-wizard/wizard/models/custom"
     ).default;
-    const updateWizard = requirejs(
+    const updateCachedWizard = requirejs(
       "discourse/plugins/discourse-custom-wizard/wizard/models/custom"
-    ).updateWizard;
+    ).updateCachedWizard;
     const StepModel = requirejs("wizard/models/step").default;
     const StepComponent = requirejs("wizard/components/wizard-step").default;
     const ajax = requirejs("wizard/lib/ajax").ajax;
@@ -163,7 +163,7 @@ export default {
         this.get("step")
           .save()
           .then((response) => {
-            updateWizard(CustomWizard.build(response["wizard"]));
+            updateCachedWizard(CustomWizard.build(response["wizard"]));
 
             if (response["final"]) {
               CustomWizard.finished(response);

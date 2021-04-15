@@ -1,6 +1,6 @@
 /* eslint no-undef: 0 */
 
-import { findCustomWizard, updateWizard } from "../models/custom";
+import { findCustomWizard, updateCachedWizard } from "../models/custom";
 import { ajax } from "wizard/lib/ajax";
 
 export default Ember.Route.extend({
@@ -13,7 +13,7 @@ export default Ember.Route.extend({
   },
 
   afterModel(model) {
-    updateWizard(model);
+    updateCachedWizard(model);
 
     return ajax({
       url: `/site/settings`,

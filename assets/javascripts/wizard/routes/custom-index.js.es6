@@ -1,15 +1,15 @@
-import { getWizard } from "../models/custom";
+import { getCachedWizard } from "../models/custom";
 
 export default Ember.Route.extend({
   beforeModel() {
-    const wizard = getWizard();
+    const wizard = getCachedWizard();
     if (wizard && wizard.permitted && !wizard.completed && wizard.start) {
       this.replaceWith("custom.step", wizard.start);
     }
   },
 
   model() {
-    return getWizard();
+    return getCachedWizard();
   },
 
   setupController(controller, model) {

@@ -1,9 +1,9 @@
 import WizardI18n from "../lib/wizard-i18n";
-import { getWizard } from "../models/custom";
+import { getCachedWizard } from "../models/custom";
 
 export default Ember.Route.extend({
   beforeModel() {
-    this.set("wizard", getWizard());
+    this.set("wizard", getCachedWizard());
   },
 
   model(params) {

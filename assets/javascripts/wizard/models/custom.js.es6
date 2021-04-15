@@ -127,11 +127,11 @@ export function findCustomWizard(wizardId, params = {}) {
 
 var _wizard_store;
 
-export function updateWizard(wizard) {
+export function updateCachedWizard(wizard) {
   _wizard_store = wizard;
 }
 
-export function getWizard() {
+export function getCachedWizard() {
   return _wizard_store;
 }
 
