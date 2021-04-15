@@ -234,7 +234,7 @@ describe CustomWizard::StepsController do
     expect(response.status).to eq(200)
     expect(response.parsed_body['final']).to eq(true)
   end
-  
+
   it "returns the correct final step when the conditional final step is determined in the same action" do
     new_template = wizard_template.dup
     new_template['steps'][1]['condition'] = wizard_field_condition_template['condition']
