@@ -15,13 +15,13 @@
         last=pair.last
         inputType=inputType
         options=options
-        removePair=(action 'removePair')
+        removePair=(action "removePair")
         onUpdate=onUpdate}}
     {{/each}}
-    
+
     {{#if canAddPair}}
-      <a {{action 'addPair'}} class="add-pair">
-        {{d-icon 'plus'}}
+      <a role="button" {{action "addPair"}} class="add-pair">
+        {{d-icon "plus"}}
       </a>
     {{/if}}
   </div>
@@ -40,7 +40,7 @@
 
   <div class="output mapper-block">
     {{wizard-mapper-selector
-      selectorType='output'
+      selectorType="output"
       inputType=input.type
       value=input.output
       activeType=input.output_type
@@ -49,6 +49,6 @@
   </div>
 {{/if}}
 
-<a class="remove-input" {{action remove input}}>
-  {{d-icon 'times'}}
+<a role="button" class="remove-input" {{action remove input}}>
+  {{d-icon "times"}}
 </a>
