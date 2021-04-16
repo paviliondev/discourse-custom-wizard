@@ -1,6 +1,6 @@
 <div class="key mapper-block">
   {{wizard-mapper-selector
-    selectorType='key'
+    selectorType="key"
     inputType=inputType
     value=pair.key
     activeType=pair.key_type
@@ -18,7 +18,7 @@
 
 <div class="value mapper-block">
   {{wizard-mapper-selector
-    selectorType='value'
+    selectorType="value"
     inputType=inputType
     value=pair.value
     activeType=pair.value_type
@@ -31,5 +31,5 @@
 {{/if}}
 
 {{#if showRemove}}
-  <a {{action removePair pair}} class="remove-pair">{{d-icon 'times'}}</a>
+  <a role="button" {{action removePair pair}} class="remove-pair">{{d-icon "times"}}</a>
 {{/if}}
