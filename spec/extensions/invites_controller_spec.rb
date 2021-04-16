@@ -19,6 +19,6 @@ describe InvitesControllerCustomWizard, type: :request do
     template['after_signup'] = true
     CustomWizard::Template.save(template, skip_jobs: true)
     put "/invites/show/#{invite.invite_key}.json"
-    expect(response.parsed_body["redirect_to"]).to eq("/w/super-mega-fun-wizard")
+    expect(cookies[:destination_url]).to eq("/w/super-mega-fun-wizard")
   end
 end
