@@ -23,7 +23,12 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.7
-          bundler-cache: true
+
+      - name: Setup bundler
+        run: gem install bundler -v 2.1.4 --no-doc
+
+      - name: Setup gems
+        run: bundle install --jobs 4
 
       - name: Yarn install
         run: yarn install
