@@ -4,7 +4,7 @@ require_relative '../plugin_helper'
 describe InvitesControllerCustomWizard, type: :request do
   fab!(:topic) { Fabricate(:topic) }
   let(:invite) { Invite.generate(topic.user, email: "angus@mcleod.org", topic: topic) }
-  
+
   let(:template) do
     JSON.parse(File.open(
       "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
@@ -19,6 +19,6 @@ describe InvitesControllerCustomWizard, type: :request do
     template['after_signup'] = true
     CustomWizard::Template.save(template, skip_jobs: true)
     put "/invites/show/#{invite.invite_key}.json"
-    expect(response.parsed_body["redirect_to"]).to eq("/w/super-mega-fun-wizard")
+    expect(cookies[:destination_url]).to eq("/w/super-mega-fun-wizard")
   end
 end

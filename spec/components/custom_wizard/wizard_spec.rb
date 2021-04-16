@@ -98,7 +98,7 @@ describe CustomWizard::Wizard do
       CustomWizard::Wizard.new(@permitted_template, trusted_user).permitted?
     ).to eq(true)
   end
-  
+
   it "permits everyone if everyone is permitted" do
     @permitted_template['permitted'][0]['output'] = Group::AUTO_GROUPS[:everyone]
     expect(
@@ -185,7 +185,7 @@ describe CustomWizard::Wizard do
     ).to eq('I am a user submission')
   end
 
-  context do
+  context "class methods" do
     before do
       CustomWizard::Template.save(@permitted_template, skip_jobs: true)
 

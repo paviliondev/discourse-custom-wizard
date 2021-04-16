@@ -1,0 +1,137 @@
+name: Plugin Tests
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+
+jobs:
+  build:
+    name: ${{ matrix.build_type }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    env:
+      DISCOURSE_HOSTNAME: www.example.com
+      RUBY_GLOBAL_METHOD_CACHE_SIZE: 131072
+      RAILS_ENV: test
+      PGHOST: localhost
+      PGUSER: discourse
+      PGPASSWORD: discourse
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        build_type: ["backend", "frontend"]
+        ruby: ["2.7"]
+        postgres: ["12"]
+        redis: ["4.x"]
+
+    services:
+      postgres:
+        image: postgres:${{ matrix.postgres }}
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: discourse
+          POSTGRES_PASSWORD: discourse
+        options: >-
+          --mount type=tmpfs,destination=/var/lib/postgresql/data
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: discourse/discourse
+          fetch-depth: 1
+
+      - name: Install plugin
+        uses: actions/checkout@v2
+        with:
+          path: plugins/${{ github.event.repository.name }}
+          fetch-depth: 1
+
+      - name: Check spec existence
+        id: check_spec
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "plugins/${{ github.event.repository.name }}/spec"
+
+      - name: Check qunit existence
+        id: check_qunit
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "plugins/${{ github.event.repository.name }}/test/javascripts"
+
+      - name: Setup Git
+        run: |
+          git config --global user.email "ci@ci.invalid"
+          git config --global user.name "Discourse CI"
+
+      - name: Setup packages
+        run: |
+          sudo apt-get update
+          sudo apt-get -yqq install postgresql-client libpq-dev gifsicle jpegoptim optipng jhead
+          wget -qO- https://raw.githubusercontent.com/discourse/discourse_docker/master/image/base/install-pngquant | sudo sh
+
+      - name: Update imagemagick
+        if: matrix.build_type == 'backend'
+        run: |
+          wget https://raw.githubusercontent.com/discourse/discourse_docker/master/image/base/install-imagemagick
+          chmod +x install-imagemagick
+          sudo ./install-imagemagick
+
+      - name: Setup redis
+        uses: shogo82148/actions-setup-redis@v1
+        with:
+          redis-version: ${{ matrix.redis }}
+
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+
+      - name: Lint English locale
+        if: matrix.build_type == 'backend'
+        run: bundle exec ruby script/i18n_lint.rb "plugins/${{ github.event.repository.name }}/locales/{client,server}.en.yml"
+
+      - name: Get yarn cache directory
+        id: yarn-cache-dir
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Yarn cache
+        uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-${{ matrix.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.os }}-yarn-
+
+      - name: Yarn install
+        run: yarn install --dev
+
+      - name: Migrate database
+        run: |
+          bin/rake db:create
+          bin/rake db:migrate
+
+      - name: Plugin RSpec
+        if: matrix.build_type == 'backend' && steps.check_spec.outputs.files_exists == 'true'
+        run: bin/rake plugin:spec[${{ github.event.repository.name }}]
+
+      - name: Plugin QUnit
+        if: matrix.build_type == 'frontend' && steps.check_qunit.outputs.files_exists == 'true'
+        run: bundle exec rake plugin:qunit['${{ github.event.repository.name }}','1200000']
+        timeout-minutes: 30
+
+      - name: Simplecov Report
+        if: matrix.build_type == 'backend'
+        run: COVERAGE=1 bin/rake plugin:spec[${{ github.event.repository.name }}]
