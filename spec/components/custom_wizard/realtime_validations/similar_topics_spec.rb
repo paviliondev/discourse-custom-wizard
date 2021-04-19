@@ -5,7 +5,6 @@ require_relative '../../../plugin_helper'
 describe ::CustomWizard::RealtimeValidation::SimilarTopics do
   let(:post) {  create_post(title: "matching similar topic") }
   let(:topic) {  post.topic }
-  let(:user) { post.user }
 
   let(:category) { Fabricate(:category) }
   let(:cat_post) {  create_post(title: "matching similar topic slightly different", category: category) }

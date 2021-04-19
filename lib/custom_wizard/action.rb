@@ -309,15 +309,15 @@ class CustomWizard::Action
       return
     end
 
-    groups = group_map.reduce([]) do |groups, g|
+    groups = group_map.reduce([]) do |result, g|
       begin
-        groups.push(Integer(g))
+        result.push(Integer(g))
       rescue ArgumentError
         group = Group.find_by(name: g)
-        groups.push(group.id) if group
+        result.push(group.id) if group
       end
 
-      groups
+      result
     end
 
     result = nil

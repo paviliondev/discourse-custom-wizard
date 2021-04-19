@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require_relative '../../plugin_helper'
 
 describe CustomWizard::Action do
@@ -147,8 +148,8 @@ describe CustomWizard::Action do
     end
 
     it 'encodes special characters in the title and body' do
-      open_composer['title'][0]['output'] = "Title that's special $"
-      open_composer['post_template'] = "Body & more body & more body"
+      open_composer['title'][0]['output'] = "Title that's special $".dup
+      open_composer['post_template'] = "Body & more body & more body".dup
 
       wizard = CustomWizard::Wizard.new(@template, user)
 

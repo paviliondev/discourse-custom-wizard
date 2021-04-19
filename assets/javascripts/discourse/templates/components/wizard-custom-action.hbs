@@ -10,7 +10,7 @@
   <div class="setting-label">
     <label>{{i18n "admin.wizard.type"}}</label>
   </div>
-  
+
   <div class="setting-value">
     {{combo-box
       value=action.type
@@ -26,7 +26,7 @@
   <div class="setting-label">
     <label>{{i18n "admin.wizard.action.run_after.label"}}</label>
   </div>
-  
+
   <div class="setting-value">
     {{combo-box
       value=action.run_after
@@ -38,23 +38,23 @@
 {{wizard-message
   key=messageKey
   url=messageUrl
-  component='action'}}
+  component="action"}}
 
 {{#if basicTopicFields}}
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.title"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.title
-        property='title'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="title"
+        onUpdate=(action "mappedFieldUpdated")
         options=(hash
           wizardFieldSelection=true
-          userFieldSelection='key,value'
-          context='action'
+          userFieldSelection="key,value"
+          context="action"
         )}}
     </div>
   </div>
@@ -63,21 +63,21 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.post"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{combo-box
         value=action.post
         content=wizardFields
-        nameProperty='label'
+        nameProperty="label"
         onChange=(action (mut action.post))
         options=(hash
-          none='admin.wizard.selector.placeholder.wizard_field'
+          none="admin.wizard.selector.placeholder.wizard_field"
           isDisabled=showPostBuilder
         )}}
-      
+
       <div class="setting-gutter">
-        {{input type='checkbox' checked=action.post_builder}}
-        <span>{{i18n 'admin.wizard.action.post_builder.checkbox'}}</span>
+        {{input type="checkbox" checked=action.post_builder}}
+        <span>{{i18n "admin.wizard.action.post_builder.checkbox"}}</span>
       </div>
     </div>
   </div>
@@ -85,9 +85,9 @@
   {{#if action.post_builder}}
     <div class="setting full">
       <div class="setting-label">
-        <label>{{i18n 'admin.wizard.action.post_builder.label'}}</label>
+        <label>{{i18n "admin.wizard.action.post_builder.label"}}</label>
       </div>
-      
+
       <div class="setting-value editor">
         {{wizard-text-editor
           value=action.post_template
@@ -102,83 +102,83 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.create_topic.category"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.category
-        property='category'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="category"
+        onUpdate=(action "mappedFieldUpdated")
         options=(hash
-          textSelection='key,value'
+          textSelection="key,value"
           wizardFieldSelection=true
-          userFieldSelection='key,value'
-          categorySelection='output'
-          wizardActionSelection='output'
-          outputDefaultSelection='category'
-          context='action'
+          userFieldSelection="key,value"
+          categorySelection="output"
+          wizardActionSelection="output"
+          outputDefaultSelection="category"
+          context="action"
         )}}
     </div>
   </div>
-  
+
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.create_topic.tags"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.tags
-        property='tags'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="tags"
+        onUpdate=(action "mappedFieldUpdated")
         options=(hash
-          tagSelection='output'
-          outputDefaultSelection='tag'
-          listSelection='output'
+          tagSelection="output"
+          outputDefaultSelection="tag"
+          listSelection="output"
           wizardFieldSelection=true
-          userFieldSelection='key,value'
-          context='action'
+          userFieldSelection="key,value"
+          context="action"
         )}}
     </div>
   </div>
-  
+
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.create_topic.visible"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.visible
-        property='visible'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="visible"
+        onUpdate=(action "mappedFieldUpdated")
         options=(hash
           wizardFieldSelection=true
           userFieldSelection=true
-          context='action'
+          context="action"
         )}}
     </div>
   </div>
 {{/if}}
 
-{{#if sendMessage}}  
+{{#if sendMessage}}
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.send_message.recipient"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.recipient
-        property='recipient'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="recipient"
+        onUpdate=(action "mappedFieldUpdated")
         options=(hash
-          textSelection='value,output'
+          textSelection="value,output"
           wizardFieldSelection=true
-          userFieldSelection='key,value'
-          groupSelection='key,value'
-          userSelection='output'
-          outputDefaultSelection='user'
-          context='action'
+          userFieldSelection="key,value"
+          groupSelection="key,value"
+          userSelection="output"
+          outputDefaultSelection="user"
+          context="action"
         )}}
     </div>
   </div>
@@ -187,21 +187,21 @@
 {{#if updateProfile}}
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
-      <label>{{i18n 'admin.wizard.action.update_profile.setting'}}</label>
+      <label>{{i18n "admin.wizard.action.update_profile.setting"}}</label>
     </div>
-    
-    {{wizard-mapper 
+
+    {{wizard-mapper
       inputs=action.profile_updates
-      property='profile_updates'
-      onUpdate=(action 'mappedFieldUpdated')
+      property="profile_updates"
+      onUpdate=(action "mappedFieldUpdated")
       options=(hash
-        inputTypes='association'
-        textSelection='value'
-        userFieldSelection='key'
-        wizardFieldSelection='value'
-        wizardActionSelection='value'
-        keyDefaultSelection='userField'
-        context='action'
+        inputTypes="association"
+        textSelection="value"
+        userFieldSelection="key"
+        wizardFieldSelection="value"
+        wizardActionSelection="value"
+        keyDefaultSelection="userField"
+        context="action"
       )}}
   </div>
 {{/if}}
@@ -211,7 +211,7 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.send_to_api.api"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{combo-box
         value=action.api
@@ -219,7 +219,7 @@
         onChange=(action (mut action.api))
         options=(hash
           isDisabled=action.custom_title_enabled
-          none='admin.wizard.action.send_to_api.select_an_api'
+          none="admin.wizard.action.send_to_api.select_an_api"
         )}}
     </div>
   </div>
@@ -228,7 +228,7 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.send_to_api.endpoint"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{combo-box
         value=action.api_endpoint
@@ -236,7 +236,7 @@
         onChange=(action (mut action.api_endpoint))
         options=(hash
           isDisabled=apiEmpty
-          none='admin.wizard.action.send_to_api.select_an_endpoint'
+          none="admin.wizard.action.send_to_api.select_an_endpoint"
         )}}
     </div>
   </div>
@@ -245,14 +245,14 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.send_to_api.body"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-text-editor
         value=action.api_body
         previewEnabled=false
         barEnabled=false
         wizardFields=wizardFields
-        placeholder='admin.wizard.action.send_to_api.body_placeholder'}}
+        placeholder="admin.wizard.action.send_to_api.body_placeholder"}}
     </div>
   </div>
 {{/if}}
@@ -262,20 +262,20 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.group"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.group
-        property='group'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="group"
+        onUpdate=(action "mappedFieldUpdated")
         options=(hash
-          textSelection='value,output'
-          wizardFieldSelection='key,value,assignment'
-          userFieldSelection='key,value,assignment'
+          textSelection="value,output"
+          wizardFieldSelection="key,value,assignment"
+          userFieldSelection="key,value,assignment"
           wizardActionSelection=true
-          groupSelection='value,output'
-          outputDefaultSelection='group'
-          context='action'
+          groupSelection="value,output"
+          outputDefaultSelection="group"
+          context="action"
         )}}
     </div>
   </div>
@@ -286,19 +286,19 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.route_to.url"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.url
-        property='url'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="url"
+        onUpdate=(action "mappedFieldUpdated")
         options=(hash
-          context='action'
+          context="action"
           wizardFieldSelection=true
-          userFieldSelection='key,value'
-          groupSelection='key,value'
-          categorySelection='key,value'
-          userSelection='key,value'
+          userFieldSelection="key,value"
+          groupSelection="key,value"
+          categorySelection="key,value"
+          userSelection="key,value"
         )}}
     </div>
   </div>
@@ -309,19 +309,19 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.watch_categories.categories"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.categories
-        property='categories'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="categories"
+        onUpdate=(action "mappedFieldUpdated")
         options=(hash
-          textSelection='key,value'
+          textSelection="key,value"
           wizardFieldSelection=true
           wizardActionSelection=true
-          userFieldSelection='key,value'
-          categorySelection='output'
-          context='action'
+          userFieldSelection="key,value"
+          categorySelection="output"
+          context="action"
         )}}
     </div>
   </div>
@@ -334,12 +334,12 @@
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.mute_remainder
-        property='mute_remainder'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="mute_remainder"
+        onUpdate=(action "mappedFieldUpdated")
         options=(hash
-          context='action'
+          context="action"
           wizardFieldSelection=true
-          userFieldSelection='key,value'
+          userFieldSelection="key,value"
         )}}
     </div>
   </div>
@@ -356,11 +356,11 @@
         onChange=(action (mut action.notification_level))
         options=(hash
           isDisabled=action.custom_title_enabled
-          none='admin.wizard.action.watch_categories.select_a_notification_level'
+          none="admin.wizard.action.watch_categories.select_a_notification_level"
         )}}
     </div>
   </div>
-  
+
   <div class="setting full">
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.watch_categories.wizard_user"}}</label>
@@ -370,7 +370,7 @@
       {{input type="checkbox" checked=action.wizard_user}}
     </div>
   </div>
-  
+
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.watch_categories.usernames"}}</label>
@@ -379,13 +379,13 @@
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.usernames
-        property='usernames'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="usernames"
+        onUpdate=(action "mappedFieldUpdated")
         options=(hash
-          context='action'
+          context="action"
           wizardFieldSelection=true
-          userFieldSelection='key,value'
-          userSelection='output'
+          userFieldSelection="key,value"
+          userSelection="output"
         )}}
     </div>
   </div>
@@ -396,17 +396,17 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.create_group.name"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.name
-        property='name'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="name"
+        onUpdate=(action "mappedFieldUpdated")
         options=(hash
           textSelection=true
           wizardFieldSelection=true
           userFieldSelection=true
-          context='action'
+          context="action"
         )}}
     </div>
   </div>
@@ -414,17 +414,17 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.create_group.full_name"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.full_name
-        property='full_name'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="full_name"
+        onUpdate=(action "mappedFieldUpdated")
         options=(hash
           textSelection=true
           wizardFieldSelection=true
           userFieldSelection=true
-          context='action'
+          context="action"
         )}}
     </div>
   </div>
@@ -432,17 +432,17 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.create_group.title"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.title
-        property='title'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="title"
+        onUpdate=(action "mappedFieldUpdated")
         options=(hash
           textSelection=true
           wizardFieldSelection=true
           userFieldSelection=true
-          context='action'
+          context="action"
         )}}
     </div>
   </div>
@@ -450,17 +450,17 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.create_group.bio_raw"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.bio_raw
-        property='bio_raw'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="bio_raw"
+        onUpdate=(action "mappedFieldUpdated")
         options=(hash
           textSelection=true
           wizardFieldSelection=true
           userFieldSelection=true
-          context='action'
+          context="action"
         )}}
     </div>
   </div>
@@ -468,18 +468,18 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.create_group.owner_usernames"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.owner_usernames
-        property='owner_usernames'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="owner_usernames"
+        onUpdate=(action "mappedFieldUpdated")
         options=(hash
           textSelection=true
           wizardFieldSelection=true
           userFieldSelection=true
-          userSelection='output'
-          context='action'
+          userSelection="output"
+          context="action"
         )}}
     </div>
   </div>
@@ -487,18 +487,18 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.create_group.usernames"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.usernames
-        property='usernames'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="usernames"
+        onUpdate=(action "mappedFieldUpdated")
         options=(hash
           textSelection=true
           wizardFieldSelection=true
           userFieldSelection=true
-          userSelection='output'
-          context='action'
+          userSelection="output"
+          context="action"
         )}}
     </div>
   </div>
@@ -506,17 +506,17 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.create_group.grant_trust_level"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.grant_trust_level
-        property='grant_trust_level'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="grant_trust_level"
+        onUpdate=(action "mappedFieldUpdated")
         options=(hash
           textSelection=true
           wizardFieldSelection=true
           userFieldSelection=true
-          context='action'
+          context="action"
         )}}
     </div>
   </div>
@@ -524,17 +524,17 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.create_group.mentionable_level"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.mentionable_level
-        property='mentionable_level'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="mentionable_level"
+        onUpdate=(action "mappedFieldUpdated")
         options=(hash
           textSelection=true
           wizardFieldSelection=true
           userFieldSelection=true
-          context='action'
+          context="action"
         )}}
     </div>
   </div>
@@ -542,17 +542,17 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.create_group.messageable_level"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.messageable_level
-        property='messageable_level'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="messageable_level"
+        onUpdate=(action "mappedFieldUpdated")
         options=(hash
           textSelection=true
           wizardFieldSelection=true
           userFieldSelection=true
-          context='action'
+          context="action"
         )}}
     </div>
   </div>
@@ -560,35 +560,35 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.create_group.visibility_level"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.visibility_level
-        property='visibility_level'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="visibility_level"
+        onUpdate=(action "mappedFieldUpdated")
         options=(hash
           textSelection=true
           wizardFieldSelection=true
           userFieldSelection=true
-          context='action'
+          context="action"
         )}}
     </div>
-  </div>  
+  </div>
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.create_group.members_visibility_level"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.members_visibility_level
-        property='members_visibility_level'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="members_visibility_level"
+        onUpdate=(action "mappedFieldUpdated")
         options=(hash
           textSelection=true
           wizardFieldSelection=true
           userFieldSelection=true
-          context='action'
+          context="action"
         )}}
     </div>
   </div>
@@ -599,116 +599,116 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.create_category.name"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.name
-        property='name'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="name"
+        onUpdate=(action "mappedFieldUpdated")
         options=(hash
-          textSelection='key,value'
+          textSelection="key,value"
           wizardFieldSelection=true
-          userFieldSelection='key,value'
-          context='action'
+          userFieldSelection="key,value"
+          context="action"
         )}}
     </div>
   </div>
-  
+
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.create_category.slug"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.slug
-        property='slug'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="slug"
+        onUpdate=(action "mappedFieldUpdated")
         options=(hash
           textSelection=true
           wizardFieldSelection=true
-          userFieldSelection='key,value'
-          context='action'
+          userFieldSelection="key,value"
+          context="action"
         )}}
     </div>
   </div>
-  
+
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.create_category.color"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.color
-        property='color'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="color"
+        onUpdate=(action "mappedFieldUpdated")
         options=(hash
           textSelection=true
           wizardFieldSelection=true
-          userFieldSelection='key,value'
-          context='action'
+          userFieldSelection="key,value"
+          context="action"
         )}}
     </div>
   </div>
-  
+
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.create_category.text_color"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.text_color
-        property='text_color'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="text_color"
+        onUpdate=(action "mappedFieldUpdated")
         options=(hash
           textSelection=true
           wizardFieldSelection=true
-          userFieldSelection='key,value'
-          context='action'
+          userFieldSelection="key,value"
+          context="action"
         )}}
     </div>
   </div>
-  
+
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.create_category.parent_category"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.parent_category_id
-        property='parent_category_id'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="parent_category_id"
+        onUpdate=(action "mappedFieldUpdated")
         options=(hash
-          textSelection='key,value'
+          textSelection="key,value"
           wizardFieldSelection=true
-          userFieldSelection='key,value'
-          categorySelection='output'
-          context='action'
+          userFieldSelection="key,value"
+          categorySelection="output"
+          context="action"
         )}}
     </div>
   </div>
-  
+
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
       <label>{{i18n "admin.wizard.action.create_category.permissions"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=action.permissions
-        property='permissions'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="permissions"
+        onUpdate=(action "mappedFieldUpdated")
         options=(hash
-          inputTypes='association'
+          inputTypes="association"
           textSelection=true
           wizardFieldSelection=true
-          wizardActionSelection='key'
+          wizardActionSelection="key"
           userFieldSelection=true
-          groupSelection='key'
-          context='action'
+          groupSelection="key"
+          context="action"
         )}}
     </div>
   </div>
@@ -719,89 +719,89 @@
 
   {{#if action.showAdvanced}}
     <div class="advanced-settings">
-      
+
       {{#if hasCustomFields}}
         <div class="setting full field-mapper-setting">
           <div class="setting-label">
-            <label>{{i18n 'admin.wizard.action.custom_fields.label'}}</label>
+            <label>{{i18n "admin.wizard.action.custom_fields.label"}}</label>
           </div>
-          
+
           <div class="setting-value">
             {{wizard-mapper
               inputs=action.custom_fields
-              property='custom_fields'
-              onUpdate=(action 'mappedFieldUpdated')
+              property="custom_fields"
+              onUpdate=(action "mappedFieldUpdated")
               options=(hash
-                inputTypes='association'
-                customFieldSelection='key'
-                wizardFieldSelection='value'
-                wizardActionSelection='value'
-                userFieldSelection='value'
-                keyPlaceholder='admin.wizard.action.custom_fields.key'
-                context='action'
+                inputTypes="association"
+                customFieldSelection="key"
+                wizardFieldSelection="value"
+                wizardActionSelection="value"
+                userFieldSelection="value"
+                keyPlaceholder="admin.wizard.action.custom_fields.key"
+                context="action"
               )}}
           </div>
         </div>
       {{/if}}
-      
+
       {{#if sendMessage}}
         <div class="setting full field-mapper-setting">
           <div class="setting-label">
-            <label>{{i18n 'admin.wizard.required'}}</label>
+            <label>{{i18n "admin.wizard.required"}}</label>
           </div>
-          
+
           <div class="setting-value">
             {{wizard-mapper
               inputs=action.required
-              property='required'
-              onUpdate=(action 'mappedFieldUpdated')
+              property="required"
+              onUpdate=(action "mappedFieldUpdated")
               options=(hash
-                textSelection='value'
+                textSelection="value"
                 wizardFieldSelection=true
                 userFieldSelection=true
                 groupSelection=true
-                context='action'
+                context="action"
               )}}
           </div>
         </div>
       {{/if}}
-      
+
       {{#if showPostAdvanced}}
         <div class="setting full">
           <div class="setting-label">
             <label>{{i18n "admin.wizard.action.skip_redirect.label"}}</label>
           </div>
-          
+
           <div class="setting-value">
-            {{input type='checkbox' checked=action.skip_redirect}}
-            
+            {{input type="checkbox" checked=action.skip_redirect}}
+
             <span>
-              {{i18n 'admin.wizard.action.skip_redirect.description' type='topic'}}
+              {{i18n "admin.wizard.action.skip_redirect.description" type="topic"}}
             </span>
           </div>
         </div>
-        
+
         <div class="setting full">
           <div class="setting-label">
             <label>{{i18n "admin.wizard.action.suppress_notifications.label"}}</label>
           </div>
-          
+
           <div class="setting-value">
-            {{input type='checkbox' checked=action.suppress_notifications}}
-            
+            {{input type="checkbox" checked=action.suppress_notifications}}
+
             <span>
-              {{i18n 'admin.wizard.action.suppress_notifications.description' type='topic'}}
+              {{i18n "admin.wizard.action.suppress_notifications.description" type="topic"}}
             </span>
           </div>
         </div>
       {{/if}}
-      
+
       {{#if routeTo}}
         <div class="setting">
           <div class="setting-label">
             <label>{{i18n "admin.wizard.action.route_to.code"}}</label>
           </div>
-          
+
           <div class="setting-value">
             {{input value=action.code}}
           </div>
