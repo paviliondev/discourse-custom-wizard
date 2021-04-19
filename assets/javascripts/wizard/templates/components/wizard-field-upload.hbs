@@ -1,4 +1,4 @@
-<label class="wizard-btn wizard-btn-upload-file {{if uploading 'disabled'}}" tabindex="{{field.tabindex}}">
+<label class="wizard-btn wizard-btn-upload-file {{if uploading "disabled"}}" tabindex={{field.tabindex}}>
   {{#if uploading}}
     {{wizard-i18n "wizard.uploading"}}
   {{else}}
@@ -6,13 +6,13 @@
     {{d-icon "upload"}}
   {{/if}}
 
-  <input disabled={{uploading}} type="file" accept="{{field.file_types}}" style="visibility: hidden; position: absolute;" />
+  <input disabled={{uploading}} type="file" accept={{field.file_types}} style="visibility: hidden; position: absolute;" >
 </label>
 
 {{#if field.value}}
-  {{#unless isImage}}
-    {{field.value.original_filename}}
-  {{else}}
+  {{#if isImage}}
     <img src={{field.value.url}}  class="wizard-image-preview">
-  {{/unless}}
+  {{else}}
+    {{field.value.original_filename}}
+  {{/if}}
 {{/if}}

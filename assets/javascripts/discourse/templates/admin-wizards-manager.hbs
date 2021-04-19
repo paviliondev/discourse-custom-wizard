@@ -1,18 +1,18 @@
 <div class="admin-wizard-controls">
-  <h3>{{i18n 'admin.wizard.manager.title'}}</h3>
-  
+  <h3>{{i18n "admin.wizard.manager.title"}}</h3>
+
   <div class="buttons">
     {{#if filename}}
       <div class="filename">
-        <a {{action 'clearFile'}}>
-          {{d-icon 'times'}}
+        <a role="button" {{action "clearFile"}}>
+          {{d-icon "times"}}
         </a>
         <span>{{filename}}</span>
       </div>
     {{/if}}
-    
+
     {{input
-      id='file-upload'
+      id="file-upload"
       type="file"
       accept="application/json"
       change=(action "setFile")}}
@@ -45,15 +45,15 @@
   opts=messageOpts
   items=messageItems
   loading=loading
-  component='manager'}}
+  component="manager"}}
 
 <div class="admin-wizard-container">
   <table class="table grid">
     <thead>
       <tr>
-        <th>{{i18n 'admin.wizard.label'}}</th>
-        <th class="control-column">{{i18n 'admin.wizard.manager.export'}}</th>
-        <th class="control-column">{{i18n 'admin.wizard.manager.destroy'}}</th>
+        <th>{{i18n "admin.wizard.label"}}</th>
+        <th class="control-column">{{i18n "admin.wizard.manager.export"}}</th>
+        <th class="control-column">{{i18n "admin.wizard.manager.destroy"}}</th>
       </tr>
     </thead>
     <tbody>
@@ -65,16 +65,16 @@
             {{/link-to}}
           </td>
           <td class="control-column">
-            {{input 
+            {{input
               type="checkbox"
               class="export"
-              change=(action 'selectWizard')}}
+              change=(action "selectWizard")}}
           </td>
           <td class="control-column">
-            {{input 
+            {{input
               type="checkbox"
               class="destroy"
-              change=(action 'selectWizard')}}
+              change=(action "selectWizard")}}
           </td>
         </tr>
       {{/each}}

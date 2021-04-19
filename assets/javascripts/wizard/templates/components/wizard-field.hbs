@@ -1,18 +1,18 @@
 <label for={{field.id}} class="field-label">
-  {{{field.label}}}
+  {{html-safe field.label}}
 </label>
 
 {{#if field.image}}
-  <div class="field-image"><img src="{{field.image}}"></div>
+  <div class="field-image"><img src={{field.image}}></div>
 {{/if}}
 
 {{#if field.description}}
-  <div class='field-description'>{{cookedDescription}}</div>
+  <div class="field-description">{{cookedDescription}}</div>
 {{/if}}
 
 {{#field-validators field=field as |validators|}}
   {{#if inputComponentName}}
-    <div class='input-area'>
+    <div class="input-area">
       {{component inputComponentName field=field step=step fieldClass=fieldClass wizard=wizard autocomplete=validators.autocomplete}}
     </div>
   {{/if}}
@@ -25,5 +25,5 @@
 {{/if}}
 
 {{#if field.errorDescription}}
-  <div class='field-error-description'>{{{field.errorDescription}}}</div>
+  <div class="field-error-description">{{html-safe field.errorDescription}}</div>
 {{/if}}

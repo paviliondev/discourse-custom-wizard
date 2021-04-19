@@ -231,7 +231,7 @@ describe CustomWizard::Wizard do
     ).to eq('I am a user submission')
   end
 
-  context do
+  context "class methods" do
     before do
       CustomWizard::Template.save(@permitted_template, skip_jobs: true)
 
