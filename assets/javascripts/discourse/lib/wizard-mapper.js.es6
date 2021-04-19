@@ -41,6 +41,7 @@ const connectors = {
     "less_or_equal",
     "regex",
     "is",
+    "in"
   ],
   output: ["then", "set"],
 };
@@ -101,8 +102,10 @@ const selectionTypes = [
   "userField",
   "userFieldOptions",
   "group",
+  "groupUsers",
   "category",
   "tag",
+  "wizardUser",
   "user",
   "customField",
 ];

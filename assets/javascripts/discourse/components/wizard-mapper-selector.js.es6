@@ -17,6 +17,9 @@ export default Component.extend({
   showText: computed("activeType", function () {
     return this.showInput("text");
   }),
+  showLabel: computed("activeType", function() {
+    return this.showInput("wizardUser");
+  }),
   showWizardField: computed("activeType", function () {
     return this.showInput("wizardField");
   }),
@@ -37,6 +40,9 @@ export default Component.extend({
   }),
   showGroup: computed("activeType", function () {
     return this.showInput("group");
+  }),
+  showGroupUsers: computed("activeType", function () {
+    return this.showInput("groupUsers");
   }),
   showUser: computed("activeType", function () {
     return this.showInput("user");
@@ -98,8 +104,14 @@ export default Component.extend({
   groupEnabled: computed("options.groupSelection", "inputType", function () {
     return this.optionEnabled("groupSelection");
   }),
+  groupUsersEnabled: computed("options.groupUsersSelection", "inputType", function () {
+    return this.optionEnabled("groupUsersSelection");
+  }),
   userEnabled: computed("options.userSelection", "inputType", function () {
     return this.optionEnabled("userSelection");
+  }),
+  wizardUserEnabled: computed("options.wizardUserSelection", "inputType", function () {
+    return this.optionEnabled("wizardUserSelection");
   }),
   listEnabled: computed("options.listSelection", "inputType", function () {
     return this.optionEnabled("listSelection");
@@ -114,7 +126,7 @@ export default Component.extend({
     "showUserFieldOptions",
     "showCustomField"
   ),
-  showMultiSelect: or("showCategory", "showGroup"),
+  showMultiSelect: or("showCategory", "showGroup", "showGroupUsers"),
   hasTypes: gt("selectorTypes.length", 1),
   showTypes: false,
 
@@ -245,6 +257,7 @@ export default Component.extend({
     return {
       category: this.categories,
       group: this.groups,
+      groupUsers: this.groups,
       list: "",
     }[activeType];
   },

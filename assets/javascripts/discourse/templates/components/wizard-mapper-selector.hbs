@@ -20,6 +20,10 @@
 </div>
 
 <div class="input">
+  {{#if showLabel}}
+    <div class="label">{{i18n placeholderKey}}</div>
+  {{/if}}
+
   {{#if showText}}
     {{input
       type="text"

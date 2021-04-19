@@ -112,12 +112,14 @@ en:
             text: "text"
             wizard_field: "wizard field"
             wizard_action: "wizard action"
+            wizard_user: "current user"
             user_field: "user field"
             user_field_options: "user field options"
             user: "user"
             category: "category"
             tag: "tag"
             group: "group"
+            group_users: "group members"
             list: "list"
             custom_field: "custom field"
 
@@ -126,12 +128,14 @@ en:
             property: "Select property"
             wizard_field: "Select field"
             wizard_action: "Select action"
+            wizard_user: "Current user"
             user_field: "Select field"
             user_field_options: "Select field"
             user: "Select user"
             category: "Select category"
             tag: "Select tag"
             group: "Select group"
+            group_users: "Select group"
             list: "Enter item"
             custom_field: "Select field"
             
@@ -222,6 +226,7 @@ en:
           regex: '=~'
           association: '→'
           is: 'is'
+          in: 'in'
         
         action:
           header: "Actions"

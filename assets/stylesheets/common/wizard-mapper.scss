@@ -175,6 +175,15 @@
       overflow: hidden;
     }
   }
+
+  .input > .label {
+    padding: 4px 10px;
+    border: 1px solid var(--primary-medium);
+    font-size: 1em;
+    line-height: 1;
+    min-height: 30px;
+    box-sizing: border-box;
+  }
 }
 
 .mapper-pairs {

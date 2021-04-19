@@ -32,7 +32,8 @@ class CustomWizard::Mapper
       present: "present?",
       true: "==",
       false: "=="
-    }
+    },
+    in: 'in'
   }
 
   def initialize(params)
@@ -138,6 +139,8 @@ class CustomWizard::Mapper
       elsif ["true", "false"].include?(value)
         result = key.public_send(operator, ActiveRecord::Type::Boolean.new.cast(value))
       end
+    elsif operator === 'in'
+      result = value.includes?(key)
     elsif [key, value, operator].all? { |i| !i.nil? }
       result = key.public_send(operator, value)
     else
@@ -210,6 +213,16 @@ class CustomWizard::Mapper
       if field = UserField.find_by(id: value.split('_').last)
         field.user_field_options.map(&:value)
       end
+    end
+  end
+
+  def map_current_user(value)
+    @user.username
+  end
+
+  def map_group_users(value)
+    if group = Group.find_by(id: value)
+      group.users.map(&:username)
     end
   end
 
