@@ -68,26 +68,52 @@ describe CustomWizard::Action do
     end
   end
 
-  it 'sends a message' do
-    User.create(username: 'angus1', email: "angus1@email.com")
+  context 'sending a message' do
+    it 'works' do
+      User.create(username: 'angus1', email: "angus1@email.com")
 
-    wizard = CustomWizard::Builder.new(@template[:id], user).build
-    wizard.create_updater(wizard.steps[0].id, {}).update
-    wizard.create_updater(wizard.steps[1].id, {}).update
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      wizard.create_updater(wizard.steps[0].id, {}).update
+      wizard.create_updater(wizard.steps[1].id, {}).update
 
-    topic = Topic.where(
-      archetype: Archetype.private_message,
-      title: "Message title"
-    )
+      topic = Topic.where(
+        archetype: Archetype.private_message,
+        title: "Message title"
+      )
 
-    post = Post.where(
-      topic_id: topic.pluck(:id),
-      raw: "I will interpolate some wizard fields"
-    )
+      post = Post.where(
+        topic_id: topic.pluck(:id),
+        raw: "I will interpolate some wizard fields"
+      )
 
-    expect(topic.exists?).to eq(true)
-    expect(topic.first.topic_allowed_users.first.user.username).to eq('angus1')
-    expect(post.exists?).to eq(true)
+      expect(topic.exists?).to eq(true)
+      expect(topic.first.topic_allowed_users.first.user.username).to eq('angus1')
+      expect(post.exists?).to eq(true)
+    end
+
+    it 'allows using multiple PM targets' do
+      User.create(username: 'angus1', email: "angus1@email.com")
+      User.create(username: 'faiz', email: "faiz@email.com")
+      Group.create(name: "cool_group")
+      Group.create(name: 'cool_group_1')
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      wizard.create_updater(wizard.steps[0].id, {}).update
+      wizard.create_updater(wizard.steps[1].id, {}).update
+
+      topic = Topic.where(
+        archetype: Archetype.private_message,
+        title: "Multiple Recipients title"
+      )
+
+      post = Post.where(
+        topic_id: topic.pluck(:id),
+        raw: "I will interpolate some wizard fields"
+      )
+      expect(topic.exists?).to eq(true)
+      expect(topic.first.all_allowed_users.map(&:username)).to include('angus1', 'faiz')
+      expect(topic.first.allowed_groups.map(&:name)).to include('cool_group', 'cool_group_1')
+      expect(post.exists?).to eq(true)
+    end
   end
 
   it 'updates a profile' do

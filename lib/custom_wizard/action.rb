@@ -89,11 +89,13 @@ class CustomWizard::Action
       return
     end
 
+    params[:target_group_names] = []
+    params[:target_usernames] = []
     targets.each do |target|
       if Group.find_by(name: target)
-        params[:target_group_names] = target
+        params[:target_group_names] << target
       elsif User.find_by_username(target)
-        params[:target_usernames] = target
+        params[:target_usernames] << target
       else
         #
       end
