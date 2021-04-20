@@ -33,7 +33,7 @@ CustomWizard.reopenClass({
   },
 
   build(wizardJson) {
-    if (!wizardJson) return null;
+    if (!wizardJson) {return null;}
 
     if (!wizardJson.completed && wizardJson.steps) {
       wizardJson.steps = wizardJson.steps
@@ -45,7 +45,7 @@ CustomWizard.reopenClass({
           });
 
           let tabindex = 1;
-          stepObj.fields.forEach((f, i) => {
+          stepObj.fields.forEach((f) => {
             f.tabindex = tabindex;
 
             if (["date_time"].includes(f.type)) {
@@ -108,7 +108,7 @@ export function findCustomWizard(wizardId, params = {}) {
   let url = `/w/${wizardId}`;
 
   let paramKeys = Object.keys(params).filter((k) => {
-    if (k === "wizard_id") return false;
+    if (k === "wizard_id") {return false;}
     return !!params[k];
   });
 
@@ -127,7 +127,7 @@ export function findCustomWizard(wizardId, params = {}) {
   });
 }
 
-var _wizard_store;
+let _wizard_store;
 
 export function updateCachedWizard(wizard) {
   _wizard_store = wizard;

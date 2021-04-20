@@ -132,8 +132,8 @@ const CustomWizard = EmberObject.extend({
   },
 
   buildMappedJson(value) {
-    if (typeof value === "string" || Number.isInteger(value)) return value;
-    if (!value || !value.length) return false;
+    if (typeof value === "string" || Number.isInteger(value)) {return value;}
+    if (!value || !value.length) {return false;}
 
     let inputs = value;
     let result = [];
