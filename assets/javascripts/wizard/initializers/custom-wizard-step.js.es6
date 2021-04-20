@@ -8,6 +8,9 @@ export default {
     const CustomWizard = requirejs(
       "discourse/plugins/discourse-custom-wizard/wizard/models/custom"
     ).default;
+    const updateCachedWizard = requirejs(
+      "discourse/plugins/discourse-custom-wizard/wizard/models/custom"
+    ).updateCachedWizard;
     const StepModel = requirejs("wizard/models/step").default;
     const StepComponent = requirejs("wizard/components/wizard-step").default;
     const ajax = requirejs("wizard/lib/ajax").ajax;
@@ -18,6 +21,7 @@ export default {
       "discourse/plugins/discourse-custom-wizard/wizard/lib/text-lite"
     ).cook;
     const { schedule } = requirejs("@ember/runloop");
+    const { alias, not } = requirejs("@ember/object/computed");
 
     StepModel.reopen({
       save() {
@@ -155,12 +159,17 @@ export default {
         this.sendAction("showMessage", message);
       }.observes("step.message"),
 
+      showNextButton: not("step.final"),
+      showDoneButton: alias("step.final"),
+
       advance() {
         this.set("saving", true);
         this.get("step")
           .save()
           .then((response) => {
-            if (this.get("finalStep")) {
+            updateCachedWizard(CustomWizard.build(response["wizard"]));
+
+            if (response["final"]) {
               CustomWizard.finished(response);
             } else {
               this.sendAction("goNext", response);
@@ -178,7 +187,6 @@ export default {
         },
 
         done() {
-          this.set("finalStep", true);
           this.send("nextStep");
         },
 

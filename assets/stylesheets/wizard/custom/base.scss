@@ -50,6 +50,11 @@ textarea {
     border-color: var(--danger);
     box-shadow: shadow("focus-danger");
   }
+
+  &[type="checkbox"] {
+    margin-bottom: 0;
+    margin-right: 10px;
+  }
 }
 
 .spinner {

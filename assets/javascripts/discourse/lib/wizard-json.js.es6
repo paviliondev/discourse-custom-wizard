@@ -23,54 +23,69 @@ function castCase(property, value) {
   return property.indexOf("_type") > -1 ? camelCase(value) : value;
 }
 
-function buildProperty(json, property, type) {
-  let value = json[property];
+function buildMappedProperty(value) {
+  let inputs = [];
 
-  if (mapped(property, type) && present(value) && value.constructor === Array) {
-    let inputs = [];
+  value.forEach((inputJson) => {
+    let input = {};
 
-    value.forEach((inputJson) => {
-      let input = {};
+    Object.keys(inputJson).forEach((inputKey) => {
+      if (inputKey === "pairs") {
+        let pairs = [];
+        let pairCount = inputJson.pairs.length;
 
-      Object.keys(inputJson).forEach((inputKey) => {
-        if (inputKey === "pairs") {
-          let pairs = [];
-          let pairCount = inputJson.pairs.length;
+        inputJson.pairs.forEach((pairJson) => {
+          let pair = {};
 
-          inputJson.pairs.forEach((pairJson) => {
-            let pair = {};
-
-            Object.keys(pairJson).forEach((pairKey) => {
-              pair[pairKey] = castCase(pairKey, pairJson[pairKey]);
-            });
-
-            pair.pairCount = pairCount;
-
-            pairs.push(EmberObject.create(pair));
+          Object.keys(pairJson).forEach((pairKey) => {
+            pair[pairKey] = castCase(pairKey, pairJson[pairKey]);
           });
 
-          input.pairs = pairs;
-        } else {
-          input[inputKey] = castCase(inputKey, inputJson[inputKey]);
-        }
-      });
+          pair.pairCount = pairCount;
 
-      inputs.push(EmberObject.create(input));
+          pairs.push(EmberObject.create(pair));
+        });
+
+        input.pairs = pairs;
+      } else {
+        input[inputKey] = castCase(inputKey, inputJson[inputKey]);
+      }
     });
 
-    return A(inputs);
-  } else {
-    return value;
-  }
+    inputs.push(EmberObject.create(input));
+  });
+
+  return A(inputs);
 }
 
-function buildObject(json, type) {
+function buildProperty(json, property, type, objectIndex) {
+  let value = json[property];
+  if (
+    property === "index" &&
+    (value === null || value === undefined) &&
+    (objectIndex !== null || objectIndex !== undefined)
+  ) {
+    return objectIndex;
+  }
+
+  if (
+    !mapped(property, type) ||
+    !present(value) ||
+    !value.constructor === Array
+  ) {
+    return value;
+  }
+
+  return buildMappedProperty(value);
+}
+
+function buildObject(json, type, objectIndex) {
   let props = {
     isNew: false,
   };
 
   Object.keys(json).forEach((prop) => {
-    props[prop] = buildProperty(json, prop, type);
+    props[prop] = buildProperty(json, prop, type, objectIndex);
   });
 
   return EmberObject.create(props);
@@ -80,8 +95,8 @@ function buildObjectArray(json, type) {
   let array = A();
 
   if (present(json)) {
-    json.forEach((objJson) => {
-      let object = buildObject(objJson, type);
+    json.forEach((objJson, objectIndex) => {
+      let object = buildObject(objJson, type, objectIndex);
 
       if (hasAdvancedProperties(object, type)) {
         object.set("showAdvanced", true);
@@ -94,9 +109,9 @@ function buildObjectArray(json, type) {
   return array;
 }
 
-function buildBasicProperties(json, type, props) {
+function buildBasicProperties(json, type, props, objectIndex = null) {
   listProperties(type).forEach((p) => {
-    props[p] = buildProperty(json, p, type);
+    props[p] = buildProperty(json, p, type, objectIndex);
 
     if (hasAdvancedProperties(json, type)) {
       props.showAdvanced = true;
@@ -142,12 +157,17 @@ function buildProperties(json) {
     props = buildBasicProperties(json, "wizard", props);
 
     if (present(json.steps)) {
-      json.steps.forEach((stepJson) => {
+      json.steps.forEach((stepJson, objectIndex) => {
         let stepProps = {
           isNew: false,
         };
 
-        stepProps = buildBasicProperties(stepJson, "step", stepProps);
+        stepProps = buildBasicProperties(
+          stepJson,
+          "step",
+          stepProps,
+          objectIndex
+        );
         stepProps.fields = buildObjectArray(stepJson.fields, "field");
 
         props.steps.pushObject(EmberObject.create(stepProps));

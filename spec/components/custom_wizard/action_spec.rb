@@ -6,19 +6,25 @@ describe CustomWizard::Action do
   fab!(:category) { Fabricate(:category, name: 'cat1', slug: 'cat-slug') }
   fab!(:group) { Fabricate(:group) }
 
+  let(:wizard_template) {
+    JSON.parse(
+      File.open(
+        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
+      ).read
+    )
+  }
+
   let(:open_composer) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/actions/open_composer.json"
-    ).read)
+    JSON.parse(
+      File.open(
+        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/actions/open_composer.json"
+      ).read
+    )
   }
 
   before do
     Group.refresh_automatic_group!(:trust_level_2)
-    CustomWizard::Template.save(
-      JSON.parse(File.open(
-        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-      ).read),
-    skip_jobs: true)
+    CustomWizard::Template.save(wizard_template, skip_jobs: true)
     @template = CustomWizard::Template.find('super_mega_fun_wizard')
   end
 
@@ -156,7 +162,6 @@ describe CustomWizard::Action do
       action = CustomWizard::Action.new(
         wizard: wizard,
         action: open_composer,
-        user: user,
         data: {}
       )
       action.perform
@@ -179,8 +184,7 @@ describe CustomWizard::Action do
 
   it 'creates a group' do
     wizard = CustomWizard::Builder.new(@template[:id], user).build
-    step_id = wizard.steps[0].id
-    updater = wizard.create_updater(step_id, step_1_field_1: "Text input").update
+    wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
     expect(Group.where(name: wizard.current_submission['action_9']).exists?).to eq(true)
   end
 
@@ -210,6 +214,6 @@ describe CustomWizard::Action do
     wizard = CustomWizard::Builder.new(@template[:id], user).build
     updater = wizard.create_updater(wizard.steps.last.id, {})
     updater.update
-    expect(updater.result[:redirect_on_complete]).to eq("https://google.com")
+    expect(updater.result[:redirect_on_next]).to eq("https://google.com")
   end
 end

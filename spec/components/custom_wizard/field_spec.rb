@@ -2,6 +2,12 @@
 require_relative '../../plugin_helper'
 
 describe CustomWizard::Field do
+  let(:field_hash) do
+    JSON.parse(File.open(
+      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/field/field.json"
+    ).read).with_indifferent_access
+  end
+
   before do
     CustomWizard::Field.register(
       'location',
@@ -11,6 +17,19 @@ describe CustomWizard::Field do
         prefill: { "coordinates": [35.3082, 149.1244] }
       }
     )
+  end
+
+  it "initialize custom field attributes" do
+    field = CustomWizard::Field.new(field_hash)
+    expect(field.id).to eq("field_id")
+    expect(field.index).to eq(0)
+    expect(field.label).to eq("<p>Field Label</p>")
+    expect(field.image).to eq("field_image_url.png")
+    expect(field.description).to eq("Field description")
+    expect(field.required).to eq(true)
+    expect(field.key).to eq("field.locale.key")
+    expect(field.type).to eq("field_type")
+    expect(field.content).to eq([])
   end
 
   it "registers custom field types" do
