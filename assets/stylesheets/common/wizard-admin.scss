@@ -303,6 +303,15 @@
         max-width: 250px !important;
         min-width: 250px !important;
       }
+
+      &.force-final {
+        padding: 1em;
+        background-color: var(--primary-very-low);
+
+        label, span {
+          font-size: 1em;
+        }
+      }
     }
 
     &.full,

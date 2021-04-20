@@ -60,11 +60,10 @@ function buildMappedProperty(value) {
 
 function buildProperty(json, property, type, objectIndex) {
   let value = json[property];
-
   if (
     property === "index" &&
     (value === null || value === undefined) &&
-    objectIndex
+    (objectIndex !== null || objectIndex !== undefined)
   ) {
     return objectIndex;
   }
