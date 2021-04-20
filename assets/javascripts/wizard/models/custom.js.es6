@@ -33,7 +33,9 @@ CustomWizard.reopenClass({
   },
 
   build(wizardJson) {
-    if (!wizardJson) {return null;}
+    if (!wizardJson) {
+      return null;
+    }
 
     if (!wizardJson.completed && wizardJson.steps) {
       wizardJson.steps = wizardJson.steps
@@ -108,7 +110,9 @@ export function findCustomWizard(wizardId, params = {}) {
   let url = `/w/${wizardId}`;
 
   let paramKeys = Object.keys(params).filter((k) => {
-    if (k === "wizard_id") {return false;}
+    if (k === "wizard_id") {
+      return false;
+    }
     return !!params[k];
   });
 

@@ -18,7 +18,9 @@ export default Ember.Route.extend({
   },
 
   afterModel(model) {
-    if (model.completed) {return this.transitionTo("index");}
+    if (model.completed) {
+      return this.transitionTo("index");
+    }
     return model.set("wizardId", this.wizard.id);
   },
 
