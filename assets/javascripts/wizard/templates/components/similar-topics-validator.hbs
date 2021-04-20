@@ -1,9 +1,9 @@
 <label class={{currentStateClass}}>
   {{#if currentState}}
     {{#if insufficientCharactersCategories}}
-      {{html-safe (i18n currentStateKey catLinks=catLinks)}}
+      {{html-safe (wizard-i18n currentStateKey catLinks=catLinks)}}
     {{else}}
-      {{i18n currentStateKey}}
+      {{wizard-i18n currentStateKey}}
     {{/if}}
   {{/if}}
 </label>

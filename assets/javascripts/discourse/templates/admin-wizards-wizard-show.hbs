@@ -1,10 +1,10 @@
-{{#if wizard}}  
+{{#if wizard}}
   <div class="wizard-header large">
     {{input
       name="name"
       value=wizard.name
       placeholderKey="admin.wizard.name_placeholder"}}
-    
+
     <div class="wizard-url">
       {{#if wizard.name}}
         {{#if copiedUrl}}
@@ -12,15 +12,15 @@
         {{else}}
           {{d-button action=(action "copyUrl") class="pull-right no-text" icon="copy"}}
         {{/if}}
-        <a href="{{wizardUrl}}" target="_blank">{{wizardUrl}}</a>
+        <a href={{wizardUrl}} target="_blank" rel="noopener noreferrer">{{wizardUrl}}</a>
       {{/if}}
     </div>
   </div>
 
-  <div class="wizard-basic-details">    
+  <div class="wizard-basic-details">
     <div class="setting">
       <div class="setting-label">
-        <label>{{i18n 'admin.wizard.background'}}</label>
+        <label>{{i18n "admin.wizard.background"}}</label>
       </div>
       <div class="setting-value">
         {{input
@@ -30,127 +30,127 @@
           class="small"}}
       </div>
     </div>
-    
+
     <div class="setting">
       <div class="setting-label">
-        <label>{{i18n 'admin.wizard.theme_id'}}</label>
+        <label>{{i18n "admin.wizard.theme_id"}}</label>
       </div>
       <div class="setting-value">
         {{combo-box
           content=themes
-          valueProperty='id'
+          valueProperty="id"
           value=wizard.theme_id
           onChange=(action (mut wizard.theme_id))
           options=(hash
-            none='admin.wizard.no_theme'
+            none="admin.wizard.no_theme"
           )}}
       </div>
     </div>
   </div>
 
   <div class="wizard-header medium">
-    {{i18n 'admin.wizard.label'}}
+    {{i18n "admin.wizard.label"}}
   </div>
 
   <div class="wizard-settings">
     <div class="setting">
       <div class="setting-label">
-        <label>{{i18n 'admin.wizard.required'}}</label>
+        <label>{{i18n "admin.wizard.required"}}</label>
       </div>
       <div class="setting-value">
-        {{input type='checkbox' checked=wizard.required}}
-        <span>{{i18n 'admin.wizard.required_label'}}</span>
+        {{input type="checkbox" checked=wizard.required}}
+        <span>{{i18n "admin.wizard.required_label"}}</span>
       </div>
     </div>
 
     <div class="setting">
       <div class="setting-label">
-        <label>{{i18n 'admin.wizard.after_signup'}}</label>
+        <label>{{i18n "admin.wizard.after_signup"}}</label>
       </div>
       <div class="setting-value">
-        {{input type='checkbox' checked=wizard.after_signup}}
-        <span>{{i18n 'admin.wizard.after_signup_label'}}</span>
-      </div>
-    </div>
-    
-    <div class="setting">
-      <div class="setting-label">
-        <label>{{i18n 'admin.wizard.multiple_submissions'}}</label>
-      </div>
-      <div class="setting-value">
-        {{input type='checkbox' checked=wizard.multiple_submissions}}
-        <span>{{i18n 'admin.wizard.multiple_submissions_label'}}</span>
+        {{input type="checkbox" checked=wizard.after_signup}}
+        <span>{{i18n "admin.wizard.after_signup_label"}}</span>
       </div>
     </div>
 
     <div class="setting">
       <div class="setting-label">
-        <label>{{i18n 'admin.wizard.prompt_completion'}}</label>
+        <label>{{i18n "admin.wizard.multiple_submissions"}}</label>
       </div>
       <div class="setting-value">
-        {{input type='checkbox' checked=wizard.prompt_completion}}
-        <span>{{i18n 'admin.wizard.prompt_completion_label'}}</span>
+        {{input type="checkbox" checked=wizard.multiple_submissions}}
+        <span>{{i18n "admin.wizard.multiple_submissions_label"}}</span>
       </div>
     </div>
-    
+
+    <div class="setting">
+      <div class="setting-label">
+        <label>{{i18n "admin.wizard.prompt_completion"}}</label>
+      </div>
+      <div class="setting-value">
+        {{input type="checkbox" checked=wizard.prompt_completion}}
+        <span>{{i18n "admin.wizard.prompt_completion_label"}}</span>
+      </div>
+    </div>
+
     <div class="setting full-inline">
       <div class="setting-label">
-        <label>{{i18n 'admin.wizard.after_time'}}</label>
+        <label>{{i18n "admin.wizard.after_time"}}</label>
       </div>
       <div class="setting-value">
-        {{input type='checkbox' checked=wizard.after_time}}
-        <span>{{i18n 'admin.wizard.after_time_label'}}</span>
+        {{input type="checkbox" checked=wizard.after_time}}
+        <span>{{i18n "admin.wizard.after_time_label"}}</span>
         {{d-button
-          action='setNextSessionScheduled'
+          action="setNextSessionScheduled"
           translatedLabel=nextSessionScheduledLabel
           class="btn-after-time"
-          icon='far-calendar'}}
+          icon="far-calendar"}}
       </div>
     </div>
-    
+
     <div class="setting full field-mapper-setting">
       <div class="setting-label">
-        <label>{{i18n 'admin.wizard.permitted'}}</label>
+        <label>{{i18n "admin.wizard.permitted"}}</label>
       </div>
       <div class="setting-value">
         {{wizard-mapper
           inputs=wizard.permitted
           options=(hash
-            context='wizard'
-            inputTypes='assignment,validation'
-            groupSelection='output'
-            userFieldSelection='key'
-            textSelection='value'
-            inputConnector='and'
+            context="wizard"
+            inputTypes="assignment,validation"
+            groupSelection="output"
+            userFieldSelection="key"
+            textSelection="value"
+            inputConnector="and"
           )}}
       </div>
     </div>
-    
+
     {{wizard-advanced-toggle showAdvanced=wizard.showAdvanced}}
-    
+
     {{#if wizard.showAdvanced}}
       <div class="advanced-settings">
-        
+
         <div class="setting">
           <div class="setting-label">
-            <label>{{i18n 'admin.wizard.save_submissions'}}</label>
+            <label>{{i18n "admin.wizard.save_submissions"}}</label>
           </div>
           <div class="setting-value">
-            {{input type='checkbox' checked=wizard.save_submissions}}
-            <span>{{i18n 'admin.wizard.save_submissions_label'}}</span>
+            {{input type="checkbox" checked=wizard.save_submissions}}
+            <span>{{i18n "admin.wizard.save_submissions_label"}}</span>
           </div>
         </div>
-        
+
         <div class="setting">
           <div class="setting-label">
-            <label>{{i18n 'admin.wizard.restart_on_revisit'}}</label>
+            <label>{{i18n "admin.wizard.restart_on_revisit"}}</label>
           </div>
           <div class="setting-value">
-            {{input type='checkbox' checked=wizard.restart_on_revisit}}
-            <span>{{i18n 'admin.wizard.restart_on_revisit_label'}}</span>
+            {{input type="checkbox" checked=wizard.restart_on_revisit}}
+            <span>{{i18n "admin.wizard.restart_on_revisit_label"}}</span>
           </div>
         </div>
-        
+
       </div>
     {{/if}}
   </div>
@@ -185,19 +185,19 @@
       wizardFields=wizardFields}}
   {{/each}}
 
-  <div class='admin-wizard-buttons'>
-    <button {{action "save"}} disabled={{disableSave}} class='btn btn-primary'>
-      {{i18n 'admin.wizard.save'}}
+  <div class="admin-wizard-buttons">
+    <button {{action "save"}} disabled={{disableSave}} class="btn btn-primary" type="button">
+      {{i18n "admin.wizard.save"}}
     </button>
-    
+
     {{#unless creating}}
-      <button {{action "remove"}} class='btn btn-danger remove'>
-        {{d-icon "far-trash-alt"}}{{i18n 'admin.wizard.remove'}}
+      <button {{action "remove"}} class="btn btn-danger remove" type="button">
+        {{d-icon "far-trash-alt"}}{{i18n "admin.wizard.remove"}}
       </button>
     {{/unless}}
-    
-    {{conditional-loading-spinner condition=saving size='small'}}
-    
+
+    {{conditional-loading-spinner condition=saving size="small"}}
+
     {{#if error}}
       <span class="error">{{d-icon "times"}}{{error}}</span>
     {{/if}}

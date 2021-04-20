@@ -1,11 +1,16 @@
 export default {
   name: "custom-wizard-step",
-  initialize(app) {
-    if (window.location.pathname.indexOf("/w/") < 0) return;
+  initialize() {
+    if (window.location.pathname.indexOf("/w/") < 0) {
+      return;
+    }
 
     const CustomWizard = requirejs(
       "discourse/plugins/discourse-custom-wizard/wizard/models/custom"
     ).default;
+    const updateCachedWizard = requirejs(
+      "discourse/plugins/discourse-custom-wizard/wizard/models/custom"
+    ).updateCachedWizard;
     const StepModel = requirejs("wizard/models/step").default;
     const StepComponent = requirejs("wizard/components/wizard-step").default;
     const ajax = requirejs("wizard/lib/ajax").ajax;
@@ -16,6 +21,7 @@ export default {
       "discourse/plugins/discourse-custom-wizard/wizard/lib/text-lite"
     ).cook;
     const { schedule } = requirejs("@ember/runloop");
+    const { alias, not } = requirejs("@ember/object/computed");
 
     StepModel.reopen({
       save() {
@@ -132,7 +138,9 @@ export default {
 
       bannerImage: function () {
         const src = this.get("step.banner");
-        if (!src) return;
+        if (!src) {
+          return;
+        }
         return getUrl(src);
       }.property("step.banner"),
 
@@ -151,12 +159,17 @@ export default {
         this.sendAction("showMessage", message);
       }.observes("step.message"),
 
+      showNextButton: not("step.final"),
+      showDoneButton: alias("step.final"),
+
       advance() {
         this.set("saving", true);
         this.get("step")
           .save()
           .then((response) => {
-            if (this.get("finalStep")) {
+            updateCachedWizard(CustomWizard.build(response["wizard"]));
+
+            if (response["final"]) {
               CustomWizard.finished(response);
             } else {
               this.sendAction("goNext", response);
@@ -166,7 +179,7 @@ export default {
           .finally(() => this.set("saving", false));
       },
 
-      keyPress(key) {},
+      keyPress() {},
 
       actions: {
         quit() {
@@ -174,7 +187,6 @@ export default {
         },
 
         done() {
-          this.set("finalStep", true);
           this.send("nextStep");
         },
 

@@ -1,4 +1,4 @@
-import { set, get } from "@ember/object";
+import { get, set } from "@ember/object";
 
 const wizard = {
   basic: {
@@ -37,6 +37,7 @@ const wizard = {
 const step = {
   basic: {
     id: null,
+    index: null,
     title: null,
     key: null,
     banner: null,
@@ -44,9 +45,11 @@ const step = {
     required_data: null,
     required_data_message: null,
     permitted_params: null,
+    condition: null,
+    force_final: false,
   },
-  mapped: ["required_data", "permitted_params"],
-  advanced: ["required_data", "permitted_params"],
+  mapped: ["required_data", "permitted_params", "condition", "index"],
+  advanced: ["required_data", "permitted_params", "condition", "index"],
   required: ["id"],
   dependent: {},
   objectArrays: {
@@ -60,16 +63,18 @@ const step = {
 const field = {
   basic: {
     id: null,
+    index: null,
     label: null,
     image: null,
     description: null,
     required: null,
     key: null,
     type: null,
+    condition: null,
   },
   types: {},
-  mapped: ["prefill", "content"],
-  advanced: ["property", "key"],
+  mapped: ["prefill", "content", "condition", "index"],
+  advanced: ["property", "key", "condition", "index"],
   required: ["id", "type"],
   dependent: {},
   objectArrays: {},
@@ -225,7 +230,7 @@ if (Discourse.SiteSettings.wizard_apis_enabled) {
   };
 }
 
-export function setWizardDefaults(obj, itemType, opts = {}) {
+export function setWizardDefaults(obj, itemType) {
   const objSchema = wizardSchema[itemType];
   const basicDefaults = objSchema.basic;
 

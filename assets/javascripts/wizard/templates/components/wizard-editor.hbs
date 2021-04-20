@@ -1,15 +1,15 @@
-<div class='d-editor-overlay hidden'></div>
+<div class="d-editor-overlay hidden"></div>
 
-<div class='d-editor-container'>
+<div class="d-editor-container">
   {{#if showPreview}}
-    <div class="d-editor-preview-wrapper {{if forcePreview 'force-preview'}}">
+    <div class="d-editor-preview-wrapper {{if forcePreview "force-preview"}}">
       <div class="d-editor-preview">
-        {{{preview}}}
+        {{html-safe preview}}
       </div>
     </div>
   {{else}}
     <div class="d-editor-textarea-wrapper">
-      <div class='d-editor-button-bar'>
+      <div class="d-editor-button-bar">
         {{#each toolbar.groups as |group|}}
           {{#each group.buttons as |b|}}
             {{#if b.popupMenu}}
@@ -24,7 +24,7 @@
                 )}}
             {{else}}
               <div>{{d.icon}}</div>
-              <button class='wizard-btn {{b.className}}' {{action b.action b}} title="{{b.title}}">
+              <button class="wizard-btn {{b.className}}" {{action b.action b}} title={{b.title}} type="button">
                 {{d-icon b.icon}}
                 {{#if b.label}}
                   <span class="d-button-label">{{wizard-i18n b.label}}</span>
@@ -34,7 +34,7 @@
           {{/each}}
 
           {{#unless group.lastGroup}}
-            <div class='d-editor-spacer'></div>
+            <div class="d-editor-spacer"></div>
           {{/unless}}
         {{/each}}
       </div>

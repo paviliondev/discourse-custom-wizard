@@ -1,6 +1,6 @@
 <div class="admin-wizard-controls">
-  <h3>{{i18n 'admin.wizard.log.nav_label'}}</h3>
-  
+  <h3>{{i18n "admin.wizard.log.nav_label"}}</h3>
+
   {{d-button
     label="refresh"
     icon="refresh"
@@ -10,7 +10,7 @@
 
 {{#load-more selector=".log-list tr" action=(action "loadMore") class="wizard-logs"}}
   {{#if noResults}}
-    <p>{{i18n 'search.no_results'}}</p>
+    <p>{{i18n "search.no_results"}}</p>
   {{else}}
     <table class="table grid">
       <thead>
@@ -27,8 +27,8 @@
           </tr>
         {{/each}}
       </tbody>
-    </table>  
+    </table>
   {{/if}}
-  
+
   {{conditional-loading-spinner condition=refreshing}}
 {{/load-more}}

@@ -56,6 +56,8 @@ en:
         undo: "Undo"
         clear: "Clear"
         select_type: "Select a type"
+        condition: "Condition"
+        index: "Index"
         
         message:
           wizard:
@@ -153,6 +155,9 @@ en:
             not_permitted_message: "Message shown when required data not present"
           permitted_params:
             label: "Params"
+          force_final:
+            label: "Conditional Final Step"
+            description: "Display this step as the final step if conditions on later steps have not passed when the user reaches this step."
         
         field:
           header: "Fields"

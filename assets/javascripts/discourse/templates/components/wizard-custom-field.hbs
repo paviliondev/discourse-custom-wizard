@@ -8,7 +8,7 @@
 
 <div class="setting">
   <div class="setting-label">
-    <label>{{i18n 'admin.wizard.field.label'}}</label>
+    <label>{{i18n "admin.wizard.field.label"}}</label>
   </div>
   <div class="setting-value">
     {{input name="label" value=field.label}}
@@ -17,18 +17,18 @@
 
 <div class="setting">
   <div class="setting-label">
-    <label>{{i18n 'admin.wizard.field.required'}}</label>
+    <label>{{i18n "admin.wizard.field.required"}}</label>
   </div>
   
   <div class="setting-value">
-    <span>{{i18n 'admin.wizard.field.required_label'}}</span>
-    {{input type='checkbox' checked=field.required}}
+    <span>{{i18n "admin.wizard.field.required_label"}}</span>
+    {{input type="checkbox" checked=field.required}}
   </div>
 </div>
 
 <div class="setting">
   <div class="setting-label">
-    <label>{{i18n 'admin.wizard.field.description'}}</label>
+    <label>{{i18n "admin.wizard.field.description"}}</label>
   </div>
   <div class="setting-value">
     {{textarea name="description" value=field.description}}
@@ -37,7 +37,7 @@
 
 <div class="setting">
   <div class="setting-label">
-    <label>{{i18n 'admin.wizard.field.image'}}</label>
+    <label>{{i18n "admin.wizard.field.image"}}</label>
   </div>
   <div class="setting-value">
     {{image-uploader
@@ -51,7 +51,7 @@
 
 <div class="setting">
   <div class="setting-label">
-    <label>{{i18n 'admin.wizard.type'}}</label>
+    <label>{{i18n "admin.wizard.type"}}</label>
   </div>
   
   <div class="setting-value">
@@ -68,14 +68,14 @@
 {{wizard-message
   key=messageKey
   url=messageUrl
-  component='field'}}
+  component="field"}}
 
 {{#if isTextType}}
   <div class="setting">
     <div class="setting-label">
-      <label>{{i18n 'admin.wizard.field.min_length'}}</label>
+      <label>{{i18n "admin.wizard.field.min_length"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{input
         type="number"
@@ -87,7 +87,7 @@
 
   <div class="setting full">
     <div class="setting-label">
-      <label>{{i18n 'admin.wizard.field.max_length'}}</label>
+      <label>{{i18n "admin.wizard.field.max_length"}}</label>
     </div>
 
     <div class="setting-value">
@@ -101,11 +101,11 @@
 
   <div class="setting">
     <div class="setting-label">
-      <label>{{i18n 'admin.wizard.field.char_counter'}}</label>
+      <label>{{i18n "admin.wizard.field.char_counter"}}</label>
     </div>
 
     <div class="setting-value">
-      <span>{{i18n 'admin.wizard.field.char_counter_placeholder'}}</span>
+      <span>{{i18n "admin.wizard.field.char_counter_placeholder"}}</span>
       {{input
         type="checkbox"
         checked=field.char_counter}}
@@ -116,9 +116,9 @@
 {{#if isUpload}}
   <div class="setting">
     <div class="setting-label">
-      <label>{{i18n 'admin.wizard.field.file_types'}}</label>
+      <label>{{i18n "admin.wizard.field.file_types"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{input value=field.file_types class="medium"}}
     </div>
@@ -128,9 +128,9 @@
 {{#if showLimit}}
   <div class="setting">
     <div class="setting-label">
-      <label>{{i18n 'admin.wizard.field.limit'}}</label>
+      <label>{{i18n "admin.wizard.field.limit"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{input type="number" value=field.limit class="small"}}
     </div>
@@ -140,12 +140,12 @@
 {{#if isDateTime}}
   <div class="setting">
     <div class="setting-label">
-      <label>{{{i18n 'admin.wizard.field.date_time_format.label'}}}</label>
+      <label>{{html-safe (i18n "admin.wizard.field.date_time_format.label")}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{input value=field.format class="medium"}}
-      <label>{{{i18n 'admin.wizard.field.date_time_format.instructions'}}}</label>
+      <label>{{html-safe (i18n "admin.wizard.field.date_time_format.instructions")}}</label>
     </div>
   </div>
 {{/if}}
@@ -153,14 +153,14 @@
 {{#if showPrefill}}
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
-      <label>{{i18n 'admin.wizard.field.prefill'}}</label>
+      <label>{{i18n "admin.wizard.field.prefill"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=field.prefill
-        property='prefill'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="prefill"
+        onUpdate=(action "mappedFieldUpdated")
         options=prefillOptions}}
     </div>
   </div>
@@ -169,14 +169,14 @@
 {{#if showContent}}
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
-      <label>{{i18n 'admin.wizard.field.content'}}</label>
+      <label>{{i18n "admin.wizard.field.content"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=field.content
-        property='content'
-        onUpdate=(action 'mappedFieldUpdated')
+        property="content"
+        onUpdate=(action "mappedFieldUpdated")
         options=contentOptions}}
     </div>
   </div>
@@ -187,11 +187,35 @@
 
   {{#if field.showAdvanced}}
     <div class="advanced-settings">
-      
+
+      <div class="setting full field-mapper-setting">
+        <div class="setting-label">
+          <label>{{i18n "admin.wizard.condition"}}</label>
+        </div>
+
+        <div class="setting-value">
+          {{wizard-mapper
+            inputs=field.condition
+            options=fieldConditionOptions}}
+        </div>
+      </div>
+
+      <div class="setting full field-mapper-setting">
+        <div class="setting-label">
+          <label>{{i18n "admin.wizard.index"}}</label>
+        </div>
+
+        <div class="setting-value">
+          {{wizard-mapper
+            inputs=field.index
+            options=fieldIndexOptions}}
+        </div>
+      </div>
+
       {{#if isCategory}}
         <div class="setting">
           <div class="setting-label">
-            <label>{{i18n 'admin.wizard.field.property'}}</label>
+            <label>{{i18n "admin.wizard.field.property"}}</label>
           </div>
           
           <div class="setting-value">
@@ -200,15 +224,15 @@
               content=categoryPropertyTypes
               onChange=(action (mut field.property))
               options=(hash
-                none='admin.wizard.selector.placeholder.property'
+                none="admin.wizard.selector.placeholder.property"
               )}}
           </div>
         </div>
       {{/if}}
-      
+
       <div class="setting">
         <div class="setting-label">
-          <label>{{i18n 'admin.wizard.translation'}}</label>
+          <label>{{i18n "admin.wizard.translation"}}</label>
         </div>
         <div class="setting-value medium">
           {{input
@@ -218,7 +242,7 @@
             placeholderKey="admin.wizard.translation_placeholder"}}
         </div>
       </div>
-      
+
       {{#if validations}}
         {{wizard-realtime-validations field=field validations=validations}}
       {{/if}}

@@ -1,7 +1,7 @@
 import { ajax } from "discourse/lib/ajax";
 import EmberObject from "@ember/object";
-import { buildProperties, present, mapped } from "../lib/wizard-json";
-import { listProperties, camelCase, snakeCase } from "../lib/wizard";
+import { buildProperties, mapped, present } from "../lib/wizard-json";
+import { listProperties, snakeCase } from "../lib/wizard";
 import wizardSchema from "../lib/wizard-schema";
 import { Promise } from "rsvp";
 import { popupAjaxError } from "discourse/lib/ajax-error";
@@ -131,9 +131,15 @@ const CustomWizard = EmberObject.extend({
     return result;
   },
 
-  buildMappedJson(inputs) {
-    if (!inputs || !inputs.length) return false;
+  buildMappedJson(value) {
+    if (typeof value === "string" || Number.isInteger(value)) {
+      return value;
+    }
+    if (!value || !value.length) {
+      return false;
+    }
 
+    let inputs = value;
     let result = [];
 
     inputs.forEach((inpt) => {

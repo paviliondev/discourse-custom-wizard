@@ -1,0 +1,17 @@
+{
+  "condition": [
+    {
+      "type": "validation",
+      "pairs": [
+        {
+          "index": 0,
+          "key": "username",
+          "key_type": "user_field",
+          "value": "angus",
+          "value_type": "text",
+          "connector": "equal"
+        }
+      ]
+    }
+  ]
+}

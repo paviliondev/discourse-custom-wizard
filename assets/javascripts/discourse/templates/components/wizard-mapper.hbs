@@ -3,18 +3,18 @@
     {{wizard-mapper-connector
       connector=input.connector
       connectorType="input"
-      onUpdate=(action 'inputUpdated')}}
+      onUpdate=(action "inputUpdated")}}
   {{/if}}
-  
-  {{wizard-mapper-input 
+
+  {{wizard-mapper-input
     input=input
     options=inputOptions
-    remove=(action 'remove')
-    onUpdate=(action 'inputUpdated')}}
+    remove=(action "remove")
+    onUpdate=(action "inputUpdated")}}
 {{/each}}
 
 {{#if canAdd}}
   <span class="add-mapper-input">
-    {{d-button action='add' label='admin.wizard.add' icon='plus'}}
+    {{d-button action="add" label="admin.wizard.add" icon="plus"}}
   </span>
 {{/if}}

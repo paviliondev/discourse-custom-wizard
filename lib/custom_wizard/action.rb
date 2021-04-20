@@ -6,12 +6,12 @@ class CustomWizard::Action
                 :guardian,
                 :result
 
-  def initialize(params)
-    @wizard = params[:wizard]
-    @action = params[:action]
-    @user = params[:user]
+  def initialize(opts)
+    @wizard = opts[:wizard]
+    @action = opts[:action]
+    @user = @wizard.user
     @guardian = Guardian.new(@user)
-    @data = params[:data]
+    @data = opts[:data]
     @log = []
     @result = CustomWizard::ActionResult.new
   end
@@ -89,11 +89,13 @@ class CustomWizard::Action
       return
     end
 
+    params[:target_group_names] = []
+    params[:target_usernames] = []
     targets.each do |target|
       if Group.find_by(name: target)
-        params[:target_group_names] = target
+        params[:target_group_names] << target
       elsif User.find_by_username(target)
-        params[:target_usernames] = target
+        params[:target_usernames] << target
       else
         #
       end
@@ -307,15 +309,15 @@ class CustomWizard::Action
       return
     end
 
-    groups = group_map.reduce([]) do |groups, g|
+    groups = group_map.reduce([]) do |result, g|
       begin
-        groups.push(Integer(g))
+        result.push(Integer(g))
       rescue ArgumentError
         group = Group.find_by(name: g)
-        groups.push(group.id) if group
+        result.push(group.id) if group
       end
 
-      groups
+      result
     end
 
     result = nil

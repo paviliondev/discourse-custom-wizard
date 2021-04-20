@@ -2,11 +2,11 @@
   {{combo-box
     value=apiName
     content=apiList
-    onChange=(route-action 'changeApi')
+    onChange=(route-action "changeApi")
     options=(hash
-      none='admin.wizard.api.select'
+      none="admin.wizard.api.select"
     )}}
-    
+
   {{d-button
     action="createApi"
     label="admin.wizard.api.create"
