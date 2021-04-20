@@ -10,7 +10,7 @@ describe CustomWizard::StepsController do
       trust_level: TrustLevel[3]
     )
   }
-  
+
   fab!(:user2) {
     Fabricate(
       :user,
@@ -81,7 +81,7 @@ describe CustomWizard::StepsController do
       new_template = wizard_template.dup
       new_template["permitted"] = permitted_json["permitted"]
       CustomWizard::Template.save(new_template, skip_jobs: true)
-  
+
       put '/w/super-mega-fun-wizard/steps/step_1.json'
       expect(response.status).to eq(403)
     end
