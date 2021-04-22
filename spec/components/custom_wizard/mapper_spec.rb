@@ -130,21 +130,53 @@ describe CustomWizard::Mapper do
     end
   end
 
-  it "validates valid data" do
-    expect(CustomWizard::Mapper.new(
-      inputs: inputs['validation'],
-      data: data,
-      user: user1
-    ).perform).to eq(true)
-  end
+  context "conditional validation" do
+    it "validates valid data" do
+      expect(CustomWizard::Mapper.new(
+        inputs: inputs['validation'],
+        data: data,
+        user: user1
+      ).perform).to eq(true)
+    end
 
-  it "does not validate invalid data" do
-    data["input_2"] = "value 3"
-    expect(CustomWizard::Mapper.new(
-      inputs: inputs['validation'],
-      data: data,
-      user: user1
-    ).perform).to eq(false)
+    it "does not validate invalid data" do
+      data["input_2"] = "value 3"
+      expect(CustomWizard::Mapper.new(
+        inputs: inputs['validation'],
+        data: data,
+        user: user1
+      ).perform).to eq(false)
+    end
+    context "using or condition" do
+      it "validates the data when all of the conditions are met" do
+        expect(CustomWizard::Mapper.new(
+          inputs: inputs['validation_multiple_pairs'],
+          data: data,
+          user: user1
+        ).perform).to eq(true)
+      end
+
+      it "validates the data when one of the conditions are met" do
+        custom_data = data.dup
+        custom_data['input_1'] = 'value 3'
+        expect(CustomWizard::Mapper.new(
+          inputs: inputs['validation_multiple_pairs'],
+          data: custom_data,
+          user: user1
+        ).perform).to eq(true)
+      end
+
+      it "doesn't validate the data when none of the conditions are met" do
+        custom_data = data.dup
+        custom_data['input_1'] = 'value 3'
+        custom_data['input_2'] = 'value 4'
+        expect(CustomWizard::Mapper.new(
+          inputs: inputs['validation_multiple_pairs'],
+          data: custom_data,
+          user: user1
+        ).perform).to eq(false)
+      end
+    end
   end
 
   it "maps text fields" do
