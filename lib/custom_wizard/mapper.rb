@@ -45,8 +45,9 @@ class CustomWizard::Mapper
   def perform
     multiple = @opts[:multiple]
     perform_result = multiple ? [] : nil
+    input_size = inputs.size
 
-    inputs.each do |input|
+    inputs.each_with_index do |input, index|
       input_type = input['type']
       pairs = input['pairs']
 
@@ -69,6 +70,8 @@ class CustomWizard::Mapper
 
         if multiple
           perform_result.push(result)
+        elsif result != true && index < (input_size - 1)
+          next
         else
           perform_result = result
           break
