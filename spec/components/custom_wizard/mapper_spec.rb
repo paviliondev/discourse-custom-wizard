@@ -147,6 +147,7 @@ describe CustomWizard::Mapper do
         user: user1
       ).perform).to eq(false)
     end
+
     context "using or condition" do
       it "validates the data when all of the conditions are met" do
         expect(CustomWizard::Mapper.new(
