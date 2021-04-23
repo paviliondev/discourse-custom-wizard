@@ -246,6 +246,7 @@ class CustomWizard::Builder
         wizard: true,
         template: true
       )
+      step.description = PrettyText.cook(step.description)
     end
 
     step
