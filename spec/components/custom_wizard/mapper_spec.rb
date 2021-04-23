@@ -153,8 +153,11 @@ describe CustomWizard::Mapper do
         expect(CustomWizard::Mapper.new(
           inputs: inputs['validation_multiple_pairs'],
           data: data,
-          user: user1
-        ).perform).to eq(true)
+          user: user1,
+          opts: {
+            multiple: true
+          }
+        ).perform.any?).to eq(true)
       end
 
       it "validates the data when one of the conditions are met" do
@@ -163,8 +166,11 @@ describe CustomWizard::Mapper do
         expect(CustomWizard::Mapper.new(
           inputs: inputs['validation_multiple_pairs'],
           data: custom_data,
-          user: user1
-        ).perform).to eq(true)
+          user: user1,
+          opts: {
+            multiple: true
+          }
+        ).perform.any?).to eq(true)
       end
 
       it "doesn't validate the data when none of the conditions are met" do
@@ -174,8 +180,11 @@ describe CustomWizard::Mapper do
         expect(CustomWizard::Mapper.new(
           inputs: inputs['validation_multiple_pairs'],
           data: custom_data,
-          user: user1
-        ).perform).to eq(false)
+          user: user1,
+          opts: {
+            multiple: true
+          }
+        ).perform.any?).to eq(false)
       end
     end
   end

@@ -192,11 +192,16 @@ class CustomWizard::Builder
 
   def check_condition(template)
     if template['condition'].present?
-      CustomWizard::Mapper.new(
+      result = CustomWizard::Mapper.new(
         inputs: template['condition'],
         user: @wizard.user,
-        data: @wizard.current_submission
+        data: @wizard.current_submission,
+        opts: {
+          multiple: true
+        }
       ).perform
+
+      result.any?
     else
       true
     end
