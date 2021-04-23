@@ -53,7 +53,7 @@ class CustomWizard::StepSerializer < ::ApplicationSerializer
   end
 
   def description
-    return PrettyText.cook(object.description) if object.description
+    return object.description if object.description
     PrettyText.cook(I18n.t("#{object.key || i18n_key}.description", default: '', base_url: Discourse.base_url))
   end
 

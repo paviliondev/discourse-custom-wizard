@@ -97,6 +97,10 @@ class CustomWizard::Template
 
   def prepare_data
     @data[:steps].each do |step|
+      if step[:raw_description]
+        step[:description] = step[:raw_description]
+      end
+
       remove_non_mapped_index(step)
 
       step[:fields].each do |field|
