@@ -177,6 +177,16 @@ class CustomWizard::Builder
       params[:index] = index.to_i unless index.nil?
     end
 
+    if field_template['description'].present?
+      params[:description] = mapper.interpolate(
+        field_template['description'],
+        user: true,
+        value: true,
+        wizard: true,
+        template: true
+      )
+    end
+
     field = step.add_field(params)
   end
 
@@ -232,7 +242,9 @@ class CustomWizard::Builder
       step.description = mapper.interpolate(
         step_template['description'],
         user: true,
-        value: true
+        value: true,
+        wizard: true,
+        template: true
       )
     end
 
