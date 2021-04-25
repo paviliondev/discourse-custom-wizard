@@ -37,7 +37,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
     wizard_id = template.save(create: params[:create])
 
     if template.errors.any?
-      render json: failed_json.merge(errors: result.errors.full_messages)
+      render json: failed_json.merge(errors: template.errors.full_messages)
     else
       render json: success_json.merge(wizard_id: wizard_id)
     end
@@ -83,15 +83,19 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
       permitted: mapped_params,
       steps: [
         :id,
+        :index,
         :title,
         :key,
         :banner,
         :raw_description,
         :required_data_message,
+        :force_final,
         required_data: mapped_params,
         permitted_params: mapped_params,
+        condition: mapped_params,
         fields: [
           :id,
+          :index,
           :label,
           :image,
           :description,
@@ -107,6 +111,8 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
           :property,
           prefill: mapped_params,
           content: mapped_params,
+          condition: mapped_params,
+          index: mapped_params,
           validations: {},
         ]
       ],

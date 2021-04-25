@@ -4,10 +4,14 @@ class CustomWizard::Template
   include HasErrors
 
   attr_reader :data,
-              :opts
+              :opts,
+              :steps,
+              :actions
 
   def initialize(data)
     @data = data
+    @steps = data['steps'] || []
+    @actions = data['actions'] || []
   end
 
   def save(opts = {})
@@ -29,6 +33,14 @@ class CustomWizard::Template
 
   def self.save(data, opts = {})
     new(data).save(opts)
+  end
+
+  def self.create(wizard_id)
+    if data = find(wizard_id)
+      new(data)
+    else
+      nil
+    end
   end
 
   def self.find(wizard_id)
@@ -86,7 +98,13 @@ class CustomWizard::Template
   def prepare_data
     @data[:steps].each do |step|
       if step[:raw_description]
-        step[:description] = PrettyText.cook(step[:raw_description])
+        step[:description] = step[:raw_description]
+      end
+
+      remove_non_mapped_index(step)
+
+      step[:fields].each do |field|
+        remove_non_mapped_index(field)
       end
     end
   end
@@ -116,6 +134,12 @@ class CustomWizard::Template
         Jobs.cancel_scheduled_job(:set_after_time_wizard, wizard_id: wizard_id)
         Jobs.enqueue(:clear_after_time_wizard, wizard_id: wizard_id)
       end
+    end
+  end
+
+  def remove_non_mapped_index(object)
+    if !object[:index].is_a?(Array)
+      object.delete(:index)
     end
   end
 end

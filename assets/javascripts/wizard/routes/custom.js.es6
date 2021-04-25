@@ -1,6 +1,6 @@
 /* eslint no-undef: 0*/
 
-import { findCustomWizard } from "../models/custom";
+import { findCustomWizard, updateCachedWizard } from "../models/custom";
 import { ajax } from "wizard/lib/ajax";
 
 export default Ember.Route.extend({
@@ -12,7 +12,9 @@ export default Ember.Route.extend({
     return findCustomWizard(params.wizard_id, this.get("queryParams"));
   },
 
-  afterModel() {
+  afterModel(model) {
+    updateCachedWizard(model);
+
     return ajax({
       url: `/site/settings`,
       type: "GET",
@@ -25,11 +27,11 @@ export default Ember.Route.extend({
     const background = model ? model.get("background") : "AliceBlue";
     Ember.run.scheduleOnce("afterRender", this, function () {
       $("body.custom-wizard").css("background", background);
-      if (model) {
-        $("#custom-wizard-main").addClass(model.get("id").dasherize());
+
+      if (model && model.id) {
+        $("#custom-wizard-main").addClass(model.id.dasherize());
       }
     });
-
     controller.setProperties({
       customWizard: true,
       logoUrl: Wizard.SiteSettings.logo_small,

@@ -75,7 +75,7 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.field.min_length"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{input
         type="number"
@@ -118,7 +118,7 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.field.file_types"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{input value=field.file_types class="medium"}}
     </div>
@@ -130,7 +130,7 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.field.limit"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{input type="number" value=field.limit class="small"}}
     </div>
@@ -142,7 +142,7 @@
     <div class="setting-label">
       <label>{{html-safe (i18n "admin.wizard.field.date_time_format.label")}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{input value=field.format class="medium"}}
       <label>{{html-safe (i18n "admin.wizard.field.date_time_format.instructions")}}</label>
@@ -155,7 +155,7 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.field.prefill"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=field.prefill
@@ -171,7 +171,7 @@
     <div class="setting-label">
       <label>{{i18n "admin.wizard.field.content"}}</label>
     </div>
-    
+
     <div class="setting-value">
       {{wizard-mapper
         inputs=field.content
@@ -187,7 +187,31 @@
 
   {{#if field.showAdvanced}}
     <div class="advanced-settings">
-      
+
+      <div class="setting full field-mapper-setting">
+        <div class="setting-label">
+          <label>{{i18n "admin.wizard.condition"}}</label>
+        </div>
+
+        <div class="setting-value">
+          {{wizard-mapper
+            inputs=field.condition
+            options=fieldConditionOptions}}
+        </div>
+      </div>
+
+      <div class="setting full field-mapper-setting">
+        <div class="setting-label">
+          <label>{{i18n "admin.wizard.index"}}</label>
+        </div>
+
+        <div class="setting-value">
+          {{wizard-mapper
+            inputs=field.index
+            options=fieldIndexOptions}}
+        </div>
+      </div>
+
       {{#if isCategory}}
         <div class="setting">
           <div class="setting-label">
@@ -205,7 +229,7 @@
           </div>
         </div>
       {{/if}}
-      
+
       <div class="setting">
         <div class="setting-label">
           <label>{{i18n "admin.wizard.translation"}}</label>
@@ -218,7 +242,7 @@
             placeholderKey="admin.wizard.translation_placeholder"}}
         </div>
       </div>
-      
+
       {{#if validations}}
         {{wizard-realtime-validations field=field validations=validations}}
       {{/if}}

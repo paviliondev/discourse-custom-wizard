@@ -6,12 +6,12 @@ class CustomWizard::Action
                 :guardian,
                 :result
 
-  def initialize(params)
-    @wizard = params[:wizard]
-    @action = params[:action]
-    @user = params[:user]
+  def initialize(opts)
+    @wizard = opts[:wizard]
+    @action = opts[:action]
+    @user = @wizard.user
     @guardian = Guardian.new(@user)
-    @data = params[:data]
+    @data = opts[:data]
     @log = []
     @result = CustomWizard::ActionResult.new
   end
@@ -89,11 +89,13 @@ class CustomWizard::Action
       return
     end
 
+    params[:target_group_names] = []
+    params[:target_usernames] = []
     targets.each do |target|
       if Group.find_by(name: target)
-        params[:target_group_names] = target
+        params[:target_group_names] << target
       elsif User.find_by_username(target)
-        params[:target_usernames] = target
+        params[:target_usernames] << target
       else
         #
       end
@@ -497,7 +499,13 @@ class CustomWizard::Action
     ).perform
 
     params[:raw] = action['post_builder'] ?
-      mapper.interpolate(action['post_template']) :
+      mapper.interpolate(
+        action['post_template'],
+        user: true,
+        value: true,
+        wizard: true,
+        template: true
+      ) :
       data[action['post']]
 
     params[:import_mode] = ActiveRecord::Type::Boolean.new.cast(action['suppress_notifications'])

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_relative '../../plugin_helper'
 
 describe CustomWizard::Wizard do
@@ -7,27 +8,33 @@ describe CustomWizard::Wizard do
   fab!(:admin_user) { Fabricate(:user, admin: true) }
 
   let(:template_json) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-    ).read)
+    JSON.parse(
+      File.open(
+        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
+      ).read
+    )
   }
 
   let(:permitted_json) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard/permitted.json"
-    ).read)
+    JSON.parse(
+      File.open(
+        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard/permitted.json"
+      ).read
+    )
   }
 
   before do
     Group.refresh_automatic_group!(:trust_level_3)
-
     @permitted_template = template_json.dup
     @permitted_template["permitted"] = permitted_json["permitted"]
-
     @wizard = CustomWizard::Wizard.new(template_json, user)
+  end
+
+  def append_steps
     template_json['steps'].each do |step_template|
       @wizard.append_step(step_template['id'])
     end
+    @wizard.update_step_order!
   end
 
   def progress_step(step_id, acting_user: user, wizard: @wizard)
@@ -37,16 +44,48 @@ describe CustomWizard::Wizard do
       context: wizard.id,
       subject: step_id
     )
+    @wizard.update_step_order!
   end
 
-  it "appends steps from a template" do
+  it "appends steps" do
+    append_steps
     expect(@wizard.steps.length).to eq(3)
   end
 
+  it "appends steps with indexes" do
+    append_steps
+    expect(@wizard.steps.first.index).to eq(0)
+    expect(@wizard.steps.last.index).to eq(2)
+  end
+
+  it "appends steps with custom indexes" do
+    template_json['steps'][0]['index'] = 2
+    template_json['steps'][1]['index'] = 1
+    template_json['steps'][2]['index'] = 0
+
+    template_json['steps'].each do |step_template|
+      @wizard.append_step(step_template['id']) do |step|
+        step.index = step_template['index'] if step_template['index']
+      end
+    end
+
+    expect(@wizard.steps.first.index).to eq(2)
+    expect(@wizard.steps.last.index).to eq(0)
+
+    @wizard.update_step_order!
+
+    expect(@wizard.steps.first.id).to eq("step_3")
+    expect(@wizard.steps.last.id).to eq("step_1")
+
+    expect(@wizard.steps.first.next.id).to eq("step_2")
+    expect(@wizard.steps.last.next).to eq(nil)
+  end
+
   it "determines the user's current step" do
-    expect(@wizard.start.id).to eq('step_1')
+    append_steps
+    expect(@wizard.start).to eq('step_1')
     progress_step('step_1')
-    expect(@wizard.start.id).to eq('step_2')
+    expect(@wizard.start).to eq('step_2')
   end
 
   it "creates a step updater" do
@@ -57,6 +96,7 @@ describe CustomWizard::Wizard do
   end
 
   it "determines whether a wizard is unfinished" do
+    append_steps
     expect(@wizard.unfinished?).to eq(true)
     progress_step("step_1")
     expect(@wizard.unfinished?).to eq(true)
@@ -67,6 +107,7 @@ describe CustomWizard::Wizard do
   end
 
   it "determines whether a wizard has been completed by a user" do
+    append_steps
     expect(@wizard.completed?).to eq(false)
     progress_step("step_1")
     progress_step("step_2")
@@ -75,6 +116,8 @@ describe CustomWizard::Wizard do
   end
 
   it "is not completed if steps submitted before after time" do
+    append_steps
+
     progress_step("step_1")
     progress_step("step_2")
     progress_step("step_3")
@@ -83,7 +126,6 @@ describe CustomWizard::Wizard do
     template_json['after_time_scheduled'] = Time.now + 3.hours
 
     wizard = CustomWizard::Wizard.new(template_json, user)
-
     expect(wizard.completed?).to eq(false)
   end
 
@@ -125,6 +167,8 @@ describe CustomWizard::Wizard do
   end
 
   it "lets a permitted user access a complete wizard with multiple submissions" do
+    append_steps
+
     progress_step("step_1", acting_user: trusted_user)
     progress_step("step_2", acting_user: trusted_user)
     progress_step("step_3", acting_user: trusted_user)
@@ -135,6 +179,8 @@ describe CustomWizard::Wizard do
   end
 
   it "does not let an unpermitted user access a complete wizard without multiple submissions" do
+    append_steps
+
     progress_step("step_1", acting_user: trusted_user)
     progress_step("step_2", acting_user: trusted_user)
     progress_step("step_3", acting_user: trusted_user)

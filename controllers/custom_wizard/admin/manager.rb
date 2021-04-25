@@ -41,7 +41,7 @@ class CustomWizard::AdminManagerController < CustomWizard::AdminController
     end
 
     begin
-      template_json = JSON.parse file
+      template_json = JSON.parse(file)
     rescue JSON::ParserError
       return render_error(I18n.t('wizard.import.error.invalid_json'))
     end
