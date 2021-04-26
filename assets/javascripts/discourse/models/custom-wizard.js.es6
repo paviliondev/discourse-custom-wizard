@@ -161,7 +161,7 @@ const CustomWizard = EmberObject.extend({
         input.pairs = [];
 
         inpt.pairs.forEach((pr) => {
-          if (present(pr.key) && present(pr.value)) {
+          if ((present(pr.key) && present(pr.value)) || pr.key_type == "wizardUser") {
             let pairParams = {
               index: pr.index,
               key: pr.key,

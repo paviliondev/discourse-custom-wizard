@@ -106,7 +106,12 @@ class CustomWizard::Mapper
     pairs.all? do |pair|
       connector = pair['connector']
       operator = map_operator(connector)
-      key = map_field(pair['key'], pair['key_type'])
+      if pair['key_type'] == 'wizard_user'
+        key = @user.username
+      else
+        key = map_field(pair['key'], pair['key_type'])
+      end
+
       value = cast_value(map_field(pair['value'], pair['value_type']), key, connector)
       begin
         validation_result(key, value, operator)
@@ -119,6 +124,8 @@ class CustomWizard::Mapper
   def cast_value(value, key, connector)
     if connector == 'regex'
       Regexp.new(value)
+    elsif connector == 'in'
+      value.to_a
     else
       if key.is_a?(String)
         value.to_s
@@ -140,7 +147,7 @@ class CustomWizard::Mapper
         result = key.public_send(operator, ActiveRecord::Type::Boolean.new.cast(value))
       end
     elsif operator === 'in'
-      result = value.includes?(key)
+      result = value.include?(key)
     elsif [key, value, operator].all? { |i| !i.nil? }
       result = key.public_send(operator, value)
     else
@@ -216,7 +223,7 @@ class CustomWizard::Mapper
     end
   end
 
-  def map_current_user(value)
+  def map_wizard_user(value)
     @user.username
   end
 
