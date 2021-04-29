@@ -59,7 +59,7 @@ export default {
     FieldModel.reopen({
       init() {
         this._super(...arguments);
-        if  (this.type === "checkbox") {
+        if (this.type === "checkbox") {
           this.set("value", this.value || false);
         }
       },
