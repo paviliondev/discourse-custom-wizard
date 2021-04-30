@@ -31,7 +31,7 @@ class CustomWizard::Field
     @index = attrs[:index]
     @type = attrs[:type]
     @required = !!attrs[:required]
-    @value = attrs[:value]
+    @value = attrs[:value] || default_value
     @description = attrs[:description]
     @image = attrs[:image]
     @key = attrs[:key]
@@ -48,6 +48,12 @@ class CustomWizard::Field
 
   def label
     @label ||= PrettyText.cook(@raw[:label])
+  end
+
+  def default_value
+    if @type == 'checkbox'
+      false
+    end
   end
 
   def self.types
