@@ -11,7 +11,9 @@ class CustomWizard::WizardController < ::ApplicationController
   helper_method :wizard_theme_translations_lookup
 
   def wizard
-    CustomWizard::Wizard.create(params[:wizard_id].underscore, current_user)
+    @builder = CustomWizard::Builder.new(params[:wizard_id].underscore, current_user)
+    @wizard ||= @builder.build
+    @wizard
   end
 
   def wizard_page_title
