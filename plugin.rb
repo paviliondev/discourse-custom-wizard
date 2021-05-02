@@ -97,6 +97,8 @@ after_initialize do
   end
 
   add_to_class(::Sprockets::DirectiveProcessor, :process_require_tree_discourse_directive) do |path = "."|
+    raise ArgumentError, "path cannot be empty" if path == "."
+
     discourse_asset_path = "#{Rails.root}/app/assets/javascripts/"
     path = File.expand_path(path, discourse_asset_path)
     stat = @environment.stat(path)
