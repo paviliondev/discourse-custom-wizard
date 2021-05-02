@@ -36,7 +36,7 @@ describe "Sprockets: require_tree_discourse directive" do
     File.new(path, 'w')
     File.write(path, file_contents)
     yield block if block_given?
-    File.delete(path)
+    FileUtils.rm_r(dir)
   end
 
   it "includes assets from the discourse core" do
