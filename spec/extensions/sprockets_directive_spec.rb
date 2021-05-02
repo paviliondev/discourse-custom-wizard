@@ -4,7 +4,7 @@ require_relative '../plugin_helper'
 
 describe "Sprockets: require_tree_discourse directive" do
   let(:discourse_asset_path) {
-   "#{Rails.root}/app/assets/javascripts/"
+    "#{Rails.root}/app/assets/javascripts/"
   }
   let(:fixture_asset_path) {
     "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/sprockets/"
@@ -13,9 +13,9 @@ describe "Sprockets: require_tree_discourse directive" do
     "console.log('hello')"
   }
   let(:resolved_file_contents) {
-   File.read(
-    "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/sprockets/resolved_js_file_contents.txt"
-   )
+    File.read(
+     "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/sprockets/resolved_js_file_contents.txt"
+    )
   }
 
   before do
