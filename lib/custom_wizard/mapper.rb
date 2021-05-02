@@ -106,12 +106,7 @@ class CustomWizard::Mapper
     pairs.all? do |pair|
       connector = pair['connector']
       operator = map_operator(connector)
-      if pair['key_type'] == 'wizard_user'
-        key = @user.username
-      else
-        key = map_field(pair['key'], pair['key_type'])
-      end
-
+      key = map_field(pair['key'], pair['key_type'])
       value = cast_value(map_field(pair['value'], pair['value_type']), key, connector)
       begin
         validation_result(key, value, operator)
