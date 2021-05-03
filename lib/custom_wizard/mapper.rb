@@ -215,6 +215,7 @@ class CustomWizard::Mapper
 
   def interpolate(string, opts = { user: true, wizard: true, value: true, template: false })
     return string if string.blank?
+    int_data = prepare_data_for_interpolation
 
     if opts[:user]
       string.gsub!(/u\{(.*?)\}/) do |match|
@@ -227,7 +228,7 @@ class CustomWizard::Mapper
 
     if opts[:wizard]
       string.gsub!(/w\{(.*?)\}/) do |match|
-        value = recurse(data, [*$1.split('.')])
+        value = recurse(int_data, [*$1.split('.')])
         value.present? ? value : ''
       end
     end
@@ -250,7 +251,7 @@ class CustomWizard::Mapper
 
     if opts[:template]
       template = Liquid::Template.parse(string)
-      string = template.render(data)
+      string = template.render(int_data)
     end
 
     string
@@ -261,5 +262,20 @@ class CustomWizard::Mapper
     k = keys.shift
     result = data[k]
     keys.empty? ? result : self.recurse(result, keys)
+  end
+
+  def prepare_data_for_interpolation
+    result = {}
+
+    data.each do |key, value|
+      if value.is_a?(Hash)
+        result["#{key}_url"] = value[:url] if value[:url]
+        result["#{key}_id"] = value[:id] if value[:id]
+      else
+        result[key] = value
+      end
+    end
+
+    result
   end
 end
