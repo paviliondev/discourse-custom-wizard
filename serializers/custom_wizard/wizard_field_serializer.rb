@@ -40,10 +40,6 @@ class CustomWizard::FieldSerializer < ::ApplicationSerializer
     object.value
   end
 
-  def include_value?
-    object.value.present?
-  end
-
   def i18n_key
     @i18n_key ||= "wizard.step.#{object.step.id}.fields.#{object.id}".underscore
   end
