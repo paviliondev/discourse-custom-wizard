@@ -21,7 +21,7 @@ export default {
       actions: {
         willTransition(transition) {
           const redirectToWizard = this.get("currentUser.redirect_to_wizard");
-          const excludedPaths = Discourse.SiteSettings.wizard_redirect_exclude_paths
+          const excludedPaths = this.siteSettings.wizard_redirect_exclude_paths
             .split("|")
             .concat(["loading"]);
 
