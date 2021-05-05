@@ -243,8 +243,14 @@ class CustomWizard::Wizard
     return nil unless save_submissions
 
     submissions.pop(1) if unfinished?
+    submission = filter_conditional_fields(submission)
     submissions.push(submission)
     set_submissions(submissions)
+  end
+
+  def filter_conditional_fields(submission)
+    included_fields = steps.map { |s| s.fields.map { |f| f.id } }.flatten
+    submission.select { |key, _| included_fields.include?(key) }
   end
 
   def final_cleanup!
