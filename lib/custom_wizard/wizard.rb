@@ -250,7 +250,18 @@ class CustomWizard::Wizard
 
   def filter_conditional_fields(submission)
     included_fields = steps.map { |s| s.fields.map { |f| f.id } }.flatten
-    submission.select { |key, _| included_fields.include?(key) }
+    submission.select do |key, _|
+      included_fields.include?(key) ||
+      required_fields.include?(key) ||
+      key.include?("action")
+    end
+  end
+
+  def required_fields
+    %w{
+      submitted_at
+      route_to
+    }
   end
 
   def final_cleanup!
