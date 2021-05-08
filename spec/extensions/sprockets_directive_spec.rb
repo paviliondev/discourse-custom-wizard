@@ -46,10 +46,10 @@ describe "Sprockets: require_tree_discourse directive" do
   end
 
   it "throws ArgumentError if path is empty" do
-    expect { @env.find_asset("require_tree_discourse_empty.js") }.to raise_error(ArgumentError).with_message("path cannot be empty")
+    expect { @env.find_asset("require_tree_discourse_empty.js") }.to raise_error(CustomWizard::SprocketsEmptyPath).with_message("path cannot be empty")
   end
 
   it "throws ArgumentError if path is non non-existent" do
-    expect { @env.find_asset("require_tree_discourse_non_existant.js") }.to raise_error(ArgumentError)
+    expect { @env.find_asset("require_tree_discourse_non_existant.js") }.to raise_error(CustomWizard::SprocketsFileNotFound)
   end
 end
