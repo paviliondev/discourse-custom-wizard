@@ -46,7 +46,7 @@
           "type": "text_only"
         }
       ],
-      "description": "<p>Text inputs!</p>"
+      "description": "Text inputs!"
     },
     {
       "id": "step_2",
@@ -93,7 +93,7 @@
           "file_types": ".jpg,.jpeg,.png"
         }
       ],
-      "description": "<p>Because I couldn’t think of another name for this step <img src=\"/images/emoji/twitter/slight_smile.png?v=9\" title=\":slight_smile:\" class=\"emoji\" alt=\":slight_smile:\"></p>"
+      "description": "Because I couldn't think of another name for this step :)"
     },
     {
       "id": "step_3",
@@ -160,7 +160,7 @@
           "type": "user_selector"
         }
       ],
-      "description": "<p>Unfortunately not the edible type <img src=\"/images/emoji/twitter/sushi.png?v=9\" title=\":sushi:\" class=\"emoji\" alt=\":sushi:\"></p>"
+      "description": "Unfortunately not the edible type :sushi: "
     }
   ],
   "actions": [
@@ -465,6 +465,34 @@
       ]
     },
     {
+      "id": "action_11",
+      "run_after": "step_2",
+      "type": "send_message",
+      "post_builder": true,
+      "post_template": "I will interpolate some wizard fields w{step_1_field_1} w{step_1_field_2}",
+      "title": [
+        {
+          "type": "assignment",
+          "output": "Multiple Recipients title",
+          "output_type": "text",
+          "output_connector": "set"
+        }
+      ],
+      "recipient": [
+        {
+          "type": "assignment",
+          "output_type": "user",
+          "output_connector": "set",
+          "output": [
+            "angus1",
+            "faiz",
+            "cool_group",
+            "cool_group_1"
+          ]
+        }
+      ]
+    },
+    {
       "id": "action_3",
       "run_after": "step_2",
       "type": "open_composer",
@@ -507,7 +535,7 @@
     },
     {
       "id": "action_10",
-      "run_after": "wizard_completion",
+      "run_after": "step_3",
       "type": "route_to",
       "url": [
         {

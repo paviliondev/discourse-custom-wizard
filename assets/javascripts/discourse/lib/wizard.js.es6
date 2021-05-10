@@ -9,7 +9,7 @@ function generateName(id) {
   return id ? sentenceCase(id) : "";
 }
 
-function generateId(name, opts = {}) {
+function generateId(name) {
   return name ? snakeCase(name) : "";
 }
 
@@ -60,10 +60,10 @@ const notificationLevels = [
   "muted",
 ];
 
-function listProperties(type, opts = {}) {
-  let properties = Object.keys(wizardSchema[type].basic);
+function listProperties(itemType, opts = {}) {
+  let properties = Object.keys(wizardSchema[itemType].basic);
 
-  const types = wizardSchema[type].types;
+  const types = wizardSchema[itemType].types;
 
   if (types) {
     let typeProperties = [];

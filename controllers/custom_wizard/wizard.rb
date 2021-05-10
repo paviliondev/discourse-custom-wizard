@@ -8,9 +8,12 @@ class CustomWizard::WizardController < ::ApplicationController
   helper_method :wizard_page_title
   helper_method :wizard_theme_ids
   helper_method :wizard_theme_lookup
+  helper_method :wizard_theme_translations_lookup
 
   def wizard
-    CustomWizard::Wizard.create(params[:wizard_id].underscore, current_user)
+    @builder = CustomWizard::Builder.new(params[:wizard_id].underscore, current_user)
+    @wizard ||= @builder.build
+    @wizard
   end
 
   def wizard_page_title
@@ -23,6 +26,10 @@ class CustomWizard::WizardController < ::ApplicationController
 
   def wizard_theme_lookup(name)
     Theme.lookup_field(wizard_theme_ids, mobile_view? ? :mobile : :desktop, name)
+  end
+
+  def wizard_theme_translations_lookup
+    Theme.lookup_field(wizard_theme_ids, :translations, I18n.locale)
   end
 
   def index
@@ -60,10 +67,7 @@ class CustomWizard::WizardController < ::ApplicationController
         result.merge!(redirect_to: submission['redirect_to'])
       end
 
-      if user.custom_fields['redirect_to_wizard'] === wizard.id
-        user.custom_fields.delete('redirect_to_wizard')
-        user.save_custom_fields(true)
-      end
+      wizard.final_cleanup!
     end
 
     render json: result

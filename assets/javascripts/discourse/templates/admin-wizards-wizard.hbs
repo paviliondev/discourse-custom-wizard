@@ -2,11 +2,11 @@
   {{combo-box
     value=wizardListVal
     content=wizardList
-    onChange=(route-action 'changeWizard')
+    onChange=(route-action "changeWizard")
     options=(hash
-      none='admin.wizard.select'
+      none="admin.wizard.select"
     )}}
-  
+
   {{d-button
     action="createWizard"
     label="admin.wizard.create"
@@ -16,7 +16,7 @@
 {{wizard-message
   key=messageKey
   url=messageUrl
-  component='wizard'}}
+  component="wizard"}}
 
 <div class="admin-wizard-container settings">
   {{outlet}}

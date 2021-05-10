@@ -1,4 +1,5 @@
-window.Discourse = {}
+/* eslint no-undef: 0*/
+window.Discourse = {};
 window.Wizard = {};
 Wizard.SiteSettings = {};
 Discourse.__widget_helpers = {};

@@ -1,5 +1,6 @@
 import loadScript from "./load-script";
 import { default as PrettyText } from "pretty-text/pretty-text";
+import Handlebars from "handlebars";
 
 export function cook(text, options) {
   return new Handlebars.SafeString(new PrettyText(options).cook(text));

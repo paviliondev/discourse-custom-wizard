@@ -9,29 +9,29 @@
       action="togglePreview"
       translatedLabel=previewLabel}}
   {{/if}}
-  
+
   {{#if fieldsEnabled}}
     {{d-button
       action="togglePopover"
       translatedLabel=popoverLabel}}
-    
+
     {{#if showPopover}}
       <div class="wizard-editor-gutter-popover">
         <label>
-          {{i18n 'admin.wizard.action.post_builder.user_properties'}}
+          {{i18n "admin.wizard.action.post_builder.user_properties"}}
           {{userPropertyList}}
         </label>
-        
+
         {{#if hasWizardFields}}
           <label>
-            {{i18n 'admin.wizard.action.post_builder.wizard_fields'}}
+            {{i18n "admin.wizard.action.post_builder.wizard_fields"}}
             {{wizardFieldList}}
           </label>
         {{/if}}
-        
+
         {{#if hasWizardActions}}
           <label>
-            {{i18n 'admin.wizard.action.post_builder.wizard_actions'}}
+            {{i18n "admin.wizard.action.post_builder.wizard_actions"}}
             {{wizardActionList}}
           </label>
         {{/if}}

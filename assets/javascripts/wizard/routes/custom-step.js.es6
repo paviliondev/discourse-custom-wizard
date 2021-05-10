@@ -1,26 +1,33 @@
 import WizardI18n from "../lib/wizard-i18n";
+import { getCachedWizard } from "../models/custom";
 
 export default Ember.Route.extend({
-  model(params) {
-    const appModel = this.modelFor("custom");
-    const allSteps = appModel.steps;
-    if (allSteps) {
-      const step = allSteps.findBy("id", params.step_id);
-      return step ? step : allSteps[0];
-    }
+  beforeModel() {
+    this.set("wizard", getCachedWizard());
+  },
 
-    return appModel;
+  model(params) {
+    const wizard = this.wizard;
+
+    if (wizard && wizard.steps) {
+      const step = wizard.steps.findBy("id", params.step_id);
+      return step ? step : wizard.steps[0];
+    } else {
+      return wizard;
+    }
   },
 
   afterModel(model) {
-    if (model.completed) return this.transitionTo("index");
-    return model.set("wizardId", this.modelFor("custom").id);
+    if (model.completed) {
+      return this.transitionTo("index");
+    }
+    return model.set("wizardId", this.wizard.id);
   },
 
   setupController(controller, model) {
     let props = {
       step: model,
-      wizard: this.modelFor("custom"),
+      wizard: this.wizard,
     };
 
     if (!model.permitted) {

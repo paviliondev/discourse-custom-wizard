@@ -13,11 +13,9 @@
 # description: In this unit, we'll learn about creating, editing, validating
 #              and building wizard templates by adding a new field attribute.
 ##
- 
+gem 'liquid', '5.0.1', require: true
 register_asset 'stylesheets/common/wizard-admin.scss'
 register_asset 'stylesheets/common/wizard-mapper.scss'
-register_asset 'lib/jquery.timepicker.min.js'
-register_asset 'lib/jquery.timepicker.scss'
 
 enabled_site_setting :custom_wizard_enabled
 
@@ -75,12 +73,14 @@ after_initialize do
     ../lib/custom_wizard/mapper.rb
     ../lib/custom_wizard/log.rb
     ../lib/custom_wizard/step_updater.rb
+    ../lib/custom_wizard/step.rb
     ../lib/custom_wizard/template.rb
     ../lib/custom_wizard/wizard.rb
     ../lib/custom_wizard/api/api.rb
     ../lib/custom_wizard/api/authorization.rb
     ../lib/custom_wizard/api/endpoint.rb
     ../lib/custom_wizard/api/log_entry.rb
+    ../lib/custom_wizard/liquid_extensions/first_non_empty.rb
     ../serializers/custom_wizard/api/authorization_serializer.rb
     ../serializers/custom_wizard/api/basic_endpoint_serializer.rb
     ../serializers/custom_wizard/api/endpoint_serializer.rb
@@ -97,13 +97,13 @@ after_initialize do
     ../extensions/extra_locales_controller.rb
     ../extensions/invites_controller.rb
     ../extensions/users_controller.rb
-    ../extensions/wizard_field.rb
-    ../extensions/wizard_step.rb
     ../extensions/custom_field/preloader.rb
     ../extensions/custom_field/serializer.rb
   ].each do |path|
     load File.expand_path(path, __FILE__)
   end
+
+  Liquid::Template.register_filter(::CustomWizard::LiquidFilter::FirstNonEmpty)
 
   add_class_method(:wizard, :user_requires_completion?) do |user|
     wizard_result = self.new(user).requires_completion?
@@ -178,8 +178,6 @@ after_initialize do
   ::ExtraLocalesController.prepend ExtraLocalesControllerCustomWizard
   ::InvitesController.prepend InvitesControllerCustomWizard
   ::UsersController.prepend CustomWizardUsersController
-  ::Wizard::Field.prepend CustomWizardFieldExtension
-  ::Wizard::Step.prepend CustomWizardStepExtension
 
   full_path = "#{Rails.root}/plugins/discourse-custom-wizard/assets/stylesheets/wizard/wizard_custom.scss"
   if Stylesheet::Importer.respond_to?(:plugin_assets)

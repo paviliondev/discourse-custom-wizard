@@ -30,7 +30,7 @@ class CustomWizard::WizardSerializer < CustomWizard::BasicWizardSerializer
   end
 
   def start
-    object.start.id
+    object.start
   end
 
   def include_start?

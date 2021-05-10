@@ -1,5 +1,5 @@
 import { default as discourseComputed } from "discourse-common/utils/decorators";
-import { equal, or, alias } from "@ember/object/computed";
+import { alias, equal, or } from "@ember/object/computed";
 import { computed } from "@ember/object";
 import { selectKitContent } from "../lib/wizard";
 import UndoChanges from "../mixins/undo-changes";
@@ -105,6 +105,40 @@ export default Component.extend(UndoChanges, {
     };
 
     return this.setupTypeOutput(fieldType, options);
+  },
+
+  @discourseComputed("step.index")
+  fieldConditionOptions(stepIndex) {
+    const options = {
+      inputTypes: "validation",
+      context: "field",
+      textSelection: "value",
+      userFieldSelection: true,
+      groupSelection: true,
+    };
+
+    if (stepIndex > 0) {
+      options.wizardFieldSelection = true;
+      options.wizardActionSelection = true;
+    }
+
+    return options;
+  },
+
+  @discourseComputed("step.index")
+  fieldIndexOptions(stepIndex) {
+    const options = {
+      context: "field",
+      userFieldSelection: true,
+      groupSelection: true,
+    };
+
+    if (stepIndex > 0) {
+      options.wizardFieldSelection = true;
+      options.wizardActionSelection = true;
+    }
+
+    return options;
   },
 
   actions: {

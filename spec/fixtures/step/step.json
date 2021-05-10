@@ -1,5 +1,6 @@
 {
   "id": "step_1",
+  "index": 0,
   "title": "Text",
   "description": "Step description",
   "image": "step_image_url.png",

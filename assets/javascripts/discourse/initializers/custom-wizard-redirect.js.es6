@@ -8,7 +8,9 @@ export default {
     const messageBus = container.lookup("message-bus:main");
     const siteSettings = container.lookup("site-settings:main");
 
-    if (!siteSettings.custom_wizard_enabled || !messageBus) return;
+    if (!siteSettings.custom_wizard_enabled || !messageBus) {
+      return;
+    }
 
     messageBus.subscribe("/redirect_to_wizard", function (wizardId) {
       const wizardUrl = window.location.origin + "/w/" + wizardId;
@@ -19,7 +21,7 @@ export default {
       actions: {
         willTransition(transition) {
           const redirectToWizard = this.get("currentUser.redirect_to_wizard");
-          const excludedPaths = Discourse.SiteSettings.wizard_redirect_exclude_paths
+          const excludedPaths = this.siteSettings.wizard_redirect_exclude_paths
             .split("|")
             .concat(["loading"]);
 

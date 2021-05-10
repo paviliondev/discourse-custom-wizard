@@ -6,10 +6,17 @@
 # title:       Add it to the serializer
 # description: We want our new attribute to be serialized to the wizard client... 
 ##
+class CustomWizard::FieldSerializer < ::ApplicationSerializer
 
-class CustomWizard::FieldSerializer < ::WizardFieldSerializer
-
-  attributes :image,
+  attributes :id,
+             :index,
+             :type,
+             :required,
+             :value,
+             :label,
+             :placeholder,
+             :description,
+             :image,
              :file_types,
              :format,
              :limit,
@@ -17,17 +24,48 @@ class CustomWizard::FieldSerializer < ::WizardFieldSerializer
              :content,
              :validations,
              :max_length,
-             :char_counter,
-             :number
+             :char_counter
+
+  def id
+    object.id
+  end
+
+  def index
+    object.index
+  end
+
+  def type
+    object.type
+  end
+
+  def required
+    object.required
+  end
+
+  def value
+    object.value
+  end
+
+  def i18n_key
+    @i18n_key ||= "wizard.step.#{object.step.id}.fields.#{object.id}".underscore
+  end
 
   def label
     return object.label if object.label.present?
     I18n.t("#{object.key || i18n_key}.label", default: '')
   end
 
+  def include_label?
+    label.present?
+  end
+
   def description
     return object.description if object.description.present?
     I18n.t("#{object.key || i18n_key}.description", default: '', base_url: Discourse.base_url)
+  end
+
+  def include_description?
+    description.present?
   end
 
   def image
@@ -40,6 +78,10 @@ class CustomWizard::FieldSerializer < ::WizardFieldSerializer
 
   def placeholder
     I18n.t("#{object.key || i18n_key}.placeholder", default: '')
+  end
+
+  def include_placeholder?
+    placeholder.present?
   end
 
   def file_types
@@ -62,10 +104,6 @@ class CustomWizard::FieldSerializer < ::WizardFieldSerializer
     object.content
   end
 
-  def include_choices?
-    object.choices.present?
-  end
-
   def validations
     validations = {}
     object.validations&.each do |type, props|
@@ -83,9 +121,5 @@ class CustomWizard::FieldSerializer < ::WizardFieldSerializer
 
   def char_counter
     object.char_counter
-  end
-
-  def number
-    object.number
   end
 end

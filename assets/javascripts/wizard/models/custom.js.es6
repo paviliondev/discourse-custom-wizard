@@ -10,7 +10,9 @@ const CustomWizard = EmberObject.extend({
   totalSteps: (length) => length,
 
   skip() {
-    if (this.required && !this.completed && this.permitted) return;
+    if (this.required && !this.completed && this.permitted) {
+      return;
+    }
     CustomWizard.skip(this.id);
   },
 });
@@ -29,59 +31,45 @@ CustomWizard.reopenClass({
     }
     window.location.href = getUrl(url);
   },
-});
 
-export function findCustomWizard(wizardId, params = {}) {
-  let url = `/w/${wizardId}`;
-
-  let paramKeys = Object.keys(params).filter((k) => {
-    if (k === "wizard_id") return false;
-    return !!params[k];
-  });
-
-  if (paramKeys.length) {
-    url += "?";
-    paramKeys.forEach((k, i) => {
-      if (i > 0) {
-        url += "&";
-      }
-      url += `${k}=${params[k]}`;
-    });
-  }
-
-  return ajax({ url, cache: false, dataType: "json" }).then((result) => {
-    const wizard = result;
-    if (!wizard) return null;
-
-    if (!wizard.completed) {
-      wizard.steps = wizard.steps.map((step) => {
-        const stepObj = Step.create(step);
-
-        stepObj.fields.sort((a, b) => {
-          return parseFloat(a.number) - parseFloat(b.number);
-        });
-
-        let tabindex = 1;
-        stepObj.fields.forEach((f, i) => {
-          f.tabindex = tabindex;
-
-          if (["date_time"].includes(f.type)) {
-            tabindex = tabindex + 2;
-          } else {
-            tabindex++;
-          }
-        });
-
-        stepObj.fields = stepObj.fields.map((f) => WizardField.create(f));
-
-        return stepObj;
-      });
+  build(wizardJson) {
+    if (!wizardJson) {
+      return null;
     }
 
-    if (wizard.categories) {
+    if (!wizardJson.completed && wizardJson.steps) {
+      wizardJson.steps = wizardJson.steps
+        .map((step) => {
+          const stepObj = Step.create(step);
+
+          stepObj.fields.sort((a, b) => {
+            return parseFloat(a.number) - parseFloat(b.number);
+          });
+
+          let tabindex = 1;
+          stepObj.fields.forEach((f) => {
+            f.tabindex = tabindex;
+
+            if (["date_time"].includes(f.type)) {
+              tabindex = tabindex + 2;
+            } else {
+              tabindex++;
+            }
+          });
+
+          stepObj.fields = stepObj.fields.map((f) => WizardField.create(f));
+
+          return stepObj;
+        })
+        .sort((a, b) => {
+          return parseFloat(a.index) - parseFloat(b.index);
+        });
+    }
+
+    if (wizardJson.categories) {
       let subcatMap = {};
       let categoriesById = {};
-      let categories = wizard.categories.map((c) => {
+      let categories = wizardJson.categories.map((c) => {
         if (c.parent_category_id) {
           subcatMap[c.parent_category_id] =
             subcatMap[c.parent_category_id] || [];
@@ -110,12 +98,47 @@ export function findCustomWizard(wizardId, params = {}) {
       Discourse.Site.currentProp("categoriesById", categoriesById);
       Discourse.Site.currentProp(
         "uncategorized_category_id",
-        wizard.uncategorized_category_id
+        wizardJson.uncategorized_category_id
       );
     }
 
-    return CustomWizard.create(wizard);
+    return CustomWizard.create(wizardJson);
+  },
+});
+
+export function findCustomWizard(wizardId, params = {}) {
+  let url = `/w/${wizardId}`;
+
+  let paramKeys = Object.keys(params).filter((k) => {
+    if (k === "wizard_id") {
+      return false;
+    }
+    return !!params[k];
   });
+
+  if (paramKeys.length) {
+    url += "?";
+    paramKeys.forEach((k, i) => {
+      if (i > 0) {
+        url += "&";
+      }
+      url += `${k}=${params[k]}`;
+    });
+  }
+
+  return ajax({ url, cache: false, dataType: "json" }).then((result) => {
+    return CustomWizard.build(result);
+  });
+}
+
+let _wizard_store;
+
+export function updateCachedWizard(wizard) {
+  _wizard_store = wizard;
+}
+
+export function getCachedWizard() {
+  return _wizard_store;
 }
 
 export default CustomWizard;

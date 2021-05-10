@@ -1,7 +1,4 @@
-import {
-  default as discourseComputed,
-  on,
-} from "discourse-common/utils/decorators";
+import discourseComputed from "discourse-common/utils/decorators";
 import { notEmpty } from "@ember/object/computed";
 import { userProperties } from "../lib/wizard";
 import { scheduleOnce } from "@ember/runloop";
