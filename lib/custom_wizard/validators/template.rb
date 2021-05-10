@@ -11,10 +11,11 @@ class CustomWizard::TemplateValidator
   ## 
   # type:        step
   # number:      5
-  # title:       Add a validation
-  # description: If our new attribute requires validation, that should be
-  #              handled here, which is run before the template is saved 
-  #              to the database.      
+  # title:       Add a template validation (optional)
+  # description: If our new attribute requires validation of a value entered 
+  #              during administration of a wizard that should be handled here.
+  #              Template validators are run before the template is saved to
+  #              the database.    
   ##
   def perform
     data = @data

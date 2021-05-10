@@ -70,8 +70,8 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
   # type:        step
   # number:      3
   # title:       Add a permitted parameter
-  # description: The custom wizard server admin will only accept permitted 
-  #              attributes...
+  # description: The custom wizard server admin controller will only accept
+  #              permitted attributes...
   ##
 
   def save_wizard_params

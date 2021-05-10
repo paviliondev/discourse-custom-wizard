@@ -63,14 +63,17 @@ const step = {
  * type:        step
  * number:      2
  * title:       Add the attribute to the wizard schema
- * description: Custom Wizard templates are modeled in the client via
- *              the wizard-schema, which, along with the serialization in 
- *              wizard-json and models/custom-wizard, models and serializes
- *              data on the client. Normally when adding an attribute, you
- *              just need to add it to the schema, for the rest of the
- *              modeling and serialization to work.
+ * description: Custom Wizard templates are modeled and serialized in the
+ *              client via the Wizard Schema. In some cases, when adding a new
+ *              attribute, you just need to add it to the schema for the
+ *              attribute to be loaded from, and sent back to, the server.
+ *              However, if you are adding a new type-specific field attribute,
+ *              currently you only need to add it to the field type schema on
+ *              the server. The field schema on the server is loaded into the
+ *              empty ``types`` object below.
+ * refernces:   plugins/discourse-custom-wizard/discourse/lib/wizard-json
+ *              plugins/discourse-custom-wizard/discourse/models/custom-wizard
  */
- 
 const field = {
   basic: {
     id: null,

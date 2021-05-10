@@ -6,7 +6,7 @@
 # url: https://github.com/paviliondev/discourse-custom-wizard
 # contact emails: angus@thepavilion.io
 
-## 
+## learning_unit
 # unit:        custom_wizard:templates_and_builder
 # type:        introduction
 # title:       Adding a new wizard field attribute.
