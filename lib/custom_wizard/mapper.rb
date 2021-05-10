@@ -1,4 +1,13 @@
 # frozen_string_literal: true
+
+##
+# unit:        custom_wizard:mapper adding_an_operator
+# type:        introduction
+# title:       Adding a new operator to the mapper
+# description: In this unit, we'll learn about adding a new operator to
+#              custom wizard's mapper
+##
+
 class CustomWizard::Mapper
   attr_accessor :inputs, :data, :user
 
@@ -33,6 +42,15 @@ class CustomWizard::Mapper
       true: "==",
       false: "=="
     },
+    ##
+    # unit:        custom_wizard:mapper adding_an_operator
+    # type:        step
+    # number:      1
+    # title:       Adding the operator to the OPERATORS hash
+    # description: Add operator to this hash. The key will be used in code
+    #              to refer to it and the value is generally the ruby operator
+    #              to be used between the key and value
+    ##
     in: 'in'
   }
 
@@ -119,6 +137,14 @@ class CustomWizard::Mapper
   def cast_value(value, key, connector)
     if connector == 'regex'
       Regexp.new(value)
+    ##
+    # unit:        custom_wizard:mapper adding_an_operator
+    # type:        step
+    # number:      3
+    # title:       Type casting mapper value
+    # description: You may want to typecast mapper values, based on certain conditions. Here,
+    #              we're typecasting the value to an array so that we can use check for value contains key
+    ##
     elsif connector == 'in'
       value.to_a
     else
@@ -134,7 +160,16 @@ class CustomWizard::Mapper
 
   def validation_result(key, value, operator)
     result = nil
-
+    ##
+    # unit:        custom_wizard:mapper adding_an_operator
+    # type:        step
+    # number:      2
+    # title:       Defining operator's behaviour
+    # description: Define what happens when your operator is used between a key
+    #              and value. The default behaviour is to use the operator hash value as a ruby
+    #              operator between key and value. i.e. if operator is `equal`, then key == value or
+    #              key.public_send('==', value).
+    ##
     if operator.is_a?(Hash) && (operator = operator[value.to_sym]).present?
       if value == "present"
         result = key.public_send(operator)

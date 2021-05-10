@@ -231,6 +231,13 @@ en:
           regex: '=~'
           association: '→'
           is: 'is'
+          ##
+          # unit:        custom_wizard:mapper adding_an_operator
+          # type:        step
+          # number:      4
+          # title:       Adding client translation for the operator
+          # description: Add the translation string for the said operator
+          ##
           in: 'in'
         
         action:
