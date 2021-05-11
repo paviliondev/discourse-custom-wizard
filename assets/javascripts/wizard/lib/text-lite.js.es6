@@ -1,8 +1,17 @@
 import loadScript from "./load-script";
-import { default as PrettyText } from "pretty-text/pretty-text";
+import { default as PrettyText, buildOptions } from "pretty-text/pretty-text";
 import Handlebars from "handlebars";
+import getURL from "discourse-common/lib/get-url";
+import { getOwner } from "discourse-common/lib/get-owner";
 
 export function cook(text, options) {
+  if (!options) {
+    options = buildOptions({
+      getURL: getURL,
+      siteSettings: getOwner(this).lookup("site-settings:main"),
+    });
+  }
+
   return new Handlebars.SafeString(new PrettyText(options).cook(text));
 }
 
