@@ -35,17 +35,19 @@ if respond_to?(:register_svg_icon)
   register_svg_icon "save"
 end
 
-add_to_class(::Sprockets::DirectiveProcessor, :process_require_tree_discourse_directive) do |path = "."|
-  raise CustomWizard::SprocketsEmptyPath, "path cannot be empty" if path == "."
+class ::Sprockets::DirectiveProcessor
+  def process_require_tree_discourse_directive(path = ".")
+    raise CustomWizard::SprocketsEmptyPath, "path cannot be empty" if path == "."
 
-  discourse_asset_path = "#{Rails.root}/app/assets/javascripts/"
-  path = File.expand_path(path, discourse_asset_path)
-  stat = @environment.stat(path)
+    discourse_asset_path = "#{Rails.root}/app/assets/javascripts/"
+    path = File.expand_path(path, discourse_asset_path)
+    stat = @environment.stat(path)
 
-  if stat && stat.directory?
-    require_paths(*@environment.stat_sorted_tree_with_dependencies(path))
-  else
-    raise CustomWizard::SprocketsFileNotFound, "#{path} not found in discourse core"
+    if stat && stat.directory?
+      require_paths(*@environment.stat_sorted_tree_with_dependencies(path))
+    else
+      raise CustomWizard::SprocketsFileNotFound, "#{path} not found in discourse core"
+    end
   end
 end
 
