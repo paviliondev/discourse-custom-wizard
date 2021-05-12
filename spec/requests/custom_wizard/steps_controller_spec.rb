@@ -272,16 +272,8 @@ describe CustomWizard::StepsController do
         step_1_field_1: "Condition will not pass"
       }
     }
-    wizard_id = response.parsed_body['wizard']['id']
-    wizard = CustomWizard::Wizard.create(wizard_id, user)
-    submission = wizard.submissions.last
-    expect(submission.keys).to include("step_2_field_1")
 
-    put '/w/super-mega-fun-wizard/steps/step_2.json', params: {
-      fields: {
-        step_2_field_1: "1995-04-23"
-      }
-    }
+    wizard_id = response.parsed_body['wizard']['id']
     wizard = CustomWizard::Wizard.create(wizard_id, user)
     submission = wizard.submissions.last
     expect(submission.keys).not_to include("step_2_field_1")
