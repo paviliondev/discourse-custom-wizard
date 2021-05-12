@@ -1,0 +1,3 @@
+eval("define(\"sptest/test\", [], function () {\n  \"use strict\";\n\n  console.log('hello');\n});" + "\n//# sourceURL=sptest/test");
+;
+eval("" + "\n//# sourceURL=require_tree_discourse_test");
