@@ -247,6 +247,26 @@ class CustomWizard::Wizard
     set_submissions(submissions)
   end
 
+  def filter_conditional_fields
+    included_fields = steps.map { |s| s.fields.map { |f| f.id } }.flatten
+    filtered_submision = current_submission&.select do |key, _|
+      key = key.to_s
+      included_fields.include?(key) ||
+      required_fields.include?(key) ||
+      key.include?("action")
+    end
+
+    save_submission(filtered_submision)
+  end
+
+  def required_fields
+    %w{
+      submitted_at
+      route_to
+      saved_param
+    }
+  end
+
   def final_cleanup!
     if id == user.custom_fields['redirect_to_wizard']
       user.custom_fields.delete('redirect_to_wizard')
