@@ -4,27 +4,27 @@ class CustomWizard::Field
   include ActiveModel::SerializerSupport
 
   def self.attributes
-  %i{
-    raw
-    id
-    index
-    type
-    step
-    required
-    value
-    description
-    image
-    key
-    validations
-    min_length
-    max_length
-    char_counter
-    file_types
-    format
-    limit
-    property
-    content
-  }
+    %i{
+      raw
+      id
+      index
+      type
+      step
+      required
+      value
+      description
+      image
+      key
+      validations
+      min_length
+      max_length
+      char_counter
+      file_types
+      format
+      limit
+      property
+      content
+    }
   end
 
   def self.accessible_attributes
@@ -42,6 +42,28 @@ class CustomWizard::Field
 
   def self.readonly_attributes
     attributes - accessible_attributes - excluded_attributes
+  end
+
+  def self.serializable_attributes
+    %i{
+      id
+      index
+      type
+      required
+      value
+      label
+      placeholder
+      description
+      image
+      file_types
+      format
+      limit
+      property
+      content
+      validations
+      max_length
+      char_counter
+    }
   end
 
   attr_reader *readonly_attributes

@@ -8,23 +8,7 @@
 ##
 class CustomWizard::FieldSerializer < ::ApplicationSerializer
 
-  attributes :id,
-             :index,
-             :type,
-             :required,
-             :value,
-             :label,
-             :placeholder,
-             :description,
-             :image,
-             :file_types,
-             :format,
-             :limit,
-             :property,
-             :content,
-             :validations,
-             :max_length,
-             :char_counter
+  attributes *CustomWizard::Field.serializable_attributes
 
   def id
     object.id
