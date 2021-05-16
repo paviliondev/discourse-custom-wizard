@@ -78,14 +78,14 @@ class CustomWizard::Builder
     @wizard.update_step_order!
     @wizard
   end
-  
-  ## 
+
+  ##
   # type:        step
   # number:      7
   # title:       Add it to the builder
-  # description: When our template is built into a wizard, we need our new 
+  # description: When our template is built into a wizard, we need our new
   #              attribute to be built here in the builder so it's ready to
-  #              be sent to the wizard client.  
+  #              be sent to the wizard client.
   ##
   def append_field(step, step_template, field_template, build_opts)
     params = {

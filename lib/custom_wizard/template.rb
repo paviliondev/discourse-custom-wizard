@@ -13,8 +13,8 @@ class CustomWizard::Template
     @steps = data['steps'] || []
     @actions = data['actions'] || []
   end
-  
-  ## 
+
+  ##
   # type:        step
   # number:      4
   # title:       Our new field is saved to the template

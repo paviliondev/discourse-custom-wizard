@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-## 
+##
 # type:        step
 # number:      8
 # title:       Add it to the serializer
-# description: We want our new attribute to be serialized to the wizard client... 
+# description: We want our new attribute to be serialized to the wizard client...
 ##
 class CustomWizard::FieldSerializer < ::ApplicationSerializer
 

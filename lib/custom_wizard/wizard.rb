@@ -6,7 +6,7 @@ require_dependency 'wizard/builder'
 
 UserHistory.actions[:custom_wizard_step] = 1000
 
-## 
+##
 # type:        step
 # number:      6
 # title:       Add the parameter to the wizard model

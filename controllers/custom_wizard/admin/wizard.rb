@@ -65,8 +65,8 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
       output: [],
     ]
   end
-  
-  ## 
+
+  ##
   # type:        step
   # number:      3
   # title:       Add a permitted parameter
