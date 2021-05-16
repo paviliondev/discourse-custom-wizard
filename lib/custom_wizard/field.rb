@@ -40,7 +40,11 @@ class CustomWizard::Field
     }
   end
 
-  attr_reader *(attributes - accessible_attributes - excluded_attributes)
+  def self.readonly_attributes
+    attributes - accessible_attributes - excluded_attributes
+  end
+
+  attr_reader *readonly_attributes
   attr_accessor *accessible_attributes
 
   def initialize(attrs)
