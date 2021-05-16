@@ -3,47 +3,56 @@
 class CustomWizard::Field
   include ActiveModel::SerializerSupport
 
-  attr_reader :raw,
-              :id,
-              :type,
-              :required,
-              :value,
-              :label,
-              :description,
-              :image,
-              :key,
-              :validations,
-              :min_length,
-              :max_length,
-              :char_counter,
-              :file_types,
-              :format,
-              :limit,
-              :property,
-              :content
+  def self.attributes
+  %i{
+    raw
+    id
+    index
+    type
+    step
+    required
+    value
+    description
+    image
+    key
+    validations
+    min_length
+    max_length
+    char_counter
+    file_types
+    format
+    limit
+    property
+    content
+  }
+  end
 
-  attr_accessor :index,
-                :step
+  def self.accessible_attributes
+    %i{
+      index
+      step
+    }
+  end
+
+  def self.excluded_attributes
+    %i{
+      label
+    }
+  end
+
+  attr_reader *(attributes - accessible_attributes - excluded_attributes)
+  attr_accessor *accessible_attributes
 
   def initialize(attrs)
+    attrs.each do |k, v|
+      if self.singleton_class.attributes.include?(k.to_sym)
+        instance_variable_set("@#{k}", v)
+      end
+    end
+
     @raw = attrs || {}
-    @id = attrs[:id]
-    @index = attrs[:index]
-    @type = attrs[:type]
     @required = !!attrs[:required]
     @value = attrs[:value] || default_value
-    @description = attrs[:description]
-    @image = attrs[:image]
-    @key = attrs[:key]
-    @validations = attrs[:validations]
-    @min_length = attrs[:min_length]
-    @max_length = attrs[:max_length]
-    @char_counter = attrs[:char_counter]
-    @file_types = attrs[:file_types]
-    @format = attrs[:format]
-    @limit = attrs[:limit]
-    @property = attrs[:property]
-    @content = attrs[:content]
   end
 
   def label
