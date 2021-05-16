@@ -61,7 +61,6 @@ const step = {
   },
 };
 
-
 /*
  * unit:        custom_wizard:templates_and_builder
  * type:        step
