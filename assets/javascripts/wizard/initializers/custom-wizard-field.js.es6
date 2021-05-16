@@ -16,7 +16,7 @@ export default {
     const DEditor = requirejs("discourse/components/d-editor").default;
     const { clipboardHelpers } = requirejs("discourse/lib/utilities");
     const { toMarkdown } = requirejs("discourse/lib/to-markdown");
-    
+
     /*
      * unit:        custom_wizard:templates_and_builder
      * type:        step
@@ -24,7 +24,7 @@ export default {
      * title:       Handle the attribute in the wizard client
      * description: We can now handle our new attribute in the wizard client.
      *              For our "highlighted" attribute, we would add a
-     *              classNameBinding in the wizard-field component which 
+     *              classNameBinding in the wizard-field component which
      *              we've imported from the discourse/discourse wizard and are
      *              extending here.
      */
