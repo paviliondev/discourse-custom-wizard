@@ -499,7 +499,13 @@ class CustomWizard::Action
     ).perform
 
     params[:raw] = action['post_builder'] ?
-      mapper.interpolate(action['post_template']) :
+      mapper.interpolate(
+        action['post_template'],
+        user: true,
+        value: true,
+        wizard: true,
+        template: true
+      ) :
       data[action['post']]
 
     params[:import_mode] = ActiveRecord::Type::Boolean.new.cast(action['suppress_notifications'])

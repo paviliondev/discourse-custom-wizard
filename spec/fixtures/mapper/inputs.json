@@ -260,5 +260,34 @@
         }
       ]
     }
+  ],
+  "validation_multiple_pairs": [
+    {
+      "type": "validation",
+      "pairs": [
+        {
+          "index": 0,
+          "key": "input_1",
+          "key_type": "wizard_field",
+          "value": "value 1",
+          "value_type": "text",
+          "connector": "equal"
+        }
+      ]
+    },
+    {
+      "type": "validation",
+      "connector": "or",
+      "pairs": [
+        {
+          "index": 0,
+          "key": "input_2",
+          "key_type": "wizard_field",
+          "value": "value 2",
+          "value_type": "text",
+          "connector": "equal"
+        }
+      ]
+    }
   ]
 }

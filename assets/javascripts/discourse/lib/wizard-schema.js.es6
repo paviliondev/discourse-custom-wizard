@@ -1,4 +1,5 @@
 import { get, set } from "@ember/object";
+import { getOwner } from "discourse-common/lib/get-owner";
 
 const wizard = {
   basic: {
@@ -222,7 +223,8 @@ export function buildFieldValidations(validations) {
   wizardSchema.field.validations = validations;
 }
 
-if (Discourse.SiteSettings.wizard_apis_enabled) {
+const siteSettings = getOwner(this).lookup("site-settings:main");
+if (siteSettings.wizard_apis_enabled) {
   wizardSchema.action.types.send_to_api = {
     api: null,
     api_endpoint: null,

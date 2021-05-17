@@ -46,7 +46,7 @@
           "type": "text_only"
         }
       ],
-      "description": "<p>Text inputs!</p>"
+      "description": "Text inputs!"
     },
     {
       "id": "step_2",
@@ -93,7 +93,7 @@
           "file_types": ".jpg,.jpeg,.png"
         }
       ],
-      "description": "<p>Because I couldn’t think of another name for this step <img src=\"/images/emoji/twitter/slight_smile.png?v=9\" title=\":slight_smile:\" class=\"emoji\" alt=\":slight_smile:\"></p>"
+      "description": "Because I couldn't think of another name for this step :)"
     },
     {
       "id": "step_3",
@@ -160,7 +160,7 @@
           "type": "user_selector"
         }
       ],
-      "description": "<p>Unfortunately not the edible type <img src=\"/images/emoji/twitter/sushi.png?v=9\" title=\":sushi:\" class=\"emoji\" alt=\":sushi:\"></p>"
+      "description": "Unfortunately not the edible type :sushi: "
     }
   ],
   "actions": [

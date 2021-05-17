@@ -28,7 +28,7 @@ class CustomWizard::StepsController < ::ApplicationController
       current_step = @wizard.find_step(update[:step_id])
       current_submission = @wizard.current_submission
       result = {}
-
+      @wizard.filter_conditional_fields
       if current_step.conditional_final_step && !current_step.last_step
         current_step.force_final = true
       end
