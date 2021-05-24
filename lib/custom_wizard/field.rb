@@ -6,27 +6,29 @@ class CustomWizard::Field
   def self.attribute_map
     {
       raw: [],
-      id: [:serializable],
-      index: [:accessible, :serializable],
-      type: [:serializable],
+      id: [:serializable, :permitted],
+      index: [:accessible, :serializable, :permitted, :mapped],
+      type: [:serializable, :permitted],
       step: [:accessible],
-      required: [:serializable],
+      required: [:serializable, :permitted],
       value: [:serializable],
-      description: [:serializable],
-      image: [:serializable],
-      key: [],
+      description: [:serializable, :permitted],
+      image: [:serializable, :permitted],
+      key: [:permitted],
       validations: [:serializable],
-      min_length: [],
-      max_length: [:serializable],
-      char_counter: [:serializable],
-      file_types: [:serializable],
-      format: [:serializable],
-      limit: [:serializable],
-      property: [:serializable],
-      content: [:serializable],
+      min_length: [:permitted],
+      max_length: [:serializable, :permitted],
+      char_counter: [:serializable, :permitted],
+      file_types: [:serializable, :permitted],
+      format: [:serializable, :permitted],
+      limit: [:serializable, :permitted],
+      property: [:serializable, :permitted],
       # label is excluded so that it isn't initialized and the value
       # returned by `label` method is used for serialization
-      label: [:excluded, :serializable]
+      label: [:excluded, :serializable, :permitted],
+      content: [:serializable, :permitted, :mapped],
+      prefill: [:permitted, :mapped],
+      condition: [:permitted, :mapped],
     }
   end
 

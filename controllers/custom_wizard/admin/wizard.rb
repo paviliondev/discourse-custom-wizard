@@ -102,26 +102,10 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
         permitted_params: mapped_params,
         condition: mapped_params,
         fields: [
-          :id,
-          :index,
-          :label,
-          :image,
-          :description,
-          :required,
-          :key,
-          :type,
-          :min_length,
-          :max_length,
-          :char_counter,
-          :file_types,
-          :format,
-          :limit,
-          :property,
-          prefill: mapped_params,
-          content: mapped_params,
-          condition: mapped_params,
-          index: mapped_params,
-          validations: {},
+          *CustomWizard::Field.type_attributes(:permitted),
+          CustomWizard::Field.type_attributes(:mapped).map do |attribute|
+            [attribute, mapped_params]
+          end.to_h
         ]
       ],
       actions: [
