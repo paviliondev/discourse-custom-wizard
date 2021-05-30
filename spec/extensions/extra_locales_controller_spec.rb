@@ -37,6 +37,13 @@ describe ExtraLocalesControllerCustomWizard, type: :request do
     expect(response.status).to eq(200)
   end
 
+  it "returns wizard locales when requested by user in a wizard step" do
+    sign_in(new_user)
+
+    get @locale_url, headers: { 'REFERER' => "/w/super-mega-fun-wizard/steps/step_1" }
+    expect(response.status).to eq(200)
+  end
+
   it "return wizard locales if user cant access wizard" do
     template[:permitted] = permitted["permitted"]
     CustomWizard::Template.save(template.as_json)
