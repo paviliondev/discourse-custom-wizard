@@ -4,7 +4,8 @@ module ExtraLocalesControllerCustomWizard
     super || begin
       return false unless bundle =~ /wizard/ && request.referer =~ /\/w\//
       path = URI(request.referer).path
-      wizard_id = path.split('/w/').last
+      wizard_path = path.split('/w/').last
+      wizard_id = wizard_path.split('/').first
       CustomWizard::Template.exists?(wizard_id.underscore)
     end
   end
