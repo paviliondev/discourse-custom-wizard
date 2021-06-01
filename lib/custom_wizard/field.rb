@@ -3,6 +3,21 @@
 class CustomWizard::Field
   include ActiveModel::SerializerSupport
 
+  ##
+  # type:        step
+  # number:      3
+  # title:       Add the field name to attribute map
+  # description: The attribute map serves as a global registry for field attributes. Set the
+  #              key as the attribute name and value as an array of properties. Use the properties according to the 
+  #              your usecase. Here's a list and description of each of the properties.
+  #              accessible: The attribute is passed to attr_accessor
+  #              serializable: The attribute is serialized to the client
+  #              permitted: The attribute is permitted to be passed to the admin side controller for saving
+  #              mapped: The attribute is a mapped attributed and is permitted to be passed to the admin side controller for saving
+  #              excluded: The attribute is not initialized in the constructor. This is used
+  #               if the attribute needs a method
+  ##
+
   def self.attribute_map
     {
       raw: [],
