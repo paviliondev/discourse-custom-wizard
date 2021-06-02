@@ -8,14 +8,15 @@ class CustomWizard::Field
   # number:      3
   # title:       Add the field name to attribute map
   # description: The attribute map serves as a global registry for field attributes. Set the
-  #              key as the attribute name and value as an array of properties. Use the properties according to the
+  #              key as the attribute name and value as an array of properties. Use the properties according to
   #              your usecase. Here's a list and description of each of the properties.
-  #              accessible: The attribute is passed to attr_accessor
+  #              ```
+  #              accessible: The attribute is set as a CustomWizard::Field attr_accessor
   #              serializable: The attribute is serialized to the client
-  #              permitted: The attribute is permitted to be passed to the admin side controller for saving
-  #              mapped: The attribute is a mapped attributed and is permitted to be passed to the admin side controller for saving
-  #              excluded: The attribute is not initialized in the constructor. This is used
-  #               if the attribute needs a method
+  #              permitted: The attribute is permitted in the admin controller
+  #              mapped: The attribute is mapped and permitted (see above)
+  #              excluded: The attribute is not initialized in the constructor
+  #              ```
   ##
 
   def self.attribute_map
