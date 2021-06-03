@@ -454,32 +454,51 @@ class CustomWizard::Action
         data: data,
         user: user
       ).perform
-
-      registered_fields = CustomWizard::CustomField.cached_list
+      registered_fields = CustomWizard::CustomField.full_list
 
       field_map.each do |field|
         keyArr = field[:key].split('.')
         value = field[:value]
 
         if keyArr.length > 1
-          klass = keyArr.first
-          name = keyArr.last
+          klass = keyArr.first.to_sym
+          name = keyArr.second
+
+          if keyArr.length === 3 && name.include?("{}")
+            name = name.gsub("{}", "")
+            json_attr = keyArr.last
+            type = :json
+          end
         else
           name = keyArr.first
         end
 
-        registered = registered_fields.select { |f| f[:name] == name }
-        if registered.first.present?
-          klass = registered.first[:klass]
+        registered = registered_fields.select { |f| f.name == name }.first
+        if registered.present?
+          klass = registered.klass
+          type = registered.type
         end
 
-        if klass === 'topic'
+        next if type === :json && json_attr.blank?
+
+        if klass === :topic
           params[:topic_opts] ||= {}
           params[:topic_opts][:custom_fields] ||= {}
-          params[:topic_opts][:custom_fields][name] = value
+
+          if type === :json
+            params[:topic_opts][:custom_fields][name] ||= {}
+            params[:topic_opts][:custom_fields][name][json_attr] = value
+          else
+            params[:topic_opts][:custom_fields][name] = value
+          end
         else
-          params[:custom_fields] ||= {}
-          params[:custom_fields][name] = value
+          if type === :json
+            params[:custom_fields][name] ||= {}
+            params[:custom_fields][name][json_attr] = value
+          else
+            params[:custom_fields] ||= {}
+            params[:custom_fields][name] = value
+          end
         end
       end
     end

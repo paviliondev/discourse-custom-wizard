@@ -391,10 +391,34 @@
           "pairs": [
             {
               "index": 0,
-              "key": "custom_field_1",
+              "key": "post_field",
               "key_type": "text",
-              "value": "title",
-              "value_type": "user_field",
+              "value": "Post custom field value",
+              "value_type": "text",
+              "connector": "association"
+            },
+            {
+              "index": 1,
+              "key": "topic.topic_field",
+              "key_type": "text",
+              "value": "Topic custom field value",
+              "value_type": "text",
+              "connector": "association"
+            },
+            {
+              "index": 2,
+              "key": "topic.topic_json_field{}.key_1",
+              "key_type": "text",
+              "value": "Key 1 value",
+              "value_type": "text",
+              "connector": "association"
+            },
+            {
+              "index": 3,
+              "key": "topic.topic_json_field{}.key_2",
+              "key_type": "text",
+              "value": "Key 2 value",
+              "value_type": "text",
               "connector": "association"
             }
           ]

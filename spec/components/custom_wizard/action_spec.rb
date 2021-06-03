@@ -72,6 +72,42 @@ describe CustomWizard::Action do
         raw: "topic body"
       ).exists?).to eq(false)
     end
+    
+    it "adds custom fields" do
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      wizard.create_updater(wizard.steps.first.id,
+        step_1_field_1: "Topic Title",
+        step_1_field_2: "topic body"
+      ).update
+      wizard.create_updater(wizard.steps.second.id, {}).update
+      wizard.create_updater(wizard.steps.last.id,
+        step_3_field_3: category.id
+      ).update
+      
+      topic = Topic.where(
+        title: "Topic Title",
+        category_id: category.id
+      ).first
+      topic_custom_field = TopicCustomField.where(
+        name: "topic_field",
+        value: "Topic custom field value",
+        topic_id: topic.id
+      )
+      topic_json_custom_field = TopicCustomField.where("
+        name = 'topic_json_field' AND
+        (value::json->>'key_1') = 'Key 1 value' AND
+        (value::json->>'key_2') = 'Key 2 value' AND
+        topic_id = #{topic.id}"
+      )
+      post_custom_field = PostCustomField.where(
+        name: "post_field",
+        value: "Post custom field value",
+        post_id: topic.first_post.id
+      )
+      expect(topic_custom_field.exists?).to eq(true)
+      expect(topic_json_custom_field.exists?).to eq(true)
+      expect(post_custom_field.exists?).to eq(true)
+    end
   end
 
   context 'sending a message' do

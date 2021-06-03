@@ -215,4 +215,32 @@ class ::CustomWizard::CustomField
   def self.enabled?
     any?
   end
+
+  def self.external_list
+    external = []
+
+    CLASSES.keys.each do |klass|
+      field_types = klass.to_s.classify.constantize.custom_field_types
+
+      if field_types.present?
+        field_types.each do |name, type|
+          unless list.any? { |field| field.name === name }
+            field = new(
+              'external',
+              name: name,
+              klass: klass,
+              type: type
+            )
+            external.push(field)
+          end
+        end
+      end
+    end
+
+    external
+  end
+
+  def self.full_list
+    (list + external_list).uniq
+  end
 end

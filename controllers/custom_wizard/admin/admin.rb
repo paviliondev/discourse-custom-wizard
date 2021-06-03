@@ -14,7 +14,7 @@ class CustomWizard::AdminController < ::Admin::AdminController
   end
 
   def custom_field_list
-    serialize_data(CustomWizard::CustomField.list, CustomWizard::CustomFieldSerializer)
+    serialize_data(CustomWizard::CustomField.full_list, CustomWizard::CustomFieldSerializer)
   end
 
   def render_error(message)

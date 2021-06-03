@@ -178,6 +178,14 @@ describe CustomWizard::CustomField do
     it "lists saved custom field records by attribute value" do
       expect(CustomWizard::CustomField.list_by(:klass, 'topic').length).to eq(1)
     end
+
+    it "lists custom field records added by other plugins " do
+      expect(CustomWizard::CustomField.external_list.length).to eq(11)
+    end
+
+    it "lists all custom field records" do
+      expect(CustomWizard::CustomField.full_list.length).to eq(15)
+    end
   end
 
   it "is enabled if there are custom fields" do

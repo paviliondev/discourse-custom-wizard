@@ -3,12 +3,12 @@ import CustomWizardCustomField from "../models/custom-wizard-custom-field";
 
 export default Controller.extend({
   messageKey: "create",
-  fieldKeys: ["klass", "type", "serializers", "name"],
+  fieldKeys: ["klass", "type", "name", "serializers"],
   documentationUrl: "https://thepavilion.io/t/3572",
 
   actions: {
     addField() {
-      this.get("customFields").pushObject(
+      this.get("customFields").unshiftObject(
         CustomWizardCustomField.create({ edit: true })
       );
     },
