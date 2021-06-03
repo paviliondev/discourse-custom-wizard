@@ -201,9 +201,14 @@ export default Component.extend({
     customFields
   ) {
     let content;
-    let contextAttrs = this.options.context.split(".");
-    let context = contextAttrs[0];
-    let contextType = contextAttrs[1];
+    let context;
+    let contextType;
+
+    if (this.options.context) {
+      let contextAttrs = this.options.context.split(".");
+      context = contextAttrs[0];
+      contextType = contextAttrs[1];
+    }
 
     if (activeType === "wizardField") {
       content = wizardFields;
