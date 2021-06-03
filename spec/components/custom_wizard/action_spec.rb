@@ -72,7 +72,7 @@ describe CustomWizard::Action do
         raw: "topic body"
       ).exists?).to eq(false)
     end
-    
+
     it "adds custom fields" do
       wizard = CustomWizard::Builder.new(@template[:id], user).build
       wizard.create_updater(wizard.steps.first.id,
@@ -83,7 +83,7 @@ describe CustomWizard::Action do
       wizard.create_updater(wizard.steps.last.id,
         step_3_field_3: category.id
       ).update
-      
+
       topic = Topic.where(
         title: "Topic Title",
         category_id: category.id
