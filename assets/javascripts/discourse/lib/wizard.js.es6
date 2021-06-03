@@ -120,5 +120,5 @@ export {
   listProperties,
   notificationLevels,
   wizardFieldList,
-  sentenceCase
+  sentenceCase,
 };

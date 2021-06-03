@@ -62,7 +62,7 @@ export default Component.extend(UndoChanges, {
     return key;
   },
 
-  @discourseComputed('action.type')
+  @discourseComputed("action.type")
   customFieldsContext(type) {
     return `action.${type}`;
   },
