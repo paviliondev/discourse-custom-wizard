@@ -1,6 +1,6 @@
 import Component from "@ember/component";
 import discourseComputed, { observes } from "discourse-common/utils/decorators";
-import { alias, or, equal } from "@ember/object/computed";
+import { alias, equal, or } from "@ember/object/computed";
 import I18n from "I18n";
 
 const generateContent = function (array, type) {

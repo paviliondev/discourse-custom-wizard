@@ -6,7 +6,7 @@ import {
 } from "discourse-common/utils/decorators";
 import { getOwner } from "discourse-common/lib/get-owner";
 import { defaultSelectionType, selectionTypes } from "../lib/wizard-mapper";
-import { generateName, snakeCase, userProperties, sentenceCase } from "../lib/wizard";
+import { generateName, sentenceCase, snakeCase, userProperties } from "../lib/wizard";
 import Component from "@ember/component";
 import { bind, later } from "@ember/runloop";
 import I18n from "I18n";
@@ -17,7 +17,7 @@ const customFieldActionMap = {
   category: ['create_category'],
   group: ['create_group'],
   user: ['update_profile']
-}
+};
 
 export default Component.extend({
   classNameBindings: [":mapper-selector", "activeType"],
