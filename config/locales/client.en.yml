@@ -47,9 +47,9 @@ en:
         translation: "Translation"
         translation_placeholder: "key"
         type: "Type"
-        none: "Make a selection"              
-        submission_key: 'submission key'
-        param_key: 'param'
+        none: "Make a selection"
+        submission_key: "submission key"
+        param_key: "param"
         group: "Group"
         permitted: "Permitted"
         advanced: "Advanced"
@@ -58,7 +58,10 @@ en:
         select_type: "Select a type"
         condition: "Condition"
         index: "Index"
-        
+        support_button:
+          title: "Request Support"
+          url: "https://thepavilion.io/w/bug-report/steps/plugin"
+
         message:
           wizard:
             select: "Select a wizard, or create a new one"
@@ -91,24 +94,24 @@ en:
             destroying: Destroying wizards...
             import_complete: Import complete
             destroy_complete: Destruction complete
-        
+
         editor:
           show: "Show"
           hide: "Hide"
           preview: "{{action}} Preview"
           popover: "{{action}} Fields"
-        
+
         input:
-          conditional: 
-            name: 'if'
-            output: 'then'
+          conditional:
+            name: "if"
+            output: "then"
           assignment:
-            name: 'set'
+            name: "set"
           association:
-            name: 'map'
+            name: "map"
           validation:
-            name: 'ensure'
-  
+            name: "ensure"
+
         selector:
           label:
             text: "text"
@@ -136,7 +139,7 @@ en:
             group: "Select group"
             list: "Enter item"
             custom_field: "Select field"
-            
+
         error:
           failed: "failed to save wizard"
           required: "{{type}} requires {{property}}"
@@ -144,7 +147,7 @@ en:
           dependent: "{{property}} is dependent on {{dependent}}"
           conflict: "{{type}} with {{property}} '{{value}}' already exists"
           after_time: "After time invalid"
-        
+
         step:
           header: "Steps"
           title: "Title"
@@ -158,7 +161,7 @@ en:
           force_final:
             label: "Conditional Final Step"
             description: "Display this step as the final step if conditions on later steps have not passed when the user reaches this step."
-        
+
         field:
           header: "Fields"
           label: "Label"
@@ -178,7 +181,7 @@ en:
           property: "Property"
           prefill: "Prefill"
           content: "Content"
-          date_time_format: 
+          date_time_format:
             label: "Format"
             instructions: "<a href='https://momentjs.com/docs/#/displaying/format/' target='_blank'>Moment.js format</a>"
           validations:
@@ -195,7 +198,7 @@ en:
               weeks: "Weeks"
               months: "Months"
               years: "Years"
-          
+
           type:
             text: "Text"
             textarea: Textarea
@@ -213,21 +216,21 @@ en:
             date: Date
             time: Time
             date_time: Date & Time
-        
+
         connector:
           and: "and"
           or: "or"
           then: "then"
           set: "set"
-          equal: '='
-          greater: '>'
-          less: '<'
-          greater_or_equal: '>='
-          less_or_equal: '<='
-          regex: '=~'
-          association: '→'
-          is: 'is'
-        
+          equal: "="
+          greater: ">"
+          less: "<"
+          greater_or_equal: ">="
+          less_or_equal: "<="
+          regex: "=~"
+          association: "→"
+          is: "is"
+
         action:
           header: "Actions"
           include: "Include Fields"
@@ -235,8 +238,8 @@ en:
           post: "Post"
           topic_attr: "Topic Attribute"
           interpolate_fields: "Insert wizard fields using the field_id in w{}. Insert user fields using field key in u{}."
-          
-          run_after: 
+
+          run_after:
             label: "Run After"
             wizard_completion: "Wizard Completion"
           custom_fields:
@@ -318,7 +321,7 @@ en:
             messageable_level: Messageable Level
             visibility_level: Visibility Level
             members_visibility_level: Members Visibility Level
-        
+
         custom_field:
           nav_label: "Custom Fields"
           add: "Add"
@@ -348,7 +351,7 @@ en:
             basic_category: "Category"
             basic_group: "Group"
             post: "Post"
-            
+
         submissions:
           nav_label: "Submissions"
           title: "{{name}} Submissions"
@@ -356,38 +359,38 @@ en:
 
         api:
           label: "API"
-          nav_label: 'APIs'
+          nav_label: "APIs"
           select: "Select API"
           create: "Create API"
-          new: 'New API'
+          new: "New API"
           name: "Name (can't be changed)"
-          name_placeholder: 'Underscored'
-          title: 'Title'
-          title_placeholder: 'Display name'
-          remove: 'Delete'
+          name_placeholder: "Underscored"
+          title: "Title"
+          title_placeholder: "Display name"
+          remove: "Delete"
           save: "Save"
 
           auth:
             label: "Authorization"
-            btn: 'Authorize'
+            btn: "Authorize"
             settings: "Settings"
             status: "Status"
             redirect_uri: "Redirect url"
-            type: 'Type'
-            type_none: 'Select a type'
+            type: "Type"
+            type_none: "Select a type"
             url: "Authorization url"
             token_url: "Token url"
-            client_id: 'Client id'
-            client_secret: 'Client secret'
-            username: 'username'
-            password: 'password'
+            client_id: "Client id"
+            client_secret: "Client secret"
+            username: "username"
+            password: "password"
             params:
-              label: 'Params'
-              new: 'New param'
+              label: "Params"
+              new: "New param"
 
           status:
             label: "Status"
-            authorized: 'Authorized'
+            authorized: "Authorized"
             not_authorized: "Not authorized"
             code: "Code"
             access_token: "Access token"
@@ -406,7 +409,7 @@ en:
 
           log:
             label: "Logs"
-            
+
         log:
           nav_label: "Logs"
 
@@ -418,7 +421,7 @@ en:
           imported: imported
           upload: Select wizards.json
           destroy: Destroy
-          destroyed: destroyed    
+          destroyed: destroyed
 
   wizard_js:
     group:
@@ -530,7 +533,7 @@ en:
       yourself_confirm:
         title: "Did you forget to add recipients?"
         body: "Right now this message is only being sent to yourself!"
-    
+
     realtime_validations:
       similar_topics:
         insufficient_characters: "Type a minimum 5 characters to start looking for similar topics"
