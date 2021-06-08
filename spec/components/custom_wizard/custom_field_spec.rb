@@ -49,6 +49,40 @@ describe CustomWizard::CustomField do
   end
 
   context "validation" do
+    it "does not save without required attributes" do
+      invalid_field_json = custom_field_json['custom_fields'].first
+      invalid_field_json['klass'] = nil
+
+      custom_field = CustomWizard::CustomField.new(nil, invalid_field_json)
+      expect(custom_field.save).to eq(false)
+      expect(custom_field.valid?).to eq(false)
+      expect(custom_field.errors.full_messages.first).to eq(
+        I18n.t("wizard.custom_field.error.required_attribute", attr: "klass")
+      )
+      expect(
+        PluginStoreRow.where(
+          plugin_name: CustomWizard::CustomField::NAMESPACE,
+          key: custom_field.name
+        ).exists?
+      ).to eq(false)
+    end
+
+    it "does save without optional attributes" do
+      field_json = custom_field_json['custom_fields'].first
+      field_json['serializers'] = nil
+
+      custom_field = CustomWizard::CustomField.new(nil, field_json)
+      expect(custom_field.save).to eq(true)
+      expect(custom_field.valid?).to eq(true)
+      expect(
+        PluginStoreRow.where("
+          plugin_name = '#{CustomWizard::CustomField::NAMESPACE}' AND
+          key = '#{custom_field.name}' AND
+          value::jsonb = '#{field_json.except('name').to_json}'::jsonb
+        ",).exists?
+      ).to eq(true)
+    end
+
     it "does not save with an unsupported class" do
       invalid_field_json = custom_field_json['custom_fields'].first
       invalid_field_json['klass'] = 'user'
@@ -177,6 +211,22 @@ describe CustomWizard::CustomField do
 
     it "lists saved custom field records by attribute value" do
       expect(CustomWizard::CustomField.list_by(:klass, 'topic').length).to eq(1)
+    end
+
+    it "lists saved custom field records by optional values" do
+      field_json = custom_field_json['custom_fields'].first
+      field_json['serializers'] = nil
+
+      custom_field = CustomWizard::CustomField.new(nil, field_json)
+      expect(CustomWizard::CustomField.list_by(:serializers, ['post']).length).to eq(0)
+    end
+
+    it "lists custom field records added by other plugins " do
+      expect(CustomWizard::CustomField.external_list.length).to eq(11)
+    end
+
+    it "lists all custom field records" do
+      expect(CustomWizard::CustomField.full_list.length).to eq(15)
     end
   end
 
