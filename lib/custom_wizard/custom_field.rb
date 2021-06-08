@@ -66,10 +66,12 @@ class ::CustomWizard::CustomField
       value = send(attr)
       i18n_key = "wizard.custom_field.error"
 
-      if value.blank?
-        if REQUIRED.include?(attr)
-          add_error(I18n.t("#{i18n_key}.required_attribute", attr: attr))
-        end
+      if value.blank? && REQUIRED.include?(attr)
+        add_error(I18n.t("#{i18n_key}.required_attribute", attr: attr))
+        break
+      end
+
+      if attr == 'serializers' && !value.is_a?(Array)
         next
       end
 
@@ -140,7 +142,7 @@ class ::CustomWizard::CustomField
 
     fields.select do |cf|
       if attr == :serializers
-        cf[attr].include?(value)
+        cf[attr] && cf[attr].include?(value)
       else
         cf[attr] == value
       end
