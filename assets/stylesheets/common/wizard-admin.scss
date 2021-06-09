@@ -707,3 +707,29 @@
   width: 80px;
   vertical-align: middle;
 }
+
+.btn-pavilion-pro {
+  background: #3C1c8c;
+  color: white;
+
+  .d-icon {
+    color: white;
+  }
+
+  &:hover {
+    background: #2d1569 !important;
+    color: rgba(white, 0.8);
+    &[href], svg.d-icon {
+      color: rgba(white, 0.85) !important;
+    }
+  }
+
+  &:focus {
+    border: 2px solid white;
+    background: #2d1569 !important;
+  }
+
+  &[href] {
+    color: white;
+  }
+}
