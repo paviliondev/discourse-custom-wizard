@@ -58,9 +58,9 @@ en:
         select_type: "Select a type"
         condition: "Condition"
         index: "Index"
-        support_button:
-          title: "Request Support"
-          url: "https://thepavilion.io/c/open-source/pro-support/222"
+        pro_support_button:
+          title: "Request Pro Support"
+          label: "Pro Support"
 
         message:
           wizard:
