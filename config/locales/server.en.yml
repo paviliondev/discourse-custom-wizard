@@ -55,3 +55,4 @@ en:
     wizard_redirect_exclude_paths: "Routes excluded from wizard redirects."
     wizard_recognised_image_upload_formats: "File types which will result in upload displaying an image preview"
     wizard_apis_enabled: "Enable API features (experimental)."
+    wizard_pro_support_url: "URL Linking to Pavilion's PRO Support"

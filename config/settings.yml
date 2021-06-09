@@ -18,3 +18,7 @@ plugins:
   wizard_apis_enabled:
     client: true
     default: false
+  wizard_pro_support_url:
+    client: true
+    default: ''
+    type: string
