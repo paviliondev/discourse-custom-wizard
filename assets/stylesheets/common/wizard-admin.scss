@@ -716,17 +716,12 @@
     color: white;
   }
 
-  &:hover {
+  &:hover, &:focus {
     background: #2d1569 !important;
     color: rgba(white, 0.8);
     &[href], svg.d-icon {
       color: rgba(white, 0.85) !important;
     }
-  }
-
-  &:focus {
-    border: 2px solid white;
-    background: #2d1569 !important;
   }
 
   &[href] {
