@@ -57,6 +57,22 @@
       "output": "Name: u{name}"
     }
   ],
+  "interpolate_user_email": [
+    {
+      "type": "assignment",
+      "output_type": "text",
+      "output_connector": "set",
+      "output": "Email: u{email}"
+    }
+  ],
+  "interpolate_user_option": [
+    {
+      "type": "assignment",
+      "output_type": "text",
+      "output_connector": "set",
+      "output": "Email Level: u{email_level}"
+    }
+  ],
   "interpolate_wizard_field": [
     {
       "type": "assignment",
