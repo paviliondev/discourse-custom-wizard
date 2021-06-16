@@ -5,7 +5,7 @@ export default Ember.Application.extend({
   Resolver: buildResolver("wizard"),
 
   customEvents: {
-    paste: "paste"
+    paste: "paste",
   },
 
   start() {
