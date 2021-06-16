@@ -173,6 +173,8 @@ describe CustomWizard::Wizard do
     progress_step("step_2", acting_user: trusted_user)
     progress_step("step_3", acting_user: trusted_user)
 
+    @permitted_template["multiple_submissions"] = true
+
     expect(
       CustomWizard::Wizard.new(@permitted_template, trusted_user).can_access?
     ).to eq(true)

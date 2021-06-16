@@ -3,7 +3,6 @@
   "name": "Super Mega Fun Wizard",
   "background": "#333333",
   "save_submissions": true,
-  "multiple_submissions": true,
   "after_signup": false,
   "prompt_completion": false,
   "theme_id": 2,
