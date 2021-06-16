@@ -11,6 +11,14 @@ describe CustomWizard::WizardController do
     )
   }
 
+  let(:permitted_json) {
+    JSON.parse(
+      File.open(
+        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard/permitted.json"
+      ).read
+    )
+  }
+
   before do
     CustomWizard::Template.save(
       JSON.parse(File.open(
@@ -43,6 +51,14 @@ describe CustomWizard::WizardController do
   end
 
   it 'skips a wizard if user is allowed to skip' do
+    put '/w/super-mega-fun-wizard/skip.json'
+    expect(response.status).to eq(200)
+  end
+
+  it 'lets user skip if user cant access wizard' do
+    @template["permitted"] = permitted_json["permitted"]
+    CustomWizard::Template.save(@template, skip_jobs: true)
+
     put '/w/super-mega-fun-wizard/skip.json'
     expect(response.status).to eq(200)
   end
