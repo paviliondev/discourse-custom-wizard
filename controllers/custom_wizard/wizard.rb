@@ -61,7 +61,7 @@ class CustomWizard::WizardController < ::ApplicationController
     result = success_json
     user = current_user
 
-    if user
+    if user && wizard.can_access?
       submission = wizard.current_submission
       if submission && submission['redirect_to']
         result.merge!(redirect_to: submission['redirect_to'])

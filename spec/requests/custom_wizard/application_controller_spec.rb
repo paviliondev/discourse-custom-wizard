@@ -43,6 +43,12 @@ describe ApplicationController do
             .first['redirect_to']
         ).to eq("/t/2")
       end
+
+      it "does not redirect if wizard does not exist" do
+        CustomWizard::Template.remove('super_mega_fun_wizard')
+        get "/"
+        expect(response.status).to eq(200)
+      end
     end
 
     context "who is not required to complete wizard" do

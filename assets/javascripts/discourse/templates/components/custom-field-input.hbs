@@ -13,17 +13,17 @@
       none="admin.wizard.custom_field.type.select"
       onChange=(action (mut field.type))}}
   </td>
+  <td class="input">
+    {{input
+      value=field.name
+      placeholder=(i18n "admin.wizard.custom_field.name.select")}}
+  </td>
   <td class="multi-select">
     {{multi-select
       value=field.serializers
       content=serializerContent
       none="admin.wizard.custom_field.serializers.select"
       onChange=(action (mut field.serializers))}}
-  </td>
-  <td class="input">
-    {{input
-      value=field.name
-      placeholder=(i18n "admin.wizard.custom_field.name.select")}}
   </td>
   <td class="actions">
     {{#if loading}}
@@ -51,13 +51,25 @@
 {{else}}
   <td><label>{{field.klass}}</label></td>
   <td><label>{{field.type}}</label></td>
-  <td class="multi-select">
-    {{#each field.serializers as |serializer|}}
-      <label>{{serializer}}</label>
-    {{/each}}
-  </td>
   <td class="input"><label>{{field.name}}</label></td>
-  <td class="actions">
-    {{d-button action="edit" icon="pencil-alt"}}
+  <td class="multi-select">
+    {{#if isExternal}}
+      &mdash;
+    {{else}}
+      {{#each field.serializers as |serializer|}}
+        <label>{{serializer}}</label>
+      {{/each}}
+    {{/if}}
   </td>
+  {{#if isExternal}}
+    <td class="external">
+      <label title={{i18n "admin.wizard.custom_field.external.title"}}>
+        {{i18n "admin.wizard.custom_field.external.label"}}
+      </label>
+    </td>
+  {{else}}
+    <td class="actions">
+      {{d-button action="edit" icon="pencil-alt"}}
+    </td>
+  {{/if}}
 {{/if}}

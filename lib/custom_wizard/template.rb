@@ -49,17 +49,14 @@ class CustomWizard::Template
 
   def self.remove(wizard_id)
     wizard = CustomWizard::Wizard.create(wizard_id)
-
     return false if !wizard
 
     ActiveRecord::Base.transaction do
       PluginStore.remove(CustomWizard::PLUGIN_NAME, wizard.id)
-
-      if wizard.after_time
-        Jobs.cancel_scheduled_job(:set_after_time_wizard)
-        Jobs.enqueue(:clear_after_time_wizard, wizard_id: wizard_id)
-      end
+      clear_user_wizard_redirect(wizard_id)
     end
+
+    Jobs.cancel_scheduled_job(:set_after_time_wizard) if wizard.after_time
 
     true
   end
@@ -86,6 +83,10 @@ class CustomWizard::Template
 
         result
       end
+  end
+
+  def self.clear_user_wizard_redirect(wizard_id)
+    UserCustomField.where(name: 'redirect_to_wizard', value: wizard_id).destroy_all
   end
 
   private
@@ -132,7 +133,7 @@ class CustomWizard::Template
         Jobs.enqueue_at(enqueue_wizard_at, :set_after_time_wizard, wizard_id: wizard_id)
       elsif old_data && old_data[:after_time]
         Jobs.cancel_scheduled_job(:set_after_time_wizard, wizard_id: wizard_id)
-        Jobs.enqueue(:clear_after_time_wizard, wizard_id: wizard_id)
+        self.class.clear_user_wizard_redirect(wizard_id)
       end
     end
   end
