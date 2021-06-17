@@ -28,7 +28,7 @@ class CustomWizard::StepsController < ::ApplicationController
       current_step = @wizard.find_step(update[:step_id])
       current_submission = @wizard.current_submission
       result = {}
-      @wizard.filter_conditional_fields
+
       if current_step.conditional_final_step && !current_step.last_step
         current_step.force_final = true
       end
@@ -44,7 +44,7 @@ class CustomWizard::StepsController < ::ApplicationController
           end
         end
 
-        @wizard.save_submission(current_submission)
+        current_submission.save
 
         if redirect = get_redirect
           updater.result[:redirect_on_complete] = redirect
@@ -101,9 +101,9 @@ class CustomWizard::StepsController < ::ApplicationController
   def get_redirect
     return @result[:redirect_on_next] if @result[:redirect_on_next].present?
 
-    current_submission = @wizard.current_submission
-    return nil unless current_submission.present?
+    submission = @wizard.current_submission
+    return nil unless submission.present?
     ## route_to set by actions, redirect_on_complete set by actions, redirect_to set at wizard entry
-    current_submission[:route_to] || current_submission[:redirect_on_complete] || current_submission[:redirect_to]
+    submission.route_to || submission.redirect_on_complete || submission.redirect_to
   end
 end

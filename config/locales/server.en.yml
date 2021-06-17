@@ -1,8 +1,8 @@
 en:
   admin:
     wizard:
-      submissions:
-        no_user: "deleted (id: %{id})"
+      submission:
+        no_user: "deleted (user_id: %{user_id})"
 
   wizard:
     custom_title: "Wizard"

@@ -204,14 +204,7 @@ describe CustomWizard::Wizard do
 
   context "submissions" do
     before do
-      @wizard.set_submissions(step_1_field_1: 'I am a user submission')
-    end
-
-    it "sets the user's submission" do
-      expect(
-        PluginStore.get("#{template_json['id']}_submissions", user.id)
-          .first['step_1_field_1']
-      ).to eq('I am a user submission')
+      CustomWizard::Submission.new(@wizard, step_1_field_1: "I am a user submission")
     end
 
     it "lists the user's submissions" do
@@ -219,18 +212,8 @@ describe CustomWizard::Wizard do
     end
 
     it "returns the user's current submission" do
-      expect(@wizard.current_submission['step_1_field_1']).to eq('I am a user submission')
+      expect(@wizard.current_submission.fields["step_1_field_1"]).to eq("I am a user submission")
     end
-  end
-
-  it "provides class methods to set and list submissions" do
-    CustomWizard::Wizard.set_submissions(template_json['id'], user,
-      step_1_field_1: 'I am a user submission'
-    )
-    expect(
-      CustomWizard::Wizard.submissions(template_json['id'], user)
-        .first['step_1_field_1']
-    ).to eq('I am a user submission')
   end
 
   context "class methods" do
@@ -273,7 +256,7 @@ describe CustomWizard::Wizard do
 
   it "sets wizard redirects if user is permitted" do
     CustomWizard::Template.save(@permitted_template, skip_jobs: true)
-    CustomWizard::Wizard.set_wizard_redirect('super_mega_fun_wizard', trusted_user)
+    CustomWizard::Wizard.set_user_redirect('super_mega_fun_wizard', trusted_user)
     expect(
       trusted_user.custom_fields['redirect_to_wizard']
     ).to eq("super_mega_fun_wizard")
@@ -281,7 +264,7 @@ describe CustomWizard::Wizard do
 
   it "does not set a wizard redirect if user is not permitted" do
     CustomWizard::Template.save(@permitted_template, skip_jobs: true)
-    CustomWizard::Wizard.set_wizard_redirect('super_mega_fun_wizard', user)
+    CustomWizard::Wizard.set_user_redirect('super_mega_fun_wizard', user)
     expect(
       trusted_user.custom_fields['redirect_to_wizard']
     ).to eq(nil)

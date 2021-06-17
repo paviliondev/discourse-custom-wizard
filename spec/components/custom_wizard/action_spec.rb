@@ -182,7 +182,7 @@ describe CustomWizard::Action do
       updater = wizard.create_updater(wizard.steps[1].id, {})
       updater.update
 
-      category = Category.find_by(id: wizard.current_submission['action_8'])
+      category = Category.find_by(id: wizard.current_submission.fields['action_8'])
 
       expect(updater.result[:redirect_on_next]).to eq(
         "/new-topic?title=Title%20of%20the%20composer%20topic&body=I%20am%20interpolating%20some%20user%20fields%20Angus%20angus%20angus%40email.com&category_id=#{category.id}&tags=tag1"
@@ -215,20 +215,20 @@ describe CustomWizard::Action do
     wizard = CustomWizard::Builder.new(@template[:id], user).build
     wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
     wizard.create_updater(wizard.steps[1].id, {}).update
-    expect(Category.where(id: wizard.current_submission['action_8']).exists?).to eq(true)
+    expect(Category.where(id: wizard.current_submission.fields['action_8']).exists?).to eq(true)
   end
 
   it 'creates a group' do
     wizard = CustomWizard::Builder.new(@template[:id], user).build
     wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
-    expect(Group.where(name: wizard.current_submission['action_9']).exists?).to eq(true)
+    expect(Group.where(name: wizard.current_submission.fields['action_9']).exists?).to eq(true)
   end
 
   it 'adds a user to a group' do
     wizard = CustomWizard::Builder.new(@template[:id], user).build
     step_id = wizard.steps[0].id
     updater = wizard.create_updater(step_id, step_1_field_1: "Text input").update
-    group = Group.find_by(name: wizard.current_submission['action_9'])
+    group = Group.find_by(name: wizard.current_submission.fields['action_9'])
     expect(group.users.first.username).to eq('angus')
   end
 
@@ -237,7 +237,7 @@ describe CustomWizard::Action do
     wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
     wizard.create_updater(wizard.steps[1].id, {}).update
     expect(CategoryUser.where(
-      category_id: wizard.current_submission['action_8'],
+      category_id: wizard.current_submission.fields['action_8'],
       user_id: user.id
     ).first.notification_level).to eq(2)
     expect(CategoryUser.where(

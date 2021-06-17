@@ -66,6 +66,7 @@ after_initialize do
     ../lib/custom_wizard/log.rb
     ../lib/custom_wizard/step_updater.rb
     ../lib/custom_wizard/step.rb
+    ../lib/custom_wizard/submission.rb
     ../lib/custom_wizard/template.rb
     ../lib/custom_wizard/wizard.rb
     ../lib/custom_wizard/api/api.rb
@@ -110,7 +111,7 @@ after_initialize do
 
       if !wizard.completed?
         custom_redirect = true
-        CustomWizard::Wizard.set_wizard_redirect(wizard.id, user)
+        CustomWizard::Wizard.set_user_redirect(wizard.id, user)
       end
     end
 
@@ -131,7 +132,7 @@ after_initialize do
 
   on(:user_approved) do |user|
     if wizard = CustomWizard::Wizard.after_signup(user)
-      CustomWizard::Wizard.set_wizard_redirect(wizard.id, user)
+      CustomWizard::Wizard.set_user_redirect(wizard.id, user)
     end
   end
 
@@ -142,7 +143,7 @@ after_initialize do
 
     if request.format === 'text/html' && !@excluded_routes.any? { |str| /#{str}/ =~ url } && wizard_id
       if request.referer !~ /\/w\// && request.referer !~ /\/invites\//
-        CustomWizard::Wizard.set_submission_redirect(current_user, wizard_id, request.referer)
+        CustomWizard::Wizard.set_wizard_redirect(current_user, wizard_id, request.referer)
       end
       if CustomWizard::Template.exists?(wizard_id)
         redirect_to "/w/#{wizard_id.dasherize}"

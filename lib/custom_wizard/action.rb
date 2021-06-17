@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class CustomWizard::Action
-  attr_accessor :data,
+  attr_accessor :submission,
                 :action,
                 :user,
                 :guardian,
@@ -11,7 +11,7 @@ class CustomWizard::Action
     @action = opts[:action]
     @user = @wizard.user
     @guardian = Guardian.new(@user)
-    @data = opts[:data]
+    @submission = opts[:submission]
     @log = []
     @result = CustomWizard::ActionResult.new
   end
@@ -26,14 +26,18 @@ class CustomWizard::Action
     end
 
     if @result.success? && @result.output.present?
-      data[action['id']] = @result.output
+      @submission.fields[action['id']] = @result.output
     end
 
     save_log
   end
 
+  def mapper_data
+    @mapper_data ||= @submission&.fields_and_meta || {}
+  end
+
   def mapper
-    @mapper ||= CustomWizard::Mapper.new(user: user, data: data)
+    @mapper ||= CustomWizard::Mapper.new(user: user, data: mapper_data)
   end
 
   def create_topic
@@ -47,7 +51,7 @@ class CustomWizard::Action
         messages = creator.errors.full_messages.join(" ")
         log_error("failed to create", messages)
       elsif action['skip_redirect'].blank?
-        data['redirect_on_complete'] = post.topic.url
+        @submission.redirect_on_complete = post.topic.url
       end
 
       if creator.errors.blank?
@@ -65,7 +69,7 @@ class CustomWizard::Action
     if action['required'].present?
       required = CustomWizard::Mapper.new(
         inputs: action['required'],
-        data: data,
+        data: mapper_data,
         user: user
       ).perform
 
@@ -79,7 +83,7 @@ class CustomWizard::Action
 
     targets = CustomWizard::Mapper.new(
       inputs: action['recipient'],
-      data: data,
+      data: mapper_data,
       user: user,
       multiple: true
     ).perform
@@ -115,7 +119,7 @@ class CustomWizard::Action
         messages = creator.errors.full_messages.join(" ")
         log_error("failed to create message", messages)
       elsif action['skip_redirect'].blank?
-        data['redirect_on_complete'] = post.topic.url
+        @submission.redirect_on_complete = post.topic.url
       end
 
       if creator.errors.blank?
@@ -178,7 +182,7 @@ class CustomWizard::Action
   def watch_categories
     watched_categories = CustomWizard::Mapper.new(
       inputs: action['categories'],
-      data: data,
+      data: mapper_data,
       user: user
     ).perform
 
@@ -193,7 +197,7 @@ class CustomWizard::Action
 
     mute_remainder = CustomWizard::Mapper.new(
       inputs: action['mute_remainder'],
-      data: data,
+      data: mapper_data,
       user: user
     ).perform
 
@@ -202,7 +206,7 @@ class CustomWizard::Action
     if action['usernames']
       mapped_users = CustomWizard::Mapper.new(
         inputs: action['usernames'],
-        data: data,
+        data: mapper_data,
         user: user
       ).perform
 
@@ -284,7 +288,7 @@ class CustomWizard::Action
       end
 
       route_to = Discourse.base_uri + url
-      @result.output = data['route_to'] = route_to
+      @result.output = @submission.route_to = route_to
 
       log_success("route: #{route_to}")
     else
@@ -295,7 +299,7 @@ class CustomWizard::Action
   def add_to_group
     group_map = CustomWizard::Mapper.new(
       inputs: action['group'],
-      data: data,
+      data: mapper_data,
       user: user,
       opts: {
         multiple: true
@@ -345,18 +349,18 @@ class CustomWizard::Action
     else
       url = CustomWizard::Mapper.new(
         inputs: url_input,
-        data: data,
+        data: mapper_data,
         user: user
       ).perform
     end
 
     if action['code']
-      data[action['code']] = SecureRandom.hex(8)
-      url += "&#{action['code']}=#{data[action['code']]}"
+      @submission.fields[action['code']] = SecureRandom.hex(8)
+      url += "&#{action['code']}=#{@submission.fields[action['code']]}"
     end
 
     route_to = UrlHelper.encode(url)
-    data['route_to'] = route_to
+    @submission.route_to = route_to
 
     log_info("route: #{route_to}")
   end
@@ -416,7 +420,7 @@ class CustomWizard::Action
   def action_category
     output = CustomWizard::Mapper.new(
       inputs: action['category'],
-      data: data,
+      data: mapper_data,
       user: user
     ).perform
 
@@ -434,7 +438,7 @@ class CustomWizard::Action
   def action_tags
     output = CustomWizard::Mapper.new(
       inputs: action['tags'],
-      data: data,
+      data: mapper_data,
       user: user,
     ).perform
 
@@ -451,7 +455,7 @@ class CustomWizard::Action
     if (custom_fields = action['custom_fields']).present?
       field_map = CustomWizard::Mapper.new(
         inputs: custom_fields,
-        data: data,
+        data: mapper_data,
         user: user
       ).perform
       registered_fields = CustomWizard::CustomField.full_list
@@ -513,7 +517,7 @@ class CustomWizard::Action
 
     params[:title] = CustomWizard::Mapper.new(
       inputs: action['title'],
-      data: data,
+      data: mapper_data,
       user: user
     ).perform
 
@@ -525,7 +529,7 @@ class CustomWizard::Action
         wizard: true,
         template: true
       ) :
-      data[action['post']]
+      @submission.fields[action['post']]
 
     params[:import_mode] = ActiveRecord::Type::Boolean.new.cast(action['suppress_notifications'])
 
@@ -548,7 +552,7 @@ class CustomWizard::Action
         unless action[field].nil? || action[field] == ""
           params[field.to_sym] = CustomWizard::Mapper.new(
             inputs: action[field],
-            data: data,
+            data: mapper_data,
             user: user
           ).perform
         end
@@ -587,7 +591,7 @@ class CustomWizard::Action
       if input.present?
         value = CustomWizard::Mapper.new(
           inputs: input,
-          data: data,
+          data: mapper_data,
           user: user
         ).perform
 
@@ -617,7 +621,7 @@ class CustomWizard::Action
       if action[attr].present?
         value = CustomWizard::Mapper.new(
           inputs: action[attr],
-          data: data,
+          data: mapper_data,
           user: user
         ).perform
 

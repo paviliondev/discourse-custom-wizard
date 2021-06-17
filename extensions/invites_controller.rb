@@ -5,7 +5,7 @@ module InvitesControllerCustomWizard
       wizard_id = @user.custom_fields['redirect_to_wizard']
 
       if wizard_id && url != '/'
-        CustomWizard::Wizard.set_submission_redirect(@user, wizard_id, url)
+        CustomWizard::Wizard.set_wizard_redirect(@user, wizard_id, url)
         url = "/w/#{wizard_id.dasherize}"
       end
     end
