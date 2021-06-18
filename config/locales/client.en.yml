@@ -91,6 +91,9 @@ en:
             destroying: Destroying wizards...
             import_complete: Import complete
             destroy_complete: Destruction complete
+          submissions:
+            select: "Select a wizard to see its submissions"
+            documentation: "Check out the submissions documentation"
         
         editor:
           show: "Show"
