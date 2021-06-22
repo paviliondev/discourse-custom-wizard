@@ -229,28 +229,40 @@ describe CustomWizard::Mapper do
     ).perform).to eq("value 2")
   end
 
-  it "interpolates user fields" do
-    expect(CustomWizard::Mapper.new(
-      inputs: inputs['interpolate_user_field'],
-      data: data,
-      user: user1
-    ).perform).to eq("Name: Angus")
-  end
+  context "interpolates" do
+    it "user fields" do
+      expect(CustomWizard::Mapper.new(
+        inputs: inputs['interpolate_user_field'],
+        data: data,
+        user: user1
+      ).perform).to eq("Name: Angus")
+    end
 
-  it "interpolates wizard fields" do
-    expect(CustomWizard::Mapper.new(
-      inputs: inputs['interpolate_wizard_field'],
-      data: data,
-      user: user1
-    ).perform).to eq("Input 1: value 1")
-  end
+    it "user emails" do
+      expect(CustomWizard::Mapper.new(
+        inputs: inputs['interpolate_user_email'],
+        data: data,
+        user: user1
+      ).perform).to eq("Email: angus@email.com")
+    end
 
-  it "interpolates date" do
-    expect(CustomWizard::Mapper.new(
-      inputs: inputs['interpolate_timestamp'],
-      data: data,
-      user: user1
-    ).perform).to eq("Time: #{Time.now.strftime("%B %-d, %Y")}")
+    it "user options" do
+      user1.user_option.update_columns(email_level: UserOption.email_level_types[:never])
+
+      expect(CustomWizard::Mapper.new(
+        inputs: inputs['interpolate_user_option'],
+        data: data,
+        user: user1
+      ).perform).to eq("Email Level: #{UserOption.email_level_types[:never]}")
+    end
+
+    it "date" do
+      expect(CustomWizard::Mapper.new(
+        inputs: inputs['interpolate_timestamp'],
+        data: data,
+        user: user1
+      ).perform).to eq("Time: #{Time.now.strftime("%B %-d, %Y")}")
+    end
   end
 
   it "handles greater than pairs" do

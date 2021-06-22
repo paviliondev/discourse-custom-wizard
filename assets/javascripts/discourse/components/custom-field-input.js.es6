@@ -1,6 +1,6 @@
 import Component from "@ember/component";
 import discourseComputed, { observes } from "discourse-common/utils/decorators";
-import { alias, or } from "@ember/object/computed";
+import { alias, equal, or } from "@ember/object/computed";
 import I18n from "I18n";
 
 const generateContent = function (array, type) {
@@ -29,6 +29,7 @@ export default Component.extend({
   loading: or("saving", "destroying"),
   destroyDisabled: alias("loading"),
   closeDisabled: alias("loading"),
+  isExternal: equal("field.id", "external"),
 
   didInsertElement() {
     this.set("originalField", JSON.parse(JSON.stringify(this.field)));
@@ -61,13 +62,14 @@ export default Component.extend({
 
   @discourseComputed(
     "saving",
+    "isExternal",
     "field.name",
     "field.klass",
     "field.type",
     "field.serializers"
   )
-  saveDisabled(saving) {
-    if (saving) {
+  saveDisabled(saving, isExternal) {
+    if (saving || isExternal) {
       return true;
     }
 

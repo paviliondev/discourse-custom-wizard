@@ -92,6 +92,7 @@ after_initialize do
     ../extensions/users_controller.rb
     ../extensions/custom_field/preloader.rb
     ../extensions/custom_field/serializer.rb
+    ../extensions/custom_field/extension.rb
   ].each do |path|
     load File.expand_path(path, __FILE__)
   end
@@ -184,18 +185,18 @@ after_initialize do
   end
 
   CustomWizard::CustomField::CLASSES.keys.each do |klass|
+    class_constant = klass.to_s.classify.constantize
+
     add_model_callback(klass, :after_initialize) do
       if CustomWizard::CustomField.enabled?
         CustomWizard::CustomField.list_by(:klass, klass.to_s).each do |field|
-          klass.to_s
-            .classify
-            .constantize
-            .register_custom_field_type(field[:name], field[:type].to_sym)
+          class_constant.register_custom_field_type(field[:name], field[:type].to_sym)
         end
       end
     end
 
-    klass.to_s.classify.constantize.singleton_class.prepend CustomWizardCustomFieldPreloader
+    class_constant.singleton_class.prepend CustomWizardCustomFieldPreloader
+    class_constant.singleton_class.prepend CustomWizardCustomFieldExtension
   end
 
   CustomWizard::CustomField.serializers.each do |serializer_klass|

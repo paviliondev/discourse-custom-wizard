@@ -30,7 +30,7 @@ class CustomWizard::Builder
 
   def build(build_opts = {}, params = {})
     return nil if !SiteSetting.custom_wizard_enabled || !@wizard
-    return @wizard if !@wizard.can_access?
+    return @wizard if !@wizard.can_access? && !build_opts[:force]
 
     build_opts[:reset] = build_opts[:reset] || @wizard.restart_on_revisit
 

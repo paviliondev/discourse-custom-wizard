@@ -23,7 +23,7 @@ class CustomWizard::StepsController < ::ApplicationController
     if updater.success?
       wizard_id = update_params[:wizard_id]
       builder = CustomWizard::Builder.new(wizard_id, current_user)
-      @wizard = builder.build
+      @wizard = builder.build(force: true)
 
       current_step = @wizard.find_step(update[:step_id])
       current_submission = @wizard.current_submission
