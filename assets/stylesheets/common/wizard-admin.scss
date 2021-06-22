@@ -2,6 +2,7 @@
 @import "wizard-manager";
 @import "wizard-api";
 @import "common/components/buttons";
+@import "wizard-variables";
 
 .admin-wizard-controls {
   display: flex;
@@ -712,25 +713,20 @@
   vertical-align: middle;
 }
 
-.btn-pavilion-pro {
-  background: #3c1c8c;
-  color: white;
+.btn.btn-pavilion-pro {
+  background: $pavilion-primary;
+  color: $pavilion-secondary;
 
   .d-icon {
-    color: white;
+    color: $pavilion-secondary;
   }
 
   &:hover,
   &:focus {
-    background: #2d1569 !important;
-    color: rgba(white, 0.8);
+    background: darken($pavilion-primary, 5%);
     &[href],
     svg.d-icon {
-      color: rgba(white, 0.85) !important;
+      color: darken($pavilion-secondary, 10%);
     }
-  }
-
-  &[href] {
-    color: white;
   }
 }
