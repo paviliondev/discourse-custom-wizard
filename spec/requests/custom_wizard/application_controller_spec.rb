@@ -39,8 +39,8 @@ describe ApplicationController do
       it "saves original destination of user" do
         get '/', headers: { 'REFERER' => "/t/2" }
         expect(
-          CustomWizard::Wizard.submissions(@template['id'], user)
-            .first['redirect_to']
+          CustomWizard::Wizard.create(@template['id'], user).submissions
+            .first.fields['redirect_to']
         ).to eq("/t/2")
       end
 

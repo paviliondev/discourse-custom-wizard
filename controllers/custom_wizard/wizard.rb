@@ -64,7 +64,7 @@ class CustomWizard::WizardController < ::ApplicationController
     if user && wizard.can_access?
       submission = wizard.current_submission
 
-      if submission && submission.redirect_to
+      if submission.present? && submission.redirect_to
         result.merge!(redirect_to: submission.redirect_to)
       end
 

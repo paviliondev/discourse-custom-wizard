@@ -34,7 +34,7 @@ describe CustomWizard::Wizard do
     template_json['steps'].each do |step_template|
       @wizard.append_step(step_template['id'])
     end
-    @wizard.update_step_order!
+    @wizard.update!
   end
 
   def progress_step(step_id, acting_user: user, wizard: @wizard)
@@ -44,7 +44,7 @@ describe CustomWizard::Wizard do
       context: wizard.id,
       subject: step_id
     )
-    @wizard.update_step_order!
+    @wizard.update!
   end
 
   it "appends steps" do
@@ -72,7 +72,7 @@ describe CustomWizard::Wizard do
     expect(@wizard.steps.first.index).to eq(2)
     expect(@wizard.steps.last.index).to eq(0)
 
-    @wizard.update_step_order!
+    @wizard.update!
 
     expect(@wizard.steps.first.id).to eq("step_3")
     expect(@wizard.steps.last.id).to eq("step_1")
@@ -204,7 +204,7 @@ describe CustomWizard::Wizard do
 
   context "submissions" do
     before do
-      CustomWizard::Submission.new(@wizard, step_1_field_1: "I am a user submission")
+      CustomWizard::Submission.new(@wizard, step_1_field_1: "I am a user submission").save
     end
 
     it "lists the user's submissions" do

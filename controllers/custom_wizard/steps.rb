@@ -8,7 +8,7 @@ class CustomWizard::StepsController < ::ApplicationController
 
     update[:fields] = {}
     if params[:fields]
-      field_ids = @step_template['fields'].map { |f| f['id'] }
+      field_ids = @builder.wizard.field_ids
       params[:fields].each do |k, v|
         update[:fields][k] = v if field_ids.include? k
       end
@@ -36,11 +36,15 @@ class CustomWizard::StepsController < ::ApplicationController
       if current_step.final?
         builder.template.actions.each do |action_template|
           if action_template['run_after'] === 'wizard_completion'
-            CustomWizard::Action.new(
+            action_result = CustomWizard::Action.new(
               action: action_template,
               wizard: @wizard,
-              data: current_submission
+              submission: current_submission
             ).perform
+
+            if action_result.success?
+              current_submission = action_result.submission
+            end
           end
         end
 
@@ -54,6 +58,8 @@ class CustomWizard::StepsController < ::ApplicationController
 
         result[:final] = true
       else
+        current_submission.save
+
         result[:final] = false
         result[:next_step_id] = current_step.next.id
       end

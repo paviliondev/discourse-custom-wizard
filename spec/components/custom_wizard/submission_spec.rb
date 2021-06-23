@@ -29,7 +29,7 @@ describe CustomWizard::Submission do
 
   it "saves a user's submission" do
     expect(
-      described_class.get(template_json["id"], user.id).fields["step_1_field_1"]
+      described_class.get(@wizard, user.id).fields["step_1_field_1"]
     ).to eq("I am a user submission")
   end
 
@@ -38,6 +38,6 @@ describe CustomWizard::Submission do
   end
 
   it "list submissions by wizard and user" do
-    expect(described_class.list(@wizard, user).size).to eq(1)
+    expect(described_class.list(@wizard, user_id: user.id).size).to eq(1)
   end
 end

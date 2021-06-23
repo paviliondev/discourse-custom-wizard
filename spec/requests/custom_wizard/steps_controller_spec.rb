@@ -175,8 +175,11 @@ describe CustomWizard::StepsController do
 
     wizard_id = response.parsed_body['wizard']['id']
     wizard = CustomWizard::Wizard.create(wizard_id, user)
-    group_name = wizard.current_submission.fields['action_9']
+
+    group_name = wizard.submissions.first.fields['action_9']
     group = Group.find_by(name: group_name)
+
+    expect(group.present?).to eq(true)
     expect(group.full_name).to eq("My cool group")
   end
 

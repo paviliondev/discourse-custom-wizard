@@ -257,10 +257,7 @@ describe CustomWizard::Builder do
 
         it 'is permitted if required data is present' do
           wizard = CustomWizard::Wizard.create('super_mega_fun_wizard', user)
-          data = {
-            step_1_field_1: 'I am a user submission'
-          }
-          CustomWizard::Submission.new(wizard, data).save
+          CustomWizard::Submission.new(wizard, step_1_field_1: "required").save
 
           expect(
             CustomWizard::Builder.new(@template[:id], user).build
@@ -280,7 +277,7 @@ describe CustomWizard::Builder do
           wizard = CustomWizard::Builder.new(@template[:id], user).build({},
             param: 'param_value'
           )
-          expect(wizard.current_submission['saved_param']).to eq('param_value')
+          expect(wizard.current_submission.fields['saved_param']).to eq('param_value')
         end
       end
 
@@ -362,7 +359,7 @@ describe CustomWizard::Builder do
 
         it "does not save submissions" do
           perform_update('step_1', step_1_field_1: 'Text input')
-          expect(@wizard.current_submission).to eq(nil)
+          expect(@wizard.current_submission.present?).to eq(false)
         end
       end
     end

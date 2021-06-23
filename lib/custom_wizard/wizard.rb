@@ -26,11 +26,15 @@ class CustomWizard::Wizard
                 :needs_groups,
                 :steps,
                 :step_ids,
+                :field_ids,
                 :first_step,
                 :start,
                 :actions,
+                :action_ids,
                 :user,
                 :submissions
+
+  attr_reader   :all_step_ids
 
   def initialize(attrs = {}, user = nil)
     @user = user
@@ -59,11 +63,22 @@ class CustomWizard::Wizard
 
     @first_step = nil
     @steps = []
+
     if attrs['steps'].present?
-      @step_ids = attrs['steps'].map { |s| s['id'] }
+      @step_ids = @all_step_ids = attrs['steps'].map { |s| s['id'] }
+
+      @field_ids = []
+      attrs['steps'].each do |step|
+        if step['fields'].present?
+          step['fields'].each do |field|
+            @field_ids << field['id']
+          end
+        end
+      end
     end
 
-    @actions = []
+    @actions = attrs['actions'] || []
+    @action_ids = @actions.map { |a| a['id'] }
   end
 
   def cast_bool(val)
@@ -84,7 +99,19 @@ class CustomWizard::Wizard
     step.index = (steps.size == 1 ? 0 : steps.size) if step.index.nil?
   end
 
-  def update_step_order!
+  def update!
+    update_step_order
+    update_step_ids
+    update_field_ids
+    update_action_ids
+
+    @submissions = nil
+    @current_submission = nil
+
+    true
+  end
+
+  def update_step_order
     steps.sort_by!(&:index)
 
     steps.each_with_index do |step, index|
@@ -103,7 +130,7 @@ class CustomWizard::Wizard
         step.conditional_final_step = true
       end
 
-      if index === (step_ids.length - 1)
+      if index === (all_step_ids.length - 1)
         step.last_step = true
       end
 
@@ -118,7 +145,7 @@ class CustomWizard::Wizard
         acting_user_id: user.id,
         action: ::UserHistory.actions[:custom_wizard_step],
         context: id,
-        subject: step_ids
+        subject: all_step_ids
       ).order("created_at").last
 
       last_completed_step.subject
@@ -222,8 +249,25 @@ class CustomWizard::Wizard
     @groups ||= ::Site.new(Guardian.new(user)).groups
   end
 
-  def field_ids
-    steps.map { |step| step.fields.map { |field| field.id } }.flatten
+  def update_step_ids
+    @step_ids = steps.map(&:id)
+  end
+
+  def update_field_ids
+    @field_ids = steps.map { |step| step.fields.map { |field| field.id } }.flatten
+  end
+
+  def update_action_ids
+    @action_ids = []
+
+    @actions.each do |action|
+      if action['run_after'].blank? ||
+         action['run_after'] === 'wizard_completion' ||
+         step_ids.include?(action['run_after'])
+
+        @action_ids << action['id']
+      end
+    end
   end
 
   def submissions
@@ -235,9 +279,9 @@ class CustomWizard::Wizard
     @current_submission ||= begin
       if submissions.present?
         unsubmitted = submissions.select { |submission| !submission.submitted_at }
-        unsubmitted.present? ? unsubmitted.first : nil
+        unsubmitted.present? ? unsubmitted.first : CustomWizard::Submission.new(self)
       else
-        nil
+        CustomWizard::Submission.new(self)
       end
     end
   end
@@ -252,6 +296,8 @@ class CustomWizard::Wizard
       current_submission.submitted_at = Time.now.iso8601
       current_submission.save
     end
+
+    update!
   end
 
   def self.create(wizard_id, user = nil)
@@ -321,7 +367,7 @@ class CustomWizard::Wizard
     wizard = self.create(wizard_id, user)
 
     if wizard.permitted?
-      submission = wizard.current_submission || CustomWizard::Submission.new(wizard)
+      submission = wizard.current_submission
       submission.redirect_to = url
       submission.save
     else

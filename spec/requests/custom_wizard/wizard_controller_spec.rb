@@ -72,7 +72,7 @@ describe CustomWizard::WizardController do
 
   it 'skip response contains a redirect_to if in users submissions' do
     @wizard = CustomWizard::Wizard.create(@template["id"], user)
-    CustomWizard::Submission.new(@wizard, step_1_field_1: "I am a user submission").save
+    CustomWizard::Submission.new(@wizard, redirect_to: "/t/2").save
     put '/w/super-mega-fun-wizard/skip.json'
     expect(response.parsed_body['redirect_to']).to eq('/t/2')
   end

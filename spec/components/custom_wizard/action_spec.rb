@@ -194,11 +194,10 @@ describe CustomWizard::Action do
       open_composer['post_template'] = "Body & more body & more body".dup
 
       wizard = CustomWizard::Wizard.new(@template, user)
-
       action = CustomWizard::Action.new(
         wizard: wizard,
         action: open_composer,
-        data: {}
+        submission: wizard.current_submission
       )
       action.perform
 

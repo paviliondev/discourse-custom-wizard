@@ -47,8 +47,8 @@ class CustomWizard::Builder
 
         step.on_update do |updater|
           @updater = updater
-          @submission = @wizard.current_submission || CustomWizard::Submission.new(@wizard)
-          @submission.fields.merge(@updater.submission)
+          @submission = @wizard.current_submission
+          @submission.fields.merge!(@updater.submission)
 
           @updater.validate
           next if @updater.errors.any?
@@ -63,7 +63,9 @@ class CustomWizard::Builder
             @submission.route_to = nil
             @submission.save
 
+            @wizard.update!
             @updater.result[:redirect_on_next] = route_to if route_to
+
             true
           else
             false
@@ -72,7 +74,7 @@ class CustomWizard::Builder
       end
     end
 
-    @wizard.update_step_order!
+    @wizard.update!
     @wizard
   end
 
@@ -89,7 +91,7 @@ class CustomWizard::Builder
 
     params[:value] = prefill_field(field_template, step_template)
 
-    if !build_opts[:reset] && (submission = @wizard.current_submission)
+    if !build_opts[:reset] && (submission = @wizard.current_submission).present?
       params[:value] = submission.fields[field_template['id']] if submission.fields[field_template['id']]
     end
 
@@ -272,14 +274,15 @@ class CustomWizard::Builder
     permitted_data = {}
     submission_key = nil
     params_key = nil
-    submission = @wizard.current_submission || CustomWizard::Submission.new(@wizard)
+    submission = @wizard.current_submission
 
     permitted_params.each do |pp|
       pair = pp['pairs'].first
       params_key = pair['key'].to_sym
       submission_key = pair['value'].to_sym
 
-      if submission_key && params_key
+      if submission_key && params_key && params[params_key].present?
+        submission.permitted_param_keys << submission_key.to_s
         submission.fields[submission_key] = params[params_key]
       end
     end
@@ -293,7 +296,7 @@ class CustomWizard::Builder
         pair['key'].present? && pair['value'].present?
       end
 
-      if pairs.any? && !@wizard.current_submission
+      if pairs.any? && !@wizard.current_submission.present?
         step.permitted = false
         break
       end
@@ -323,11 +326,15 @@ class CustomWizard::Builder
     if @template.actions.present?
       @template.actions.each do |action_template|
         if action_template['run_after'] === updater.step.id
-          CustomWizard::Action.new(
+          result = CustomWizard::Action.new(
             action: action_template,
             wizard: @wizard,
             submission: @submission
           ).perform
+
+          if result.success?
+            @submission = result.submission
+          end
         end
       end
     end

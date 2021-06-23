@@ -30,6 +30,9 @@ class CustomWizard::Action
     end
 
     save_log
+
+    @result.submission = @submission
+    @result
   end
 
   def mapper_data

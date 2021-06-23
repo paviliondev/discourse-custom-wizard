@@ -13,11 +13,14 @@ describe CustomWizard::AdminSubmissionsController do
     ).read)
   }
 
+  let(:template_2) {
+    temp = template.dup
+    temp["id"] = "super_mega_fun_wizard_2"
+    temp
+  }
+
   before do
     CustomWizard::Template.save(template, skip_jobs: true)
-
-    template_2 = template.dup
-    template_2["id"] = "super_mega_fun_wizard_2"
     CustomWizard::Template.save(template_2, skip_jobs: true)
 
     wizard1 = CustomWizard::Wizard.create(template["id"], user1)
@@ -33,7 +36,7 @@ describe CustomWizard::AdminSubmissionsController do
 
   it "returns a list of wizards" do
     get "/admin/wizards/submissions.json"
-    expect(response.parsed_body.length).to eq(3)
+    expect(response.parsed_body.length).to eq(2)
     expect(response.parsed_body.first['id']).to eq(template['id'])
   end
 

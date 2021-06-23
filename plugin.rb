@@ -86,6 +86,7 @@ after_initialize do
     ../serializers/custom_wizard/wizard_step_serializer.rb
     ../serializers/custom_wizard/wizard_serializer.rb
     ../serializers/custom_wizard/log_serializer.rb
+    ../serializers/custom_wizard/submission_serializer.rb
     ../serializers/custom_wizard/realtime_validation/similar_topics_serializer.rb
     ../extensions/extra_locales_controller.rb
     ../extensions/invites_controller.rb

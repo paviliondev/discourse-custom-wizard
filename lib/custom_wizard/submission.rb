@@ -2,14 +2,15 @@ class CustomWizard::Submission
   include ActiveModel::SerializerSupport
 
   KEY ||= "submissions"
-  ACTION_KEY ||= "action"
   META ||= %w(submitted_at route_to redirect_on_complete redirect_to)
 
   attr_reader :id,
               :user,
+              :user_id,
               :wizard
-  
-  attr_accessor :fields
+
+  attr_accessor :fields,
+                :permitted_param_keys
 
   META.each do |attr|
     class_eval { attr_accessor attr }
@@ -17,9 +18,10 @@ class CustomWizard::Submission
 
   def initialize(wizard, data = {}, user_id = nil)
     @wizard = wizard
+    @user_id = user_id
 
     if user_id
-      @user = User.find_by(id: user_id) || OpenStruct.new(deleted: true, id: user_id)
+      @user = User.find_by(id: user_id)
     else
       @user = wizard.user 
     end
@@ -31,25 +33,32 @@ class CustomWizard::Submission
     META.each do |attr|
       send("#{attr}=", data[attr]) if data[attr]
     end
+
+    @permitted_param_keys = data['permitted_param_keys'] || []
   end
 
   def save
     return nil unless wizard.save_submissions
-    validate_fields
+    validate
 
-    submissions = self.class.list(wizard, user_id: user.id).select { |s| s.id != self.id }
+    submission_list = self.class.list(wizard, user_id: user.id)
+    submissions = submission_list.select { |submission| submission.id != self.id }
     submissions.push(self)
 
-    submission_data = submissions.map { |s| s.fields_and_meta }
+    submission_data = submissions.map { |submission| data_to_save(submission)  }
     PluginStore.set("#{wizard.id}_#{KEY}", user.id, submission_data)
   end
 
-  def validate_fields
-    self.fields = fields.select do |key, value|
-      wizard.field_ids.include?(key) || key.include?(ACTION_KEY)
-    end
+  def validate
+    self.fields = fields.select { |key, value| validate_field_key(key) }
   end
-  
+
+  def validate_field_key(key)
+    wizard.field_ids.include?(key) ||
+    wizard.action_ids.include?(key) ||
+    permitted_param_keys.include?(key)
+  end
+
   def fields_and_meta
     result = fields
 
@@ -60,6 +69,24 @@ class CustomWizard::Submission
     end
 
     result
+  end
+
+  def present?
+    fields_and_meta.present?
+  end
+
+  def data_to_save(submission)
+    data = {
+      id: submission.id
+    }
+
+    data.merge!(submission.fields_and_meta)
+
+    if submission.permitted_param_keys.present?
+      data[:permitted_param_keys] = submission.permitted_param_keys
+    end
+
+    data
   end
 
   def self.get(wizard, user_id)
