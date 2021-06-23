@@ -27,7 +27,7 @@ class CustomWizard::Submission
       @user = wizard.user
     end
 
-    data = data.with_indifferent_access
+    data = (data || {}).with_indifferent_access
     @id = data['id'] || SecureRandom.hex(12)
     @fields = data.except(META + ['id']) || {}
 
