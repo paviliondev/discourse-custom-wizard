@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CustomWizard::Submission
   include ActiveModel::SerializerSupport
 
@@ -23,7 +24,7 @@ class CustomWizard::Submission
     if user_id
       @user = User.find_by(id: user_id)
     else
-      @user = wizard.user 
+      @user = wizard.user
     end
 
     data = data.with_indifferent_access

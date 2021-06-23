@@ -23,7 +23,7 @@ class CustomWizard::AdminSubmissionsController < CustomWizard::AdminController
       content_type: "application/json",
       disposition: "attachment"
   end
-  
+
   protected
 
   def ordered_submissions
