@@ -143,7 +143,7 @@ describe CustomWizard::UpdateValidator do
     ).to eq(nil)
   end
 
-  it 'doesnt validate date field if the format is not respected' do
+  it 'doesn\'t validate date field if the format is not respected' do
     @template[:steps][1][:fields][0][:format] = "MM-DD-YYYY"
     CustomWizard::Template.save(@template)
 
@@ -163,7 +163,7 @@ describe CustomWizard::UpdateValidator do
     ).to eq(nil)
   end
 
-  it 'doesnt validate date time field if the format is not respected' do
+  it 'doesn\'t validate date time field if the format is not respected' do
     @template[:steps][1][:fields][2][:format] = "MM-DD-YYYY HH:mm:ss"
     CustomWizard::Template.save(@template)
 
