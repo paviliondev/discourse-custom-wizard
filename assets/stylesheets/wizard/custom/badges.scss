@@ -31,7 +31,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
       .extra-info-wrapper & {
-        color: $header-primary;
+        color: var(--header_primary);
       }
     }
 
@@ -108,7 +108,7 @@
       text-overflow: ellipsis;
 
       .extra-info-wrapper & {
-        color: $header-primary;
+        color: var(--header_primary);
       }
     }
 

@@ -48,7 +48,7 @@
 
 .wizard-api-authentication {
   display: flex;
-  background-color: $primary-very-low;
+  background-color: var(--primary-very-low);
   padding: 20px;
   margin-bottom: 20px;
 
@@ -68,7 +68,7 @@
   }
 
   .status {
-    border-left: 1px solid $primary;
+    border-left: 1px solid var(--primary);
     margin-left: 20px;
     padding-left: 20px;
     width: 50%;
@@ -89,7 +89,7 @@
 }
 
 .wizard-api-endpoints {
-  background-color: $primary-very-low;
+  background-color: var(--primary-very-low);
   padding: 20px;
   margin-bottom: 20px;
 
