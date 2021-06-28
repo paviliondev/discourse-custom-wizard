@@ -35,6 +35,22 @@ if respond_to?(:register_svg_icon)
   register_svg_icon "save"
 end
 
+class ::Sprockets::DirectiveProcessor
+  def process_require_tree_discourse_directive(path = ".")
+    raise CustomWizard::SprocketsEmptyPath, "path cannot be empty" if path == "."
+
+    discourse_asset_path = "#{Rails.root}/app/assets/javascripts/"
+    path = File.expand_path(path, discourse_asset_path)
+    stat = @environment.stat(path)
+
+    if stat && stat.directory?
+      require_paths(*@environment.stat_sorted_tree_with_dependencies(path))
+    else
+      raise CustomWizard::SprocketsFileNotFound, "#{path} not found in discourse core"
+    end
+  end
+end
+
 after_initialize do
   %w[
     ../lib/custom_wizard/engine.rb
@@ -74,6 +90,7 @@ after_initialize do
     ../lib/custom_wizard/api/endpoint.rb
     ../lib/custom_wizard/api/log_entry.rb
     ../lib/custom_wizard/liquid_extensions/first_non_empty.rb
+    ../lib/custom_wizard/exceptions/exceptions.rb
     ../serializers/custom_wizard/api/authorization_serializer.rb
     ../serializers/custom_wizard/api/basic_endpoint_serializer.rb
     ../serializers/custom_wizard/api/endpoint_serializer.rb
