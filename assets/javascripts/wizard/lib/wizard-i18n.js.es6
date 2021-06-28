@@ -1,7 +1,10 @@
 import I18n from "I18n";
 
 const getThemeId = () => {
-  let themeId = parseInt($("meta[name=discourse_theme_ids]")[0].content, 10);
+  let themeId = parseInt(
+    document.querySelector("meta[name=discourse_theme_id]").content,
+    10
+  );
 
   if (!isNaN(themeId)) {
     return themeId.toString();

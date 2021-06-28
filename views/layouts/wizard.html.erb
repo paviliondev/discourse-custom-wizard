@@ -4,8 +4,8 @@
 
     <%= discourse_stylesheet_link_tag :wizard, theme_id: nil %>
     <%= discourse_stylesheet_link_tag :wizard_custom %>
-    <%- if wizard_theme_ids.present? %>
-      <%= discourse_stylesheet_link_tag (mobile_view? ? :mobile_theme : :desktop_theme), theme_ids: wizard_theme_ids %>
+    <%- if wizard_theme_id.present? %>
+      <%= discourse_stylesheet_link_tag (mobile_view? ? :mobile_theme : :desktop_theme), theme_id: wizard_theme_id %>
     <%- end %>
 
     <%= preload_script "locales/#{I18n.locale}" %>
@@ -29,7 +29,7 @@
 
     <%= tag.meta id: 'data-discourse-setup', data: client_side_setup_data %>
 
-    <meta name="discourse_theme_ids" content="<%= wizard_theme_ids&.join(",") %>">
+    <meta name="discourse_theme_id" content="<%= wizard_theme_id %>">
     <meta name="discourse-base-uri" content="<%= Discourse.base_path %>">
 
     <%= render partial: "layouts/head" %>
