@@ -714,20 +714,20 @@
 }
 
 .btn.btn-pavilion-pro {
-  background: $pavilion-primary;
-  color: $pavilion-secondary;
+  background: var(--pavilion-primary);
+  color: var(--pavilion-secondary);
 
   .d-icon {
-    color: $pavilion-secondary;
+    color: var(--pavilion-secondary);
   }
 
   &:hover,
   &:focus {
-    background: darken($pavilion-primary, 5%);
+    background: darken(var(--pavilion-primary), 5%);
     
     &[href],
     svg.d-icon {
-      color: darken($pavilion-secondary, 10%);
+      color: darken(var(--pavilion-secondary), 10%);
     }
   }
 }
