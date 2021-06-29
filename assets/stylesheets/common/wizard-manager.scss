@@ -16,13 +16,13 @@
 
     #import-button:enabled,
     #export-button:enabled {
-      background-color: $tertiary;
-      color: $secondary;
+      background-color: var(--tertiary);
+      color: var(--secondary);
     }
 
     #destroy-button:enabled {
-      background-color: $danger;
-      color: $secondary;
+      background-color: var(--danger);
+      color: var(--secondary);
     }
   }
 
@@ -32,13 +32,13 @@
 
   .filename {
     padding: 0 10px;
-    border: 1px solid $primary;
+    border: 1px solid var(--primary);
     display: inline-flex;
     height: 28px;
     line-height: 28px;
 
     a {
-      color: $primary;
+      color: var(--primary);
       margin-right: 5px;
       display: inline-flex;
       align-items: center;
