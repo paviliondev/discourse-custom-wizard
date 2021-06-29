@@ -22,7 +22,7 @@
     width: min-content;
     margin-bottom: 10px;
     height: 20px;
-    border: 2px solid $primary-low;
+    border: 2px solid var(--primary-low);
   }
 }
 
@@ -33,8 +33,8 @@
   position: relative;
   padding: 25px 7px 7px 7px;
   margin-bottom: 10px;
-  background: rgba($secondary, 0.5);
-  border: 2px solid $primary-low;
+  background: rgba(var(--secondary-rgb), 0.5);
+  border: 2px solid var(--primary-low);
 
   .d-icon {
     text-align: center;
@@ -45,7 +45,7 @@
   }
 
   input[disabled] {
-    background-color: $primary-low;
+    background-color: var(--primary-low);
     border-color: #ddd;
   }
 
@@ -62,10 +62,10 @@
     align-items: center;
     justify-content: center;
     transform: translateY(-50%);
-    background: $secondary;
+    background: var(--secondary);
     border-radius: 50%;
     font-size: 0.8em;
-    border: 2px solid $primary-low;
+    border: 2px solid var(--primary-low);
   }
 
   &.association,
@@ -89,8 +89,8 @@
 
   &.single {
     height: 28px;
-    background: $secondary;
-    border: 1px solid $primary-medium;
+    background: var(--secondary);
+    border: 1px solid var(--primary-medium);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -126,7 +126,7 @@
   }
 
   .type-selector a {
-    color: $primary;
+    color: var(--primary);
     margin-right: 4px;
     display: flex;
     align-items: center;
@@ -150,11 +150,11 @@
     box-shadow: shadow("dropdown");
     position: absolute;
     display: flex;
-    background: $secondary;
+    background: var(--secondary);
     z-index: 200;
     padding: 5px 7px;
     flex-direction: column;
-    border: 1px solid $primary-low;
+    border: 1px solid var(--primary-low);
   }
 
   .value-list .remove-value-btn {
@@ -162,7 +162,7 @@
     border: none;
 
     .d-icon {
-      color: $primary;
+      color: var(--primary);
     }
   }
 
