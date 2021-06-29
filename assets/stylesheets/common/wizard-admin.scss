@@ -724,6 +724,7 @@
   &:hover,
   &:focus {
     background: darken($pavilion-primary, 5%);
+    
     &[href],
     svg.d-icon {
       color: darken($pavilion-secondary, 10%);
