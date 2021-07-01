@@ -77,7 +77,6 @@ class CustomWizard::Field
         char_counter: nil
       },
       text_only: {},
-      composer_preview: {},
       date: {
         format: "YYYY-MM-DD"
       },
