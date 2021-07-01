@@ -27,8 +27,8 @@ export default {
       .setDefaultOwner;
     const messageBus = requirejs("message-bus-client").default;
     const getToken = requirejs("wizard/lib/ajax").getToken;
-    const setEnvironment = requirejs("discourse-common/config/environment").setEnvironment
-    const isDevelopment = requirejs("discourse-common/config/environment").isDevelopment
+    const setEnvironment = requirejs("discourse-common/config/environment").setEnvironment;
+    const isDevelopment = requirejs("discourse-common/config/environment").isDevelopment;
     const container = app.__container__;
     Discourse.Model = EmberObject.extend();
     Discourse.__container__ = container;
@@ -111,7 +111,7 @@ export default {
       model() {},
     });
 
-    $.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
+    $.ajaxPrefilter(function( options, originalOptions ) {
       if(isDevelopment()) {
         options.data = $.param($.extend(originalOptions.data || {}, {
           authenticity_token: getToken()
