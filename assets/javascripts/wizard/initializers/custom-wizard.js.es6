@@ -26,7 +26,9 @@ export default {
     const setDefaultOwner = requirejs("discourse-common/lib/get-owner")
       .setDefaultOwner;
     const messageBus = requirejs("message-bus-client").default;
-
+    const getToken = requirejs("wizard/lib/ajax").getToken;
+    const setEnvironment = requirejs("discourse-common/config/environment").setEnvironment
+    const isDevelopment = requirejs("discourse-common/config/environment").isDevelopment
     const container = app.__container__;
     Discourse.Model = EmberObject.extend();
     Discourse.__container__ = container;
@@ -89,6 +91,7 @@ export default {
     const session = container.lookup("session:main");
     const setupData = document.getElementById("data-discourse-setup").dataset;
     session.set("highlightJsPath", setupData.highlightJsPath);
+    setEnvironment(setupData.environment);
 
     Router.reopen({
       rootURL: getUrl("/w/"),
@@ -106,6 +109,14 @@ export default {
         this.transitionTo("custom");
       },
       model() {},
+    });
+
+    $.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
+      if(isDevelopment()) {
+        options.data = $.param($.extend(originalOptions.data || {}, {
+          authenticity_token: getToken()
+        }));
+      }
     });
   },
 };
