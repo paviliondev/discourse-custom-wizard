@@ -23,7 +23,6 @@ export default Component.extend({
   },
 
   updatePreview() {
-    this.set('preview', this.get('field.preview_template'));
     if (this.isDestroyed) {
       return;
     }
