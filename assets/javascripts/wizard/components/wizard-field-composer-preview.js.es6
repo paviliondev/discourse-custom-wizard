@@ -23,6 +23,7 @@ export default Component.extend({
   },
 
   updatePreview() {
+    this.set('preview', this.get('field.preview_template'));
     if (this.isDestroyed) {
       return;
     }
@@ -32,14 +33,10 @@ export default Component.extend({
         return;
       }
 
-      const $preview = $(this.element).closest(".wizard-field").find('.field-description');
+      const $preview = $(this.element)
+
       if ($preview.length === 0) {
         return;
-      }
-      
-      if(!$preview.prop('classList').contains('d-editor-preview')) {
-        $preview.addClass('d-editor-preview');
-        $preview.wrap('<div class="wizard-composer-preview d-editor-preview-wrapper"></div>')
       }
 
       if (this.previewUpdated) {
