@@ -109,6 +109,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
           :format,
           :limit,
           :property,
+          :preview_template,
           prefill: mapped_params,
           content: mapped_params,
           condition: mapped_params,
