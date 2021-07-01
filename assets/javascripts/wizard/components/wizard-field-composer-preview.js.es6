@@ -1,7 +1,6 @@
 import Component from "@ember/component";
 import { loadOneboxes } from "discourse/lib/load-oneboxes";
-import { generateCookFunction } from "discourse/lib/text";
-import { schedule } from "@ember/runloop";
+import { later, schedule } from "@ember/runloop";
 import {
   fetchUnseenHashtags,
   linkSeenHashtags,
@@ -16,7 +15,6 @@ import { resolveAllShortUrls } from "pretty-text/upload-short-url";
 import { ajax } from "discourse/lib/ajax";
 
 export default Component.extend({
-
   init() {
     this._super();
     this.updatePreview();
@@ -32,7 +30,7 @@ export default Component.extend({
         return;
       }
 
-      const $preview = $(this.element)
+      const $preview = $(this.element);
 
       if ($preview.length === 0) {
         return;
