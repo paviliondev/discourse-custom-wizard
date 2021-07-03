@@ -111,6 +111,19 @@
         checked=field.char_counter}}
     </div>
   </div>
+
+  <div class="setting full">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.field.field_placeholder"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{input
+        type="text"
+        class="medium"
+        value=field.placeholder}}
+    </div>
+  </div>
 {{/if}}
 
 {{#if isUpload}}

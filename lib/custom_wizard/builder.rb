@@ -86,7 +86,7 @@ class CustomWizard::Builder
       required: field_template['required']
     }
 
-    %w(label description image key validations min_length max_length char_counter).each do |key|
+    %w(label description image key validations min_length max_length char_counter placeholder).each do |key|
       params[key.to_sym] = field_template[key] if field_template[key]
     end
 
