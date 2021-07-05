@@ -187,6 +187,16 @@ class CustomWizard::Builder
       )
     end
 
+    if field_template['placeholder'].present?
+      params[:placeholder] = mapper.interpolate(
+        field_template['placeholder'],
+        user: true,
+        value: true,
+        wizard: true,
+        template: true
+      )
+    end
+
     field = step.add_field(params)
   end
 

@@ -71,6 +71,7 @@ class CustomWizard::FieldSerializer < ::ApplicationSerializer
   end
 
   def placeholder
+    return object.placeholder if object.placeholder.present?
     I18n.t("#{object.key || i18n_key}.placeholder", default: '')
   end
 
