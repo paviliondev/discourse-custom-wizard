@@ -86,7 +86,7 @@ class CustomWizard::Builder
       required: field_template['required']
     }
 
-    %w(label description image key validations min_length max_length char_counter placeholder).each do |key|
+    %w(label description image key validations min_length max_length char_counter).each do |key|
       params[key.to_sym] = field_template[key] if field_template[key]
     end
 
@@ -180,6 +180,16 @@ class CustomWizard::Builder
     if field_template['description'].present?
       params[:description] = mapper.interpolate(
         field_template['description'],
+        user: true,
+        value: true,
+        wizard: true,
+        template: true
+      )
+    end
+
+    if field_template['placeholder'].present?
+      params[:placeholder] = mapper.interpolate(
+        field_template['placeholder'],
         user: true,
         value: true,
         wizard: true,
