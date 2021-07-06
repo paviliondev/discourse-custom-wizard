@@ -1,6 +1,6 @@
 import Component from "@ember/component";
 import { loadOneboxes } from "discourse/lib/load-oneboxes";
-import { later, schedule } from "@ember/runloop";
+import { schedule } from "@ember/runloop";
 import {
   fetchUnseenHashtags,
   linkSeenHashtags,
@@ -10,7 +10,6 @@ import {
   linkSeenMentions,
 } from "discourse/lib/link-mentions";
 import discourseDebounce from "discourse-common/lib/debounce";
-import Composer from "discourse/models/composer";
 import { resolveAllShortUrls } from "pretty-text/upload-short-url";
 import { ajax } from "discourse/lib/ajax";
 
@@ -65,7 +64,7 @@ export default Component.extend({
     const paintFunc = () => {
       let refresh = false;
 
-      const paintedCount = loadOneboxes(
+      loadOneboxes(
         $preview[0],
         ajax,
         null,
