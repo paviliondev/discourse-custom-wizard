@@ -240,30 +240,42 @@
 // Markdown table styles for wizard composer preview
 
 .cooked table,
-.d-editor-preview table {
-  border-collapse: collapse;
+.d-editor-preview {
+  a.mention {
+    display: inline-block; // https://bugzilla.mozilla.org/show_bug.cgi?id=1656119
+    font-weight: bold;
+    font-size: 0.93em;
+    color: var(--primary-high-or-secondary-low);
+    padding: 0 4px 1px;
+    background: var(--primary-low);
+    border-radius: 8px;
+  }
 
-  tr {
-    border-bottom: 1px solid var(--primary-low);
-    &.highlighted {
-      animation: background-fade-highlight 2.5s ease-out;
+  table {
+    border-collapse: collapse;
+
+    tr {
+      border-bottom: 1px solid var(--primary-low);
+      &.highlighted {
+        animation: background-fade-highlight 2.5s ease-out;
+      }
     }
-  }
 
-  thead {
-    th {
-      text-align: left;
-      padding: 0.5em;
-      font-weight: bold;
-      color: var(--primary);
+    thead {
+      th {
+        text-align: left;
+        padding: 0.5em;
+        font-weight: bold;
+        color: var(--primary);
+      }
     }
-  }
 
-  tbody {
-    border-top: 3px solid var(--primary-low);
-  }
+    tbody {
+      border-top: 3px solid var(--primary-low);
+    }
 
-  td {
-    padding: 3px 3px 3px 0.5em;
+    td {
+      padding: 3px 3px 3px 0.5em;
+    }
   }
 }
