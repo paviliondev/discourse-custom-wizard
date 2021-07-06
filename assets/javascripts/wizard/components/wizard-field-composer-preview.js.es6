@@ -10,7 +10,6 @@ import {
   linkSeenMentions,
 } from "discourse/lib/link-mentions";
 import discourseDebounce from "discourse-common/lib/debounce";
-import { resetCache } from "pretty-text/oneboxer";
 import { resolveAllShortUrls } from "pretty-text/upload-short-url";
 import { ajax } from "discourse/lib/ajax";
 import { on } from "discourse-common/utils/decorators";
