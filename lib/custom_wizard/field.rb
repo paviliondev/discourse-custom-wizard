@@ -21,7 +21,8 @@ class CustomWizard::Field
               :limit,
               :property,
               :content,
-              :preview_template
+              :preview_template,
+              :placeholder
 
   attr_accessor :index,
                 :step
@@ -46,6 +47,7 @@ class CustomWizard::Field
     @property = attrs[:property]
     @content = attrs[:content]
     @preview_template = attrs[:preview_template]
+    @placeholder = attrs[:placeholder]
   end
 
   def label
@@ -65,18 +67,21 @@ class CustomWizard::Field
         max_length: nil,
         prefill: nil,
         char_counter: nil,
-        validations: nil
+        validations: nil,
+        placeholder: nil
       },
       textarea: {
         min_length: nil,
         max_length: nil,
         prefill: nil,
-        char_counter: nil
+        char_counter: nil,
+        placeholder: nil
       },
       composer: {
         min_length: nil,
         max_length: nil,
-        char_counter: nil
+        char_counter: nil,
+        placeholder: nil
       },
       text_only: {},
       composer_preview: {

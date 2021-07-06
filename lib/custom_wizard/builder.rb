@@ -189,14 +189,24 @@ class CustomWizard::Builder
 
     if field_template['preview_template'].present?
       preview_template = mapper.interpolate(
-       field_template['preview_template'],
-       user: true,
-       value: true,
-       wizard: true,
-       template: true
-     )
+        field_template['preview_template'],
+        user: true,
+        value: true,
+        wizard: true,
+        template: true
+      )
 
       params[:preview_template] = PrettyText.cook(preview_template)
+    end
+
+    if field_template['placeholder'].present?
+      params[:placeholder] = mapper.interpolate(
+        field_template['placeholder'],
+        user: true,
+        value: true,
+        wizard: true,
+        template: true
+      )
     end
 
     field = step.add_field(params)
