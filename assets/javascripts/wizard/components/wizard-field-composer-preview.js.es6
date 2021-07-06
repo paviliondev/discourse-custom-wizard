@@ -10,15 +10,13 @@ import {
   linkSeenMentions,
 } from "discourse/lib/link-mentions";
 import discourseDebounce from "discourse-common/lib/debounce";
+import { resetCache } from "pretty-text/oneboxer";
 import { resolveAllShortUrls } from "pretty-text/upload-short-url";
 import { ajax } from "discourse/lib/ajax";
+import { on } from "discourse-common/utils/decorators";
 
 export default Component.extend({
-  init() {
-    this._super();
-    this.updatePreview();
-  },
-
+  @on('init')
   updatePreview() {
     if (this.isDestroyed) {
       return;
@@ -35,9 +33,7 @@ export default Component.extend({
         return;
       }
 
-      if (this.previewUpdated) {
-        this.previewUpdated($preview);
-      }
+      this.previewUpdated($preview);
     });
   },
 
@@ -62,15 +58,13 @@ export default Component.extend({
 
     // Paint oneboxes
     const paintFunc = () => {
-      let refresh = false;
-
       loadOneboxes(
         $preview[0],
         ajax,
         null,
         null,
         this.siteSettings.max_oneboxes_per_post,
-        refresh
+        true // refresh on every load
       );
     };
 
