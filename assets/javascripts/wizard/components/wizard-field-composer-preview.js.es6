@@ -15,7 +15,7 @@ import { ajax } from "discourse/lib/ajax";
 import { on } from "discourse-common/utils/decorators";
 
 export default Component.extend({
-  @on('init')
+  @on("init")
   updatePreview() {
     if (this.isDestroyed) {
       return;
