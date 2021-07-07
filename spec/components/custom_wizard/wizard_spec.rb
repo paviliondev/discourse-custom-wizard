@@ -199,6 +199,7 @@ describe CustomWizard::Wizard do
   end
 
   it "lists the site categories" do
+    Site.clear_cache
     expect(@wizard.categories.length).to eq(1)
   end
 
