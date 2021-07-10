@@ -1,14 +1,6 @@
 import Component from "@ember/component";
 import { loadOneboxes } from "discourse/lib/load-oneboxes";
 import { schedule } from "@ember/runloop";
-import {
-  fetchUnseenHashtags,
-  linkSeenHashtags,
-} from "discourse/lib/link-hashtags";
-import {
-  fetchUnseenMentions,
-  linkSeenMentions,
-} from "discourse/lib/link-mentions";
 import discourseDebounce from "discourse-common/lib/debounce";
 import { resolveAllShortUrls } from "pretty-text/upload-short-url";
 import { ajax } from "discourse/lib/ajax";
