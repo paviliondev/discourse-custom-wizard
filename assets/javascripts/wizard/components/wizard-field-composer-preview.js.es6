@@ -37,24 +37,6 @@ export default Component.extend({
   },
 
   previewUpdated($preview) {
-    // Paint mentions
-    const unseenMentions = linkSeenMentions($preview, this.siteSettings);
-    if (unseenMentions.length) {
-      discourseDebounce(
-        this,
-        this._renderUnseenMentions,
-        $preview,
-        unseenMentions,
-        450
-      );
-    }
-
-    // Paint category and tag hashtags
-    const unseenHashtags = linkSeenHashtags($preview);
-    if (unseenHashtags.length > 0) {
-      discourseDebounce(this, this._renderUnseenHashtags, $preview, 450);
-    }
-
     // Paint oneboxes
     const paintFunc = () => {
       loadOneboxes(
@@ -71,22 +53,5 @@ export default Component.extend({
 
     // Short upload urls need resolution
     resolveAllShortUrls(ajax, this.siteSettings, $preview[0]);
-  },
-
-  _renderUnseenMentions($preview, unseen) {
-    // 'Create a New Topic' scenario is not supported (per conversation with codinghorror)
-    // https://meta.discourse.org/t/taking-another-1-7-release-task/51986/7
-    fetchUnseenMentions(unseen, this.get("composer.topic.id")).then(() => {
-      linkSeenMentions($preview, this.siteSettings);
-    });
-  },
-
-  _renderUnseenHashtags($preview) {
-    const unseen = linkSeenHashtags($preview);
-    if (unseen.length > 0) {
-      fetchUnseenHashtags(unseen).then(() => {
-        linkSeenHashtags($preview);
-      });
-    }
-  },
+  }
 });
