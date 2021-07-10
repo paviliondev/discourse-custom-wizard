@@ -45,5 +45,5 @@ export default Component.extend({
 
     // Short upload urls need resolution
     resolveAllShortUrls(ajax, this.siteSettings, $preview[0]);
-  }
+  },
 });
