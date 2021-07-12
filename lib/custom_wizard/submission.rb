@@ -29,7 +29,8 @@ class CustomWizard::Submission
 
     data = (data || {}).with_indifferent_access
     @id = data['id'] || SecureRandom.hex(12)
-    @fields = data.except(META + ['id']) || {}
+    non_field_keys = META + ['id']
+    @fields = data.except(*non_field_keys) || {}
 
     META.each do |attr|
       send("#{attr}=", data[attr]) if data[attr]
