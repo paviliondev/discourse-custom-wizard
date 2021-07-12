@@ -187,6 +187,18 @@ class CustomWizard::Builder
       )
     end
 
+    if field_template['preview_template'].present?
+      preview_template = mapper.interpolate(
+        field_template['preview_template'],
+        user: true,
+        value: true,
+        wizard: true,
+        template: true
+      )
+
+      params[:preview_template] = PrettyText.cook(preview_template)
+    end
+
     if field_template['placeholder'].present?
       params[:placeholder] = mapper.interpolate(
         field_template['placeholder'],

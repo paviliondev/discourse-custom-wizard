@@ -29,8 +29,6 @@ export default {
     const getToken = requirejs("wizard/lib/ajax").getToken;
     const setEnvironment = requirejs("discourse-common/config/environment")
       .setEnvironment;
-    const isDevelopment = requirejs("discourse-common/config/environment")
-      .isDevelopment;
     const container = app.__container__;
     Discourse.Model = EmberObject.extend();
     Discourse.__container__ = container;
@@ -114,9 +112,7 @@ export default {
     });
 
     $.ajaxPrefilter(function (_, __, jqXHR) {
-      if (isDevelopment()) {
-        jqXHR.setRequestHeader("X-CSRF-Token", getToken());
-      }
+      jqXHR.setRequestHeader("X-CSRF-Token", getToken());
     });
   },
 };

@@ -21,6 +21,7 @@ class CustomWizard::Field
               :limit,
               :property,
               :content,
+              :preview_template,
               :placeholder
 
   attr_accessor :index,
@@ -45,6 +46,7 @@ class CustomWizard::Field
     @limit = attrs[:limit]
     @property = attrs[:property]
     @content = attrs[:content]
+    @preview_template = attrs[:preview_template]
     @placeholder = attrs[:placeholder]
   end
 
@@ -82,6 +84,9 @@ class CustomWizard::Field
         placeholder: nil
       },
       text_only: {},
+      composer_preview: {
+        preview_template: nil,
+      },
       date: {
         format: "YYYY-MM-DD"
       },

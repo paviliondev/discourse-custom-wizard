@@ -18,7 +18,8 @@ class CustomWizard::FieldSerializer < ::ApplicationSerializer
              :content,
              :validations,
              :max_length,
-             :char_counter
+             :char_counter,
+             :preview_template
 
   def id
     object.id
@@ -116,5 +117,9 @@ class CustomWizard::FieldSerializer < ::ApplicationSerializer
 
   def char_counter
     object.char_counter
+  end
+
+  def preview_template
+    object.preview_template
   end
 end

@@ -175,6 +175,7 @@ en:
           char_counter_placeholder: "Display Character Counter"
           field_placeholder: "Field Placeholder"
           file_types: "File Types"
+          preview_template: "Preview Template"
           limit: "Limit"
           property: "Property"
           prefill: "Prefill"
@@ -201,6 +202,7 @@ en:
             text: "Text"
             textarea: Textarea
             composer: Composer
+            composer_preview: Composer Preview
             text_only: Text Only
             number: Number
             checkbox: Checkbox
