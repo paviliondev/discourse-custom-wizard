@@ -40,7 +40,7 @@ describe ApplicationController do
         get '/', headers: { 'REFERER' => "/t/2" }
         expect(
           CustomWizard::Wizard.create(@template['id'], user).submissions
-            .first.fields['redirect_to']
+            .first.redirect_to
         ).to eq("/t/2")
       end
 
