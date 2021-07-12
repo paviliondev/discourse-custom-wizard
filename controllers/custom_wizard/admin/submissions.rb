@@ -13,34 +13,20 @@ class CustomWizard::AdminSubmissionsController < CustomWizard::AdminController
   def show
     render_json_dump(
       wizard: CustomWizard::BasicWizardSerializer.new(@wizard, root: false),
-      submissions: build_submissions.as_json
+      submissions: ActiveModel::ArraySerializer.new(ordered_submissions, each_serializer: CustomWizard::SubmissionSerializer)
     )
   end
 
   def download
-    send_data build_submissions.to_json,
+    send_data ordered_submissions.to_json,
       filename: "#{Discourse.current_hostname}-wizard-submissions-#{@wizard.name}.json",
       content_type: "application/json",
       disposition: "attachment"
   end
 
-  private
+  protected
 
-  def build_submissions
-    PluginStoreRow.where(plugin_name: "#{@wizard.id}_submissions")
-      .order('id DESC')
-      .map do |row|
-        value = ::JSON.parse(row.value)
-
-        if user = User.find_by(id: row.key)
-          username = user.username
-        else
-          username = I18n.t('admin.wizard.submissions.no_user', id: row.key)
-        end
-
-        value.map do |v|
-          { username: username }.merge!(v.except("redirect_to"))
-        end
-      end.flatten
+  def ordered_submissions
+    CustomWizard::Submission.list(@wizard, order_by: 'id')
   end
 end
