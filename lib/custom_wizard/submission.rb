@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class CustomWizard::Submission
   include ActiveModel::SerializerSupport
-  
+
   PAGE_LIMIT = 50
   KEY ||= "submissions"
   META ||= %w(submitted_at route_to redirect_on_complete redirect_to)
@@ -105,7 +105,7 @@ class CustomWizard::Submission
     result = OpenStruct.new(submissions: [], total: nil)
 
     query.each do |record|
-      if (submission_data = ::JSON.parse(record.value)).any?        
+      if (submission_data = ::JSON.parse(record.value)).any?
         submission_data.each do |data|
           result.submissions.push(new(wizard, data, record.key))
         end

@@ -24,7 +24,7 @@ describe CustomWizard::Submission do
     @count = CustomWizard::Submission::PAGE_LIMIT + 20
 
     @count.times do |index|
-      described_class.new(@wizard, step_1_field_1: "I am user submission #{index+1}").save
+      described_class.new(@wizard, step_1_field_1: "I am user submission #{index + 1}").save
     end
     described_class.new(@wizard2, step_1_field_1: "I am another user's submission").save
     described_class.new(@wizard3, step_1_field_1: "I am a user submission on another wizard").save
