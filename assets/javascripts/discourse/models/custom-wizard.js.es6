@@ -220,43 +220,45 @@ CustomWizard.reopenClass({
 
     return ajax(`/admin/wizards/submissions/${wizardId}`, {
       type: "GET",
-      data
-    }).then(result => {
-      if (result.wizard) {
-        let fields = ["username"];
-        let submissions = [];
-        let wizard = result.wizard;
-        let total = result.total;
+      data,
+    })
+      .then((result) => {
+        if (result.wizard) {
+          let fields = ["username"];
+          let submissions = [];
+          let wizard = result.wizard;
+          let total = result.total;
 
-        result.submissions.forEach((s) => {
-          let submission = {
-            username: s.username,
-          };
+          result.submissions.forEach((s) => {
+            let submission = {
+              username: s.username,
+            };
 
-          Object.keys(s.fields).forEach((f) => {
-            if (fields.indexOf(f) < 0) {
-              fields.push(f);
-            }
+            Object.keys(s.fields).forEach((f) => {
+              if (fields.indexOf(f) < 0) {
+                fields.push(f);
+              }
 
-            if (fields.includes(f)) {
-              submission[f] = s.fields[f];
-            }
+              if (fields.includes(f)) {
+                submission[f] = s.fields[f];
+              }
+            });
+
+            submission["submitted_at"] = s.submitted_at;
+            submissions.push(submission);
           });
-          
-          submission['submitted_at'] = s.submitted_at;
-          submissions.push(submission);
-        });
 
-        fields.push("submitted_at");
+          fields.push("submitted_at");
 
-        return {
-          wizard,
-          fields,
-          submissions,
-          total
-        };
-      }
-    }).catch(popupAjaxError);
+          return {
+            wizard,
+            fields,
+            submissions,
+            total,
+          };
+        }
+      })
+      .catch(popupAjaxError);
   },
 
   create(wizardJson = {}) {

@@ -12,7 +12,7 @@ export default DiscourseRoute.extend({
       wizard: model.wizard,
       fields: model.fields,
       submissions: A(model.submissions),
-      total: model.total
+      total: model.total,
     });
   },
 });
