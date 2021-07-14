@@ -3,10 +3,7 @@ class CustomWizard::SubmissionSerializer < ApplicationSerializer
   attributes :id,
              :username,
              :fields,
-             :submitted_at,
-             :route_to,
-             :redirect_on_complete,
-             :redirect_to
+             :submitted_at
 
   def username
     object.user.present? ?
