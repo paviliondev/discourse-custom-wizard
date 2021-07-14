@@ -256,6 +256,10 @@
         width: 100%;
         box-sizing: border-box;
         margin-bottom: 0;
+
+        &.medium {
+          width: 40%;
+        }
       }
 
       input[type="number"] {
