@@ -21,8 +21,11 @@ describe CustomWizard::Submission do
     @wizard = CustomWizard::Wizard.create(template_json["id"], user)
     @wizard2 = CustomWizard::Wizard.create(template_json["id"], user2)
     @wizard3 = CustomWizard::Wizard.create(template_json_2["id"], user)
+    @count = CustomWizard::Submission::PAGE_LIMIT + 20
 
-    described_class.new(@wizard, step_1_field_1: "I am a user submission").save
+    @count.times do |index|
+      described_class.new(@wizard, step_1_field_1: "I am user submission #{index + 1}").save
+    end
     described_class.new(@wizard2, step_1_field_1: "I am another user's submission").save
     described_class.new(@wizard3, step_1_field_1: "I am a user submission on another wizard").save
   end
@@ -30,14 +33,18 @@ describe CustomWizard::Submission do
   it "saves a user's submission" do
     expect(
       described_class.get(@wizard, user.id).fields["step_1_field_1"]
-    ).to eq("I am a user submission")
+    ).to eq("I am user submission #{@count}")
   end
 
   it "list submissions by wizard" do
-    expect(described_class.list(@wizard).size).to eq(2)
+    expect(described_class.list(@wizard).total).to eq(@count + 1)
   end
 
   it "list submissions by wizard and user" do
-    expect(described_class.list(@wizard, user_id: user.id).size).to eq(1)
+    expect(described_class.list(@wizard, user_id: user.id).total).to eq(@count)
+  end
+
+  it "paginates submission lists" do
+    expect(described_class.list(@wizard, page: 1).submissions.size).to eq((@count + 1) - CustomWizard::Submission::PAGE_LIMIT)
   end
 end

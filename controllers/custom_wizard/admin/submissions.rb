@@ -13,12 +13,16 @@ class CustomWizard::AdminSubmissionsController < CustomWizard::AdminController
   def show
     render_json_dump(
       wizard: CustomWizard::BasicWizardSerializer.new(@wizard, root: false),
-      submissions: ActiveModel::ArraySerializer.new(ordered_submissions, each_serializer: CustomWizard::SubmissionSerializer)
+      submissions: ActiveModel::ArraySerializer.new(
+        submission_list.submissions,
+        each_serializer: CustomWizard::SubmissionSerializer
+      ),
+      total: submission_list.total
     )
   end
 
   def download
-    send_data ordered_submissions.to_json,
+    send_data submission_list.submissions.to_json,
       filename: "#{Discourse.current_hostname}-wizard-submissions-#{@wizard.name}.json",
       content_type: "application/json",
       disposition: "attachment"
@@ -26,7 +30,7 @@ class CustomWizard::AdminSubmissionsController < CustomWizard::AdminController
 
   protected
 
-  def ordered_submissions
-    CustomWizard::Submission.list(@wizard, order_by: 'id')
+  def submission_list
+    CustomWizard::Submission.list(@wizard, page: params[:page].to_i)
   end
 end

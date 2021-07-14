@@ -272,7 +272,7 @@ class CustomWizard::Wizard
 
   def submissions
     return nil unless user.present?
-    @submissions ||= CustomWizard::Submission.list(self, user_id: user.id)
+    @submissions ||= CustomWizard::Submission.list(self, user_id: user.id).submissions
   end
 
   def current_submission

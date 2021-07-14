@@ -2,6 +2,7 @@
 class CustomWizard::Submission
   include ActiveModel::SerializerSupport
 
+  PAGE_LIMIT = 50
   KEY ||= "submissions"
   META ||= %w(submitted_at route_to redirect_on_complete redirect_to)
 
@@ -44,7 +45,7 @@ class CustomWizard::Submission
     validate
 
     submission_list = self.class.list(wizard, user_id: user.id)
-    submissions = submission_list.select { |submission| submission.id != self.id }
+    submissions = submission_list.submissions.select { |submission| submission.id != self.id }
     submissions.push(self)
 
     submission_data = submissions.map { |submission| data_to_save(submission)  }
@@ -92,24 +93,35 @@ class CustomWizard::Submission
   end
 
   def self.get(wizard, user_id)
-    data = PluginStore.get("#{wizard.id}_#{KEY}", user_id).first
+    data = PluginStore.get("#{wizard.id}_#{KEY}", user_id).last
     new(wizard, data, user_id)
   end
 
-  def self.list(wizard, user_id: nil, order_by: nil)
+  def self.list(wizard, user_id: nil, page: nil)
     params = { plugin_name: "#{wizard.id}_#{KEY}" }
     params[:key] = user_id if user_id.present?
 
     query = PluginStoreRow.where(params)
-    query = query.order("#{order_by} DESC") if order_by.present?
-
-    result = []
+    result = OpenStruct.new(submissions: [], total: nil)
 
     query.each do |record|
       if (submission_data = ::JSON.parse(record.value)).any?
         submission_data.each do |data|
-          result.push(new(wizard, data, record.key))
+          result.submissions.push(new(wizard, data, record.key))
         end
+      end
+    end
+
+    result.total = result.submissions.size
+
+    if !page.nil?
+      start = page * PAGE_LIMIT
+      length = PAGE_LIMIT
+
+      if result.submissions.length > start
+        result.submissions = result.submissions[start, length]
+      else
+        result.submissions = []
       end
     end
 
