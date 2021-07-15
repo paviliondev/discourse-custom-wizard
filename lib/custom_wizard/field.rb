@@ -45,6 +45,8 @@ class CustomWizard::Field
       content: [:serializable, :permitted, :mapped],
       prefill: [:permitted, :mapped],
       condition: [:permitted, :mapped],
+      preview_template: [:serializable, :permitted, :mapped],
+      placeholder: [:serializable, :permitted, :mapped],
     }
   end
 
@@ -108,20 +110,26 @@ class CustomWizard::Field
         max_length: nil,
         prefill: nil,
         char_counter: nil,
-        validations: nil
+        validations: nil,
+        placeholder: nil
       },
       textarea: {
         min_length: nil,
         max_length: nil,
         prefill: nil,
-        char_counter: nil
+        char_counter: nil,
+        placeholder: nil
       },
       composer: {
         min_length: nil,
         max_length: nil,
-        char_counter: nil
+        char_counter: nil,
+        placeholder: nil
       },
       text_only: {},
+      composer_preview: {
+        preview_template: nil,
+      },
       date: {
         format: "YYYY-MM-DD"
       },

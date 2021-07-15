@@ -15,7 +15,7 @@
 }
 
 .wizard-message {
-  background-color: $primary-low;
+  background-color: var(--primary-low);
   width: 100%;
   padding: 10px;
   box-sizing: border-box;
@@ -37,7 +37,7 @@
     }
 
     a + a {
-      border-left: 1px solid $primary-medium;
+      border-left: 1px solid var(--primary-medium);
       padding-left: 5px;
       margin-left: 5px;
     }
@@ -89,7 +89,7 @@
 
 .wizard-settings-parent {
   padding: 20px;
-  border: 1px solid $primary-low;
+  border: 1px solid var(--primary-low);
 }
 
 .wizard-settings-group {
@@ -115,7 +115,7 @@
 
 .wizard-custom-field {
   background: transparent;
-  background-color: dark-light-diff($primary, $secondary, 96%, -65%);
+  background-color: var(--primary-very-low);
   padding: 20px;
 }
 
@@ -182,7 +182,7 @@
       a {
         padding: 6px 12px;
         font-size: 1rem;
-        background-color: $primary-low;
+        background-color: var(--primary-low);
       }
 
       button {
@@ -256,6 +256,10 @@
         width: 100%;
         box-sizing: border-box;
         margin-bottom: 0;
+
+        &.medium {
+          width: 40%;
+        }
       }
 
       input[type="number"] {
@@ -263,7 +267,7 @@
       }
 
       input[disabled] {
-        background-color: $primary-low;
+        background-color: var(--primary-low);
         cursor: not-allowed;
       }
 
@@ -434,8 +438,8 @@
       display: none;
       margin: 0 0 10px 0;
       padding: 10px;
-      background-color: $secondary;
-      border: 1px solid $primary-medium;
+      background-color: var(--secondary);
+      border: 1px solid var(--primary-medium);
       max-width: 100%;
 
       &.force-preview {
@@ -454,17 +458,17 @@
 
     .btn {
       margin-right: 10px;
-      color: $primary;
+      color: var(--primary);
 
       &:hover {
-        color: $secondary;
+        color: var(--secondary);
       }
     }
 
     .wizard-editor-gutter-popover {
       position: absolute;
       padding: 10px;
-      background-color: $secondary;
+      background-color: var(--secondary);
       box-shadow: shadow("card");
       z-index: 200;
       top: 40px;
@@ -502,7 +506,7 @@
     width: 100px;
     display: inline-block;
     vertical-align: top;
-    background-color: $primary-low;
+    background-color: var(--primary-low);
     margin-right: 10px;
     margin-left: 3px;
   }
@@ -587,8 +591,8 @@
 .add-mapper-input .btn,
 .btn-after-time,
 .wizard-editor-gutter .btn {
-  background-color: $secondary;
-  border: 1px solid $primary-medium;
+  background-color: var(--secondary);
+  border: 1px solid var(--primary-medium);
 }
 
 .admin-wizards-custom-fields {
@@ -666,6 +670,10 @@
       button.btn {
         margin-left: 5px !important;
       }
+    }
+
+    td.external {
+      font-style: italic;
     }
   }
 }

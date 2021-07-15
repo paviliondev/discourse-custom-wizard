@@ -6,7 +6,7 @@ class CustomWizard::WizardController < ::ApplicationController
 
   before_action :ensure_plugin_enabled
   helper_method :wizard_page_title
-  helper_method :wizard_theme_ids
+  helper_method :wizard_theme_id
   helper_method :wizard_theme_lookup
   helper_method :wizard_theme_translations_lookup
 
@@ -20,16 +20,16 @@ class CustomWizard::WizardController < ::ApplicationController
     wizard ? (wizard.name || wizard.id) : I18n.t('wizard.custom_title')
   end
 
-  def wizard_theme_ids
-    wizard ? [wizard.theme_id] : nil
+  def wizard_theme_id
+    wizard ? wizard.theme_id : nil
   end
 
   def wizard_theme_lookup(name)
-    Theme.lookup_field(wizard_theme_ids, mobile_view? ? :mobile : :desktop, name)
+    Theme.lookup_field(wizard_theme_id, mobile_view? ? :mobile : :desktop, name)
   end
 
   def wizard_theme_translations_lookup
-    Theme.lookup_field(wizard_theme_ids, :translations, I18n.locale)
+    Theme.lookup_field(wizard_theme_id, :translations, I18n.locale)
   end
 
   def index
@@ -61,10 +61,11 @@ class CustomWizard::WizardController < ::ApplicationController
     result = success_json
     user = current_user
 
-    if user
+    if user && wizard.can_access?
       submission = wizard.current_submission
-      if submission && submission['redirect_to']
-        result.merge!(redirect_to: submission['redirect_to'])
+
+      if submission.present? && submission.redirect_to
+        result.merge!(redirect_to: submission.redirect_to)
       end
 
       wizard.final_cleanup!

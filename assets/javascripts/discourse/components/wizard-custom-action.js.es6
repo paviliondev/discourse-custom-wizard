@@ -62,6 +62,11 @@ export default Component.extend(UndoChanges, {
     return key;
   },
 
+  @discourseComputed("action.type")
+  customFieldsContext(type) {
+    return `action.${type}`;
+  },
+
   @discourseComputed("wizard.steps")
   runAfterContent(steps) {
     let content = steps.map(function (step) {

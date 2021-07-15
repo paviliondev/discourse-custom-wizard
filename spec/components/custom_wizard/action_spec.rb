@@ -72,6 +72,42 @@ describe CustomWizard::Action do
         raw: "topic body"
       ).exists?).to eq(false)
     end
+
+    it "adds custom fields" do
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      wizard.create_updater(wizard.steps.first.id,
+        step_1_field_1: "Topic Title",
+        step_1_field_2: "topic body"
+      ).update
+      wizard.create_updater(wizard.steps.second.id, {}).update
+      wizard.create_updater(wizard.steps.last.id,
+        step_3_field_3: category.id
+      ).update
+
+      topic = Topic.where(
+        title: "Topic Title",
+        category_id: category.id
+      ).first
+      topic_custom_field = TopicCustomField.where(
+        name: "topic_field",
+        value: "Topic custom field value",
+        topic_id: topic.id
+      )
+      topic_json_custom_field = TopicCustomField.where("
+        name = 'topic_json_field' AND
+        (value::json->>'key_1') = 'Key 1 value' AND
+        (value::json->>'key_2') = 'Key 2 value' AND
+        topic_id = #{topic.id}"
+      )
+      post_custom_field = PostCustomField.where(
+        name: "post_field",
+        value: "Post custom field value",
+        post_id: topic.first_post.id
+      )
+      expect(topic_custom_field.exists?).to eq(true)
+      expect(topic_json_custom_field.exists?).to eq(true)
+      expect(post_custom_field.exists?).to eq(true)
+    end
   end
 
   context 'sending a message' do
@@ -146,7 +182,7 @@ describe CustomWizard::Action do
       updater = wizard.create_updater(wizard.steps[1].id, {})
       updater.update
 
-      category = Category.find_by(id: wizard.current_submission['action_8'])
+      category = Category.find_by(id: wizard.current_submission.fields['action_8'])
 
       expect(updater.result[:redirect_on_next]).to eq(
         "/new-topic?title=Title%20of%20the%20composer%20topic&body=I%20am%20interpolating%20some%20user%20fields%20Angus%20angus%20angus%40email.com&category_id=#{category.id}&tags=tag1"
@@ -158,11 +194,10 @@ describe CustomWizard::Action do
       open_composer['post_template'] = "Body & more body & more body".dup
 
       wizard = CustomWizard::Wizard.new(@template, user)
-
       action = CustomWizard::Action.new(
         wizard: wizard,
         action: open_composer,
-        data: {}
+        submission: wizard.current_submission
       )
       action.perform
 
@@ -179,20 +214,20 @@ describe CustomWizard::Action do
     wizard = CustomWizard::Builder.new(@template[:id], user).build
     wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
     wizard.create_updater(wizard.steps[1].id, {}).update
-    expect(Category.where(id: wizard.current_submission['action_8']).exists?).to eq(true)
+    expect(Category.where(id: wizard.current_submission.fields['action_8']).exists?).to eq(true)
   end
 
   it 'creates a group' do
     wizard = CustomWizard::Builder.new(@template[:id], user).build
     wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
-    expect(Group.where(name: wizard.current_submission['action_9']).exists?).to eq(true)
+    expect(Group.where(name: wizard.current_submission.fields['action_9']).exists?).to eq(true)
   end
 
   it 'adds a user to a group' do
     wizard = CustomWizard::Builder.new(@template[:id], user).build
     step_id = wizard.steps[0].id
     updater = wizard.create_updater(step_id, step_1_field_1: "Text input").update
-    group = Group.find_by(name: wizard.current_submission['action_9'])
+    group = Group.find_by(name: wizard.current_submission.fields['action_9'])
     expect(group.users.first.username).to eq('angus')
   end
 
@@ -201,7 +236,7 @@ describe CustomWizard::Action do
     wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
     wizard.create_updater(wizard.steps[1].id, {}).update
     expect(CategoryUser.where(
-      category_id: wizard.current_submission['action_8'],
+      category_id: wizard.current_submission.fields['action_8'],
       user_id: user.id
     ).first.notification_level).to eq(2)
     expect(CategoryUser.where(

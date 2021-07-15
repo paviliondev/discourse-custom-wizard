@@ -34,7 +34,7 @@ describe CustomWizard::Wizard do
     template_json['steps'].each do |step_template|
       @wizard.append_step(step_template['id'])
     end
-    @wizard.update_step_order!
+    @wizard.update!
   end
 
   def progress_step(step_id, acting_user: user, wizard: @wizard)
@@ -44,7 +44,7 @@ describe CustomWizard::Wizard do
       context: wizard.id,
       subject: step_id
     )
-    @wizard.update_step_order!
+    @wizard.update!
   end
 
   it "appends steps" do
@@ -72,7 +72,7 @@ describe CustomWizard::Wizard do
     expect(@wizard.steps.first.index).to eq(2)
     expect(@wizard.steps.last.index).to eq(0)
 
-    @wizard.update_step_order!
+    @wizard.update!
 
     expect(@wizard.steps.first.id).to eq("step_3")
     expect(@wizard.steps.last.id).to eq("step_1")
@@ -173,6 +173,8 @@ describe CustomWizard::Wizard do
     progress_step("step_2", acting_user: trusted_user)
     progress_step("step_3", acting_user: trusted_user)
 
+    @permitted_template["multiple_submissions"] = true
+
     expect(
       CustomWizard::Wizard.new(@permitted_template, trusted_user).can_access?
     ).to eq(true)
@@ -197,19 +199,13 @@ describe CustomWizard::Wizard do
   end
 
   it "lists the site categories" do
+    Site.clear_cache
     expect(@wizard.categories.length).to eq(1)
   end
 
   context "submissions" do
     before do
-      @wizard.set_submissions(step_1_field_1: 'I am a user submission')
-    end
-
-    it "sets the user's submission" do
-      expect(
-        PluginStore.get("#{template_json['id']}_submissions", user.id)
-          .first['step_1_field_1']
-      ).to eq('I am a user submission')
+      CustomWizard::Submission.new(@wizard, step_1_field_1: "I am a user submission").save
     end
 
     it "lists the user's submissions" do
@@ -217,18 +213,8 @@ describe CustomWizard::Wizard do
     end
 
     it "returns the user's current submission" do
-      expect(@wizard.current_submission['step_1_field_1']).to eq('I am a user submission')
+      expect(@wizard.current_submission.fields["step_1_field_1"]).to eq("I am a user submission")
     end
-  end
-
-  it "provides class methods to set and list submissions" do
-    CustomWizard::Wizard.set_submissions(template_json['id'], user,
-      step_1_field_1: 'I am a user submission'
-    )
-    expect(
-      CustomWizard::Wizard.submissions(template_json['id'], user)
-        .first['step_1_field_1']
-    ).to eq('I am a user submission')
   end
 
   context "class methods" do
@@ -271,7 +257,7 @@ describe CustomWizard::Wizard do
 
   it "sets wizard redirects if user is permitted" do
     CustomWizard::Template.save(@permitted_template, skip_jobs: true)
-    CustomWizard::Wizard.set_wizard_redirect('super_mega_fun_wizard', trusted_user)
+    CustomWizard::Wizard.set_user_redirect('super_mega_fun_wizard', trusted_user)
     expect(
       trusted_user.custom_fields['redirect_to_wizard']
     ).to eq("super_mega_fun_wizard")
@@ -279,7 +265,7 @@ describe CustomWizard::Wizard do
 
   it "does not set a wizard redirect if user is not permitted" do
     CustomWizard::Template.save(@permitted_template, skip_jobs: true)
-    CustomWizard::Wizard.set_wizard_redirect('super_mega_fun_wizard', user)
+    CustomWizard::Wizard.set_user_redirect('super_mega_fun_wizard', user)
     expect(
       trusted_user.custom_fields['redirect_to_wizard']
     ).to eq(nil)

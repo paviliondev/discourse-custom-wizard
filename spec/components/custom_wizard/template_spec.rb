@@ -41,6 +41,14 @@ describe CustomWizard::Template do
     ).to eq(nil)
   end
 
+  it "removes user wizard redirects if template is removed" do
+    user.custom_fields['redirect_to_wizard'] = 'super_mega_fun_wizard'
+    user.save_custom_fields(true)
+
+    CustomWizard::Template.remove('super_mega_fun_wizard')
+    expect(user.reload.custom_fields['redirect_to_wizard']).to eq(nil)
+  end
+
   it "checks for wizard template existence" do
     expect(
       CustomWizard::Template.exists?('super_mega_fun_wizard')

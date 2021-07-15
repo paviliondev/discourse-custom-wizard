@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Create custom wizards
-# version: 0.7.0
+# version: 0.8.0
 # authors: Angus McLeod
 # url: https://github.com/paviliondev/discourse-custom-wizard
 # contact emails: angus@thepavilion.io
@@ -42,6 +42,22 @@ if respond_to?(:register_svg_icon)
   register_svg_icon "save"
 end
 
+class ::Sprockets::DirectiveProcessor
+  def process_require_tree_discourse_directive(path = ".")
+    raise CustomWizard::SprocketsEmptyPath, "path cannot be empty" if path == "."
+
+    discourse_asset_path = "#{Rails.root}/app/assets/javascripts/"
+    path = File.expand_path(path, discourse_asset_path)
+    stat = @environment.stat(path)
+
+    if stat && stat.directory?
+      require_paths(*@environment.stat_sorted_tree_with_dependencies(path))
+    else
+      raise CustomWizard::SprocketsFileNotFound, "#{path} not found in discourse core"
+    end
+  end
+end
+
 after_initialize do
   %w[
     ../lib/custom_wizard/engine.rb
@@ -56,7 +72,6 @@ after_initialize do
     ../controllers/custom_wizard/wizard.rb
     ../controllers/custom_wizard/steps.rb
     ../controllers/custom_wizard/realtime_validations.rb
-    ../jobs/clear_after_time_wizard.rb
     ../jobs/refresh_api_access_token.rb
     ../jobs/set_after_time_wizard.rb
     ../lib/custom_wizard/validators/template.rb
@@ -74,6 +89,7 @@ after_initialize do
     ../lib/custom_wizard/log.rb
     ../lib/custom_wizard/step_updater.rb
     ../lib/custom_wizard/step.rb
+    ../lib/custom_wizard/submission.rb
     ../lib/custom_wizard/template.rb
     ../lib/custom_wizard/wizard.rb
     ../lib/custom_wizard/api/api.rb
@@ -81,6 +97,7 @@ after_initialize do
     ../lib/custom_wizard/api/endpoint.rb
     ../lib/custom_wizard/api/log_entry.rb
     ../lib/custom_wizard/liquid_extensions/first_non_empty.rb
+    ../lib/custom_wizard/exceptions/exceptions.rb
     ../serializers/custom_wizard/api/authorization_serializer.rb
     ../serializers/custom_wizard/api/basic_endpoint_serializer.rb
     ../serializers/custom_wizard/api/endpoint_serializer.rb
@@ -93,12 +110,14 @@ after_initialize do
     ../serializers/custom_wizard/wizard_step_serializer.rb
     ../serializers/custom_wizard/wizard_serializer.rb
     ../serializers/custom_wizard/log_serializer.rb
+    ../serializers/custom_wizard/submission_serializer.rb
     ../serializers/custom_wizard/realtime_validation/similar_topics_serializer.rb
     ../extensions/extra_locales_controller.rb
     ../extensions/invites_controller.rb
     ../extensions/users_controller.rb
     ../extensions/custom_field/preloader.rb
     ../extensions/custom_field/serializer.rb
+    ../extensions/custom_field/extension.rb
   ].each do |path|
     load File.expand_path(path, __FILE__)
   end
@@ -117,7 +136,7 @@ after_initialize do
 
       if !wizard.completed?
         custom_redirect = true
-        CustomWizard::Wizard.set_wizard_redirect(wizard.id, user)
+        CustomWizard::Wizard.set_user_redirect(wizard.id, user)
       end
     end
 
@@ -138,7 +157,7 @@ after_initialize do
 
   on(:user_approved) do |user|
     if wizard = CustomWizard::Wizard.after_signup(user)
-      CustomWizard::Wizard.set_wizard_redirect(wizard.id, user)
+      CustomWizard::Wizard.set_user_redirect(wizard.id, user)
     end
   end
 
@@ -149,7 +168,7 @@ after_initialize do
 
     if request.format === 'text/html' && !@excluded_routes.any? { |str| /#{str}/ =~ url } && wizard_id
       if request.referer !~ /\/w\// && request.referer !~ /\/invites\//
-        CustomWizard::Wizard.set_submission_redirect(current_user, wizard_id, request.referer)
+        CustomWizard::Wizard.set_wizard_redirect(current_user, wizard_id, request.referer)
       end
       if CustomWizard::Template.exists?(wizard_id)
         redirect_to "/w/#{wizard_id.dasherize}"
@@ -191,18 +210,18 @@ after_initialize do
   end
 
   CustomWizard::CustomField::CLASSES.keys.each do |klass|
+    class_constant = klass.to_s.classify.constantize
+
     add_model_callback(klass, :after_initialize) do
       if CustomWizard::CustomField.enabled?
         CustomWizard::CustomField.list_by(:klass, klass.to_s).each do |field|
-          klass.to_s
-            .classify
-            .constantize
-            .register_custom_field_type(field[:name], field[:type].to_sym)
+          class_constant.register_custom_field_type(field[:name], field[:type].to_sym)
         end
       end
     end
 
-    klass.to_s.classify.constantize.singleton_class.prepend CustomWizardCustomFieldPreloader
+    class_constant.singleton_class.prepend CustomWizardCustomFieldPreloader
+    class_constant.singleton_class.prepend CustomWizardCustomFieldExtension
   end
 
   CustomWizard::CustomField.serializers.each do |serializer_klass|

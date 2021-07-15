@@ -39,9 +39,15 @@ describe ApplicationController do
       it "saves original destination of user" do
         get '/', headers: { 'REFERER' => "/t/2" }
         expect(
-          CustomWizard::Wizard.submissions(@template['id'], user)
-            .first['redirect_to']
+          CustomWizard::Wizard.create(@template['id'], user).submissions
+            .first.redirect_to
         ).to eq("/t/2")
+      end
+
+      it "does not redirect if wizard does not exist" do
+        CustomWizard::Template.remove('super_mega_fun_wizard')
+        get "/"
+        expect(response.status).to eq(200)
       end
     end
 

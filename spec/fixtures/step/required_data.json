@@ -6,9 +6,9 @@
       "pairs": [
         {
           "index": 0,
-          "key": "required_data",
+          "key": "step_1_field_1",
           "key_type": "text",
-          "value": "required_value",
+          "value": "required",
           "value_type": "text",
           "connector": "equal"
         }

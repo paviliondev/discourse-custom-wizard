@@ -68,7 +68,7 @@ describe CustomWizard::StepsController do
 
     wizard_id = response.parsed_body['wizard']['id']
     wizard = CustomWizard::Wizard.create(wizard_id, user)
-    expect(wizard.submissions.last['step_1_field_1']).to eq("Text input")
+    expect(wizard.current_submission.fields['step_1_field_1']).to eq("Text input")
   end
 
   context "raises an error" do
@@ -175,8 +175,11 @@ describe CustomWizard::StepsController do
 
     wizard_id = response.parsed_body['wizard']['id']
     wizard = CustomWizard::Wizard.create(wizard_id, user)
-    group_name = wizard.submissions.last['action_9']
+
+    group_name = wizard.submissions.first.fields['action_9']
     group = Group.find_by(name: group_name)
+
+    expect(group.present?).to eq(true)
     expect(group.full_name).to eq("My cool group")
   end
 
@@ -248,5 +251,34 @@ describe CustomWizard::StepsController do
     }
     expect(response.status).to eq(200)
     expect(response.parsed_body['final']).to eq(true)
+  end
+
+  it "excludes the non-included conditional fields from the submissions" do
+    new_template = wizard_template.dup
+    new_template['steps'][1]['fields'][0]['condition'] = wizard_field_condition_template['condition']
+    CustomWizard::Template.save(new_template, skip_jobs: true)
+
+    put '/w/super-mega-fun-wizard/steps/step_1.json', params: {
+      fields: {
+        step_1_field_1: "Condition will pass"
+      }
+    }
+
+    put '/w/super-mega-fun-wizard/steps/step_2.json', params: {
+      fields: {
+        step_2_field_1: "1995-04-23"
+      }
+    }
+
+    put '/w/super-mega-fun-wizard/steps/step_1.json', params: {
+      fields: {
+        step_1_field_1: "Condition will not pass"
+      }
+    }
+
+    wizard_id = response.parsed_body['wizard']['id']
+    wizard = CustomWizard::Wizard.create(wizard_id, user)
+    submission = wizard.current_submission
+    expect(submission.fields.keys).not_to include("step_2_field_1")
   end
 end

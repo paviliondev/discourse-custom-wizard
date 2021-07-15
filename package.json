@@ -2,8 +2,8 @@
   "name": "discourse-custom-wizard",
   "version": "1.0.0",
   "repository": "git@github.com:paviliondev/discourse-custom-wizard.git",
-  "author": "Discourse",
-  "license": "MIT",
+  "author": "Pavilion",
+  "license": "GPL V2",
   "devDependencies": {
     "eslint-config-discourse": "^1.1.8"
   }

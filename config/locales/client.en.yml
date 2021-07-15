@@ -75,7 +75,7 @@ en:
             edit: "You're editing an action"
             documentation: "Check out the action documentation"
           custom_fields:
-            create: "Create, edit or destroy a custom field record"
+            create: "View, create, edit and destroy custom fields"
             saved: "Saved custom field"
             error: "Failed to save: {{messages}}"
             documentation: Check out the custom field documentation
@@ -173,7 +173,9 @@ en:
           max_length_placeholder: "Maximum length in characters"
           char_counter: "Character Counter"
           char_counter_placeholder: "Display Character Counter"
+          field_placeholder: "Field Placeholder"
           file_types: "File Types"
+          preview_template: "Preview Template"
           limit: "Limit"
           property: "Property"
           prefill: "Prefill"
@@ -200,6 +202,7 @@ en:
             text: "Text"
             textarea: Textarea
             composer: Composer
+            composer_preview: Composer Preview
             text_only: Text Only
             number: Number
             checkbox: Checkbox
@@ -322,6 +325,9 @@ en:
         custom_field:
           nav_label: "Custom Fields"
           add: "Add"
+          external: 
+            label: "from another plugin"
+            title: "This custom field has been added by another plugin. You can use it in your wizards but you can't edit the field here."
           name:
             label: "Name"
             select: "underscored_name"

@@ -11,6 +11,14 @@ describe CustomWizard::WizardController do
     )
   }
 
+  let(:permitted_json) {
+    JSON.parse(
+      File.open(
+        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard/permitted.json"
+      ).read
+    )
+  }
+
   before do
     CustomWizard::Template.save(
       JSON.parse(File.open(
@@ -47,6 +55,14 @@ describe CustomWizard::WizardController do
     expect(response.status).to eq(200)
   end
 
+  it 'lets user skip if user cant access wizard' do
+    @template["permitted"] = permitted_json["permitted"]
+    CustomWizard::Template.save(@template, skip_jobs: true)
+
+    put '/w/super-mega-fun-wizard/skip.json'
+    expect(response.status).to eq(200)
+  end
+
   it 'returns a no skip message if user is not allowed to skip' do
     @template['required'] = 'true'
     CustomWizard::Template.save(@template)
@@ -55,9 +71,8 @@ describe CustomWizard::WizardController do
   end
 
   it 'skip response contains a redirect_to if in users submissions' do
-    CustomWizard::Wizard.set_submissions(@template['id'], user,
-      redirect_to: '/t/2'
-    )
+    @wizard = CustomWizard::Wizard.create(@template["id"], user)
+    CustomWizard::Submission.new(@wizard, redirect_to: "/t/2").save
     put '/w/super-mega-fun-wizard/skip.json'
     expect(response.parsed_body['redirect_to']).to eq('/t/2')
   end

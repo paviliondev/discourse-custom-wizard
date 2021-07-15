@@ -15,7 +15,7 @@ export default {
     );
     const DEditor = requirejs("discourse/components/d-editor").default;
     const { clipboardHelpers } = requirejs("discourse/lib/utilities");
-    const { toMarkdown } = requirejs("discourse/lib/to-markdown");
+    const toMarkdown = requirejs("discourse/lib/to-markdown").default;
 
     /*
      * unit:        custom_wizard:templates_and_builder
@@ -192,7 +192,7 @@ export default {
               markdown = pre.match(/\S$/) ? ` ${markdown}` : markdown;
             }
 
-            this.appEvents.trigger("composer:insert-text", {
+            this.appEvents.trigger("wizard-editor:insert-text", {
               fieldId: this.fieldId,
               text: markdown,
             });

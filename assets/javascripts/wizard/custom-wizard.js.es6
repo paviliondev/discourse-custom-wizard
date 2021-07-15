@@ -4,6 +4,10 @@ export default Ember.Application.extend({
   rootElement: "#custom-wizard-main",
   Resolver: buildResolver("wizard"),
 
+  customEvents: {
+    paste: "paste",
+  },
+
   start() {
     Object.keys(requirejs._eak_seen).forEach((key) => {
       if (/\/pre\-initializers\//.test(key)) {
