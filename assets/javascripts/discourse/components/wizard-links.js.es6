@@ -58,7 +58,7 @@ export default Component.extend({
         link.classes = classes;
         link.index = index;
 
-        if (index == 0) {
+        if (index === 0) {
           link.first = true;
         }
 
@@ -107,11 +107,11 @@ export default Component.extend({
     },
 
     back(item) {
-      this.updateItemOrder(item.id, item.index - 1)
+      this.updateItemOrder(item.id, item.index - 1);
     },
 
     forward(item) {
-      this.updateItemOrder(item.id, item.index + 1)
+      this.updateItemOrder(item.id, item.index + 1);
     },
 
     change(itemId) {
