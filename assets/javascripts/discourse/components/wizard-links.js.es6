@@ -62,7 +62,7 @@ export default Component.extend({
           link.first = true;
         }
 
-        if (index === (items.length - 1)) {
+        if (index === items.length - 1) {
           link.last = true;
         }
 
