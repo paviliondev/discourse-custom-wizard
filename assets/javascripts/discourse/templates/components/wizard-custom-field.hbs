@@ -111,6 +111,31 @@
         checked=field.char_counter}}
     </div>
   </div>
+
+  <div class="setting full">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.field.field_placeholder"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{textarea
+        name="field_placeholder"
+        class="medium"
+        value=field.placeholder}}
+    </div>
+  </div>
+{{/if}}
+
+{{#if isComposerPreview}}
+  <div class="setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.field.preview_template"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{textarea name="preview-template" value=field.preview_template}}
+    </div>
+  </div>
 {{/if}}
 
 {{#if isUpload}}

@@ -8,7 +8,7 @@ class CustomWizard::StepsController < ::ApplicationController
 
     update[:fields] = {}
     if params[:fields]
-      field_ids = @step_template['fields'].map { |f| f['id'] }
+      field_ids = @builder.wizard.field_ids
       params[:fields].each do |k, v|
         update[:fields][k] = v if field_ids.include? k
       end
@@ -28,7 +28,7 @@ class CustomWizard::StepsController < ::ApplicationController
       current_step = @wizard.find_step(update[:step_id])
       current_submission = @wizard.current_submission
       result = {}
-      @wizard.filter_conditional_fields
+
       if current_step.conditional_final_step && !current_step.last_step
         current_step.force_final = true
       end
@@ -36,15 +36,19 @@ class CustomWizard::StepsController < ::ApplicationController
       if current_step.final?
         builder.template.actions.each do |action_template|
           if action_template['run_after'] === 'wizard_completion'
-            CustomWizard::Action.new(
+            action_result = CustomWizard::Action.new(
               action: action_template,
               wizard: @wizard,
-              data: current_submission
+              submission: current_submission
             ).perform
+
+            if action_result.success?
+              current_submission = action_result.submission
+            end
           end
         end
 
-        @wizard.save_submission(current_submission)
+        current_submission.save
 
         if redirect = get_redirect
           updater.result[:redirect_on_complete] = redirect
@@ -54,6 +58,8 @@ class CustomWizard::StepsController < ::ApplicationController
 
         result[:final] = true
       else
+        current_submission.save
+
         result[:final] = false
         result[:next_step_id] = current_step.next.id
       end
@@ -101,9 +107,9 @@ class CustomWizard::StepsController < ::ApplicationController
   def get_redirect
     return @result[:redirect_on_next] if @result[:redirect_on_next].present?
 
-    current_submission = @wizard.current_submission
-    return nil unless current_submission.present?
+    submission = @wizard.current_submission
+    return nil unless submission.present?
     ## route_to set by actions, redirect_on_complete set by actions, redirect_to set at wizard entry
-    current_submission[:route_to] || current_submission[:redirect_on_complete] || current_submission[:redirect_to]
+    submission.route_to || submission.redirect_on_complete || submission.redirect_to
   end
 end

@@ -7,7 +7,7 @@ on:
       - main
   pull_request:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 */12 * * *'
 
 jobs:
   build:
@@ -53,26 +53,27 @@ jobs:
           repository: discourse/discourse
           fetch-depth: 1
 
-      - run: echo "REPOSITORY_NAME=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')" >> $GITHUB_ENV
-        shell: bash
+      - name: Fetch Repo Name
+        id: repo-name
+        run: echo "::set-output name=value::$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')"
 
       - name: Install plugin
         uses: actions/checkout@v2
         with:
-          path: plugins/${{ env.REPOSITORY_NAME }}
+          path: plugins/${{ steps.repo-name.outputs.value }}
           fetch-depth: 1
 
       - name: Check spec existence
         id: check_spec
         uses: andstor/file-existence-action@v1
         with:
-          files: "plugins/${{ env.REPOSITORY_NAME }}/spec"
+          files: "plugins/${{ steps.repo-name.outputs.value }}/spec"
 
       - name: Check qunit existence
         id: check_qunit
         uses: andstor/file-existence-action@v1
         with:
-          files: "plugins/${{ env.REPOSITORY_NAME }}/test/javascripts"
+          files: "plugins/${{ steps.repo-name.outputs.value }}/test/javascripts"
 
       - name: Setup Git
         run: |
@@ -105,7 +106,7 @@ jobs:
 
       - name: Lint English locale
         if: matrix.build_type == 'backend'
-        run: bundle exec ruby script/i18n_lint.rb "plugins/${{ env.REPOSITORY_NAME }}/locales/{client,server}.en.yml"
+        run: bundle exec ruby script/i18n_lint.rb "plugins/${{ steps.repo-name.outputs.value }}/locales/{client,server}.en.yml"
 
       - name: Get yarn cache directory
         id: yarn-cache-dir
@@ -130,9 +131,9 @@ jobs:
 
       - name: Plugin RSpec with Coverage
         if: matrix.build_type == 'backend' && steps.check_spec.outputs.files_exists == 'true'
-        run: SIMPLECOV=1 bin/rake plugin:spec[${{ env.REPOSITORY_NAME }}]
+        run: SIMPLECOV=1 bin/rake plugin:spec[${{ steps.repo-name.outputs.value }}]
 
       - name: Plugin QUnit
         if: matrix.build_type == 'frontend' && steps.check_qunit.outputs.files_exists == 'true'
-        run: bundle exec rake plugin:qunit['${{ env.REPOSITORY_NAME }}','1200000']
+        run: bundle exec rake plugin:qunit['${{ steps.repo-name.outputs.value }}','1200000']
         timeout-minutes: 30

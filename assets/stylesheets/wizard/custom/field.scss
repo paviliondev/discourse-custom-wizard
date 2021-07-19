@@ -162,4 +162,15 @@
   .text-field input {
     margin-bottom: 0;
   }
+
+  .text-field,
+  .textarea-field,
+  .composer-field {
+    input[type="text"],
+    textarea {
+      &:focus::placeholder {
+        color: transparent;
+      }
+    }
+  }
 }

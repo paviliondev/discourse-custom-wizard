@@ -68,7 +68,7 @@ describe CustomWizard::StepsController do
 
     wizard_id = response.parsed_body['wizard']['id']
     wizard = CustomWizard::Wizard.create(wizard_id, user)
-    expect(wizard.submissions.last['step_1_field_1']).to eq("Text input")
+    expect(wizard.current_submission.fields['step_1_field_1']).to eq("Text input")
   end
 
   context "raises an error" do
@@ -175,8 +175,11 @@ describe CustomWizard::StepsController do
 
     wizard_id = response.parsed_body['wizard']['id']
     wizard = CustomWizard::Wizard.create(wizard_id, user)
-    group_name = wizard.submissions.last['action_9']
+
+    group_name = wizard.submissions.first.fields['action_9']
     group = Group.find_by(name: group_name)
+
+    expect(group.present?).to eq(true)
     expect(group.full_name).to eq("My cool group")
   end
 
@@ -275,7 +278,7 @@ describe CustomWizard::StepsController do
 
     wizard_id = response.parsed_body['wizard']['id']
     wizard = CustomWizard::Wizard.create(wizard_id, user)
-    submission = wizard.submissions.last
-    expect(submission.keys).not_to include("step_2_field_1")
+    submission = wizard.current_submission
+    expect(submission.fields.keys).not_to include("step_2_field_1")
   end
 end

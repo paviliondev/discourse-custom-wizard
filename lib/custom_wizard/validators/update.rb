@@ -32,11 +32,11 @@ class ::CustomWizard::UpdateValidator
       @updater.errors.add(field_id, I18n.t('wizard.field.required', label: label))
     end
 
-    if min_length && value.is_a?(String) && value.strip.length < min_length.to_i
+    if min_length.present? && value.is_a?(String) && value.strip.length < min_length.to_i
       @updater.errors.add(field_id, I18n.t('wizard.field.too_short', label: label, min: min_length.to_i))
     end
 
-    if max_length && value.is_a?(String) && value.strip.length > max_length.to_i
+    if max_length.present? && value.is_a?(String) && value.strip.length > max_length.to_i
       @updater.errors.add(field_id, I18n.t('wizard.field.too_long', label: label, max: max_length.to_i))
     end
 
@@ -52,7 +52,7 @@ class ::CustomWizard::UpdateValidator
       @updater.errors.add(field_id, I18n.t('wizard.field.invalid_file', label: label, types: file_types))
     end
 
-    if ['date', 'date_time'].include?(type) && value.present? && !validate_date(value)
+    if ['date', 'date_time'].include?(type) && value.present? && !validate_date(value, format)
       @updater.errors.add(field_id, I18n.t('wizard.field.invalid_date'))
     end
 
@@ -88,13 +88,8 @@ class ::CustomWizard::UpdateValidator
       .include?(File.extname(value['original_filename'])[1..-1])
   end
 
-  def validate_date(value)
-    begin
-      Date.parse(value)
-      true
-    rescue ArgumentError
-      false
-    end
+  def validate_date(value, format)
+    v8.eval("moment('#{value}', '#{format}', true).isValid()")
   end
 
   def validate_time(value)
@@ -125,5 +120,13 @@ class ::CustomWizard::UpdateValidator
 
   def standardise_boolean(value)
     ActiveRecord::Type::Boolean.new.cast(value)
+  end
+
+  def v8
+    return @ctx if @ctx
+
+    @ctx = PrettyText.v8
+    PrettyText.ctx_load(@ctx, "#{Rails.root}/vendor/assets/javascripts/moment.js")
+    @ctx
   end
 end

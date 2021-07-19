@@ -1,17 +1,19 @@
 import CustomWizard from "../models/custom-wizard";
 import DiscourseRoute from "discourse/routes/discourse";
 
+const excludedMetaFields = ["route_to", "redirect_on_complete", "redirect_to"];
+
 export default DiscourseRoute.extend({
   model(params) {
     return CustomWizard.submissions(params.wizardId);
   },
 
   setupController(controller, model) {
-    if (model.submissions) {
-      let fields = [];
+    if (model && model.submissions) {
+      let fields = ["username"];
       model.submissions.forEach((s) => {
-        Object.keys(s).forEach((k) => {
-          if (fields.indexOf(k) < 0) {
+        Object.keys(s.fields).forEach((k) => {
+          if (!excludedMetaFields.includes(k) && fields.indexOf(k) < 0) {
             fields.push(k);
           }
         });
@@ -19,9 +21,13 @@ export default DiscourseRoute.extend({
 
       let submissions = [];
       model.submissions.forEach((s) => {
-        let submission = {};
-        fields.forEach((f) => {
-          submission[f] = s[f];
+        let submission = {
+          username: s.username,
+        };
+        Object.keys(s.fields).forEach((f) => {
+          if (fields.includes(f)) {
+            submission[f] = s.fields[f];
+          }
         });
         submissions.push(submission);
       });

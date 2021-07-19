@@ -189,7 +189,10 @@ describe CustomWizard::Builder do
     context "user has partially completed" do
       before do
         wizard = CustomWizard::Wizard.new(@template, user)
-        wizard.set_submissions(step_1_field_1: 'I am a user submission')
+        data = {
+          step_1_field_1: 'I am a user submission'
+        }
+        CustomWizard::Submission.new(wizard, data).save
       end
 
       it 'returns saved submissions' do
@@ -253,9 +256,9 @@ describe CustomWizard::Builder do
         end
 
         it 'is permitted if required data is present' do
-          CustomWizard::Wizard.set_submissions('super_mega_fun_wizard', user,
-            required_data: "required_value"
-          )
+          wizard = CustomWizard::Wizard.create('super_mega_fun_wizard', user)
+          CustomWizard::Submission.new(wizard, step_1_field_1: "required").save
+
           expect(
             CustomWizard::Builder.new(@template[:id], user).build
               .steps.first
@@ -274,7 +277,7 @@ describe CustomWizard::Builder do
           wizard = CustomWizard::Builder.new(@template[:id], user).build({},
             param: 'param_value'
           )
-          expect(wizard.current_submission['saved_param']).to eq('param_value')
+          expect(wizard.current_submission.fields['saved_param']).to eq('param_value')
         end
       end
 
@@ -336,31 +339,27 @@ describe CustomWizard::Builder do
 
     context 'on update' do
       def perform_update(step_id, submission)
-        wizard = CustomWizard::Builder.new(@template[:id], user).build
-        updater = wizard.create_updater(step_id, submission)
+        updater = @wizard.create_updater(step_id, submission)
         updater.update
         updater
       end
 
       it 'saves submissions' do
+        @wizard = CustomWizard::Builder.new(@template[:id], user).build
         perform_update('step_1', step_1_field_1: 'Text input')
-        expect(
-          CustomWizard::Wizard.submissions(@template[:id], user)
-            .first['step_1_field_1']
-        ).to eq('Text input')
+        expect(@wizard.current_submission.fields['step_1_field_1']).to eq('Text input')
       end
 
       context 'save submissions disabled' do
         before do
           @template[:save_submissions] = false
           CustomWizard::Template.save(@template.as_json)
+          @wizard = CustomWizard::Builder.new(@template[:id], user).build
         end
 
         it "does not save submissions" do
           perform_update('step_1', step_1_field_1: 'Text input')
-          expect(
-            CustomWizard::Wizard.submissions(@template[:id], user).first
-          ).to eq(nil)
+          expect(@wizard.current_submission.present?).to eq(false)
         end
       end
     end
