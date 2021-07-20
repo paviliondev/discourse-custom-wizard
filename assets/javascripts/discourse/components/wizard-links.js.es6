@@ -1,15 +1,10 @@
-import {
-  default as discourseComputed,
-  observes,
-  on,
-} from "discourse-common/utils/decorators";
+import discourseComputed from "discourse-common/utils/decorators";
 import { generateName } from "../lib/wizard";
 import {
   setWizardDefaults,
   default as wizardSchema,
 } from "../lib/wizard-schema";
 import { notEmpty } from "@ember/object/computed";
-import { scheduleOnce } from "@ember/runloop";
 import EmberObject from "@ember/object";
 import Component from "@ember/component";
 import { A } from "@ember/array";
@@ -19,28 +14,12 @@ export default Component.extend({
   items: A(),
   anyLinks: notEmpty("links"),
 
-  @on("didInsertElement")
-  @observes("links.[]")
-  setupSortable() {
-    scheduleOnce("afterRender", () => this.applySortable());
-  },
-
-  applySortable() {
-    $(this.element)
-      .find(".link-list")
-      .sortable({ tolerance: "pointer" })
-      .on("sortupdate", (e, ui) => {
-        this.updateItemOrder(ui.item.data("id"), ui.item.index());
-      });
-  },
-
   updateItemOrder(itemId, newIndex) {
     const items = this.items;
     const item = items.findBy("id", itemId);
     items.removeObject(item);
     item.set("index", newIndex);
     items.insertAt(newIndex, item);
-    scheduleOnce("afterRender", this, () => this.applySortable());
   },
 
   @discourseComputed("itemType")
@@ -58,7 +37,7 @@ export default Component.extend({
       return;
     }
 
-    return items.map((item) => {
+    return items.map((item, index) => {
       if (item) {
         let link = {
           id: item.id,
@@ -77,6 +56,15 @@ export default Component.extend({
         }
 
         link.classes = classes;
+        link.index = index;
+
+        if (index === 0) {
+          link.first = true;
+        }
+
+        if (index === items.length - 1) {
+          link.last = true;
+        }
 
         return link;
       }
@@ -116,6 +104,14 @@ export default Component.extend({
       items.pushObject(newItem);
 
       this.set("current", newItem);
+    },
+
+    back(item) {
+      this.updateItemOrder(item.id, item.index - 1);
+    },
+
+    forward(item) {
+      this.updateItemOrder(item.id, item.index + 1);
     },
 
     change(itemId) {
