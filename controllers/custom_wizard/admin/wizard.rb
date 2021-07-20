@@ -82,17 +82,10 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
       :theme_id,
       permitted: mapped_params,
       steps: [
-        :id,
-        :index,
-        :title,
-        :key,
-        :banner,
-        :raw_description,
-        :required_data_message,
-        :force_final,
-        required_data: mapped_params,
-        permitted_params: mapped_params,
-        condition: mapped_params,
+        *CustomWizard::Step.type_attributes(:permitted),
+        CustomWizard::Step.type_attributes(:mapped).map do |attribute|
+          [attribute, mapped_params]
+        end.to_h ,
         fields: [
           *CustomWizard::Field.type_attributes(:permitted),
           CustomWizard::Field.type_attributes(:mapped).map do |attribute|
