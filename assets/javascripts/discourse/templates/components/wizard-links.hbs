@@ -2,10 +2,16 @@
 
 <div class="link-list">
   {{#if anyLinks}}
-    {{#each links as |l|}}
-      <div data-id={{l.id}}>
-        {{d-button action="change" actionParam=l.id translatedLabel=l.label class=l.classes}}
-        {{d-button action="remove" actionParam=l.id icon="times" class="remove"}}
+    {{#each links as |link|}}
+      <div data-id={{link.id}}>
+        {{d-button action="change" actionParam=link.id translatedLabel=link.label class=link.classes}}
+        {{#unless link.first}}
+          {{d-button action="back" actionParam=link icon="arrow-left" class="back"}}
+        {{/unless}}
+        {{#unless link.last}}
+          {{d-button action="forward" actionParam=link icon="arrow-right" class="forward"}}
+        {{/unless}}
+        {{d-button action="remove" actionParam=link.id icon="times" class="remove"}}
       </div>
     {{/each}}
   {{/if}}
