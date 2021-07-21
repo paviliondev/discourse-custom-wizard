@@ -32,7 +32,8 @@ class CustomWizard::Wizard
                 :actions,
                 :action_ids,
                 :user,
-                :submissions
+                :submissions,
+                :template
 
   attr_reader   :all_step_ids
 
@@ -79,6 +80,7 @@ class CustomWizard::Wizard
 
     @actions = attrs['actions'] || []
     @action_ids = @actions.map { |a| a['id'] }
+    @template = attrs
   end
 
   def cast_bool(val)
