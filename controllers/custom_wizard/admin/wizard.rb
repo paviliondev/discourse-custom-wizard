@@ -85,7 +85,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
         *CustomWizard::Step.type_attributes(:permitted),
         CustomWizard::Step.type_attributes(:mapped).map do |attribute|
           [attribute, mapped_params]
-        end.to_h ,
+        end.to_h,
         fields: [
           *CustomWizard::Field.type_attributes(:permitted),
           CustomWizard::Field.type_attributes(:mapped).map do |attribute|
