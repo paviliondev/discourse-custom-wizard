@@ -61,7 +61,9 @@ class CustomWizard::Builder
           if @updater.errors.empty?
             route_to = @submission.route_to
             @submission.route_to = nil
+            @submission.updated_at = Time.now.iso8601
             @submission.save
+            CustomWizard::Submission.cleanup_incomplete_submissions(@wizard)
 
             @wizard.update!
             @updater.result[:redirect_on_next] = route_to if route_to

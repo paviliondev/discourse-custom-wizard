@@ -96,6 +96,21 @@ class CustomWizard::Submission
     new(wizard, data, user_id)
   end
 
+  def self.cleanup_incomplete_submissions(wizard, user_id = nil)
+    user_id = user_id || wizard.user.id
+    all_submissions = list(wizard, user_id: user_id)
+    incomplete_submissions = all_submissions.select { |submission| !submission.submitted_at }
+    incomplete_submissions.sort! { |a, b| a.updated_at <=> b.updated_at }
+    valid_incomplete = incomplete_submissions.first
+
+    to_be_deleted = incomplete_submissions.select { |submission| submission.id != valid_incomplete.id }
+    to_be_deleted_ids = to_be_deleted.map(&:id)
+    valid_submissions = all_submissions.select { |submission| !to_be_deleted_ids.include?(submission.id) }
+
+    valid_data = valid_submissions.map { |submission| submission.data_to_save(submission) }
+    PluginStore.set("#{wizard.id}_#{KEY}", user_id, valid_data)
+  end
+
   def self.list(wizard, user_id: nil, order_by: nil)
     params = { plugin_name: "#{wizard.id}_#{KEY}" }
     params[:key] = user_id if user_id.present?
