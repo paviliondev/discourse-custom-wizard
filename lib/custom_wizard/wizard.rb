@@ -278,12 +278,16 @@ class CustomWizard::Wizard
   def current_submission
     @current_submission ||= begin
       if submissions.present?
-        unsubmitted = submissions.select { |submission| !submission.submitted_at }
+        unsubmitted = unsubmitted_submissions
         unsubmitted.present? ? unsubmitted.first : CustomWizard::Submission.new(self)
       else
         CustomWizard::Submission.new(self)
       end
     end
+  end
+
+  def unsubmitted_submissions
+    submissions&.select { |submission| !submission.submitted_at }
   end
 
   def final_cleanup!
