@@ -3,7 +3,7 @@ class CustomWizard::Submission
   include ActiveModel::SerializerSupport
 
   KEY ||= "submissions"
-  META ||= %w(submitted_at route_to redirect_on_complete redirect_to)
+  META ||= %w(updated_at submitted_at route_to redirect_on_complete redirect_to)
 
   attr_reader :id,
               :user,
