@@ -101,6 +101,7 @@ class CustomWizard::Submission
     user_id = user_id || wizard.user.id
     all_submissions = list(wizard, user_id: user_id)
     incomplete_submissions = all_submissions.select { |submission| !submission.submitted_at }
+    return if incomplete_submissions.length < 2
 
     if incomplete_submissions.any? { |submission| submission.updated_at.present? }
       incomplete_with_key = incomplete_submissions.select { |submission| submission.updated_at.present? }
