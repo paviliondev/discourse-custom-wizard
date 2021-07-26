@@ -45,6 +45,7 @@ class CustomWizard::Submission
 
     submission_list = self.class.list(wizard, user_id: user.id)
     submissions = submission_list.select { |submission| submission.id != self.id }
+    self.updated_at = Time.now.iso8601
     submissions.push(self)
 
     submission_data = submissions.map { |submission| data_to_save(submission)  }
@@ -100,9 +101,17 @@ class CustomWizard::Submission
     user_id = user_id || wizard.user.id
     all_submissions = list(wizard, user_id: user_id)
     incomplete_submissions = all_submissions.select { |submission| !submission.submitted_at }
-    incomplete_submissions.sort! { |a, b| a.updated_at <=> b.updated_at }
-    valid_incomplete = incomplete_submissions.first
+    incomplete_submissions.sort! do |a, b|
+      if a.updated_at.present? && b.updated_at.present?
+        Time.iso8601(b.updated_at) <=> Time.iso8601(a.updated_at)
+      elsif a.updated_at.present?
+        -1
+      else
+        1
+      end
+    end
 
+    valid_incomplete = incomplete_submissions.first
     to_be_deleted = incomplete_submissions.select { |submission| submission.id != valid_incomplete.id }
     to_be_deleted_ids = to_be_deleted.map(&:id)
     valid_submissions = all_submissions.select { |submission| !to_be_deleted_ids.include?(submission.id) }
