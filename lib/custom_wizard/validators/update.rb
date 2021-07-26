@@ -43,7 +43,6 @@ class ::CustomWizard::UpdateValidator
         @updater.errors.add(field_id, I18n.t('wizard.field.too_long', label: label, max: max_length.to_i))
       end
     end
-   
 
     if is_url_type(field) && value.present? && !check_if_url(value)
       @updater.errors.add(field_id, I18n.t('wizard.field.not_url', label: label))
