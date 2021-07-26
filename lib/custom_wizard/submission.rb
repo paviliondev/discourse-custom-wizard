@@ -102,13 +102,11 @@ class CustomWizard::Submission
     all_submissions = list(wizard, user_id: user_id)
     incomplete_submissions = all_submissions.select { |submission| !submission.submitted_at }
 
-    if incomplete_submissions.all? { |submission| submission.updated_at.present? }
-      valid_incomplete = incomplete_submissions.max_by { |submission| Time.iso8601(submission.updated_at) }
-    elsif incomplete_submissions.none? { |submission| submission.updated_at.present? }
-      valid_incomplete = incomplete_submissions.last
-    else
+    if incomplete_submissions.any? { |submission| submission.updated_at.present? }
       incomplete_with_key = incomplete_submissions.select { |submission| submission.updated_at.present? }
       valid_incomplete = incomplete_with_key.max_by { |submission| Time.iso8601(submission.updated_at) }
+    else
+      valid_incomplete = incomplete_submissions.last
     end
 
     to_be_deleted = incomplete_submissions.select { |submission| submission.id != valid_incomplete.id }
