@@ -97,6 +97,31 @@ describe CustomWizard::UpdateValidator do
     ).to eq(nil)
   end
 
+  it "applies min length only if the input is non-empty" do
+    min_length = 3
+
+    @template[:steps][0][:fields][0][:min_length] = min_length
+
+    CustomWizard::Template.save(@template)
+
+    updater = perform_validation('step_1', step_1_field_1: '')
+    expect(
+      updater.errors.messages[:step_1_field_1].first
+    ).to eq(nil)
+  end
+
+  it "applies max length only if the input is non-empty" do
+    max_length = 100
+
+    @template[:steps][0][:fields][0][:max_length] = max_length
+
+    CustomWizard::Template.save(@template)
+    updater = perform_validation('step_1', step_1_field_1: "")
+    expect(
+      updater.errors.messages[:step_1_field_1].first
+    ).to eq(nil)
+  end
+
   it 'standardises boolean entries' do
     updater = perform_validation('step_2', step_2_field_5: 'false')
     expect(updater.submission['step_2_field_5']).to eq(false)
