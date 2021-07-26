@@ -32,7 +32,7 @@ class ::CustomWizard::UpdateValidator
       @updater.errors.add(field_id, I18n.t('wizard.field.required', label: label))
     end
 
-    if value.is_a?(String) && stripped_length = value.strip.length > 0
+    if value.is_a?(String) && (stripped_length = value.strip.length) > 0
       if min_length.present? && stripped_length < min_length.to_i
         @updater.errors.add(field_id, I18n.t('wizard.field.too_short', label: label, min: min_length.to_i))
       end
