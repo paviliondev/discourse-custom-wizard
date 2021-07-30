@@ -98,6 +98,7 @@ class CustomWizard::Submission
   end
 
   def self.cleanup_incomplete_submissions(wizard)
+    user_id = wizard.user_id
     all_submissions = list(wizard, user_id: user_id)
     sorted_submissions = all_submissions.sort_by do |submission|
       zero_epoch_time = DateTime.strptime("0", '%s')
