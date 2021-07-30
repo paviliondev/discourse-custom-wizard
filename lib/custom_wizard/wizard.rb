@@ -107,6 +107,7 @@ class CustomWizard::Wizard
 
     @submissions = nil
     @current_submission = nil
+    CustomWizard::Submission.cleanup_incomplete_submissions(@wizard)
 
     true
   end
