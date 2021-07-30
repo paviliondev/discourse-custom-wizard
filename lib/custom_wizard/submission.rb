@@ -97,22 +97,23 @@ class CustomWizard::Submission
     new(wizard, data, user_id)
   end
 
-  def self.cleanup_incomplete_submissions(wizard, user_id = nil)
-    user_id = user_id || wizard.user.id
+  def self.cleanup_incomplete_submissions(wizard)
     all_submissions = list(wizard, user_id: user_id)
-    incomplete_submissions = all_submissions.select { |submission| !submission.submitted_at }
-    return if incomplete_submissions.length < 2
+    sorted_submissions = all_submissions.sort_by do |submission|
+      zero_epoch_time = DateTime.strptime("0", '%s')
+      [
+        submission.submitted_at ? Time.iso8601(submission.submitted_at) : zero_epoch_time,
+        submission.updated_at ? Time.iso8601(submission.updated_at) : zero_epoch_time
+      ]
+    end.reverse
 
-    if incomplete_submissions.any? { |submission| submission.updated_at.present? }
-      incomplete_with_key = incomplete_submissions.select { |submission| submission.updated_at.present? }
-      valid_incomplete = incomplete_with_key.max_by { |submission| Time.iso8601(submission.updated_at) }
-    else
-      valid_incomplete = incomplete_submissions.last
+    has_unfinished = false
+    valid_submissions = sorted_submissions.select do |submission|
+      to_be_included = submission.submitted_at || !has_unfinished
+      has_unfinished = true if !submission.submitted_at
+
+      to_be_included
     end
-
-    to_be_deleted = incomplete_submissions.select { |submission| submission.id != valid_incomplete.id }
-    to_be_deleted_ids = to_be_deleted.map(&:id)
-    valid_submissions = all_submissions.select { |submission| !to_be_deleted_ids.include?(submission.id) }
 
     valid_data = valid_submissions.map { |submission| submission.data_to_save(submission) }
     PluginStore.set("#{wizard.id}_#{KEY}", user_id, valid_data)
