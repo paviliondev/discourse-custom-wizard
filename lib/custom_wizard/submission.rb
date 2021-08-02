@@ -108,10 +108,10 @@ class CustomWizard::Submission
       ]
     end.reverse
 
-    has_unfinished = false
+    has_incomplete = false
     valid_submissions = sorted_submissions.select do |submission|
-      to_be_included = submission.submitted_at || !has_unfinished
-      has_unfinished = true if !submission.submitted_at
+      to_be_included = submission.submitted_at || !has_incomplete
+      has_incomplete = true if !submission.submitted_at
 
       to_be_included
     end
