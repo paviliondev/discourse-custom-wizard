@@ -58,7 +58,7 @@ en:
         select_type: "Select a type"
         condition: "Condition"
         index: "Index"
-        
+
         message:
           wizard:
             select: "Select a wizard, or create a new one"
@@ -436,6 +436,7 @@ en:
 
         pro:
           nav_label: PRO
+          label: PRO
           title: Custom Wizard PRO
           authorize: Authorize
           authorized: Authorized

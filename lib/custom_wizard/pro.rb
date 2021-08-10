@@ -18,4 +18,8 @@ class CustomWizard::Pro
   def subscribed?
     @subscription.active?
   end
+
+  def self.subscribed?
+    self.new.subscribed?
+  end
 end

@@ -372,6 +372,22 @@
     .setting-gutter {
       margin-top: 5px;
     }
+
+    &.pro {
+      .setting-label {
+        display: flex;
+        flex-direction: column;
+
+        label {
+          margin: 0;
+        }
+      }
+
+      .pro-label {
+        color: $tertiary;
+        font-size: .75em;
+      }
+    }
   }
 
   .advanced-settings {

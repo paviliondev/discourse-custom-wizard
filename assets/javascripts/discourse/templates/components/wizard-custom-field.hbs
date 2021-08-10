@@ -213,17 +213,20 @@
   {{#if field.showAdvanced}}
     <div class="advanced-settings">
 
-      <div class="setting full field-mapper-setting">
-        <div class="setting-label">
-          <label>{{i18n "admin.wizard.condition"}}</label>
-        </div>
+      {{#if proSubscribed}}
+        <div class="setting full field-mapper-setting pro">
+          <div class="setting-label">
+            <label>{{i18n "admin.wizard.condition"}}</label>
+            <span class="pro-label">{{i18n "admin.wizard.pro.label"}}</span>
+          </div>
 
-        <div class="setting-value">
-          {{wizard-mapper
-            inputs=field.condition
-            options=fieldConditionOptions}}
+          <div class="setting-value">
+            {{wizard-mapper
+              inputs=field.condition
+              options=fieldConditionOptions}}
+          </div>
         </div>
-      </div>
+      {{/if}}
 
       <div class="setting full field-mapper-setting">
         <div class="setting-label">

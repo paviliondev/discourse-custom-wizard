@@ -49,6 +49,7 @@ en:
       required: "%{property} is required"
       conflict: "Wizard with id '%{wizard_id}' already exists"
       after_time: "After time setting is invalid"
+      pro: "%{property} is PRO only"
 
   site_settings:
     custom_wizard_enabled: "Enable custom wizards."

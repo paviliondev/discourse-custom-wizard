@@ -6,6 +6,7 @@ class CustomWizard::Builder
     @template = CustomWizard::Template.create(wizard_id)
     return nil if @template.nil?
     @wizard = CustomWizard::Wizard.new(template.data, user)
+    @pro = CustomWizard::Pro.new
   end
 
   def self.sorted_handlers
@@ -222,6 +223,8 @@ class CustomWizard::Builder
   end
 
   def check_condition(template)
+    return false unless @pro.subscribed?
+
     if template['condition'].present?
       result = CustomWizard::Mapper.new(
         inputs: template['condition'],

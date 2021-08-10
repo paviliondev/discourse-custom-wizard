@@ -6,6 +6,7 @@ class CustomWizard::TemplateValidator
   def initialize(data, opts = {})
     @data = data
     @opts = opts
+    @pro = CustomWizard::Pro.new
   end
 
   def perform
@@ -14,12 +15,15 @@ class CustomWizard::TemplateValidator
     check_id(data, :wizard)
     check_required(data, :wizard)
     validate_after_time
+    validate_pro(data, :wizard)
 
     data[:steps].each do |step|
       check_required(step, :step)
+      validate_pro(step, :step)
 
       if data[:fields].present?
         data[:fields].each do |field|
+          validate_pro(field, :field)
           check_required(field, :field)
         end
       end
@@ -47,12 +51,27 @@ class CustomWizard::TemplateValidator
     }
   end
 
+  def self.pro
+    {
+      step: ['condition'],
+      field: ['conition']
+    }
+  end
+
   private
 
   def check_required(object, type)
     CustomWizard::TemplateValidator.required[type].each do |property|
       if object[property].blank?
         errors.add :base, I18n.t("wizard.validation.required", property: property)
+      end
+    end
+  end
+
+  def validate_pro(object, type)
+    CustomWizard::TemplateValidator.required[type].each do |property|
+      if object[property].present? && !@pro.subscribed?
+        errors.add :base, I18n.t("wizard.validation.pro", property: property)
       end
     end
   end
