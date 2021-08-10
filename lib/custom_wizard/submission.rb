@@ -103,7 +103,7 @@ class CustomWizard::Submission
       wizard_id = submission.wizard.id
       submission_id = submission.id
       data = PluginStore.get("#{wizard_id}_#{KEY}", user_id)
-      data.delete_if { |sub| sub["id"] == submission_id}
+      data.delete_if { |sub| sub["id"] == submission_id }
       PluginStore.set("#{wizard_id}_#{KEY}", user_id, data)
     end
   end
