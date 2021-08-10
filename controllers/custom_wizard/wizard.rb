@@ -68,7 +68,7 @@ class CustomWizard::WizardController < ::ApplicationController
         result.merge!(redirect_to: submission.redirect_to)
       end
 
-      wizard.final_cleanup!
+      submission.remove if submission.present?
     end
 
     render json: result

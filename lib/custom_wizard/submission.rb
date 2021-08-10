@@ -97,6 +97,21 @@ class CustomWizard::Submission
     new(wizard, data, user_id)
   end
 
+  def self.remove(submission)
+    if submission.present?
+      user_id = submission.user.id
+      wizard_id = submission.wizard.id
+      submission_id = submission.id
+      data = PluginStore.get("#{wizard_id}_#{KEY}", user_id)
+      data.delete_if { |sub| sub["id"] == submission_id}
+      PluginStore.set("#{wizard_id}_#{KEY}", user_id, data)
+    end
+  end
+
+  def remove
+    self.class.remove(self)
+  end
+
   def self.cleanup_incomplete_submissions(wizard)
     user_id = wizard.user.id
     all_submissions = list(wizard, user_id: user_id)
