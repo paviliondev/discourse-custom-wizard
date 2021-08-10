@@ -2,22 +2,28 @@
 class CustomWizard::Log
   include ActiveModel::Serialization
 
-  attr_accessor :message, :date
+  attr_accessor :date, :wizard, :action, :user, :message
 
   PAGE_LIMIT = 100
 
   def initialize(attrs)
-    @message = attrs['message']
     @date = attrs['date']
+    @wizard = attrs['wizard']
+    @action = attrs['action']
+    @user = attrs['user']
+    @message = attrs['message']
   end
 
-  def self.create(message)
+  def self.create(wizard, action, user, message)
     log_id = SecureRandom.hex(12)
 
     PluginStore.set('custom_wizard_log',
       log_id.to_s,
       {
         date: Time.now,
+        wizard: wizard,
+        action: action,
+        user: user,
         message: message
       }
     )
