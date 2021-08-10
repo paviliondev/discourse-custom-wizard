@@ -7,11 +7,14 @@
       <a {{action "unauthorize"}} title={{i18n "admin.wizard.pro.unauthorize"}}>
         {{i18n "admin.wizard.pro.unauthorize"}}
       </a>
-      <label>{{i18n "admin.wizard.pro.authorized"}}</label>
+      <label title={{i18n "admin.wizard.pro.authorized"}}>
+        {{i18n "admin.wizard.pro.authorized"}}
+      </label>
     {{else}}
       {{d-button
         icon="id-card"
         label="admin.wizard.pro.authorize"
+        title="admin.wizard.pro.authorize"
         action=(route-action "authorize")}}
     {{/if}}
   </div>

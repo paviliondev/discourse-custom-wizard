@@ -13,18 +13,16 @@
       icon="sync"
       action=(action "update")
       disabled=updating
+      title="admin.wizard.pro.subscription.update"
       label="admin.wizard.pro.subscription.update"}}
   </div>
 </div>
 
 {{#if subscribed}}
   <div class="detail-container">
-    <div class="subscription-state {{stateClass}}">{{stateLabel}}</div>
-    <div class="subscription-updated-at">
-      {{{i18n 
-        'admin.wizard.pro.subscription.last_updated'
-        updated_at=(format-date subscription.updated_at leaveAgo="true")
-      }}}
+    <div class="subscription-state {{stateClass}}" title={{stateLabel}}>{{stateLabel}}</div>
+    <div class="subscription-updated-at" title={{subscription.updated_at}}>
+      {{{i18n 'admin.wizard.pro.subscription.last_updated' updated_at=(format-date subscription.updated_at leaveAgo="true")}}}
     </div>
   </div>
 {{/if}}
