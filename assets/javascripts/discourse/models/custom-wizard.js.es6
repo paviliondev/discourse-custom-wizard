@@ -221,7 +221,7 @@ CustomWizard.reopenClass({
     const wizard = this._super.apply(this);
     wizard.setProperties(buildProperties(wizardJson));
     return wizard;
-  },
+  }
 });
 
 export default CustomWizard;

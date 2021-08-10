@@ -1,0 +1,30 @@
+<div class="title-container">
+  <h3 class="subscription-title">{{title}}</h3>
+
+  <div class="buttons">
+    <span>
+      {{#if updating}}
+        {{loading-spinner size="small"}}
+      {{else if updateIcon}}
+        {{d-icon updateIcon}}
+      {{/if}}
+    </span>
+    {{d-button
+      icon="sync"
+      action=(action "update")
+      disabled=updating
+      label="admin.wizard.pro.subscription.update"}}
+  </div>
+</div>
+
+{{#if subscribed}}
+  <div class="detail-container">
+    <div class="subscription-state {{stateClass}}">{{stateLabel}}</div>
+    <div class="subscription-updated-at">
+      {{{i18n 
+        'admin.wizard.pro.subscription.last_updated'
+        updated_at=(format-date subscription.updated_at leaveAgo="true")
+      }}}
+    </div>
+  </div>
+{{/if}}

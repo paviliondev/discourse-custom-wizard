@@ -6,6 +6,7 @@ import I18n from "I18n";
 const icons = {
   error: "times-circle",
   success: "check-circle",
+  warn: "exclamation-circle",
   info: "info-circle",
 };
 

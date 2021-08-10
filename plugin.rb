@@ -62,11 +62,13 @@ after_initialize do
     ../controllers/custom_wizard/admin/logs.rb
     ../controllers/custom_wizard/admin/manager.rb
     ../controllers/custom_wizard/admin/custom_fields.rb
+    ../controllers/custom_wizard/admin/pro.rb
     ../controllers/custom_wizard/wizard.rb
     ../controllers/custom_wizard/steps.rb
     ../controllers/custom_wizard/realtime_validations.rb
-    ../jobs/refresh_api_access_token.rb
-    ../jobs/set_after_time_wizard.rb
+    ../jobs/regular/refresh_api_access_token.rb
+    ../jobs/regular/set_after_time_wizard.rb
+    ../jobs/scheduled/update_pro_status.rb
     ../lib/custom_wizard/validators/template.rb
     ../lib/custom_wizard/validators/update.rb
     ../lib/custom_wizard/action_result.rb
@@ -85,6 +87,9 @@ after_initialize do
     ../lib/custom_wizard/submission.rb
     ../lib/custom_wizard/template.rb
     ../lib/custom_wizard/wizard.rb
+    ../lib/custom_wizard/pro.rb
+    ../lib/custom_wizard/pro/subscription.rb
+    ../lib/custom_wizard/pro/authentication.rb
     ../lib/custom_wizard/api/api.rb
     ../lib/custom_wizard/api/authorization.rb
     ../lib/custom_wizard/api/endpoint.rb
@@ -105,6 +110,9 @@ after_initialize do
     ../serializers/custom_wizard/log_serializer.rb
     ../serializers/custom_wizard/submission_serializer.rb
     ../serializers/custom_wizard/realtime_validation/similar_topics_serializer.rb
+    ../serializers/custom_wizard/pro_serializer.rb
+    ../serializers/custom_wizard/pro/authentication_serializer.rb
+    ../serializers/custom_wizard/pro/subscription_serializer.rb
     ../extensions/extra_locales_controller.rb
     ../extensions/invites_controller.rb
     ../extensions/users_controller.rb

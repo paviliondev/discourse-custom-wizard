@@ -7,7 +7,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 
   & + .wizard-message + div {
     margin-top: 20px;
@@ -714,4 +714,62 @@
 .select-kit.time-unit-selector {
   width: 80px;
   vertical-align: middle;
+}
+
+.admin-wizards-pro {
+  .admin-wizard-controls {
+    h3, label {
+      margin: 0;
+    }
+
+    label {
+      padding: .4em .5em;
+      margin-left: .75em;
+      background-color: $success;
+      color: $secondary;
+    }
+
+    .buttons {
+      display: flex;
+      align-items: center;
+
+      .loading-container {
+        margin-right: 1em;
+      }
+    }
+  }
+
+  .custom-wizard-pro-subscription {
+    .title-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: .5em;
+
+      h3 {
+        margin: 0;
+      }
+
+      .buttons > span {
+        margin-right: .5em;
+      }
+    }
+
+    .detail-container {
+      display: flex;
+      align-items: center;
+      padding: 1em;
+      background-color: $primary-very-low;
+
+      .subscription-state {
+        padding: .25em .5em;
+        margin-right: .75em;
+
+        &.active {
+          background-color: $success;
+          color: $secondary;
+        }
+      }
+    }
+  }
 }

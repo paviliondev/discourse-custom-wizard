@@ -43,10 +43,18 @@ export default {
           }
         );
 
-        this.route("adminWizardsLogs", { path: "/logs", resetNamespace: true });
+        this.route("adminWizardsLogs", {
+          path: "/logs",
+          resetNamespace: true
+        });
 
         this.route("adminWizardsManager", {
           path: "/manager",
+          resetNamespace: true,
+        });
+
+        this.route("adminWizardsPro", {
+          path: "/pro",
           resetNamespace: true,
         });
       }
