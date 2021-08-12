@@ -69,6 +69,7 @@ class CustomWizard::WizardController < ::ApplicationController
       end
 
       submission.remove if submission.present?
+      wizard.cleanup!
     end
 
     render json: result

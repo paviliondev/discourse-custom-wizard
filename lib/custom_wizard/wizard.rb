@@ -286,11 +286,15 @@ class CustomWizard::Wizard
     end
   end
 
-  def final_cleanup!
+  def cleanup!
     if id == user.custom_fields['redirect_to_wizard']
       user.custom_fields.delete('redirect_to_wizard')
       user.save_custom_fields(true)
     end
+  end
+
+  def final_cleanup!
+    cleanup!
 
     if current_submission.present?
       current_submission.submitted_at = Time.now.iso8601
