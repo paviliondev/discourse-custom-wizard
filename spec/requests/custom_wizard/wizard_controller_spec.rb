@@ -76,4 +76,14 @@ describe CustomWizard::WizardController do
     put '/w/super-mega-fun-wizard/skip.json'
     expect(response.parsed_body['redirect_to']).to eq('/t/2')
   end
+
+  it "deletes the submission if user has filled up some data" do
+    @wizard = CustomWizard::Wizard.create(@template["id"], user)
+    CustomWizard::Submission.new(@wizard, step_1_field_1: "Hello World").save
+    current_submission = @wizard.current_submission
+    put '/w/super-mega-fun-wizard/skip.json'
+    list = CustomWizard::Submission.list(@wizard)
+
+    expect(list.any? { |submission| submission.id == current_submission.id }).to eq(false)
+  end
 end
