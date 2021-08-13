@@ -86,4 +86,16 @@ describe CustomWizard::WizardController do
 
     expect(list.any? { |submission| submission.id == current_submission.id }).to eq(false)
   end
+
+  it "starts from the first step if user visits after skipping the wizard" do
+    put '/w/super-mega-fun-wizard/steps/step_1.json', params: {
+      fields: {
+        step_1_field_1: "Text input"
+      }
+    }
+    put '/w/super-mega-fun-wizard/skip.json'
+    get '/w/super-mega-fun-wizard.json'
+
+    expect(response.parsed_body["start"]).to eq('step_1')
+  end
 end
