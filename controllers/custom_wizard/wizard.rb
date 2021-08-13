@@ -69,7 +69,7 @@ class CustomWizard::WizardController < ::ApplicationController
       end
 
       submission.remove if submission.present?
-      wizard.reset_user_progress!
+      wizard.reset
     end
 
     render json: result
