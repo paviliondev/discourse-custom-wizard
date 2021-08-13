@@ -286,14 +286,6 @@ class CustomWizard::Wizard
     end
   end
 
-  def reset_user_progress!
-    UserHistory.where(
-      action: UserHistory.actions[:custom_wizard_step],
-      acting_user_id: user.id,
-      context: id
-    ).destroy_all
-  end
-
   def final_cleanup!
     if id == user.custom_fields['redirect_to_wizard']
       user.custom_fields.delete('redirect_to_wizard')
