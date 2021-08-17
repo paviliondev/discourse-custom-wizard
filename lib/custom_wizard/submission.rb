@@ -3,7 +3,7 @@ class CustomWizard::Submission
   include ActiveModel::SerializerSupport
 
   KEY ||= "submissions"
-  META ||= %w(submitted_at route_to redirect_on_complete redirect_to)
+  META ||= %w(updated_at submitted_at route_to redirect_on_complete redirect_to)
 
   attr_reader :id,
               :user,
@@ -45,6 +45,7 @@ class CustomWizard::Submission
 
     submission_list = self.class.list(wizard, user_id: user.id)
     submissions = submission_list.select { |submission| submission.id != self.id }
+    self.updated_at = Time.now.iso8601
     submissions.push(self)
 
     submission_data = submissions.map { |submission| data_to_save(submission)  }
@@ -94,6 +95,29 @@ class CustomWizard::Submission
   def self.get(wizard, user_id)
     data = PluginStore.get("#{wizard.id}_#{KEY}", user_id).first
     new(wizard, data, user_id)
+  end
+
+  def self.cleanup_incomplete_submissions(wizard)
+    user_id = wizard.user.id
+    all_submissions = list(wizard, user_id: user_id)
+    sorted_submissions = all_submissions.sort_by do |submission|
+      zero_epoch_time = DateTime.strptime("0", '%s')
+      [
+        submission.submitted_at ? Time.iso8601(submission.submitted_at) : zero_epoch_time,
+        submission.updated_at ? Time.iso8601(submission.updated_at) : zero_epoch_time
+      ]
+    end.reverse
+
+    has_incomplete = false
+    valid_submissions = sorted_submissions.select do |submission|
+      to_be_included = submission.submitted_at || !has_incomplete
+      has_incomplete = true if !submission.submitted_at
+
+      to_be_included
+    end
+
+    valid_data = valid_submissions.map { |submission| submission.data_to_save(submission) }
+    PluginStore.set("#{wizard.id}_#{KEY}", user_id, valid_data)
   end
 
   def self.list(wizard, user_id: nil, order_by: nil)
