@@ -10,15 +10,15 @@ class CustomWizard::AdminProController < CustomWizard::AdminController
   def authorize
     request_id = SecureRandom.hex(32)
     cookies[:user_api_request_id] = request_id
-    redirect_to CustomWizard::ProAuthentication.generate_request(current_user.id, request_id).to_s
+    redirect_to CustomWizard::Pro.auth_request(current_user.id, request_id).to_s
   end
 
   def authorize_callback
     payload = params[:payload]
     request_id = cookies[:user_api_request_id]
 
-    CustomWizard::ProAuthentication.handle_response(request_id, payload)
-    CustomWizard::ProSubscription.update
+    CustomWizard::Pro.auth_response(request_id, payload)
+    CustomWizard::Pro.update_subscription
 
     redirect_to '/admin/wizards/pro'
   end
@@ -32,7 +32,7 @@ class CustomWizard::AdminProController < CustomWizard::AdminController
   end
 
   def update_subscription
-    if CustomWizard::ProSubscription.update
+    if CustomWizard::Pro.update
       render json: success_json.merge(
         subscription: CustomWizard::ProSubscriptionSerializer.new(
           CustomWizard::ProSubscription.new,

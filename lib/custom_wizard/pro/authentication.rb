@@ -1,10 +1,6 @@
 class CustomWizard::ProAuthentication
   include ActiveModel::Serialization
 
-  API_KEY ||= "api_key"
-  API_CLIENT_ID ||= 'api_client_id'
-  KEYS ||= "keys"
-
   attr_reader :client_id,
               :auth_by,
               :auth_at,
@@ -39,10 +35,6 @@ class CustomWizard::ProAuthentication
     remove
   end
 
-  def self.destroy
-    self.new.destroy
-  end
-
   def generate_keys(user_id, request_id)
     rsa = OpenSSL::PKey::RSA.generate(2048) 
     nonce = SecureRandom.hex(32)
@@ -72,37 +64,22 @@ class CustomWizard::ProAuthentication
     data
   end
 
-  def self.generate_request(user_id, request_id)
-    authentication = self.new
-    keys = authentication.generate_keys(user_id, request_id)
-
-    params = {
-      public_key: keys.public_key,
-      nonce: keys.nonce,
-      client_id: authentication.client_id,
-      auth_redirect: "#{Discourse.base_url}/admin/wizards/pro/authorize/callback",
-      application_name: SiteSetting.title,
-      scopes: CustomWizard::ProSubscription::SCOPE
-    }
-
-    uri = URI.parse("https://#{CustomWizard::ProSubscription::SUBSCRIPTION_SERVER}/user-api-key/new")
-    uri.query = URI.encode_www_form(params)
-    uri.to_s
-  end
-
-  def self.handle_response(request_id, payload)
-    authentication = self.new
-
-    data = authentication.decrypt_payload(request_id, payload)
-    return unless data.is_a?(Hash) && data[:key] && data[:user_id]
-
-    authentication.update(data)
-  end
-
   private
 
+  def api_key_db_key
+    "api_key"
+  end
+
+  def api_client_id_db_key
+    "api_client_id"
+  end
+
+  def keys_db_key
+    "keys"
+  end
+
   def get_api_key
-    raw = PluginStore.get(CustomWizard::Pro::NAMESPACE, API_KEY)
+    raw = PluginStore.get(CustomWizard::Pro.namespace, api_key_db_key)
     OpenStruct.new(
       key: raw && raw['key'],
       auth_by: raw && raw['auth_by'],
@@ -111,7 +88,7 @@ class CustomWizard::ProAuthentication
   end
 
   def set_api_key(key, user_id)
-    PluginStore.set(CustomWizard::Pro::NAMESPACE, API_KEY,
+    PluginStore.set(CustomWizard::Pro.namespace, api_key_db_key,
       key: key,
       auth_by: user_id,
       auth_at: Time.now
@@ -119,21 +96,21 @@ class CustomWizard::ProAuthentication
   end
 
   def remove
-    PluginStore.remove(CustomWizard::Pro::NAMESPACE, API_KEY)
+    PluginStore.remove(CustomWizard::Pro.namespace, api_key_db_key)
   end
 
   def get_client_id
-    PluginStore.get(CustomWizard::Pro::NAMESPACE, API_CLIENT_ID)
+    PluginStore.get(CustomWizard::Pro.namespace, api_client_id_db_key)
   end
 
   def set_client_id
     client_id = SecureRandom.hex(32)
-    PluginStore.set(CustomWizard::Pro::NAMESPACE, API_CLIENT_ID, client_id)
+    PluginStore.set(CustomWizard::Pro.namespace, api_client_id_db_key, client_id)
     client_id
   end
 
   def set_keys(request_id, user_id, rsa, nonce)
-    PluginStore.set(CustomWizard::Pro::NAMESPACE, "#{KEYS}_#{request_id}",
+    PluginStore.set(CustomWizard::Pro.namespace, "#{keys_db_key}_#{request_id}",
       user_id: user_id,
       pem: rsa.export,
       nonce: nonce
@@ -141,7 +118,7 @@ class CustomWizard::ProAuthentication
   end
 
   def get_keys(request_id)
-    raw = PluginStore.get(CustomWizard::Pro::NAMESPACE, "#{KEYS}_#{request_id}")
+    raw = PluginStore.get(CustomWizard::Pro.namespace, "#{keys_db_key}_#{request_id}")
     OpenStruct.new(
       user_id: raw && raw['user_id'],
       pem: raw && raw['pem'],
@@ -150,6 +127,6 @@ class CustomWizard::ProAuthentication
   end
 
   def delete_keys(request_id)
-    PluginStore.remove(CustomWizard::Pro::NAMESPACE, "#{KEYS}_#{request_id}")
+    PluginStore.remove(CustomWizard::Pro.namespace, "#{keys_db_key}_#{request_id}")
   end
 end

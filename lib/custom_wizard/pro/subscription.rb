@@ -1,14 +1,6 @@
 class CustomWizard::ProSubscription
   include ActiveModel::Serialization
 
-  SUBSCRIPTION_SERVER ||= "test.thepavilion.io"
-  SUBSCRIPTION_TYPE ||= "stripe"
-  SCOPE ||= "discourse-subscription-server:user_subscription"
-  CLIENT_NAME ||= "custom-wizard"
-  SUBSCRIPTION_KEY ||= "custom_wizard_pro_subscription"
-  UPDATE_DAY_BUFFER ||= 2
-  TYPES ||= %w(community business)
-
   attr_reader :type,
               :updated_at
 
@@ -21,8 +13,12 @@ class CustomWizard::ProSubscription
     end
   end
 
+  def types
+    %w(community business)
+  end
+
   def active?
-    TYPES.include?(type) && updated_at.to_datetime > (Date.today - UPDATE_DAY_BUFFER.days).to_datetime
+    types.include?(type) && updated_at.to_datetime > (Date.today - 15.minutes).to_datetime
   end
 
   def update(data)
@@ -37,39 +33,25 @@ class CustomWizard::ProSubscription
     end
   end
 
-  def self.update
-    auth = CustomWizard::ProAuthentication.new
-    subscription = self.new
-
-    if auth.active?
-      response = Excon.get(
-        "https://#{SUBSCRIPTION_SERVER}/subscription-server/user-subscriptions/#{SUBSCRIPTION_TYPE}/#{CLIENT_NAME}",
-        headers: {
-          "User-Api-Key" => auth.api_key
-        }
-      )
-
-      if response.status == 200
-        begin
-          data = JSON.parse(response.body).deep_symbolize_keys
-        rescue JSON::ParserError
-          return false
-        end
-
-        return subscription.update(data)
-      end
-    end
-
-    false
+  def destroy
+    remove
   end
-  
+
   private
-  
+
+  def key
+    "custom_wizard_pro_subscription"
+  end
+
   def set(type)
-    PluginStore.set(CustomWizard::Pro::NAMESPACE, SUBSCRIPTION_KEY, type: type, updated_at: Time.now)
+    PluginStore.set(CustomWizard::Pro.namespace, key, type: type, updated_at: Time.now)
   end
 
   def get
-    PluginStore.get(CustomWizard::Pro::NAMESPACE, SUBSCRIPTION_KEY)
+    PluginStore.get(CustomWizard::Pro.namespace, key)
+  end
+
+  def remove
+    PluginStore.remove(CustomWizard::Pro.namespace, key)
   end
 end

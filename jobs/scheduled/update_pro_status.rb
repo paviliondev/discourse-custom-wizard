@@ -4,6 +4,6 @@ class CustomWizard::UpdateProSubscription < ::Jobs::Scheduled
   every 10.minutes
 
   def execute(args)
-    CustomWizard::ProSubscription.update
+    CustomWizard::Pro.update_subscription
   end
 end
