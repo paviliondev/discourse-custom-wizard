@@ -17,6 +17,7 @@ en:
         name_too_short: "'%{name}' is too short for a custom field name (min length is #{min_length})"
         name_already_taken: "'%{name}' is already taken as a custom field name"
         save_default: "Failed to save custom field '%{name}'"
+        pro_required: "PRO Actions require a PRO Subscription"
     
     field:
       too_short: "%{label} must be at least %{min} characters"

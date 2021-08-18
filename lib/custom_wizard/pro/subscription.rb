@@ -38,14 +38,15 @@ class CustomWizard::ProSubscription
   end
 
   def self.update
-    @subscribed = nil
     auth = CustomWizard::ProAuthentication.new
     subscription = self.new
 
     if auth.active?
       response = Excon.get(
         "https://#{SUBSCRIPTION_SERVER}/subscription-server/user-subscriptions/#{SUBSCRIPTION_TYPE}/#{CLIENT_NAME}",
-        headers: { "User-Api-Key" => auth.api_key }
+        headers: {
+          "User-Api-Key" => auth.api_key
+        }
       )
 
       if response.status == 200

@@ -22,13 +22,6 @@ class CustomWizard::Builder
     @sorted_handlers.sort_by! { |h| -h[:priority] }
   end
 
-  def mapper
-    CustomWizard::Mapper.new(
-      user: @wizard.user,
-      data: @wizard.current_submission&.fields_and_meta
-    )
-  end
-
   def build(build_opts = {}, params = {})
     return nil if !SiteSetting.custom_wizard_enabled || !@wizard
     return @wizard if !@wizard.can_access? && !build_opts[:force]
@@ -78,6 +71,15 @@ class CustomWizard::Builder
     @wizard.update!
     CustomWizard::Submission.cleanup_incomplete_submissions(@wizard)
     @wizard
+  end
+
+  private
+
+  def mapper
+    CustomWizard::Mapper.new(
+      user: @wizard.user,
+      data: @wizard.current_submission&.fields_and_meta
+    )
   end
 
   def append_field(step, step_template, field_template, build_opts)
@@ -224,7 +226,10 @@ class CustomWizard::Builder
   end
 
   def check_condition(template)
-    return false unless @pro.subscribed?
+    unless @pro.subscribed?
+      CustomWizard::Log.create(I18n.t("wizard.custom_field.error.pro_required"))
+      return false
+    end
 
     if template['condition'].present?
       result = CustomWizard::Mapper.new(

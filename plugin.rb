@@ -126,6 +126,18 @@ after_initialize do
 
   Liquid::Template.register_filter(::CustomWizard::LiquidFilter::FirstNonEmpty)
 
+  class CustomWizard::UnpermittedOverride < StandardError; end
+
+  CustomWizard.constants.each do |class_name|
+    klass = CustomWizard.const_get(class_name)
+    next if !klass.is_a?(Class) || klass.superclass.name.to_s.split("::").first == 'CustomWizard'
+
+    klass.define_singleton_method(:prepend) { |klass| raise CustomWizard::UnpermittedOverride.new }
+    klass.define_singleton_method(:include) { |klass| raise CustomWizard::UnpermittedOverride.new }
+    klass.define_singleton_method(:define_method) { |name, &block| raise CustomWizard::UnpermittedOverride.new }
+    klass.define_singleton_method(:define_singleton_method) { |name, &block| raise CustomWizard::UnpermittedOverride.new }
+  end
+
   add_class_method(:wizard, :user_requires_completion?) do |user|
     wizard_result = self.new(user).requires_completion?
     return wizard_result if wizard_result
