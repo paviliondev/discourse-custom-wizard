@@ -97,10 +97,6 @@ class CustomWizard::Submission
     new(wizard, data, user_id)
   end
 
-  def self.remove(submission)
-    submission.remove
-  end
-
   def remove
     if present?
       user_id = @user.id
