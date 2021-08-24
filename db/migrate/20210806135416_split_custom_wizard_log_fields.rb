@@ -16,16 +16,23 @@ class SplitCustomWizardLogFields < ActiveRecord::Migration[6.1]
                 next
               end
 
-              # first three keys are wizard/action/user
 
-              if log_json.key?('message')
-                attr_strs = log_json['message'].split('; ', 4)
+              if log_json.key?('message') and log_json['message'].is_a? String
 
-                log_json['message'] = attr_strs.pop
+                attr_strs = []
+
+                # assumes no whitespace in the values
+                attr_strs << log_json['message'].slice!(/(wizard: \S*; )/, 1)
+                attr_strs << log_json['message'].slice!(/(action: \S*; )/, 1)
+                attr_strs << log_json['message'].slice!(/(user: \S*; )/, 1)
 
                 attr_strs.each do |attr_str|
-                  key, value = attr_str.split(': ')
-                  log_json[key] = value
+                  if attr_str.is_a? String
+                    attr_str.gsub!(/[;]/ ,"")
+                    key, value = attr_str.split(': ')
+                    value.strip! if value
+                    log_json[key] = value ? value : ''
+                  end
                 end
 
                 row.value = log_json.to_json
