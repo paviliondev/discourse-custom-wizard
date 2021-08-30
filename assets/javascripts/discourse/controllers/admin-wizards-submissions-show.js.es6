@@ -24,6 +24,18 @@ export default Controller.extend({
         this.set("loadingMore", false);
       });
   },
+  
+  
+  @discourseComputed('submissions', 'fields.@each.enabled')
+  displaySubmissions(submissions, fields) {
+    return submissions.map(submission => {
+      let field = fields.find(f => Object.keys(submission).includes(f.id));
+      if (!field.enabled) {
+        submission.delete(field.id);
+      };
+      return submission;
+    });
+  },
 
   actions: {
     loadMore() {
