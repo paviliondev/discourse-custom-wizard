@@ -1,6 +1,7 @@
-import CustomWizard from "../models/custom-wizard";
-import DiscourseRoute from "discourse/routes/discourse";
 import { A } from "@ember/array";
+import EmberObject from "@ember/object";
+import DiscourseRoute from "discourse/routes/discourse";
+import CustomWizard from "../models/custom-wizard";
 
 export default DiscourseRoute.extend({
   model(params) {
@@ -8,9 +9,14 @@ export default DiscourseRoute.extend({
   },
 
   setupController(controller, model) {
+    const fields = model.fields.map((f) => {
+      const fieldsObject = EmberObject.create(f);
+      fieldsObject.enabled = true;
+      return fieldsObject;
+    });
     controller.setProperties({
       wizard: model.wizard,
-      fields: model.fields,
+      fields: A(fields),
       submissions: A(model.submissions),
       total: model.total,
     });

@@ -224,31 +224,33 @@ CustomWizard.reopenClass({
     })
       .then((result) => {
         if (result.wizard) {
-          let fields = ["username"];
+          console.log(result);
+          let fields = [{ id: "username", label: "User"}];
           let submissions = [];
           let wizard = result.wizard;
           let total = result.total;
 
           result.submissions.forEach((s) => {
             let submission = {
-              username: s.username,
+              username: s.user,
             };
 
-            Object.keys(s.fields).forEach((f) => {
-              if (fields.indexOf(f) < 0) {
-                fields.push(f);
+            Object.keys(s.fields).forEach((fieldId) => {
+              if (!fields.some(field => field.id === fieldId)) {
+                fields.push({ id: fieldId, label: s.fields[fieldId].label });
               }
-
-              if (fields.includes(f)) {
-                submission[f] = s.fields[f];
-              }
+              submission[fieldId] = s.fields[fieldId];
             });
-
             submission["submitted_at"] = s.submitted_at;
             submissions.push(submission);
           });
 
-          fields.push("submitted_at");
+          let submittedAt = {
+            id: "submitted_at",
+            label: "Submitted At"
+          }
+          
+          fields.push(submittedAt);
 
           return {
             wizard,

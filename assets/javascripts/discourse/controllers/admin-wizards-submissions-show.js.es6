@@ -2,6 +2,9 @@ import Controller from "@ember/controller";
 import { fmt } from "discourse/lib/computed";
 import { empty } from "@ember/object/computed";
 import CustomWizard from "../models/custom-wizard";
+import showModal from "discourse/lib/show-modal";
+import discourseComputed from "discourse-common/utils/decorators";
+
 
 export default Controller.extend({
   downloadUrl: fmt("wizard.id", "/admin/wizards/submissions/%@/download"),
@@ -31,8 +34,11 @@ export default Controller.extend({
     return submissions.map(submission => {
       let field = fields.find(f => Object.keys(submission).includes(f.id));
       if (!field.enabled) {
-        submission.delete(field.id);
-      };
+        // insert field / submission deletion code here:
+        console.log(field, "is not enabled for ", submission);
+      } else if (field.enabled) {
+        console.log(field, "is enabled for ", submission);
+      }
       return submission;
     });
   },
@@ -43,6 +49,15 @@ export default Controller.extend({
         this.set("page", this.get("page") + 1);
         this.loadMoreSubmissions();
       }
+    },
+
+    showEditColumnsModal() {
+      const controller = showModal("admin-wizards-submissions-columns", {
+        model: {
+          fields: this.get('fields'),
+          submissions: this.get('submissions')
+        }
+      });
     },
   },
 });
