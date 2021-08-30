@@ -367,6 +367,12 @@ en:
           nav_label: "Submissions"
           title: "{{name}} Submissions"
           download: "Download"
+          edit_columns: "Edit Columns"
+          expand_text: "Read More"
+          collapse_text: "Show Less"
+          group_id: "Group ID"
+          category_id: "Category ID"
+          composer_preview: "Composer Preview"
 
         api:
           label: "API"

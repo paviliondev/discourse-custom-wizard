@@ -71,6 +71,51 @@
   table td {
     min-width: 150px;
   }
+
+  table thead th {
+    text-transform: capitalize;
+  }
+
+  .submission-icon-item {
+    display: flex;
+    align-items: center;
+    svg {
+      margin-right: 5px;
+    }
+  }
+
+  .submission-checkbox-true {
+    text-transform: capitalize;
+    color: var(--success);
+  }
+
+  .submission-checkbox-false {
+    text-transform: capitalize;
+    color: var(--danger);
+  }
+
+  .submission-long-text {
+    &-content {
+      white-space: nowrap;
+      word-wrap: break-word;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 250px;
+      margin-bottom: 0;
+
+      &.text-expanded {
+        white-space: normal;
+      }
+    }
+
+    a {
+      font-size: var(--font-down-1);
+    }
+  }
+
+  .submission-composer-text {
+    font-family: monospace;
+  }
 }
 
 .admin-wizards-logs {
@@ -202,6 +247,11 @@
 
   &.underline {
     text-decoration: underline;
+  }
+
+  .controls {
+    margin-left: auto;
+    margin-right: 0.5rem;
   }
 }
 
@@ -715,3 +765,4 @@
   width: 80px;
   vertical-align: middle;
 }
+

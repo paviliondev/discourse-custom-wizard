@@ -1,0 +1,114 @@
+{{#if isText}}
+  {{value.value}}
+{{/if}}
+
+{{#if isTextArea}}
+  <div class="submission-long-text">
+    <p class="submission-long-text-content {{textState}}">{{value.value}}</p>
+    <a href {{action "expandText"}}>{{toggleText}}</a>
+  </div>
+{{/if}}
+
+{{#if isComposer}}
+  <div class="submission-long-text">
+    <p class="submission-composer-text submission-long-text-content {{textState}}">{{value.value}}</p>
+    <a href {{action "expandText"}}>{{toggleText}}</a>
+  </div>
+{{/if}}
+
+{{#if isComposerPreview}}
+  {{d-icon "comment-alt" }} <span class="submission-composer-text">{{i18n "admin.wizard.submissions.composer_preview"}}: {{value.value}}</span>
+{{/if}}
+
+{{#if isTextOnly}}
+  {{value.value}}
+{{/if}}
+
+{{#if isDate}}
+  <span class="submission-icon-item">
+    {{d-icon "calendar"}}{{value.value}}
+  </span>
+{{/if}}
+
+{{#if isTime}}
+  <span class="submission-icon-item">
+    {{d-icon "clock"}}{{value.value}}
+  </span>
+{{/if}}
+
+{{#if isDateTime}}
+  <span class="submission-icon-item" title={{value.value}}>
+    {{d-icon "calendar"}}{{format-date value.value format="medium"}}
+  </span>
+{{/if}}
+
+{{#if isNumber}}
+  {{value.value}}
+{{/if}}
+
+{{#if isCheckbox}}
+  {{#if checkboxValue}}
+  <span class="submission-icon-item submission-checkbox-true">
+    {{d-icon  "check"}}{{value.value}}
+  </span>
+  {{else}}
+  <span class="submission-icon-item submission-checkbox-false">
+    {{d-icon  "times"}}{{value.value}}
+  </span>
+  {{/if}}
+{{/if}}
+
+{{#if isUrl}}
+  <span class="submission-icon-item submission-url">
+    {{ d-icon "link" }}
+    <a target="_blank" href={{value.value}}>
+      {{value.value}}
+    </a>
+  </span>
+{{/if}}
+
+{{#if isUpload}}
+  <a target="_blank" class="attachment" href={{file.url}} download>
+    {{file.original_filename}}
+  </a>
+{{/if}}
+
+{{#if isDropdown}}
+  <span class="submission-icon-item">
+    {{ d-icon "check-square" }}
+    {{ value.value }}
+  </span>
+{{/if}}
+
+{{#if isTag}}
+  {{#each value.value as |tag|}}
+    {{discourse-tag tag}}
+  {{/each}}
+{{/if}}
+
+{{#if isCategory}}
+  <strong>{{i18n "admin.wizard.submissions.category_id"}}: </strong><a target="_blank" href={{categoryUrl}} title={{value.value}}>{{value.value}}</a>
+{{/if}}
+
+{{#if isGroup}}
+  <strong>{{i18n "admin.wizard.submissions.group_id"}}: </strong> {{ value.value }}
+{{/if}}
+
+
+{{#if isUserSelector}}
+  {{#each submittedUsers as |user|}}
+    {{ d-icon "user" }}
+    <a target="_blank" href={{user.url}} title={{user.username}}>{{user.username}}</a>
+  {{/each}}
+{{/if}}
+
+{{#if isUser}}
+  {{#link-to "user" value}}{{avatar value imageSize="tiny"}}{{/link-to}}
+  <a target="_blank" href={{userProfileUrl}} title={{value.name}}>{{value.username}}</a>
+{{/if}}
+
+{{#if isSubmittedAt}}
+  <span class="submission-date" title={{value.value}}>
+    {{d-icon "clock"}}{{format-date value format="tiny"}}
+  </span>
+{{/if}}
