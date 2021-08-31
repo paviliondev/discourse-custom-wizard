@@ -31,16 +31,20 @@ export default Controller.extend({
   
   @discourseComputed('submissions', 'fields.@each.enabled')
   displaySubmissions(submissions, fields) {
-    return submissions.map(submission => {
-      let field = fields.find(f => Object.keys(submission).includes(f.id));
-      if (!field.enabled) {
-        // insert field / submission deletion code here:
-        console.log(field, "is not enabled for ", submission);
-      } else if (field.enabled) {
-        console.log(field, "is enabled for ", submission);
-      }
-      return submission;
+    let result = [];
+
+    submissions.forEach(submission => {
+      let sub = {};
+
+      Object.keys(submission).forEach(fieldId => {
+        if (fields.some(f => f.id === fieldId && f.enabled)) {
+          sub[fieldId] = submission[fieldId];
+        }
+      });
+      result.push(sub);
     });
+
+    return result;
   },
 
   actions: {
