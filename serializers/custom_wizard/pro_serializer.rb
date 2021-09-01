@@ -1,26 +1,6 @@
 # frozen_string_literal: true
 class CustomWizard::ProSerializer < ApplicationSerializer
-  attributes :server,
-             :authentication,
-             :subscription
-
-  def server
-    CustomWizard::ProSubscription::SUBSCRIPTION_SERVER
-  end
-
-  def authentication
-    if object.authentication
-      CustomWizard::ProAuthenticationSerializer.new(object.authentication, root: false)
-    else
-      nil
-    end
-  end
-
-  def subscription
-    if object.subscription
-      CustomWizard::ProSubscriptionSerializer.new(object.subscription, root: false)
-    else
-      nil
-    end
-  end
+  attributes :server
+  has_one :authentication, serializer: CustomWizard::ProAuthenticationSerializer, embed: :objects
+  has_one :subscription, serializer: CustomWizard::ProSubscriptionSerializer, embed: :objects
 end

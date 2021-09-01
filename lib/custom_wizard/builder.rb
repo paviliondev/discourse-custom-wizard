@@ -6,7 +6,6 @@ class CustomWizard::Builder
     @template = CustomWizard::Template.create(wizard_id)
     return nil if @template.nil?
     @wizard = CustomWizard::Wizard.new(template.data, user)
-    @pro = CustomWizard::Pro.new
   end
 
   def self.sorted_handlers
@@ -226,11 +225,6 @@ class CustomWizard::Builder
   end
 
   def check_condition(template)
-    unless @pro.subscribed?
-      CustomWizard::Log.create(I18n.t("wizard.custom_field.error.pro_required"))
-      return false
-    end
-
     if template['condition'].present?
       result = CustomWizard::Mapper.new(
         inputs: template['condition'],

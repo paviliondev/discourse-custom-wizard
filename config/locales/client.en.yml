@@ -192,7 +192,7 @@ en:
             label: "Format"
             instructions: "<a href='https://momentjs.com/docs/#/displaying/format/' target='_blank'>Moment.js format</a>"
           validations:
-            header: "Realtime Validations"
+            header: "Validations"
             enabled: "Enabled"
             similar_topics: "Similar Topics"
             position: "Position"

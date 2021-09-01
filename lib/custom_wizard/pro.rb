@@ -1,12 +1,22 @@
 # frozen_string_literal: true
 
 class CustomWizard::Pro
-  attr_reader :authentication,
-              :subscription
+  include ActiveModel::Serialization
+
+  attr_accessor :authentication,
+                :subscription
 
   def initialize
-    @authentication = CustomWizard::ProAuthentication.new
-    @subscription = CustomWizard::ProSubscription.new
+    @authentication = CustomWizard::ProAuthentication.new(get_authentication)
+    @subscription = CustomWizard::ProSubscription.new(get_subscription)
+  end
+
+  def authorized?
+    @authentication.active?
+  end
+
+  def subscribed?
+    @subscription.active?
   end
 
   def server
@@ -21,12 +31,8 @@ class CustomWizard::Pro
     "custom-wizard"
   end
 
-  def authorized?
-    @authentication.active?
-  end
-
-  def subscribed?
-    @subscription.active?
+  def scope
+    "discourse-subscription-server:user_subscription"
   end
 
   def update_subscription
@@ -45,28 +51,35 @@ class CustomWizard::Pro
           return false
         end
 
-        return @subscription.update(data)        
+        return false unless data && data.is_a?(Hash)
+        subscriptions = data[:subscriptions]
+
+        if subscriptions.present?
+          subscription = subscriptions.first
+          type = subscription[:price_nickname]
+
+          @subscription = set_subscription(type)
+          return true
+        end
       end
     end
 
-    @subscription.destroy
-    false
+    remove_subscription
   end
 
-  def destroy
-    @authentication.destroy
+  def destroy_subscription
+    remove_subscription
   end
 
-  def auth_request(user_id, request_id)
+  def authentication_request(user_id, request_id)
     keys = @authentication.generate_keys(user_id, request_id)
-
     params = {
       public_key: keys.public_key,
       nonce: keys.nonce,
       client_id: @authentication.client_id,
       auth_redirect: "#{Discourse.base_url}/admin/wizards/pro/authorize/callback",
       application_name: SiteSetting.title,
-      scopes: "discourse-subscription-server:user_subscription"
+      scopes: scope
     }
 
     uri = URI.parse("https://#{server}/user-api-key/new")
@@ -74,26 +87,24 @@ class CustomWizard::Pro
     uri.to_s
   end
 
-  def auth_response(request_id, payload)
+  def authentication_response(request_id, payload)
     data = @authentication.decrypt_payload(request_id, payload)
     return unless data.is_a?(Hash) && data[:key] && data[:user_id]
-    @authentication.update(data)
+
+    api_key = data[:key]
+    user_id = data[:user_id]
+    user = User.find(user_id)
+
+    if user&.admin
+      @authentication = set_authentication(api_key, user.id)
+      true
+    else
+      false
+    end
   end
 
-  def self.update
-    self.new.update
-  end
-
-  def self.destroy
-    self.new.destroy
-  end
-
-  def self.generate_request
-    self.new.generate_request
-  end
-
-  def self.handle_response
-    self.new.handle_response
+  def destroy_authentication
+    remove_authentication
   end
 
   def self.subscribed?
@@ -102,5 +113,57 @@ class CustomWizard::Pro
 
   def self.namespace
     "custom_wizard_pro"
+  end
+
+  private
+
+  def subscription_db_key
+    "subscription"
+  end
+
+  def authentication_db_key
+    "authentication"
+  end
+
+  def get_subscription
+    raw = PluginStore.get(self.class.namespace, subscription_db_key)
+
+    if raw.present?
+      OpenStruct.new(
+        type: raw['type'],
+        updated_at: raw['updated_at']
+      )
+    end
+  end
+
+  def remove_subscription
+    PluginStore.remove(self.class.namespace, subscription_db_key)
+  end
+
+  def set_subscription(type)
+    PluginStore.set(CustomWizard::Pro.namespace, subscription_db_key, type: type, updated_at: Time.now)
+    CustomWizard::ProSubscription.new(get_subscription)
+  end
+
+  def get_authentication
+    raw = PluginStore.get(self.class.namespace, authentication_db_key)
+    OpenStruct.new(
+      key: raw && raw['key'],
+      auth_by: raw && raw['auth_by'],
+      auth_at: raw && raw['auth_at']
+    )
+  end
+
+  def set_authentication(key, user_id)
+    PluginStore.set(self.class.namespace, authentication_db_key,
+      key: key,
+      auth_by: user_id,
+      auth_at: Time.now
+    )
+    CustomWizard::ProAuthentication.new(get_authentication)
+  end
+
+  def remove_authentication
+    PluginStore.remove(self.class.namespace, authentication_db_key)
   end
 end

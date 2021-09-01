@@ -69,7 +69,7 @@ after_initialize do
     ../controllers/custom_wizard/realtime_validations.rb
     ../jobs/regular/refresh_api_access_token.rb
     ../jobs/regular/set_after_time_wizard.rb
-    ../jobs/scheduled/update_pro_status.rb
+    ../jobs/scheduled/update_pro_subscription.rb
     ../lib/custom_wizard/validators/template.rb
     ../lib/custom_wizard/validators/update.rb
     ../lib/custom_wizard/action_result.rb
@@ -111,9 +111,9 @@ after_initialize do
     ../serializers/custom_wizard/log_serializer.rb
     ../serializers/custom_wizard/submission_serializer.rb
     ../serializers/custom_wizard/realtime_validation/similar_topics_serializer.rb
-    ../serializers/custom_wizard/pro_serializer.rb
     ../serializers/custom_wizard/pro/authentication_serializer.rb
     ../serializers/custom_wizard/pro/subscription_serializer.rb
+    ../serializers/custom_wizard/pro_serializer.rb
     ../extensions/extra_locales_controller.rb
     ../extensions/invites_controller.rb
     ../extensions/users_controller.rb
@@ -125,18 +125,6 @@ after_initialize do
   end
 
   Liquid::Template.register_filter(::CustomWizard::LiquidFilter::FirstNonEmpty)
-
-  class CustomWizard::UnpermittedOverride < StandardError; end
-
-  CustomWizard.constants.each do |class_name|
-    klass = CustomWizard.const_get(class_name)
-    next if !klass.is_a?(Class) || klass.superclass.name.to_s.split("::").first == 'CustomWizard'
-
-    klass.define_singleton_method(:prepend) { |klass| raise CustomWizard::UnpermittedOverride.new }
-    klass.define_singleton_method(:include) { |klass| raise CustomWizard::UnpermittedOverride.new }
-    klass.define_singleton_method(:define_method) { |name, &block| raise CustomWizard::UnpermittedOverride.new }
-    klass.define_singleton_method(:define_singleton_method) { |name, &block| raise CustomWizard::UnpermittedOverride.new }
-  end
 
   add_class_method(:wizard, :user_requires_completion?) do |user|
     wizard_result = self.new(user).requires_completion?

@@ -14,15 +14,9 @@ class CustomWizard::Action
     @submission = opts[:submission]
     @log = []
     @result = CustomWizard::ActionResult.new
-    @pro = CustomWizard::Pro.new
   end
 
   def perform
-    if pro_actions.include?(action['type']) && !@pro.subscribed?
-      log_error(I18n.t("wizard.custom_field.error.pro_required"))
-      return
-    end
-
     ActiveRecord::Base.transaction do
       self.send(action['type'].to_sym)
     end

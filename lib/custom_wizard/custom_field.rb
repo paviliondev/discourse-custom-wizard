@@ -37,6 +37,8 @@ class ::CustomWizard::CustomField
         send("#{attr}=", value)
       end
     end
+
+    @pro = CustomWizard::Pro.new
   end
 
   def save
@@ -90,6 +92,10 @@ class ::CustomWizard::CustomField
 
       if attr == 'type' && TYPES.exclude?(value)
         add_error(I18n.t("#{i18n_key}.unsupported_type", type: value))
+      end
+
+      if attr == 'type' && value == 'json' && !@pro.subscribed?
+        add_error(I18n.t("wizard.custom_field.error.pro_type", type: value))
       end
 
       if attr == 'name'

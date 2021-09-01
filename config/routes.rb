@@ -47,7 +47,7 @@ Discourse::Application.routes.append do
     get 'admin/wizards/pro' => 'admin_pro#index'
     get 'admin/wizards/pro/authorize' => 'admin_pro#authorize'
     get 'admin/wizards/pro/authorize/callback' => 'admin_pro#authorize_callback'
-    delete 'admin/wizards/pro/authorize' => 'admin_pro#destroy'
+    delete 'admin/wizards/pro/authorize' => 'admin_pro#destroy_authentication'
     post 'admin/wizards/pro/subscription' => 'admin_pro#update_subscription'
   end
 end

@@ -694,27 +694,59 @@
   }
 }
 
-.realtime-validations > ul {
+.admin-wizard-container.settings .realtime-validations .setting-value > ul {
   list-style: none;
   margin: 0;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
 
   > li {
     background-color: var(--primary-low);
     padding: 1em;
     margin: 0 0 1em 0;
+    
+    .setting-title {
+      display: flex;
+      align-items: center;
 
-    input {
-      margin-bottom: 0;
+      h4 {
+        margin: 0 15px 0 0;
+      }
+
+      input[type="checkbox"] {
+        margin: 0 5px 0 0;
+      } 
+    }
+
+    .setting-label {
+      width: 100px;
+    }
+
+    .setting-value {
+      display: flex;
+      align-items: center;
+
+      .input .select-kit,
+      > .select-kit {
+        max-width: unset !important;
+      }
+
+      > span {
+        margin-right: 1em;
+      } 
     }
   }
 }
 
 .validation-container {
   display: flex;
+  flex-direction: column;
   padding: 1em 0;
 
   .validation-section {
-    width: 250px;
+    min-width: 250px;
+    margin: .5em 0;
   }
 }
 
