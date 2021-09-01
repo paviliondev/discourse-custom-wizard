@@ -84,9 +84,9 @@ describe CustomWizard::WizardController do
       CustomWizard::Submission.new(@wizard, step_1_field_1: "Hello World").save
       current_submission = @wizard.current_submission
       put '/w/super-mega-fun-wizard/skip.json'
-      list = CustomWizard::Submission.list(@wizard)
+      submissions = CustomWizard::Submission.list(@wizard).submissions
 
-      expect(list.any? { |submission| submission.id == current_submission.id }).to eq(false)
+      expect(submissions.any? { |submission| submission.id == current_submission.id }).to eq(false)
     end
 
     it "starts from the first step if user visits after skipping the wizard" do
