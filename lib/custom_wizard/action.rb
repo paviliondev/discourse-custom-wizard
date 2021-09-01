@@ -392,7 +392,7 @@ class CustomWizard::Action
         user_ids.each { |user_id| group.group_users.build(user_id: user_id) }
       end
 
-      GroupActionLogger.new(user, group, skip_guardian: true).log_change_group_settings
+      GroupActionLogger.new(user, group).log_change_group_settings
       log_success("Group created", group.name)
 
       result.output = group.name

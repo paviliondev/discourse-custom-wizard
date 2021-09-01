@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Create custom wizards
-# version: 0.8.0
+# version: 0.8.1
 # authors: Angus McLeod
 # url: https://github.com/paviliondev/discourse-custom-wizard
 # contact emails: angus@thepavilion.io
@@ -34,6 +34,7 @@ if respond_to?(:register_svg_icon)
   register_svg_icon "chevron-left"
   register_svg_icon "save"
   register_svg_icon "far-life-ring"
+  register_svg_icon "arrow-right"
 end
 
 class ::Sprockets::DirectiveProcessor
