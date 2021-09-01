@@ -75,6 +75,7 @@ class CustomWizard::Builder
     end
 
     @wizard.update!
+    CustomWizard::Submission.cleanup_incomplete_submissions(@wizard)
     @wizard
   end
 
