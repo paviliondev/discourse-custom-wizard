@@ -45,7 +45,7 @@ class CustomWizard::Submission
     validate
 
     submission_list = self.class.list(wizard, user_id: user.id)
-    submissions = submission_list.select { |submission| submission.id != self.id }
+    submissions = submission_list.submissions.select { |submission| submission.id != self.id }
     self.updated_at = Time.now.iso8601
     submissions.push(self)
 
@@ -112,7 +112,7 @@ class CustomWizard::Submission
   def self.cleanup_incomplete_submissions(wizard)
     user_id = wizard.user.id
     all_submissions = list(wizard, user_id: user_id)
-    sorted_submissions = all_submissions.sort_by do |submission|
+    sorted_submissions = all_submissions.submissions.sort_by do |submission|
       zero_epoch_time = DateTime.strptime("0", '%s')
       [
         submission.submitted_at ? Time.iso8601(submission.submitted_at) : zero_epoch_time,
@@ -132,7 +132,7 @@ class CustomWizard::Submission
     PluginStore.set("#{wizard.id}_#{KEY}", user_id, valid_data)
   end
 
-  def self.list(wizard, user_id: nil, order_by: nil)
+  def self.list(wizard, user_id: nil, order_by: nil, page: nil)
     params = { plugin_name: "#{wizard.id}_#{KEY}" }
     params[:key] = user_id if user_id.present?
 
