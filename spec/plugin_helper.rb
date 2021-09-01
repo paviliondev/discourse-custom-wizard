@@ -11,4 +11,7 @@ if ENV['SIMPLECOV']
   end
 end
 
+require 'oj'
+Oj.default_options = Oj.default_options.merge(cache_str: -1)
+
 require 'rails_helper'

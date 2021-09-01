@@ -47,4 +47,50 @@ describe CustomWizard::Submission do
   it "paginates submission lists" do
     expect(described_class.list(@wizard, page: 1).submissions.size).to eq((@count + 1) - CustomWizard::Submission::PAGE_LIMIT)
   end
+
+  context "#cleanup_incomplete_submissions" do
+    it "cleans up redundant incomplete submissions on each build" do
+      freeze_time Time.now + 1
+      described_class.new(@wizard, step_1_field_1: "I am the second submission").save
+      builder = CustomWizard::Builder.new(@wizard.id, @wizard.user)
+      builder.build
+      sub_list = described_class.list(@wizard, user_id: @wizard.user.id)
+
+      expect(sub_list.length).to eq(1)
+      expect(sub_list.first.fields["step_1_field_1"]).to eq("I am the second submission")
+    end
+
+    it "handles submissions without 'updated_at' field correctly" do
+      described_class.new(@wizard, step_1_field_1: "I am the second submission").save
+      described_class.new(@wizard, step_1_field_1: "I am the third submission").save
+      sub_data = PluginStore.get("#{@wizard.id}_submissions", @wizard.user.id)
+      sub_data.each do |sub|
+        sub['updated_at'] = nil
+      end
+      PluginStore.set("#{@wizard.id}_submissions", @wizard.user.id, sub_data)
+      builder = CustomWizard::Builder.new(@wizard.id, @wizard.user)
+      builder.build
+      sub_list = described_class.list(@wizard, user_id: @wizard.user.id)
+
+      expect(sub_list.length).to eq(1)
+      expect(sub_list.first.fields["step_1_field_1"]).to eq("I am the third submission")
+    end
+
+    it "handles submissions with and without 'updated_at' field correctly" do
+      freeze_time Time.now + 1
+      described_class.new(@wizard, step_1_field_1: "I am the second submission").save
+      freeze_time Time.now + 2
+      described_class.new(@wizard, step_1_field_1: "I am the third submission").save
+      sub_data = PluginStore.get("#{@wizard.id}_submissions", @wizard.user.id)
+      sub_data[0]['updated_at'] = nil
+      PluginStore.set("#{@wizard.id}_submissions", @wizard.user.id, sub_data)
+
+      builder = CustomWizard::Builder.new(@wizard.id, @wizard.user)
+      builder.build
+      sub_list = described_class.list(@wizard, user_id: @wizard.user.id)
+
+      expect(sub_list.length).to eq(1)
+      expect(sub_list.first.fields["step_1_field_1"]).to eq("I am the third submission")
+    end
+  end
 end
