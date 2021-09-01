@@ -27,8 +27,8 @@ export default Controller.extend({
         this.set("loadingMore", false);
       });
   },
-  
-  
+
+
   @discourseComputed('submissions', 'fields.@each.enabled')
   displaySubmissions(submissions, fields) {
     let result = [];
@@ -56,7 +56,7 @@ export default Controller.extend({
     },
 
     showEditColumnsModal() {
-      const controller = showModal("admin-wizards-submissions-columns", {
+      return showModal("admin-wizards-submissions-columns", {
         model: {
           fields: this.get('fields'),
           submissions: this.get('submissions')

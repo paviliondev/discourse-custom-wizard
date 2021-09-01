@@ -64,21 +64,21 @@ export default Component.extend({
   submittedUsers(value) {
     const isUserSelector = this.get("isUserSelector");
     const users = [];
-    
+
     if (isUserSelector) {
       const userData = value.value;
       const usernames = [];
 
-      if (userData.indexOf(',')) { 
+      if (userData.indexOf(',')) {
         usernames.push(...userData.split(','));
 
         usernames.forEach(u => {
           const user = {
             username: u,
             url: `/u/${u}`
-          }
+          };
           users.push(user);
-        })
+        });
       }
     }
     return users;
@@ -87,7 +87,6 @@ export default Component.extend({
   @discourseComputed('value')
   userProfileUrl(value) {
     const isUser = this.get("isUser");
-    const isUserSelector = this.get("isUserSelector");
 
     if (isUser) {
       return `/u/${value.username}`;

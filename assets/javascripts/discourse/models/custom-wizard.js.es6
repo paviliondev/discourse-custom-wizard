@@ -224,7 +224,6 @@ CustomWizard.reopenClass({
     })
       .then((result) => {
         if (result.wizard) {
-          console.log(result);
           let fields = [{ id: "username", label: "User"}];
           let submissions = [];
           let wizard = result.wizard;
@@ -248,8 +247,8 @@ CustomWizard.reopenClass({
           let submittedAt = {
             id: "submitted_at",
             label: "Submitted At"
-          }
-          
+          };
+
           fields.push(submittedAt);
 
           return {
