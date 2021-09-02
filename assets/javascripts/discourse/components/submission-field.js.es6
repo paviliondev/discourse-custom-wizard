@@ -1,9 +1,8 @@
-import { action } from "@ember/object";
 import Component from "@ember/component";
+import { action } from "@ember/object";
 import { equal } from "@ember/object/computed";
 import discourseComputed from "discourse-common/utils/decorators";
 import I18n from "I18n";
-
 
 export default Component.extend({
   isText: equal("value.type", "text"),
@@ -25,7 +24,7 @@ export default Component.extend({
   isTextArea: equal("value.type", "textarea"),
   isComposerPreview: equal("value.type", "composer_preview"),
   textState: "text-collapsed",
-  toggleText: I18n.t('admin.wizard.submissions.expand_text'),
+  toggleText: I18n.t("admin.wizard.submissions.expand_text"),
 
   @discourseComputed("value")
   checkboxValue(value) {
@@ -45,14 +44,14 @@ export default Component.extend({
 
     if (state === "text-collapsed") {
       this.set("textState", "text-expanded");
-      this.set("toggleText", I18n.t('admin.wizard.submissions.collapse_text'));
+      this.set("toggleText", I18n.t("admin.wizard.submissions.collapse_text"));
     } else if (state === "text-expanded") {
       this.set("textState", "text-collapsed");
-      this.set("toggleText", I18n.t('admin.wizard.submissions.expand_text'));
+      this.set("toggleText", I18n.t("admin.wizard.submissions.expand_text"));
     }
   },
 
-  @discourseComputed('value')
+  @discourseComputed("value")
   file(value) {
     const isUpload = this.get("isUpload");
     if (isUpload) {
@@ -60,7 +59,7 @@ export default Component.extend({
     }
   },
 
-  @discourseComputed('value')
+  @discourseComputed("value")
   submittedUsers(value) {
     const isUserSelector = this.get("isUserSelector");
     const users = [];
@@ -69,13 +68,13 @@ export default Component.extend({
       const userData = value.value;
       const usernames = [];
 
-      if (userData.indexOf(',')) {
-        usernames.push(...userData.split(','));
+      if (userData.indexOf(",")) {
+        usernames.push(...userData.split(","));
 
-        usernames.forEach(u => {
+        usernames.forEach((u) => {
           const user = {
             username: u,
-            url: `/u/${u}`
+            url: `/u/${u}`,
           };
           users.push(user);
         });
@@ -84,7 +83,7 @@ export default Component.extend({
     return users;
   },
 
-  @discourseComputed('value')
+  @discourseComputed("value")
   userProfileUrl(value) {
     const isUser = this.get("isUser");
 
@@ -93,18 +92,18 @@ export default Component.extend({
     }
   },
 
-  @discourseComputed('value')
+  @discourseComputed("value")
   categoryUrl(value) {
-    const isCategory = this.get('isCategory');
+    const isCategory = this.get("isCategory");
 
     if (isCategory) {
       return `/c/${value.value}`;
     }
   },
 
-  @discourseComputed('value')
+  @discourseComputed("value")
   groupUrl(value) {
-    const isGroup = this.get('isGroup');
+    const isGroup = this.get("isGroup");
 
     if (isGroup) {
       return `/g/${value.value}`;
