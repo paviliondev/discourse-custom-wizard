@@ -18,7 +18,6 @@ const wizard = {
     permitted: null,
   },
   mapped: ["permitted"],
-  advanced: ["restart_on_revisit"],
   required: ["id"],
   dependent: {
     after_time: "after_time_scheduled",
@@ -50,7 +49,6 @@ const step = {
     force_final: false,
   },
   mapped: ["required_data", "permitted_params", "condition", "index"],
-  advanced: ["required_data", "permitted_params", "condition", "index"],
   required: ["id"],
   dependent: {},
   objectArrays: {
@@ -68,6 +66,7 @@ const field = {
     label: null,
     image: null,
     description: null,
+    property: null,
     required: null,
     key: null,
     type: null,
@@ -75,7 +74,6 @@ const field = {
   },
   types: {},
   mapped: ["prefill", "content", "condition", "index"],
-  advanced: ["property", "key", "condition", "index"],
   required: ["id", "type"],
   dependent: {},
   objectArrays: {},
@@ -196,14 +194,14 @@ const action = {
     "visibility_level",
     "members_visibility_level",
   ],
-  advanced: [
-    "code",
-    "custom_fields",
-    "skip_redirect",
-    "suppress_notifications",
-    "required",
-  ],
   required: ["id", "type"],
+  proTypes: [
+    'send_message',
+    'create_category',
+    'create_group',
+    'watch_categories',
+    'send_to_api'
+  ],
   dependent: {},
   objectArrays: {},
 };

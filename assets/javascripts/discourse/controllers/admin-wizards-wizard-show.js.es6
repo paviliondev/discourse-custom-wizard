@@ -77,7 +77,6 @@ export default Controller.extend({
       wizard
         .save(opts)
         .then((result) => {
-          console.log(result)
           if (result.wizard_id) {
             this.send("afterSave", result.wizard_id);
           } else if (result.errors) {
@@ -117,10 +116,6 @@ export default Controller.extend({
       });
 
       controller.setup();
-    },
-
-    toggleAdvanced() {
-      this.toggleProperty("wizard.showAdvanced");
     },
 
     copyUrl() {

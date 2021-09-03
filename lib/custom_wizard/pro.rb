@@ -16,7 +16,7 @@ class CustomWizard::Pro
   end
 
   def subscribed?
-    @subscription.active?
+    false #@subscription.active?
   end
 
   def server

@@ -126,33 +126,25 @@
       </div>
     </div>
 
-    {{wizard-advanced-toggle showAdvanced=wizard.showAdvanced}}
-
-    {{#if wizard.showAdvanced}}
-      <div class="advanced-settings">
-
-        <div class="setting">
-          <div class="setting-label">
-            <label>{{i18n "admin.wizard.save_submissions"}}</label>
-          </div>
-          <div class="setting-value">
-            {{input type="checkbox" checked=wizard.save_submissions}}
-            <span>{{i18n "admin.wizard.save_submissions_label"}}</span>
-          </div>
-        </div>
-
-        <div class="setting">
-          <div class="setting-label">
-            <label>{{i18n "admin.wizard.restart_on_revisit"}}</label>
-          </div>
-          <div class="setting-value">
-            {{input type="checkbox" checked=wizard.restart_on_revisit}}
-            <span>{{i18n "admin.wizard.restart_on_revisit_label"}}</span>
-          </div>
-        </div>
-
+    <div class="setting">
+      <div class="setting-label">
+        <label>{{i18n "admin.wizard.save_submissions"}}</label>
       </div>
-    {{/if}}
+      <div class="setting-value">
+        {{input type="checkbox" checked=wizard.save_submissions}}
+        <span>{{i18n "admin.wizard.save_submissions_label"}}</span>
+      </div>
+    </div>
+
+    <div class="setting">
+      <div class="setting-label">
+        <label>{{i18n "admin.wizard.restart_on_revisit"}}</label>
+      </div>
+      <div class="setting-value">
+        {{input type="checkbox" checked=wizard.restart_on_revisit}}
+        <span>{{i18n "admin.wizard.restart_on_revisit_label"}}</span>
+      </div>
+    </div>
   </div>
 
   {{wizard-links
@@ -183,7 +175,8 @@
       wizard=wizard
       apis=apis
       removeAction="removeAction"
-      wizardFields=wizardFields}}
+      wizardFields=wizardFields
+      proSubscribed=proSubscribed}}
   {{/each}}
 
   <div class="admin-wizard-buttons">

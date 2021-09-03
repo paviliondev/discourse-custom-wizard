@@ -31,7 +31,7 @@ class CustomWizard::TemplateValidator
 
     if data[:actions].present?
       data[:actions].each do |action|
-        validate_pro_action(action)
+        validate_pro(action, :action)
         check_required(action, :action)
       end
     end

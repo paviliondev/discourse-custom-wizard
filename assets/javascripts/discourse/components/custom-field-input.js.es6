@@ -1,13 +1,29 @@
 import Component from "@ember/component";
 import discourseComputed, { observes } from "discourse-common/utils/decorators";
 import { alias, equal, or } from "@ember/object/computed";
+import { computed } from "@ember/object";
 import I18n from "I18n";
 
-const generateContent = function (array, type) {
-  return array.map((key) => ({
-    id: key,
-    name: I18n.t(`admin.wizard.custom_field.${type}.${key}`),
-  }));
+const klasses = ["topic", "post", "group", "category"];
+const types = ["string", "boolean", "integer", "json"];
+const proTypes = {
+  klass: ["group", "category"],
+  type: ["json"]
+}
+
+const generateContent = function (array, type, proSubscribed = false) {
+  return array.reduce((result, key) => {
+    let proArr = proTypes[type];
+    let pro = proArr && proArr.includes(key);
+    if (!pro || proSubscribed) {
+      result.push({
+        id: key,
+        name: I18n.t(`admin.wizard.custom_field.${type}.${key}`),
+        pro
+      });
+    }
+    return result;
+  }, []);
 };
 
 export default Component.extend({
@@ -16,14 +32,12 @@ export default Component.extend({
   postSerializers: ["post"],
   groupSerializers: ["basic_group"],
   categorySerializers: ["basic_category"],
-  klassContent: generateContent(
-    ["topic", "post", "group", "category"],
-    "klass"
-  ),
-  typeContent: generateContent(
-    ["string", "boolean", "integer", "json"],
-    "type"
-  ),
+  klassContent: computed("proSubscribed", function() { 
+    return generateContent(klasses, "klass", this.proSubscribed);
+  }),
+  typeContent: computed("proSubscribed", function() {
+    return generateContent(types, "type", this.proSubscribed);
+  }),
   showInputs: or("field.new", "field.edit"),
   classNames: ["custom-field-input"],
   loading: or("saving", "destroying"),
@@ -40,7 +54,7 @@ export default Component.extend({
     const serializers = this.get(`${klass}Serializers`);
 
     if (serializers) {
-      return generateContent(serializers, "serializers");
+      return generateContent(serializers, "serializers", this.proSubscribed);
     } else {
       return [];
     }

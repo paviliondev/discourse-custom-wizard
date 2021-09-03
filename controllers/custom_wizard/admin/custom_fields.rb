@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 class CustomWizard::AdminCustomFieldsController < CustomWizard::AdminController
   def index
-    render_json_dump(custom_field_list)
+    render_json_dump(
+      custom_fields: custom_field_list,
+      pro_subscribed: CustomWizard::Pro.subscribed?
+    )
   end
 
   def update

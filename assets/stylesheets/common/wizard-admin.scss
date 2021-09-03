@@ -243,7 +243,7 @@
         font-size: 0.85em;
       }
 
-      span {
+      > span {
         font-size: 0.929em;
       }
 
@@ -381,11 +381,6 @@
         label {
           margin: 0;
         }
-      }
-
-      .pro-label {
-        color: $tertiary;
-        font-size: .75em;
       }
     }
   }
@@ -764,6 +759,11 @@
   vertical-align: middle;
 }
 
+.pro-label {
+  color: var(--tertiary);
+  font-size: .75em;
+}
+
 .admin-wizards-pro {
   .admin-wizard-controls {
     h3, label {
@@ -773,8 +773,8 @@
     label {
       padding: .4em .5em;
       margin-left: .75em;
-      background-color: $success;
-      color: $secondary;
+      background-color: var(--success);
+      color: var(--secondary);
     }
 
     .buttons {
@@ -807,17 +807,29 @@
       display: flex;
       align-items: center;
       padding: 1em;
-      background-color: $primary-very-low;
+      background-color: var(--primary-very-low);
 
       .subscription-state {
         padding: .25em .5em;
         margin-right: .75em;
 
         &.active {
-          background-color: $success;
-          color: $secondary;
+          background-color: var(--success);
+          color: var(--secondary);
         }
       }
     }
+  }
+}
+
+.wizard-pro-selector.select-kit.single-select {
+  .select-kit-row .texts {
+    display: flex;
+    align-items: center;
+  }
+
+  .pro-label {
+    margin-left: .75em;
+    padding-top: .25em;
   }
 }
