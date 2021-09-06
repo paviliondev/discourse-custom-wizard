@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class CustomWizard::SubmissionSerializer < ApplicationSerializer
   attributes :id,
-             :user,
              :fields,
              :submitted_at
 
