@@ -18,7 +18,7 @@ describe CustomWizard::SubmissionSerializer do
       step_1_field_1: "I am user submission",
       submitted_at: Time.now.iso8601
     ).save
-    @list =  CustomWizard::Submission.list(wizard, page: 0)
+    @list = CustomWizard::Submission.list(wizard, page: 0)
   end
 
   it 'should return submission attributes' do
