@@ -1,10 +1,10 @@
-import { ajax } from "discourse/lib/ajax";
 import EmberObject from "@ember/object";
-import { buildProperties, mapped, present } from "../lib/wizard-json";
-import { listProperties, snakeCase } from "../lib/wizard";
-import wizardSchema from "../lib/wizard-schema";
-import { Promise } from "rsvp";
+import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import { Promise } from "rsvp";
+import { listProperties, snakeCase } from "../lib/wizard";
+import { buildProperties, mapped, present } from "../lib/wizard-json";
+import wizardSchema from "../lib/wizard-schema";
 
 const CustomWizard = EmberObject.extend({
   save(opts) {
@@ -224,31 +224,32 @@ CustomWizard.reopenClass({
     })
       .then((result) => {
         if (result.wizard) {
-          let fields = ["username"];
+          let fields = [{ id: "username", label: "User" }];
           let submissions = [];
           let wizard = result.wizard;
           let total = result.total;
 
           result.submissions.forEach((s) => {
             let submission = {
-              username: s.username,
+              username: s.user,
             };
 
-            Object.keys(s.fields).forEach((f) => {
-              if (fields.indexOf(f) < 0) {
-                fields.push(f);
+            Object.keys(s.fields).forEach((fieldId) => {
+              if (!fields.some((field) => field.id === fieldId)) {
+                fields.push({ id: fieldId, label: s.fields[fieldId].label });
               }
-
-              if (fields.includes(f)) {
-                submission[f] = s.fields[f];
-              }
+              submission[fieldId] = s.fields[fieldId];
             });
-
             submission["submitted_at"] = s.submitted_at;
             submissions.push(submission);
           });
 
-          fields.push("submitted_at");
+          let submittedAt = {
+            id: "submitted_at",
+            label: "Submitted At",
+          };
+
+          fields.push(submittedAt);
 
           return {
             wizard,

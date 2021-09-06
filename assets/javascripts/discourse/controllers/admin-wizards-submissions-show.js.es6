@@ -1,6 +1,8 @@
 import Controller from "@ember/controller";
-import { fmt } from "discourse/lib/computed";
 import { empty } from "@ember/object/computed";
+import discourseComputed from "discourse-common/utils/decorators";
+import { fmt } from "discourse/lib/computed";
+import showModal from "discourse/lib/show-modal";
 import CustomWizard from "../models/custom-wizard";
 
 export default Controller.extend({
@@ -25,12 +27,39 @@ export default Controller.extend({
       });
   },
 
+  @discourseComputed("submissions", "fields.@each.enabled")
+  displaySubmissions(submissions, fields) {
+    let result = [];
+
+    submissions.forEach((submission) => {
+      let sub = {};
+
+      Object.keys(submission).forEach((fieldId) => {
+        if (fields.some((f) => f.id === fieldId && f.enabled)) {
+          sub[fieldId] = submission[fieldId];
+        }
+      });
+      result.push(sub);
+    });
+
+    return result;
+  },
+
   actions: {
     loadMore() {
       if (!this.loadingMore && this.submissions.length < this.total) {
         this.set("page", this.get("page") + 1);
         this.loadMoreSubmissions();
       }
+    },
+
+    showEditColumnsModal() {
+      return showModal("admin-wizards-submissions-columns", {
+        model: {
+          fields: this.get("fields"),
+          submissions: this.get("submissions"),
+        },
+      });
     },
   },
 });
