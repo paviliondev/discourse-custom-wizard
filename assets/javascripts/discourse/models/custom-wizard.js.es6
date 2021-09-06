@@ -1,10 +1,10 @@
-import { ajax } from "discourse/lib/ajax";
 import EmberObject from "@ember/object";
-import { buildProperties, mapped, present } from "../lib/wizard-json";
-import { listProperties, snakeCase } from "../lib/wizard";
-import wizardSchema from "../lib/wizard-schema";
-import { Promise } from "rsvp";
+import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import { Promise } from "rsvp";
+import { listProperties, snakeCase } from "../lib/wizard";
+import { buildProperties, mapped, present } from "../lib/wizard-json";
+import wizardSchema from "../lib/wizard-schema";
 
 const CustomWizard = EmberObject.extend({
   save(opts) {
@@ -224,8 +224,7 @@ CustomWizard.reopenClass({
     })
       .then((result) => {
         if (result.wizard) {
-          console.log(result);
-          let fields = [{ id: "username", label: "User"}];
+          let fields = [{ id: "username", label: "User" }];
           let submissions = [];
           let wizard = result.wizard;
           let total = result.total;
@@ -236,7 +235,7 @@ CustomWizard.reopenClass({
             };
 
             Object.keys(s.fields).forEach((fieldId) => {
-              if (!fields.some(field => field.id === fieldId)) {
+              if (!fields.some((field) => field.id === fieldId)) {
                 fields.push({ id: fieldId, label: s.fields[fieldId].label });
               }
               submission[fieldId] = s.fields[fieldId];
@@ -247,9 +246,9 @@ CustomWizard.reopenClass({
 
           let submittedAt = {
             id: "submitted_at",
-            label: "Submitted At"
-          }
-          
+            label: "Submitted At",
+          };
+
           fields.push(submittedAt);
 
           return {

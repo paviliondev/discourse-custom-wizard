@@ -1,10 +1,9 @@
 import Controller from "@ember/controller";
-import { fmt } from "discourse/lib/computed";
 import { empty } from "@ember/object/computed";
-import CustomWizard from "../models/custom-wizard";
-import showModal from "discourse/lib/show-modal";
 import discourseComputed from "discourse-common/utils/decorators";
-
+import { fmt } from "discourse/lib/computed";
+import showModal from "discourse/lib/show-modal";
+import CustomWizard from "../models/custom-wizard";
 
 export default Controller.extend({
   downloadUrl: fmt("wizard.id", "/admin/wizards/submissions/%@/download"),
@@ -27,17 +26,16 @@ export default Controller.extend({
         this.set("loadingMore", false);
       });
   },
-  
-  
-  @discourseComputed('submissions', 'fields.@each.enabled')
+
+  @discourseComputed("submissions", "fields.@each.enabled")
   displaySubmissions(submissions, fields) {
     let result = [];
 
-    submissions.forEach(submission => {
+    submissions.forEach((submission) => {
       let sub = {};
 
-      Object.keys(submission).forEach(fieldId => {
-        if (fields.some(f => f.id === fieldId && f.enabled)) {
+      Object.keys(submission).forEach((fieldId) => {
+        if (fields.some((f) => f.id === fieldId && f.enabled)) {
           sub[fieldId] = submission[fieldId];
         }
       });
@@ -56,11 +54,11 @@ export default Controller.extend({
     },
 
     showEditColumnsModal() {
-      const controller = showModal("admin-wizards-submissions-columns", {
+      return showModal("admin-wizards-submissions-columns", {
         model: {
-          fields: this.get('fields'),
-          submissions: this.get('submissions')
-        }
+          fields: this.get("fields"),
+          submissions: this.get("submissions"),
+        },
       });
     },
   },
