@@ -3,12 +3,9 @@ require_relative '../../plugin_helper'
 
 describe CustomWizard::TemplateValidator do
   fab!(:user) { Fabricate(:user) }
-
-  let(:template) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-    ).read).with_indifferent_access
-  }
+  let(:template) { get_wizard_fixture("wizard") }
+  let(:create_category) { get_wizard_fixture("actions/create_category") }
+  let(:user_condition) { get_wizard_fixture("condition/user_condition") }
 
   it "validates valid templates" do
     expect(
@@ -44,5 +41,53 @@ describe CustomWizard::TemplateValidator do
     expect(
       CustomWizard::TemplateValidator.new(template).perform
     ).to eq(false)
+  end
+
+  it "invalidates pro step attributes without a pro subscription" do
+    template[:steps][0][:condition] = user_condition['condition']
+    expect(
+      CustomWizard::TemplateValidator.new(template).perform
+    ).to eq(false)
+  end
+
+  it "invalidates pro field attributes without a pro subscription" do
+    template[:steps][0][:fields][0][:condition] = user_condition['condition']
+    expect(
+      CustomWizard::TemplateValidator.new(template).perform
+    ).to eq(false)
+  end
+
+  it "invalidates pro actions without a pro subscription" do
+    template[:actions] << create_category
+    expect(
+      CustomWizard::TemplateValidator.new(template).perform
+    ).to eq(false)
+  end
+
+  context "with pro subscription" do
+    before do
+      enable_pro
+    end
+
+    it "validates pro step attributes" do
+      template[:steps][0][:condition] = user_condition['condition']
+      expect(
+        CustomWizard::TemplateValidator.new(template).perform
+      ).to eq(true)
+    end
+
+    it "validates pro field attributes" do
+      template[:steps][0][:fields][0][:condition] = user_condition['condition']
+      expect(
+        CustomWizard::TemplateValidator.new(template).perform
+      ).to eq(true)
+    end
+
+    it "validates pro actions" do
+      template[:actions] << create_category
+      expect(
+        CustomWizard::TemplateValidator.new(template).perform
+      ).to eq(true)
+    end
   end
 end

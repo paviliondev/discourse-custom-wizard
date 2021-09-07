@@ -1,0 +1,51 @@
+{
+  "id": "action_8",
+  "run_after": "step_1",
+  "type": "create_category",
+  "custom_fields": [
+    {
+      "type": "association",
+      "pairs": [
+        {
+          "index": 0,
+          "key": "category_custom_field",
+          "key_type": "text",
+          "value": "CC Val",
+          "value_type": "text",
+          "connector": "association"
+        }
+      ]
+    }
+  ],
+  "name": [
+    {
+      "type": "assignment",
+      "output": "step_1_field_1",
+      "output_type": "wizard_field",
+      "output_connector": "set"
+    }
+  ],
+  "slug": [
+    {
+      "type": "assignment",
+      "output": "step_1_field_1",
+      "output_type": "wizard_field",
+      "output_connector": "set"
+    }
+  ],
+  "permissions": [
+    {
+      "type": "association",
+      "pairs": [
+        {
+          "index": 0,
+          "key": "action_9",
+          "key_type": "wizard_action",
+          "value": "2",
+          "value_type": "text",
+          "connector": "association"
+        }
+      ]
+    }
+  ]
+}

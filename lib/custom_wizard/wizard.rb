@@ -308,10 +308,10 @@ class CustomWizard::Wizard
     end
   end
 
-  def self.list(user, template_opts: {}, not_completed: false)
+  def self.list(user, template_opts = {}, not_completed = false)
     return [] unless user
 
-    CustomWizard::Template.list(template_opts).reduce([]) do |result, template|
+    CustomWizard::Template.list(**template_opts).reduce([]) do |result, template|
       wizard = new(template, user)
       result.push(wizard) if wizard.can_access? && (
         !not_completed || !wizard.completed?
@@ -323,7 +323,7 @@ class CustomWizard::Wizard
   def self.after_signup(user)
     wizards = list(
       user,
-      template_opts: {
+      {
         setting: 'after_signup',
         order: "(value::json ->> 'permitted') IS NOT NULL DESC"
       }
@@ -334,11 +334,11 @@ class CustomWizard::Wizard
   def self.prompt_completion(user)
     wizards = list(
       user,
-      template_opts: {
+      {
         setting: 'prompt_completion',
         order: "(value::json ->> 'permitted') IS NOT NULL DESC"
       },
-      not_completed: true
+      true
     )
     if wizards.any?
       wizards.map do |w|

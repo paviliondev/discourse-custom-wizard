@@ -10,7 +10,7 @@ class CustomWizard::AdminProController < CustomWizard::AdminController
   def authorize
     request_id = SecureRandom.hex(32)
     cookies[:user_api_request_id] = request_id
-    redirect_to pro.authentication_request(current_user.id, request_id).to_s
+    redirect_to pro.authentication_url(current_user.id, request_id).to_s
   end
 
   def authorize_callback

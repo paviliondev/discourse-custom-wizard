@@ -197,9 +197,9 @@ const action = {
   required: ["id", "type"],
   proTypes: [
     'send_message',
+    'add_to_group',
     'create_category',
     'create_group',
-    'watch_categories',
     'send_to_api'
   ],
   dependent: {},

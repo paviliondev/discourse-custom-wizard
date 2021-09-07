@@ -6,26 +6,22 @@ describe CustomWizard::Action do
   fab!(:category) { Fabricate(:category, name: 'cat1', slug: 'cat-slug') }
   fab!(:group) { Fabricate(:group) }
 
-  let(:wizard_template) {
-    JSON.parse(
-      File.open(
-        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-      ).read
-    )
-  }
+  let(:wizard_template) { get_wizard_fixture("wizard") }
+  let(:open_composer) { get_wizard_fixture("actions/open_composer") }
+  let(:create_category) { get_wizard_fixture("actions/create_category") }
+  let(:create_group) { get_wizard_fixture("actions/create_group") }
+  let(:add_to_group) { get_wizard_fixture("actions/add_to_group") }
+  let(:send_message) { get_wizard_fixture("actions/send_message") }
+  let(:send_message_multi) { get_wizard_fixture("actions/send_message_multi") }
 
-  let(:open_composer) {
-    JSON.parse(
-      File.open(
-        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/actions/open_composer.json"
-      ).read
-    )
-  }
+  def update_template(template)
+    CustomWizard::Template.save(template, skip_jobs: true)
+    @template = CustomWizard::Template.find('super_mega_fun_wizard')
+  end
 
   before do
     Group.refresh_automatic_group!(:trust_level_2)
-    CustomWizard::Template.save(wizard_template, skip_jobs: true)
-    @template = CustomWizard::Template.find('super_mega_fun_wizard')
+    update_template(wizard_template)
   end
 
   context 'creating a topic' do
@@ -110,54 +106,6 @@ describe CustomWizard::Action do
     end
   end
 
-  context 'sending a message' do
-    it 'works' do
-      User.create(username: 'angus1', email: "angus1@email.com")
-
-      wizard = CustomWizard::Builder.new(@template[:id], user).build
-      wizard.create_updater(wizard.steps[0].id, {}).update
-      wizard.create_updater(wizard.steps[1].id, {}).update
-
-      topic = Topic.where(
-        archetype: Archetype.private_message,
-        title: "Message title"
-      )
-
-      post = Post.where(
-        topic_id: topic.pluck(:id),
-        raw: "I will interpolate some wizard fields"
-      )
-
-      expect(topic.exists?).to eq(true)
-      expect(topic.first.topic_allowed_users.first.user.username).to eq('angus1')
-      expect(post.exists?).to eq(true)
-    end
-
-    it 'allows using multiple PM targets' do
-      User.create(username: 'angus1', email: "angus1@email.com")
-      User.create(username: 'faiz', email: "faiz@email.com")
-      Group.create(name: "cool_group")
-      Group.create(name: 'cool_group_1')
-      wizard = CustomWizard::Builder.new(@template[:id], user).build
-      wizard.create_updater(wizard.steps[0].id, {}).update
-      wizard.create_updater(wizard.steps[1].id, {}).update
-
-      topic = Topic.where(
-        archetype: Archetype.private_message,
-        title: "Multiple Recipients title"
-      )
-
-      post = Post.where(
-        topic_id: topic.pluck(:id),
-        raw: "I will interpolate some wizard fields"
-      )
-      expect(topic.exists?).to eq(true)
-      expect(topic.first.all_allowed_users.map(&:username)).to include('angus1', 'faiz')
-      expect(topic.first.allowed_groups.map(&:name)).to include('cool_group', 'cool_group_1')
-      expect(post.exists?).to eq(true)
-    end
-  end
-
   it 'updates a profile' do
     wizard = CustomWizard::Builder.new(@template[:id], user).build
     upload = Upload.create!(
@@ -182,10 +130,8 @@ describe CustomWizard::Action do
       updater = wizard.create_updater(wizard.steps[1].id, {})
       updater.update
 
-      category = Category.find_by(id: wizard.current_submission.fields['action_8'])
-
       expect(updater.result[:redirect_on_next]).to eq(
-        "/new-topic?title=Title%20of%20the%20composer%20topic&body=I%20am%20interpolating%20some%20user%20fields%20Angus%20angus%20angus%40email.com&category_id=#{category.id}&tags=tag1"
+        "/new-topic?title=Title%20of%20the%20composer%20topic&body=I%20am%20interpolating%20some%20user%20fields%20Angus%20angus%20angus%40email.com&tags=tag1"
       )
     end
 
@@ -210,35 +156,11 @@ describe CustomWizard::Action do
     end
   end
 
-  it 'creates a category' do
-    wizard = CustomWizard::Builder.new(@template[:id], user).build
-    wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
-    wizard.create_updater(wizard.steps[1].id, {}).update
-    expect(Category.where(id: wizard.current_submission.fields['action_8']).exists?).to eq(true)
-  end
-
-  it 'creates a group' do
-    wizard = CustomWizard::Builder.new(@template[:id], user).build
-    wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
-    expect(Group.where(name: wizard.current_submission.fields['action_9']).exists?).to eq(true)
-  end
-
-  it 'adds a user to a group' do
-    wizard = CustomWizard::Builder.new(@template[:id], user).build
-    step_id = wizard.steps[0].id
-    updater = wizard.create_updater(step_id, step_1_field_1: "Text input").update
-    group = Group.find_by(name: wizard.current_submission.fields['action_9'])
-    expect(group.users.first.username).to eq('angus')
-  end
-
   it 'watches categories' do
     wizard = CustomWizard::Builder.new(@template[:id], user).build
     wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
     wizard.create_updater(wizard.steps[1].id, {}).update
-    expect(CategoryUser.where(
-      category_id: wizard.current_submission.fields['action_8'],
-      user_id: user.id
-    ).first.notification_level).to eq(2)
+
     expect(CategoryUser.where(
       category_id: category.id,
       user_id: user.id
@@ -250,5 +172,98 @@ describe CustomWizard::Action do
     updater = wizard.create_updater(wizard.steps.last.id, {})
     updater.update
     expect(updater.result[:redirect_on_next]).to eq("https://google.com")
+  end
+
+  context "pro actions" do
+    before do
+      enable_pro
+    end
+    
+    it '#send_message' do
+      wizard_template['actions'] << send_message
+      update_template(wizard_template)
+
+      User.create(username: 'angus1', email: "angus1@email.com")
+
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      wizard.create_updater(wizard.steps[0].id, {}).update
+      wizard.create_updater(wizard.steps[1].id, {}).update
+
+      topic = Topic.where(
+        archetype: Archetype.private_message,
+        title: "Message title"
+      )
+
+      post = Post.where(
+        topic_id: topic.pluck(:id),
+        raw: "I will interpolate some wizard fields"
+      )
+
+      expect(topic.exists?).to eq(true)
+      expect(topic.first.topic_allowed_users.first.user.username).to eq('angus1')
+      expect(post.exists?).to eq(true)
+    end
+
+    it '#send_message allows using multiple targets' do
+      wizard_template['actions'] << send_message_multi
+      update_template(wizard_template)
+
+      User.create(username: 'angus1', email: "angus1@email.com")
+      User.create(username: 'faiz', email: "faiz@email.com")
+      Group.create(name: "cool_group")
+      Group.create(name: 'cool_group_1')
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      wizard.create_updater(wizard.steps[0].id, {}).update
+      wizard.create_updater(wizard.steps[1].id, {}).update
+
+      topic = Topic.where(
+        archetype: Archetype.private_message,
+        title: "Multiple Recipients title"
+      )
+
+      post = Post.where(
+        topic_id: topic.pluck(:id),
+        raw: "I will interpolate some wizard fields"
+      )
+
+      expect(topic.exists?).to eq(true)
+      expect(topic.first.all_allowed_users.map(&:username)).to include('angus1', 'faiz')
+      expect(topic.first.allowed_groups.map(&:name)).to include('cool_group', 'cool_group_1')
+      expect(post.exists?).to eq(true)
+    end
+
+    it '#create_category' do
+      wizard_template['actions'] << create_category
+      update_template(wizard_template)
+
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
+      wizard.create_updater(wizard.steps[1].id, {}).update
+
+      expect(Category.where(id: wizard.current_submission.fields['action_8']).exists?).to eq(true)
+    end
+
+    it '#create_group' do
+      wizard_template['actions'] << create_group
+      update_template(wizard_template)
+
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
+
+      expect(Group.where(name: wizard.current_submission.fields['action_9']).exists?).to eq(true)
+    end
+
+    it '#add_to_group' do
+      wizard_template['actions'] << create_group
+      wizard_template['actions'] << add_to_group
+      update_template(wizard_template)
+
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      step_id = wizard.steps[0].id
+      updater = wizard.create_updater(step_id, step_1_field_1: "Text input").update
+      group = Group.find_by(name: wizard.current_submission.fields['action_9'])
+
+      expect(group.users.first.username).to eq('angus')
+    end
   end
 end

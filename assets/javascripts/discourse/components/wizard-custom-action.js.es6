@@ -1,6 +1,6 @@
 import { default as discourseComputed } from "discourse-common/utils/decorators";
 import wizardSchema from "discourse/plugins/discourse-custom-wizard/discourse/lib/wizard-schema";
-import { and, empty, equal, or } from "@ember/object/computed";
+import { empty, equal, or } from "@ember/object/computed";
 import { notificationLevels, selectKitContent } from "../lib/wizard";
 import { computed } from "@ember/object";
 import UndoChanges from "../mixins/undo-changes";

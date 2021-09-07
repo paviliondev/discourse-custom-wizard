@@ -21,8 +21,8 @@ class CustomWizard::TemplateValidator
       check_required(step, :step)
       validate_pro(step, :step)
 
-      if data[:fields].present?
-        data[:fields].each do |field|
+      if step[:fields].present?
+        step[:fields].each do |field|
           validate_pro(field, :field)
           check_required(field, :field)
         end
@@ -66,9 +66,9 @@ class CustomWizard::TemplateValidator
       action: {
         type: %w[
           send_message
+          add_to_group
           create_category
           create_group
-          watch_categories
           send_to_api
         ]
       }
@@ -87,11 +87,13 @@ class CustomWizard::TemplateValidator
 
   def validate_pro(object, type)
     self.class.pro[type].each do |property, pro_type|
-      is_pro = (pro_type === 'present' && object[property].present?) ||
-        (pro_type === 'conditional' && object[property].is_a?(Hash)) ||
-        (pro_type.is_a?(Array) && pro_type.includes?(object[property]))
+      is_pro = object[property.to_s].present? && (
+        pro_type === 'present' ||
+        (pro_type === 'conditional' && object[property.to_s].is_a?(Hash)) ||
+        (pro_type.is_a?(Array) && pro_type.include?(object[property.to_s]))
+      )
 
-      if is_pro && @pro.subscribed?
+      if is_pro && !@pro.subscribed?
         errors.add :base, I18n.t("wizard.validation.pro", type: type.to_s, property: property)
       end
     end

@@ -54,24 +54,27 @@ class CustomWizard::Pro
         return false unless data && data.is_a?(Hash)
         subscriptions = data[:subscriptions]
 
-        if subscriptions.present?
-          subscription = subscriptions.first
-          type = subscription[:price_nickname]
-
+        if subscriptions.present? && type = subscriptions.first[:price_nickname]
           @subscription = set_subscription(type)
           return true
         end
       end
     end
 
-    remove_subscription
+    destroy_subscription
+    false
   end
 
   def destroy_subscription
-    remove_subscription
+    if remove_subscription
+      @subscription = CustomWizard::ProSubscription.new(get_subscription)
+      !@subscription.active?
+    else
+      false
+    end
   end
 
-  def authentication_request(user_id, request_id)
+  def authentication_url(user_id, request_id)
     keys = @authentication.generate_keys(user_id, request_id)
     params = {
       public_key: keys.public_key,
@@ -89,7 +92,7 @@ class CustomWizard::Pro
 
   def authentication_response(request_id, payload)
     data = @authentication.decrypt_payload(request_id, payload)
-    return unless data.is_a?(Hash) && data[:key] && data[:user_id]
+    return false unless data.is_a?(Hash) && data[:key] && data[:user_id]
 
     api_key = data[:key]
     user_id = data[:user_id]
@@ -104,11 +107,24 @@ class CustomWizard::Pro
   end
 
   def destroy_authentication
-    remove_authentication
+    if remove_authentication
+      @authentication = CustomWizard::ProAuthentication.new(get_authentication)
+      !@authentication.active?
+    else
+      false
+    end
   end
 
   def self.subscribed?
     self.new.subscribed?
+  end
+
+  def self.authorized?
+    self.new.authorized?
+  end
+
+  def self.update_subscription
+    self.new.update_subscription
   end
 
   def self.namespace
@@ -165,5 +181,6 @@ class CustomWizard::Pro
 
   def remove_authentication
     PluginStore.remove(self.class.namespace, authentication_db_key)
+    get_authentication
   end
 end

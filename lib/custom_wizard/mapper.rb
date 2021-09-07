@@ -252,7 +252,7 @@ class CustomWizard::Mapper
       end
     end
 
-    if @pro.subscribed? && opts[:template] 
+    if opts[:template] && @pro.subscribed?
       template = Liquid::Template.parse(string)
       string = template.render(data)
     end

@@ -2,29 +2,12 @@
 require_relative '../../plugin_helper'
 
 describe CustomWizard::WizardController do
-  fab!(:user) {
-    Fabricate(
-      :user,
-      username: 'angus',
-      email: "angus@email.com",
-      trust_level: TrustLevel[3]
-    )
-  }
-
-  let(:permitted_json) {
-    JSON.parse(
-      File.open(
-        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard/permitted.json"
-      ).read
-    )
-  }
+  fab!(:user) { Fabricate(:user, username: 'angus', email: "angus@email.com", trust_level: TrustLevel[3]) }
+  let(:wizard_template) { get_wizard_fixture("wizard") }
+  let(:permitted_json) { get_wizard_fixture("wizard/permitted") }
 
   before do
-    CustomWizard::Template.save(
-      JSON.parse(File.open(
-        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-      ).read),
-    skip_jobs: true)
+    CustomWizard::Template.save(wizard_template, skip_jobs: true)
     @template = CustomWizard::Template.find("super_mega_fun_wizard")
     sign_in(user)
   end

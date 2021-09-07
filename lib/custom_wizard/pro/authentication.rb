@@ -30,11 +30,13 @@ class CustomWizard::ProAuthentication
 
   def decrypt_payload(request_id, payload)
     keys = get_keys(request_id)
+
     return false unless keys.present? && keys.pem
     delete_keys(request_id)
 
     rsa = OpenSSL::PKey::RSA.new(keys.pem)
     decrypted_payload = rsa.private_decrypt(Base64.decode64(payload))
+
     return false unless decrypted_payload.present?
 
     begin
@@ -48,7 +50,16 @@ class CustomWizard::ProAuthentication
 
     data
   end
-  
+
+  def get_keys(request_id)
+    raw = PluginStore.get(CustomWizard::Pro.namespace, "#{keys_db_key}_#{request_id}")
+    OpenStruct.new(
+      user_id: raw && raw['user_id'],
+      pem: raw && raw['pem'],
+      nonce: raw && raw['nonce']
+    )
+  end
+
   private
 
   def keys_db_key
@@ -64,15 +75,6 @@ class CustomWizard::ProAuthentication
       user_id: user_id,
       pem: rsa.export,
       nonce: nonce
-    )
-  end
-
-  def get_keys(request_id)
-    raw = PluginStore.get(CustomWizard::Pro.namespace, "#{keys_db_key}_#{request_id}")
-    OpenStruct.new(
-      user_id: raw && raw['user_id'],
-      pem: raw && raw['pem'],
-      nonce: raw && raw['nonce']
     )
   end
 

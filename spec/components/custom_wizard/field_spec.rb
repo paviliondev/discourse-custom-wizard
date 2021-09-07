@@ -2,11 +2,7 @@
 require_relative '../../plugin_helper'
 
 describe CustomWizard::Field do
-  let(:field_hash) do
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/field/field.json"
-    ).read).with_indifferent_access
-  end
+  let(:field_hash) { get_wizard_fixture("field/field") }
 
   before do
     CustomWizard::Field.register(

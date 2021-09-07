@@ -72,6 +72,23 @@ class CustomWizard::Builder
     @wizard
   end
 
+  def check_condition(template)
+    if template['condition'].present?
+      result = CustomWizard::Mapper.new(
+        inputs: template['condition'],
+        user: @wizard.user,
+        data: @wizard.current_submission&.fields_and_meta,
+        opts: {
+          multiple: true
+        }
+      ).perform
+
+      result.any?
+    else
+      true
+    end
+  end
+
   private
 
   def mapper
@@ -221,23 +238,6 @@ class CustomWizard::Builder
         user: @wizard.user,
         data: @wizard.current_submission&.fields_and_meta
       ).perform
-    end
-  end
-
-  def check_condition(template)
-    if template['condition'].present?
-      result = CustomWizard::Mapper.new(
-        inputs: template['condition'],
-        user: @wizard.user,
-        data: @wizard.current_submission&.fields_and_meta,
-        opts: {
-          multiple: true
-        }
-      ).perform
-
-      result.any?
-    else
-      true
     end
   end
 
