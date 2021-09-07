@@ -17,6 +17,7 @@ en:
         name_too_short: "'%{name}' is too short for a custom field name (min length is #{min_length})"
         name_already_taken: "'%{name}' is already taken as a custom field name"
         save_default: "Failed to save custom field '%{name}'"
+        pro_type: "%{type} custom fields require PRO Subscription"
     
     field:
       too_short: "%{label} must be at least %{min} characters"
@@ -49,6 +50,7 @@ en:
       required: "%{property} is required"
       conflict: "Wizard with id '%{wizard_id}' already exists"
       after_time: "After time setting is invalid"
+      pro: "%{type} %{property} is PRO only"
 
   site_settings:
     custom_wizard_enabled: "Enable custom wizards."

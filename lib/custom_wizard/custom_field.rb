@@ -17,7 +17,9 @@ class ::CustomWizard::CustomField
     category: ["basic_category"],
     post: ["post"]
   }
+  PRO_CLASSES ||= ['category', 'group']
   TYPES ||= ["string", "boolean", "integer", "json"]
+  PRO_TYPES ||= ["json"]
   LIST_CACHE_KEY ||= 'custom_field_list'
 
   def self.serializers
@@ -37,6 +39,8 @@ class ::CustomWizard::CustomField
         send("#{attr}=", value)
       end
     end
+
+    @pro = CustomWizard::Pro.new
   end
 
   def save
@@ -81,6 +85,10 @@ class ::CustomWizard::CustomField
         next
       end
 
+      if attr == 'klass' && PRO_CLASSES.include?(value) && !@pro.subscribed?
+        add_error(I18n.t("wizard.custom_field.error.pro_type", type: value))
+      end
+
       if attr == 'serializers' && (unsupported = value - CLASSES[klass.to_sym]).length > 0
         add_error(I18n.t("#{i18n_key}.unsupported_serializers",
           class: klass,
@@ -90,6 +98,10 @@ class ::CustomWizard::CustomField
 
       if attr == 'type' && TYPES.exclude?(value)
         add_error(I18n.t("#{i18n_key}.unsupported_type", type: value))
+      end
+
+      if attr == 'type' && PRO_TYPES.include?(value) && !@pro.subscribed?
+        add_error(I18n.t("wizard.custom_field.error.pro_type", type: value))
       end
 
       if attr == 'name'

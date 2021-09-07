@@ -15,45 +15,15 @@ describe CustomWizard::Builder do
   fab!(:category2) { Fabricate(:category, name: 'cat2') }
   fab!(:group) { Fabricate(:group) }
 
-  let(:required_data_json) {
-    JSON.parse(
-      File.open(
-        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/step/required_data.json"
-      ).read
-    )
-  }
-
-  let(:permitted_json) {
-    JSON.parse(
-      File.open(
-        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard/permitted.json"
-      ).read
-    )
-  }
-
-  let(:permitted_param_json) {
-    JSON.parse(
-      File.open(
-        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/step/permitted_params.json"
-      ).read
-    )
-  }
-
-  let(:user_condition_json) {
-    JSON.parse(
-      File.open(
-        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/condition/user_condition.json"
-      ).read
-    )
-  }
+  let(:wizard_template) { get_wizard_fixture("wizard") }
+  let(:required_data_json) { get_wizard_fixture("step/required_data") }
+  let(:permitted_json) { get_wizard_fixture("wizard/permitted") }
+  let(:permitted_param_json) { get_wizard_fixture("step/permitted_params") }
+  let(:user_condition_json) { get_wizard_fixture("condition/user_condition") }
 
   before do
     Group.refresh_automatic_group!(:trust_level_3)
-    CustomWizard::Template.save(
-      JSON.parse(File.open(
-        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-      ).read),
-    skip_jobs: true)
+    CustomWizard::Template.save(wizard_template, skip_jobs: true)
     @template = CustomWizard::Template.find('super_mega_fun_wizard')
   end
 
@@ -283,6 +253,7 @@ describe CustomWizard::Builder do
 
       context "with condition" do
         before do
+          enable_pro
           @template[:steps][0][:condition] = user_condition_json['condition']
           CustomWizard::Template.save(@template.as_json)
         end
@@ -321,6 +292,7 @@ describe CustomWizard::Builder do
 
       context "with condition" do
         before do
+          enable_pro
           @template[:steps][0][:fields][0][:condition] = user_condition_json['condition']
           CustomWizard::Template.save(@template.as_json)
         end

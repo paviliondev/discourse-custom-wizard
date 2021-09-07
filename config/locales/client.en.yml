@@ -58,10 +58,11 @@ en:
         select_type: "Select a type"
         condition: "Condition"
         index: "Index"
+
         pro_support_button:
           title: "Request Pro Support"
           label: "Pro Support"
-        
+
         message:
           wizard:
             select: "Select a wizard, or create a new one"
@@ -89,11 +90,19 @@ en:
             no_file: Please choose a file to import
             file_size_error: The file size must be 512kb or less
             file_format_error: The file must be a .json file
-            server_error: "Error: {{message}}"
             importing: Importing wizards...
             destroying: Destroying wizards...
             import_complete: Import complete
             destroy_complete: Destruction complete
+          pro:
+            documentation: Check out the PRO documentation
+            authorize: "Authorize this forum to use your PRO subscription plan on %{server}."
+            not_subscribed: "You've authorized, but are not currently subscribed to a PRO plan on %{server}."
+            subscription_expiring: "Your subscription is active, but will expire in the next 48 hours."
+            subscription_active: "Your subscription is active."
+            subscription_inactive: "Your subscription is inactive on this forum. Read more in <a href='https://thepavilion.io/t/3652'>the documentation</a>."
+            unauthorized: "You're unauthorized. If you have a subscription, it will become inactive in the next 48 hours."
+            unauthorize_failed: Failed to unauthorize.
           submissions:
             select: "Select a wizard to see its submissions"
             viewing: "You're viewing the submissions of the %{wizardName}. Click 'Download' on the right to download them."
@@ -102,7 +111,6 @@ en:
             viewing: "View recent logs for wizards on the forum"
             documentation: "Check out the logs documentation"
 
-        
         editor:
           show: "Show"
           hide: "Hide"
@@ -182,9 +190,9 @@ en:
           min_length_placeholder: "Minimum length in characters"
           max_length: "Max Length"
           max_length_placeholder: "Maximum length in characters"
-          char_counter: "Character Counter"
+          char_counter: "Counter"
           char_counter_placeholder: "Display Character Counter"
-          field_placeholder: "Field Placeholder"
+          field_placeholder: "Placeholder"
           file_types: "File Types"
           preview_template: "Preview Template"
           limit: "Limit"
@@ -195,7 +203,7 @@ en:
             label: "Format"
             instructions: "<a href='https://momentjs.com/docs/#/displaying/format/' target='_blank'>Moment.js format</a>"
           validations:
-            header: "Realtime Validations"
+            header: "Validations"
             enabled: "Enabled"
             similar_topics: "Similar Topics"
             position: "Position"
@@ -441,7 +449,25 @@ en:
           imported: imported
           upload: Select wizards.json
           destroy: Destroy
-          destroyed: destroyed    
+          destroyed: destroyed
+
+        pro:
+          nav_label: PRO
+          label: PRO
+          title: Custom Wizard PRO
+          authorize: Authorize
+          authorized: Authorized
+          unauthorize: cancel
+          not_subscribed: You're not currently subscribed
+          subscription:
+            title:
+              community: Community Subscription
+              business: Business Subscription
+            status:
+              active: Active
+              inactive: Inactive
+            update: Update
+            last_updated: Last updated              
 
   wizard_js:
     group:

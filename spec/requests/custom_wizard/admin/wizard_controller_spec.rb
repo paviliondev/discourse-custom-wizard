@@ -5,12 +5,7 @@ describe CustomWizard::AdminWizardController do
   fab!(:admin_user) { Fabricate(:user, admin: true) }
   fab!(:user1) { Fabricate(:user) }
   fab!(:user2) { Fabricate(:user) }
-
-  let(:template) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-    ).read)
-  }
+  let(:template) { get_wizard_fixture("wizard") }
 
   before do
     CustomWizard::Template.save(template, skip_jobs: true)

@@ -8,7 +8,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 
   & + .wizard-message + div {
     margin-top: 20px;
@@ -294,7 +294,7 @@
         font-size: 0.85em;
       }
 
-      span {
+      > span {
         font-size: 0.929em;
       }
 
@@ -422,6 +422,17 @@
 
     .setting-gutter {
       margin-top: 5px;
+    }
+
+    &.pro {
+      .setting-label {
+        display: flex;
+        flex-direction: column;
+
+        label {
+          margin: 0;
+        }
+      }
     }
   }
 
@@ -729,27 +740,59 @@
   }
 }
 
-.realtime-validations > ul {
+.admin-wizard-container.settings .realtime-validations .setting-value > ul {
   list-style: none;
   margin: 0;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
 
   > li {
     background-color: var(--primary-low);
     padding: 1em;
     margin: 0 0 1em 0;
 
-    input {
-      margin-bottom: 0;
+    .setting-title {
+      display: flex;
+      align-items: center;
+
+      h4 {
+        margin: 0 15px 0 0;
+      }
+
+      input[type="checkbox"] {
+        margin: 0 5px 0 0;
+      }
+    }
+
+    .setting-label {
+      width: 100px;
+    }
+
+    .setting-value {
+      display: flex;
+      align-items: center;
+
+      .input .select-kit,
+      > .select-kit {
+        max-width: unset !important;
+      }
+
+      > span {
+        margin-right: 1em;
+      }
     }
   }
 }
 
 .validation-container {
   display: flex;
+  flex-direction: column;
   padding: 1em 0;
 
   .validation-section {
-    width: 250px;
+    min-width: 250px;
+    margin: 0.5em 0;
   }
 }
 
@@ -765,6 +808,82 @@
 .select-kit.time-unit-selector {
   width: 80px;
   vertical-align: middle;
+}
+
+.pro-label {
+  color: var(--tertiary);
+  font-size: 0.75em;
+}
+
+.admin-wizards-pro {
+  .admin-wizard-controls {
+    h3,
+    label {
+      margin: 0;
+    }
+
+    label {
+      padding: 0.4em 0.5em;
+      margin-left: 0.75em;
+      background-color: var(--success);
+      color: var(--secondary);
+    }
+
+    .buttons {
+      display: flex;
+      align-items: center;
+
+      .loading-container {
+        margin-right: 1em;
+      }
+    }
+  }
+
+  .custom-wizard-pro-subscription {
+    .title-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5em;
+
+      h3 {
+        margin: 0;
+      }
+
+      .buttons > span {
+        margin-right: 0.5em;
+      }
+    }
+
+    .detail-container {
+      display: flex;
+      align-items: center;
+      padding: 1em;
+      background-color: var(--primary-very-low);
+
+      .subscription-state {
+        padding: 0.25em 0.5em;
+        margin-right: 0.75em;
+
+        &.active {
+          background-color: var(--success);
+          color: var(--secondary);
+        }
+      }
+    }
+  }
+}
+
+.wizard-pro-selector.select-kit.single-select {
+  .select-kit-row .texts {
+    display: flex;
+    align-items: center;
+  }
+
+  .pro-label {
+    margin-left: 0.75em;
+    padding-top: 0.25em;
+  }
 }
 
 .btn.btn-pavilion-pro {

@@ -3,12 +3,7 @@ require_relative '../../plugin_helper'
 
 describe CustomWizard::UpdateValidator do
   fab!(:user) { Fabricate(:user) }
-
-  let(:template) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-    ).read).with_indifferent_access
-  }
+  let(:template) { get_wizard_fixture("wizard") }
 
   before do
     CustomWizard::Template.save(template, skip_jobs: true)

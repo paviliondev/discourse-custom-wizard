@@ -4,13 +4,10 @@ require_relative '../../plugin_helper'
 
 describe CustomWizard::FieldSerializer do
   fab!(:user) { Fabricate(:user) }
+  let(:template) { get_wizard_fixture("wizard") }
 
   before do
-    CustomWizard::Template.save(
-      JSON.parse(File.open(
-        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-      ).read),
-    skip_jobs: true)
+    CustomWizard::Template.save(template, skip_jobs: true)
     @wizard = CustomWizard::Builder.new("super_mega_fun_wizard", user).build
   end
 

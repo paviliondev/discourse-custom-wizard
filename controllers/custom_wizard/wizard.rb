@@ -5,6 +5,7 @@ class CustomWizard::WizardController < ::ApplicationController
   layout 'wizard'
 
   before_action :ensure_plugin_enabled
+  before_action :update_pro_subscription, only: [:index]
   helper_method :wizard_page_title
   helper_method :wizard_theme_id
   helper_method :wizard_theme_lookup
@@ -81,5 +82,9 @@ class CustomWizard::WizardController < ::ApplicationController
     unless SiteSetting.custom_wizard_enabled
       redirect_to path("/")
     end
+  end
+
+  def update_pro_subscription
+    CustomWizard::Pro.update_subscription
   end
 end

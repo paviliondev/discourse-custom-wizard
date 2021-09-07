@@ -12,13 +12,14 @@
   </div>
 
   <div class="setting-value">
-    {{combo-box
+    {{wizard-pro-selector
       value=action.type
       content=actionTypes
       onChange=(action "changeType")
       options=(hash
         none="admin.wizard.select_type"
-      )}}
+      )
+    }}
   </div>
 </div>
 
@@ -714,99 +715,90 @@
   </div>
 {{/if}}
 
-{{#if showAdvanced}}
-  {{wizard-advanced-toggle showAdvanced=action.showAdvanced}}
-
-  {{#if action.showAdvanced}}
-    <div class="advanced-settings">
-
-      {{#if hasCustomFields}}
-        <div class="setting full field-mapper-setting">
-          <div class="setting-label">
-            <label>{{i18n "admin.wizard.action.custom_fields.label"}}</label>
-          </div>
-
-          <div class="setting-value">
-            {{wizard-mapper
-              inputs=action.custom_fields
-              property="custom_fields"
-              onUpdate=(action "mappedFieldUpdated")
-              options=(hash
-                inputTypes="association"
-                customFieldSelection="key"
-                wizardFieldSelection="value"
-                wizardActionSelection="value"
-                userFieldSelection="value"
-                keyPlaceholder="admin.wizard.action.custom_fields.key"
-                context=customFieldsContext
-              )}}
-          </div>
-        </div>
-      {{/if}}
-
-      {{#if sendMessage}}
-        <div class="setting full field-mapper-setting">
-          <div class="setting-label">
-            <label>{{i18n "admin.wizard.required"}}</label>
-          </div>
-
-          <div class="setting-value">
-            {{wizard-mapper
-              inputs=action.required
-              property="required"
-              onUpdate=(action "mappedFieldUpdated")
-              options=(hash
-                textSelection="value"
-                wizardFieldSelection=true
-                userFieldSelection=true
-                groupSelection=true
-                context="action"
-              )}}
-          </div>
-        </div>
-      {{/if}}
-
-      {{#if showPostAdvanced}}
-        <div class="setting full">
-          <div class="setting-label">
-            <label>{{i18n "admin.wizard.action.skip_redirect.label"}}</label>
-          </div>
-
-          <div class="setting-value">
-            {{input type="checkbox" checked=action.skip_redirect}}
-
-            <span>
-              {{i18n "admin.wizard.action.skip_redirect.description" type="topic"}}
-            </span>
-          </div>
-        </div>
-
-        <div class="setting full">
-          <div class="setting-label">
-            <label>{{i18n "admin.wizard.action.suppress_notifications.label"}}</label>
-          </div>
-
-          <div class="setting-value">
-            {{input type="checkbox" checked=action.suppress_notifications}}
-
-            <span>
-              {{i18n "admin.wizard.action.suppress_notifications.description" type="topic"}}
-            </span>
-          </div>
-        </div>
-      {{/if}}
-
-      {{#if routeTo}}
-        <div class="setting">
-          <div class="setting-label">
-            <label>{{i18n "admin.wizard.action.route_to.code"}}</label>
-          </div>
-
-          <div class="setting-value">
-            {{input value=action.code}}
-          </div>
-        </div>
-      {{/if}}
+{{#if hasCustomFields}}
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.custom_fields.label"}}</label>
     </div>
-  {{/if}}
+
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.custom_fields
+        property="custom_fields"
+        onUpdate=(action "mappedFieldUpdated")
+        options=(hash
+          inputTypes="association"
+          customFieldSelection="key"
+          wizardFieldSelection="value"
+          wizardActionSelection="value"
+          userFieldSelection="value"
+          keyPlaceholder="admin.wizard.action.custom_fields.key"
+          context=customFieldsContext
+        )}}
+    </div>
+  </div>
+{{/if}}
+
+{{#if sendMessage}}
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.required"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.required
+        property="required"
+        onUpdate=(action "mappedFieldUpdated")
+        options=(hash
+          textSelection="value"
+          wizardFieldSelection=true
+          userFieldSelection=true
+          groupSelection=true
+          context="action"
+        )}}
+    </div>
+  </div>
+{{/if}}
+
+{{#if showPostAdvanced}}
+  <div class="setting full">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.skip_redirect.label"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{input type="checkbox" checked=action.skip_redirect}}
+
+      <span>
+        {{i18n "admin.wizard.action.skip_redirect.description" type="topic"}}
+      </span>
+    </div>
+  </div>
+
+  <div class="setting full">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.suppress_notifications.label"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{input type="checkbox" checked=action.suppress_notifications}}
+
+      <span>
+        {{i18n "admin.wizard.action.suppress_notifications.description" type="topic"}}
+      </span>
+    </div>
+  </div>
+{{/if}}
+
+{{#if routeTo}}
+  <div class="setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.route_to.code"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{input value=action.code}}
+    </div>
+  </div>
 {{/if}}

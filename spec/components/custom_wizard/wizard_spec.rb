@@ -6,22 +6,8 @@ describe CustomWizard::Wizard do
   fab!(:user) { Fabricate(:user) }
   fab!(:trusted_user) { Fabricate(:user, trust_level: TrustLevel[3]) }
   fab!(:admin_user) { Fabricate(:user, admin: true) }
-
-  let(:template_json) {
-    JSON.parse(
-      File.open(
-        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-      ).read
-    )
-  }
-
-  let(:permitted_json) {
-    JSON.parse(
-      File.open(
-        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard/permitted.json"
-      ).read
-    )
-  }
+  let(:template_json) { get_wizard_fixture("wizard") }
+  let(:permitted_json) { get_wizard_fixture("wizard/permitted") }
 
   before do
     Group.refresh_automatic_group!(:trust_level_3)

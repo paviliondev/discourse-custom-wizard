@@ -4,22 +4,8 @@ require_relative '../../plugin_helper'
 
 describe CustomWizard::StepSerializer do
   fab!(:user) { Fabricate(:user) }
-
-  let(:wizard_template) {
-    JSON.parse(
-      File.open(
-        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-      ).read
-    )
-  }
-
-  let(:required_data_json) {
-    JSON.parse(
-      File.open(
-        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/step/required_data.json"
-      ).read
-    )
-  }
+  let(:wizard_template) { get_wizard_fixture("wizard") }
+  let(:required_data_json) { get_wizard_fixture("step/required_data") }
 
   before do
     CustomWizard::Template.save(wizard_template, skip_jobs: true)

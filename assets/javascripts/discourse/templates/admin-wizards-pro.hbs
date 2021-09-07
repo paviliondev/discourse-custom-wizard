@@ -1,0 +1,34 @@
+<div class="admin-wizard-controls">
+  <h3>{{i18n "admin.wizard.pro.title"}}</h3>
+
+  <div class="buttons">
+    {{#if model.authentication.active}}
+      {{conditional-loading-spinner size="small" condition=unauthorizing}}
+      <a {{action "unauthorize"}} title={{i18n "admin.wizard.pro.unauthorize"}} role="button">
+        {{i18n "admin.wizard.pro.unauthorize"}}
+      </a>
+      <label title={{i18n "admin.wizard.pro.authorized"}}>
+        {{i18n "admin.wizard.pro.authorized"}}
+      </label>
+    {{else}}
+      {{d-button
+        icon="id-card"
+        label="admin.wizard.pro.authorize"
+        title="admin.wizard.pro.authorize"
+        action=(route-action "authorize")}}
+    {{/if}}
+  </div>
+</div>
+
+{{wizard-message
+  key=messageKey
+  url=messageUrl
+  type=messageType
+  opts=messageOpts
+  component="pro"}}
+
+<div class="admin-wizard-container">
+  {{#if showSubscription}}
+    {{wizard-pro-subscription subscription=model.subscription}}
+  {{/if}}
+</div>

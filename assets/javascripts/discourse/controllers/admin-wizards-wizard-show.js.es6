@@ -77,7 +77,11 @@ export default Controller.extend({
       wizard
         .save(opts)
         .then((result) => {
-          this.send("afterSave", result.wizard_id);
+          if (result.wizard_id) {
+            this.send("afterSave", result.wizard_id);
+          } else if (result.errors) {
+            this.set("error", result.errors.join(", "));
+          }
         })
         .catch((result) => {
           let errorType = "failed";
@@ -112,10 +116,6 @@ export default Controller.extend({
       });
 
       controller.setup();
-    },
-
-    toggleAdvanced() {
-      this.toggleProperty("wizard.showAdvanced");
     },
 
     copyUrl() {

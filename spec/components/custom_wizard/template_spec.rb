@@ -3,17 +3,8 @@ require_relative '../../plugin_helper'
 
 describe CustomWizard::Template do
   fab!(:user) { Fabricate(:user) }
-
-  let(:template_json) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-    ).read)
-  }
-  let(:permitted_json) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard/permitted.json"
-    ).read)
-  }
+  let(:template_json) { get_wizard_fixture("wizard") }
+  let(:permitted_json) { get_wizard_fixture("wizard/permitted") }
 
   before do
     CustomWizard::Template.save(template_json, skip_jobs: true)

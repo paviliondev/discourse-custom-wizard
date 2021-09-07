@@ -6,6 +6,7 @@ class CustomWizard::TemplateValidator
   def initialize(data, opts = {})
     @data = data
     @opts = opts
+    @pro = CustomWizard::Pro.new
   end
 
   def perform
@@ -14,12 +15,15 @@ class CustomWizard::TemplateValidator
     check_id(data, :wizard)
     check_required(data, :wizard)
     validate_after_time
+    validate_pro(data, :wizard)
 
     data[:steps].each do |step|
       check_required(step, :step)
+      validate_pro(step, :step)
 
-      if data[:fields].present?
-        data[:fields].each do |field|
+      if step[:fields].present?
+        step[:fields].each do |field|
+          validate_pro(field, :field)
           check_required(field, :field)
         end
       end
@@ -27,6 +31,7 @@ class CustomWizard::TemplateValidator
 
     if data[:actions].present?
       data[:actions].each do |action|
+        validate_pro(action, :action)
         check_required(action, :action)
       end
     end
@@ -47,12 +52,49 @@ class CustomWizard::TemplateValidator
     }
   end
 
+  def self.pro
+    {
+      wizard: {},
+      step: {
+        condition: 'present',
+        index: 'conditional'
+      },
+      field: {
+        condition: 'present',
+        index: 'conditional'
+      },
+      action: {
+        type: %w[
+          send_message
+          add_to_group
+          create_category
+          create_group
+          send_to_api
+        ]
+      }
+    }
+  end
+
   private
 
   def check_required(object, type)
-    CustomWizard::TemplateValidator.required[type].each do |property|
+    self.class.required[type].each do |property|
       if object[property].blank?
         errors.add :base, I18n.t("wizard.validation.required", property: property)
+      end
+    end
+  end
+
+  def validate_pro(object, type)
+    self.class.pro[type].each do |property, pro_type|
+      is_pro = object[property.to_s].present? && (
+        pro_type === 'present' ||
+        (pro_type === 'conditional' && object[property.to_s].is_a?(Hash)) ||
+        (pro_type.is_a?(Array) && pro_type.include?(object[property.to_s]))
+      )
+
+      if is_pro && !@pro.subscribed?
+        errors.add :base, I18n.t("wizard.validation.pro", type: type.to_s, property: property)
       end
     end
   end
