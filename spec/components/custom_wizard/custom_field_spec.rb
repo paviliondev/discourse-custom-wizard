@@ -192,7 +192,7 @@ describe CustomWizard::CustomField do
         ).exists?
       ).to eq(false)
     end
-    
+
     it "does not save pro field types without a pro subscription" do
       pro_field_json = custom_field_pro_json['custom_fields'].first
       custom_field = CustomWizard::CustomField.new(nil, pro_field_json)

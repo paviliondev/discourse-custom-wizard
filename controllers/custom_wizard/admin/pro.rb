@@ -39,9 +39,9 @@ class CustomWizard::AdminProController < CustomWizard::AdminController
       render json: failed_json
     end
   end
-  
+
   protected
-  
+
   def pro
     @pro ||= CustomWizard::Pro.new
   end

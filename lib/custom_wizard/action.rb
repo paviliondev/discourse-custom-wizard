@@ -752,7 +752,7 @@ class CustomWizard::Action
 
     CustomWizard::Log.create(log)
   end
-  
+
   def pro_actions
     %w[send_message watch_categories send_to_api create_group create_category]
   end

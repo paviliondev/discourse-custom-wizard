@@ -78,7 +78,7 @@ describe CustomWizard::StepsController do
 
     put '/w/super-mega-fun-wizard/steps/step_1.json'
     put '/w/super-mega-fun-wizard/steps/step_2.json'
-    put '/w/super-mega-fun-wizard/steps/step_3.json'    
+    put '/w/super-mega-fun-wizard/steps/step_3.json'
     expect(response.status).to eq(200)
     expect(response.parsed_body['redirect_on_complete']).to eq("https://google.com")
   end
@@ -95,7 +95,7 @@ describe CustomWizard::StepsController do
       }
     }
     put '/w/super-mega-fun-wizard/steps/step_2.json'
-    put '/w/super-mega-fun-wizard/steps/step_3.json' 
+    put '/w/super-mega-fun-wizard/steps/step_3.json'
 
     wizard_id = response.parsed_body['wizard']['id']
     wizard = CustomWizard::Wizard.create(wizard_id, user)

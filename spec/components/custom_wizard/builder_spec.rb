@@ -251,7 +251,7 @@ describe CustomWizard::Builder do
         end
       end
 
-      context "with condition" do          
+      context "with condition" do
         before do
           enable_pro
           @template[:steps][0][:condition] = user_condition_json['condition']

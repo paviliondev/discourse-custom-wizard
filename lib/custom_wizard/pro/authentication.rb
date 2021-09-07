@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CustomWizard::ProAuthentication
   include ActiveModel::Serialization
 
@@ -21,7 +22,7 @@ class CustomWizard::ProAuthentication
   end
 
   def generate_keys(user_id, request_id)
-    rsa = OpenSSL::PKey::RSA.generate(2048) 
+    rsa = OpenSSL::PKey::RSA.generate(2048)
     nonce = SecureRandom.hex(32)
     set_keys(request_id, user_id, rsa, nonce)
 

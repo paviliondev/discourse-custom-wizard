@@ -38,7 +38,7 @@ describe CustomWizard::AdminProController do
   it "#destroy_authentication" do
     request_id = SecureRandom.hex(32)
     payload = generate_payload(request_id, admin_user.id)
-    @pro.authentication_response(request_id, payload)    
+    @pro.authentication_response(request_id, payload)
 
     delete "/admin/wizards/pro/authorize.json"
 

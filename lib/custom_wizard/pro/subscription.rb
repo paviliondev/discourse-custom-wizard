@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CustomWizard::ProSubscription
   include ActiveModel::Serialization
 

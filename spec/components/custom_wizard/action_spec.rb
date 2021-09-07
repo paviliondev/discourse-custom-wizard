@@ -178,7 +178,7 @@ describe CustomWizard::Action do
     before do
       enable_pro
     end
-    
+
     it '#send_message' do
       wizard_template['actions'] << send_message
       update_template(wizard_template)
