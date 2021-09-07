@@ -700,7 +700,7 @@
     background-color: var(--primary-low);
     padding: 1em;
     margin: 0 0 1em 0;
-    
+
     .setting-title {
       display: flex;
       align-items: center;
@@ -711,7 +711,7 @@
 
       input[type="checkbox"] {
         margin: 0 5px 0 0;
-      } 
+      }
     }
 
     .setting-label {
@@ -729,7 +729,7 @@
 
       > span {
         margin-right: 1em;
-      } 
+      }
     }
   }
 }
@@ -741,7 +741,7 @@
 
   .validation-section {
     min-width: 250px;
-    margin: .5em 0;
+    margin: 0.5em 0;
   }
 }
 
@@ -761,18 +761,19 @@
 
 .pro-label {
   color: var(--tertiary);
-  font-size: .75em;
+  font-size: 0.75em;
 }
 
 .admin-wizards-pro {
   .admin-wizard-controls {
-    h3, label {
+    h3,
+    label {
       margin: 0;
     }
 
     label {
-      padding: .4em .5em;
-      margin-left: .75em;
+      padding: 0.4em 0.5em;
+      margin-left: 0.75em;
       background-color: var(--success);
       color: var(--secondary);
     }
@@ -792,14 +793,14 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: .5em;
+      margin-bottom: 0.5em;
 
       h3 {
         margin: 0;
       }
 
       .buttons > span {
-        margin-right: .5em;
+        margin-right: 0.5em;
       }
     }
 
@@ -810,8 +811,8 @@
       background-color: var(--primary-very-low);
 
       .subscription-state {
-        padding: .25em .5em;
-        margin-right: .75em;
+        padding: 0.25em 0.5em;
+        margin-right: 0.75em;
 
         &.active {
           background-color: var(--success);
@@ -829,7 +830,7 @@
   }
 
   .pro-label {
-    margin-left: .75em;
-    padding-top: .25em;
+    margin-left: 0.75em;
+    padding-top: 0.25em;
   }
 }

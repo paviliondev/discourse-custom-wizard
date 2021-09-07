@@ -45,7 +45,7 @@ export default {
 
         this.route("adminWizardsLogs", {
           path: "/logs",
-          resetNamespace: true
+          resetNamespace: true,
         });
 
         this.route("adminWizardsManager", {

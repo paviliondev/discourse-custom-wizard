@@ -7,13 +7,13 @@ export default DiscourseRoute.extend({
   },
 
   setupController(controller, model) {
-    controller.set('model', model);
+    controller.set("model", model);
     controller.setup();
   },
 
   actions: {
     authorize() {
       CustomWizardPro.authorize();
-    }
-  }
+    },
+  },
 });

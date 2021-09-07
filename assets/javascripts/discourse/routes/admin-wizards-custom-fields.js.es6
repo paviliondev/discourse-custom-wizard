@@ -13,7 +13,7 @@ export default DiscourseRoute.extend({
 
     controller.setProperties({
       customFields,
-      proSubscribed
+      proSubscribed,
     });
   },
 });

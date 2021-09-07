@@ -8,8 +8,8 @@ const klasses = ["topic", "post", "group", "category"];
 const types = ["string", "boolean", "integer", "json"];
 const proTypes = {
   klass: ["group", "category"],
-  type: ["json"]
-}
+  type: ["json"],
+};
 
 const generateContent = function (array, type, proSubscribed = false) {
   return array.reduce((result, key) => {
@@ -19,7 +19,7 @@ const generateContent = function (array, type, proSubscribed = false) {
       result.push({
         id: key,
         name: I18n.t(`admin.wizard.custom_field.${type}.${key}`),
-        pro
+        pro,
       });
     }
     return result;
@@ -32,10 +32,10 @@ export default Component.extend({
   postSerializers: ["post"],
   groupSerializers: ["basic_group"],
   categorySerializers: ["basic_category"],
-  klassContent: computed("proSubscribed", function() { 
+  klassContent: computed("proSubscribed", function () {
     return generateContent(klasses, "klass", this.proSubscribed);
   }),
-  typeContent: computed("proSubscribed", function() {
+  typeContent: computed("proSubscribed", function () {
     return generateContent(types, "type", this.proSubscribed);
   }),
   showInputs: or("field.new", "field.edit"),

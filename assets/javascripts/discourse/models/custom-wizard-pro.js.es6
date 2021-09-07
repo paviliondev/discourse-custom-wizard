@@ -23,12 +23,12 @@ CustomWizardPro.reopenClass({
       type: "DELETE",
     }).catch(popupAjaxError);
   },
-  
+
   update_subscription() {
     return ajax(`${basePath}/subscription`, {
       type: "POST",
     }).catch(popupAjaxError);
-  }
+  },
 });
 
 export default CustomWizardPro;

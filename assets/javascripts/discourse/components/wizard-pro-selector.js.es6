@@ -2,7 +2,7 @@ import SingleSelectComponent from "select-kit/components/single-select";
 import { computed } from "@ember/object";
 
 export default SingleSelectComponent.extend({
-  classNames: ["combo-box", 'wizard-pro-selector'],
+  classNames: ["combo-box", "wizard-pro-selector"],
 
   selectKitOptions: {
     autoFilterable: false,
@@ -10,10 +10,10 @@ export default SingleSelectComponent.extend({
     showFullTitle: true,
     headerComponent: "wizard-pro-selector/wizard-pro-selector-header",
     caretUpIcon: "caret-up",
-    caretDownIcon: "caret-down"
+    caretDownIcon: "caret-down",
   },
 
   modifyComponentForRow() {
     return "wizard-pro-selector/wizard-pro-selector-row";
-  }
+  },
 });

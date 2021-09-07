@@ -4,44 +4,49 @@ import { notEmpty } from "@ember/object/computed";
 import discourseComputed from "discourse-common/utils/decorators";
 
 export default Component.extend({
-  classNameBindings: [':custom-wizard-pro-subscription', 'subscription.active:active:inactive'],
-  subscribed: notEmpty('subscription'),
+  classNameBindings: [
+    ":custom-wizard-pro-subscription",
+    "subscription.active:active:inactive",
+  ],
+  subscribed: notEmpty("subscription"),
 
-  @discourseComputed('subscription.type')
+  @discourseComputed("subscription.type")
   title(type) {
-    return type ? 
-      I18n.t(`admin.wizard.pro.subscription.title.${type}`) :
-      I18n.t("admin.wizard.pro.not_subscribed");
+    return type
+      ? I18n.t(`admin.wizard.pro.subscription.title.${type}`)
+      : I18n.t("admin.wizard.pro.not_subscribed");
   },
 
-  @discourseComputed('subscription.active')
+  @discourseComputed("subscription.active")
   stateClass(active) {
-    return active ? 'active' : 'inactive';
+    return active ? "active" : "inactive";
   },
 
-  @discourseComputed('stateClass')
+  @discourseComputed("stateClass")
   stateLabel(stateClass) {
     return I18n.t(`admin.wizard.pro.subscription.status.${stateClass}`);
   },
 
   actions: {
     update() {
-      this.set('updating', true);
-      CustomWizardPro.update_subscription().then(result => {
-        if (result.success) {
-          this.setProperties({
-            updateIcon: 'check',
-            subscription: result.subscription
-          });
-        } else {
-          this.set('updateIcon', 'times');
-        }
-      }).finally(() => {
-        this.set('updating', false);
-        setTimeout(() => {
-          this.set('updateIcon', null);
-        }, 7000);
-      })
-    }
-  }
+      this.set("updating", true);
+      CustomWizardPro.update_subscription()
+        .then((result) => {
+          if (result.success) {
+            this.setProperties({
+              updateIcon: "check",
+              subscription: result.subscription,
+            });
+          } else {
+            this.set("updateIcon", "times");
+          }
+        })
+        .finally(() => {
+          this.set("updating", false);
+          setTimeout(() => {
+            this.set("updateIcon", null);
+          }, 7000);
+        });
+    },
+  },
 });

@@ -80,7 +80,7 @@ export default Controller.extend({
           if (result.wizard_id) {
             this.send("afterSave", result.wizard_id);
           } else if (result.errors) {
-            this.set('error', result.errors.join(', '));
+            this.set("error", result.errors.join(", "));
           }
         })
         .catch((result) => {

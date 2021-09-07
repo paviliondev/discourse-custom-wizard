@@ -102,10 +102,10 @@ export default Component.extend(UndoChanges, {
         result.push({
           id: type,
           name: I18n.t(`admin.wizard.action.${type}.label`),
-          pro
+          pro,
         });
       }
       return result;
     }, []);
-  }
+  },
 });
