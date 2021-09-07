@@ -4,7 +4,7 @@
   <div class="buttons">
     {{#if model.authentication.active}}
       {{conditional-loading-spinner size="small" condition=unauthorizing}}
-      <a {{action "unauthorize"}} title={{i18n "admin.wizard.pro.unauthorize"}}>
+      <a {{action "unauthorize"}} title={{i18n "admin.wizard.pro.unauthorize"}} role="button">
         {{i18n "admin.wizard.pro.unauthorize"}}
       </a>
       <label title={{i18n "admin.wizard.pro.authorized"}}>

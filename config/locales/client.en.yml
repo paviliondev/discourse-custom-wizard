@@ -467,7 +467,7 @@ en:
               active: Active
               inactive: Inactive
             update: Update
-            last_updated: Last updated {{updated_at}}              
+            last_updated: Last updated              
 
   wizard_js:
     group:

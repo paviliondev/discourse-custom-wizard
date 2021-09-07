@@ -24,7 +24,7 @@
 
     {{#if subscription.updated_at}}
       <div class="subscription-updated-at" title={{subscription.updated_at}}>
-        {{{i18n 'admin.wizard.pro.subscription.last_updated' updated_at=(format-date subscription.updated_at leaveAgo="true")}}}
+        {{i18n "admin.wizard.pro.subscription.last_updated"}} {{format-date subscription.updated_at leaveAgo="true"}}
       </div>
     {{/if}}
   </div>
