@@ -1,10 +1,10 @@
-import { ajax } from "discourse/lib/ajax";
 import EmberObject from "@ember/object";
-import { buildProperties, mapped, present } from "../lib/wizard-json";
-import { listProperties, snakeCase } from "../lib/wizard";
-import wizardSchema from "../lib/wizard-schema";
-import { Promise } from "rsvp";
+import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import { Promise } from "rsvp";
+import { listProperties, snakeCase } from "../lib/wizard";
+import { buildProperties, mapped, present } from "../lib/wizard-json";
+import wizardSchema from "../lib/wizard-schema";
 
 const CustomWizard = EmberObject.extend({
   save(opts) {
@@ -211,10 +211,55 @@ CustomWizard.reopenClass({
       .catch(popupAjaxError);
   },
 
-  submissions(wizardId) {
+  submissions(wizardId, page = null) {
+    let data = {};
+
+    if (page) {
+      data.page = page;
+    }
+
     return ajax(`/admin/wizards/submissions/${wizardId}`, {
       type: "GET",
-    }).catch(popupAjaxError);
+      data,
+    })
+      .then((result) => {
+        if (result.wizard) {
+          let fields = [{ id: "username", label: "User" }];
+          let submissions = [];
+          let wizard = result.wizard;
+          let total = result.total;
+
+          result.submissions.forEach((s) => {
+            let submission = {
+              username: s.user,
+            };
+
+            Object.keys(s.fields).forEach((fieldId) => {
+              if (!fields.some((field) => field.id === fieldId)) {
+                fields.push({ id: fieldId, label: s.fields[fieldId].label });
+              }
+              submission[fieldId] = s.fields[fieldId];
+            });
+            submission["submitted_at"] = s.submitted_at;
+            submissions.push(submission);
+          });
+
+          let submittedAt = {
+            id: "submitted_at",
+            label: "Submitted At",
+          };
+
+          fields.push(submittedAt);
+
+          return {
+            wizard,
+            fields,
+            submissions,
+            total,
+          };
+        }
+      })
+      .catch(popupAjaxError);
   },
 
   create(wizardJson = {}) {

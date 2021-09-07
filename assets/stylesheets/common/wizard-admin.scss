@@ -2,6 +2,7 @@
 @import "wizard-manager";
 @import "wizard-api";
 @import "common/components/buttons";
+@import "wizard-variables";
 
 .admin-wizard-controls {
   display: flex;
@@ -70,6 +71,51 @@
 
   table td {
     min-width: 150px;
+  }
+
+  table thead th {
+    text-transform: capitalize;
+  }
+
+  .submission-icon-item {
+    display: flex;
+    align-items: center;
+    svg {
+      margin-right: 5px;
+    }
+  }
+
+  .submission-checkbox-true {
+    text-transform: capitalize;
+    color: var(--success);
+  }
+
+  .submission-checkbox-false {
+    text-transform: capitalize;
+    color: var(--danger);
+  }
+
+  .submission-long-text {
+    &-content {
+      white-space: nowrap;
+      word-wrap: break-word;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 250px;
+      margin-bottom: 0;
+
+      &.text-expanded {
+        white-space: normal;
+      }
+    }
+
+    a {
+      font-size: var(--font-down-1);
+    }
+  }
+
+  .submission-composer-text {
+    font-family: monospace;
   }
 }
 
@@ -202,6 +248,11 @@
 
   &.underline {
     text-decoration: underline;
+  }
+
+  .controls {
+    margin-left: auto;
+    margin-right: 0.5rem;
   }
 }
 
@@ -832,5 +883,24 @@
   .pro-label {
     margin-left: 0.75em;
     padding-top: 0.25em;
+  }
+}
+
+.btn.btn-pavilion-pro {
+  background: var(--pavilion-primary);
+  color: var(--pavilion-secondary);
+
+  .d-icon {
+    color: var(--pavilion-secondary);
+  }
+
+  &:hover,
+  &:focus {
+    background: darken($pavilionPrimary, 5%);
+
+    &[href],
+    svg.d-icon {
+      color: darken($pavilionSecondary, 10%);
+    }
   }
 }

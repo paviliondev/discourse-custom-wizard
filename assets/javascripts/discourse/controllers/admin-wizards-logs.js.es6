@@ -9,6 +9,8 @@ export default Controller.extend({
   page: 0,
   canLoadMore: true,
   logs: [],
+  documentationUrl: "https://thepavilion.io/t/2818",
+  messageKey: "viewing",
 
   loadLogs() {
     if (!this.canLoadMore) {

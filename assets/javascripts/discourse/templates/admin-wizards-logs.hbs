@@ -8,6 +8,12 @@
     class="refresh"}}
 </div>
 
+{{wizard-message
+  key=messageKey
+  opts=messageOpts
+  url=documentationUrl
+  component="logs"}}
+
 {{#load-more selector=".log-list tr" action=(action "loadMore") class="wizard-logs"}}
   {{#if noResults}}
     <p>{{i18n "search.no_results"}}</p>

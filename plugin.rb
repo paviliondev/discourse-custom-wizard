@@ -33,6 +33,14 @@ if respond_to?(:register_svg_icon)
   register_svg_icon "chevron-right"
   register_svg_icon "chevron-left"
   register_svg_icon "save"
+  register_svg_icon "sliders-h"
+  register_svg_icon "calendar"
+  register_svg_icon "check"
+  register_svg_icon "times"
+  register_svg_icon "clock"
+  register_svg_icon "link"
+  register_svg_icon "comment-alt"
+  register_svg_icon "far-life-ring"
   register_svg_icon "arrow-right"
 end
 
