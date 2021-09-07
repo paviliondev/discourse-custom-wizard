@@ -59,6 +59,10 @@ en:
         condition: "Condition"
         index: "Index"
 
+        pro_support_button:
+          title: "Request Pro Support"
+          label: "Pro Support"
+
         message:
           wizard:
             select: "Select a wizard, or create a new one"
@@ -99,6 +103,13 @@ en:
             subscription_inactive: "Your subscription is inactive on this forum. Read more in <a href='https://thepavilion.io/t/3652'>the documentation</a>."
             unauthorized: "You're unauthorized. If you have a subscription, it will become inactive in the next 48 hours."
             unauthorize_failed: Failed to unauthorize.
+          submissions:
+            select: "Select a wizard to see its submissions"
+            viewing: "You're viewing the submissions of the %{wizardName}. Click 'Download' on the right to download them."
+            documentation: "Check out the submissions documentation"
+          logs:
+            viewing: "View recent logs for wizards on the forum"
+            documentation: "Check out the logs documentation
 
         editor:
           show: "Show"
@@ -367,6 +378,12 @@ en:
           nav_label: "Submissions"
           title: "{{name}} Submissions"
           download: "Download"
+          edit_columns: "Edit Columns"
+          expand_text: "Read More"
+          collapse_text: "Show Less"
+          group_id: "Group ID"
+          category_id: "Category ID"
+          composer_preview: "Composer Preview"
 
         api:
           label: "API"

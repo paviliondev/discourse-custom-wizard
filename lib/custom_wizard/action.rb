@@ -742,15 +742,12 @@ class CustomWizard::Action
   end
 
   def save_log
-    log = "wizard: #{@wizard.id}; action: #{action['type']}; user: #{user.username}"
-
-    if @log.any?
-      @log.each do |item|
-        log += "; #{item.to_s}"
-      end
-    end
-
-    CustomWizard::Log.create(log)
+    CustomWizard::Log.create(
+      @wizard.id,
+      action['type'],
+      user.username,
+      @log.join('; ')
+    )
   end
   
   def pro_actions
