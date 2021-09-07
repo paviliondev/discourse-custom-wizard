@@ -2,6 +2,7 @@ import Component from "@ember/component";
 import CustomWizardPro from "../models/custom-wizard-pro";
 import { notEmpty } from "@ember/object/computed";
 import discourseComputed from "discourse-common/utils/decorators";
+import I18n from "I18n";
 
 export default Component.extend({
   classNameBindings: [

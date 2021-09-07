@@ -1,5 +1,5 @@
 import { default as discourseComputed } from "discourse-common/utils/decorators";
-import { alias, equal, or } from "@ember/object/computed";
+import { equal, or } from "@ember/object/computed";
 import { computed } from "@ember/object";
 import { selectKitContent } from "../lib/wizard";
 import UndoChanges from "../mixins/undo-changes";

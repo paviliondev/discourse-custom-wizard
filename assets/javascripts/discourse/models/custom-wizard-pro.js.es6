@@ -1,7 +1,6 @@
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import EmberObject from "@ember/object";
-import DiscourseURL from "discourse/lib/url";
 
 const CustomWizardPro = EmberObject.extend();
 

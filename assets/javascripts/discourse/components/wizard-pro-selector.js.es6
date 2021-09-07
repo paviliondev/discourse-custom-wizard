@@ -1,5 +1,4 @@
 import SingleSelectComponent from "select-kit/components/single-select";
-import { computed } from "@ember/object";
 
 export default SingleSelectComponent.extend({
   classNames: ["combo-box", "wizard-pro-selector"],
