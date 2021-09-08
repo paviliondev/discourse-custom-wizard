@@ -105,7 +105,7 @@ en:
             unauthorize_failed: Failed to unauthorize.
           submissions:
             select: "Select a wizard to see its submissions"
-            viewing: "You're viewing the submissions of the %{wizardName}. Click 'Download' on the right to download them."
+            viewing: "You're viewing the submissions of the %{wizardName}"
             documentation: "Check out the submissions documentation"
           logs:
             viewing: "View recent logs for wizards on the forum"
