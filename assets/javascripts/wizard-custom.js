@@ -64,7 +64,6 @@
 
 //= require markdown-it-bundle
 //= require lodash.js
-//= require mousetrap.js
 //= require template_include.js
 //= require caret_position.js
 //= require popper.js
