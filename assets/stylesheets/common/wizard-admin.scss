@@ -66,10 +66,10 @@
   }
 }
 
-.wizard-submissions {
+.wizard-table {
   overflow: scroll;
 
-  table td {
+  table td:not(.small) {
     min-width: 150px;
   }
 
@@ -77,25 +77,26 @@
     text-transform: capitalize;
   }
 
-  .submission-icon-item {
+  .wizard-table-icon-item {
     display: flex;
     align-items: center;
+
     svg {
       margin-right: 5px;
     }
   }
 
-  .submission-checkbox-true {
+  .wizard-table-checkbox-true {
     text-transform: capitalize;
     color: var(--success);
   }
 
-  .submission-checkbox-false {
+  .wizard-table-checkbox-false {
     text-transform: capitalize;
     color: var(--danger);
   }
 
-  .submission-long-text {
+  .wizard-table-long-text {
     &-content {
       white-space: nowrap;
       word-wrap: break-word;
@@ -114,22 +115,8 @@
     }
   }
 
-  .submission-composer-text {
+  .wizard-table-composer-text {
     font-family: monospace;
-  }
-}
-
-.admin-wizards-logs {
-  .admin-wizard-controls {
-    h3 {
-      margin: 0 7px;
-    }
-  }
-
-  .wizard-logs {
-    .date {
-      width: 100px;
-    }
   }
 }
 
@@ -215,6 +202,10 @@
       margin-bottom: 0;
     }
 
+    button {
+      font-size: 1rem;
+    }
+
     .download-link {
       font-size: 1rem;
       line-height: 20px;
@@ -229,10 +220,6 @@
         padding: 6px 12px;
         font-size: 1rem;
         background-color: var(--primary-low);
-      }
-
-      button {
-        font-size: 1rem;
       }
     }
   }

@@ -58,6 +58,9 @@ en:
         select_type: "Select a type"
         condition: "Condition"
         index: "Index"
+        edit_columns: "Edit Columns"
+        expand_text: "Read More"
+        collapse_text: "Show Less"
 
         pro_support_button:
           title: "Request Pro Support"
@@ -108,6 +111,7 @@ en:
             viewing: "You're viewing the submissions of the %{wizardName}"
             documentation: "Check out the submissions documentation"
           logs:
+            select: "Select a wizard to see its logs"
             viewing: "View recent logs for wizards on the forum"
             documentation: "Check out the logs documentation"
 
@@ -378,9 +382,6 @@ en:
           nav_label: "Submissions"
           title: "{{name}} Submissions"
           download: "Download"
-          edit_columns: "Edit Columns"
-          expand_text: "Read More"
-          collapse_text: "Show Less"
           group_id: "Group ID"
           category_id: "Category ID"
           composer_preview: "Composer Preview"
@@ -437,9 +438,14 @@ en:
 
           log:
             label: "Logs"
-            
+
         log:
           nav_label: "Logs"
+          title: "{{name}} Logs"
+          date: Date
+          action: Action
+          user: User
+          message: Message
 
         manager:
           nav_label: Manager

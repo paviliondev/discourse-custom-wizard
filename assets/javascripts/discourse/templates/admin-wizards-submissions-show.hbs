@@ -7,7 +7,7 @@
     <div class="controls">
       {{d-button
         icon="sliders-h"
-        label="admin.wizard.submissions.edit_columns"
+        label="admin.wizard.edit_columns"
         action=(action "showEditColumnsModal")
         class="btn-default open-edit-columns-btn download-link"
       }}
@@ -26,12 +26,10 @@
     </a>
   </div>
 
-  <div class="wizard-submissions">
-    {{#load-more selector=".wizard-submissions tr" action=(action "loadMore")}}
+  <div class="wizard-table">
+    {{#load-more selector=".wizard-table tr" action=(action "loadMore")}}
       {{#if noResults}}
-        <p>
-          {{i18n "search.no_results"}}
-        </p>
+        <p>{{i18n "search.no_results"}}</p>
       {{else}}
         <table>
           <thead>
@@ -49,9 +47,7 @@
             {{#each displaySubmissions as |submission|}}
               <tr>
                 {{#each-in submission as |field value|}}
-                  <td>
-                    {{submission-field fieldName=field value=value}}
-                  </td>
+                  <td>{{wizard-table-field field=field value=value}}</td>
                 {{/each-in}}
               </tr>
             {{/each}}

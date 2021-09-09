@@ -54,10 +54,14 @@ export default Controller.extend({
     },
 
     showEditColumnsModal() {
-      return showModal("admin-wizards-submissions-columns", {
+      return showModal("admin-wizards-columns", {
         model: {
-          fields: this.get("fields"),
-          submissions: this.get("submissions"),
+          columns: this.get("fields"),
+          reset: () => {
+            this.get("fields").forEach((field) => {
+              field.set("enabled", true);
+            });
+          },
         },
       });
     },

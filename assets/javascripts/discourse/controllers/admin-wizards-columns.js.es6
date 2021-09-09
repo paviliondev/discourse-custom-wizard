@@ -6,10 +6,9 @@ export default Controller.extend(ModalFunctionality, {
     save() {
       this.send("closeModal");
     },
+
     resetToDefault() {
-      this.get("model.fields").forEach((field) => {
-        field.set("enabled", true);
-      });
+      this.get("model.reset")();
     },
   },
 });

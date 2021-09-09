@@ -1,52 +1,34 @@
-import discourseComputed from "discourse-common/utils/decorators";
-import { notEmpty } from "@ember/object/computed";
-import CustomWizardLogs from "../models/custom-wizard-logs";
 import Controller from "@ember/controller";
+import { default as discourseComputed } from "discourse-common/utils/decorators";
 
 export default Controller.extend({
-  refreshing: false,
-  hasLogs: notEmpty("logs"),
-  page: 0,
-  canLoadMore: true,
-  logs: [],
   documentationUrl: "https://thepavilion.io/t/2818",
-  messageKey: "viewing",
 
-  loadLogs() {
-    if (!this.canLoadMore) {
-      return;
+  @discourseComputed("wizardId")
+  wizardName(wizardId) {
+    let currentWizard = this.wizardList.find(
+      (wizard) => wizard.id === wizardId
+    );
+    if (currentWizard) {
+      return currentWizard.name;
+    }
+  },
+
+  @discourseComputed("wizardName")
+  messageOpts(wizardName) {
+    return {
+      wizardName,
+    };
+  },
+
+  @discourseComputed("wizardId")
+  messageKey(wizardId) {
+    let key = "select";
+
+    if (wizardId) {
+      key = "viewing";
     }
 
-    this.set("refreshing", true);
-
-    CustomWizardLogs.list()
-      .then((result) => {
-        if (!result || result.length === 0) {
-          this.set("canLoadMore", false);
-        }
-        this.set("logs", this.logs.concat(result));
-      })
-      .finally(() => this.set("refreshing", false));
-  },
-
-  @discourseComputed("hasLogs", "refreshing")
-  noResults(hasLogs, refreshing) {
-    return !hasLogs && !refreshing;
-  },
-
-  actions: {
-    loadMore() {
-      this.set("page", (this.page += 1));
-      this.loadLogs();
-    },
-
-    refresh() {
-      this.setProperties({
-        canLoadMore: true,
-        page: 0,
-        logs: [],
-      });
-      this.loadLogs();
-    },
+    return key;
   },
 });

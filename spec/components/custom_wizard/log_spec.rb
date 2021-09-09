@@ -10,19 +10,25 @@ describe CustomWizard::Log do
 
   it "creates logs" do
     expect(
-      CustomWizard::Log.list.length
+      CustomWizard::Log.list.logs.length
     ).to eq(3)
   end
 
   it "lists logs by time created" do
     expect(
-      CustomWizard::Log.list.first.message
+      CustomWizard::Log.list.logs.first.message
     ).to eq("Third log message")
   end
 
   it "paginates logs" do
     expect(
-      CustomWizard::Log.list(0, 2).length
+      CustomWizard::Log.list(0, 2).logs.length
     ).to eq(2)
+  end
+
+  it "lists logs by wizard" do
+    expect(
+      CustomWizard::Log.list(0, 2, 'third-test-wizard').logs.length
+    ).to eq(1)
   end
 end

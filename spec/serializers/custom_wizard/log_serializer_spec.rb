@@ -10,13 +10,12 @@ describe CustomWizard::LogSerializer do
     CustomWizard::Log.create('second-test-wizard', 'perform_second_action', 'second_test_user', 'Second log message')
 
     json_array = ActiveModel::ArraySerializer.new(
-      CustomWizard::Log.list(0),
+      CustomWizard::Log.list(0).logs,
       each_serializer: CustomWizard::LogSerializer
     ).as_json
     expect(json_array.length).to eq(2)
-    expect(json_array[0][:wizard]).to eq("second-test-wizard")
     expect(json_array[0][:action]).to eq("perform_second_action")
-    expect(json_array[0][:user]).to eq("second_test_user")
+    expect(json_array[0][:username]).to eq('second_test_user')
     expect(json_array[0][:message]).to eq("Second log message")
   end
 end

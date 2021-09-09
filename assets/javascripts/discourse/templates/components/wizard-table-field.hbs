@@ -1,0 +1,161 @@
+{{#if hasValue}}
+  {{#if isText}}
+    {{value.value}}
+  {{/if}}
+
+  {{#if isLongtext}}
+    <div class="wizard-table-long-text">
+      <p class="wizard-table-long-text-content {{textState}}">
+        {{value.value}}
+      </p>
+      <a href {{action "expandText"}}>
+        {{toggleText}}
+      </a>
+    </div>
+  {{/if}}
+
+  {{#if isComposer}}
+    <div class="wizard-table-long-text">
+      <p class="wizard-table-composer-text wizard-table-long-text-content {{textState}}">
+        {{value.value}}
+      </p>
+      <a href {{action "expandText"}}>
+        {{toggleText}}
+      </a>
+    </div>
+  {{/if}}
+
+  {{#if isComposerPreview}}
+    {{d-icon "comment-alt"}}
+    <span class="wizard-table-composer-text">
+      {{i18n "admin.wizard.submissions.composer_preview"}}: {{value.value}}
+    </span>
+  {{/if}}
+
+  {{#if isTextOnly}}
+    {{value.value}}
+  {{/if}}
+
+  {{#if isDate}}
+    <span class="wizard-table-icon-item">
+      {{d-icon "calendar"}}{{value.value}}
+    </span>
+  {{/if}}
+
+  {{#if isTime}}
+    <span class="wizard-table-icon-item">
+      {{d-icon "clock"}}{{value.value}}
+    </span>
+  {{/if}}
+
+  {{#if isDateTime}}
+    <span class="wizard-table-icon-item" title={{value.value}}>
+      {{d-icon "calendar"}}{{format-date value.value format="medium"}}
+    </span>
+  {{/if}}
+
+  {{#if isNumber}}
+    {{value.value}}
+  {{/if}}
+
+  {{#if isCheckbox}}
+    {{#if checkboxValue}}
+      <span class="wizard-table-icon-item checkbox-true">
+        {{d-icon "check"}}{{value.value}}
+      </span>
+    {{else}}
+      <span class="wizard-table-icon-item checkbox-false">
+        {{d-icon "times"}}{{value.value}}
+      </span>
+    {{/if}}
+  {{/if}}
+
+  {{#if isUrl}}
+    <span class="wizard-table-icon-item url">
+      {{d-icon "link"}}
+      <a target="_blank" rel="noopener noreferrer" href={{value.value}}>
+        {{value.value}}
+      </a>
+    </span>
+  {{/if}}
+
+  {{#if isUpload}}
+    <a
+      target="_blank"
+      rel="noopener noreferrer"
+      class="attachment"
+      href={{file.url}}
+      download
+    >
+      {{file.original_filename}}
+    </a>
+  {{/if}}
+
+  {{#if isDropdown}}
+    <span class="wizard-table-icon-item">
+      {{d-icon "check-square"}}
+      {{value.value}}
+    </span>
+  {{/if}}
+
+  {{#if isTag}}
+    {{#each value.value as |tag|}}
+      {{discourse-tag tag}}
+    {{/each}}
+  {{/if}}
+
+  {{#if isCategory}}
+    <strong>
+      {{i18n "admin.wizard.submissions.category_id"}}:
+    </strong>
+    <a
+      target="_blank"
+      rel="noopener noreferrer"
+      href={{categoryUrl}}
+      title={{value.value}}
+    >
+      {{value.value}}
+    </a>
+  {{/if}}
+
+  {{#if isGroup}}
+    <strong>
+      {{i18n "admin.wizard.submissions.group_id"}}:
+    </strong>
+    {{value.value}}
+  {{/if}}
+
+  {{#if isUserSelector}}
+    {{#each submittedUsers as |user|}}
+      {{d-icon "user"}}
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href={{user.url}}
+        title={{user.username}}
+      >
+        {{user.username}}
+      </a>
+    {{/each}}
+  {{/if}}
+
+  {{#if isUser}}
+    {{#link-to "user" value}}
+      {{avatar value imageSize="tiny"}}
+    {{/link-to}}
+  {{/if}}
+
+  {{#if showUsername}}
+    <a target="_blank" rel="noopener noreferrer" href={{userProfileUrl}} title={{username}}>
+      {{username}}
+    </a>
+  {{/if}}
+
+  {{#if isSubmittedAt}}
+    <span class="date" title={{value.value}}>
+      {{d-icon "clock"}}{{format-date value format="tiny"}}
+    </span>
+  {{/if}}
+{{else}}
+  &mdash;
+{{/if}}
