@@ -48,20 +48,21 @@ class CustomWizard::AdminManagerController < CustomWizard::AdminController
 
     imported = []
     failures = []
+    templates = template_json.is_a?(Array) ? template_json : [template_json]
 
-    template_json.each do |json|
-      template = CustomWizard::Template.new(json)
+    templates.each do |raw_template|
+      template = CustomWizard::Template.new(raw_template)
       template.save(skip_jobs: true, create: true)
 
       if template.errors.any?
         failures.push(
-          id: json['id'],
+          id: template.data['id'],
           messages: template.errors.full_messages.join(', ')
         )
       else
         imported.push(
-          id: json['id'],
-          name: json['name']
+          id: template.data['id'],
+          name: template.data['name']
         )
       end
     end

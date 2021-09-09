@@ -1,7 +1,11 @@
 //= require_tree_discourse discourse/app/lib
+//= require_tree_discourse discourse/app/mixins
+//
 
 //= require discourse/app/mixins/singleton
 //= require discourse/app/mixins/upload
+//= require discourse/app/mixins/composer-upload
+//= require discourse/app/mixins/textarea-text-manipulation
 
 //= require discourse/app/adapters/rest
 
@@ -60,10 +64,11 @@
 
 //= require markdown-it-bundle
 //= require lodash.js
-//= require mousetrap.js
 //= require template_include.js
+//= require itsatrap.js
 //= require caret_position.js
 //= require popper.js
+//= require uppy.js
 //= require bootstrap-modal.js
 //= require bootbox.js
 //= require discourse-shims
