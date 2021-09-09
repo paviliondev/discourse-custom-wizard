@@ -65,6 +65,7 @@
 //= require markdown-it-bundle
 //= require lodash.js
 //= require template_include.js
+//= require itsatrap.js
 //= require caret_position.js
 //= require popper.js
 //= require uppy.js
