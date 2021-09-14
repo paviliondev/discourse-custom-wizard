@@ -41,13 +41,8 @@ class CustomWizard::FieldSerializer < ::ApplicationSerializer
     object.value
   end
 
-  def i18n_key
-    @i18n_key ||= "wizard.step.#{object.step.id}.fields.#{object.id}".underscore
-  end
-
   def label
-    return object.label if object.label.present?
-    I18n.t("#{object.key || i18n_key}.label", default: '')
+    I18n.t("#{i18n_key}.label", default: object.label, base_url: Discourse.base_url)
   end
 
   def include_label?
@@ -55,12 +50,19 @@ class CustomWizard::FieldSerializer < ::ApplicationSerializer
   end
 
   def description
-    return object.description if object.description.present?
-    I18n.t("#{object.key || i18n_key}.description", default: '', base_url: Discourse.base_url)
+    I18n.t("#{i18n_key}.description", default: object.description, base_url: Discourse.base_url)
   end
 
   def include_description?
     description.present?
+  end
+
+  def placeholder
+    I18n.t("#{i18n_key}.placeholder", default: object.placeholder)
+  end
+
+  def include_placeholder?
+    placeholder.present?
   end
 
   def image
@@ -69,15 +71,6 @@ class CustomWizard::FieldSerializer < ::ApplicationSerializer
 
   def include_image?
     object.image.present?
-  end
-
-  def placeholder
-    return object.placeholder if object.placeholder.present?
-    I18n.t("#{object.key || i18n_key}.placeholder", default: '')
-  end
-
-  def include_placeholder?
-    placeholder.present?
   end
 
   def file_types
@@ -121,5 +114,15 @@ class CustomWizard::FieldSerializer < ::ApplicationSerializer
 
   def preview_template
     object.preview_template
+  end
+
+  protected
+
+  def i18n_key
+    @i18n_key ||= "#{object.step.wizard.id}.#{object.step.id}.#{object.id}".underscore
+  end
+
+  def subscribed?
+    @subscribed ||= CustomWizard::Pro.subscribed?
   end
 end

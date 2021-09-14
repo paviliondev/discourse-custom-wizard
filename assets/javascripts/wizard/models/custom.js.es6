@@ -41,6 +41,7 @@ CustomWizard.reopenClass({
       wizardJson.steps = wizardJson.steps
         .map((step) => {
           const stepObj = Step.create(step);
+          stepObj.wizardId = wizardJson.id;
 
           stepObj.fields.sort((a, b) => {
             return parseFloat(a.number) - parseFloat(b.number);
@@ -57,7 +58,11 @@ CustomWizard.reopenClass({
             }
           });
 
-          stepObj.fields = stepObj.fields.map((f) => WizardField.create(f));
+          stepObj.fields = stepObj.fields.map((f) => {
+            f.wizardId = wizardJson.id;
+            f.stepId = stepObj.id;
+            return WizardField.create(f);
+          });
 
           return stepObj;
         })

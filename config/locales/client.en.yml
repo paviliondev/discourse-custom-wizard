@@ -44,8 +44,6 @@ en:
         key: "Key"
         value: "Value"
         profile: "profile"
-        translation: "Translation"
-        translation_placeholder: "key"
         type: "Type"
         none: "Make a selection"              
         submission_key: 'submission key'
@@ -174,10 +172,10 @@ en:
           banner: "Banner"
           description: "Description"
           required_data:
-            label: "Required"
+            label: "Required Data"
             not_permitted_message: "Message shown when required data not present"
           permitted_params:
-            label: "Params"
+            label: "Permitted Params"
           force_final:
             label: "Conditional Final Step"
             description: "Display this step as the final step if conditions on later steps have not passed when the user reaches this step."

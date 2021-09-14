@@ -176,7 +176,7 @@ describe CustomWizard::Action do
 
   context "pro actions" do
     before do
-      enable_pro
+      enable_subscription
     end
 
     it '#send_message' do

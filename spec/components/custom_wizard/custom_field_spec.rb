@@ -217,7 +217,7 @@ describe CustomWizard::CustomField do
 
     context "with a pro subscription" do
       before do
-        enable_pro
+        enable_subscription
       end
 
       it "saves pro field types" do

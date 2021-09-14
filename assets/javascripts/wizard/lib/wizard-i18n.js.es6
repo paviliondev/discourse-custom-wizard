@@ -20,13 +20,25 @@ const translationExists = (key) => {
   );
 };
 
+const getThemeKey = (key) => {
+  const themeId = getThemeId();
+  return `theme_translations.${themeId}.${key}`;
+};
+
+const translatedText = (key, value) => {
+  const themeKey = getThemeKey(key);
+  return translationExists(themeKey) ? I18n.t(themeKey) : value;
+};
+
+export { translatedText };
+
 const WizardI18n = (key, params = {}) => {
   const themeId = getThemeId();
   if (!themeId) {
     return I18n.t(key, params);
   }
 
-  const themeKey = `theme_translations.${themeId}.${key}`;
+  let themeKey = getThemeKey(key);
 
   if (translationExists(themeKey)) {
     return I18n.t(themeKey, params);

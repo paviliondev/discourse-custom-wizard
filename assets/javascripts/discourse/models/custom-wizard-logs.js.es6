@@ -31,14 +31,20 @@ CustomWizardLogs.reopenClass({
           result.logs = result.logs.map((item) => {
             let map = {};
 
-            if (item.date) {map.date = logItem(item, "date");}
-            if (item.action) {map.action = logItem(item, "action");}
+            if (item.date) {
+              map.date = logItem(item, "date");
+            }
+            if (item.action) {
+              map.action = logItem(item, "action");
+            }
             if (item.user) {
               map.user = item.user;
             } else {
               map.user = logItem(item, "username");
             }
-            if (item.message) {map.message = logItem(item, "message");}
+            if (item.message) {
+              map.message = logItem(item, "message");
+            }
 
             return map;
           });

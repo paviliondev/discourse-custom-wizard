@@ -11,7 +11,6 @@ class CustomWizard::Field
               :label,
               :description,
               :image,
-              :key,
               :validations,
               :min_length,
               :max_length,
@@ -36,7 +35,6 @@ class CustomWizard::Field
     @value = attrs[:value] || default_value
     @description = attrs[:description]
     @image = attrs[:image]
-    @key = attrs[:key]
     @validations = attrs[:validations]
     @min_length = attrs[:min_length]
     @max_length = attrs[:max_length]

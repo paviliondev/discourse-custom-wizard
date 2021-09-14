@@ -176,6 +176,7 @@ describe CustomWizard::Builder do
 
       context "restart is enabled" do
         before do
+          enable_subscription
           @template[:restart_on_revisit] = true
           CustomWizard::Template.save(@template.as_json)
         end
@@ -204,6 +205,7 @@ describe CustomWizard::Builder do
 
       context 'with required data' do
         before do
+          enable_subscription
           @template[:steps][0][:required_data] = required_data_json['required_data']
           @template[:steps][0][:required_data_message] = required_data_json['required_data_message']
           CustomWizard::Template.save(@template.as_json)
@@ -239,6 +241,7 @@ describe CustomWizard::Builder do
 
       context "with permitted params" do
         before do
+          enable_subscription
           @template[:steps][0][:permitted_params] = permitted_param_json['permitted_params']
           CustomWizard::Template.save(@template.as_json)
         end
@@ -253,7 +256,7 @@ describe CustomWizard::Builder do
 
       context "with condition" do
         before do
-          enable_pro
+          enable_subscription
           @template[:steps][0][:condition] = user_condition_json['condition']
           CustomWizard::Template.save(@template.as_json)
         end
@@ -292,7 +295,7 @@ describe CustomWizard::Builder do
 
       context "with condition" do
         before do
-          enable_pro
+          enable_subscription
           @template[:steps][0][:fields][0][:condition] = user_condition_json['condition']
           CustomWizard::Template.save(@template.as_json)
         end
@@ -324,6 +327,7 @@ describe CustomWizard::Builder do
 
       context 'save submissions disabled' do
         before do
+          enable_subscription
           @template[:save_submissions] = false
           CustomWizard::Template.save(@template.as_json)
           @wizard = CustomWizard::Builder.new(@template[:id], user).build

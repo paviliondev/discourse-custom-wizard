@@ -16,18 +16,22 @@ export default {
     const DEditor = requirejs("discourse/components/d-editor").default;
     const { clipboardHelpers } = requirejs("discourse/lib/utilities");
     const toMarkdown = requirejs("discourse/lib/to-markdown").default;
+    const { translatedText } = requirejs(
+      "discourse/plugins/discourse-custom-wizard/wizard/lib/wizard-i18n"
+    );
 
     FieldComponent.reopen({
       classNameBindings: ["field.id"],
+
+      @discourseComputed("field.translatedDescription")
+      cookedDescription(description) {
+        return cook(description);
+      },
 
       @discourseComputed("field.type")
       textType(fieldType) {
         return ["text", "textarea"].includes(fieldType);
       },
-
-      cookedDescription: function () {
-        return cook(this.get("field.description"));
-      }.property("field.description"),
 
       inputComponentName: function () {
         const type = this.get("field.type");
@@ -57,6 +61,26 @@ export default {
     ];
 
     FieldModel.reopen({
+      @discourseComputed("wizardId", "stepId", "id")
+      i18nKey(wizardId, stepId, id) {
+        return `${wizardId}.${stepId}.${id}`;
+      },
+
+      @discourseComputed("i18nKey", "label")
+      translatedLabel(i18nKey, label) {
+        return translatedText(`${i18nKey}.label`, label);
+      },
+
+      @discourseComputed("i18nKey", "placeholder")
+      translatedPlaceholder(i18nKey, placeholder) {
+        return translatedText(`${i18nKey}.placeholder`, placeholder);
+      },
+
+      @discourseComputed("i18nKey", "description")
+      translatedDescription(i18nKey, description) {
+        return translatedText(`${i18nKey}.description`, description);
+      },
+
       check() {
         if (this.customCheck) {
           return this.customCheck();

@@ -33,7 +33,7 @@ export default ComposerEditor.extend({
   lastValidatedAt: "lastValidatedAt",
   popupMenuOptions: [],
   draftStatus: "null",
-  replyPlaceholder: alias("field.placeholder"),
+  replyPlaceholder: alias("field.translatedPlaceholder"),
 
   @on("didInsertElement")
   _composerEditorInit() {

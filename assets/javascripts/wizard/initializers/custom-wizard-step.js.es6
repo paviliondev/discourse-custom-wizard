@@ -22,8 +22,26 @@ export default {
     ).cook;
     const { schedule } = requirejs("@ember/runloop");
     const { alias, not } = requirejs("@ember/object/computed");
+    const { translatedText } = requirejs(
+      "discourse/plugins/discourse-custom-wizard/wizard/lib/wizard-i18n"
+    );
 
     StepModel.reopen({
+      @discourseComputed("wizardId", "id")
+      i18nKey(wizardId, stepId) {
+        return `${wizardId}.${stepId}`;
+      },
+
+      @discourseComputed("i18nKey", "title")
+      translatedTitle(i18nKey, title) {
+        return translatedText(`${i18nKey}.title`, title);
+      },
+
+      @discourseComputed("i18nKey", "description")
+      translatedDescription(i18nKey, description) {
+        return translatedText(`${i18nKey}.description`, description);
+      },
+
       save() {
         const wizardId = this.get("wizardId");
         const fields = {};
@@ -128,13 +146,15 @@ export default {
         return index === 0 && !required;
       }.property("step.index", "wizard.required"),
 
-      cookedTitle: function () {
-        return cook(this.get("step.title"));
-      }.property("step.title"),
+      @discourseComputed("step.translatedTitle")
+      cookedTitle(title) {
+        return cook(title);
+      },
 
-      cookedDescription: function () {
-        return cook(this.get("step.description"));
-      }.property("step.description"),
+      @discourseComputed("step.translatedDescription")
+      cookedDescription(description) {
+        return cook(description);
+      },
 
       bannerImage: function () {
         const src = this.get("step.banner");

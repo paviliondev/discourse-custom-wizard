@@ -9,7 +9,6 @@ class CustomWizard::Step
   attr_accessor :index,
                 :title,
                 :description,
-                :key,
                 :permitted,
                 :permitted_message,
                 :fields,

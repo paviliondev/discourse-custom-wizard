@@ -54,10 +54,15 @@ class CustomWizard::TemplateValidator
 
   def self.pro
     {
-      wizard: {},
+      wizard: {
+        save_submissions: 'false',
+        restart_on_revisit: 'true',
+      },
       step: {
         condition: 'present',
-        index: 'conditional'
+        index: 'conditional',
+        required_data: 'present',
+        permitted_params: 'present'
       },
       field: {
         condition: 'present',
@@ -87,10 +92,12 @@ class CustomWizard::TemplateValidator
 
   def validate_pro(object, type)
     self.class.pro[type].each do |property, pro_type|
-      is_pro = object[property.to_s].present? && (
-        pro_type === 'present' ||
-        (pro_type === 'conditional' && object[property.to_s].is_a?(Hash)) ||
-        (pro_type.is_a?(Array) && pro_type.include?(object[property.to_s]))
+      val = object[property.to_s]
+      is_pro = (val != nil) && (
+        pro_type === 'present' && val.present? ||
+        (['true', 'false'].include?(pro_type) && cast_bool(val) == cast_bool(pro_type)) ||
+        (pro_type === 'conditional' && val.is_a?(Hash)) ||
+        (pro_type.is_a?(Array) && pro_type.include?(val))
       )
 
       if is_pro && !@pro.subscribed?
@@ -121,5 +128,9 @@ class CustomWizard::TemplateValidator
     if invalid_time || active_time.blank? || active_time < Time.now.utc
       errors.add :base, I18n.t("wizard.validation.after_time")
     end
+  end
+
+  def cast_bool(val)
+    ActiveRecord::Type::Boolean.new.cast(val)
   end
 end

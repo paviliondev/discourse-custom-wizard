@@ -18,7 +18,7 @@ describe CustomWizard::StepSerializer do
       each_serializer: described_class,
       scope: Guardian.new(user)
     ).as_json
-    expect(json_array[0][:title]).to eq("<p>Text</p>")
+    expect(json_array[0][:title]).to eq("Text")
     expect(json_array[0][:description]).to eq("<p>Text inputs!</p>")
     expect(json_array[1][:index]).to eq(1)
   end
@@ -34,6 +34,7 @@ describe CustomWizard::StepSerializer do
 
   context 'with required data' do
     before do
+      enable_subscription
       wizard_template['steps'][0]['required_data'] = required_data_json['required_data']
       wizard_template['steps'][0]['required_data_message'] = required_data_json['required_data_message']
       CustomWizard::Template.save(wizard_template)

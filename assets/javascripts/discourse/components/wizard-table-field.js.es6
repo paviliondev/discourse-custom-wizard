@@ -102,8 +102,12 @@ export default Component.extend({
 
   @discourseComputed("isUser", "field", "value")
   username(isUser, field, value) {
-    if (isUser) {return value.username;}
-    if (field === "username") {return value.value;}
+    if (isUser) {
+      return value.username;
+    }
+    if (field === "username") {
+      return value.value;
+    }
     return null;
   },
 
@@ -111,7 +115,9 @@ export default Component.extend({
 
   @discourseComputed("username")
   userProfileUrl(username) {
-    if (username) {return `/u/${username}`;}
+    if (username) {
+      return `/u/${username}`;
+    }
     return "/";
   },
 

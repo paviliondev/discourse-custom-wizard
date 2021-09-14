@@ -28,7 +28,7 @@ def authenticate_pro
   CustomWizard::ProAuthentication.any_instance.stubs(:active?).returns(true)
 end
 
-def enable_pro
+def enable_subscription
   CustomWizard::Pro.any_instance.stubs(:subscribed?).returns(true)
 end
 

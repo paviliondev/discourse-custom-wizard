@@ -121,7 +121,7 @@ describe CustomWizard::StepsController do
 
   context "pro" do
     before do
-      enable_pro
+      enable_subscription
     end
 
     it "raises an error when user cant see the step due to conditions" do

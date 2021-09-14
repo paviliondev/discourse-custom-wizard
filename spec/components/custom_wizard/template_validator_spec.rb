@@ -43,47 +43,63 @@ describe CustomWizard::TemplateValidator do
     ).to eq(false)
   end
 
-  it "invalidates pro step attributes without a pro subscription" do
-    template[:steps][0][:condition] = user_condition['condition']
-    expect(
-      CustomWizard::TemplateValidator.new(template).perform
-    ).to eq(false)
-  end
-
-  it "invalidates pro field attributes without a pro subscription" do
-    template[:steps][0][:fields][0][:condition] = user_condition['condition']
-    expect(
-      CustomWizard::TemplateValidator.new(template).perform
-    ).to eq(false)
-  end
-
-  it "invalidates pro actions without a pro subscription" do
-    template[:actions] << create_category
-    expect(
-      CustomWizard::TemplateValidator.new(template).perform
-    ).to eq(false)
-  end
-
-  context "with pro subscription" do
-    before do
-      enable_pro
+  context "without subscription" do
+    it "invalidates subscription wizard attributes" do
+      template[:save_submissions] = false
+      expect(
+        CustomWizard::TemplateValidator.new(template).perform
+      ).to eq(false)
     end
 
-    it "validates pro step attributes" do
+    it "invalidates subscription step attributes" do
+      template[:steps][0][:condition] = user_condition['condition']
+      expect(
+        CustomWizard::TemplateValidator.new(template).perform
+      ).to eq(false)
+    end
+
+    it "invalidates subscription field attributes" do
+      template[:steps][0][:fields][0][:condition] = user_condition['condition']
+      expect(
+        CustomWizard::TemplateValidator.new(template).perform
+      ).to eq(false)
+    end
+
+    it "invalidates subscription actions" do
+      template[:actions] << create_category
+      expect(
+        CustomWizard::TemplateValidator.new(template).perform
+      ).to eq(false)
+    end
+  end
+
+  context "with subscription" do
+    before do
+      enable_subscription
+    end
+
+    it "validates wizard attributes" do
+      template[:save_submissions] = false
+      expect(
+        CustomWizard::TemplateValidator.new(template).perform
+      ).to eq(true)
+    end
+
+    it "validates step attributes" do
       template[:steps][0][:condition] = user_condition['condition']
       expect(
         CustomWizard::TemplateValidator.new(template).perform
       ).to eq(true)
     end
 
-    it "validates pro field attributes" do
+    it "validates field attributes" do
       template[:steps][0][:fields][0][:condition] = user_condition['condition']
       expect(
         CustomWizard::TemplateValidator.new(template).perform
       ).to eq(true)
     end
 
-    it "validates pro actions" do
+    it "validates actions" do
       template[:actions] << create_category
       expect(
         CustomWizard::TemplateValidator.new(template).perform

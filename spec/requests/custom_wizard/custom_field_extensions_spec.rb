@@ -40,7 +40,7 @@ describe "custom field extensions" do
 
   context "with a pro subscription" do
     before do
-      enable_pro
+      enable_subscription
 
       pro_custom_field_json['custom_fields'].each do |field_json|
         custom_field = CustomWizard::CustomField.new(nil, field_json)
