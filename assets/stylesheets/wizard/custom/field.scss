@@ -143,6 +143,10 @@
 
   .d-date-time-input {
     display: flex;
+
+    input.date-picker {
+      padding: 3px !important;
+    } 
   }
 
   .list-controls {
