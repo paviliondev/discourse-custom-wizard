@@ -1,5 +1,6 @@
 import WizardI18n from "../lib/wizard-i18n";
 import { getCachedWizard } from "../models/custom";
+import showModal from "discourse/lib/show-modal";
 
 export default Ember.Route.extend({
   beforeModel() {
@@ -43,4 +44,14 @@ export default Ember.Route.extend({
 
     controller.setProperties(props);
   },
+
+  renderTemplate() {
+    this.render("custom.step");
+    const modalController = showModal('resume-popup-modal');
+  },
+
+  actions: {
+    closeModal(initiatedBy) {
+    }
+  }
 });

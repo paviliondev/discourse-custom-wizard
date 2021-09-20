@@ -12,12 +12,15 @@
 //= require message-bus
 
 //= require_tree_discourse discourse/app/models
+//= require discourse/app/controllers/basic-modal-body
+//= require discourse/app/controllers/modal
 
 //= require discourse/app/helpers/category-link
 //= require discourse/app/helpers/user-avatar
 //= require discourse/app/helpers/format-username
 //= require discourse/app/helpers/share-url
 //= require discourse/app/helpers/decorate-username-selector
+//= require discourse/app/helpers/route-action
 //= require discourse-common/addon/helpers/component-for-collection
 //= require discourse-common/addon/helpers/component-for-row
 //= require discourse-common/addon/lib/raw-templates
@@ -39,7 +42,8 @@
 //= require discourse/app/components/date-input
 //= require discourse/app/components/date-time-input
 //= require discourse/app/components/text-field
-//= require discourse/app/components/d-textarea
+//= require discourse/app/components/d-textarea	
+//= require discourse/app/components/d-modal
 
 //= require discourse/app/templates/components/conditional-loading-spinner
 //= require discourse/app/templates/components/d-button
@@ -53,6 +57,7 @@
 //= require discourse/app/templates/category-tag-autocomplete
 //= require discourse/app/templates/emoji-selector-autocomplete
 //= require discourse/app/templates/user-selector-autocomplete
+//= require discourse/app/templates/modal
 
 //= require discourse/app/initializers/jquery-plugins
 //= require discourse/app/pre-initializers/sniff-capabilities

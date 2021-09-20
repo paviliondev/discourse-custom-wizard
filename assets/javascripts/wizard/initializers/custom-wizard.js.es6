@@ -105,10 +105,11 @@ export default {
     });
 
     ApplicationRoute.reopen({
-      redirect() {
-        this.transitionTo("custom");
-      },
       model() {},
+      renderTemplate() {
+        this.render("application");
+        this.render("modal", { into: "application", outlet: "modal" });
+      }
     });
 
     $.ajaxPrefilter(function (_, __, jqXHR) {
