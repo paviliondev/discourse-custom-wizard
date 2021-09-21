@@ -19,27 +19,39 @@ export default Ember.Route.extend({
     const stepModel = this.modelFor("custom.step");
 
     if (wizardModel.get("first_step.id") !== stepModel.id) {
-      const resumeDialog = bootbox.dialog(
-        WizardI18n("wizard.incomplete_submission.title"),
-        [
-          {
-            label: WizardI18n("wizard.incomplete_submission.restart"),
-            callback: () => {
-              wizardModel.restart();
-            },
-          },
-          {
-            label: WizardI18n("wizard.incomplete_submission.resume"),
-            callback: () => {
-              resumeDialog.modal("hide");
-            },
-          },
-        ],
-        {
-          onEscape: false,
-        }
-      );
+      this.showDialog(wizardModel);
     }
+  },
+
+  showDialog(wizardModel) {
+    const title = WizardI18n("wizard.incomplete_submission.title", {
+      date: moment(wizardModel.submission_last_updated_at).format(
+        "MMMM Do YYYY"
+      ),
+    });
+
+    const buttons = [
+      {
+        label: WizardI18n("wizard.incomplete_submission.resume"),
+        class: "btn btn-primary",
+        callback: () => {
+          resumeDialog.modal("hide");
+        },
+      },
+      {
+        label: WizardI18n("wizard.incomplete_submission.restart"),
+        class: "btn btn-default",
+        callback: () => {
+          wizardModel.restart();
+        },
+      },
+    ];
+
+    const options = {
+      onEscape: false,
+    };
+
+    bootbox.dialog(title, buttons, options);
   },
 
   afterModel(model) {

@@ -497,9 +497,9 @@ en:
       reset: "Reset this wizard."
       step_not_permitted: "You're not permitted to view this step."
       incomplete_submission:
-        title: "You have an incomplete submission, What do you want to do?"
-        resume: "Resume"
-        restart: "Restart"
+        title: "Continue editing your draft submission from %{date}?"
+        resume: "Yes, Continue"
+        restart: "No, Start Over"
       x_characters:
         one: "%{count} Character"
         other: "%{count} Characters"

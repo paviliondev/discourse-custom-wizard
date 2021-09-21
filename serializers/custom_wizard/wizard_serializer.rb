@@ -4,6 +4,7 @@ class CustomWizard::WizardSerializer < CustomWizard::BasicWizardSerializer
 
   attributes :start,
              :background,
+             :submission_last_updated_at,
              :theme_id,
              :completed,
              :required,
@@ -36,6 +37,10 @@ class CustomWizard::WizardSerializer < CustomWizard::BasicWizardSerializer
 
   def include_start?
     include_steps? && object.start.present?
+  end
+
+  def submission_last_updated_at
+    object.current_submission.updated_at
   end
 
   def include_steps?
