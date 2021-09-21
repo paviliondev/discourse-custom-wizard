@@ -12,6 +12,7 @@ class CustomWizard::WizardSerializer < CustomWizard::BasicWizardSerializer
              :categories
 
   has_many :steps, serializer: ::CustomWizard::StepSerializer, embed: :objects
+  has_one :first_step, serializer: ::CustomWizard::StepSerializer, embed: :objects
   has_one :user, serializer: ::BasicUserSerializer, embed: :objects
   has_many :groups, serializer: ::BasicGroupSerializer, embed: :objects
 
