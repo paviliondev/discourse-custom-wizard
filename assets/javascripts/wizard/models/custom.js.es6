@@ -15,12 +15,22 @@ const CustomWizard = EmberObject.extend({
     }
     CustomWizard.skip(this.id);
   },
+
+  restart() {
+    CustomWizard.restart(this.id);
+  },
 });
 
 CustomWizard.reopenClass({
   skip(wizardId) {
     ajax({ url: `/w/${wizardId}/skip`, type: "PUT" }).then((result) => {
       CustomWizard.finished(result);
+    });
+  },
+
+  restart(wizardId) {
+    ajax({ url: `/w/${wizardId}/skip`, type: "PUT" }).then(() => {
+      window.location.href = `/w/${wizardId}`;
     });
   },
 
