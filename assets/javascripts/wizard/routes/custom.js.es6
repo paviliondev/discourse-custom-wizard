@@ -18,7 +18,7 @@ export default Ember.Route.extend({
     const wizardModel = this.modelFor("custom");
     const stepModel = this.modelFor("custom.step");
 
-    if (wizardModel.get("first_step.id") !== stepModel.id) {
+    if (wizardModel.resume_on_revisit && stepModel.index > 0) {
       this.showDialog(wizardModel);
     }
   },
@@ -32,19 +32,16 @@ export default Ember.Route.extend({
 
     const buttons = [
       {
-        label: WizardI18n("wizard.incomplete_submission.resume"),
-        class: "btn btn-primary",
-        callback: () => {
-          resumeDialog.modal("hide");
-        },
-      },
-      {
         label: WizardI18n("wizard.incomplete_submission.restart"),
         class: "btn btn-default",
         callback: () => {
           wizardModel.restart();
         },
       },
+      {
+        label: WizardI18n("wizard.incomplete_submission.resume"),
+        class: "btn btn-primary"
+      }
     ];
 
     const options = {
