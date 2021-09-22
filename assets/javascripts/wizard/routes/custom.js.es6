@@ -40,8 +40,8 @@ export default Ember.Route.extend({
       },
       {
         label: WizardI18n("wizard.incomplete_submission.resume"),
-        class: "btn btn-primary"
-      }
+        class: "btn btn-primary",
+      },
     ];
 
     const options = {
