@@ -18,7 +18,7 @@ export default Ember.Route.extend({
     const wizardModel = this.modelFor("custom");
     const stepModel = this.modelFor("custom.step");
 
-    if (wizardModel.resume_on_revisit && stepModel.index > 0) {
+    if (wizardModel.resume_on_revisit && wizardModel.submission_last_updated_at && stepModel.index > 0) {
       this.showDialog(wizardModel);
     }
   },
