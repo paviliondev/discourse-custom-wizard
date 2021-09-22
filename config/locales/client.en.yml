@@ -35,6 +35,8 @@ en:
         prompt_completion_label: "Prompt user to complete wizard."
         restart_on_revisit: "Restart"
         restart_on_revisit_label: "Clear submissions on each visit."
+        resume_on_revisit: "Resume"
+        resume_on_revisit_label: "Ask the user if they want to resume on each visit."
         theme_id: "Theme"
         no_theme: "Select a Theme (optional)"
         save: "Save Changes"
@@ -496,6 +498,10 @@ en:
       requires_login: "You need to be logged in to access this wizard."
       reset: "Reset this wizard."
       step_not_permitted: "You're not permitted to view this step."
+      incomplete_submission:
+        title: "Continue editing your draft submission from %{date}?"
+        resume: "Continue"
+        restart: "Start over"
       x_characters:
         one: "%{count} Character"
         other: "%{count} Characters"
