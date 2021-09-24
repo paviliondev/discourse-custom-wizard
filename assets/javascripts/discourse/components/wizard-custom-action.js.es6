@@ -94,15 +94,15 @@ export default Component.extend(UndoChanges, {
     return apis.find((a) => a.name === api).endpoints;
   },
 
-  @discourseComputed("proSubscribed")
-  actionTypes(proSubscribed) {
+  @discourseComputed("subscribed")
+  actionTypes(subscribed) {
     return Object.keys(wizardSchema.action.types).reduce((result, type) => {
-      let pro = wizardSchema.action.proTypes.includes(type);
-      if (proSubscribed || !pro) {
+      let subscription = wizardSchema.action.subscriptionTypes.includes(type);
+      if (subscribed || !subscription) {
         result.push({
           id: type,
           name: I18n.t(`admin.wizard.action.${type}.label`),
-          pro,
+          subscription,
         });
       }
       return result;

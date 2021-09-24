@@ -10,7 +10,7 @@ class CustomWizard::WizardSerializer < CustomWizard::BasicWizardSerializer
              :permitted,
              :uncategorized_category_id,
              :categories,
-             :pro_subscribed
+             :subscribed
 
   has_many :steps, serializer: ::CustomWizard::StepSerializer, embed: :objects
   has_one :user, serializer: ::BasicUserSerializer, embed: :objects
@@ -62,7 +62,7 @@ class CustomWizard::WizardSerializer < CustomWizard::BasicWizardSerializer
     object.categories.map { |c| c.to_h }
   end
 
-  def pro_subscribed
-    CustomWizard::Pro.subscribed?
+  def subscribed
+    CustomWizard::Subscription.subscribed?
   end
 end

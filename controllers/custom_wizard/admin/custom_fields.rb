@@ -3,7 +3,7 @@ class CustomWizard::AdminCustomFieldsController < CustomWizard::AdminController
   def index
     render_json_dump(
       custom_fields: custom_field_list,
-      pro_subscribed: CustomWizard::Pro.subscribed?
+      subscribed: CustomWizard::Subscription.subscribed?
     )
   end
 

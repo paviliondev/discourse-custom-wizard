@@ -9,11 +9,11 @@ export default DiscourseRoute.extend({
 
   setupController(controller, model) {
     const customFields = A(model.custom_fields || []);
-    const proSubscribed = model.pro_subscribed;
+    const subscribed = model.subscribed;
 
     controller.setProperties({
       customFields,
-      proSubscribed,
+      subscribed,
     });
   },
 });

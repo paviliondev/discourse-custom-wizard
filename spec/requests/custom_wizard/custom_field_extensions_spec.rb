@@ -9,7 +9,7 @@ describe "custom field extensions" do
   let!(:user) { Fabricate(:user) }
   let!(:group) { Fabricate(:group, users: [user]) }
   let(:custom_field_json) { get_wizard_fixture("custom_field/custom_fields") }
-  let(:pro_custom_field_json) { get_wizard_fixture("custom_field/pro_custom_fields") }
+  let(:subscription_custom_field_json) { get_wizard_fixture("custom_field/subscription_custom_fields") }
 
   before do
     custom_field_json['custom_fields'].each do |field_json|
@@ -38,11 +38,11 @@ describe "custom field extensions" do
     expect(response.parsed_body['post_field_1']).to eq(7)
   end
 
-  context "with a pro subscription" do
+  context "with a subscription" do
     before do
       enable_subscription
 
-      pro_custom_field_json['custom_fields'].each do |field_json|
+      subscription_custom_field_json['custom_fields'].each do |field_json|
         custom_field = CustomWizard::CustomField.new(nil, field_json)
         custom_field.save
       end

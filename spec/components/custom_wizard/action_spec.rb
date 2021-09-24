@@ -174,7 +174,7 @@ describe CustomWizard::Action do
     expect(updater.result[:redirect_on_next]).to eq("https://google.com")
   end
 
-  context "pro actions" do
+  context "subscription actions" do
     before do
       enable_subscription
     end

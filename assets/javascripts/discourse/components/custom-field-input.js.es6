@@ -6,20 +6,20 @@ import I18n from "I18n";
 
 const klasses = ["topic", "post", "group", "category"];
 const types = ["string", "boolean", "integer", "json"];
-const proTypes = {
+const subscriptionTypes = {
   klass: ["group", "category"],
   type: ["json"],
 };
 
-const generateContent = function (array, type, proSubscribed = false) {
+const generateContent = function (array, type, subscribed = false) {
   return array.reduce((result, key) => {
-    let proArr = proTypes[type];
-    let pro = proArr && proArr.includes(key);
-    if (!pro || proSubscribed) {
+    let subArr = subscriptionTypes[type];
+    let subscription = subArr && subArr.includes(key);
+    if (!subscription || subscribed) {
       result.push({
         id: key,
         name: I18n.t(`admin.wizard.custom_field.${type}.${key}`),
-        pro,
+        subscription,
       });
     }
     return result;
@@ -32,11 +32,11 @@ export default Component.extend({
   postSerializers: ["post"],
   groupSerializers: ["basic_group"],
   categorySerializers: ["basic_category"],
-  klassContent: computed("proSubscribed", function () {
-    return generateContent(klasses, "klass", this.proSubscribed);
+  klassContent: computed("subscribed", function () {
+    return generateContent(klasses, "klass", this.subscribed);
   }),
-  typeContent: computed("proSubscribed", function () {
-    return generateContent(types, "type", this.proSubscribed);
+  typeContent: computed("subscribed", function () {
+    return generateContent(types, "type", this.subscribed);
   }),
   showInputs: or("field.new", "field.edit"),
   classNames: ["custom-field-input"],
@@ -54,7 +54,7 @@ export default Component.extend({
     const serializers = this.get(`${klass}Serializers`);
 
     if (serializers) {
-      return generateContent(serializers, "serializers", this.proSubscribed);
+      return generateContent(serializers, "serializers", this.subscribed);
     } else {
       return [];
     }

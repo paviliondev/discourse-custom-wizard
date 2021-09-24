@@ -33,11 +33,10 @@
   </div>
 </div>
 
-{{#if proSubscribed}}
-  <div class="setting full field-mapper-setting pro">
+{{#subscription-container subscribed=subscribed}}
+  <div class="setting full field-mapper-setting">
     <div class="setting-label">
       <label>{{i18n "admin.wizard.condition"}}</label>
-      <span class="pro-label">{{i18n "admin.wizard.pro.label"}}</span>
     </div>
 
     <div class="setting-value">
@@ -83,10 +82,9 @@
     </div>
   </div>
 
-  <div class="setting full field-mapper-setting pro">
+  <div class="setting full field-mapper-setting">
     <div class="setting-label">
       <label>{{i18n "admin.wizard.step.permitted_params.label"}}</label>
-      <span class="pro-label">{{i18n "admin.wizard.pro.label"}}</span>
     </div>
     <div class="setting-value">
       {{wizard-mapper
@@ -100,7 +98,7 @@
         )}}
     </div>
   </div>
-{{/if}}
+{{/subscription-container}}
 
 {{wizard-links
   itemType="field"
@@ -116,5 +114,5 @@
     fieldTypes=fieldTypes
     removeField="removeField"
     wizardFields=wizardFields
-    proSubscribed=proSubscribed}}
+    subscribed=subscribed}}
 {{/each}}

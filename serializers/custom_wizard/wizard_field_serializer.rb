@@ -123,6 +123,6 @@ class CustomWizard::FieldSerializer < ::ApplicationSerializer
   end
 
   def subscribed?
-    @subscribed ||= CustomWizard::Pro.subscribed?
+    @subscribed ||= CustomWizard::Subscription.subscribed?
   end
 end

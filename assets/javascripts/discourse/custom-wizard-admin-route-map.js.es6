@@ -59,8 +59,8 @@ export default {
           resetNamespace: true,
         });
 
-        this.route("adminWizardsPro", {
-          path: "/pro",
+        this.route("adminWizardsSubscription", {
+          path: "/subscription",
           resetNamespace: true,
         });
       }

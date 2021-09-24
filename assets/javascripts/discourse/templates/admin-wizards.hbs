@@ -7,13 +7,18 @@
   {{/if}}
   {{nav-item route="adminWizardsLogs" label="admin.wizard.log.nav_label"}}
   {{nav-item route="adminWizardsManager" label="admin.wizard.manager.nav_label"}}
-  {{nav-item route="adminWizardsPro" label="admin.wizard.pro.nav_label"}}
+  {{nav-item route="adminWizardsSubscription" label="admin.wizard.subscription.nav_label"}}
 
   <div class="admin-actions">
-    <a target="_blank" class="btn btn-pavilion-pro" rel="noreferrer noopener" href="https://thepavilion.io/w/support" title={{i18n "admin.wizard.pro_support_button.title"}}>{{d-icon "far-life-ring"}}{{i18n "admin.wizard.pro_support_button.label"}}</a>
+    <a target="_blank" class="btn btn-pavilion-support" rel="noreferrer noopener" href="https://thepavilion.io/w/support" title={{i18n "admin.wizard.support_button.title"}}>
+      {{d-icon "far-life-ring"}}{{i18n "admin.wizard.support_button.label"}}
+    </a>
   </div>
 {{/admin-nav}}
 
 <div class="admin-container">
+  {{#each notices as |notice|}}
+    {{wizard-notice notice=notice}}
+  {{/each}}
   {{outlet}}
 </div>

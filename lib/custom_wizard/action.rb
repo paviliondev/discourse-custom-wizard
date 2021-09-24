@@ -749,8 +749,4 @@ class CustomWizard::Action
       @log.join('; ')
     )
   end
-
-  def pro_actions
-    %w[send_message watch_categories send_to_api create_group create_category]
-  end
 end

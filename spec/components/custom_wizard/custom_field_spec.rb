@@ -4,7 +4,7 @@ require_relative '../../plugin_helper'
 
 describe CustomWizard::CustomField do
   let(:custom_field_json) { get_wizard_fixture("custom_field/custom_fields") }
-  let(:custom_field_pro_json) { get_wizard_fixture("custom_field/pro_custom_fields") }
+  let(:custom_field_subscription_json) { get_wizard_fixture("custom_field/subscription_custom_fields") }
 
   before do
     CustomWizard::CustomField.invalidate_cache
@@ -193,44 +193,44 @@ describe CustomWizard::CustomField do
       ).to eq(false)
     end
 
-    it "does not save pro field types without a pro subscription" do
-      pro_field_json = custom_field_pro_json['custom_fields'].first
-      custom_field = CustomWizard::CustomField.new(nil, pro_field_json)
+    it "does not save subscription field types without a subscription" do
+      subscription_field_json = custom_field_subscription_json['custom_fields'].first
+      custom_field = CustomWizard::CustomField.new(nil, subscription_field_json)
 
       expect(custom_field.save).to eq(false)
       expect(custom_field.valid?).to eq(false)
       expect(custom_field.errors.full_messages.first).to eq(
-        I18n.t("wizard.custom_field.error.pro_type", type: "json")
+        I18n.t("wizard.custom_field.error.subscription_type", type: "json")
       )
     end
 
-    it "does not save pro field classes without a pro subscription" do
-      pro_field_json = custom_field_pro_json['custom_fields'].second
-      custom_field = CustomWizard::CustomField.new(nil, pro_field_json)
+    it "does not save subscription field classes without a subscription" do
+      subscription_field_json = custom_field_subscription_json['custom_fields'].second
+      custom_field = CustomWizard::CustomField.new(nil, subscription_field_json)
 
       expect(custom_field.save).to eq(false)
       expect(custom_field.valid?).to eq(false)
       expect(custom_field.errors.full_messages.first).to eq(
-        I18n.t("wizard.custom_field.error.pro_type", type: "category")
+        I18n.t("wizard.custom_field.error.subscription_type", type: "category")
       )
     end
 
-    context "with a pro subscription" do
+    context "with a subscription" do
       before do
         enable_subscription
       end
 
-      it "saves pro field types" do
-        pro_field_json = custom_field_pro_json['custom_fields'].first
-        custom_field = CustomWizard::CustomField.new(nil, pro_field_json)
+      it "saves subscription field types" do
+        subscription_field_json = custom_field_subscription_json['custom_fields'].first
+        custom_field = CustomWizard::CustomField.new(nil, subscription_field_json)
 
         expect(custom_field.save).to eq(true)
         expect(custom_field.valid?).to eq(true)
       end
 
-      it "saves pro field classes" do
-        pro_field_json = custom_field_pro_json['custom_fields'].second
-        custom_field = CustomWizard::CustomField.new(nil, pro_field_json)
+      it "saves subscription field classes" do
+        subscription_field_json = custom_field_subscription_json['custom_fields'].second
+        custom_field = CustomWizard::CustomField.new(nil, subscription_field_json)
 
         expect(custom_field.save).to eq(true)
         expect(custom_field.valid?).to eq(true)

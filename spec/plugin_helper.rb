@@ -24,16 +24,16 @@ def get_wizard_fixture(path)
   ).with_indifferent_access
 end
 
-def authenticate_pro
-  CustomWizard::ProAuthentication.any_instance.stubs(:active?).returns(true)
+def authenticate_subscription
+  CustomWizard::Subscription::Authentication.any_instance.stubs(:active?).returns(true)
 end
 
 def enable_subscription
-  CustomWizard::Pro.any_instance.stubs(:subscribed?).returns(true)
+  CustomWizard::Subscription.any_instance.stubs(:subscribed?).returns(true)
 end
 
-def disable_pro
-  CustomWizard::Pro.any_instance.stubs(:subscribed?).returns(false)
+def disable_subscription
+  CustomWizard::Subscription.any_instance.stubs(:subscribed?).returns(false)
 end
 
 def valid_subscription
@@ -52,7 +52,7 @@ def invalid_subscription
 end
 
 def stub_subscription_request(status, subscription)
-  authenticate_pro
-  pro = CustomWizard::Pro.new
-  stub_request(:get, "https://#{pro.server}/subscription-server/user-subscriptions/#{pro.subscription_type}/#{pro.client_name}").to_return(status: status, body: { subscriptions: [subscription] }.to_json)
+  authenticate_subscription
+  sub = CustomWizard::Subscription.new
+  stub_request(:get, "https://#{sub.server}/subscription-server/user-subscriptions/#{sub.subscription_type}/#{sub.client_name}").to_return(status: status, body: { subscriptions: [subscription] }.to_json)
 end

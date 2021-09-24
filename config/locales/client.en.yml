@@ -60,9 +60,9 @@ en:
         expand_text: "Read More"
         collapse_text: "Show Less"
 
-        pro_support_button:
-          title: "Request Pro Support"
-          label: "Pro Support"
+        support_button:
+          title: "Request Support"
+          label: "Support"
 
         message:
           wizard:
@@ -95,10 +95,10 @@ en:
             destroying: Destroying wizards...
             import_complete: Import complete
             destroy_complete: Destruction complete
-          pro:
-            documentation: Check out the PRO documentation
-            authorize: "Authorize this forum to use your PRO subscription plan on %{server}."
-            not_subscribed: "You've authorized, but are not currently subscribed to a PRO plan on %{server}."
+          subscription:
+            documentation: Check out the subscription documentation
+            authorize: "Authorize this forum to use your Custom Wizard subscription plan on %{server}."
+            not_subscribed: "You've authorized, but are not currently subscribed to a Custom Wizard plan on %{server}."
             subscription_expiring: "Your subscription is active, but will expire in the next 48 hours."
             subscription_active: "Your subscription is active."
             subscription_inactive: "Your subscription is inactive on this forum. Read more in <a href='https://thepavilion.io/t/3652'>the documentation</a>."
@@ -455,10 +455,19 @@ en:
           destroy: Destroy
           destroyed: destroyed
 
-        pro:
-          nav_label: PRO
-          label: PRO
-          title: Custom Wizard PRO
+        subscription_container:
+          title: Subscriber Features
+          subscribed: 
+            label: Subscribed
+            title: You're subscribed and can use these features
+          not_subscribed:
+            label: Not Subscribed
+            title: Subscribe to use these features
+
+        subscription:
+          nav_label: Subscription
+          label: Subscription
+          title: Custom Wizard Subscription
           authorize: Authorize
           authorized: Authorized
           unauthorize: cancel
@@ -471,7 +480,14 @@ en:
               active: Active
               inactive: Inactive
             update: Update
-            last_updated: Last updated              
+            last_updated: Last updated
+
+        notice:
+          plugin: Custom Wizard Plugin
+          issued: Issued
+          resolved: Resolved
+          title:
+            warning: Warning Notice
 
   wizard_js:
     group:

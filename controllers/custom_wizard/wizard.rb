@@ -5,7 +5,7 @@ class CustomWizard::WizardController < ::ApplicationController
   layout 'wizard'
 
   before_action :ensure_plugin_enabled
-  before_action :update_pro_subscription, only: [:index]
+  before_action :update_subscription, only: [:index]
   helper_method :wizard_page_title
   helper_method :wizard_theme_id
   helper_method :wizard_theme_lookup
@@ -84,7 +84,7 @@ class CustomWizard::WizardController < ::ApplicationController
     end
   end
 
-  def update_pro_subscription
-    CustomWizard::Pro.update_subscription
+  def update_subscription
+    CustomWizard::Subscription.update
   end
 end

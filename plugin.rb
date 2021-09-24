@@ -7,9 +7,7 @@
 # contact emails: angus@thepavilion.io
 
 gem 'liquid', '5.0.1', require: true
-register_asset 'stylesheets/common/wizard-admin.scss'
-register_asset 'stylesheets/common/wizard-mapper.scss'
-
+register_asset 'stylesheets/admin/admin.scss', :desktop
 enabled_site_setting :custom_wizard_enabled
 
 config = Rails.application.config
@@ -42,6 +40,7 @@ if respond_to?(:register_svg_icon)
   register_svg_icon "comment-alt"
   register_svg_icon "far-life-ring"
   register_svg_icon "arrow-right"
+  register_svg_icon "shield-virus"
 end
 
 class ::Sprockets::DirectiveProcessor
@@ -71,13 +70,15 @@ after_initialize do
     ../controllers/custom_wizard/admin/logs.rb
     ../controllers/custom_wizard/admin/manager.rb
     ../controllers/custom_wizard/admin/custom_fields.rb
-    ../controllers/custom_wizard/admin/pro.rb
+    ../controllers/custom_wizard/admin/subscription.rb
+    ../controllers/custom_wizard/admin/notice.rb
     ../controllers/custom_wizard/wizard.rb
     ../controllers/custom_wizard/steps.rb
     ../controllers/custom_wizard/realtime_validations.rb
     ../jobs/regular/refresh_api_access_token.rb
     ../jobs/regular/set_after_time_wizard.rb
-    ../jobs/scheduled/update_pro_subscription.rb
+    ../jobs/scheduled/custom_wizard/update_subscription.rb
+    ../jobs/scheduled/custom_wizard/update_notices.rb
     ../lib/custom_wizard/validators/template.rb
     ../lib/custom_wizard/validators/update.rb
     ../lib/custom_wizard/action_result.rb
@@ -96,9 +97,10 @@ after_initialize do
     ../lib/custom_wizard/submission.rb
     ../lib/custom_wizard/template.rb
     ../lib/custom_wizard/wizard.rb
-    ../lib/custom_wizard/pro.rb
-    ../lib/custom_wizard/pro/subscription.rb
-    ../lib/custom_wizard/pro/authentication.rb
+    ../lib/custom_wizard/notice.rb
+    ../lib/custom_wizard/subscription.rb
+    ../lib/custom_wizard/subscription/subscription.rb
+    ../lib/custom_wizard/subscription/authentication.rb
     ../lib/custom_wizard/api/api.rb
     ../lib/custom_wizard/api/authorization.rb
     ../lib/custom_wizard/api/endpoint.rb
@@ -119,9 +121,10 @@ after_initialize do
     ../serializers/custom_wizard/log_serializer.rb
     ../serializers/custom_wizard/submission_serializer.rb
     ../serializers/custom_wizard/realtime_validation/similar_topics_serializer.rb
-    ../serializers/custom_wizard/pro/authentication_serializer.rb
-    ../serializers/custom_wizard/pro/subscription_serializer.rb
-    ../serializers/custom_wizard/pro_serializer.rb
+    ../serializers/custom_wizard/subscription/authentication_serializer.rb
+    ../serializers/custom_wizard/subscription/subscription_serializer.rb
+    ../serializers/custom_wizard/subscription_serializer.rb
+    ../serializers/custom_wizard/notice_serializer.rb
     ../extensions/extra_locales_controller.rb
     ../extensions/invites_controller.rb
     ../extensions/users_controller.rb
@@ -238,5 +241,11 @@ after_initialize do
     "#{serializer_klass}_serializer".classify.constantize.prepend CustomWizardCustomFieldSerializer
   end
 
+  AdminDashboardData.add_problem_check do
+    warning_notices = CustomWizard::Notice.list(CustomWizard::Notice.types[:warning])
+    warning_notices.any? ? ActionView::Base.full_sanitizer.sanitize(warning_notices.first.message, tags: %w(a)) : nil
+  end
+
+  Jobs.enqueue(:custom_wizard_update_notices)
   DiscourseEvent.trigger(:custom_wizard_ready)
 end

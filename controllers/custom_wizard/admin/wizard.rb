@@ -11,7 +11,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
       field_types: CustomWizard::Field.types,
       realtime_validations: CustomWizard::RealtimeValidation.types,
       custom_fields: custom_field_list,
-      pro_subscribed: CustomWizard::Pro.subscribed?
+      subscribed: CustomWizard::Subscription.subscribed?
     )
   end
 

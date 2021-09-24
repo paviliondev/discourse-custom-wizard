@@ -193,6 +193,14 @@ const action = {
     "members_visibility_level",
   ],
   required: ["id", "type"],
+  subscriptionTypes: [
+    "send_message",
+    "add_to_group",
+    "create_category",
+    "create_group",
+    "send_to_api",
+  ],
+  required: ["id", "type"],
   proTypes: [
     "send_message",
     "add_to_group",

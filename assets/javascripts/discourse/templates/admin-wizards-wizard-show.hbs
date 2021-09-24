@@ -126,11 +126,10 @@
       </div>
     </div>
 
-    {{#if proSubscribed}}
-      <div class="setting pro">
+    {{#subscription-container subscribed=subscribed}}
+      <div class="setting">
         <div class="setting-label">
           <label>{{i18n "admin.wizard.save_submissions"}}</label>
-          <span class="pro-label">{{i18n "admin.wizard.pro.label"}}</span>
         </div>
         <div class="setting-value">
           {{input type="checkbox" checked=wizard.save_submissions}}
@@ -138,17 +137,16 @@
         </div>
       </div>
 
-      <div class="setting pro">
+      <div class="setting">
         <div class="setting-label">
           <label>{{i18n "admin.wizard.restart_on_revisit"}}</label>
-          <span class="pro-label">{{i18n "admin.wizard.pro.label"}}</span>
         </div>
         <div class="setting-value">
           {{input type="checkbox" checked=wizard.restart_on_revisit}}
           <span>{{i18n "admin.wizard.restart_on_revisit_label"}}</span>
         </div>
       </div>
-    {{/if}}
+    {{/subscription-container}}
   </div>
 
   {{wizard-links
@@ -163,7 +161,7 @@
       currentField=currentField
       wizardFields=wizardFields
       fieldTypes=fieldTypes
-      proSubscribed=proSubscribed}}
+      subscribed=subscribed}}
   {{/if}}
 
   {{wizard-links
@@ -180,7 +178,7 @@
       apis=apis
       removeAction="removeAction"
       wizardFields=wizardFields
-      proSubscribed=proSubscribed}}
+      subscribed=subscribed}}
   {{/each}}
 
   <div class="admin-wizard-buttons">

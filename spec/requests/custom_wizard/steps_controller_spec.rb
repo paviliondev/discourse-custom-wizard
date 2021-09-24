@@ -119,9 +119,41 @@ describe CustomWizard::StepsController do
     expect(response.parsed_body['final']).to eq(true)
   end
 
-  context "pro" do
+  context "subscription" do
     before do
       enable_subscription
+    end
+
+    it "raises an error when user cant see the step due to conditions" do
+      sign_in(user2)
+
+      new_wizard_template = wizard_template.dup
+      new_wizard_template['steps'][0]['condition'] = user_condition_template['condition']
+      CustomWizard::Template.save(new_wizard_template, skip_jobs: true)
+
+      put '/w/super-mega-fun-wizard/steps/step_1.json'
+      expect(response.status).to eq(403)
+    end
+
+    it "returns an updated wizard when condition doesnt pass" do
+      new_template = wizard_template.dup
+      new_template['steps'][1]['condition'] = wizard_field_condition_template['condition']
+      CustomWizard::Template.save(new_template, skip_jobs: true)
+
+      put '/w/super-mega-fun-wizard/steps/step_1.json', params: {
+        fields: {
+          step_1_field_1: "Condition wont pass"
+        }
+      }
+      expect(response.status).to eq(200)
+      expect(response.parsed_body['wizard']['start']).to eq("step_3")
+    end
+
+    it "returns the correct final step when the conditional final step and last step are the same" do
+      new_template = wizard_template.dup
+      new_template['steps'][0]['condition'] = user_condition_template['condition']
+      new_template['steps'][2]['condition'] = wizard_field_condition_template['condition']
+      CustomWizard::Template.save(new_template, skip_jobs: true)
     end
 
     it "raises an error when user cant see the step due to conditions" do

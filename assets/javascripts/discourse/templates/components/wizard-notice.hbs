@@ -1,0 +1,37 @@
+<div class="notice-header">
+  {{#if resolved}}
+    <div class="notice-expired-at notice-badge" title={{notice.expired_at}}>
+      {{d-icon "check"}}
+      <span class="notice-resolved">{{i18n "admin.wizard.notice.resolved"}}</span>
+      {{format-date notice.expired_at leaveAgo="true"}}
+    </div>
+  {{/if}}
+  
+  <div class="notice-title notice-badge" title={{title}}>
+    {{d-icon icon}}
+    <span>{{title}}</span>
+  </div>
+
+  <div class="notice-created-at notice-badge" title={{notice.created_at}}>
+    {{d-icon "calendar-alt"}}
+    <span class="notice-issued">{{i18n "admin.wizard.notice.issued"}}</span>
+    {{format-date notice.created_at leaveAgo="true"}}
+  </div>
+
+  <div class="notice-plugin notice-badge" title={{i18n "admin.wizard.notice.plugin"}}>
+    {{d-icon "plug"}}
+    <span>{{i18n "admin.wizard.notice.plugin"}}</span>
+  </div>
+</div>
+
+<div class="notice-message">
+  {{{notice.message}}}
+</div>
+
+{{#if canDismiss}}
+  {{#if dismissing}}
+    {{loading-spinner size="small"}}
+  {{else}}
+    <a {{action "dismiss"}} role="button" class="dismiss-notice">{{d-icon "times"}}</a>
+  {{/if}}
+{{/if}}

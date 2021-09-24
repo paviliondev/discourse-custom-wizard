@@ -344,7 +344,7 @@ describe CustomWizard::Mapper do
       expect(result).to eq(template_params["step_1_field_1"])
     end
 
-    it "requires a pro subscription" do
+    it "requires a subscription" do
       template = '{{ "w{step_1_field_1}" | size }}'
       mapper = create_template_mapper(template_params, user1)
       result = mapper.interpolate(
@@ -357,7 +357,7 @@ describe CustomWizard::Mapper do
       expect(result).to eq("{{ \"#{template_params["step_1_field_1"]}\" | size }}")
     end
 
-    context "with a pro subscription" do
+    context "with a subscription" do
       before do
         enable_subscription
       end

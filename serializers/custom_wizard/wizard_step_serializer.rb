@@ -80,8 +80,4 @@ class CustomWizard::StepSerializer < ::ApplicationSerializer
   def i18n_key
     @i18n_key ||= "#{object.wizard.id}.#{object.id}".underscore
   end
-
-  def subscribed?
-    @subscribed ||= CustomWizard::Pro.subscribed?
-  end
 end

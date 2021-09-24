@@ -6,7 +6,7 @@ class CustomWizard::TemplateValidator
   def initialize(data, opts = {})
     @data = data
     @opts = opts
-    @pro = CustomWizard::Pro.new
+    @subscription = CustomWizard::Subscription.new
   end
 
   def perform
@@ -15,15 +15,15 @@ class CustomWizard::TemplateValidator
     check_id(data, :wizard)
     check_required(data, :wizard)
     validate_after_time
-    validate_pro(data, :wizard)
+    validate_subscription(data, :wizard)
 
     data[:steps].each do |step|
       check_required(step, :step)
-      validate_pro(step, :step)
+      validate_subscription(step, :step)
 
       if step[:fields].present?
         step[:fields].each do |field|
-          validate_pro(field, :field)
+          validate_subscription(field, :field)
           check_required(field, :field)
         end
       end
@@ -31,7 +31,7 @@ class CustomWizard::TemplateValidator
 
     if data[:actions].present?
       data[:actions].each do |action|
-        validate_pro(action, :action)
+        validate_subscription(action, :action)
         check_required(action, :action)
       end
     end
@@ -52,7 +52,7 @@ class CustomWizard::TemplateValidator
     }
   end
 
-  def self.pro
+  def self.subscription
     {
       wizard: {
         save_submissions: 'false',
@@ -90,18 +90,18 @@ class CustomWizard::TemplateValidator
     end
   end
 
-  def validate_pro(object, type)
-    self.class.pro[type].each do |property, pro_type|
+  def validate_subscription(object, type)
+    self.class.subscription[type].each do |property, subscription_type|
       val = object[property.to_s]
-      is_pro = (val != nil) && (
-        pro_type === 'present' && val.present? ||
-        (['true', 'false'].include?(pro_type) && cast_bool(val) == cast_bool(pro_type)) ||
-        (pro_type === 'conditional' && val.is_a?(Hash)) ||
-        (pro_type.is_a?(Array) && pro_type.include?(val))
+      is_subscription = (val != nil) && (
+        subscription_type === 'present' && val.present? ||
+        (['true', 'false'].include?(subscription_type) && cast_bool(val) == cast_bool(subscription_type)) ||
+        (subscription_type === 'conditional' && val.is_a?(Hash)) ||
+        (subscription_type.is_a?(Array) && subscription_type.include?(val))
       )
 
-      if is_pro && !@pro.subscribed?
-        errors.add :base, I18n.t("wizard.validation.pro", type: type.to_s, property: property)
+      if is_subscription && !@subscription.subscribed?
+        errors.add :base, I18n.t("wizard.validation.subscription", type: type.to_s, property: property)
       end
     end
   end

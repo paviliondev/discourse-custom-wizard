@@ -3,6 +3,12 @@ class CustomWizard::AdminController < ::Admin::AdminController
   before_action :ensure_admin
 
   def index
+    render_json_dump(
+      notices: ActiveModel::ArraySerializer.new(
+        CustomWizard::Notice.list,
+        each_serializer: CustomWizard::NoticeSerializer
+      )
+    )
   end
 
   private

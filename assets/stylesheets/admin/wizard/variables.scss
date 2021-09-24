@@ -1,0 +1,9 @@
+$pavilion_primary: #3c1c8c;
+$pavilion_secondary: #ffffff;
+$pavilion_warning: rgb(243, 163, 61);
+
+:root {
+  --pavilion-primary: #{$pavilion_primary};
+  --pavilion-secondary: #{$pavilion_secondary};
+  --pavilion-warning: #{$pavilion_warning};
+}

@@ -1,13 +1,13 @@
 {{#if showInputs}}
   <td>
-    {{wizard-pro-selector
+    {{wizard-subscription-selector
       value=field.klass
       content=klassContent
       none="admin.wizard.custom_field.klass.select"
       onChange=(action (mut field.klass))}}
   </td>
   <td>
-    {{wizard-pro-selector
+    {{wizard-subscription-selector
       value=field.type
       content=typeContent
       none="admin.wizard.custom_field.type.select"

@@ -207,11 +207,10 @@
   </div>
 {{/if}}
 
-{{#if proSubscribed}}
-  <div class="setting full field-mapper-setting pro">
+{{#subscription-container subscribed=subscribed}}
+  <div class="setting full field-mapper-setting">
     <div class="setting-label">
       <label>{{i18n "admin.wizard.condition"}}</label>
-      <span class="pro-label">{{i18n "admin.wizard.pro.label"}}</span>
     </div>
 
     <div class="setting-value">
@@ -221,10 +220,9 @@
     </div>
   </div>
   
-  <div class="setting full field-mapper-setting pro">
+  <div class="setting full field-mapper-setting">
     <div class="setting-label">
-      <label>{{i18n "admin.wizard.index"}}</label>
-      <span class="pro-label">{{i18n "admin.wizard.pro.label"}}</span>
+      <label>{{i18n "admin.wizard.index"}}</label>>
     </div>
 
     <div class="setting-value">
@@ -256,4 +254,4 @@
   {{#if validations}}
     {{wizard-realtime-validations field=field validations=validations}}
   {{/if}}
-{{/if}}
+{{/subscription-container}}
