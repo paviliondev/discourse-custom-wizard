@@ -15,6 +15,3 @@ plugins:
     refresh: true
     type: list
     list_type: compact
-  wizard_apis_enabled:
-    client: true
-    default: false
