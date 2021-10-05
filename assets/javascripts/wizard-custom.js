@@ -1,4 +1,5 @@
 //= require_tree_discourse discourse/app/lib
+//= require_tree_discourse discourse/app/mixins
 
 //= require discourse/app/mixins/singleton
 //= require discourse/app/mixins/upload
