@@ -15,6 +15,7 @@ require 'oj'
 Oj.default_options = Oj.default_options.merge(cache_str: -1)
 
 require 'rails_helper'
+require 'webmock/rspec'
 
 def get_wizard_fixture(path)
   JSON.parse(

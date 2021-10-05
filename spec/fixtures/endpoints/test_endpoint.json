@@ -1,0 +1,5 @@
+{
+  "method": "PUT",
+  "url": "https://myexternalapi.com/update",
+  "success_codes": [200]
+}

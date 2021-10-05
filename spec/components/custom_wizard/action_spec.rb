@@ -13,6 +13,9 @@ describe CustomWizard::Action do
   let(:add_to_group) { get_wizard_fixture("actions/add_to_group") }
   let(:send_message) { get_wizard_fixture("actions/send_message") }
   let(:send_message_multi) { get_wizard_fixture("actions/send_message_multi") }
+  let(:api_test_endpoint) { get_wizard_fixture("endpoints/test_endpoint") }
+  let(:api_test_endpoint_body) { get_wizard_fixture("endpoints/test_endpoint_body")}
+  let(:api_test_no_authorization) { get_wizard_fixture("api/no_authorization")}
 
   def update_template(template)
     CustomWizard::Template.save(template, skip_jobs: true)
@@ -265,5 +268,29 @@ describe CustomWizard::Action do
 
       expect(group.users.first.username).to eq('angus')
     end
+
+    it '#send_to_api' do
+      stub_request(:put, "https://myexternalapi.com/update").
+      with(
+        body: "some_body",
+        headers: {
+          'Host'=>'myexternalapi.com'
+        }).
+       to_return(status: 200, body: "success", headers: {})
+
+      new_api = CustomWizard::Api.new("my_api")
+      CustomWizard::Api.set("my_api", title: "Mocked external api")
+      CustomWizard::Api::Authorization.set("my_api", api_test_no_authorization)
+      CustomWizard::Api::Endpoint.new("my_api")
+      CustomWizard::Api::Endpoint.set("my_api",  api_test_endpoint)
+      endpoint_id = CustomWizard::Api::Endpoint.list("my_api").first.id
+
+      result = CustomWizard::Api::Endpoint.request("my_api", endpoint_id, "some_body")
+      log_entry = CustomWizard::Api::LogEntry.list("my_api").first
+      byebug
+      expect(result).to eq('success')
+      expect(log_entry.status).to eq('SUCCESS')
+    end
   end
 end
+
