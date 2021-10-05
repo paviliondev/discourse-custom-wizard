@@ -64,6 +64,12 @@ class CustomWizard::WizardSerializer < CustomWizard::BasicWizardSerializer
   end
 
   def categories
-    object.categories.map { |c| c.to_h }
+    object.categories.map do |category|
+      if category.respond_to?(:to_h)
+        category.to_h
+      else
+        ::BasicCategorySerializer.new(category).as_json
+      end
+    end
   end
 end
