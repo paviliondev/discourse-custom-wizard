@@ -6,6 +6,7 @@ class CustomWizard::NoticeSerializer < ApplicationSerializer
              :type,
              :created_at,
              :expired_at,
+             :updated_at,
              :dismissed_at,
              :retrieved_at,
              :dismissable
