@@ -17,6 +17,7 @@ import {
 import { cacheShortUploadUrl } from "pretty-text/upload-short-url";
 import { alias } from "@ember/object/computed";
 import WizardI18n from "../lib/wizard-i18n";
+import Site from "../models/site";
 
 const uploadMarkdownResolvers = [];
 
@@ -57,7 +58,7 @@ export default ComposerEditor.extend({
 
     const siteSettings = this.siteSettings;
     if (siteSettings.mentionables_enabled) {
-      Discourse.Site.currentProp(
+      Site.currentProp(
         "mentionable_items",
         this.wizard.mentionable_items
       );
