@@ -24,4 +24,4 @@ jobs:
         uses: actions/github-script@v3
         with:
           script: |
-              core.setFailed('Branch version is incorrect.')
+              core.setFailed('Branch version is equal to or lower than base version.')
