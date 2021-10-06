@@ -1,0 +1,27 @@
+name: Metadata
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Store head version
+      - uses: actions/checkout@v2
+        run: |
+          sed -n -e 's/^.*version: /head_version=/p' plugin.rb >> $GITHUB_ENV
+
+      - name: Store base version
+      - uses: actions/checkout@v2
+        ref: github.base_ref
+        run: |
+          sed -n -e 's/^.*version: /base_version=/p' plugin.rb >> $GITHUB_ENV
+
+      - name: Fail if version is incorrect
+        if: printf '${{ env.head_version }}\n${{ env.base_version }}\n' | sort -V | head -n1 | grep '${{ env.head_version }}'
+        uses: actions/github-script@v3
+        with:
+          script: |
+              core.setFailed('Branch version is incorrect.')
