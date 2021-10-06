@@ -58,10 +58,7 @@ export default ComposerEditor.extend({
 
     const siteSettings = this.siteSettings;
     if (siteSettings.mentionables_enabled) {
-      Site.currentProp(
-        "mentionable_items",
-        this.wizard.mentionable_items
-      );
+      Site.currentProp("mentionable_items", this.wizard.mentionable_items);
       const { SEPARATOR } = requirejs(
         "discourse/plugins/discourse-mentionables/discourse/lib/discourse-markdown/mentionable-items"
       );
