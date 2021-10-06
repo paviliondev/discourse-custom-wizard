@@ -81,6 +81,7 @@ img.avatar {
         text-overflow: ellipsis;
         font-size: 14px;
         text-decoration: none;
+        color: var(--primary);
 
         img {
           margin-right: 5px;
@@ -98,6 +99,7 @@ img.avatar {
         }
         &.selected {
           background-color: var(--tertiary);
+          color: var(--secondary);
         }
         &:hover {
           background-color: var(--highlight-low);
