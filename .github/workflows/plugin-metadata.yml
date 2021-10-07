@@ -18,7 +18,7 @@ jobs:
       - name: Checkout base repository
         uses: actions/checkout@v2
         with:
-          ref: github.base_ref
+          ref: "${{ github.base_ref }}"
 
       - name: Store base version
         run: |
