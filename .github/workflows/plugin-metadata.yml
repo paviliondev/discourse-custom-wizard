@@ -33,7 +33,7 @@ jobs:
         run: npm install --include=dev
 
       - name: Check version
-        uses: actions/github-script@v3
+        uses: actions/github-script@v5
         with:
           script: |
               const semver = require('semver');
