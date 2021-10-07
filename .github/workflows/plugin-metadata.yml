@@ -25,12 +25,12 @@ jobs:
           sed -n -e 's/^.*version: /base_version=/p' plugin.rb >> $GITHUB_ENV
 
       - name: Setup node
-      - uses: actions/setup-node@v2
+        uses: actions/setup-node@v2
         with:
           node-version: 14
 
       - name: Install semver
-      - run: npm install semver
+        run: npm install semver
 
       - name: Check version
         uses: actions/github-script@v3
