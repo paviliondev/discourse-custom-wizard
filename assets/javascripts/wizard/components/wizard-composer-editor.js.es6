@@ -17,6 +17,7 @@ import {
 import { cacheShortUploadUrl } from "pretty-text/upload-short-url";
 import { alias } from "@ember/object/computed";
 import WizardI18n from "../lib/wizard-i18n";
+import Site from "../models/site";
 
 const uploadMarkdownResolvers = [];
 
@@ -50,6 +51,31 @@ export default ComposerEditor.extend({
           this.composer.set("reply", value);
           scheduleOnce("afterRender", () => $input.blur().focus());
         },
+        triggerRule: (textarea) =>
+          !inCodeBlock(textarea.value, caretPosition(textarea)),
+      });
+    }
+
+    const siteSettings = this.siteSettings;
+    if (siteSettings.mentionables_enabled) {
+      Site.currentProp("mentionable_items", this.wizard.mentionable_items);
+      const { SEPARATOR } = requirejs(
+        "discourse/plugins/discourse-mentionables/discourse/lib/discourse-markdown/mentionable-items"
+      );
+      const { searchMentionableItem } = requirejs(
+        "discourse/plugins/discourse-mentionables/discourse/lib/mentionable-item-search"
+      );
+
+      $input.autocomplete({
+        template: findRawTemplate("javascripts/mentionable-item-autocomplete"),
+        key: SEPARATOR,
+        afterComplete: (value) => {
+          this.composer.set("reply", value);
+          scheduleOnce("afterRender", () => $input.blur().focus());
+        },
+        transformComplete: (item) => item.model.slug,
+        dataSource: (term) =>
+          term.match(/\s/) ? null : searchMentionableItem(term, siteSettings),
         triggerRule: (textarea) =>
           !inCodeBlock(textarea.value, caretPosition(textarea)),
       });
@@ -293,10 +319,42 @@ export default ComposerEditor.extend({
         unshift: true,
         sendAction: () => component.set("showHyperlinkBox", true),
       });
+
+      if (this.siteSettings.mentionables_enabled) {
+        const { SEPARATOR } = requirejs(
+          "discourse/plugins/discourse-mentionables/discourse/lib/discourse-markdown/mentionable-items"
+        );
+
+        toolbar.addButton({
+          id: "insert-mentionable",
+          group: "extras",
+          icon: this.siteSettings.mentionables_composer_button_icon,
+          title: "mentionables.composer.insert.title",
+          perform: () => {
+            this.appEvents.trigger("wizard-editor:insert-text", {
+              fieldId: this.field.id,
+              text: SEPARATOR,
+            });
+            const $textarea = $(
+              document.querySelector(
+                `.composer-field.${this.field.id} textarea.d-editor-input`
+              )
+            );
+            $textarea.trigger("keyup.autocomplete");
+          },
+        });
+      }
     },
 
     previewUpdated($preview) {
       highlightSyntax($preview[0], this.siteSettings, this.session);
+
+      if (this.siteSettings.mentionables_enabled) {
+        const { linkSeenMentionableItems } = requirejs(
+          "discourse/plugins/discourse-mentionables/discourse/lib/mentionable-items-preview-styling"
+        );
+        linkSeenMentionableItems($preview, this.siteSettings);
+      }
       this._super(...arguments);
     },
 
