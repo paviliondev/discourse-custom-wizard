@@ -25,7 +25,7 @@ jobs:
           sed -n -e 's/^.*version: /base_version=/p' plugin.rb >> $GITHUB_ENV
 
       - name: Fail if version is incorrect
-        if: $(printf "${env.head_version}\n${env.base_version}\n" | sort -V | head -n1) == env.head_version
+        if: ${{ $(printf "${env.head_version}\n${env.base_version}\n" | sort -V | head -n1) == env.head_version }}
         uses: actions/github-script@v3
         with:
           script: |
