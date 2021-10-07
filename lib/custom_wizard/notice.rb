@@ -125,7 +125,7 @@ class CustomWizard::Notice
 
     if PLUGIN_STATUSES_TO_WARN.include?(plugin_status[:status])
       notice = {
-        message: PrettyText.cook(I18n.t('wizard.notice.compatibility_issue', domain: plugin_status_domain)),
+        message: I18n.t('wizard.notice.compatibility_issue', domain: plugin_status_domain),
         type: types[:plugin_status_warning],
         created_at: plugin_status[:status_changed_at]
       }
@@ -138,7 +138,7 @@ class CustomWizard::Notice
 
   def self.notify_connection_errors(connection_type_key)
     domain = self.send("#{connection_type_key.to_s}_domain")
-    message = PrettyText.cook(I18n.t("wizard.notice.#{connection_type_key.to_s}.connection_error_limit", domain: domain))
+    message = I18n.t("wizard.notice.#{connection_type_key.to_s}.connection_error_limit", domain: domain)
     notices = list(type: types[:connection_error], message: message)
 
     if notices.any?
@@ -221,7 +221,7 @@ class CustomWizard::Notice
     query = PluginStoreRow.where(plugin_name: namespace)
     query = query.where("(value::json->>'expired_at') IS NULL#{include_recently_expired ? " OR (value::json->>'expired_at')::date > now()::date - 1" : ""}")
     query = query.where("(value::json->>'type')::integer = ?", type) if type
-    query = query.where("(value::json->>'message') = ?", message) if message
+    query = query.where("(value::json->>'message')::text = ?", message) if message
     query.order("value::json->>'created_at' DESC")
   end
 

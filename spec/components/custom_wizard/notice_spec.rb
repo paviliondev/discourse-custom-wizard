@@ -54,7 +54,7 @@ describe CustomWizard::Notice do
     it "converts warning into notice" do
       notice = described_class.list.first
       expect(notice.type).to eq(described_class.types[:plugin_status_warning])
-      expect(notice.message).to eq(PrettyText.cook(I18n.t("wizard.notice.compatibility_issue", server: described_class.plugin_status_domain)))
+      expect(notice.message).to eq(I18n.t("wizard.notice.compatibility_issue", domain: described_class.plugin_status_domain))
       expect(notice.created_at.to_datetime).to be_within(1.second).of (plugin_status[:status_changed_at].to_datetime)
     end
 

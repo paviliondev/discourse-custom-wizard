@@ -18,4 +18,8 @@ class CustomWizard::NoticeSerializer < ApplicationSerializer
   def type
     CustomWizard::Notice.types.key(object.type)
   end
+
+  def messsage
+    PrettyText.cook(object.message)
+  end
 end
