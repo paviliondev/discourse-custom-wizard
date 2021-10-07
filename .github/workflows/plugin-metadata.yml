@@ -30,7 +30,7 @@ jobs:
           node-version: 14
 
       - name: Install semver
-        run: npm ci
+        run: npm install
 
       - name: Check version
         uses: actions/github-script@v3
