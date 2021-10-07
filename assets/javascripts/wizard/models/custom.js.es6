@@ -4,6 +4,7 @@ import WizardField from "wizard/models/wizard-field";
 import { ajax } from "wizard/lib/ajax";
 import Step from "wizard/models/step";
 import EmberObject from "@ember/object";
+import Site from "./site";
 
 const CustomWizard = EmberObject.extend({
   @computed("steps.length")
@@ -102,11 +103,11 @@ CustomWizard.reopenClass({
         }
       });
 
-      Discourse.Site.currentProp("categoriesList", categories);
-      Discourse.Site.currentProp("sortedCategories", categories);
-      Discourse.Site.currentProp("listByActivity", categories);
-      Discourse.Site.currentProp("categoriesById", categoriesById);
-      Discourse.Site.currentProp(
+      Site.currentProp("categoriesList", categories);
+      Site.currentProp("sortedCategories", categories);
+      Site.currentProp("listByActivity", categories);
+      Site.currentProp("categoriesById", categoriesById);
+      Site.currentProp(
         "uncategorized_category_id",
         wizardJson.uncategorized_category_id
       );
