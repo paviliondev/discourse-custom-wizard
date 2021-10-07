@@ -8,15 +8,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Store head version
+      - name: Checkout head repository
         uses: actions/checkout@v2
+
+      - name: Store head version
         run: |
           sed -n -e 's/^.*version: /head_version=/p' plugin.rb >> $GITHUB_ENV
 
-      - name: Store base version
+      - name: Checkout base repository
         uses: actions/checkout@v2
         with:
           ref: github.base_ref
+
+      - name: Store base version
         run: |
           sed -n -e 's/^.*version: /base_version=/p' plugin.rb >> $GITHUB_ENV
 
