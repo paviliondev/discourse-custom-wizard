@@ -13,7 +13,7 @@ class CustomWizard::Subscription::Subscription
   end
 
   def types
-    %w(core advanced business)
+    %w(core advanced complete)
   end
 
   def active?

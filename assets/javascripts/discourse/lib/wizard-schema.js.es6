@@ -219,11 +219,11 @@ export function actionsAvailableWithAdditionalSubscription(
   currentSubscription
 ) {
   switch (currentSubscription) {
-    case "business":
+    case "complete":
       return [];
     case "advanced":
       return action.actionTypesWithSubscription["business"];
-    case "community":
+    case "core":
       return action.actionTypesWithSubscription["advanced"].concat(
         action.actionTypesWithSubscription["business"]
       );
