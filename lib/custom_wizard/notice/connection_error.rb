@@ -25,7 +25,6 @@ class CustomWizard::Notice::ConnectionError
     end
 
     PluginStore.set(namespace, id, attrs)
-
     @errors = nil
   end
 
@@ -34,7 +33,7 @@ class CustomWizard::Notice::ConnectionError
       errors.each do |error_row|
         error = JSON.parse(error_row.value)
         error['expired_at'] = Time.now
-        error_row.value = error
+        error_row.value = error.to_json
         error_row.save
       end
     end
