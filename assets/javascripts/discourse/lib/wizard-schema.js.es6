@@ -200,14 +200,10 @@ const action = {
     "create_group",
     "send_to_api",
   ],
-  required: ["id", "type"],
-  proTypes: [
-    "send_message",
-    "add_to_group",
-    "create_category",
-    "create_group",
-    "send_to_api",
-  ],
+  actionTypesWithSubscription: {
+    advanced: ["send_message", "add_to_group", "watch_categories"],
+    business: ["create_category", "create_group", "send_to_api"],
+  },
   dependent: {},
   objectArrays: {},
 };
@@ -218,6 +214,21 @@ const wizardSchema = {
   field,
   action,
 };
+
+export function actionsAvailableWithAdditionalSubscription(
+  currentSubscription
+) {
+  switch (currentSubscription) {
+    case "business":
+      return [];
+    case "advanced":
+      return action.actionTypesWithSubscription["business"];
+    case "community":
+      return action.actionTypesWithSubscription["advanced"].concat(
+        action.actionTypesWithSubscription["business"]
+      );
+  }
+}
 
 export function buildFieldTypes(types) {
   wizardSchema.field.types = types;
