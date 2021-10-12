@@ -9,6 +9,7 @@ export default DiscourseRoute.extend({
 
   setupController(controller, model) {
     controller.set('notices', A(model.notices));
+    controller.set('api_section', model.api_section);
   },
 
   afterModel(model, transition) {

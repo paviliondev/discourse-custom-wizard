@@ -27,6 +27,10 @@ class CustomWizard::Subscription
     "stripe"
   end
 
+  def type
+    @subscription.type
+  end
+
   def client_name
     "custom-wizard"
   end
@@ -117,6 +121,10 @@ class CustomWizard::Subscription
 
   def self.subscribed?
     self.new.subscribed?
+  end
+
+  def self.type
+    self.new.type
   end
 
   def self.authorized?
