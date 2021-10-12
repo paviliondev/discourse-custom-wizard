@@ -269,7 +269,7 @@ describe CustomWizard::Action do
       expect(group.users.first.username).to eq('angus')
     end
 
-    it '#send_to_api' do
+    it '#send_to_api successful' do
       stub_request(:put, "https://myexternalapi.com/update").
       with(
         body: "some_body",
@@ -290,6 +290,29 @@ describe CustomWizard::Action do
 
       expect(result).to eq('success')
       expect(log_entry.status).to eq('SUCCESS')
+    end
+
+    it '#send_to_api failure' do
+      stub_request(:put, "https://myexternalapi.com/update").
+      with(
+        body: "some_body",
+        headers: {
+          'Host'=>'myexternalapi.com'
+        }).
+      to_return(status: 500, body: "failure", headers: {})
+
+      new_api = CustomWizard::Api.new("my_api")
+      CustomWizard::Api.set("my_api", title: "Mocked external api")
+      CustomWizard::Api::Authorization.set("my_api", api_test_no_authorization)
+      CustomWizard::Api::Endpoint.new("my_api")
+      CustomWizard::Api::Endpoint.set("my_api",  api_test_endpoint)
+      endpoint_id = CustomWizard::Api::Endpoint.list("my_api").first.id
+
+      result = CustomWizard::Api::Endpoint.request("my_api", endpoint_id, "some_body")
+      log_entry = CustomWizard::Api::LogEntry.list("my_api").first
+
+      expect(result).to eq('failure')
+      expect(log_entry.status).to eq('FAILURE')
     end
   end
 end
