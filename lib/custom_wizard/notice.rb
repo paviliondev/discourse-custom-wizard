@@ -4,10 +4,10 @@ class CustomWizard::Notice
   include ActiveModel::Serialization
 
   PLUGIN_STATUS_DOMAINS = {
-    "tests-passed" => "try.thepavilion.io",
-    "stable" => "stable.try.thepavilion.io"
+    "tests-passed" => "plugins.thepavilion.io",
+    "stable" => "stable.plugins.thepavilion.io"
   }
-  SUBSCRIPTION_MESSAGES_DOMAIN = "thepavilion.io"
+  SUBSCRIPTION_MESSAGES_DOMAIN = "test.thepavilion.io"
   LOCALHOST_DOMAIN = "localhost:3000"
   PLUGIN_STATUSES_TO_WARN = %w(incompatible tests_failing)
   CHECK_PLUGIN_STATUS_ON_BRANCH = %w(tests-passed main stable)
