@@ -6,17 +6,25 @@
       {{format-date notice.expired_at leaveAgo="true"}}
     </div>
   {{/if}}
-  
+
   <div class="notice-title notice-badge" title={{title}}>
     {{d-icon icon}}
     <span>{{title}}</span>
   </div>
 
   <div class="notice-created-at notice-badge" title={{notice.created_at}}>
-    {{d-icon "calendar-alt"}}
+    {{d-icon "far-clock"}}
     <span class="notice-issued">{{i18n "admin.wizard.notice.issued"}}</span>
     {{format-date notice.created_at leaveAgo="true"}}
   </div>
+
+  {{#if notice.updated_at}}
+    <div class="notice-updated-at notice-badge" title={{notice.updated_at}}>
+      {{d-icon "calendar-alt"}}
+      <span class="notice-updated">{{i18n "admin.wizard.notice.updated"}}</span>
+      {{format-date notice.updated_at leaveAgo="true"}}
+    </div>
+  {{/if}}
 
   <div class="notice-plugin notice-badge" title={{i18n "admin.wizard.notice.plugin"}}>
     {{d-icon "plug"}}
@@ -27,6 +35,12 @@
 <div class="notice-message">
   {{{notice.message}}}
 </div>
+
+{{#if importantOnDashboard}}
+  <a href="/admin/site_settings/category/all_results?filter=wizard_important_notices_on_dashboard" class="disable-important">
+    {{i18n "admin.wizard.notice.disable_important_on_dashboard"}}
+  </a>
+{{/if}}
 
 {{#if canDismiss}}
   {{#if dismissing}}

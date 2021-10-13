@@ -18,4 +18,4 @@ export default Component.extend({
   subscribedTitle(subscribed) {
     return `admin.wizard.subscription_container.${subscribed ? 'subscribed' : 'not_subscribed'}.title`;
   }
-})
+});

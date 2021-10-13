@@ -485,9 +485,13 @@ en:
         notice:
           plugin: Custom Wizard Plugin
           issued: Issued
+          update: Updated
           resolved: Resolved
           title:
-            warning: Warning Notice
+            plugin_status_warning: Warning Notice
+            plugin_status_connection_error: Connection Notice
+            subscription_messages_connection_error: Connection Notice
+          disable_important_on_dashboard: disable
 
   wizard_js:
     group:

@@ -4,7 +4,7 @@ class CustomWizard::AdminNoticeController < CustomWizard::AdminController
   before_action :find_notice, only: [:dismiss]
 
   def index
-    render_serialized(CustomWizard::Notice.list, CustomWizard::NoticeSerializer)
+    render_serialized(CustomWizard::Notice.list(include_recently_expired: true), CustomWizard::NoticeSerializer)
   end
 
   def dismiss

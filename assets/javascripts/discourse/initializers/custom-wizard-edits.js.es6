@@ -1,6 +1,5 @@
 import DiscourseURL from "discourse/lib/url";
 import { withPluginApi } from "discourse/lib/plugin-api";
-import { ajax } from "discourse/lib/ajax";
 import CustomWizardNotice from "../models/custom-wizard-notice";
 import { A } from "@ember/array";
 
@@ -31,12 +30,13 @@ export default {
          });
         },
 
-        setupController(controller, model) {
+        setupController(controller) {
           if (this.notices) {
-            let warningNotices = this.notices.filter(n => n.type === 'warning');
+            let pluginStatusConnectionError = this.notices.filter(n => n.type === 'plugin_status_connection_error')[0];
+            let pluginStatusWarning = this.notices.filter(n => n.type === 'plugin_status_warning')[0];
 
-            if (warningNotices.length) {
-              controller.set('wizardWarningNotice', warningNotices[0]);
+            if (pluginStatusConnectionError || pluginStatusWarning) {
+              controller.set('customWizardImportantNotice', pluginStatusConnectionError || pluginStatusWarning);
             }
           }
 

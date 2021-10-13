@@ -1,10 +1,10 @@
 import Component from "@ember/component";
 import discourseComputed from "discourse-common/utils/decorators";
-import { notEmpty, not } from "@ember/object/computed";
+import { not, notEmpty } from "@ember/object/computed";
 import I18n from "I18n";
 
 export default Component.extend({
-  classNameBindings: [':wizard-notice', 'notice.type', 'dismissed', 'expired'],
+  classNameBindings: [':wizard-notice', 'notice.type', 'dismissed', 'expired', 'resolved'],
   showFull: false,
   resolved: notEmpty('notice.expired_at'),
   dismissed: notEmpty('notice.dismissed_at'),
@@ -18,14 +18,16 @@ export default Component.extend({
   @discourseComputed('notice.type')
   icon(type) {
     return {
-      warning: 'exclamation-circle',
+      plugin_status_warning: 'exclamation-circle',
+      plugin_status_connection_error: 'bolt',
+      subscription_messages_connection_error: 'bolt',
       info: 'info-circle'
     }[type];
   },
 
   actions: {
     dismiss() {
-      this.set('dismissing', true)
+      this.set('dismissing', true);
       this.notice.dismiss().then(() => {
         this.set('dismissing', false);
       });

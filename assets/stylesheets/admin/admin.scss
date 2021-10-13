@@ -911,11 +911,16 @@
   padding: 1em;
   margin-bottom: 1em;
   border: 1px solid var(--primary);
-  border-radius: 4px;
   position: relative;
 
   &.dismissed {
     display: none;
+  }
+
+  &.resolved .notice-badge:not(.notice-expired-at),
+  &.resolved a,
+  &.resolved p {
+    color: var(--primary-medium) !important;
   }
 
   .d-icon {
@@ -931,7 +936,6 @@
     display: inline-flex;
     align-items: center;
     padding: 0 .5em;
-    border-radius: 4px;
     margin-right: 1em;
     font-size: .9em;
     line-height: 25px;
@@ -957,7 +961,8 @@
     }
   }
 
-  .notice-issued {
+  .notice-issued,
+  .notice-resolved {
     margin-right: .3em;
   }
 
@@ -976,6 +981,13 @@
     position: absolute;
     top: 1em;
     right: 1em;
-    color: var(--primary);
+    color: var(--primary-medium);
+  }
+
+  .disable-important {
+    position: absolute;
+    right: 3em;
+    top: 1em;
+    color: var(--primary-medium);
   }
 }

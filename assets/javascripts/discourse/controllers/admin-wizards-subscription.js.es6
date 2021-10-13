@@ -38,7 +38,7 @@ export default Controller.extend({
     unauthorize() {
       this.set("unauthorizing", true);
 
-      CustomWizardPro.unauthorize()
+      CustomWizardSubscription.unauthorize()
         .then((result) => {
           if (result.success) {
             this.setProperties({

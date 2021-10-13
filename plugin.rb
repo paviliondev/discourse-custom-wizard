@@ -40,7 +40,7 @@ if respond_to?(:register_svg_icon)
   register_svg_icon "comment-alt"
   register_svg_icon "far-life-ring"
   register_svg_icon "arrow-right"
-  register_svg_icon "shield-virus"
+  register_svg_icon "bolt"
 end
 
 class ::Sprockets::DirectiveProcessor
@@ -98,6 +98,7 @@ after_initialize do
     ../lib/custom_wizard/template.rb
     ../lib/custom_wizard/wizard.rb
     ../lib/custom_wizard/notice.rb
+    ../lib/custom_wizard/notice/connection_error.rb
     ../lib/custom_wizard/subscription.rb
     ../lib/custom_wizard/subscription/subscription.rb
     ../lib/custom_wizard/subscription/authentication.rb
@@ -242,10 +243,9 @@ after_initialize do
   end
 
   AdminDashboardData.add_problem_check do
-    warning_notices = CustomWizard::Notice.list(CustomWizard::Notice.types[:warning])
+    warning_notices = CustomWizard::Notice.list(type: CustomWizard::Notice.types[:plugin_status_warning])
     warning_notices.any? ? ActionView::Base.full_sanitizer.sanitize(warning_notices.first.message, tags: %w(a)) : nil
   end
 
-  Jobs.enqueue(:custom_wizard_update_notices)
   DiscourseEvent.trigger(:custom_wizard_ready)
 end

@@ -10,13 +10,13 @@ CustomWizardNotice.reopen({
       if (result.success) {
         this.set('dismissed_at', result.dismissed_at);
       }
-    }).catch(popupAjaxError)
+    }).catch(popupAjaxError);
   }
 });
 
 CustomWizardNotice.reopenClass({
   list() {
-    return ajax('/admin/wizards/notice').catch(popupAjaxError)
+    return ajax('/admin/wizards/notice').catch(popupAjaxError);
   }
 });
 
