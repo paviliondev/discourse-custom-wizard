@@ -86,6 +86,7 @@ after_initialize do
     ../lib/custom_wizard/submission.rb
     ../lib/custom_wizard/template.rb
     ../lib/custom_wizard/wizard.rb
+    ../lib/custom_wizard/guardian.rb
     ../lib/custom_wizard/api/api.rb
     ../lib/custom_wizard/api/authorization.rb
     ../lib/custom_wizard/api/endpoint.rb
