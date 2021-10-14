@@ -466,7 +466,7 @@ en:
 
         subscription:
           nav_label: Subscription
-          label: Subscription
+          label: In subscription
           additional_label: "Add subscription"
           title: Custom Wizard Subscription
           authorize: Authorize
