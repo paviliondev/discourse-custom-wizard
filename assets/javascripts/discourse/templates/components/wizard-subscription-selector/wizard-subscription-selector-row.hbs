@@ -10,6 +10,12 @@
 <div class="texts">
   <span class="name">{{html-safe label}}</span>
   {{#if item.subscription}}
-    <span class="subscription-label">{{i18n "admin.wizard.subscription.label"}}</span>
+    <span class="subscription-label">
+      {{#if item.disabled}}
+        {{i18n "admin.wizard.subscription.additional_label"}}
+      {{else}}
+        {{i18n "admin.wizard.subscription.label"}}
+      {{/if}}
+    </span>
   {{/if}}
 </div>

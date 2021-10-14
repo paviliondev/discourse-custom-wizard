@@ -427,6 +427,10 @@
     margin-bottom: 0;
   }
 
+  .wizard-custom-action .select-kit-row.disabled {
+    background: var(--primary-low);
+  }
+
   .select-box-kit-header {
     height: initial;
   }

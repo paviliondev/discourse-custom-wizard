@@ -201,8 +201,8 @@ const action = {
     "send_to_api",
   ],
   actionTypesWithSubscription: {
-    advanced: ["send_message", "add_to_group", "watch_categories"],
-    business: ["create_category", "create_group", "send_to_api"],
+    basic: ["send_message", "add_to_group", "watch_categories"],
+    advanced: ["create_category", "create_group", "send_to_api"],
   },
   dependent: {},
   objectArrays: {},
@@ -219,14 +219,28 @@ export function actionsAvailableWithAdditionalSubscription(
   currentSubscription
 ) {
   switch (currentSubscription) {
-    case "complete":
-      return [];
     case "advanced":
-      return action.actionTypesWithSubscription["business"];
-    case "core":
-      return action.actionTypesWithSubscription["advanced"].concat(
-        action.actionTypesWithSubscription["business"]
+      return [];
+    case "basic":
+      return action.actionTypesWithSubscription["advanced"];
+    case "none", "":
+      return action.actionTypesWithSubscription["basic"].concat(
+        action.actionTypesWithSubscription["advanced"]
       );
+  }
+}
+
+export function actionsAvailableWithCurrentSubscription(
+  currentSubscription
+) {
+  switch (currentSubscription) {
+    case "advanced":
+      return action.actionTypesWithSubscription["advanced"].concat(
+        action.actionTypesWithSubscription["basic"]);
+    case "basic":
+      return action.actionTypesWithSubscription["basic"];
+    case "none", "":
+      return [];
   }
 }
 
