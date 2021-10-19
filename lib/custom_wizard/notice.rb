@@ -4,8 +4,8 @@ class CustomWizard::Notice
   include ActiveModel::Serialization
 
   PLUGIN_STATUS_DOMAINS = {
-    "tests-passed" => "plugins.thepavilion.io",
-    "stable" => "stable.plugins.thepavilion.io"
+    "tests-passed" => "plugins.discourse.pavilion.tech",
+    "stable" => "stable.plugins.discourse.pavilion.tech"
   }
   SUBSCRIPTION_MESSAGES_DOMAIN = "test.thepavilion.io"
   LOCALHOST_DOMAIN = "localhost:3000"
