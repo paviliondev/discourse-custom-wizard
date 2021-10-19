@@ -86,7 +86,6 @@ after_initialize do
     ../lib/custom_wizard/submission.rb
     ../lib/custom_wizard/template.rb
     ../lib/custom_wizard/wizard.rb
-    ../lib/custom_wizard/guardian.rb
     ../lib/custom_wizard/api/api.rb
     ../lib/custom_wizard/api/authorization.rb
     ../lib/custom_wizard/api/endpoint.rb
@@ -109,6 +108,7 @@ after_initialize do
     ../serializers/custom_wizard/realtime_validation/similar_topics_serializer.rb
     ../extensions/extra_locales_controller.rb
     ../extensions/invites_controller.rb
+    ../extensions/guardian.rb
     ../extensions/users_controller.rb
     ../extensions/custom_field/preloader.rb
     ../extensions/custom_field/serializer.rb
@@ -118,6 +118,14 @@ after_initialize do
   end
 
   Liquid::Template.register_filter(::CustomWizard::LiquidFilter::FirstNonEmpty)
+
+  add_to_class(:topic, :wizard_created) do
+    custom_fields['wizard_created']
+  end
+
+  add_to_class(:topic, :wizard_submission) do
+    custom_fields['wizard_submission']
+  end
 
   add_class_method(:wizard, :user_requires_completion?) do |user|
     wizard_result = self.new(user).requires_completion?
@@ -192,6 +200,7 @@ after_initialize do
   ::ExtraLocalesController.prepend ExtraLocalesControllerCustomWizard
   ::InvitesController.prepend InvitesControllerCustomWizard
   ::UsersController.prepend CustomWizardUsersController
+  ::Guardian.prepend CustomWizardGuardian
 
   full_path = "#{Rails.root}/plugins/discourse-custom-wizard/assets/stylesheets/wizard/wizard_custom.scss"
   if Stylesheet::Importer.respond_to?(:plugin_assets)
