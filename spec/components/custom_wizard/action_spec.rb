@@ -311,7 +311,7 @@ describe CustomWizard::Action do
       result = CustomWizard::Api::Endpoint.request("my_api", endpoint_id, "some_body")
       log_entry = CustomWizard::Api::LogEntry.list("my_api").first
 
-      expect(result).to eq('failure')
+      expect(result).to eq({:error=>"API request failed"})
       expect(log_entry.status).to eq('FAILURE')
     end
   end
