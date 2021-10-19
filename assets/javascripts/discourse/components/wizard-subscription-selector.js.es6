@@ -7,7 +7,8 @@ export default SingleSelectComponent.extend({
     autoFilterable: false,
     filterable: false,
     showFullTitle: true,
-    headerComponent: "wizard-subscription-selector/wizard-subscription-selector-header",
+    headerComponent:
+      "wizard-subscription-selector/wizard-subscription-selector-header",
     caretUpIcon: "caret-up",
     caretDownIcon: "caret-down",
   },

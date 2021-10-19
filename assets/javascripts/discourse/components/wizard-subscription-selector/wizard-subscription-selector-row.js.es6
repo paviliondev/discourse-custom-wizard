@@ -16,5 +16,5 @@ export default SelectKitRowComponent.extend({
       this.selectKit.select(this.rowValue, this.item);
     }
     return false;
-  }
+  },
 });

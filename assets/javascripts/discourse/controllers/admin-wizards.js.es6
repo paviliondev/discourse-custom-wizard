@@ -8,13 +8,13 @@ export default Controller.extend({
       ajax(`/admin/wizards/notice/${this.id}`, {
         type: "DELETE",
       })
-        .then(result => {
+        .then((result) => {
           if (result.success) {
             const notices = this.notices;
-            notices.removeObject(notices.findBy('id', noticeId));
+            notices.removeObject(notices.findBy("id", noticeId));
           }
         })
         .catch(popupAjaxError);
-    }
-  }
+    },
+  },
 });

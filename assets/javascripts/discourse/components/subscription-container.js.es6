@@ -4,18 +4,22 @@ import discourseComputed from "discourse-common/utils/decorators";
 export default Component.extend({
   classNameBindings: [":subscription-container", "subscribed"],
 
-  @discourseComputed('subscribed')
+  @discourseComputed("subscribed")
   subscribedIcon(subscribed) {
-    return subscribed ? 'check' : 'dash';
+    return subscribed ? "check" : "dash";
   },
 
-  @discourseComputed('subscribed')
+  @discourseComputed("subscribed")
   subscribedLabel(subscribed) {
-    return `admin.wizard.subscription_container.${subscribed ? 'subscribed' : 'not_subscribed'}.label`;
+    return `admin.wizard.subscription_container.${
+      subscribed ? "subscribed" : "not_subscribed"
+    }.label`;
   },
 
-  @discourseComputed('subscribed')
+  @discourseComputed("subscribed")
   subscribedTitle(subscribed) {
-    return `admin.wizard.subscription_container.${subscribed ? 'subscribed' : 'not_subscribed'}.title`;
-  }
+    return `admin.wizard.subscription_container.${
+      subscribed ? "subscribed" : "not_subscribed"
+    }.title`;
+  },
 });

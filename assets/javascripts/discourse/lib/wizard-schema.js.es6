@@ -230,13 +230,12 @@ export function actionsAvailableWithAdditionalSubscription(
   }
 }
 
-export function actionsAvailableWithCurrentSubscription(
-  currentSubscription
-) {
+export function actionsAvailableWithCurrentSubscription(currentSubscription) {
   switch (currentSubscription) {
     case "advanced":
       return action.actionTypesWithSubscription["advanced"].concat(
-        action.actionTypesWithSubscription["basic"]);
+        action.actionTypesWithSubscription["basic"]
+      );
     case "basic":
       return action.actionTypesWithSubscription["basic"];
     case "none":

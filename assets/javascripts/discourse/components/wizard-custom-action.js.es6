@@ -1,7 +1,7 @@
 import { default as discourseComputed } from "discourse-common/utils/decorators";
 import wizardSchema, {
   actionsAvailableWithAdditionalSubscription,
-  actionsAvailableWithCurrentSubscription
+  actionsAvailableWithCurrentSubscription,
 } from "discourse/plugins/discourse-custom-wizard/discourse/lib/wizard-schema";
 import { empty, equal, or } from "@ember/object/computed";
 import { notificationLevels, selectKitContent } from "../lib/wizard";
@@ -99,11 +99,15 @@ export default Component.extend(UndoChanges, {
 
   @discourseComputed("subscribed", "subscription")
   actionTypes(subscribed, subscription) {
-    let unsubscribedActions =
-      actionsAvailableWithAdditionalSubscription(subscription);
-    let subscribedActions = actionsAvailableWithCurrentSubscription(subscription);
+    let unsubscribedActions = actionsAvailableWithAdditionalSubscription(
+      subscription
+    );
+    let subscribedActions = actionsAvailableWithCurrentSubscription(
+      subscription
+    );
     return Object.keys(wizardSchema.action.types).reduce((result, type) => {
-      let subscriptionLabel = (subscribedActions.includes(type) || unsubscribedActions.includes(type));
+      let subscriptionLabel =
+        subscribedActions.includes(type) || unsubscribedActions.includes(type);
       let disabled = unsubscribedActions.includes(type);
       result.push({
         id: type,
