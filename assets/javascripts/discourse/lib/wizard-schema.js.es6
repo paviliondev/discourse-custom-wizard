@@ -223,7 +223,7 @@ export function actionsAvailableWithAdditionalSubscription(
       return [];
     case "basic":
       return action.actionTypesWithSubscription["advanced"];
-    case "none", "":
+    case "none":
       return action.actionTypesWithSubscription["basic"].concat(
         action.actionTypesWithSubscription["advanced"]
       );
@@ -239,7 +239,7 @@ export function actionsAvailableWithCurrentSubscription(
         action.actionTypesWithSubscription["basic"]);
     case "basic":
       return action.actionTypesWithSubscription["basic"];
-    case "none", "":
+    case "none":
       return [];
   }
 }

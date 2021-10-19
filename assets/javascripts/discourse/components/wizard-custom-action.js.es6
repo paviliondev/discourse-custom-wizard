@@ -105,7 +105,6 @@ export default Component.extend(UndoChanges, {
     return Object.keys(wizardSchema.action.types).reduce((result, type) => {
       let subscriptionLabel = (subscribedActions.includes(type) || unsubscribedActions.includes(type));
       let disabled = unsubscribedActions.includes(type);
-      console.log(subscriptionLabel, disabled);
       result.push({
         id: type,
         name: I18n.t(`admin.wizard.action.${type}.label`),
