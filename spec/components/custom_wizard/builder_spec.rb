@@ -47,6 +47,14 @@ describe CustomWizard::Builder do
     )
   }
 
+  let(:boolean_field_condition_json) {
+    JSON.parse(
+      File.open(
+        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/condition/boolean_field_condition.json"
+      ).read
+    )
+  }
+
   before do
     Group.refresh_automatic_group!(:trust_level_3)
     CustomWizard::Template.save(
@@ -322,6 +330,7 @@ describe CustomWizard::Builder do
       context "with condition" do
         before do
           @template[:steps][0][:fields][0][:condition] = user_condition_json['condition']
+          @template[:steps][2][:fields][5][:condition] = boolean_field_condition_json['condition']
           CustomWizard::Template.save(@template.as_json)
         end
 
@@ -333,6 +342,16 @@ describe CustomWizard::Builder do
         it "does not add field when condition is not passed" do
           wizard = CustomWizard::Builder.new(@template[:id], user).build
           expect(wizard.steps.first.fields.first.id).to eq(@template[:steps][0][:fields][1]['id'])
+        end
+
+        it "works if a field condition uses 'is true/false'" do
+          builder = CustomWizard::Builder.new(@template[:id], user)
+          wizard = builder.build
+          wizard.create_updater('step_2', step_2_field_5: 'true').update
+
+          builder = CustomWizard::Builder.new(@template[:id], user)
+          wizard = builder.build
+          expect(wizard.steps.last.fields.last.id).to eq(@template[:steps][2][:fields][5]['id'])
         end
       end
     end
