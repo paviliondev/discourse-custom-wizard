@@ -24,11 +24,7 @@ const customFieldActionMap = {
   user: ["update_profile"],
 };
 
-const values = [
-  "present",
-  "true",
-  "false"
-];
+const values = ["present", "true", "false"];
 
 export default Component.extend({
   classNameBindings: [":mapper-selector", "activeType"],
@@ -284,7 +280,7 @@ export default Component.extend({
     if (activeType === "value") {
       content = values.map((value) => ({
         id: value,
-        name: value
+        name: value,
       }));
     }
 

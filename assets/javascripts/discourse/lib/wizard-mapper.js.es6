@@ -105,7 +105,7 @@ const selectionTypes = [
   "tag",
   "user",
   "customField",
-  "value"
+  "value",
 ];
 
 function defaultSelectionType(inputType, options = {}, connector = null) {
