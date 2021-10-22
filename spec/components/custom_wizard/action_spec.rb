@@ -14,8 +14,8 @@ describe CustomWizard::Action do
   let(:send_message) { get_wizard_fixture("actions/send_message") }
   let(:send_message_multi) { get_wizard_fixture("actions/send_message_multi") }
   let(:api_test_endpoint) { get_wizard_fixture("endpoints/test_endpoint") }
-  let(:api_test_endpoint_body) { get_wizard_fixture("endpoints/test_endpoint_body")}
-  let(:api_test_no_authorization) { get_wizard_fixture("api/no_authorization")}
+  let(:api_test_endpoint_body) { get_wizard_fixture("endpoints/test_endpoint_body") }
+  let(:api_test_no_authorization) { get_wizard_fixture("api/no_authorization") }
 
   def update_template(template)
     CustomWizard::Template.save(template, skip_jobs: true)
@@ -271,12 +271,12 @@ describe CustomWizard::Action do
 
     it '#send_to_api successful' do
       stub_request(:put, "https://myexternalapi.com/update").
-      with(
+        with(
         body: "some_body",
         headers: {
-          'Host'=>'myexternalapi.com'
+          'Host' => 'myexternalapi.com'
         }).
-       to_return(status: 200, body: "success", headers: {})
+        to_return(status: 200, body: "success", headers: {})
 
       new_api = CustomWizard::Api.new("my_api")
       CustomWizard::Api.set("my_api", title: "Mocked external api")
@@ -294,12 +294,12 @@ describe CustomWizard::Action do
 
     it '#send_to_api failure' do
       stub_request(:put, "https://myexternalapi.com/update").
-      with(
+        with(
         body: "some_body",
         headers: {
-          'Host'=>'myexternalapi.com'
+          'Host' => 'myexternalapi.com'
         }).
-      to_return(status: 500, body: "failure", headers: {})
+        to_return(status: 500, body: "failure", headers: {})
 
       new_api = CustomWizard::Api.new("my_api")
       CustomWizard::Api.set("my_api", title: "Mocked external api")
@@ -311,9 +311,8 @@ describe CustomWizard::Action do
       result = CustomWizard::Api::Endpoint.request("my_api", endpoint_id, "some_body")
       log_entry = CustomWizard::Api::LogEntry.list("my_api").first
 
-      expect(result).to eq({:error=>"API request failed"})
+      expect(result).to eq({ error: "API request failed" })
       expect(log_entry.status).to eq('FAILURE')
     end
   end
 end
-
