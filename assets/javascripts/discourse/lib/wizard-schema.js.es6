@@ -201,8 +201,8 @@ const action = {
     "send_to_api",
   ],
   actionTypesWithSubscription: {
-    basic: ["send_message", "add_to_group", "watch_categories"],
-    advanced: ["create_category", "create_group", "send_to_api"],
+    standard: ["send_message", "add_to_group", "watch_categories"],
+    business: ["create_category", "create_group", "send_to_api"],
   },
   dependent: {},
   objectArrays: {},
@@ -215,31 +215,30 @@ const wizardSchema = {
   action,
 };
 
-export function actionsAvailableWithAdditionalSubscription(
+export function actionsRequiringAdditionalSubscription(
   currentSubscription
 ) {
   switch (currentSubscription) {
-    case "advanced":
+    case "business":
       return [];
-    case "basic":
-      return action.actionTypesWithSubscription["advanced"];
-    case "none":
-      return action.actionTypesWithSubscription["basic"].concat(
-        action.actionTypesWithSubscription["advanced"]
+    case "standard":
+      return action.actionTypesWithSubscription["business"];
+    default:
+      return action.actionTypesWithSubscription["standard"].concat(
+        action.actionTypesWithSubscription["business"]
       );
   }
 }
 
-export function actionsAvailableWithCurrentSubscription(currentSubscription) {
-  switch (currentSubscription) {
-    case "advanced":
-      return action.actionTypesWithSubscription["advanced"].concat(
-        action.actionTypesWithSubscription["basic"]
-      );
-    case "basic":
-      return action.actionTypesWithSubscription["basic"];
-    case "none":
-      return [];
+export function actionSubscriptionLevel(type) {
+  if (action.actionTypesWithSubscription["business"].includes(type)) {
+    return "business" 
+  } else {
+    if (action.actionTypesWithSubscription["standard"].includes(type)) {
+      return "standard"
+    } else {
+      return ""
+    }
   }
 }
 
