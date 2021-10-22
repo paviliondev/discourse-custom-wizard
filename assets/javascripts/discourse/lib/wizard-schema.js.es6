@@ -232,7 +232,7 @@ export function actionsRequiringAdditionalSubscription(
 
 export function actionSubscriptionLevel(type) {
   if (action.actionTypesWithSubscription["business"].includes(type)) {
-    return "business" 
+    return "business"
   } else {
     if (action.actionTypesWithSubscription["standard"].includes(type)) {
       return "standard"
