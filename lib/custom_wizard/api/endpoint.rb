@@ -74,7 +74,7 @@ class CustomWizard::Api::Endpoint
     headers["Authorization"] = auth_string if auth_string
     headers["Content-Type"] = content_type if content_type
 
-    connection = Excon.new(URI.encode(endpoint.url), headers: headers)
+    connection = Excon.new(CGI.escape(endpoint.url), headers: headers)
 
     params = { method: endpoint.method }
 
