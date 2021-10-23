@@ -4,27 +4,12 @@ import { alias, equal, or } from "@ember/object/computed";
 import { computed } from "@ember/object";
 import I18n from "I18n";
 
-const klasses = ["topic", "post", "group", "category"];
-const types = ["string", "boolean", "integer", "json"];
-const subscriptionTypes = {
-  klass: ["group", "category"],
-  type: ["json"],
-};
-
-const generateContent = function (array, type, subscribed = false) {
-  return array.reduce((result, key) => {
-    let subArr = subscriptionTypes[type];
-    let subscription = subArr && subArr.includes(key);
-    if (!subscription || subscribed) {
-      result.push({
-        id: key,
-        name: I18n.t(`admin.wizard.custom_field.${type}.${key}`),
-        subscription,
-      });
-    }
-    return result;
-  }, []);
-};
+import wizardSchema, {
+  customFieldsKlassesRequiringAdditionalSubscription,
+  customFieldsKlassSubscriptionLevel,
+  customFieldsTypesRequiringAdditionalSubscription,
+  customFieldsTypeSubscriptionLevel,
+} from "discourse/plugins/discourse-custom-wizard/discourse/lib/wizard-schema";
 
 export default Component.extend({
   tagName: "tr",
@@ -32,12 +17,6 @@ export default Component.extend({
   postSerializers: ["post"],
   groupSerializers: ["basic_group"],
   categorySerializers: ["basic_category"],
-  klassContent: computed("subscribed", function () {
-    return generateContent(klasses, "klass", this.subscribed);
-  }),
-  typeContent: computed("subscribed", function () {
-    return generateContent(types, "type", this.subscribed);
-  }),
   showInputs: or("field.new", "field.edit"),
   classNames: ["custom-field-input"],
   loading: or("saving", "destroying"),
@@ -49,15 +28,49 @@ export default Component.extend({
     this.set("originalField", JSON.parse(JSON.stringify(this.field)));
   },
 
-  @discourseComputed("field.klass")
-  serializerContent(klass) {
-    const serializers = this.get(`${klass}Serializers`);
+  // @discourseComputed("field.klass")
+  // serializerContent(klass) {
+  //   const serializers = this.get(`${klass}Serializers`);
 
-    if (serializers) {
-      return generateContent(serializers, "serializers", this.subscribed);
-    } else {
-      return [];
-    }
+  //   if (serializers) {
+  //     return generateContent(serializers, "serializers", this.subscribed);
+  //   } else {
+  //     return [];
+  //   }
+  // },
+
+  @discourseComputed("subscription")
+  customFieldTypes(subscription) {
+    let unsubscribedCustomFields = customFieldsTypesRequiringAdditionalSubscription(
+      subscription
+    );
+    return wizardSchema.custom_field.types.reduce((result, type) => {
+      let disabled = unsubscribedCustomFields.includes(type);
+      result.push({
+        id: type,
+        name: I18n.t(`admin.wizard.custom_field.type.${type}`),
+        subscription: customFieldsTypeSubscriptionLevel(type),
+        disabled: disabled,
+      });
+      return result;
+    }, []);
+  },
+
+  @discourseComputed("subscription")
+  customFieldKlasses(subscription) {
+    let unsubscribedCustomFields = customFieldsKlassesRequiringAdditionalSubscription(
+      subscription
+    );
+    return wizardSchema.custom_field.klasses.reduce((result, klass) => {
+      let disabled = unsubscribedCustomFields.includes(klass);
+      result.push({
+        id: klass,
+        name: I18n.t(`admin.wizard.custom_field.klass.${klass}`),
+        subscription: customFieldsKlassSubscriptionLevel(klass),
+        disabled: disabled,
+      });
+      return result;
+    }, []);
   },
 
   @observes("field.klass")

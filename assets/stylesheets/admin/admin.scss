@@ -427,10 +427,6 @@
     margin-bottom: 0;
   }
 
-  .wizard-custom-action .select-kit-row.disabled {
-    background: var(--primary-low);
-  }
-
   .select-box-kit-header {
     height: initial;
   }
@@ -792,11 +788,6 @@
   vertical-align: middle;
 }
 
-.subscription-label {
-  color: var(--tertiary);
-  font-size: 0.75em;
-}
-
 .admin-wizards-subscription {
   .admin-wizard-controls {
     h3,
@@ -857,14 +848,21 @@
 }
 
 .wizard-subscription-selector.select-kit.single-select {
-  .select-kit-row .texts {
-    display: flex;
-    align-items: center;
+  .select-kit-row {
+    .texts {
+      display: flex;
+      align-items: center;
+    }
+    &.disabled {
+      background: var(--primary-low);
+    }
   }
 
   .subscription-label {
     margin-left: 0.75em;
     padding-top: 0.25em;
+    color: var(--tertiary);
+    font-size: 0.75em;
   }
 }
 

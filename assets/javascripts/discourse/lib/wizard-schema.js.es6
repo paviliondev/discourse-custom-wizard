@@ -208,10 +208,24 @@ const action = {
   objectArrays: {},
 };
 
+const custom_field = {
+  klasses: ["topic", "post", "group", "category"],
+  types: ["string", "boolean", "integer", "json"],
+  customFieldKlassWithSubscription: {
+    standard: [],
+    business: ["group", "category"],
+  },
+  customFieldTypeWithSubscription: {
+    standard: ["json"],
+    business: [],
+  },
+}
+
 const wizardSchema = {
   wizard,
   step,
   field,
+  custom_field,
   action,
 };
 
@@ -235,6 +249,58 @@ export function actionSubscriptionLevel(type) {
     return "business"
   } else {
     if (action.actionTypesWithSubscription["standard"].includes(type)) {
+      return "standard"
+    } else {
+      return ""
+    }
+  }
+}
+
+
+
+export function customFieldsKlassesRequiringAdditionalSubscription(
+  currentSubscription
+) {
+  switch (currentSubscription) {
+    case "business":
+      return [];
+    case "standard":
+      return custom_field.customFieldKlassWithSubscription["business"];
+    default:
+      return custom_field.customFieldKlassWithSubscription["business"].concat(custom_field.customFieldKlassWithSubscription["standard"]);
+  }
+}
+
+export function customFieldsKlassSubscriptionLevel(type) {
+  if (custom_field.customFieldKlassWithSubscription["business"].includes(type)) {
+    return "business"
+  } else {
+    if (custom_field.customFieldKlassWithSubscription["standard"].includes(type)) {
+      return "standard"
+    } else {
+      return ""
+    }
+  }
+}
+
+export function customFieldsTypesRequiringAdditionalSubscription(
+  currentSubscription
+) {
+  switch (currentSubscription) {
+    case "business":
+      return [];
+    case "standard":
+      return custom_field.customFieldTypeWithSubscription["business"];
+    default:
+      return custom_field.customFieldTypeWithSubscription["business"].concat(custom_field.customFieldTypeWithSubscription["standard"]);
+  }
+}
+
+export function customFieldsTypeSubscriptionLevel(type) {
+  if (custom_field.customFieldTypeWithSubscription["business"].includes(type)) {
+    return "business"
+  } else {
+    if (custom_field.customFieldTypeWithSubscription["standard"].includes(type)) {
       return "standard"
     } else {
       return ""
