@@ -5,10 +5,8 @@ import { computed } from "@ember/object";
 import I18n from "I18n";
 
 import wizardSchema, {
-  customFieldsKlassesRequiringAdditionalSubscription,
-  customFieldsKlassSubscriptionLevel,
-  customFieldsTypesRequiringAdditionalSubscription,
-  customFieldsTypeSubscriptionLevel,
+  requiringAdditionalSubscription,
+  subscriptionLevel,
 } from "discourse/plugins/discourse-custom-wizard/discourse/lib/wizard-schema";
 
 export default Component.extend({
@@ -41,15 +39,15 @@ export default Component.extend({
 
   @discourseComputed("subscription")
   customFieldTypes(subscription) {
-    let unsubscribedCustomFields = customFieldsTypesRequiringAdditionalSubscription(
-      subscription
+    let unsubscribedCustomFields = requiringAdditionalSubscription(
+      subscription, "custom_fields", "types"
     );
     return wizardSchema.custom_field.types.reduce((result, type) => {
       let disabled = unsubscribedCustomFields.includes(type);
       result.push({
         id: type,
         name: I18n.t(`admin.wizard.custom_field.type.${type}`),
-        subscription: customFieldsTypeSubscriptionLevel(type),
+        subscription: subscriptionLevel(type, "custom_fields", "types"),
         disabled: disabled,
       });
       return result;
@@ -58,15 +56,15 @@ export default Component.extend({
 
   @discourseComputed("subscription")
   customFieldKlasses(subscription) {
-    let unsubscribedCustomFields = customFieldsKlassesRequiringAdditionalSubscription(
-      subscription
+    let unsubscribedCustomFields = requiringAdditionalSubscription(
+      subscription, "custom_fields", "klasses"
     );
     return wizardSchema.custom_field.klasses.reduce((result, klass) => {
       let disabled = unsubscribedCustomFields.includes(klass);
       result.push({
         id: klass,
         name: I18n.t(`admin.wizard.custom_field.klass.${klass}`),
-        subscription: customFieldsKlassSubscriptionLevel(klass),
+        subscription: subscriptionLevel(klass, "custom_fields", "klasses"),
         disabled: disabled,
       });
       return result;
