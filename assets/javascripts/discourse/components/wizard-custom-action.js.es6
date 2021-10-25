@@ -1,6 +1,7 @@
 import { default as discourseComputed } from "discourse-common/utils/decorators";
 import wizardSchema, {
   actionsRequiringAdditionalSubscription,
+  requiringAdditionalSubscription,
   actionSubscriptionLevel,
 } from "discourse/plugins/discourse-custom-wizard/discourse/lib/wizard-schema";
 import { empty, equal, or } from "@ember/object/computed";
@@ -99,7 +100,9 @@ export default Component.extend(UndoChanges, {
 
   @discourseComputed("subscribed", "subscription")
   actionTypes(subscribed, subscription) {
-    let unsubscribedActions = actionsRequiringAdditionalSubscription(
+    let unsubscribedActions = requiringAdditionalSubscription (subscription, "actions");
+    debugger;
+    let unsubscribedActionslong = actionsRequiringAdditionalSubscription(
       subscription
     );
     return Object.keys(wizardSchema.action.types).reduce((result, type) => {

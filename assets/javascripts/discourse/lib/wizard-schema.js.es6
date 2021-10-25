@@ -221,13 +221,75 @@ const custom_field = {
   },
 }
 
+const subscription_levels = {
+  standard: {
+    actions: ["send_message", "add_to_group", "watch_categories"],
+    custom_fields: {
+      klasses: [],
+      types: ["json"]
+    }
+  },
+
+  business: {
+    actions: ["create_category", "create_group", "send_to_api"],
+    custom_fields: {
+      klasses: ["group", "category"],
+      types: []
+    }
+  }
+}
+
 const wizardSchema = {
   wizard,
   step,
   field,
   custom_field,
   action,
-};
+  subscription_levels
+}
+
+export function requiringAdditionalSubscription(
+  currentSubscription, category
+) {
+  switch (currentSubscription) {
+    case "business":
+      return [];
+    case "standard":
+      return subscription_levels["business"].[category];
+    default:
+      return subscription_levels["standard"].[category].concat(
+        subscription_levels["business"].[category]
+      );
+  }
+}
+
+
+export function SubscriptionLevel(category, type, subCategory) {
+  switch (category) {
+    case "actions":
+      if (subscription_levels.["business"].actions.includes(type)) {
+        return "business"
+      } else {
+        if (subscription_levels.["standard"].actions.includes(type)) {
+          return "standard"
+        } else {
+          return ""
+        }
+      }
+    case "custom_fields":
+      if (subscription_levels.["business"].custom_fields[subCategory].includes(type)) {
+        return "business"
+      } else {
+        if (subscription_levels.["standard"].custom_fields[subCategory].includes(type)) {
+          return "standard"
+        } else {
+          return ""
+        }
+      }
+    default:
+      return "";
+  }
+}
 
 export function actionsRequiringAdditionalSubscription(
   currentSubscription
