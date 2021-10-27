@@ -312,7 +312,7 @@ describe CustomWizard::Action do
       log_entry = CustomWizard::Api::LogEntry.list("my_api").first
 
       expect(result).to eq({ error: "API request failed" })
-      expect(log_entry.status).to eq('FAILURE')
+      expect(log_entry.status).to eq('FAIL')
     end
   end
 end
