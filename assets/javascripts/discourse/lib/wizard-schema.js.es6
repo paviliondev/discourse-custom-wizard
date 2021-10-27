@@ -264,20 +264,20 @@ export function requiringAdditionalSubscription(
 export function subscriptionLevel(type, category, subCategory) {
   switch (category) {
     case "actions":
-      if (subscription_levels.["business"].actions.includes(type)) {
+      if (subscription_levels["business"].actions.includes(type)) {
         return "business"
       } else {
-        if (subscription_levels.["standard"].actions.includes(type)) {
+        if (subscription_levels["standard"].actions.includes(type)) {
           return "standard"
         } else {
           return ""
         }
       }
     case "custom_fields":
-      if (subscription_levels.["business"].custom_fields[subCategory].includes(type)) {
+      if (subscription_levels["business"].custom_fields[subCategory].includes(type)) {
         return "business"
       } else {
-        if (subscription_levels.["standard"].custom_fields[subCategory].includes(type)) {
+        if (subscription_levels["standard"].custom_fields[subCategory].includes(type)) {
           return "standard"
         } else {
           return ""
