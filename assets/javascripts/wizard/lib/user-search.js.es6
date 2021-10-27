@@ -27,12 +27,12 @@ function performSearch(
   // need to be able to cancel this
   oldSearch = $.ajax(getUrl("/u/search/users"), {
     data: {
-      term: term,
+      term,
       topic_id: topicId,
       include_groups: includeGroups,
       include_mentionable_groups: includeMentionableGroups,
       include_messageable_groups: includeMessageableGroups,
-      group: group,
+      group,
       topic_allowed_users: allowedUsers,
     },
   });
