@@ -238,10 +238,10 @@ export function requiringAdditionalSubscription(
         case "business":
           return [];
         case "standard":
-          return subscription_levels["business"].[category];
+          return subscription_levels["business"][category];
         default:
-          return subscription_levels["standard"].[category].concat(
-            subscription_levels["business"].[category]
+          return subscription_levels["standard"][category].concat(
+            subscription_levels["business"][category]
           );
       }
     case "custom_fields":
@@ -249,10 +249,10 @@ export function requiringAdditionalSubscription(
         case "business":
           return [];
         case "standard":
-          return subscription_levels["business"].[category].[subCategory];
+          return subscription_levels["business"][category][subCategory];
         default:
-          return subscription_levels["standard"].[category].[subCategory].concat(
-            subscription_levels["business"].[category].[subCategory]
+          return subscription_levels["standard"][category][subCategory].concat(
+            subscription_levels["business"][category][subCategory]
           );
       }
     default:
