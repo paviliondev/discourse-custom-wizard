@@ -475,7 +475,7 @@ en:
           not_subscribed: You're not currently subscribed
           subscription:
             title:
-              community: Community Subscription
+              standard: Standard Subscription
               business: Business Subscription
             status:
               active: Active
