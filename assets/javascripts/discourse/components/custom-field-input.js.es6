@@ -1,7 +1,6 @@
 import Component from "@ember/component";
 import discourseComputed, { observes } from "discourse-common/utils/decorators";
 import { alias, equal, or } from "@ember/object/computed";
-import { computed } from "@ember/object";
 import I18n from "I18n";
 
 import wizardSchema, {
@@ -48,7 +47,7 @@ export default Component.extend({
         id: type,
         name: I18n.t(`admin.wizard.custom_field.type.${type}`),
         subscription: subscriptionLevel(type, "custom_fields", "types"),
-        disabled: disabled,
+        disabled,
       });
       return result;
     }, []);
@@ -65,7 +64,7 @@ export default Component.extend({
         id: klass,
         name: I18n.t(`admin.wizard.custom_field.klass.${klass}`),
         subscription: subscriptionLevel(klass, "custom_fields", "klasses"),
-        disabled: disabled,
+        disabled,
       });
       return result;
     }, []);

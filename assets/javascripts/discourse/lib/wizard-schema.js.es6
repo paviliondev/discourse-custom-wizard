@@ -200,7 +200,7 @@ const action = {
 const custom_field = {
   klasses: ["topic", "post", "group", "category"],
   types: ["string", "boolean", "integer", "json"],
-}
+};
 
 const subscription_levels = {
   standard: {
@@ -218,7 +218,7 @@ const subscription_levels = {
       types: []
     }
   }
-}
+};
 
 const wizardSchema = {
   wizard,
@@ -227,7 +227,7 @@ const wizardSchema = {
   custom_field,
   action,
   subscription_levels
-}
+};
 
 export function requiringAdditionalSubscription(
   currentSubscription, category, subCategory
@@ -258,8 +258,7 @@ export function requiringAdditionalSubscription(
     default:
       return [];
   }
-}
-
+};
 
 export function subscriptionLevel(type, category, subCategory) {
   switch (category) {
@@ -286,15 +285,15 @@ export function subscriptionLevel(type, category, subCategory) {
     default:
       return "";
   }
-}
+};
 
 export function buildFieldTypes(types) {
   wizardSchema.field.types = types;
-}
+};
 
 export function buildFieldValidations(validations) {
   wizardSchema.field.validations = validations;
-}
+};
 
 const siteSettings = getOwner(this).lookup("site-settings:main");
 if (siteSettings.wizard_apis_enabled) {
@@ -303,7 +302,7 @@ if (siteSettings.wizard_apis_enabled) {
     api_endpoint: null,
     api_body: null,
   };
-}
+};
 
 export function setWizardDefaults(obj, itemType) {
   const objSchema = wizardSchema[itemType];
@@ -329,6 +328,6 @@ export function setWizardDefaults(obj, itemType) {
   }
 
   return obj;
-}
+};
 
 export default wizardSchema;

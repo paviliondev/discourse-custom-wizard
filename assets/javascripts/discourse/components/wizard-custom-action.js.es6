@@ -106,7 +106,7 @@ export default Component.extend(UndoChanges, {
         id: type,
         name: I18n.t(`admin.wizard.action.${type}.label`),
         subscription: subscriptionLevel(type, "actions", ""),
-        disabled: disabled,
+        disabled,
       });
       return result;
     }, []);
