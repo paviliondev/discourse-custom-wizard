@@ -143,7 +143,7 @@ class CustomWizard::Mapper
       if value == "present"
         result = key.public_send(operator)
       elsif ["true", "false"].include?(value)
-        result = key.public_send(operator, ActiveRecord::Type::Boolean.new.cast(value))
+        result = bool(key).public_send(operator, bool(value))
       end
     elsif [key, value, operator].all? { |i| !i.nil? }
       result = key.public_send(operator, value)
@@ -264,5 +264,9 @@ class CustomWizard::Mapper
     k = keys.shift
     result = data[k]
     keys.empty? ? result : self.recurse(result, keys)
+  end
+
+  def bool(value)
+    ActiveRecord::Type::Boolean.new.cast(value)
   end
 end
