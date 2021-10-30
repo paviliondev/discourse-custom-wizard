@@ -119,12 +119,12 @@ after_initialize do
 
   Liquid::Template.register_filter(::CustomWizard::LiquidFilter::FirstNonEmpty)
 
-  add_to_class(:topic, :wizard_created) do
-    custom_fields['wizard_created']
+  add_to_class(:topic, :wizard_id) do
+    custom_fields['wizard_id']
   end
 
-  add_to_class(:topic, :wizard_submission) do
-    custom_fields['wizard_submission']
+  add_to_class(:topic, :wizard_submission_id) do
+    custom_fields['wizard_submission_id']
   end
 
   add_class_method(:wizard, :user_requires_completion?) do |user|

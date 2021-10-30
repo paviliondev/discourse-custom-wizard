@@ -517,8 +517,8 @@ class CustomWizard::Action
       skip_validations: true,
       topic_opts: {
         custom_fields: {
-          wizard_created: @wizard.id,
-          wizard_submission: @wizard.current_submission.id
+          wizard_id: @wizard.id,
+          wizard_submission_id: @wizard.current_submission.id
         }
       }
     }

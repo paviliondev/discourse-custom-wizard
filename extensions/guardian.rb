@@ -21,7 +21,7 @@ module CustomWizardGuardian
   end
 
   def creating_wizard(topic)
-    wizard_id = topic.wizard_created.presence
+    wizard_id = topic.wizard_id.presence
     wizard = CustomWizard::Builder.new(wizard_id, @user).build if wizard_id
     wizard.presence
   end
@@ -38,7 +38,7 @@ module CustomWizardGuardian
 
     submission_data = begin
       submissions = CustomWizard::Submission.list(wizard)
-      submissions.find { |sub| sub.id == topic.wizard_submission }&.fields_and_meta
+      submissions.find { |sub| sub.id == topic.wizard_submission_id }&.fields_and_meta
     end
 
     categories = wizard_actions.map do |action|
