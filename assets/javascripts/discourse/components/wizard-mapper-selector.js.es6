@@ -24,6 +24,8 @@ const customFieldActionMap = {
   user: ["update_profile"],
 };
 
+const values = ["present", "true", "false"];
+
 export default Component.extend({
   classNameBindings: [":mapper-selector", "activeType"],
 
@@ -59,6 +61,9 @@ export default Component.extend({
   }),
   showCustomField: computed("activeType", function () {
     return this.showInput("customField");
+  }),
+  showValue: computed("activeType", function () {
+    return this.showInput("value");
   }),
   textEnabled: computed("options.textSelection", "inputType", function () {
     return this.optionEnabled("textSelection");
@@ -117,6 +122,9 @@ export default Component.extend({
   listEnabled: computed("options.listSelection", "inputType", function () {
     return this.optionEnabled("listSelection");
   }),
+  valueEnabled: computed("connector", function () {
+    return this.connector === "is";
+  }),
 
   groups: alias("site.groups"),
   categories: alias("site.categories"),
@@ -125,7 +133,8 @@ export default Component.extend({
     "showWizardAction",
     "showUserField",
     "showUserFieldOptions",
-    "showCustomField"
+    "showCustomField",
+    "showValue"
   ),
   showMultiSelect: or("showCategory", "showGroup"),
   hasTypes: gt("selectorTypes.length", 1),
@@ -157,7 +166,7 @@ export default Component.extend({
     }
   },
 
-  @discourseComputed
+  @discourseComputed("connector")
   selectorTypes() {
     return selectionTypes
       .filter((type) => this[`${type}Enabled`])
@@ -268,6 +277,13 @@ export default Component.extend({
         }));
     }
 
+    if (activeType === "value") {
+      content = values.map((value) => ({
+        id: value,
+        name: value,
+      }));
+    }
+
     return content;
   },
 
@@ -337,7 +353,7 @@ export default Component.extend({
   resetActiveType() {
     this.set(
       "activeType",
-      defaultSelectionType(this.selectorType, this.options)
+      defaultSelectionType(this.selectorType, this.options, this.connector)
     );
   },
 

@@ -124,6 +124,7 @@ en:
             group: "group"
             list: "list"
             custom_field: "custom field"
+            value: "value"
 
           placeholder:
             text: "Enter text"
@@ -138,7 +139,8 @@ en:
             group: "Select group"
             list: "Enter item"
             custom_field: "Select field"
-            
+            value: "Select value"
+
         error:
           failed: "failed to save wizard"
           required: "{{type}} requires {{property}}"

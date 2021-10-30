@@ -105,11 +105,16 @@ const selectionTypes = [
   "tag",
   "user",
   "customField",
+  "value",
 ];
 
-function defaultSelectionType(inputType, options = {}) {
+function defaultSelectionType(inputType, options = {}, connector = null) {
   if (options[`${inputType}DefaultSelection`]) {
     return options[`${inputType}DefaultSelection`];
+  }
+
+  if (connector === "is") {
+    return "value";
   }
 
   let type = selectionTypes[0];

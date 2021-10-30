@@ -5,6 +5,7 @@
   "author": "Pavilion",
   "license": "GPL V2",
   "devDependencies": {
-    "eslint-config-discourse": "^1.1.8"
+    "eslint-config-discourse": "^1.1.8",
+    "semver": "^7.3.5"
   }
 }
