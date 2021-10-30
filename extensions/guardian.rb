@@ -9,7 +9,7 @@ module CustomWizardGuardian
   end
 
   def can_create_post?(parent)
-    result = parent.present? ? wizard_user_can_create_topic_on_category?(parent) : false 
+    result = parent.present? ? wizard_user_can_create_topic_on_category?(parent) : false
     result || super
   end
 
@@ -23,7 +23,7 @@ module CustomWizardGuardian
   def creating_wizard(topic)
     wizard_id = topic.wizard_created.presence
     wizard = CustomWizard::Builder.new(wizard_id, @user).build if wizard_id
-    return wizard.presence
+    wizard.presence
   end
 
   def wizard_can_create_topic_on_category?(wizard, topic)
