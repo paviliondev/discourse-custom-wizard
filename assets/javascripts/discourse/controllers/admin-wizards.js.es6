@@ -1,20 +1,26 @@
-import Controller from "@ember/controller";
-import { popupAjaxError } from "discourse/lib/ajax-error";
-import { ajax } from "discourse/lib/ajax";
+import Controller, { inject as controller } from "@ember/controller";
+import { isPresent } from "@ember/utils";
+import { A } from "@ember/array";
 
 export default Controller.extend({
-  actions: {
-    dismissNotice(noticeId) {
-      ajax(`/admin/wizards/notice/${this.id}`, {
-        type: "DELETE",
-      })
-        .then((result) => {
-          if (result.success) {
-            const notices = this.notices;
-            notices.removeObject(notices.findBy("id", noticeId));
-          }
-        })
-        .catch(popupAjaxError);
-    },
+  adminWizardsNotices: controller(),
+
+  unsubscribe() {
+    this.messageBus.unsubscribe("/custom-wizard/notices");
   },
+
+  subscribe() {
+    this.unsubscribe();
+    this.messageBus.subscribe("/custom-wizard/notices", (data) => {
+      if (isPresent(data.active_notice_count)) {
+        this.set("activeNoticeCount", data.active_notice_count);
+        this.adminWizardsNotices.setProperties({
+          notices: A(),
+          page: 0,
+          canLoadMore: true
+        });
+        this.adminWizardsNotices.loadMoreNotices();
+      }
+    });
+  }
 });

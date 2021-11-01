@@ -1,51 +1,39 @@
 <div class="notice-header">
-  {{#if resolved}}
-    <div class="notice-expired-at notice-badge" title={{notice.expired_at}}>
-      {{d-icon "check"}}
-      <span class="notice-resolved">{{i18n "admin.wizard.notice.resolved"}}</span>
-      {{format-date notice.expired_at leaveAgo="true"}}
-    </div>
-  {{/if}}
-
-  <div class="notice-title notice-badge" title={{title}}>
-    {{d-icon icon}}
-    <span>{{title}}</span>
+  <div class="notice-title notice-badge notice-message">
+    <a role="button" {{action "toggleCookedMessage"}} class="show-notice-message">{{notice.title}}</a>
+    {{#if showCookedMessage}}
+      <span class="cooked-notice-message">{{cookedMessage}}</span>
+    {{/if}}
   </div>
+  <div class="notice-header-right">
+    {{#if notice.expired}}
+      {{notice-badge class="notice-expired-at" icon="check" label="admin.wizard.notice.expired_at" date=notice.expired_at}}
+    {{/if}}
+    {{#if showPlugin}}
+      {{notice-badge class="notice-plugin" icon="plug" title="admin.wizard.notice.plugin" label="admin.wizard.notice.plugin" url="/admin/wizards/notices"}}
+    {{/if}}
+    {{notice-badge class="notice-created-at" icon="far-clock" label="admin.wizard.notice.created_at" date=notice.created_at leaveAgo=true}}
+    {{#if notice.updated_at}}
+      {{notice-badge class="notice-updated-at" icon="far-clock" label="admin.wizard.notice.updated_at" date=notice.updated_at}}
+    {{/if}}
 
-  <div class="notice-created-at notice-badge" title={{notice.created_at}}>
-    {{d-icon "far-clock"}}
-    <span class="notice-issued">{{i18n "admin.wizard.notice.issued"}}</span>
-    {{format-date notice.created_at leaveAgo="true"}}
-  </div>
-
-  {{#if notice.updated_at}}
-    <div class="notice-updated-at notice-badge" title={{notice.updated_at}}>
-      {{d-icon "calendar-alt"}}
-      <span class="notice-updated">{{i18n "admin.wizard.notice.updated"}}</span>
-      {{format-date notice.updated_at leaveAgo="true"}}
-    </div>
-  {{/if}}
-
-  <div class="notice-plugin notice-badge" title={{i18n "admin.wizard.notice.plugin"}}>
-    {{d-icon "plug"}}
-    <span>{{i18n "admin.wizard.notice.plugin"}}</span>
+    {{#if notice.canDismiss}}
+      <div class="dismiss-notice-container">
+        {{#if dismissing}}
+          {{loading-spinner size="small"}}
+        {{else}}
+          <a {{action "dismiss"}} role="button" class="dismiss-notice">{{d-icon "times"}}</a>
+        {{/if}}
+      </div>
+    {{/if}}
+    {{#if notice.canHide}}
+      <div class="hide-notice-container">
+        {{#if hiding}}
+          {{loading-spinner size="small"}}
+        {{else}}
+          <a {{action "hide"}} role="button" class="hide-notice">{{d-icon "far-eye-slash"}}</a>
+        {{/if}}
+      </div>
+    {{/if}}
   </div>
 </div>
-
-<div class="notice-message">
-  {{html-safe notice.message}}
-</div>
-
-{{#if importantOnDashboard}}
-  <a href="/admin/site_settings/category/all_results?filter=wizard_important_notices_on_dashboard" class="disable-important">
-    {{i18n "admin.wizard.notice.disable_important_on_dashboard"}}
-  </a>
-{{/if}}
-
-{{#if canDismiss}}
-  {{#if dismissing}}
-    {{loading-spinner size="small"}}
-  {{else}}
-    <a {{action "dismiss"}} role="button" class="dismiss-notice">{{d-icon "times"}}</a>
-  {{/if}}
-{{/if}}

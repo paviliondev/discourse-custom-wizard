@@ -1,35 +1,9 @@
 import Component from "@ember/component";
-import discourseComputed from "discourse-common/utils/decorators";
-import { not, notEmpty } from "@ember/object/computed";
-import I18n from "I18n";
+import NoticeMessage from "../mixins/notice-message";
 
-export default Component.extend({
-  classNameBindings: [
-    ":wizard-notice",
-    "notice.type",
-    "dismissed",
-    "expired",
-    "resolved",
-  ],
-  showFull: false,
-  resolved: notEmpty("notice.expired_at"),
-  dismissed: notEmpty("notice.dismissed_at"),
-  canDismiss: not("dismissed"),
-
-  @discourseComputed("notice.type")
-  title(type) {
-    return I18n.t(`admin.wizard.notice.title.${type}`);
-  },
-
-  @discourseComputed("notice.type")
-  icon(type) {
-    return {
-      plugin_status_warning: "exclamation-circle",
-      plugin_status_connection_error: "bolt",
-      subscription_messages_connection_error: "bolt",
-      info: "info-circle",
-    }[type];
-  },
+export default Component.extend(NoticeMessage, {
+  attributeBindings: ["notice.id:data-notice-id"],
+  classNameBindings: [':wizard-notice', 'notice.typeClass', 'notice.dismissed:dismissed', 'notice.expired:expired', 'notice.hidden:hidden'],
 
   actions: {
     dismiss() {
@@ -38,5 +12,12 @@ export default Component.extend({
         this.set("dismissing", false);
       });
     },
-  },
+
+    hide() {
+      this.set('hiding', true);
+      this.notice.hide().then(() => {
+        this.set('hiding', false);
+      });
+    },
+  }
 });

@@ -112,6 +112,9 @@ en:
             select: "Select a wizard to see its logs"
             viewing: "View recent logs for wizards on the forum"
             documentation: "Check out the logs documentation"
+          notices:
+            info: "Plugin status and subscription notices"
+            documentation: Check out the notices documentation
 
         editor:
           show: "Show"
@@ -485,14 +488,31 @@ en:
 
         notice:
           plugin: Custom Wizard Plugin
-          issued: Issued
-          update: Updated
-          resolved: Resolved
-          title:
-            plugin_status_warning: Warning Notice
-            plugin_status_connection_error: Connection Notice
-            subscription_messages_connection_error: Connection Notice
-          disable_important_on_dashboard: disable
+          message: Message
+          time: Time
+          status: Status
+          title: Title
+          dismiss:
+            label: Dismiss
+            title: Dismiss notice
+          dismiss_all:
+            label: Dismiss All
+            title: Dismiss all informational Custom Wizard notices
+            confirm: Are you sure you want to dismiss all informational Custom Wizard notices?
+          active: active
+          created_at: issued
+          updated_at: updated
+          expired_at: expired
+          dismissed_at: dismissed
+          type:
+            label: Type
+            info: Information
+            warning: Warning
+            connection_error: Connection Error
+
+        notices:
+          nav_label: Notices
+          title: Plugin Notices
 
   wizard_js:
     group:

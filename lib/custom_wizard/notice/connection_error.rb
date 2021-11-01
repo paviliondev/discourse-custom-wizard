@@ -2,80 +2,73 @@
 
 class CustomWizard::Notice::ConnectionError
 
-  attr_reader :type_key
+  attr_reader :archetype
 
-  def initialize(type_key)
-    @type_key = type_key
+  def initialize(archetype)
+    @archetype = archetype
   end
 
   def create!
-    id = "#{type_key.to_s}_error"
-
-    if attrs = PluginStore.get(namespace, id)
+    if attrs = current_error
+      key = "#{archetype.to_s}_error_#{attrs["id"]}"
       attrs['updated_at'] = Time.now
       attrs['count'] = attrs['count'].to_i + 1
     else
-      domain = CustomWizard::Notice.send("#{type_key.to_s}_domain")
+      domain = CustomWizard::Notice.send("#{archetype.to_s}_domain")
+      id = SecureRandom.hex(8)
       attrs = {
+        id: id,
         message: I18n.t("wizard.notice.connection_error", domain: domain),
-        type: self.class.types[type_key],
+        archetype: CustomWizard::Notice.archetypes[archetype.to_sym],
         created_at: Time.now,
         count: 1
       }
+      key = "#{archetype.to_s}_error_#{id}"
     end
 
-    PluginStore.set(namespace, id, attrs)
+    PluginStore.set(namespace, key, attrs)
     @errors = nil
   end
 
   def expire!
-    if errors.exists?
-      errors.each do |error_row|
-        error = JSON.parse(error_row.value)
-        error['expired_at'] = Time.now
-        error_row.value = error.to_json
-        error_row.save
-      end
+    if query = current_error(query_only: true)
+      record = query.first
+      error = JSON.parse(record.value)
+      error['expired_at'] = Time.now
+      record.value = error.to_json
+      record.save
     end
-  end
-
-  def self.types
-    @types ||= Enum.new(
-      plugin_status: 0,
-      subscription_messages: 1
-    )
   end
 
   def plugin_status_limit
     5
   end
 
-  def subscription_messages_limit
+  def subscription_message_limit
     10
   end
 
   def limit
-    self.send("#{type_key.to_s}_limit")
+    self.send("#{archetype.to_s}_limit")
   end
 
   def reached_limit?
-    return false unless errors.exists?
+    return false unless current_error.present?
     current_error['count'].to_i >= limit
-  end
-
-  def current_error
-    JSON.parse(errors.first.value)
   end
 
   def namespace
     "#{CustomWizard::PLUGIN_NAME}_notice_connection"
   end
 
-  def errors
-    @errors ||= begin
+  def current_error(query_only: false)
+    @current_error ||= begin
       query = PluginStoreRow.where(plugin_name: namespace)
-      query = query.where("(value::json->>'type')::integer = ?", self.class.types[type_key])
-      query.where("(value::json->>'expired_at') IS NULL")
+      query = query.where("(value::json->>'archetype')::integer = ?", CustomWizard::Notice.archetypes[archetype])
+      query = query.where("(value::json->>'expired_at') IS NULL")
+      return nil if !query.exists?
+      return query if query_only
+      JSON.parse(query.first.value)
     end
   end
 end

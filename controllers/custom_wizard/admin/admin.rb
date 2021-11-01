@@ -6,8 +6,12 @@ class CustomWizard::AdminController < ::Admin::AdminController
     render_json_dump(
       #TODO replace with appropriate static?
       api_section: ["business"].include?(CustomWizard::Subscription.type),
-      notices: ActiveModel::ArraySerializer.new(
-        CustomWizard::Notice.list,
+      active_notice_count: CustomWizard::Notice.active_count,
+      featured_notices: ActiveModel::ArraySerializer.new(
+        CustomWizard::Notice.list(
+          type: CustomWizard::Notice.types[:info],
+          archetype: CustomWizard::Notice.archetypes[:subscription_message]
+        ),
         each_serializer: CustomWizard::NoticeSerializer
       )
     )

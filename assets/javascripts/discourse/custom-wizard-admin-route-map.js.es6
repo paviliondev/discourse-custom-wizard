@@ -63,6 +63,11 @@ export default {
           path: "/subscription",
           resetNamespace: true,
         });
+
+        this.route("adminWizardsNotices", {
+          path: "/notices",
+          resetNamespace: true,
+        });
       }
     );
   },

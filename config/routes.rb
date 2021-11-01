@@ -52,6 +52,9 @@ Discourse::Application.routes.append do
     delete 'admin/wizards/subscription/authorize' => 'admin_subscription#destroy_authentication'
 
     get 'admin/wizards/notice' => 'admin_notice#index'
-    put 'admin/wizards/notice/:notice_id' => 'admin_notice#dismiss'
+    put 'admin/wizards/notice/:notice_id/dismiss' => 'admin_notice#dismiss'
+    put 'admin/wizards/notice/:notice_id/hide' => 'admin_notice#hide'
+    put 'admin/wizards/notice/dismiss' => 'admin_notice#dismiss_all'
+    get 'admin/wizards/notices' => 'admin_notice#index'
   end
 end

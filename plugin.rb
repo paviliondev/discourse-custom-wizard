@@ -245,7 +245,10 @@ after_initialize do
   end
 
   AdminDashboardData.add_problem_check do
-    warning_notices = CustomWizard::Notice.list(type: CustomWizard::Notice.types[:plugin_status_warning])
+    warning_notices = CustomWizard::Notice.list(
+      type: CustomWizard::Notice.types[:warning],
+      archetype: CustomWizard::Notice.archetypes[:plugin_status]
+    )
     warning_notices.any? ? ActionView::Base.full_sanitizer.sanitize(warning_notices.first.message, tags: %w(a)) : nil
   end
 

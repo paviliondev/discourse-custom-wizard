@@ -54,21 +54,21 @@ en:
 
     notice:
       connection_error: "Failed to connect to http://%{domain}"
-      compatibility_issue: >
-        The Custom Wizard Plugin has a compatibility issue with the latest version of Discourse.
-        Please check the Custom Wizard Plugin status on [%{domain}](http://%{domain}) before updating Discourse.
+      compatibility_issue:
+        title: The Custom Wizard Plugin is incompatibile with the latest version of Discourse.
+        message: Please check the Custom Wizard Plugin status on [%{domain}](http://%{domain}) before updating Discourse.
       plugin_status:
-        connection_error_limit: >
-          We're unable to connect to the Pavilion Plugin Status Server. Please check the Custom Wizard Plugin status on [%{domain}](http://%{domain}) before updating Discourse or the plugin.
-          If this connection issue persists please contact <a href="mailto:support@thepavilion.io">support@thepavilion.io</a> for further assistance.
-      subscription_messages:
-        connection_error_limit: >
-          We're unable to connect to the Pavilion Subscription Server. This will not affect the operation of the plugin. 
-          If this connection issue persists please contact <a href="mailto:support@thepavilion.io">support@thepavilion.io</a> for further assistance.
+        connection_error:
+          title: Unable to connect to the Custom Wizard Plugin status server
+          message: Please check the Custom Wizard Plugin status on [%{domain}](http://%{domain}) before updating Discourse. If this issue persists contact <a href="mailto:support@thepavilion.io">support@thepavilion.io</a> for further assistance.
+      subscription_message:
+        connection_error: 
+          title: Unable to connect to the Custom Wizard Plugin subscription server
+          message: If this issue persists contact <a href="mailto:support@thepavilion.io">support@thepavilion.io</a> for further assistance.
 
   site_settings:
     custom_wizard_enabled: "Enable custom wizards."
     wizard_redirect_exclude_paths: "Routes excluded from wizard redirects."
     wizard_recognised_image_upload_formats: "File types which will result in upload displaying an image preview"
     wizard_apis_enabled: "Enable API features (experimental)."
-    wizard_important_notices_on_dashboard: "Show important notices about the custom wizard plugin on the admin dashboard."
+    wizard_critical_notices_on_dashboard: "Show critical notices about the custom wizard plugin on the admin dashboard."
