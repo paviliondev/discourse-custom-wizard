@@ -7,7 +7,7 @@ import { getOwner } from "discourse-common/lib/get-owner";
 export function cook(text, options) {
   if (!options) {
     options = buildOptions({
-      getURL: getURL,
+      getURL,
       siteSettings: getOwner(this).lookup("site-settings:main"),
     });
   }

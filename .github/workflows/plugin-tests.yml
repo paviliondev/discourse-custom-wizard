@@ -3,6 +3,7 @@ name: Plugin Tests
 on:
   push:
     branches:
+      - stable
       - master
       - main
   pull_request:
@@ -51,6 +52,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           repository: discourse/discourse
+          ref: "${{ (github.base_ref || github.ref) }}"
           fetch-depth: 1
 
       - name: Fetch Repo Name
