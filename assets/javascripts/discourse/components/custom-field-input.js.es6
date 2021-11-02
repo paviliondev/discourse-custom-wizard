@@ -60,12 +60,12 @@ export default Component.extend({
 
   @discourseComputed("subscription")
   customFieldTypes(subscription) {
-    return generateContent("type", this.subscription);
+    return generateContent("type", subscription);
   },
 
   @discourseComputed("subscription")
   customFieldKlasses(subscription) {
-    return generateContent("klass", this.subscription);
+    return generateContent("klass", subscription);
   },
 
   @observes("field.klass")
