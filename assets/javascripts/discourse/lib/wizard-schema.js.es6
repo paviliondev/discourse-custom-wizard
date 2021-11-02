@@ -207,17 +207,17 @@ const subscription_levels = {
     actions: ["send_message", "add_to_group", "watch_categories"],
     custom_fields: {
       klass: [],
-      type: ["json"]
-    }
+      type: ["json"],
+    },
   },
 
   business: {
     actions: ["create_category", "create_group", "send_to_api"],
     custom_fields: {
       klass: ["group", "category"],
-      type: []
-    }
-  }
+      type: [],
+    },
+  },
 };
 
 const wizardSchema = {
@@ -226,11 +226,13 @@ const wizardSchema = {
   field,
   custom_field,
   action,
-  subscription_levels
+  subscription_levels,
 };
 
 export function requiringAdditionalSubscription(
-  currentSubscription, category, subCategory
+  currentSubscription,
+  category,
+  subCategory
 ) {
   switch (category) {
     case "actions":
@@ -258,7 +260,7 @@ export function requiringAdditionalSubscription(
     default:
       return [];
   }
-};
+}
 
 export function subscriptionLevel(type, category, subCategory) {
   switch (category) {
@@ -273,10 +275,18 @@ export function subscriptionLevel(type, category, subCategory) {
         }
       }
     case "custom_fields":
-      if (subscription_levels["business"].custom_fields[subCategory].includes(type)) {
+      if (
+        subscription_levels["business"].custom_fields[subCategory].includes(
+          type
+        )
+      ) {
         return "business";
       } else {
-        if (subscription_levels["standard"].custom_fields[subCategory].includes(type)) {
+        if (
+          subscription_levels["standard"].custom_fields[subCategory].includes(
+            type
+          )
+        ) {
           return "standard";
         } else {
           return "";
@@ -285,15 +295,15 @@ export function subscriptionLevel(type, category, subCategory) {
     default:
       return "";
   }
-};
+}
 
 export function buildFieldTypes(types) {
   wizardSchema.field.types = types;
-};
+}
 
 export function buildFieldValidations(validations) {
   wizardSchema.field.validations = validations;
-};
+}
 
 const siteSettings = getOwner(this).lookup("site-settings:main");
 if (siteSettings.wizard_apis_enabled) {
@@ -302,7 +312,7 @@ if (siteSettings.wizard_apis_enabled) {
     api_endpoint: null,
     api_body: null,
   };
-};
+}
 
 export function setWizardDefaults(obj, itemType) {
   const objSchema = wizardSchema[itemType];
@@ -328,6 +338,6 @@ export function setWizardDefaults(obj, itemType) {
   }
 
   return obj;
-};
+}
 
 export default wizardSchema;

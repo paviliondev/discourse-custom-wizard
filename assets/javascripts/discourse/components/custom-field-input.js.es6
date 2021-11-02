@@ -10,7 +10,9 @@ import wizardSchema, {
 
 const generateContent = function (kategory, subscription) {
   let unsubscribedCustomFields = requiringAdditionalSubscription(
-    subscription, "custom_fields", kategory
+    subscription,
+    "custom_fields",
+    kategory
   );
   return wizardSchema.custom_field[kategory].reduce((result, item) => {
     let disabled = unsubscribedCustomFields.includes(item);
