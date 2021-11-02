@@ -26,18 +26,18 @@ const CustomWizard = EmberObject.extend({
 CustomWizard.reopenClass({
   skip(wizardId) {
     ajax({ url: `/w/${wizardId}/skip`, type: "PUT" })
-    .then((result) => {
-      CustomWizard.finished(result);
-    })
-    .catch(popupAjaxError);
+      .then((result) => {
+        CustomWizard.finished(result);
+      })
+      .catch(popupAjaxError);
   },
 
   restart(wizardId) {
     ajax({ url: `/w/${wizardId}/skip`, type: "PUT" })
-    .then(() => {
-      window.location.href = `/w/${wizardId}`;
-    })
-    .catch(popupAjaxError);
+      .then(() => {
+        window.location.href = `/w/${wizardId}`;
+      })
+      .catch(popupAjaxError);
   },
 
   finished(result) {
