@@ -5,6 +5,7 @@ class CustomWizard::WizardController < ::ApplicationController
   layout 'wizard'
 
   before_action :ensure_plugin_enabled
+  before_action :ensure_logged_in, only: [:skip]
   helper_method :wizard_page_title
   helper_method :wizard_theme_id
   helper_method :wizard_theme_lookup
