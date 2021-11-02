@@ -20,7 +20,7 @@ describe Jobs::CustomWizardUpdateNotices do
   }
 
   it "updates the notices" do
-    stub_request(:get, CustomWizard::Notice.subscription_messages_url).to_return(status: 200, body: { messages: [subscription_message] }.to_json)
+    stub_request(:get, CustomWizard::Notice.subscription_message_url).to_return(status: 200, body: { messages: [subscription_message] }.to_json)
     stub_request(:get, CustomWizard::Notice.plugin_status_url).to_return(status: 200, body: { status: plugin_status }.to_json)
 
     described_class.new.execute

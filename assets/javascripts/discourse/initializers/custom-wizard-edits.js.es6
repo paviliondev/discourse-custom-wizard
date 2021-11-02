@@ -41,6 +41,7 @@ export default {
         subscribe() {
           this.unsubscribe();
           this.messageBus.subscribe("/custom-wizard/notices", (data) => {
+
             if (isPresent(data.active_notice_count)) {
               this.loadCriticalNotices();
             }

@@ -43,24 +43,30 @@ class CustomWizard::Notice
   def dismiss!
     if dismissable?
       self.dismissed_at = Time.now
-      self.save
-      self.class.publish_notice_count
+      self.save_and_publish
     end
   end
 
   def hide!
     if can_hide?
       self.hidden_at = Time.now
-      self.save
-      self.class.publish_notice_count
+      self.save_and_publish
     end
   end
 
   def expire!
     if !expired?
       self.expired_at = Time.now
-      self.save
+      self.save_and_publish
+    end
+  end
+
+  def save_and_publish
+    if self.save
       self.class.publish_notice_count
+      true
+    else
+      false
     end
   end
 
@@ -95,7 +101,6 @@ class CustomWizard::Notice
       updated_at: updated_at,
       retrieved_at: retrieved_at,
       created_at: created_at,
-      hidden_at: hidden_at,
       title: title,
       message: message,
       type: type,
@@ -104,6 +109,7 @@ class CustomWizard::Notice
 
     if current = self.class.find(self.id)
       attrs[:dismissed_at] = current.dismissed_at || self.dismissed_at
+      attrs[:hidden_at] = current.hidden_at || self.hidden_at
     end
 
     self.class.store(id, attrs)
@@ -146,7 +152,6 @@ class CustomWizard::Notice
     end
 
     if notices.any?
-
       notices.each do |notice_data|
         notice = new(notice_data)
         notice.retrieved_at = Time.now
@@ -166,18 +171,16 @@ class CustomWizard::Notice
 
   def self.convert_subscription_messages_to_notices(messages)
     messages.reduce([]) do |result, message|
-      notice_id = generate_notice_id(message[:title], message[:created_at])
-
-      unless exists?(notice_id)
-        result.push(
-          title: message[:title],
-          message: message[:message],
-          type: types[message[:type].to_sym],
-          archetype: archetypes[:subscription_message],
-          created_at: message[:created_at],
-          expired_at: message[:expired_at]
-        )
-      end
+      id = generate_notice_id(message[:title], message[:created_at])
+      result.push(
+        id: id,
+        title: message[:title],
+        message: message[:message],
+        type: types[message[:type].to_sym],
+        archetype: archetypes[:subscription_message],
+        created_at: message[:created_at],
+        expired_at: message[:expired_at]
+      )
       result
     end
   end
@@ -298,11 +301,11 @@ class CustomWizard::Notice
     PluginStore.set(namespace, id, raw_notice)
   end
 
-  def self.list_query(type: nil, archetype: nil, title: nil, include_all: false, include_recently_expired: false, page: nil, visible: false)
+  def self.list_query(type: nil, archetype: nil, title: nil, include_all: false, page: nil, visible: false)
     query = PluginStoreRow.where(plugin_name: namespace)
     query = query.where("(value::json->>'hidden_at') IS NULL") if visible
     query = query.where("(value::json->>'dismissed_at') IS NULL") unless include_all
-    query = query.where("(value::json->>'expired_at') IS NULL#{include_recently_expired ? " OR (value::json->>'expired_at')::date > now()::date - 1" : ""}") unless include_all
+    query = query.where("(value::json->>'expired_at') IS NULL") unless include_all
     query = query.where("(value::json->>'archetype')::integer = ?", archetype) if archetype
     if type
       type_query_str = type.is_a?(Array) ? "(value::json->>'type')::integer IN (?)" : "(value::json->>'type')::integer = ?" 
@@ -313,8 +316,8 @@ class CustomWizard::Notice
     query.order("value::json->>'expired_at' DESC, value::json->>'updated_at' DESC,value::json->>'dismissed_at' DESC, value::json->>'created_at' DESC")
   end
 
-  def self.list(type: nil, archetype: nil, title: nil, include_all: false, include_recently_expired: false, page: 0, visible: false)
-    list_query(type: type, archetype: archetype, title: title, include_all: include_all, include_recently_expired: include_recently_expired, page: page, visible: visible)
+  def self.list(type: nil, archetype: nil, title: nil, include_all: false, page: 0, visible: false)
+    list_query(type: type, archetype: archetype, title: title, include_all: include_all, page: page, visible: visible)
       .map { |r| self.new(JSON.parse(r.value).symbolize_keys) }
   end
 

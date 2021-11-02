@@ -10,9 +10,9 @@ class CustomWizard::Notice::ConnectionError
 
   def create!
     if attrs = current_error
-      key = "#{archetype.to_s}_error_#{attrs["id"]}"
-      attrs['updated_at'] = Time.now
-      attrs['count'] = attrs['count'].to_i + 1
+      key = "#{archetype.to_s}_error_#{attrs[:id]}"
+      attrs[:updated_at] = Time.now
+      attrs[:count] = attrs[:count].to_i + 1
     else
       domain = CustomWizard::Notice.send("#{archetype.to_s}_domain")
       id = SecureRandom.hex(8)
@@ -27,7 +27,8 @@ class CustomWizard::Notice::ConnectionError
     end
 
     PluginStore.set(namespace, key, attrs)
-    @errors = nil
+
+    @current_error = nil
   end
 
   def expire!
@@ -54,7 +55,7 @@ class CustomWizard::Notice::ConnectionError
 
   def reached_limit?
     return false unless current_error.present?
-    current_error['count'].to_i >= limit
+    current_error[:count].to_i >= limit
   end
 
   def namespace
@@ -64,11 +65,13 @@ class CustomWizard::Notice::ConnectionError
   def current_error(query_only: false)
     @current_error ||= begin
       query = PluginStoreRow.where(plugin_name: namespace)
-      query = query.where("(value::json->>'archetype')::integer = ?", CustomWizard::Notice.archetypes[archetype])
+      query = query.where("(value::json->>'archetype')::integer = ?", CustomWizard::Notice.archetypes[archetype.to_sym])
       query = query.where("(value::json->>'expired_at') IS NULL")
+
       return nil if !query.exists?
       return query if query_only
-      JSON.parse(query.first.value)
+
+      JSON.parse(query.first.value).deep_symbolize_keys
     end
   end
 end
