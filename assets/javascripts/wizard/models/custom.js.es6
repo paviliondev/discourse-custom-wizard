@@ -2,6 +2,7 @@ import { default as computed } from "discourse-common/utils/decorators";
 import getUrl from "discourse-common/lib/get-url";
 import WizardField from "wizard/models/wizard-field";
 import { ajax } from "wizard/lib/ajax";
+import { popupAjaxError } from "discourse/lib/ajax-error";
 import Step from "wizard/models/step";
 import EmberObject from "@ember/object";
 import Site from "./site";
@@ -24,15 +25,19 @@ const CustomWizard = EmberObject.extend({
 
 CustomWizard.reopenClass({
   skip(wizardId) {
-    ajax({ url: `/w/${wizardId}/skip`, type: "PUT" }).then((result) => {
+    ajax({ url: `/w/${wizardId}/skip`, type: "PUT" })
+    .then((result) => {
       CustomWizard.finished(result);
-    });
+    })
+    .catch(popupAjaxError);
   },
 
   restart(wizardId) {
-    ajax({ url: `/w/${wizardId}/skip`, type: "PUT" }).then(() => {
+    ajax({ url: `/w/${wizardId}/skip`, type: "PUT" })
+    .then(() => {
       window.location.href = `/w/${wizardId}`;
-    });
+    })
+    .catch(popupAjaxError);
   },
 
   finished(result) {
