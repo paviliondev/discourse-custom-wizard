@@ -198,24 +198,24 @@ const action = {
 };
 
 const custom_field = {
-  klasses: ["topic", "post", "group", "category"],
-  types: ["string", "boolean", "integer", "json"],
+  klass: ["topic", "post", "group", "category"],
+  type: ["string", "boolean", "integer", "json"],
 };
 
 const subscription_levels = {
   standard: {
     actions: ["send_message", "add_to_group", "watch_categories"],
     custom_fields: {
-      klasses: [],
-      types: ["json"]
+      klass: [],
+      type: ["json"]
     }
   },
 
   business: {
     actions: ["create_category", "create_group", "send_to_api"],
     custom_fields: {
-      klasses: ["group", "category"],
-      types: []
+      klass: ["group", "category"],
+      type: []
     }
   }
 };

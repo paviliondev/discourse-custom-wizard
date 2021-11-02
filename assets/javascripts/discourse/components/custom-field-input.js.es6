@@ -8,6 +8,22 @@ import wizardSchema, {
   subscriptionLevel,
 } from "discourse/plugins/discourse-custom-wizard/discourse/lib/wizard-schema";
 
+const generateContent = function (kategory, subscription) {
+  let unsubscribedCustomFields = requiringAdditionalSubscription(
+    subscription, "custom_fields", kategory
+  );
+  return wizardSchema.custom_field[kategory].reduce((result, item) => {
+    let disabled = unsubscribedCustomFields.includes(item);
+    result.push({
+      id: item,
+      name: I18n.t(`admin.wizard.custom_field.${kategory}.${item}`),
+      subscription: subscriptionLevel(item, "custom_fields", kategory),
+      disabled,
+    });
+    return result;
+  }, []);
+};
+
 export default Component.extend({
   tagName: "tr",
   topicSerializers: ["topic_view", "topic_list_item"],
@@ -25,49 +41,29 @@ export default Component.extend({
     this.set("originalField", JSON.parse(JSON.stringify(this.field)));
   },
 
-  // @discourseComputed("field.klass")
-  // serializerContent(klass) {
-  //   const serializers = this.get(`${klass}Serializers`);
+  @discourseComputed("field.klass")
+  serializerContent(klass) {
+    const serializers = this.get(`${klass}Serializers`);
 
-  //   if (serializers) {
-  //     return generateContent(serializers, "serializers", this.subscribed);
-  //   } else {
-  //     return [];
-  //   }
-  // },
+    if (serializers) {
+      return serializers.reduce((result, key) => {
+        result.push({
+          id: key,
+          name: I18n.t(`admin.wizard.custom_field.serializers.${key}`),
+        });
+        return result;
+      }, []);
+    }
+  },
 
   @discourseComputed("subscription")
   customFieldTypes(subscription) {
-    let unsubscribedCustomFields = requiringAdditionalSubscription(
-      subscription, "custom_fields", "types"
-    );
-    return wizardSchema.custom_field.types.reduce((result, type) => {
-      let disabled = unsubscribedCustomFields.includes(type);
-      result.push({
-        id: type,
-        name: I18n.t(`admin.wizard.custom_field.type.${type}`),
-        subscription: subscriptionLevel(type, "custom_fields", "types"),
-        disabled,
-      });
-      return result;
-    }, []);
+    return generateContent("type", this.subscription);
   },
 
   @discourseComputed("subscription")
   customFieldKlasses(subscription) {
-    let unsubscribedCustomFields = requiringAdditionalSubscription(
-      subscription, "custom_fields", "klasses"
-    );
-    return wizardSchema.custom_field.klasses.reduce((result, klass) => {
-      let disabled = unsubscribedCustomFields.includes(klass);
-      result.push({
-        id: klass,
-        name: I18n.t(`admin.wizard.custom_field.klass.${klass}`),
-        subscription: subscriptionLevel(klass, "custom_fields", "klasses"),
-        disabled,
-      });
-      return result;
-    }, []);
+    return generateContent("klass", this.subscription);
   },
 
   @observes("field.klass")
