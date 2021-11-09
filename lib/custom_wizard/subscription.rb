@@ -61,23 +61,23 @@ class CustomWizard::Subscription
     when "actions"
       case self.type
       when "business"
-        return []
+        []
       when "standard"
-        return SUBSCRIPTION_LEVELS[:business][kategory.to_sym]
+        SUBSCRIPTION_LEVELS[:business][kategory.to_sym]
       else
-        return SUBSCRIPTION_LEVELS[:standard][kategory.to_sym] + SUBSCRIPTION_LEVELS[:business][kategory.to_sym]
+        SUBSCRIPTION_LEVELS[:standard][kategory.to_sym] + SUBSCRIPTION_LEVELS[:business][kategory.to_sym]
       end
     when "custom_fields"
       case self.type
       when "business"
-        return []
+        []
       when "standard"
-        return SUBSCRIPTION_LEVELS[:business][kategory.to_sym][sub_kategory.to_sym];
+        SUBSCRIPTION_LEVELS[:business][kategory.to_sym][sub_kategory.to_sym];
       else
-        return SUBSCRIPTION_LEVELS[:standard][kategory.to_sym][sub_kategory.to_sym] + SUBSCRIPTION_LEVELS[:business][kategory.to_sym][sub_kategory.to_sym]
+        SUBSCRIPTION_LEVELS[:standard][kategory.to_sym][sub_kategory.to_sym] + SUBSCRIPTION_LEVELS[:business][kategory.to_sym][sub_kategory.to_sym]
       end
     else
-     return []
+      []
     end
   end
 
