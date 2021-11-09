@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
-# about: Create custom wizards
+# about: Create custom wizards for topic creation, onboarding, user surveys and much more.
 # version: 0.8.1
-# authors: Angus McLeod
+# authors: Angus McLeod, Faizaan Gagan, Robert Barrow, Keegan George
+# contact_emails: support@thepavilion.io
 # url: https://github.com/paviliondev/discourse-custom-wizard
-# contact emails: angus@thepavilion.io
+# tests_passed_test_url: https://plugins.discourse.pavilion.tech/w/super-mega-fun-wizard
+# stable_test_url: https://stable.plugins.discourse.pavilion.tech/w/super-mega-fun-wizard
 
 gem 'liquid', '5.0.1', require: true
 register_asset 'stylesheets/admin/admin.scss', :desktop
