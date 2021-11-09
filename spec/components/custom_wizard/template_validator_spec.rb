@@ -75,7 +75,7 @@ describe CustomWizard::TemplateValidator do
 
   context "with subscription" do
     before do
-      enable_subscription
+      enable_subscription("standard")
     end
 
     it "validates wizard attributes" do

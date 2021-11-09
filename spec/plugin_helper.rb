@@ -29,8 +29,10 @@ def authenticate_subscription
   CustomWizard::Subscription::Authentication.any_instance.stubs(:active?).returns(true)
 end
 
-def enable_subscription
+def enable_subscription(type)
+  # CustomWizard::Subscription.new
   CustomWizard::Subscription.any_instance.stubs(:subscribed?).returns(true)
+  CustomWizard::Subscription.any_instance.stubs(:type).returns(type)
 end
 
 def disable_subscription

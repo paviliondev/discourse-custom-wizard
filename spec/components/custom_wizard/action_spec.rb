@@ -179,7 +179,7 @@ describe CustomWizard::Action do
 
   context "subscription actions" do
     before do
-      enable_subscription
+      enable_subscription("standard")
     end
 
     it '#send_message' do

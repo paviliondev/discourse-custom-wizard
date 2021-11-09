@@ -17,9 +17,8 @@ class ::CustomWizard::CustomField
     category: ["basic_category"],
     post: ["post"]
   }
-  SUBSCRIPTION_CLASSES ||= ['category', 'group']
+
   TYPES ||= ["string", "boolean", "integer", "json"]
-  SUBSCRIPTION_TYPES ||= ["json"]
   LIST_CACHE_KEY ||= 'custom_field_list'
 
   def self.serializers
@@ -84,8 +83,7 @@ class ::CustomWizard::CustomField
         add_error(I18n.t("#{i18n_key}.unsupported_class", class: value))
         next
       end
-
-      if attr == 'klass' && SUBSCRIPTION_CLASSES.include?(value) && !@subscription.subscribed?
+      if attr == 'klass' && @subscription.requires_additional_subscription("custom_fields", "klass").include?(value)
         add_error(I18n.t("wizard.custom_field.error.subscription_type", type: value))
       end
 
@@ -100,7 +98,7 @@ class ::CustomWizard::CustomField
         add_error(I18n.t("#{i18n_key}.unsupported_type", type: value))
       end
 
-      if attr == 'type' && SUBSCRIPTION_TYPES.include?(value) && !@subscription.subscribed?
+      if attr == 'type' && @subscription.requires_additional_subscription("custom_fields", "type").include?(value)
         add_error(I18n.t("wizard.custom_field.error.subscription_type", type: value))
       end
 

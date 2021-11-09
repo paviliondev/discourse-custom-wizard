@@ -6,6 +6,23 @@ class CustomWizard::Subscription
   attr_accessor :authentication,
                 :subscription
 
+  SUBSCRIPTION_LEVELS = {
+    standard: {
+      actions: ["send_message", "add_to_group", "watch_categories"],
+      custom_fields: {
+        klass: [],
+        type: ["json"],
+      },
+    },
+    business: {
+      actions: ["create_category", "create_group", "send_to_api"],
+      custom_fields: {
+        klass: ["group", "category"],
+        type: [],
+      },
+    },
+  }
+
   def initialize
     @authentication = CustomWizard::Subscription::Authentication.new(get_authentication)
     @subscription = CustomWizard::Subscription::Subscription.new(get_subscription)
@@ -37,6 +54,31 @@ class CustomWizard::Subscription
 
   def scope
     "discourse-subscription-server:user_subscription"
+  end
+
+  def requires_additional_subscription(kategory, sub_kategory)
+    case kategory
+    when "actions"
+      case self.type
+      when "business"
+        return []
+      when "standard"
+        return SUBSCRIPTION_LEVELS[:business][kategory.to_sym]
+      else
+        return SUBSCRIPTION_LEVELS[:standard][kategory.to_sym] + SUBSCRIPTION_LEVELS[:business][kategory.to_sym]
+      end
+    when "custom_fields"
+      case self.type
+      when "business"
+        return []
+      when "standard"
+        return SUBSCRIPTION_LEVELS[:business][kategory.to_sym][sub_kategory.to_sym];
+      else
+        return SUBSCRIPTION_LEVELS[:standard][kategory.to_sym][sub_kategory.to_sym] + SUBSCRIPTION_LEVELS[:business][kategory.to_sym][sub_kategory.to_sym]
+      end
+    else
+     return []
+    end
   end
 
   def update
@@ -125,6 +167,10 @@ class CustomWizard::Subscription
 
   def self.type
     self.new.type
+  end
+
+  def self.requires_additional_subscription(kategory, sub_kategory)
+    self.new.requires_additional_subscription(kategory, sub_kategory)
   end
 
   def self.authorized?

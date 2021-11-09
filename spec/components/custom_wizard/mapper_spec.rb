@@ -359,7 +359,7 @@ describe CustomWizard::Mapper do
 
     context "with a subscription" do
       before do
-        enable_subscription
+        enable_subscription("standard")
       end
 
       it "treats replaced values as string literals" do
