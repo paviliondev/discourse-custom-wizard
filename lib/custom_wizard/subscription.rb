@@ -72,7 +72,7 @@ class CustomWizard::Subscription
       when "business"
         []
       when "standard"
-        SUBSCRIPTION_LEVELS[:business][kategory.to_sym][sub_kategory.to_sym];
+        SUBSCRIPTION_LEVELS[:business][kategory.to_sym][sub_kategory.to_sym]
       else
         SUBSCRIPTION_LEVELS[:standard][kategory.to_sym][sub_kategory.to_sym] + SUBSCRIPTION_LEVELS[:business][kategory.to_sym][sub_kategory.to_sym]
       end
