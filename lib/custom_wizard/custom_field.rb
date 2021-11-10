@@ -83,6 +83,7 @@ class ::CustomWizard::CustomField
         add_error(I18n.t("#{i18n_key}.unsupported_class", class: value))
         next
       end
+
       if attr == 'klass' && @subscription.requires_additional_subscription("custom_fields", "klass").include?(value)
         add_error(I18n.t("wizard.custom_field.error.subscription_type", type: value))
       end
