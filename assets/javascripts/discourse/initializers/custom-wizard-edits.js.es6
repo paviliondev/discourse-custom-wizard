@@ -21,18 +21,20 @@ export default {
 
     withPluginApi("0.8.7", (api) => {
       api.modifyClass("component:d-navigation", {
-        pluginId: 'custom-wizard',
+        pluginId: "custom-wizard",
         actions: {
-          clickCreateTopicButton(){
-            let createTopicWizard = this.get('category.custom_fields.create_topic_wizard');
+          clickCreateTopicButton() {
+            let createTopicWizard = this.get(
+              "category.custom_fields.create_topic_wizard"
+            );
             if (createTopicWizard) {
               window.location.href = getUrl(`/w/${createTopicWizard}`);
             } else {
               this._super();
             }
-          }
-        }
-      })
+          },
+        },
+      });
     });
   },
 };
