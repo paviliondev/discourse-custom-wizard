@@ -60,6 +60,9 @@ en:
         select_type: "Select a type"
         condition: "Condition"
         index: "Index"
+        category_settings:
+          create_topic_wizard: "Create Topic Wizard"
+          select_wizard: "Select a wizard you want to use for creating topics in this category"
         
         message:
           wizard:
