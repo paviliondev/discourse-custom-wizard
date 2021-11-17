@@ -116,8 +116,15 @@ after_initialize do
     load File.expand_path(path, __FILE__)
   end
 
+  # preloaded category custom fields
+  %w[
+    create_topic_wizard
+  ]
+  .each do |custom_field|
+    Site.preloaded_category_custom_fields << custom_field
+  end
+
   Liquid::Template.register_filter(::CustomWizard::LiquidFilter::FirstNonEmpty)
-  Site.preloaded_category_custom_fields << "create_topic_wizard"
 
   add_class_method(:wizard, :user_requires_completion?) do |user|
     wizard_result = self.new(user).requires_completion?
