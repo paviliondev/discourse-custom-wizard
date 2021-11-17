@@ -186,7 +186,7 @@ describe CustomWizard::Wizard do
 
   it "lists the site categories" do
     Site.clear_cache
-    expect(@wizard.categories.length).to eq(1)
+    expect(@wizard.categories.length > 0).to eq(true)
   end
 
   context "submissions" do

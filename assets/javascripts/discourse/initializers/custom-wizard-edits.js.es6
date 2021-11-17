@@ -1,6 +1,7 @@
 import DiscourseURL from "discourse/lib/url";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import CustomWizardNotice from "../models/custom-wizard-notice";
+import { isPresent } from "@ember/utils";
 import { A } from "@ember/array";
 
 export default {
@@ -22,35 +23,43 @@ export default {
 
     withPluginApi("0.8.36", (api) => {
       api.modifyClass("route:admin-dashboard", {
-        afterModel() {
-          return CustomWizardNotice.list().then((result) => {
-            if (result && result.length) {
-              this.set(
-                "notices",
-                A(result.map((n) => CustomWizardNotice.create(n)))
-              );
+        setupController(controller) {
+          this._super(...arguments);
+
+          controller.loadCriticalNotices();
+          controller.subscribe();
+        },
+      });
+
+      api.modifyClass("controller:admin-dashboard", {
+        criticalNotices: A(),
+
+        unsubscribe() {
+          this.messageBus.unsubscribe("/custom-wizard/notices");
+        },
+
+        subscribe() {
+          this.unsubscribe();
+          this.messageBus.subscribe("/custom-wizard/notices", (data) => {
+            if (isPresent(data.active_notice_count)) {
+              this.loadCriticalNotices();
             }
           });
         },
 
-        setupController(controller) {
-          if (this.notices) {
-            let pluginStatusConnectionError = this.notices.filter(
-              (n) => n.type === "plugin_status_connection_error"
-            )[0];
-            let pluginStatusWarning = this.notices.filter(
-              (n) => n.type === "plugin_status_warning"
-            )[0];
-
-            if (pluginStatusConnectionError || pluginStatusWarning) {
-              controller.set(
-                "customWizardImportantNotice",
-                pluginStatusConnectionError || pluginStatusWarning
+        loadCriticalNotices() {
+          CustomWizardNotice.list({
+            type: ["connection_error", "warning"],
+            archetype: "plugin_status",
+            visible: true,
+          }).then((result) => {
+            if (result.notices && result.notices.length) {
+              const criticalNotices = A(
+                result.notices.map((n) => CustomWizardNotice.create(n))
               );
+              this.set("customWizardCriticalNotices", criticalNotices);
             }
-          }
-
-          this._super(...arguments);
+          });
         },
       });
     });

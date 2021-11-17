@@ -4,14 +4,24 @@
 @import "common/components/buttons";
 @import "wizard/variables";
 
+$expired: #339b18;
+$info: #038ae7;
+$warning: #d47e00;
+$error: #ef1700;
+
 .admin-wizard-controls {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 10px;
+  min-height: 34px;
 
   & + .wizard-message + div {
     margin-top: 20px;
+  }
+
+  h3 {
+    margin-bottom: 0;
   }
 }
 
@@ -909,87 +919,142 @@
   }
 }
 
+.admin-wizards-notices {
+  .wizard-table {
+    overflow: unset;
+  }
+}
+
 .wizard-notice {
-  padding: 1em;
+  padding: 0.75em;
   margin-bottom: 1em;
-  border: 1px solid var(--primary);
-  position: relative;
+  border: 1px solid var(--primary-low);
 
   &.dismissed {
     display: none;
   }
 
-  &.resolved .notice-badge:not(.notice-expired-at),
-  &.resolved a,
-  &.resolved p {
+  &.expired .notice-badge:not(.notice-expired-at),
+  &.expired a,
+  &.expired p {
     color: var(--primary-medium) !important;
   }
 
-  .d-icon {
-    margin-right: 0.4em;
+  .notice-badge {
+    padding: 0 0.5em;
   }
 
   .notice-header {
     display: flex;
-  }
-
-  .notice-badge {
-    border: 1px solid var(--primary);
-    display: inline-flex;
-    align-items: center;
-    padding: 0 0.5em;
-    margin-right: 1em;
-    font-size: 0.9em;
-    line-height: 25px;
-    min-height: 25px;
-    box-sizing: border-box;
-
-    &:last-of-type {
-      margin-right: 0;
-    }
-  }
-
-  &.warning {
-    .notice-expired-at {
-      border: 1px solid var(--success);
-      background-color: rgba($success, 0.1);
-      color: var(--success);
-    }
 
     .notice-title {
-      border: 1px solid var(--pavilion-warning);
-      background-color: rgba($pavilion_warning, 0.1);
-      color: var(--pavilion-warning);
+      padding: 0;
+    }
+
+    .notice-header-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+
+      .notice-badge {
+        margin-left: 0.5em;
+      }
     }
   }
 
-  .notice-issued,
-  .notice-resolved {
-    margin-right: 0.3em;
-  }
-
-  .notice-message {
-    p {
-      margin: 0.5em 0;
-    }
-
-    p:last-of-type {
-      margin-bottom: 0;
-    }
+  .dismiss-notice-container,
+  .hide-notice-container {
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .dismiss-notice,
-  .spinner {
-    position: absolute;
-    top: 1em;
-    right: 1em;
-    color: var(--primary-medium);
-  }
+  .hide-notice {
+    display: flex;
+    align-items: center;
 
-  .disable-important {
-    position: absolute;
-    right: 3em;
-    top: 1em;
-    color: var(--primary-medium);
+    .d-icon {
+      margin-right: 0;
+      color: var(--primary);
+    }
+  }
+}
+
+.notice-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 25px;
+  box-sizing: border-box;
+  color: var(--primary) !important;
+}
+
+.admin-actions {
+  display: flex;
+  align-items: center;
+}
+
+.wizard-notices-link {
+  position: relative;
+  margin-right: 10px;
+
+  div > a {
+    @include btn;
+    color: var(--secondary) !important;
+    background-color: var(--primary-medium);
+
+    &.active {
+      background-color: var(--tertiary) !important;
+      color: var(--secondary) !important;
+    }
+  }
+}
+
+.active-notice-count {
+  background-color: $danger;
+  color: $secondary;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+  text-align: center;
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 0.7em;
+}
+
+a.show-notice-message {
+  padding: 0.25em 0.5em;
+  color: var(--primary);
+}
+
+.wizard-notice,
+.wizard-notice-row:not(.expired):not(.dismissed) {
+  &.info {
+    background-color: rgba($info, 0.1);
+    border: 1px solid rgba($info, 0.5);
+  }
+  &.warning,
+  &.connection-error {
+    background-color: rgba($warning, 0.1);
+    border: 1px solid rgba($warning, 0.5);
+  }
+}
+
+.notice-message {
+  position: relative;
+
+  .cooked-notice-message {
+    background-color: var(--secondary);
+    padding: 1em;
+    z-index: 1;
+    box-shadow: shadow("dropdown");
+    border-top: 1px solid var(--primary-low);
+
+    p {
+      margin: 0;
+    }
   }
 }
