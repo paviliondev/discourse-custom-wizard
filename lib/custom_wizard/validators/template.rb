@@ -17,10 +17,12 @@ class CustomWizard::TemplateValidator
 
     data[:steps].each do |step|
       check_required(step, :step)
+      validate_liquid_template(step, :step)
 
       if data[:fields].present?
         data[:fields].each do |field|
           check_required(field, :field)
+          validate_liquid_template(field, :field)
         end
       end
     end
@@ -28,6 +30,7 @@ class CustomWizard::TemplateValidator
     if data[:actions].present?
       data[:actions].each do |action|
         check_required(action, :action)
+        validate_liquid_template(action, :action)
       end
     end
 
@@ -78,6 +81,43 @@ class CustomWizard::TemplateValidator
 
     if invalid_time || active_time.blank? || active_time < Time.now.utc
       errors.add :base, I18n.t("wizard.validation.after_time")
+    end
+  end
+
+  def validate_liquid_template(object, type)
+    valid = true
+
+    case type
+    when :field
+      is_description_valid = is_liquid_template_valid?(object['description'])
+      is_placeholder_valid = is_liquid_template_valid?(object['placeholder'])
+      is_preview_template_valid = begin
+        return true unless object[:type] == 'composer_preview'
+        is_liquid_template_valid?(object['preview_template'])
+      end
+
+      if !is_description_valid || !is_placeholder_valid || !is_preview_template_valid
+        valid = false
+      end
+    when :step
+      if !is_liquid_template_valid?(object['description'])
+        valid = false
+      end
+    when :action
+      if object['post_builder']
+        valid = is_liquid_template_valid?(object['post_template'])
+      end
+    end
+
+    errors.add :base, I18n.t("wizard.validation.liquid_syntax_error") unless valid
+  end
+
+  def is_liquid_template_valid?(template)
+    begin
+      Liquid::Template.parse(template)
+      true
+    rescue Liquid::SyntaxError
+      false
     end
   end
 end

@@ -45,4 +45,28 @@ describe CustomWizard::TemplateValidator do
       CustomWizard::TemplateValidator.new(template).perform
     ).to eq(false)
   end
+
+  it "validates if no liquid syntax is in use" do
+    expect(
+      CustomWizard::TemplateValidator.new(template).perform
+    ).to eq(true)
+  end
+
+  it "validates if liquid syntax in use is correct" do
+    template[:steps][0][:description] = <<-LIQUID.strip
+      {%- assign hello = "Topic Form 1" %}
+    LIQUID
+    expect(
+      CustomWizard::TemplateValidator.new(template).perform
+    ).to eq(true)
+  end
+
+  it "doesn't validate if liquid syntax in use is incorrect" do
+    template[:steps][0][:description] = <<-LIQUID.strip
+      {%- assign hello = "Topic Form 1" %
+    LIQUID
+    expect(
+      CustomWizard::TemplateValidator.new(template[:steps][0]).perform
+    ).to eq(false)
+  end
 end

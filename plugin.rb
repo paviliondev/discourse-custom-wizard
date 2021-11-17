@@ -116,6 +116,7 @@ after_initialize do
     load File.expand_path(path, __FILE__)
   end
 
+  Liquid::Template.error_mode = :strict
   Liquid::Template.register_filter(::CustomWizard::LiquidFilter::FirstNonEmpty)
 
   add_class_method(:wizard, :user_requires_completion?) do |user|
