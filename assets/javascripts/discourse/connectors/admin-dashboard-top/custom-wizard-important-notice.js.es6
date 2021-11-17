@@ -6,11 +6,11 @@ export default {
   },
 
   setupComponent() {
-    const controller = getOwner(this).lookup('controller:admin-dashboard');
-    const importantNotice = controller.get('customWizardImportantNotice');
+    const controller = getOwner(this).lookup("controller:admin-dashboard");
+    const importantNotice = controller.get("customWizardImportantNotice");
 
     if (importantNotice) {
-      this.set('importantNotice', importantNotice);
+      this.set("importantNotice", importantNotice);
     }
-  }
+  },
 };

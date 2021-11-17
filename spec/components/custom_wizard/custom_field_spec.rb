@@ -217,7 +217,7 @@ describe CustomWizard::CustomField do
 
     context "with a subscription" do
       before do
-        enable_subscription
+        enable_subscription("business")
       end
 
       it "saves subscription field types" do

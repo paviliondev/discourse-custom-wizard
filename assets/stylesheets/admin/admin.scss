@@ -788,11 +788,6 @@
   vertical-align: middle;
 }
 
-.subscription-label {
-  color: var(--tertiary);
-  font-size: 0.75em;
-}
-
 .admin-wizards-subscription {
   .admin-wizard-controls {
     h3,
@@ -853,14 +848,21 @@
 }
 
 .wizard-subscription-selector.select-kit.single-select {
-  .select-kit-row .texts {
-    display: flex;
-    align-items: center;
+  .select-kit-row {
+    .texts {
+      display: flex;
+      align-items: center;
+    }
+    &.disabled {
+      background: var(--primary-low);
+    }
   }
 
   .subscription-label {
     margin-left: 0.75em;
     padding-top: 0.25em;
+    color: var(--tertiary);
+    font-size: 0.75em;
   }
 }
 
@@ -924,7 +926,7 @@
   }
 
   .d-icon {
-    margin-right: .4em;
+    margin-right: 0.4em;
   }
 
   .notice-header {
@@ -935,9 +937,9 @@
     border: 1px solid var(--primary);
     display: inline-flex;
     align-items: center;
-    padding: 0 .5em;
+    padding: 0 0.5em;
     margin-right: 1em;
-    font-size: .9em;
+    font-size: 0.9em;
     line-height: 25px;
     min-height: 25px;
     box-sizing: border-box;
@@ -963,12 +965,12 @@
 
   .notice-issued,
   .notice-resolved {
-    margin-right: .3em;
+    margin-right: 0.3em;
   }
 
   .notice-message {
     p {
-      margin: .5em 0;
+      margin: 0.5em 0;
     }
 
     p:last-of-type {

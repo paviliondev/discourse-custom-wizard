@@ -25,7 +25,9 @@ export default Component.extend({
 
   @discourseComputed("stateClass")
   stateLabel(stateClass) {
-    return I18n.t(`admin.wizard.subscription.subscription.status.${stateClass}`);
+    return I18n.t(
+      `admin.wizard.subscription.subscription.status.${stateClass}`
+    );
   },
 
   actions: {

@@ -466,7 +466,8 @@ en:
 
         subscription:
           nav_label: Subscription
-          label: Subscription
+          label: In subscription
+          additional_label: "Add subscription"
           title: Custom Wizard Subscription
           authorize: Authorize
           authorized: Authorized
@@ -474,7 +475,7 @@ en:
           not_subscribed: You're not currently subscribed
           subscription:
             title:
-              community: Community Subscription
+              standard: Standard Subscription
               business: Business Subscription
             status:
               active: Active

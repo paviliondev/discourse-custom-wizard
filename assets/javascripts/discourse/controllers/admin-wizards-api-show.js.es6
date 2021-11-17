@@ -11,7 +11,7 @@ export default Controller.extend({
   queryParams: ["refresh_list"],
   loadingSubscriptions: false,
   notAuthorized: not("api.authorized"),
-  endpointMethods: selectKitContent(["GET", "PUT", "POST", "PATCH", "DELETE"]),
+  endpointMethods: selectKitContent(["PUT", "POST", "PATCH", "DELETE"]),
   showRemove: not("isNew"),
   showRedirectUri: and("threeLeggedOauth", "api.name"),
   responseIcon: null,

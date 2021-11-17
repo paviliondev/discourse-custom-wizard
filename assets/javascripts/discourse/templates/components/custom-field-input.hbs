@@ -2,14 +2,14 @@
   <td>
     {{wizard-subscription-selector
       value=field.klass
-      content=klassContent
+      content=customFieldKlasses
       none="admin.wizard.custom_field.klass.select"
       onChange=(action (mut field.klass))}}
   </td>
   <td>
     {{wizard-subscription-selector
       value=field.type
-      content=typeContent
+      content=customFieldTypes
       none="admin.wizard.custom_field.type.select"
       onChange=(action (mut field.type))}}
   </td>

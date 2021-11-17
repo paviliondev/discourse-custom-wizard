@@ -1,27 +1,27 @@
 import Component from "@ember/component";
 import discourseComputed, { observes } from "discourse-common/utils/decorators";
 import { alias, equal, or } from "@ember/object/computed";
-import { computed } from "@ember/object";
 import I18n from "I18n";
 
-const klasses = ["topic", "post", "group", "category"];
-const types = ["string", "boolean", "integer", "json"];
-const subscriptionTypes = {
-  klass: ["group", "category"],
-  type: ["json"],
-};
+import wizardSchema, {
+  requiringAdditionalSubscription,
+  subscriptionLevel,
+} from "discourse/plugins/discourse-custom-wizard/discourse/lib/wizard-schema";
 
-const generateContent = function (array, type, subscribed = false) {
-  return array.reduce((result, key) => {
-    let subArr = subscriptionTypes[type];
-    let subscription = subArr && subArr.includes(key);
-    if (!subscription || subscribed) {
-      result.push({
-        id: key,
-        name: I18n.t(`admin.wizard.custom_field.${type}.${key}`),
-        subscription,
-      });
-    }
+const generateContent = function (kategory, subscription) {
+  let unsubscribedCustomFields = requiringAdditionalSubscription(
+    subscription,
+    "custom_fields",
+    kategory
+  );
+  return wizardSchema.custom_field[kategory].reduce((result, item) => {
+    let disabled = unsubscribedCustomFields.includes(item);
+    result.push({
+      id: item,
+      name: I18n.t(`admin.wizard.custom_field.${kategory}.${item}`),
+      subscription: subscriptionLevel(item, "custom_fields", kategory),
+      disabled,
+    });
     return result;
   }, []);
 };
@@ -32,12 +32,6 @@ export default Component.extend({
   postSerializers: ["post"],
   groupSerializers: ["basic_group"],
   categorySerializers: ["basic_category"],
-  klassContent: computed("subscribed", function () {
-    return generateContent(klasses, "klass", this.subscribed);
-  }),
-  typeContent: computed("subscribed", function () {
-    return generateContent(types, "type", this.subscribed);
-  }),
   showInputs: or("field.new", "field.edit"),
   classNames: ["custom-field-input"],
   loading: or("saving", "destroying"),
@@ -54,10 +48,24 @@ export default Component.extend({
     const serializers = this.get(`${klass}Serializers`);
 
     if (serializers) {
-      return generateContent(serializers, "serializers", this.subscribed);
-    } else {
-      return [];
+      return serializers.reduce((result, key) => {
+        result.push({
+          id: key,
+          name: I18n.t(`admin.wizard.custom_field.serializers.${key}`),
+        });
+        return result;
+      }, []);
     }
+  },
+
+  @discourseComputed("subscription")
+  customFieldTypes(subscription) {
+    return generateContent("type", subscription);
+  },
+
+  @discourseComputed("subscription")
+  customFieldKlasses(subscription) {
+    return generateContent("klass", subscription);
   },
 
   @observes("field.klass")
