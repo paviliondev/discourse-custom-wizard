@@ -22,16 +22,16 @@ export default {
     };
 
     withPluginApi("0.8.36", (api) => {
-      api.modifyClass('route:admin-dashboard', {
+      api.modifyClass("route:admin-dashboard", {
         setupController(controller) {
           this._super(...arguments);
 
           controller.loadCriticalNotices();
           controller.subscribe();
-        }
+        },
       });
 
-      api.modifyClass('controller:admin-dashboard', {
+      api.modifyClass("controller:admin-dashboard", {
         criticalNotices: A(),
 
         unsubscribe() {
@@ -41,7 +41,6 @@ export default {
         subscribe() {
           this.unsubscribe();
           this.messageBus.subscribe("/custom-wizard/notices", (data) => {
-
             if (isPresent(data.active_notice_count)) {
               this.loadCriticalNotices();
             }
@@ -50,19 +49,18 @@ export default {
 
         loadCriticalNotices() {
           CustomWizardNotice.list({
-            type: [
-              'connection_error',
-              'warning'
-            ],
-            archetype: 'plugin_status',
-            visible: true
-          }).then(result => {
+            type: ["connection_error", "warning"],
+            archetype: "plugin_status",
+            visible: true,
+          }).then((result) => {
             if (result.notices && result.notices.length) {
-              const criticalNotices =  A(result.notices.map(n => CustomWizardNotice.create(n)));
-              this.set('customWizardCriticalNotices', criticalNotices);
+              const criticalNotices = A(
+                result.notices.map((n) => CustomWizardNotice.create(n))
+              );
+              this.set("customWizardCriticalNotices", criticalNotices);
             }
           });
-        }
+        },
       });
     });
   },

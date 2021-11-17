@@ -926,7 +926,7 @@ $error: #ef1700;
 }
 
 .wizard-notice {
-  padding: .75em;
+  padding: 0.75em;
   margin-bottom: 1em;
   border: 1px solid var(--primary-low);
 
@@ -941,7 +941,7 @@ $error: #ef1700;
   }
 
   .notice-badge {
-    padding: 0 .5em;
+    padding: 0 0.5em;
   }
 
   .notice-header {
@@ -957,7 +957,7 @@ $error: #ef1700;
       align-items: center;
 
       .notice-badge {
-        margin-left: .5em;
+        margin-left: 0.5em;
       }
     }
   }
@@ -1022,11 +1022,11 @@ $error: #ef1700;
   position: absolute;
   top: -8px;
   right: -8px;
-  font-size: .7em;
+  font-size: 0.7em;
 }
 
 a.show-notice-message {
-  padding: .25em .5em;
+  padding: 0.25em 0.5em;
   color: var(--primary);
 }
 

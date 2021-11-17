@@ -12,7 +12,7 @@ class CustomWizard::AdminNoticeController < CustomWizard::AdminController
 
     if type
       if type.is_a?(Array)
-        type = type.map { |type| CustomWizard::Notice.types[type.to_sym] }
+        type = type.map { |t| CustomWizard::Notice.types[t.to_sym] }
       else
         type = CustomWizard::Notice.types[type.to_sym]
       end
@@ -20,7 +20,7 @@ class CustomWizard::AdminNoticeController < CustomWizard::AdminController
 
     if archetype
       if archetype.is_a?(Array)
-        archetype = archetype.map { |type| CustomWizard::Notice.archetypes[archetype.to_sym] }
+        archetype = archetype.map { |t| CustomWizard::Notice.archetypes[archetype.to_sym] }
       else
         archetype = CustomWizard::Notice.archetypes[archetype.to_sym]
       end

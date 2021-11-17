@@ -6,14 +6,14 @@ export default {
   },
 
   setupComponent(attrs, component) {
-    const controller = getOwner(this).lookup('controller:admin-dashboard');
+    const controller = getOwner(this).lookup("controller:admin-dashboard");
 
-    component.set('notices', controller.get('customWizardCriticalNotices'));
-    controller.addObserver('customWizardCriticalNotices.[]', () => {
+    component.set("notices", controller.get("customWizardCriticalNotices"));
+    controller.addObserver("customWizardCriticalNotices.[]", () => {
       if (this._state === "destroying") {
         return;
       }
-      component.set('notices', controller.get('customWizardCriticalNotices'));
+      component.set("notices", controller.get("customWizardCriticalNotices"));
     });
-  }
+  },
 };

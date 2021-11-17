@@ -15,9 +15,9 @@ export default Controller.extend({
   loadingMore: false,
   canLoadMore: true,
 
-  @discourseComputed('notices.[]', 'notices.@each.dismissed')
+  @discourseComputed("notices.[]", "notices.@each.dismissed")
   allDismisssed(notices) {
-    return notices.every(n => !n.canDismiss || n.dismissed);
+    return notices.every((n) => !n.canDismiss || n.dismissed);
   },
 
   loadMoreNotices() {
@@ -35,7 +35,7 @@ export default Controller.extend({
         }
 
         this.get("notices").pushObjects(
-          A(result.notices.map(notice => CustomWizardNotice.create(notice)))
+          A(result.notices.map((notice) => CustomWizardNotice.create(notice)))
         );
       })
       .finally(() => this.set("loadingMore", false));
@@ -56,12 +56,13 @@ export default Controller.extend({
         I18n.t("yes_value"),
         (result) => {
           if (result) {
-            this.set('loadingMore', true);
-            CustomWizardNotice.dismissAll()
-              .finally(() => this.set("loadingMore", false));
+            this.set("loadingMore", true);
+            CustomWizardNotice.dismissAll().finally(() =>
+              this.set("loadingMore", false)
+            );
           }
         }
       );
-    }
-  }
+    },
+  },
 });

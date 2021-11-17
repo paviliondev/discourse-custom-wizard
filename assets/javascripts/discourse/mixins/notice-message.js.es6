@@ -6,7 +6,7 @@ import { createPopper } from "@popperjs/core";
 export default Mixin.create({
   showCookedMessage: false,
 
-  didReceiveAttrs(){
+  didReceiveAttrs() {
     const message = this.notice.message;
     cookAsync(message).then((cooked) => {
       this.set("cookedMessage", cooked);
@@ -14,27 +14,24 @@ export default Mixin.create({
   },
 
   createMessageModal() {
-    let container = this.element.querySelector('.notice-message');
-    let modal = this.element.querySelector('.cooked-notice-message');
+    let container = this.element.querySelector(".notice-message");
+    let modal = this.element.querySelector(".cooked-notice-message");
 
-    this._popper = createPopper(
-      container,
-      modal, {
-        strategy: "absolute",
-        placement: "bottom-start",
-        modifiers: [
-          {
-            name: "preventOverflow",
+    this._popper = createPopper(container, modal, {
+      strategy: "absolute",
+      placement: "bottom-start",
+      modifiers: [
+        {
+          name: "preventOverflow",
+        },
+        {
+          name: "offset",
+          options: {
+            offset: [0, 5],
           },
-          {
-            name: "offset",
-            options: {
-              offset: [0, 5],
-            },
-          },
-        ],
-      }
-    );
+        },
+      ],
+    });
   },
 
   didInsertElement() {
@@ -46,10 +43,16 @@ export default Mixin.create({
   },
 
   documentClick(event) {
-    if (this._state === "destroying") { return; }
+    if (this._state === "destroying") {
+      return;
+    }
 
-    if (!event.target.closest(`[data-notice-id="${this.notice.id}"] .notice-message`)) {
-      this.set('showCookedMessage', false);
+    if (
+      !event.target.closest(
+        `[data-notice-id="${this.notice.id}"] .notice-message`
+      )
+    ) {
+      this.set("showCookedMessage", false);
     }
   },
 
@@ -60,6 +63,6 @@ export default Mixin.create({
       if (this.showCookedMessage) {
         scheduleOnce("afterRender", this, this.createMessageModal);
       }
-    }
-  }
+    },
+  },
 });

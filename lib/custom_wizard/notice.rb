@@ -308,7 +308,7 @@ class CustomWizard::Notice
     query = query.where("(value::json->>'expired_at') IS NULL") unless include_all
     query = query.where("(value::json->>'archetype')::integer = ?", archetype) if archetype
     if type
-      type_query_str = type.is_a?(Array) ? "(value::json->>'type')::integer IN (?)" : "(value::json->>'type')::integer = ?" 
+      type_query_str = type.is_a?(Array) ? "(value::json->>'type')::integer IN (?)" : "(value::json->>'type')::integer = ?"
       query = query.where(type_query_str, type)
     end
     query = query.where("(value::json->>'title')::text = ?", title) if title

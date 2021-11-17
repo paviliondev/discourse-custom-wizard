@@ -3,7 +3,13 @@ import NoticeMessage from "../mixins/notice-message";
 
 export default Component.extend(NoticeMessage, {
   attributeBindings: ["notice.id:data-notice-id"],
-  classNameBindings: [':wizard-notice', 'notice.typeClass', 'notice.dismissed:dismissed', 'notice.expired:expired', 'notice.hidden:hidden'],
+  classNameBindings: [
+    ":wizard-notice",
+    "notice.typeClass",
+    "notice.dismissed:dismissed",
+    "notice.expired:expired",
+    "notice.hidden:hidden",
+  ],
 
   actions: {
     dismiss() {
@@ -14,10 +20,10 @@ export default Component.extend(NoticeMessage, {
     },
 
     hide() {
-      this.set('hiding', true);
+      this.set("hiding", true);
       this.notice.hide().then(() => {
-        this.set('hiding', false);
+        this.set("hiding", false);
       });
     },
-  }
+  },
 });

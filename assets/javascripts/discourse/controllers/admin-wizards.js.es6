@@ -17,10 +17,10 @@ export default Controller.extend({
         this.adminWizardsNotices.setProperties({
           notices: A(),
           page: 0,
-          canLoadMore: true
+          canLoadMore: true,
         });
         this.adminWizardsNotices.loadMoreNotices();
       }
     });
-  }
+  },
 });

@@ -9,7 +9,9 @@ export default DiscourseRoute.extend({
 
   setupController(controller, model) {
     controller.setProperties({
-      notices: A(model.notices.map(notice => CustomWizardNotice.create(notice))),
+      notices: A(
+        model.notices.map((notice) => CustomWizardNotice.create(notice))
+      ),
     });
   },
 });

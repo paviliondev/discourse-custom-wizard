@@ -23,5 +23,5 @@ export default DiscourseRoute.extend({
     if (transition.targetName === "adminWizards.index") {
       this.transitionTo("adminWizardsWizard");
     }
-  }
+  },
 });
