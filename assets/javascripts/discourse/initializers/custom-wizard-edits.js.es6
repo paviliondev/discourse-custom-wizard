@@ -23,6 +23,8 @@ export default {
 
     withPluginApi("0.8.36", (api) => {
       api.modifyClass("route:admin-dashboard", {
+        pluginId: "custom-wizard",
+
         setupController(controller) {
           this._super(...arguments);
 
@@ -32,6 +34,7 @@ export default {
       });
 
       api.modifyClass("controller:admin-dashboard", {
+        pluginId: "custom-wizard",
         criticalNotices: A(),
 
         unsubscribe() {

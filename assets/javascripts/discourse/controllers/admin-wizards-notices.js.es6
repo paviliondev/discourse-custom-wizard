@@ -29,6 +29,7 @@ export default Controller.extend({
 
     CustomWizardNotice.list({ page, include_all: true })
       .then((result) => {
+        console.log('loadMoreNotices result', result);
         if (result.notices.length === 0) {
           this.set("canLoadMore", false);
           return;
