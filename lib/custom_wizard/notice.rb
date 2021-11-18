@@ -159,9 +159,9 @@ class CustomWizard::Notice
         notice.retrieved_at = DateTime.now.iso8601(3)
         notice.save
       end
-
-      publish_notice_count
     end
+
+    publish_notice_count
   end
 
   def self.publish_notice_count
@@ -233,8 +233,6 @@ class CustomWizard::Notice
       )
       notice.save
     end
-
-    publish_notice_count
   end
 
   def self.request_plugin_status?

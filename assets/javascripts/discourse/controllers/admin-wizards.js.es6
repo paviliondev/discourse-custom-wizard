@@ -14,7 +14,6 @@ export default Controller.extend({
     this.messageBus.subscribe("/custom-wizard/notices", (data) => {
       if (isPresent(data.active_notice_count)) {
         this.set("activeNoticeCount", data.active_notice_count);
-        console.log('adminWizards resetting');
         this.adminWizardsNotices.setProperties({
           notices: A(),
           page: 0,
