@@ -4,6 +4,8 @@ class CustomWizard::Notice
   include ActiveModel::Serialization
 
   PLUGIN_STATUS_DOMAINS = {
+    "main" => "plugins.discourse.pavilion.tech",
+    "master" => "plugins.discourse.pavilion.tech",
     "tests-passed" => "plugins.discourse.pavilion.tech",
     "stable" => "stable.plugins.discourse.pavilion.tech"
   }
@@ -42,21 +44,21 @@ class CustomWizard::Notice
 
   def dismiss!
     if dismissable?
-      self.dismissed_at = Time.now
+      self.dismissed_at = DateTime.now.iso8601(3)
       self.save_and_publish
     end
   end
 
   def hide!
     if can_hide?
-      self.hidden_at = Time.now
+      self.hidden_at = DateTime.now.iso8601(3)
       self.save_and_publish
     end
   end
 
   def expire!
     if !expired?
-      self.expired_at = Time.now
+      self.expired_at = DateTime.now.iso8601(3)
       self.save_and_publish
     end
   end
@@ -154,7 +156,7 @@ class CustomWizard::Notice
     if notices.any?
       notices.each do |notice_data|
         notice = new(notice_data)
-        notice.retrieved_at = Time.now
+        notice.retrieved_at = DateTime.now.iso8601(3)
         notice.save
       end
 
@@ -218,7 +220,7 @@ class CustomWizard::Notice
 
     if notices.any?
       notice = notices.first
-      notice.updated_at = Time.now
+      notice.updated_at = DateTime.now.iso8601(3)
       notice.save
     else
       notice = new(
@@ -226,8 +228,8 @@ class CustomWizard::Notice
         message: I18n.t("wizard.notice.#{archetype.to_s}.connection_error.message", domain: domain),
         archetype: archetypes[archetype.to_sym],
         type: types[:connection_error],
-        created_at: Time.now,
-        updated_at: Time.now
+        created_at: DateTime.now.iso8601(3),
+        updated_at: DateTime.now.iso8601(3)
       )
       notice.save
     end
@@ -240,7 +242,8 @@ class CustomWizard::Notice
   end
 
   def self.subscription_message_domain
-    (Rails.env.test? || Rails.env.development?) ? LOCALHOST_DOMAIN : SUBSCRIPTION_MESSAGE_DOMAIN
+    return LOCALHOST_DOMAIN if (Rails.env.test? || Rails.env.development?)
+    SUBSCRIPTION_MESSAGE_DOMAIN
   end
 
   def self.subscription_message_url
