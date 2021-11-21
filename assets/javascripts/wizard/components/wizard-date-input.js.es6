@@ -8,4 +8,9 @@ export default DateInput.extend({
   placeholder() {
     return this.format;
   },
+  _opts() {
+    return {
+      format: this.format || "LL"
+    }
+  }
 });
