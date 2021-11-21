@@ -66,7 +66,7 @@ describe CustomWizard::TemplateValidator do
       {%- assign hello = "Topic Form 1" %
     LIQUID
     expect(
-      CustomWizard::TemplateValidator.new(template[:steps][0]).perform
+      CustomWizard::TemplateValidator.new(template).perform
     ).to eq(false)
   end
 end
