@@ -10,7 +10,7 @@ export default DateInput.extend({
   },
   _opts() {
     return {
-      format: this.format || "LL"
-    }
-  }
+      format: this.format || "LL",
+    };
+  },
 });
