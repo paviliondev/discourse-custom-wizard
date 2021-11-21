@@ -9,7 +9,7 @@ export default {
     const Router = requirejs("wizard/router").default;
     const ApplicationRoute = requirejs("wizard/routes/application").default;
     const getUrl = requirejs("discourse-common/lib/get-url").default;
-    const Store = requirejs("discourse/models/store").default;
+    const Store = requirejs("discourse/services/store").default;
     const registerRawHelpers = requirejs(
       "discourse-common/lib/raw-handlebars-helpers"
     ).registerRawHelpers;
