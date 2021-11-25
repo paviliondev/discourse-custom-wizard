@@ -245,7 +245,7 @@ class CustomWizard::Notice
   end
 
   def self.subscription_message_url
-    "http://#{subscription_message_domain}/subscription-server/messages.json"
+    "https://#{subscription_message_domain}/subscription-server/messages.json"
   end
 
   def self.plugin_status_domain
@@ -254,7 +254,7 @@ class CustomWizard::Notice
   end
 
   def self.plugin_status_url
-    "http://#{plugin_status_domain}/plugin-manager/status/discourse-custom-wizard"
+    "https://#{plugin_status_domain}/plugin-manager/status/discourse-custom-wizard"
   end
 
   def self.request(archetype)
