@@ -27,12 +27,6 @@
     flex: 0;
     margin-bottom: 0;
 
-    p {
-      img {
-        @extend img.emoji;
-      }
-    }
-
     i {
       margin-right: 7px;
     }
