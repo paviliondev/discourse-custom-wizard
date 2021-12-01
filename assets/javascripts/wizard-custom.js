@@ -4,7 +4,6 @@
 
 //= require discourse/app/mixins/singleton
 //= require discourse/app/mixins/upload
-//= require discourse/app/mixins/composer-upload
 //= require discourse/app/mixins/textarea-text-manipulation
 
 //= require discourse/app/adapters/rest

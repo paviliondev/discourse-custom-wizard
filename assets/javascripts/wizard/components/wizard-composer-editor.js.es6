@@ -4,24 +4,14 @@ import {
   on,
 } from "discourse-common/utils/decorators";
 import { findRawTemplate } from "discourse-common/lib/raw-templates";
-import { next, scheduleOnce, throttle } from "@ember/runloop";
+import { scheduleOnce, throttle } from "@ember/runloop";
 import { caretPosition, inCodeBlock } from "discourse/lib/utilities";
 import highlightSyntax from "discourse/lib/highlight-syntax";
-import { getToken } from "wizard/lib/ajax";
-import {
-  displayErrorForUpload,
-  getUploadMarkdown,
-  uploadIcon,
-  validateUploadedFiles,
-} from "discourse/lib/uploads";
-import { cacheShortUploadUrl } from "pretty-text/upload-short-url";
 import { alias } from "@ember/object/computed";
-import WizardI18n from "../lib/wizard-i18n";
 import Site from "../models/site";
+import { uploadIcon } from "discourse/lib/uploads";
+import { dasherize } from "@ember/string";
 
-const uploadMarkdownResolvers = [];
-
-const uploadHandlers = [];
 export default ComposerEditor.extend({
   classNameBindings: ["fieldClass"],
   allowUpload: true,
@@ -35,6 +25,7 @@ export default ComposerEditor.extend({
   popupMenuOptions: [],
   draftStatus: "null",
   replyPlaceholder: alias("field.placeholder"),
+  uploadingFieldId: null,
 
   @on("didInsertElement")
   _composerEditorInit() {
@@ -90,6 +81,50 @@ export default ComposerEditor.extend({
     }
 
     this._bindUploadTarget();
+
+    const wizardEventNames = ["insert-text", "replace-text"];
+    const eventPrefix = this.eventPrefix;
+    const session = this.get("session");
+    this.appEvents.reopen({
+      trigger(name, ...args) {
+        let eventParts = name.split(":");
+        let currentEventPrefix = eventParts[0];
+        let currentEventName = eventParts[1];
+
+        if (
+          currentEventPrefix !== "wizard-editor" &&
+          wizardEventNames.some((wen) => wen === currentEventName)
+        ) {
+          let wizardName = name.replace(eventPrefix, "wizard-editor");
+          if (currentEventName === "insert-text") {
+            args = {
+              text: args[0],
+            };
+          }
+          if (currentEventName === "replace-text") {
+            args = {
+              oldVal: args[0],
+              newVal: args[1],
+            };
+          }
+          let wizardArgs = Object.assign(
+            {},
+            {
+              fieldId: session.get("uploadingFieldId"),
+            },
+            args
+          );
+          return this._super(wizardName, wizardArgs);
+        } else {
+          return this._super(name, ...args);
+        }
+      },
+    });
+  },
+
+  @discourseComputed("field.id")
+  fileUploadElementId(fieldId) {
+    return `file-uploader-${dasherize(fieldId)}`;
   },
 
   @discourseComputed
@@ -103,192 +138,6 @@ export default ComposerEditor.extend({
   @discourseComputed()
   uploadIcon() {
     return uploadIcon(false, this.siteSettings);
-  },
-
-  _setUploadPlaceholderSend() {
-    if (!this.composer.get("reply")) {
-      this.composer.set("reply", "");
-    }
-    this._super(...arguments);
-  },
-
-  _bindUploadTarget() {
-    this._super(...arguments);
-    const $element = $(this.element);
-    // adding dropZone property post initialization
-    $element.fileupload("option", "dropZone", $element);
-
-    $element.off("fileuploadsubmit");
-
-    $element.on("fileuploadsubmit", (e, data) => {
-      const max = this.siteSettings.simultaneous_uploads;
-
-      // Limit the number of simultaneous uploads
-      if (max > 0 && data.files.length > max) {
-        bootbox.alert(
-          WizardI18n("post.errors.too_many_dragged_and_dropped_files", { max })
-        );
-        return false;
-      }
-
-      // Look for a matching file upload handler contributed from a plugin
-      const matcher = (handler) => {
-        const ext = handler.extensions.join("|");
-        const regex = new RegExp(`\\.(${ext})$`, "i");
-        return regex.test(data.files[0].name);
-      };
-
-      const matchingHandler = uploadHandlers.find(matcher);
-      if (data.files.length === 1 && matchingHandler) {
-        if (!matchingHandler.method(data.files[0], this)) {
-          return false;
-        }
-      }
-
-      // If no plugin, continue as normal
-      const isPrivateMessage = this.get("composer.privateMessage");
-
-      data.formData = { type: "composer" };
-      data.formData.authenticity_token = getToken();
-      if (isPrivateMessage) {
-        data.formData.for_private_message = true;
-      }
-      if (this._pasted) {
-        data.formData.pasted = true;
-      }
-
-      const opts = {
-        user: this.currentUser,
-        siteSettings: this.siteSettings,
-        isPrivateMessage,
-        allowStaffToUploadAnyFileInPm: this.siteSettings
-          .allow_staff_to_upload_any_file_in_pm,
-      };
-
-      const isUploading = validateUploadedFiles(data.files, opts);
-
-      this.setProperties({ uploadProgress: 0, isUploading });
-
-      return isUploading;
-    });
-
-    $element.on("fileuploadprogressall", (e, data) => {
-      this.set(
-        "uploadProgress",
-        parseInt((data.loaded / data.total) * 100, 10)
-      );
-    });
-
-    $element.on("fileuploadfail", (e, data) => {
-      this._setUploadPlaceholderDone(data);
-      this._resetUpload(true);
-
-      const userCancelled = this._xhr && this._xhr._userCancelled;
-      this._xhr = null;
-
-      if (!userCancelled) {
-        displayErrorForUpload(data, this.siteSettings);
-      }
-    });
-
-    $element.on("fileuploadsend", (e, data) => {
-      this._pasted = false;
-      this._validUploads++;
-
-      this._setUploadPlaceholderSend(data);
-
-      this.appEvents.trigger("wizard-editor:insert-text", {
-        fieldId: this.field.id,
-        text: this.uploadPlaceholder,
-      });
-
-      if (data.xhr && data.originalFiles.length === 1) {
-        this.set("isCancellable", true);
-        this._xhr = data.xhr();
-      }
-    });
-
-    $element.on("fileuploaddone", (e, data) => {
-      let upload = data.result;
-
-      this._setUploadPlaceholderDone(data);
-
-      if (!this._xhr || !this._xhr._userCancelled) {
-        const markdown = uploadMarkdownResolvers.reduce(
-          (md, resolver) => resolver(upload) || md,
-          getUploadMarkdown(upload)
-        );
-
-        cacheShortUploadUrl(upload.short_url, upload);
-        this.appEvents.trigger("wizard-editor:replace-text", {
-          fieldId: this.field.id,
-          oldVal: this.uploadPlaceholder.trim(),
-          newVal: markdown,
-        });
-        this._resetUpload(false);
-      } else {
-        this._resetUpload(true);
-      }
-    });
-  },
-
-  _resetUpload(removePlaceholder) {
-    next(() => {
-      if (this._validUploads > 0) {
-        this._validUploads--;
-      }
-      if (this._validUploads === 0) {
-        this.setProperties({
-          uploadProgress: 0,
-          isUploading: false,
-          isCancellable: false,
-        });
-      }
-      if (removePlaceholder) {
-        this.appEvents.trigger("wizard-editor:replace-text", {
-          fieldId: this.field.id,
-          oldVal: this.uploadPlaceholder,
-          newVal: "",
-        });
-      }
-      this._resetUploadFilenamePlaceholder();
-    });
-  },
-
-  _registerImageScaleButtonClick($preview) {
-    const imageScaleRegex = /!\[(.*?)\|(\d{1,4}x\d{1,4})(,\s*\d{1,3}%)?(.*?)\]\((upload:\/\/.*?)\)(?!(.*`))/g;
-    $preview.off("click", ".scale-btn").on("click", ".scale-btn", (e) => {
-      const index = parseInt($(e.target).parent().attr("data-image-index"), 10);
-
-      const scale = e.target.attributes["data-scale"].value;
-      const matchingPlaceholder = this.get("composer.reply").match(
-        imageScaleRegex
-      );
-
-      if (matchingPlaceholder) {
-        const match = matchingPlaceholder[index];
-
-        if (match) {
-          const replacement = match.replace(
-            imageScaleRegex,
-            `![$1|$2, ${scale}%$4]($5)`
-          );
-
-          this.appEvents.trigger("wizard-editor:replace-text", {
-            fieldId: this.field.id,
-            oldVal: matchingPlaceholder[index],
-            newVal: replacement,
-            options: {
-              regex: imageScaleRegex,
-              index,
-            },
-          });
-        }
-      }
-
-      e.preventDefault();
-      return;
-    });
   },
 
   click(e) {
@@ -372,7 +221,8 @@ export default ComposerEditor.extend({
     },
 
     showUploadModal() {
-      $(this.element.querySelector(".wizard-composer-upload")).trigger("click");
+      this.session.set("uploadingFieldId", this.field.id);
+      document.getElementById(this.fileUploadElementId).click();
     },
   },
 });
