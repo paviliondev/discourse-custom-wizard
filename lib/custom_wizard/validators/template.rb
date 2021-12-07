@@ -18,8 +18,8 @@ class CustomWizard::TemplateValidator
     data[:steps].each do |step|
       check_required(step, :step)
 
-      if data[:fields].present?
-        data[:fields].each do |field|
+      if step[:fields].present?
+        step[:fields].each do |field|
           check_required(field, :field)
         end
       end
