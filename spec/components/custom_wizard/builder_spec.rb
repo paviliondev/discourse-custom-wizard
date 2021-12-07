@@ -324,7 +324,7 @@ describe CustomWizard::Builder do
             .build
             .steps.first
             .fields.length
-        ).to eq(4)
+        ).to eq(@template[:steps][0][:fields].length)
       end
 
       context "with condition" do
