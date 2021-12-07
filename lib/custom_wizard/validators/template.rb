@@ -19,8 +19,8 @@ class CustomWizard::TemplateValidator
       check_required(step, :step)
       validate_liquid_template(step, :step)
 
-      if data[:fields].present?
-        data[:fields].each do |field|
+      if step[:fields].present?
+        step[:fields].each do |field|
           check_required(field, :field)
           validate_liquid_template(field, :field)
         end
