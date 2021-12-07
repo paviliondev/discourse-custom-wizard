@@ -92,8 +92,11 @@ class CustomWizard::TemplateValidator
       is_description_valid = is_liquid_template_valid?(object['description'])
       is_placeholder_valid = is_liquid_template_valid?(object['placeholder'])
       is_preview_template_valid = begin
-        return true unless object[:type] == 'composer_preview'
-        is_liquid_template_valid?(object['preview_template'])
+        if object[:type] == 'composer_preview'
+          is_liquid_template_valid?(object['preview_template'])
+        else
+          true
+        end
       end
 
       if !is_description_valid || !is_placeholder_valid || !is_preview_template_valid
@@ -110,6 +113,7 @@ class CustomWizard::TemplateValidator
     end
 
     errors.add :base, I18n.t("wizard.validation.liquid_syntax_error") unless valid
+    valid
   end
 
   def is_liquid_template_valid?(template)
