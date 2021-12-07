@@ -119,8 +119,7 @@ after_initialize do
   # preloaded category custom fields
   %w[
     create_topic_wizard
-  ]
-  .each do |custom_field|
+  ].each do |custom_field|
     Site.preloaded_category_custom_fields << custom_field
   end
 
