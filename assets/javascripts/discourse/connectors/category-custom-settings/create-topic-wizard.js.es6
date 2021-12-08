@@ -8,7 +8,7 @@ export default {
         component.set("wizardList", result);
       })
       .catch(popupAjaxError);
-      attrs
+
     component.set(
       "wizardListVal",
       attrs?.category?.custom_fields?.create_topic_wizard
