@@ -1,6 +1,7 @@
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import EmberObject from "@ember/object";
+import getURL from "discourse-common/lib/get-url";
 
 const CustomWizardManager = EmberObject.extend();
 
@@ -17,7 +18,7 @@ CustomWizardManager.reopenClass({
   },
 
   export(wizardIds) {
-    let url = `${Discourse.BaseUrl}/${basePath}/export?`;
+    let url = `${getURL()}/${basePath}/export?`;
 
     wizardIds.forEach((wizardId, index) => {
       let step = "wizard_ids[]=" + wizardId;

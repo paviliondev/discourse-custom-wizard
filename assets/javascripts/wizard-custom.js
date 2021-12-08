@@ -4,7 +4,6 @@
 
 //= require discourse/app/mixins/singleton
 //= require discourse/app/mixins/upload
-//= require discourse/app/mixins/composer-upload
 //= require discourse/app/mixins/textarea-text-manipulation
 
 //= require discourse/app/adapters/rest
@@ -25,6 +24,7 @@
 
 //= require discourse/app/services/app-events
 //= require discourse/app/services/emoji-store
+//= require discourse/app/services/store
 
 //= require discourse/app/components/user-selector
 //= require discourse/app/components/conditional-loading-spinner
