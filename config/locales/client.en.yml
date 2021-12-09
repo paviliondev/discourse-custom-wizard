@@ -61,9 +61,10 @@ en:
         condition: "Condition"
         index: "Index"
         category_settings:
-          create_topic_wizard: "Create Topic Wizard"
-          select_wizard: "Select a wizard you want to use for creating topics in this category"
-        
+          custom_wizard:
+            title: "Custom Wizard"
+            create_topic_wizard: "Select a wizard to replace the new topic composer in this category."
+
         message:
           wizard:
             select: "Select a wizard, or create a new one"
