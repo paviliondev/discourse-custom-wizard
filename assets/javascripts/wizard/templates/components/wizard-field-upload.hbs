@@ -6,7 +6,7 @@
     {{d-icon "upload"}}
   {{/if}}
 
-  <input disabled={{uploading}} type="file" accept={{field.file_types}} style="visibility: hidden; position: absolute;" >
+  <input class="wizard-hidden-upload-field" disabled={{uploading}} type="file" accept={{field.file_types}} style="visibility: hidden; position: absolute;" >
 </label>
 
 {{#if field.value}}

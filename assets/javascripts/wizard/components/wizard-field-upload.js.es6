@@ -1,6 +1,9 @@
 import getUrl from "discourse-common/lib/get-url";
 import { getToken } from "wizard/lib/ajax";
 import WizardI18n from "../lib/wizard-i18n";
+import Uppy from "@uppy/core";
+import DropTarget from "@uppy/drop-target";
+import XHRUpload from "@uppy/xhr-upload";
 
 export default Ember.Component.extend({
   classNames: ["wizard-field-upload"],
@@ -9,34 +12,38 @@ export default Ember.Component.extend({
   isImage: false,
 
   didInsertElement() {
-    this._super();
+    this._super(...arguments);
+    this.setupUploads();
+  },
 
-    const $upload = $(this.element);
-
+  setupUploads() {
     const id = this.get("field.id");
-
-    $upload.fileupload({
-      url: getUrl("/uploads.json"),
-      formData: {
-        synchronous: true,
-        type: `wizard_${id}`,
-        authenticity_token: getToken(),
-      },
-      dataType: "json",
-      dropZone: $upload,
+    this._uppyInstance = new Uppy({
+      id: `wizard-field-image-${id}`,
+      meta: { upload_type: `wizard_${id}` },
+      autoProceed: true,
     });
 
-    $upload.on("fileuploadsubmit", () => this.set("uploading", true));
+    this._uppyInstance.use(XHRUpload, {
+      endpoint: getUrl("/uploads.json"),
+      headers: {
+        "X-CSRF-Token": getToken(),
+      },
+    });
 
-    $upload.on("fileuploaddone", (e, response) => {
-      this.setProperties({
-        "field.value": response.result,
-        uploading: false,
-      });
+    this._uppyInstance.use(DropTarget, { target: this.element });
+
+    this._uppyInstance.on("upload", () => {
+      this.set("uploading", true);
+    });
+
+    this._uppyInstance.on("upload-success", (file, response) => {
+      this.set("field.value", response.body);
+      this.set("uploading", false);
       if (
         Discourse.SiteSettings.wizard_recognised_image_upload_formats
           .split("|")
-          .includes(response.result.extension)
+          .includes(response.body.extension)
       ) {
         this.setProperties({
           isImage: true,
@@ -44,10 +51,10 @@ export default Ember.Component.extend({
       }
     });
 
-    $upload.on("fileuploadfail", (e, response) => {
+    this._uppyInstance.on("upload-error", (file, error, response) => {
       let message = WizardI18n("wizard.upload_error");
-      if (response.jqXHR.responseJSON && response.jqXHR.responseJSON.errors) {
-        message = response.jqXHR.responseJSON.errors.join("\n");
+      if (response.body.errors) {
+        message = response.body.errors.join("\n");
       }
 
       window.swal({
@@ -59,5 +66,25 @@ export default Ember.Component.extend({
       });
       this.set("uploading", false);
     });
+
+    this.element
+      .querySelector(".wizard-hidden-upload-field")
+      .addEventListener("change", (event) => {
+        const files = Array.from(event.target.files);
+        files.forEach((file) => {
+          try {
+            this._uppyInstance.addFile({
+              source: `${this.id} file input`,
+              name: file.name,
+              type: file.type,
+              data: file,
+            });
+          } catch (err) {
+            warn(`error adding files to uppy: ${err}`, {
+              id: "discourse.upload.uppy-add-files-error",
+            });
+          }
+        });
+      });
   },
 });
