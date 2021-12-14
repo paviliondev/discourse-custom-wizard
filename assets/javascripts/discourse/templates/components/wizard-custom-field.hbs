@@ -127,13 +127,13 @@
 {{/if}}
 
 {{#if isComposerPreview}}
-  <div class="setting">
+  <div class="setting full">
     <div class="setting-label">
       <label>{{i18n "admin.wizard.field.preview_template"}}</label>
     </div>
 
     <div class="setting-value">
-      {{textarea name="preview-template" value=field.preview_template}}
+      {{textarea name="preview-template" value=field.preview_template class="preview-template"}}
     </div>
   </div>
 {{/if}}
