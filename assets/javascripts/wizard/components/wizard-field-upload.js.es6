@@ -1,63 +1,20 @@
-import getUrl from "discourse-common/lib/get-url";
-import { getToken } from "wizard/lib/ajax";
-import WizardI18n from "../lib/wizard-i18n";
+import UppyUploadMixin from "discourse/mixins/uppy-upload";
+import Component from "@ember/component";
+import { computed } from "@ember/object";
 
-export default Ember.Component.extend({
+export default Component.extend(UppyUploadMixin, {
   classNames: ["wizard-field-upload"],
   classNameBindings: ["isImage"],
   uploading: false,
-  isImage: false,
+  type: computed(function (){ return `wizard_${this.field.id}`; }),
+  isImage: computed("field.value.extension", function (){
+    return this.field.value &&
+      this.siteSettings.wizard_recognised_image_upload_formats
+        .split("|")
+        .includes(this.field.value.extension);
+  }),
 
-  didInsertElement() {
-    this._super();
-
-    const $upload = $(this.element);
-
-    const id = this.get("field.id");
-
-    $upload.fileupload({
-      url: getUrl("/uploads.json"),
-      formData: {
-        synchronous: true,
-        type: `wizard_${id}`,
-        authenticity_token: getToken(),
-      },
-      dataType: "json",
-      dropZone: $upload,
-    });
-
-    $upload.on("fileuploadsubmit", () => this.set("uploading", true));
-
-    $upload.on("fileuploaddone", (e, response) => {
-      this.setProperties({
-        "field.value": response.result,
-        uploading: false,
-      });
-      if (
-        Discourse.SiteSettings.wizard_recognised_image_upload_formats
-          .split("|")
-          .includes(response.result.extension)
-      ) {
-        this.setProperties({
-          isImage: true,
-        });
-      }
-    });
-
-    $upload.on("fileuploadfail", (e, response) => {
-      let message = WizardI18n("wizard.upload_error");
-      if (response.jqXHR.responseJSON && response.jqXHR.responseJSON.errors) {
-        message = response.jqXHR.responseJSON.errors.join("\n");
-      }
-
-      window.swal({
-        customClass: "wizard-warning",
-        title: "",
-        text: message,
-        type: "warning",
-        confirmButtonColor: "#6699ff",
-      });
-      this.set("uploading", false);
-    });
+  uploadDone(upload) {
+    this.set("field.value", upload);
   },
 });
