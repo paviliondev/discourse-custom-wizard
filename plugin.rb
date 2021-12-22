@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Create custom wizards
-# version: 1.15.7
+# version: 1.17.0
 # authors: Angus McLeod
 # url: https://github.com/paviliondev/discourse-custom-wizard
 # contact emails: angus@thepavilion.io
@@ -117,6 +117,14 @@ after_initialize do
   end
 
   Liquid::Template.error_mode = :strict
+
+  # preloaded category custom fields
+  %w[
+    create_topic_wizard
+  ].each do |custom_field|
+    Site.preloaded_category_custom_fields << custom_field
+  end
+
   Liquid::Template.register_filter(::CustomWizard::LiquidFilter::FirstNonEmpty)
 
   add_class_method(:wizard, :user_requires_completion?) do |user|
