@@ -40,12 +40,13 @@
     <label>{{i18n "admin.wizard.field.image"}}</label>
   </div>
   <div class="setting-value">
-    {{image-uploader
+    {{uppy-image-uploader
       imageUrl=field.image
       onUploadDone=(action "imageUploadDone")
       onUploadDeleted=(action "imageUploadDeleted")
       type="wizard-step"
-      class="no-repeat contain-image"}}
+      class="no-repeat contain-image"
+      id=(concat "wizard-field-" field.id "-image-upload")}}
   </div>
 </div>
 
