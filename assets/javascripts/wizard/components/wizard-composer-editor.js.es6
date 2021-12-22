@@ -4,7 +4,7 @@ import {
   on,
 } from "discourse-common/utils/decorators";
 import { findRawTemplate } from "discourse-common/lib/raw-templates";
-import { scheduleOnce, throttle } from "@ember/runloop";
+import { scheduleOnce } from "@ember/runloop";
 import { caretPosition, inCodeBlock } from "discourse/lib/utilities";
 import highlightSyntax from "discourse/lib/highlight-syntax";
 import { alias } from "@ember/object/computed";
@@ -30,7 +30,6 @@ export default ComposerEditor.extend({
   @on("didInsertElement")
   _composerEditorInit() {
     const $input = $(this.element.querySelector(".d-editor-input"));
-    const $preview = $(this.element.querySelector(".d-editor-preview-wrapper"));
 
     if (this.siteSettings.enable_mentions) {
       $input.autocomplete({
@@ -72,14 +71,7 @@ export default ComposerEditor.extend({
       });
     }
 
-    if (this._enableAdvancedEditorPreviewSync()) {
-      this._initInputPreviewSync($input, $preview);
-    } else {
-      $input.on("scroll", () =>
-        throttle(this, this._syncEditorAndPreviewScroll, $input, $preview, 20)
-      );
-    }
-
+    $input.on("scroll", this._throttledSyncEditorAndPreviewScroll);
     this._bindUploadTarget();
 
     const wizardEventNames = ["insert-text", "replace-text"];
