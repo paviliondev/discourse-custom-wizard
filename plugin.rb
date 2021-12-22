@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Create custom wizards
-# version: 1.16.2
+# version: 1.16.3
 # authors: Angus McLeod
 # url: https://github.com/paviliondev/discourse-custom-wizard
 # contact emails: angus@thepavilion.io
