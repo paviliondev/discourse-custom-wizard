@@ -45,4 +45,37 @@ describe CustomWizard::TemplateValidator do
       CustomWizard::TemplateValidator.new(template).perform
     ).to eq(false)
   end
+
+  context "steps" do
+    CustomWizard::TemplateValidator.required[:step].each do |attribute|
+      it "invalidates if \"#{attribute.to_s}\" is not present" do
+        template[:steps][0][attribute] = nil
+        expect(
+          CustomWizard::TemplateValidator.new(template).perform
+        ).to eq(false)
+      end
+    end
+  end
+
+  context "fields" do
+    CustomWizard::TemplateValidator.required[:field].each do |attribute|
+      it "invalidates if \"#{attribute.to_s}\" is not present" do
+        template[:steps][0][:fields][0][attribute] = nil
+        expect(
+          CustomWizard::TemplateValidator.new(template).perform
+        ).to eq(false)
+      end
+    end
+  end
+
+  context "actions" do
+    CustomWizard::TemplateValidator.required[:action].each do |attribute|
+      it "invalidates if \"#{attribute.to_s}\" is not present" do
+        template[:actions][0][attribute] = nil
+        expect(
+          CustomWizard::TemplateValidator.new(template).perform
+        ).to eq(false)
+      end
+    end
+  end
 end
