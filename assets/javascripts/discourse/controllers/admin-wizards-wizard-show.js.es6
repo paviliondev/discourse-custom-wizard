@@ -36,7 +36,7 @@ export default Controller.extend({
 
   @discourseComputed("wizard.id")
   wizardUrl(wizardId) {
-    return window.location.href + "/w/" + dasherize(wizardId);
+    return window.location.origin + "/w/" + dasherize(wizardId);
   },
 
   @discourseComputed("wizard.after_time_scheduled")
