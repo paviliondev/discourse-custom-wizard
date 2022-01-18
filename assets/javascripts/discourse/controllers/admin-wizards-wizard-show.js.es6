@@ -36,8 +36,8 @@ export default Controller.extend({
 
   @discourseComputed("wizard.id")
   wizardUrl(wizardId) {
-    url = window.location.href;
-    split_url = url.split('/admin');
+    let url = window.location.href;
+    let split_url = url.split('/admin');
     return split_url[0] + "/w/" + dasherize(wizardId);
   },
 
