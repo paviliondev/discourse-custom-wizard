@@ -1,4 +1,4 @@
-sr:
+sr-Cyrl:
   js:
     wizard:
       complete_custom: "Complete the {{name}}"
