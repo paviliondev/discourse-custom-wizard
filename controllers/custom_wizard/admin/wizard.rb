@@ -81,6 +81,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
       :required,
       :prompt_completion,
       :restart_on_revisit,
+      :resume_on_revisit,
       :theme_id,
       permitted: mapped_params,
       steps: [

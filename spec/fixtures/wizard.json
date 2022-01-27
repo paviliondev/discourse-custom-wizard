@@ -157,6 +157,12 @@
           "label": "User Selector",
           "description": "",
           "type": "user_selector"
+        },
+        {
+          "id": "step_3_field_6",
+          "label": "Conditional User Selector",
+          "description": "Shown when checkbox in step_2_field_5 is true",
+          "type": "user_selector"
         }
       ],
       "description": "Unfortunately not the edible type :sushi: "

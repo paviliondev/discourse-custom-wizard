@@ -3,6 +3,7 @@ import { withPluginApi } from "discourse/lib/plugin-api";
 import CustomWizardNotice from "../models/custom-wizard-notice";
 import { isPresent } from "@ember/utils";
 import { A } from "@ember/array";
+import getUrl from "discourse-common/lib/get-url";
 
 export default {
   name: "custom-wizard-edits",
@@ -63,6 +64,22 @@ export default {
               this.set("customWizardCriticalNotices", criticalNotices);
             }
           });
+        }
+      });
+
+      api.modifyClass("component:d-navigation", {
+        pluginId: "custom-wizard",
+        actions: {
+          clickCreateTopicButton() {
+            let createTopicWizard = this.get(
+              "category.custom_fields.create_topic_wizard"
+            );
+            if (createTopicWizard) {
+              window.location.href = getUrl(`/w/${createTopicWizard}`);
+            } else {
+              this._super();
+            }
+          },
         },
       });
     });

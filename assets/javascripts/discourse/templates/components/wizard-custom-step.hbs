@@ -14,12 +14,13 @@
     <label>{{i18n "admin.wizard.step.banner"}}</label>
   </div>
   <div class="setting-value">
-    {{image-uploader
+    {{uppy-image-uploader
       imageUrl=step.banner
       onUploadDone=(action "bannerUploadDone")
       onUploadDeleted=(action "bannerUploadDeleted")
       type="wizard-banner"
-      class="no-repeat contain-image"}}
+      class="no-repeat contain-image"
+      id=(concat "wizard-step-" step.id "-banner-upload")}}
   </div>
 </div>
 

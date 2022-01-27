@@ -1,11 +1,5 @@
 //= require_tree_discourse discourse/app/lib
 //= require_tree_discourse discourse/app/mixins
-//
-
-//= require discourse/app/mixins/singleton
-//= require discourse/app/mixins/upload
-//= require discourse/app/mixins/composer-upload
-//= require discourse/app/mixins/textarea-text-manipulation
 
 //= require discourse/app/adapters/rest
 
@@ -25,6 +19,7 @@
 
 //= require discourse/app/services/app-events
 //= require discourse/app/services/emoji-store
+//= require discourse/app/services/store
 
 //= require discourse/app/components/user-selector
 //= require discourse/app/components/conditional-loading-spinner
@@ -40,6 +35,7 @@
 //= require discourse/app/components/date-time-input
 //= require discourse/app/components/text-field
 //= require discourse/app/components/d-textarea
+//= require discourse/app/components/popup-input-tip
 
 //= require discourse/app/templates/components/conditional-loading-spinner
 //= require discourse/app/templates/components/d-button
@@ -65,6 +61,7 @@
 //= require markdown-it-bundle
 //= require lodash.js
 //= require template_include.js
+//= require itsatrap.js
 //= require caret_position.js
 //= require popper.js
 //= require uppy.js

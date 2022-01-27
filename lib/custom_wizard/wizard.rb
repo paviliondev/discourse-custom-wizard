@@ -21,6 +21,7 @@ class CustomWizard::Wizard
                 :required,
                 :prompt_completion,
                 :restart_on_revisit,
+                :resume_on_revisit,
                 :permitted,
                 :needs_categories,
                 :needs_groups,
@@ -48,6 +49,7 @@ class CustomWizard::Wizard
     @multiple_submissions = cast_bool(attrs['multiple_submissions'])
     @prompt_completion = cast_bool(attrs['prompt_completion'])
     @restart_on_revisit = cast_bool(attrs['restart_on_revisit'])
+    @resume_on_revisit = cast_bool(attrs['resume_on_revisit'])
     @after_signup = cast_bool(attrs['after_signup'])
     @after_time = cast_bool(attrs['after_time'])
     @after_time_scheduled = attrs['after_time_scheduled']

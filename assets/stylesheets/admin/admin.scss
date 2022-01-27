@@ -365,6 +365,10 @@ $error: #ef1700;
           font-size: 1em;
         }
       }
+
+      .preview-template {
+        min-height: 150px;
+      }
     }
 
     &.full,

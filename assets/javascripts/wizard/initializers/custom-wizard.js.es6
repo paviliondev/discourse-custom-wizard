@@ -9,7 +9,7 @@ export default {
     const Router = requirejs("wizard/router").default;
     const ApplicationRoute = requirejs("wizard/routes/application").default;
     const getUrl = requirejs("discourse-common/lib/get-url").default;
-    const Store = requirejs("discourse/models/store").default;
+    const Store = requirejs("discourse/services/store").default;
     const registerRawHelpers = requirejs(
       "discourse-common/lib/raw-handlebars-helpers"
     ).registerRawHelpers;
@@ -111,8 +111,16 @@ export default {
       model() {},
     });
 
-    $.ajaxPrefilter(function (_, __, jqXHR) {
-      jqXHR.setRequestHeader("X-CSRF-Token", getToken());
+    // Add a CSRF token to all AJAX requests
+    let token = getToken();
+    session.set("csrfToken", token);
+    let callbacks = $.Callbacks();
+    $.ajaxPrefilter(callbacks.fire);
+
+    callbacks.add(function (options, originalOptions, xhr) {
+      if (!options.crossDomain) {
+        xhr.setRequestHeader("X-CSRF-Token", session.get("csrfToken"));
+      }
     });
   },
 };

@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Create custom wizards for topic creation, onboarding, user surveys and much more.
-# version: 0.8.1
+# version: 1.16.3
 # authors: Angus McLeod, Faizaan Gagan, Robert Barrow, Keegan George
 # contact_emails: support@thepavilion.io
 # url: https://github.com/paviliondev/discourse-custom-wizard
-# tests_passed_test_url: https://plugins.discourse.pavilion.tech/w/super-mega-fun-wizard
-# stable_test_url: https://stable.plugins.discourse.pavilion.tech/w/super-mega-fun-wizard
 
 gem 'liquid', '5.0.1', require: true
 register_asset 'stylesheets/admin/admin.scss', :desktop
@@ -136,6 +134,13 @@ after_initialize do
     ../extensions/custom_field/extension.rb
   ].each do |path|
     load File.expand_path(path, __FILE__)
+  end
+
+  # preloaded category custom fields
+  %w[
+    create_topic_wizard
+  ].each do |custom_field|
+    Site.preloaded_category_custom_fields << custom_field
   end
 
   Liquid::Template.register_filter(::CustomWizard::LiquidFilter::FirstNonEmpty)

@@ -2,8 +2,10 @@ import { default as computed } from "discourse-common/utils/decorators";
 import getUrl from "discourse-common/lib/get-url";
 import WizardField from "wizard/models/wizard-field";
 import { ajax } from "wizard/lib/ajax";
+import { popupAjaxError } from "discourse/lib/ajax-error";
 import Step from "wizard/models/step";
 import EmberObject from "@ember/object";
+import Site from "./site";
 
 const CustomWizard = EmberObject.extend({
   @computed("steps.length")
@@ -15,13 +17,27 @@ const CustomWizard = EmberObject.extend({
     }
     CustomWizard.skip(this.id);
   },
+
+  restart() {
+    CustomWizard.restart(this.id);
+  },
 });
 
 CustomWizard.reopenClass({
   skip(wizardId) {
-    ajax({ url: `/w/${wizardId}/skip`, type: "PUT" }).then((result) => {
-      CustomWizard.finished(result);
-    });
+    ajax({ url: `/w/${wizardId}/skip`, type: "PUT" })
+      .then((result) => {
+        CustomWizard.finished(result);
+      })
+      .catch(popupAjaxError);
+  },
+
+  restart(wizardId) {
+    ajax({ url: `/w/${wizardId}/skip`, type: "PUT" })
+      .then(() => {
+        window.location.href = `/w/${wizardId}`;
+      })
+      .catch(popupAjaxError);
   },
 
   finished(result) {
@@ -97,11 +113,11 @@ CustomWizard.reopenClass({
         }
       });
 
-      Discourse.Site.currentProp("categoriesList", categories);
-      Discourse.Site.currentProp("sortedCategories", categories);
-      Discourse.Site.currentProp("listByActivity", categories);
-      Discourse.Site.currentProp("categoriesById", categoriesById);
-      Discourse.Site.currentProp(
+      Site.currentProp("categoriesList", categories);
+      Site.currentProp("sortedCategories", categories);
+      Site.currentProp("listByActivity", categories);
+      Site.currentProp("categoriesById", categoriesById);
+      Site.currentProp(
         "uncategorized_category_id",
         wizardJson.uncategorized_category_id
       );

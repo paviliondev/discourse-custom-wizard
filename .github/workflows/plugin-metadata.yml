@@ -1,0 +1,44 @@
+name: Metadata
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout head repository
+        uses: actions/checkout@v2
+
+      - name: Store head version
+        run: |
+          sed -n -e 's/^.*version: /head_version=/p' plugin.rb >> $GITHUB_ENV
+
+      - name: Checkout base repository
+        uses: actions/checkout@v2
+        with:
+          ref: "${{ github.base_ref }}"
+
+      - name: Store base version
+        run: |
+          sed -n -e 's/^.*version: /base_version=/p' plugin.rb >> $GITHUB_ENV
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Install semver
+        run: npm install --include=dev
+
+      - name: Check version
+        uses: actions/github-script@v5
+        with:
+          script: |
+              const semver = require('semver');
+              const { head_version, base_version } = process.env;
+
+              if (semver.lte(head_version, base_version)) {
+                core.setFailed("Head version is equal to or lower than base version.");
+              }

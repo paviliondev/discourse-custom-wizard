@@ -35,6 +35,8 @@ en:
         prompt_completion_label: "Prompt user to complete wizard."
         restart_on_revisit: "Restart"
         restart_on_revisit_label: "Clear submissions on each visit."
+        resume_on_revisit: "Resume"
+        resume_on_revisit_label: "Ask the user if they want to resume on each visit."
         theme_id: "Theme"
         no_theme: "Select a Theme (optional)"
         save: "Save Changes"
@@ -59,10 +61,13 @@ en:
         edit_columns: "Edit Columns"
         expand_text: "Read More"
         collapse_text: "Show Less"
-
         support_button:
           title: "Request Support"
           label: "Support"
+        category_settings:
+          custom_wizard:
+            title: "Custom Wizard"
+            create_topic_wizard: "Select a wizard to replace the new topic composer in this category."
 
         message:
           wizard:
@@ -146,6 +151,7 @@ en:
             group: "group"
             list: "list"
             custom_field: "custom field"
+            value: "value"
 
           placeholder:
             text: "Enter text"
@@ -160,7 +166,8 @@ en:
             group: "Select group"
             list: "Enter item"
             custom_field: "Select field"
-            
+            value: "Select value"
+
         error:
           failed: "failed to save wizard"
           required: "{{type}} requires {{property}}"
@@ -199,7 +206,7 @@ en:
           char_counter_placeholder: "Display Character Counter"
           field_placeholder: "Placeholder"
           file_types: "File Types"
-          preview_template: "Preview Template"
+          preview_template: "Template"
           limit: "Limit"
           property: "Property"
           prefill: "Prefill"
@@ -584,6 +591,10 @@ en:
       requires_login: "You need to be logged in to access this wizard."
       reset: "Reset this wizard."
       step_not_permitted: "You're not permitted to view this step."
+      incomplete_submission:
+        title: "Continue editing your draft submission from %{date}?"
+        resume: "Continue"
+        restart: "Start over"
       x_characters:
         one: "%{count} Character"
         other: "%{count} Characters"
