@@ -236,6 +236,6 @@ after_initialize do
   reloadable_patch do |plugin|
     ::TagsController.prepend CustomWizardTagsController
   end
-  
+
   DiscourseEvent.trigger(:custom_wizard_ready)
 end

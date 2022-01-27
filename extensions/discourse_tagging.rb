@@ -9,11 +9,11 @@ module ::DiscourseTagging
         filtered_tags = TagGroup.includes(:tags).where(name: tagGroupArray).map do |tag_group|
           tag_group.tags.pluck(:name)
         end.flatten
-  
+
         opts[:only_tag_names] ||= []
         opts[:only_tag_names].push(*filtered_tags)
       end
-  
+
       discourse_core_filter_allowed_tags(guardian, opts)
     end
   end
