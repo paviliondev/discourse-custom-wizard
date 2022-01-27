@@ -91,12 +91,10 @@ class CustomWizard::TemplateValidator
     when :field
       is_description_valid = is_liquid_template_valid?(object['description'])
       is_placeholder_valid = is_liquid_template_valid?(object['placeholder'])
-      is_preview_template_valid = begin
-        if object[:type] == 'composer_preview'
-          is_liquid_template_valid?(object['preview_template'])
-        else
-          true
-        end
+      is_preview_template_valid = if object[:type] == 'composer_preview'
+        is_liquid_template_valid?(object['preview_template'])
+      else
+        true
       end
 
       if !is_description_valid || !is_placeholder_valid || !is_preview_template_valid
