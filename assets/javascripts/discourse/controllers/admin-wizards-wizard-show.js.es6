@@ -93,10 +93,7 @@ export default Controller.extend({
           }
 
           if (result.backend_validation_error) {
-            this.set(
-              "error",
-              result.backend_validation_error
-            );
+            this.set("error", result.backend_validation_error);
           }
 
           later(() => this.set("error", null), 10000);
