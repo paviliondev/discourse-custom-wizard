@@ -103,7 +103,7 @@ class CustomWizard::TemplateValidator
         valid = false
       end
     when :step
-      if !is_liquid_template_valid?(object['description'])
+      if !is_liquid_template_valid?(object['raw_description'])
         valid = false
       end
     when :action
