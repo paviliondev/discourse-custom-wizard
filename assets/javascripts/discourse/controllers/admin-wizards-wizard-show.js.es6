@@ -86,12 +86,18 @@ export default Controller.extend({
           if (result.error) {
             errorType = result.error.type;
             errorParams = result.error.params;
+            this.set(
+              "error",
+              I18n.t(`admin.wizard.error.${errorType}`, errorParams)
+            );
           }
 
-          this.set(
-            "error",
-            I18n.t(`admin.wizard.error.${errorType}`, errorParams)
-          );
+          if (result.backend_validation_error) {
+            this.set(
+              "error",
+              result.backend_validation_error
+            );
+          }
 
           later(() => this.set("error", null), 10000);
         })
