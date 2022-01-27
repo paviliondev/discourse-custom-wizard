@@ -188,6 +188,7 @@ en:
           property: "Property"
           prefill: "Prefill"
           content: "Content"
+          tag_groups: "Tag Groups"
           date_time_format: 
             label: "Format"
             instructions: "<a href='https://momentjs.com/docs/#/displaying/format/' target='_blank'>Moment.js format</a>"

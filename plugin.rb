@@ -7,6 +7,8 @@
 # contact emails: angus@thepavilion.io
 
 gem 'liquid', '5.0.1', require: true
+## ensure compatibility with category lockdown plugin
+gem 'request_store', '1.5.0', require: true
 register_asset 'stylesheets/common/wizard-admin.scss'
 register_asset 'stylesheets/common/wizard-mapper.scss'
 
@@ -109,9 +111,11 @@ after_initialize do
     ../extensions/extra_locales_controller.rb
     ../extensions/invites_controller.rb
     ../extensions/users_controller.rb
+    ../extensions/tags_controller.rb
     ../extensions/custom_field/preloader.rb
     ../extensions/custom_field/serializer.rb
     ../extensions/custom_field/extension.rb
+    ../extensions/discourse_tagging.rb
   ].each do |path|
     load File.expand_path(path, __FILE__)
   end
@@ -229,5 +233,9 @@ after_initialize do
     "#{serializer_klass}_serializer".classify.constantize.prepend CustomWizardCustomFieldSerializer
   end
 
+  reloadable_patch do |plugin|
+    ::TagsController.prepend CustomWizardTagsController
+  end
+  
   DiscourseEvent.trigger(:custom_wizard_ready)
 end
