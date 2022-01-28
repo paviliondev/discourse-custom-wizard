@@ -235,6 +235,7 @@ after_initialize do
 
   reloadable_patch do |plugin|
     ::TagsController.prepend CustomWizardTagsController
+    ::DiscourseTagging.singleton_class.prepend CustomWizardDiscourseTagging
   end
 
   DiscourseEvent.trigger(:custom_wizard_ready)
