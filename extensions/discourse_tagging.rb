@@ -2,9 +2,9 @@
 
 module CustomWizardDiscourseTagging
   def filter_allowed_tags(guardian, opts = {})
-    if tagGroups = RequestStore.store[:tagGroups]
-      tagGroupArray = tagGroups.split(",")
-      filtered_tags = TagGroup.includes(:tags).where(name: tagGroupArray).map do |tag_group|
+    if tag_groups = RequestStore.store[:tag_groups]
+      tag_group_array = tag_groups.split(",")
+      filtered_tags = TagGroup.includes(:tags).where(name: tag_group_array).map do |tag_group|
         tag_group.tags.pluck(:name)
       end.flatten
 

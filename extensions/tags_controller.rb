@@ -2,7 +2,7 @@
 
 module CustomWizardTagsController
   def search
-    RequestStore.store[:tagGroups] = params[:tagGroups] if params[:tagGroups].present?
+    RequestStore.store[:tag_groups] = params[:tag_groups] if params[:tag_groups].present?
     super
   end
 end
