@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Create custom wizards
-# version: 1.16.5
+# version: 1.17.0
 # authors: Angus McLeod
 # url: https://github.com/paviliondev/discourse-custom-wizard
 # contact emails: angus@thepavilion.io
@@ -116,6 +116,8 @@ after_initialize do
   ].each do |path|
     load File.expand_path(path, __FILE__)
   end
+
+  Liquid::Template.error_mode = :strict
 
   # preloaded category custom fields
   %w[

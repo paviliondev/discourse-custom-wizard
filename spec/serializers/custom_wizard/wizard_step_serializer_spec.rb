@@ -43,7 +43,8 @@ describe CustomWizard::StepSerializer do
       each_serializer: described_class,
       scope: Guardian.new(user)
     ).as_json
-    expect(json_array[0][:fields].length).to eq(4)
+
+    expect(json_array[0][:fields].length).to eq(@wizard.steps[0].fields.length)
   end
 
   context 'with required data' do

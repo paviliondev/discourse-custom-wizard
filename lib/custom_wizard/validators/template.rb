@@ -20,10 +20,12 @@ class CustomWizard::TemplateValidator
 
     data[:steps].each do |step|
       check_required(step, :step)
+      validate_liquid_template(step, :step)
 
       if step[:fields].present?
         step[:fields].each do |field|
           check_required(field, :field)
+          validate_liquid_template(field, :field)
         end
       end
     end
@@ -31,6 +33,7 @@ class CustomWizard::TemplateValidator
     if data[:actions].present?
       data[:actions].each do |action|
         check_required(action, :action)
+        validate_liquid_template(action, :action)
       end
     end
 
@@ -93,6 +96,37 @@ class CustomWizard::TemplateValidator
 
     if invalid_time || active_time.blank? || active_time < Time.now.utc
       errors.add :base, I18n.t("wizard.validation.after_time")
+    end
+  end
+
+  def validate_liquid_template(object, type)
+    %w[
+      description
+      raw_description
+      placeholder
+      preview_template
+      post_template
+    ].each do |field|
+      if template = object[field]
+        result = is_liquid_template_valid?(template)
+
+        unless "valid" == result
+          error = I18n.t("wizard.validation.liquid_syntax_error",
+            attribute: "#{object[:id]}.#{field}",
+            message: result
+          )
+          errors.add :base, error
+        end
+      end
+    end
+  end
+
+  def is_liquid_template_valid?(template)
+    begin
+      Liquid::Template.parse(template)
+      'valid'
+    rescue Liquid::SyntaxError => error
+      error.message
     end
   end
 end

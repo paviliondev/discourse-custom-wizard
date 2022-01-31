@@ -9,6 +9,33 @@ describe CustomWizard::TemplateValidator do
       "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
     ).read).with_indifferent_access
   }
+  let(:valid_liquid_template) {
+    <<-LIQUID.strip
+        {%- assign hello = "Topic Form 1" %}
+    LIQUID
+  }
+
+  let(:invalid_liquid_template) {
+    <<-LIQUID.strip
+        {%- assign hello = "Topic Form 1" %
+      LIQUID
+  }
+
+  let(:liquid_syntax_error) {
+    "Liquid syntax error: Tag '{%' was not properly terminated with regexp: /\\%\\}/"
+  }
+
+  def expect_validation_success
+    expect(
+      CustomWizard::TemplateValidator.new(template).perform
+    ).to eq(true)
+  end
+
+  def expect_validation_failure(object_id, message)
+    validator = CustomWizard::TemplateValidator.new(template)
+    expect(validator.perform).to eq(false)
+    expect(validator.errors.first.message).to eq("Liquid syntax error in #{object_id}: #{message}")
+  end
 
   it "validates valid templates" do
     expect(
@@ -107,6 +134,66 @@ describe CustomWizard::TemplateValidator do
         expect(
           CustomWizard::TemplateValidator.new(template).perform
         ).to eq(false)
+      end
+    end
+  end
+
+  context "liquid templates" do
+    it "validates if no liquid syntax in use" do
+      expect_validation_success
+    end
+
+    it "validates if liquid syntax in use is correct" do
+      template[:steps][0][:raw_description] = valid_liquid_template
+      expect_validation_success
+    end
+
+    it "doesn't validate if liquid syntax in use is incorrect" do
+      template[:steps][0][:raw_description] = invalid_liquid_template
+      expect_validation_failure("step_1.raw_description", liquid_syntax_error)
+    end
+
+    context "validation targets" do
+      context "fields" do
+        it "validates descriptions" do
+          template[:steps][0][:fields][0][:description] = invalid_liquid_template
+          expect_validation_failure("step_1_field_1.description", liquid_syntax_error)
+        end
+
+        it "validates placeholders" do
+          template[:steps][0][:fields][0][:placeholder] = invalid_liquid_template
+          expect_validation_failure("step_1_field_1.placeholder", liquid_syntax_error)
+        end
+
+        it "validates preview templates" do
+          template[:steps][0][:fields][4][:preview_template] = invalid_liquid_template
+          expect_validation_failure("step_1_field_5.preview_template", liquid_syntax_error)
+        end
+      end
+
+      context "steps" do
+        it "validates descriptions" do
+          template[:steps][0][:raw_description] = invalid_liquid_template
+          expect_validation_failure("step_1.raw_description", liquid_syntax_error)
+        end
+      end
+
+      context "actions" do
+        it "validates post builder" do
+          action = nil
+          action_index = nil
+
+          template[:actions].each_with_index do |a, i|
+            if a["post_builder"]
+              action = a
+              action_index = i
+              break
+            end
+          end
+          template[:actions][action_index][:post_template] = invalid_liquid_template
+
+          expect_validation_failure("#{action[:id]}.post_template", liquid_syntax_error)
+        end
       end
     end
   end
