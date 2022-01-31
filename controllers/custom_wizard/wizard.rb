@@ -5,6 +5,7 @@ class CustomWizard::WizardController < ::ApplicationController
   layout 'wizard'
 
   before_action :ensure_plugin_enabled
+  before_action :ensure_logged_in, only: [:skip]
   helper_method :wizard_page_title
   helper_method :wizard_theme_id
   helper_method :wizard_theme_lookup
@@ -59,17 +60,13 @@ class CustomWizard::WizardController < ::ApplicationController
     end
 
     result = success_json
-    user = current_user
 
-    if user && wizard.can_access?
-      submission = wizard.current_submission
-
-      if submission.present? && submission.redirect_to
-        result.merge!(redirect_to: submission.redirect_to)
+    if current_user && wizard.can_access?
+      if redirect_to = wizard.current_submission&.redirect_to
+        result.merge!(redirect_to: redirect_to)
       end
 
-      submission.remove if submission.present?
-      wizard.reset
+      wizard.cleanup_on_skip!
     end
 
     render json: result

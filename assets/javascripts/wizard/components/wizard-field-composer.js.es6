@@ -16,7 +16,7 @@ export default Ember.Component.extend({
       "composer",
       EmberObject.create({
         loading: false,
-        reply: this.get("field.value"),
+        reply: this.get("field.value") || "",
       })
     );
   },

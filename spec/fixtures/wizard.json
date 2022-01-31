@@ -43,6 +43,13 @@
           "label": "I'm only text",
           "description": "",
           "type": "text_only"
+        },
+        {
+          "id": "step_1_field_5",
+          "label": "I'm a preview",
+          "description": "",
+          "type": "composer_preview",
+          "preview_template": "w{step_1_field_1}"
         }
       ],
       "description": "Text inputs!"
@@ -156,6 +163,12 @@
           "id": "step_3_field_5",
           "label": "User Selector",
           "description": "",
+          "type": "user_selector"
+        },
+        {
+          "id": "step_3_field_6",
+          "label": "Conditional User Selector",
+          "description": "Shown when checkbox in step_2_field_5 is true",
           "type": "user_selector"
         }
       ],

@@ -3,6 +3,9 @@
 class CustomWizard::Template
   include HasErrors
 
+  AFTER_SIGNUP_CACHE_KEY ||= "after_signup_wizard_ids"
+  AFTER_TIME_CACHE_KEY ||= "after_time_wizard_ids"
+
   attr_reader :data,
               :opts,
               :steps,
@@ -27,6 +30,8 @@ class CustomWizard::Template
       schedule_save_jobs unless opts[:skip_jobs]
       PluginStore.set(CustomWizard::PLUGIN_NAME, @data[:id], @data)
     end
+
+    self.class.clear_cache_keys
 
     @data[:id]
   end
@@ -53,10 +58,10 @@ class CustomWizard::Template
 
     ActiveRecord::Base.transaction do
       PluginStore.remove(CustomWizard::PLUGIN_NAME, wizard.id)
-      clear_user_wizard_redirect(wizard_id)
+      clear_user_wizard_redirect(wizard_id, after_time: !!wizard.after_time)
     end
 
-    Jobs.cancel_scheduled_job(:set_after_time_wizard) if wizard.after_time
+    clear_cache_keys
 
     true
   end
@@ -65,9 +70,10 @@ class CustomWizard::Template
     PluginStoreRow.exists?(plugin_name: 'custom_wizard', key: wizard_id)
   end
 
-  def self.list(setting: nil, order: :id)
+  def self.list(setting: nil, query_str: nil, order: :id)
     query = "plugin_name = 'custom_wizard'"
-    query += "AND (value::json ->> '#{setting}')::boolean IS TRUE" if setting
+    query += " AND (value::json ->> '#{setting}')::boolean IS TRUE" if setting
+    query += " #{query_str}" if query_str
 
     PluginStoreRow.where(query).order(order)
       .reduce([]) do |result, record|
@@ -85,8 +91,36 @@ class CustomWizard::Template
       end
   end
 
-  def self.clear_user_wizard_redirect(wizard_id)
+  def self.clear_user_wizard_redirect(wizard_id, after_time: false)
     UserCustomField.where(name: 'redirect_to_wizard', value: wizard_id).destroy_all
+
+    if after_time
+      Jobs.cancel_scheduled_job(:set_after_time_wizard, wizard_id: wizard_id)
+    end
+  end
+
+  def self.after_signup_ids
+    ::CustomWizard::Cache.wrap(AFTER_SIGNUP_CACHE_KEY) do
+      list(setting: 'after_signup').map { |t| t['id'] }
+    end
+  end
+
+  def self.after_time_ids
+    ::CustomWizard::Cache.wrap(AFTER_TIME_CACHE_KEY) do
+      list(
+        setting: 'after_time',
+        query_str: "AND (value::json ->> 'after_time_scheduled')::timestamp < CURRENT_TIMESTAMP"
+      ).map { |t| t['id'] }
+    end
+  end
+
+  def self.can_redirect_users?(wizard_id)
+    after_signup_ids.include?(wizard_id) || after_time_ids.include?(wizard_id)
+  end
+
+  def self.clear_cache_keys
+    CustomWizard::Cache.new(AFTER_SIGNUP_CACHE_KEY).delete
+    CustomWizard::Cache.new(AFTER_TIME_CACHE_KEY).delete
   end
 
   private
@@ -132,8 +166,7 @@ class CustomWizard::Template
         Jobs.cancel_scheduled_job(:set_after_time_wizard, wizard_id: wizard_id)
         Jobs.enqueue_at(enqueue_wizard_at, :set_after_time_wizard, wizard_id: wizard_id)
       elsif old_data && old_data[:after_time]
-        Jobs.cancel_scheduled_job(:set_after_time_wizard, wizard_id: wizard_id)
-        self.class.clear_user_wizard_redirect(wizard_id)
+        clear_user_wizard_redirect(wizard_id, after_time: true)
       end
     end
   end
