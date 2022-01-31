@@ -288,11 +288,8 @@ class CustomWizard::Wizard
     end
   end
 
-  def final_cleanup!
-    if id == user.custom_fields['redirect_to_wizard']
-      user.custom_fields.delete('redirect_to_wizard')
-      user.save_custom_fields(true)
-    end
+  def cleanup_on_complete!
+    remove_user_redirect
 
     if current_submission.present?
       current_submission.submitted_at = Time.now.iso8601
@@ -300,6 +297,23 @@ class CustomWizard::Wizard
     end
 
     update!
+  end
+
+  def cleanup_on_skip!
+    remove_user_redirect
+
+    if current_submission.present?
+      current_submission.remove
+    end
+
+    reset
+  end
+
+  def remove_user_redirect
+    if id == user.redirect_to_wizard
+      user.custom_fields.delete('redirect_to_wizard')
+      user.save_custom_fields(true)
+    end
   end
 
   def self.create(wizard_id, user = nil)

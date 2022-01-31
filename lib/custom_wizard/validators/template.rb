@@ -13,7 +13,10 @@ class CustomWizard::TemplateValidator
 
     check_id(data, :wizard)
     check_required(data, :wizard)
+    validate_after_signup
     validate_after_time
+
+    return false if errors.any?
 
     data[:steps].each do |step|
       check_required(step, :step)
@@ -34,11 +37,7 @@ class CustomWizard::TemplateValidator
       end
     end
 
-    if errors.any?
-      false
-    else
-      true
-    end
+    !errors.any?
   end
 
   def self.required
@@ -66,8 +65,24 @@ class CustomWizard::TemplateValidator
     end
   end
 
+  def validate_after_signup
+    return unless ActiveRecord::Type::Boolean.new.cast(@data[:after_signup])
+
+    other_after_signup = CustomWizard::Template.list(setting: 'after_signup')
+      .select { |template| template['id'] != @data[:id] }
+
+    if other_after_signup.any?
+      errors.add :base, I18n.t("wizard.validation.after_signup", wizard_id: other_after_signup.first['id'])
+    end
+  end
+
   def validate_after_time
-    return unless @data[:after_time]
+    return unless ActiveRecord::Type::Boolean.new.cast(@data[:after_time])
+
+    if ActiveRecord::Type::Boolean.new.cast(@data[:after_signup])
+      errors.add :base, I18n.t("wizard.validation.after_signup_after_time")
+      return
+    end
 
     wizard = CustomWizard::Wizard.create(@data[:id]) if !@opts[:create]
     current_time = wizard.present? ? wizard.after_time_scheduled : nil

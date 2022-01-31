@@ -151,8 +151,16 @@ after_initialize do
     !!custom_redirect
   end
 
+  add_to_class(:user, :redirect_to_wizard) do
+    if custom_fields['redirect_to_wizard'].present?
+      custom_fields['redirect_to_wizard']
+    else
+      nil
+    end
+  end
+
   add_to_class(:users_controller, :wizard_path) do
-    if custom_wizard_redirect = current_user.custom_fields['redirect_to_wizard']
+    if custom_wizard_redirect = current_user.redirect_to_wizard
       "#{Discourse.base_url}/w/#{custom_wizard_redirect.dasherize}"
     else
       "#{Discourse.base_url}/wizard"
@@ -160,7 +168,7 @@ after_initialize do
   end
 
   add_to_serializer(:current_user, :redirect_to_wizard) do
-    object.custom_fields['redirect_to_wizard']
+    object.redirect_to_wizard
   end
 
   on(:user_approved) do |user|
@@ -170,15 +178,19 @@ after_initialize do
   end
 
   add_to_class(:application_controller, :redirect_to_wizard_if_required) do
-    wizard_id = current_user.custom_fields['redirect_to_wizard']
     @excluded_routes ||= SiteSetting.wizard_redirect_exclude_paths.split('|') + ['/w/']
     url = request.referer || request.original_url
+    excluded_route = @excluded_routes.any? { |str| /#{str}/ =~ url }
+    not_api = request.format === 'text/html'
 
-    if request.format === 'text/html' && !@excluded_routes.any? { |str| /#{str}/ =~ url } && wizard_id
-      if request.referer !~ /\/w\// && request.referer !~ /\/invites\//
-        CustomWizard::Wizard.set_wizard_redirect(current_user, wizard_id, request.referer)
-      end
-      if CustomWizard::Template.exists?(wizard_id)
+    if not_api && !excluded_route
+      wizard_id = current_user.redirect_to_wizard
+
+      if CustomWizard::Template.can_redirect_users?(wizard_id)
+        if url !~ /\/w\// && url !~ /\/invites\//
+          CustomWizard::Wizard.set_wizard_redirect(current_user, wizard_id, url)
+        end
+
         redirect_to "/w/#{wizard_id.dasherize}"
       end
     end
