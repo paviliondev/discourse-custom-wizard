@@ -117,6 +117,8 @@ after_initialize do
     load File.expand_path(path, __FILE__)
   end
 
+  Liquid::Template.error_mode = :strict
+
   # preloaded category custom fields
   %w[
     create_topic_wizard
