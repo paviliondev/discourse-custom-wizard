@@ -126,10 +126,6 @@ after_initialize do
 
   Liquid::Template.register_filter(::CustomWizard::LiquidFilter::FirstNonEmpty)
 
-  add_to_class(:topic, :wizard_id) do
-    custom_fields['wizard_id']
-  end
-
   add_to_class(:topic, :wizard_submission_id) do
     custom_fields['wizard_submission_id']
   end
