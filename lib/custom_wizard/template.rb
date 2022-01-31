@@ -31,7 +31,7 @@ class CustomWizard::Template
       PluginStore.set(CustomWizard::PLUGIN_NAME, @data[:id], @data)
     end
 
-    clear_cache_keys
+    self.class.clear_cache_keys
 
     @data[:id]
   end
@@ -70,7 +70,7 @@ class CustomWizard::Template
     PluginStoreRow.exists?(plugin_name: 'custom_wizard', key: wizard_id)
   end
 
-  def self.list(setting: nil, query_str:, order: :id)
+  def self.list(setting: nil, query_str: nil, order: :id)
     query = "plugin_name = 'custom_wizard'"
     query += " AND (value::json ->> '#{setting}')::boolean IS TRUE" if setting
     query += " #{query_str}" if query_str
@@ -109,7 +109,7 @@ class CustomWizard::Template
     ::CustomWizard::Cache.wrap(AFTER_TIME_CACHE_KEY) do
       list(
         setting: 'after_time',
-        query_str: "AND (value::json ->> 'after_time_scheduled') < CURRENT_TIMESTAMP"
+        query_str: "AND (value::json ->> 'after_time_scheduled')::timestamp < CURRENT_TIMESTAMP"
       ).map { |t| t['id'] }
     end
   end

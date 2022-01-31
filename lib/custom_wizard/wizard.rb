@@ -390,8 +390,4 @@ class CustomWizard::Wizard
       false
     end
   end
-
-  def self.valid_redirect_id?(wizard_id)
-    CustomWizard::Template.can_redirect_users?(wizard_id)
-  end
 end

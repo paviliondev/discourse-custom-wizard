@@ -179,7 +179,7 @@ after_initialize do
     if not_api && !excluded_route
       wizard_id = current_user.redirect_to_wizard
 
-      if CustomWizard::Wizard.valid_redirect_id?(wizard_id)
+      if CustomWizard::Template.can_redirect_users?(wizard_id)
         if url !~ /\/w\// && url !~ /\/invites\//
           CustomWizard::Wizard.set_wizard_redirect(current_user, wizard_id, url)
         end
