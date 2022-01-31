@@ -49,7 +49,7 @@ en:
       required: "%{property} is required"
       conflict: "Wizard with id '%{wizard_id}' already exists"
       after_time: "After time setting is invalid"
-      liquid_syntax_error: "Syntax error in liquid template"
+      liquid_syntax_error: "Liquid syntax error in %{attribute}: %{message}"
 
   site_settings:
     custom_wizard_enabled: "Enable custom wizards."

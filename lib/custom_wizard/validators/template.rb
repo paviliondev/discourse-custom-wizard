@@ -85,43 +85,32 @@ class CustomWizard::TemplateValidator
   end
 
   def validate_liquid_template(object, type)
-    valid = true
+    %w[
+      description
+      placeholder
+      preview_template
+      post_template
+    ].each do |field|
+      if template = object[field]
+        result = is_liquid_template_valid?(template)
 
-    case type
-    when :field
-      is_description_valid = is_liquid_template_valid?(object['description'])
-      is_placeholder_valid = is_liquid_template_valid?(object['placeholder'])
-      is_preview_template_valid = begin
-        if object[:type] == 'composer_preview'
-          is_liquid_template_valid?(object['preview_template'])
-        else
-          true
+        unless "valid" == result
+          error = I18n.t("wizard.validation.liquid_syntax_error",
+            attribute: "#{object[:id]}.#{field}",
+            message: result
+          )
+          errors.add :base, error
         end
       end
-
-      if !is_description_valid || !is_placeholder_valid || !is_preview_template_valid
-        valid = false
-      end
-    when :step
-      if !is_liquid_template_valid?(object['description'])
-        valid = false
-      end
-    when :action
-      if object['post_builder']
-        valid = is_liquid_template_valid?(object['post_template'])
-      end
     end
-
-    errors.add :base, I18n.t("wizard.validation.liquid_syntax_error") unless valid
-    valid
   end
 
   def is_liquid_template_valid?(template)
     begin
       Liquid::Template.parse(template)
-      true
-    rescue Liquid::SyntaxError
-      false
+      'valid'
+    rescue Liquid::SyntaxError => error
+      error.message
     end
   end
 end
