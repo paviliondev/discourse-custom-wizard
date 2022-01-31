@@ -45,6 +45,12 @@ describe CustomWizard::TemplateValidator do
     )
   end
 
+  it "only allows a wizard with after signup to be validated twice" do
+    template[:after_signup] = true
+    CustomWizard::Template.save(template)
+    expect(CustomWizard::TemplateValidator.new(template).perform).to eq(true)
+  end
+
   it "only allows one after _ setting per wizard" do
     template[:after_signup] = true
     template[:after_time] = true

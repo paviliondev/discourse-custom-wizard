@@ -65,7 +65,10 @@ class CustomWizard::TemplateValidator
   def validate_after_signup
     return unless ActiveRecord::Type::Boolean.new.cast(@data[:after_signup])
 
-    if (other_after_signup = CustomWizard::Template.list(setting: 'after_signup')).any?
+    other_after_signup = CustomWizard::Template.list(setting: 'after_signup')
+      .select { |template| template['id'] != @data[:id] }
+
+    if other_after_signup.any?
       errors.add :base, I18n.t("wizard.validation.after_signup", wizard_id: other_after_signup.first['id'])
     end
   end
