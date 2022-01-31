@@ -16,24 +16,10 @@
   disabled=disableTextarea
   outletArgs=(hash composer=composer editorType="composer")}}
 
-{{input
-  class="wizard-composer-upload hidden-upload-field"
-  disabled=isUploading
+<input
   type="file"
-  accept=allowedFileTypes
-  multiple=true}}
-
-{{#if showHyperlinkBox}}
-  {{wizard-composer-hyperlink
-    addLink=(action "addLink")
-    hideBox=(action "hideBox")}}
-{{/if}}
-
-{{#if isUploading}}
-  <div id="file-uploading">
-    {{loading-spinner size="small"}}<span>{{wizard-i18n "upload_selector.uploading"}} {{uploadProgress}}%</span>
-    {{#if isCancellable}}
-      <a href id="cancel-file-upload" {{action "cancelUpload"}}>{{d-icon "times"}}</a>
-    {{/if}}
-  </div>
-{{/if}}
+  id={{fileUploadElementId}}
+  class="wizard-composer-upload"
+  accept={{allowedFileTypes}}
+  multiple
+  >

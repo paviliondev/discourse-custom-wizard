@@ -60,7 +60,11 @@ en:
         select_type: "Select a type"
         condition: "Condition"
         index: "Index"
-        
+        category_settings:
+          custom_wizard:
+            title: "Custom Wizard"
+            create_topic_wizard: "Select a wizard to replace the new topic composer in this category."
+
         message:
           wizard:
             select: "Select a wizard, or create a new one"
@@ -179,7 +183,7 @@ en:
           char_counter_placeholder: "Display Character Counter"
           field_placeholder: "Field Placeholder"
           file_types: "File Types"
-          preview_template: "Preview Template"
+          preview_template: "Template"
           limit: "Limit"
           property: "Property"
           prefill: "Prefill"
