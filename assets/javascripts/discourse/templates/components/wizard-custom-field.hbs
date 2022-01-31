@@ -40,12 +40,13 @@
     <label>{{i18n "admin.wizard.field.image"}}</label>
   </div>
   <div class="setting-value">
-    {{image-uploader
+    {{uppy-image-uploader
       imageUrl=field.image
       onUploadDone=(action "imageUploadDone")
       onUploadDeleted=(action "imageUploadDeleted")
       type="wizard-step"
-      class="no-repeat contain-image"}}
+      class="no-repeat contain-image"
+      id=(concat "wizard-field-" field.id "-image-upload")}}
   </div>
 </div>
 
@@ -127,13 +128,13 @@
 {{/if}}
 
 {{#if isComposerPreview}}
-  <div class="setting">
+  <div class="setting full">
     <div class="setting-label">
       <label>{{i18n "admin.wizard.field.preview_template"}}</label>
     </div>
 
     <div class="setting-value">
-      {{textarea name="preview-template" value=field.preview_template}}
+      {{textarea name="preview-template" value=field.preview_template class="preview-template"}}
     </div>
   </div>
 {{/if}}

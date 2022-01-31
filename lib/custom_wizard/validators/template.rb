@@ -87,6 +87,7 @@ class CustomWizard::TemplateValidator
   def validate_liquid_template(object, type)
     %w[
       description
+      raw_description
       placeholder
       preview_template
       post_template

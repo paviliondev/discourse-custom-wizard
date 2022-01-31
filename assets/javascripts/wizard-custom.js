@@ -1,10 +1,5 @@
 //= require_tree_discourse discourse/app/lib
 //= require_tree_discourse discourse/app/mixins
-//
-
-//= require discourse/app/mixins/singleton
-//= require discourse/app/mixins/upload
-//= require discourse/app/mixins/textarea-text-manipulation
 
 //= require discourse/app/adapters/rest
 
@@ -40,6 +35,7 @@
 //= require discourse/app/components/date-time-input
 //= require discourse/app/components/text-field
 //= require discourse/app/components/d-textarea
+//= require discourse/app/components/popup-input-tip
 
 //= require discourse/app/templates/components/conditional-loading-spinner
 //= require discourse/app/templates/components/d-button

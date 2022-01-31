@@ -112,13 +112,13 @@ describe CustomWizard::TemplateValidator do
     end
 
     it "validates if liquid syntax in use is correct" do
-      template[:steps][0][:description] = valid_liquid_template
+      template[:steps][0][:raw_description] = valid_liquid_template
       expect_validation_success
     end
 
     it "doesn't validate if liquid syntax in use is incorrect" do
-      template[:steps][0][:description] = invalid_liquid_template
-      expect_validation_failure("step_1.description", liquid_syntax_error)
+      template[:steps][0][:raw_description] = invalid_liquid_template
+      expect_validation_failure("step_1.raw_description", liquid_syntax_error)
     end
 
     context "validation targets" do
@@ -141,8 +141,8 @@ describe CustomWizard::TemplateValidator do
 
       context "steps" do
         it "validates descriptions" do
-          template[:steps][0][:description] = invalid_liquid_template
-          expect_validation_failure("step_1.description", liquid_syntax_error)
+          template[:steps][0][:raw_description] = invalid_liquid_template
+          expect_validation_failure("step_1.raw_description", liquid_syntax_error)
         end
       end
 
