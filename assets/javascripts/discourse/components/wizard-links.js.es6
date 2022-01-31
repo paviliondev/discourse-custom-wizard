@@ -82,7 +82,7 @@ export default Component.extend({
       let index = 0;
       if (items.length) {
         let last_item = items[items.length - 1];
-        index = Number(last_item.id.split('_').pop());
+        index = Number(last_item.id.split("_").pop());
       }
 
       params.index = index;
