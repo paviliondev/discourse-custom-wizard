@@ -54,7 +54,7 @@ class CustomWizard::StepsController < ::ApplicationController
           updater.result[:redirect_on_complete] = redirect
         end
 
-        @wizard.final_cleanup!
+        @wizard.cleanup_on_complete!
 
         result[:final] = true
       else

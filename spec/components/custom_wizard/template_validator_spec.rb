@@ -30,6 +30,38 @@ describe CustomWizard::TemplateValidator do
     ).to eq(false)
   end
 
+  it "only allows one after signup wizard at a time" do
+    wizard_id = template[:id]
+    template[:after_signup] = true
+    CustomWizard::Template.save(template)
+
+    template[:id] = "wizard_2"
+    template[:after_signup] = true
+
+    validator = CustomWizard::TemplateValidator.new(template)
+    expect(validator.perform).to eq(false)
+    expect(validator.errors.first.type).to eq(
+      I18n.t("wizard.validation.after_signup", wizard_id: wizard_id)
+    )
+  end
+
+  it "only allows a wizard with after signup to be validated twice" do
+    template[:after_signup] = true
+    CustomWizard::Template.save(template)
+    expect(CustomWizard::TemplateValidator.new(template).perform).to eq(true)
+  end
+
+  it "only allows one after _ setting per wizard" do
+    template[:after_signup] = true
+    template[:after_time] = true
+
+    validator = CustomWizard::TemplateValidator.new(template)
+    expect(validator.perform).to eq(false)
+    expect(validator.errors.first.type).to eq(
+      I18n.t("wizard.validation.after_signup_after_time")
+    )
+  end
+
   it "validates after time settings" do
     template[:after_time] = true
     template[:after_time_scheduled] = (Time.now + 3.hours).iso8601
