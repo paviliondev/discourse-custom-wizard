@@ -37,7 +37,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
     wizard_id = template.save(create: params[:create])
 
     if template.errors.any?
-      render json: failed_json.merge(errors: template.errors.full_messages)
+      render json: failed_json.merge(backend_validation_error: template.errors.full_messages.join("\n\n"))
     else
       render json: success_json.merge(wizard_id: wizard_id)
     end

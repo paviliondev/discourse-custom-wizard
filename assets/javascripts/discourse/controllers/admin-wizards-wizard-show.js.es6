@@ -58,6 +58,21 @@ export default Controller.extend({
     }
     return wizardFieldList(steps);
   },
+  getErrorMessage(result) {
+    if (result.backend_validation_error) {
+      return result.backend_validation_error;
+    }
+
+    let errorType = "failed";
+    let errorParams = {};
+
+    if (result.error) {
+      errorType = result.error.type;
+      errorParams = result.error.params;
+    }
+
+    return I18n.t(`admin.wizard.error.${errorType}`, errorParams);
+  },
 
   actions: {
     save() {
@@ -80,18 +95,7 @@ export default Controller.extend({
           this.send("afterSave", result.wizard_id);
         })
         .catch((result) => {
-          let errorType = "failed";
-          let errorParams = {};
-
-          if (result.error) {
-            errorType = result.error.type;
-            errorParams = result.error.params;
-          }
-
-          this.set(
-            "error",
-            I18n.t(`admin.wizard.error.${errorType}`, errorParams)
-          );
+          this.set("error", this.getErrorMessage(result));
 
           later(() => this.set("error", null), 10000);
         })
