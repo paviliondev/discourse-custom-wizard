@@ -31,23 +31,66 @@ describe ApplicationController do
         user.save_custom_fields(true)
       end
 
-      it "redirects if user is required to complete a wizard" do
-        get "/"
-        expect(response).to redirect_to("/w/super-mega-fun-wizard")
-      end
-
-      it "saves original destination of user" do
-        get '/', headers: { 'REFERER' => "/t/2" }
-        expect(
-          CustomWizard::Wizard.create(@template['id'], user).submissions
-            .first.redirect_to
-        ).to eq("/t/2")
-      end
-
-      it "does not redirect if wizard does not exist" do
-        CustomWizard::Template.remove('super_mega_fun_wizard')
+      it "does not redirect if wizard if no after setting is enabled" do
         get "/"
         expect(response.status).to eq(200)
+      end
+
+      context "after signup enabled" do
+        before do
+          @template["after_signup"] = true
+          CustomWizard::Template.save(@template)
+        end
+
+        it "does not redirect if wizard does not exist" do
+          CustomWizard::Template.remove(@template[:id])
+          get "/"
+          expect(response.status).to eq(200)
+        end
+
+        it "redirects if user is required to complete a wizard" do
+          get "/"
+          expect(response).to redirect_to("/w/super-mega-fun-wizard")
+        end
+
+        it "does not redirect if wizard is subsequently disabled" do
+          get "/"
+          expect(response).to redirect_to("/w/super-mega-fun-wizard")
+
+          @template["after_signup"] = false
+          CustomWizard::Template.save(@template)
+
+          get "/"
+          expect(response.status).to eq(200)
+        end
+
+        it "saves original destination of user" do
+          get '/', headers: { 'REFERER' => "/t/2" }
+          expect(
+            CustomWizard::Wizard.create(@template['id'], user).submissions
+              .first.redirect_to
+          ).to eq("/t/2")
+        end
+      end
+
+      context "after time enabled" do
+        before do
+          @template["after_time"] = true
+          @template["after_time_scheduled"] = (Time.now + 3.hours).iso8601
+          CustomWizard::Template.save(@template)
+        end
+
+        it "does not redirect if time hasn't passed" do
+          get "/"
+          expect(response.status).to eq(200)
+        end
+
+        it "redirects if time has passed" do
+          @template["after_time_scheduled"] = (Time.now - 1.hours).iso8601
+          CustomWizard::Template.save(@template)
+          get "/"
+          expect(response.status).to eq(200)
+        end
       end
     end
 
