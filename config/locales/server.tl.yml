@@ -41,7 +41,10 @@ tl:
     validation:
       required: "%{property} is required"
       conflict: "Wizard with id '%{wizard_id}' already exists"
-      after_time: "After time setting is invalid"
+      after_signup: "You can only have one 'after signup' wizard at a time. %{wizard_id} has 'after signup' enabled."
+      after_signup_after_time: "You can't use 'after time' and 'after signup' on the same wizard."
+      after_time: "After time setting is invalid."
+      liquid_syntax_error: "Liquid syntax error in %{attribute}: %{message}"
   site_settings:
     custom_wizard_enabled: "Enable custom wizards."
     wizard_redirect_exclude_paths: "Routes excluded from wizard redirects."
