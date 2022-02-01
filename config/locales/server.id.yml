@@ -1,10 +1,10 @@
-fr:
+id:
   admin:
     wizard:
       submission:
         no_user: "deleted (user_id: %{user_id})"
   wizard:
-    custom_title: "Assistant"
+    custom_title: "Wizard"
     custom_field:
       error:
         required_attribute: "'%{attr}' is a required attribute"
@@ -16,15 +16,15 @@ fr:
         name_already_taken: "'%{name}' is already taken as a custom field name"
         save_default: "Failed to save custom field '%{name}'"
     field:
-      too_short: "%{label} doit compter au-moins %{min} caractères"
+      too_short: "%{label} must be at least %{min} characters"
       too_long: "%{label} must not be more than %{max} characters"
       required: "%{label} is required."
       not_url: "%{label} must be a valid url"
       invalid_file: "%{label} must be a %{types}"
       invalid_date: "Invalid date"
       invalid_time: "Invalid time"
-    none: "Aucun assistant n'est disponible à cette adresse."
-    no_skip: "Cet assistant ne peut pas être ignoré"
+    none: "We couldn't find a wizard at that address."
+    no_skip: "Wizard can't be skipped"
     export:
       error:
         select_one: "Please select at least one valid wizard"
@@ -47,6 +47,6 @@ fr:
       liquid_syntax_error: "Liquid syntax error in %{attribute}: %{message}"
   site_settings:
     custom_wizard_enabled: "Enable custom wizards."
-    wizard_redirect_exclude_paths: "Routes exclues des redirections de l'assistant."
+    wizard_redirect_exclude_paths: "Routes excluded from wizard redirects."
     wizard_recognised_image_upload_formats: "File types which will result in upload displaying an image preview"
     wizard_apis_enabled: "Enable API features (experimental)."
