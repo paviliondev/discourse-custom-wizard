@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Create custom wizards
-# version: 1.17.3
+# version: 1.18.0
 # authors: Angus McLeod
 # url: https://github.com/paviliondev/discourse-custom-wizard
 # contact emails: angus@thepavilion.io
 
 gem 'liquid', '5.0.1', require: true
+## ensure compatibility with category lockdown plugin
+gem 'request_store', '1.5.0', require: true
 register_asset 'stylesheets/common/wizard-admin.scss'
 register_asset 'stylesheets/common/wizard-mapper.scss'
 
@@ -110,9 +112,11 @@ after_initialize do
     ../extensions/invites_controller.rb
     ../extensions/guardian.rb
     ../extensions/users_controller.rb
+    ../extensions/tags_controller.rb
     ../extensions/custom_field/preloader.rb
     ../extensions/custom_field/serializer.rb
     ../extensions/custom_field/extension.rb
+    ../extensions/discourse_tagging.rb
   ].each do |path|
     load File.expand_path(path, __FILE__)
   end
@@ -247,6 +251,11 @@ after_initialize do
 
   CustomWizard::CustomField.serializers.each do |serializer_klass|
     "#{serializer_klass}_serializer".classify.constantize.prepend CustomWizardCustomFieldSerializer
+  end
+
+  reloadable_patch do |plugin|
+    ::TagsController.prepend CustomWizardTagsController
+    ::DiscourseTagging.singleton_class.prepend CustomWizardDiscourseTagging
   end
 
   DiscourseEvent.trigger(:custom_wizard_ready)

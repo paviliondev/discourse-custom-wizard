@@ -117,6 +117,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
           condition: mapped_params,
           index: mapped_params,
           validations: {},
+          tag_groups: [],
         ]
       ],
       actions: [
