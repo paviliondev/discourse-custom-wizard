@@ -208,6 +208,20 @@
   </div>
 {{/if}}
 
+{{#if isTag}}
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.field.tag_groups"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{tag-group-chooser
+        tagGroups=field.tag_groups
+      }}
+    </div>
+  </div>
+{{/if}}
+
 {{#if showAdvanced}}
   {{wizard-advanced-toggle showAdvanced=field.showAdvanced}}
 
