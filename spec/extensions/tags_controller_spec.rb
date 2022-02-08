@@ -12,9 +12,13 @@ describe ::TagsController, type: :request do
   fab!(:tag_group_1) { Fabricate(:tag_group, tags: [tag_1, tag_2]) }
   fab!(:tag_group_2) { Fabricate(:tag_group, tags: [tag_3, tag_4]) }
 
+  before do
+    ::RequestStore.store[:tag_groups] = nil
+  end
+
   describe "#search" do
     context "tag group param present" do
-      it "returns tags only only in the tag group" do
+      it "returns tags only in the tag group" do
         get "/tags/filter/search.json", params: { q: '', tag_groups: [tag_group_1.name, tag_group_2.name] }
         expect(response.status).to eq(200)
         results = response.parsed_body['results']
@@ -24,6 +28,7 @@ describe ::TagsController, type: :request do
           .includes(:tags)
           .where(id: [tag_group_1.id, tag_group_2.id])
           .map { |tag_group| tag_group.tags.pluck(:name) }.flatten
+
         expect(names).to contain_exactly(*expected_tag_names)
       end
     end
