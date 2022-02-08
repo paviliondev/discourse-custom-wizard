@@ -8,7 +8,6 @@
 
 gem 'liquid', '5.0.1', require: true
 ## ensure compatibility with category lockdown plugin
-gem 'request_store', '1.5.0', require: true
 register_asset 'stylesheets/common/wizard-admin.scss'
 register_asset 'stylesheets/common/wizard-mapper.scss'
 
