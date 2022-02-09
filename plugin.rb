@@ -7,7 +7,7 @@
 # contact emails: angus@thepavilion.io
 
 gem 'liquid', '5.0.1', require: true
-## ensure compatibility with category lockdown plugin
+
 register_asset 'stylesheets/common/wizard-admin.scss'
 register_asset 'stylesheets/common/wizard-mapper.scss'
 
