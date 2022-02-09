@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Create custom wizards
-# version: 1.18.0.stable
+# version: 1.18.1.stable
 # authors: Angus McLeod
 # url: https://github.com/paviliondev/discourse-custom-wizard
 # contact emails: angus@thepavilion.io
 
 gem 'liquid', '5.0.1', require: true
-## ensure compatibility with category lockdown plugin
+
 register_asset 'stylesheets/common/wizard-admin.scss'
 register_asset 'stylesheets/common/wizard-mapper.scss'
 
