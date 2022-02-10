@@ -58,6 +58,7 @@
 //= require pretty-text/addon/sanitizer
 //= require pretty-text/addon/pretty-text
 //= require pretty-text/addon/guid
+//= require pretty-text/addon/emoji
 
 //= require ember-addons/decorator-alias
 //= require ember-addons/macro-alias
