@@ -54,6 +54,7 @@
 //= require discourse/app/pre-initializers/sniff-capabilities
 
 //= require pretty-text/addon/sanitizer
+//= require pretty-text/addon/pretty-text
 
 //= require ember-addons/decorator-alias
 //= require ember-addons/macro-alias
