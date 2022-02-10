@@ -57,6 +57,7 @@
 //= require pretty-text/addon/engines/discourse-markdown-it
 //= require pretty-text/addon/sanitizer
 //= require pretty-text/addon/pretty-text
+//= require pretty-text/addon/guid
 
 //= require ember-addons/decorator-alias
 //= require ember-addons/macro-alias
