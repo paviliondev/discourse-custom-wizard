@@ -53,7 +53,7 @@
 //= require discourse/app/initializers/jquery-plugins
 //= require discourse/app/pre-initializers/sniff-capabilities
 
-//= require_tree_discourse pretty-text
+//= require pretty-text-bundle
 
 //= require ember-addons/decorator-alias
 //= require ember-addons/macro-alias
