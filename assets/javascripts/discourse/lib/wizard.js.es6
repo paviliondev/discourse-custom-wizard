@@ -118,7 +118,7 @@ function buildSubscriptionContent(feature, attribute, currentSubscription) {
   let values = attributes[attribute];
 
   if (typeof values === 'object') {
-    values = Object.keys(values):
+    values = Object.keys(values);
   }
 
   return values.map((value) => {
