@@ -84,7 +84,7 @@ class ::CustomWizard::CustomField
         next
       end
 
-      if attr == 'klass' && @subscription.requires_additional_subscription("custom_fields", "klass").include?(value)
+      if attr == 'klass' && @subscription.subscription.can_use_feature?("custom_fields", "klass", value)
         add_error(I18n.t("wizard.custom_field.error.subscription_type", type: value))
       end
 
@@ -99,7 +99,7 @@ class ::CustomWizard::CustomField
         add_error(I18n.t("#{i18n_key}.unsupported_type", type: value))
       end
 
-      if attr == 'type' && @subscription.requires_additional_subscription("custom_fields", "type").include?(value)
+      if attr == 'type' && @subscription.subscription.can_use_feature?("custom_fields", "type", value)
         add_error(I18n.t("wizard.custom_field.error.subscription_type", type: value))
       end
 

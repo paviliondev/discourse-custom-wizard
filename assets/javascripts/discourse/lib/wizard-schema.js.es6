@@ -203,107 +203,35 @@ const custom_field = {
   type: ["string", "boolean", "integer", "json"],
 };
 
-const subscription_levels = {
-  standard: {
-    actions: ["send_message", "add_to_group", "watch_categories"],
-    custom_fields: {
-      klass: [],
-      type: ["json"],
-    },
-  },
-
-  business: {
-    actions: ["create_category", "create_group", "send_to_api"],
-    custom_fields: {
-      klass: ["group", "category"],
-      type: [],
-    },
-  },
-};
-
 const wizardSchema = {
   wizard,
   step,
   field,
   custom_field,
-  action,
-  subscription_levels,
+  action
 };
 
-export function requiringAdditionalSubscription(
-  currentSubscription,
-  category,
-  subCategory
-) {
-  switch (category) {
-    case "actions":
-      switch (currentSubscription) {
-        case "business":
-          return [];
-        case "standard":
-          return subscription_levels["business"][category];
-        default:
-          return subscription_levels["standard"][category].concat(
-            subscription_levels["business"][category]
-          );
-      }
-    case "custom_fields":
-      switch (currentSubscription) {
-        case "business":
-          return [];
-        case "standard":
-          return subscription_levels["business"][category][subCategory];
-        default:
-          return subscription_levels["standard"][category][subCategory].concat(
-            subscription_levels["business"][category][subCategory]
-          );
-      }
-    default:
-      return [];
+export function hasRequiredSubscription(currentSubscriptionType, featureSubscriptionType) {
+  const types = wizardSchema.subscription.types;
+  return types.indexOf(currentSubscriptionType) >= types.indexOf(featureSubscriptionType);
+}
+
+export function subscriptionType(feature, attribute, value) {
+  let attributes =  wizardSchema.subscription.features[feature];
+
+  if (!attributes || !attributes[attribute] || !attributes[attribute][value]) {
+    return wizardSchema.subscription_types[0];
+  } else {
+    return attributes[attribute][value];
   }
 }
 
-export function subscriptionLevel(type, category, subCategory) {
-  switch (category) {
-    case "actions":
-      if (subscription_levels["business"].actions.includes(type)) {
-        return "business";
-      } else {
-        if (subscription_levels["standard"].actions.includes(type)) {
-          return "standard";
-        } else {
-          return "";
-        }
-      }
-    case "custom_fields":
-      if (
-        subscription_levels["business"].custom_fields[subCategory].includes(
-          type
-        )
-      ) {
-        return "business";
-      } else {
-        if (
-          subscription_levels["standard"].custom_fields[subCategory].includes(
-            type
-          )
-        ) {
-          return "standard";
-        } else {
-          return "";
-        }
-      }
-    default:
-      return "";
-  }
-}
-
-export function buildFieldTypes(types) {
-  wizardSchema.field.types = types;
-}
-
-export function buildFieldValidations(validations) {
-  wizardSchema.field.validations = validations;
+export function buildSchema(model) {
+  wizardSchema.subscription = {};
+  wizardSchema.subscription.features = model.subscription_features;
+  wizardSchema.subscription.types = model.subscription_types;
+  wizardSchema.field.types = model.field_types;
+  wizardSchema.field.validations = model.realtime_validations;
 }
 
 const siteSettings = getOwner(this).lookup("site-settings:main");
