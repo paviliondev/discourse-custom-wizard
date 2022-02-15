@@ -49,10 +49,17 @@ jobs:
           --health-retries 5
 
     steps:
+      - uses: haya14busa/action-cond@v1
+        id: discourse_branch
+        with:
+          cond: ${{  github.base_ref == 'stable' }}
+          if_true: "stable"
+          if_false: "tests-passed"
+
       - uses: actions/checkout@v2
         with:
           repository: discourse/discourse
-          ref: "${{ github.base_ref === 'stable' ? 'stable' : 'tests-passed' }}"
+          ref: ${{ steps.discourse_branch.outputs.value }}
           fetch-depth: 1
 
       - name: Fetch Repo Name
