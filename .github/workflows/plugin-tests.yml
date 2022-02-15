@@ -31,7 +31,7 @@ jobs:
         build_type: ["backend", "frontend"]
         ruby: ["2.7"]
         postgres: ["12"]
-        redis: ["4.x"]
+        redis: ["6.x"]
 
     services:
       postgres:
