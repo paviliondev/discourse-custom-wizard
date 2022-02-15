@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Create custom wizards for topic creation, onboarding, user surveys and much more.
-# version: 1.16.3
+# version: 1.16.4
 # authors: Angus McLeod, Faizaan Gagan, Robert Barrow, Keegan George
 # contact_emails: support@thepavilion.io
 # url: https://github.com/paviliondev/discourse-custom-wizard
