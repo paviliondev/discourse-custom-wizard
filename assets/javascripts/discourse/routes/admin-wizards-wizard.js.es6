@@ -11,7 +11,7 @@ export default DiscourseRoute.extend({
   },
 
   afterModel(model) {
-    buildSchema(model)
+    buildSchema(model);
 
     return all([
       this._getThemes(model),

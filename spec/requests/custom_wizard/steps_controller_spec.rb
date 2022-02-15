@@ -35,6 +35,8 @@ describe CustomWizard::StepsController do
     end
 
     it "when the user cant access the wizard" do
+      enable_subscription("standard")
+
       new_template = wizard_template.dup
       new_template["permitted"] = permitted_json["permitted"]
       CustomWizard::Template.save(new_template, skip_jobs: true)

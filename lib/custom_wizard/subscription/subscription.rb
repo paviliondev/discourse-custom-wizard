@@ -5,16 +5,34 @@ class CustomWizard::Subscription::Subscription
   attr_reader :type,
               :updated_at
 
-  NONE ||= "none"
   STANDARD ||= "standard"
   BUSINESS ||= "business"
   FEATURES ||= {
-    actions: {
+    wizard: {
+      permitted: STANDARD
+    },
+    step: {
+      index: STANDARD,
+      condition: STANDARD,
+      required_data: BUSINESS,
+      permitted_params: BUSINESS
+    },
+    field: {
+      index: STANDARD,
+      condition: STANDARD,
+      prefill: STANDARD,
+      content: STANDARD,
+      validations: STANDARD,
       type: {
-        create_topic: NONE,
-        update_profile: NONE,
-        open_composer: NONE,
-        route_to: NONE,
+        tag: STANDARD,
+        category: STANDARD,
+        group: STANDARD,
+        composer: STANDARD,
+        composer_preview: STANDARD
+      }
+    },
+    action: {
+      type: {
         send_message: STANDARD,
         watch_categories: STANDARD,
         add_to_group: STANDARD,
@@ -23,20 +41,16 @@ class CustomWizard::Subscription::Subscription
         create_group: BUSINESS
       }
     },
-    custom_fields: {
+    custom_field: {
       klass: {
-        topic: NONE,
-        post: NONE,
         group: BUSINESS,
         category: BUSINESS
       },
       type: {
-        string: NONE,
-        boolean: NONE,
-        integer: NONE,
         json: STANDARD
       }
-    }
+    },
+    api: {}
   }
 
   def initialize(subscription)
@@ -47,23 +61,33 @@ class CustomWizard::Subscription::Subscription
   end
 
   def active?
-    types.include?(type) && updated_at.to_datetime > (Time.zone.now - 2.hours).to_datetime
+    self.class.types.include?(type) && updated_recently
   end
 
-  def can_use_feature?(feature, attribute, value)
-    feature_type = FEATURES.dig(*[feature.to_sym, attribute.to_sym, value.to_sym])
-    !feature_type || has_required_type?(feature_type)
+  def updated_recently
+    updated_at.to_datetime > (Time.zone.now - 2.hours).to_datetime
   end
 
   def has_required_type?(t)
-    t && type_index(t) >= type_index(type)
+    t && type && type_index(type) >= type_index(t)
   end
 
   def type_index(t)
     self.class.types.index(t)
   end
 
+  def determine_feature_subscription_type(klass, attribute, value)
+    return BUSINESS if klass.to_sym === :api
+    type = FEATURES.dig(*[klass.to_sym, attribute.to_sym])
+
+    if type.is_a?(Hash) && value.present?
+      type = type[value.to_sym]
+    else
+      type
+    end
+  end
+
   def self.types
-    [NONE, STANDARD, BUSINESS]
+    [STANDARD, BUSINESS]
   end
 end

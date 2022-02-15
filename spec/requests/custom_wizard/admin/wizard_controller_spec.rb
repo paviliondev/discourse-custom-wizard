@@ -8,6 +8,7 @@ describe CustomWizard::AdminWizardController do
   let(:template) { get_wizard_fixture("wizard") }
 
   before do
+    enable_subscription("standard")
     CustomWizard::Template.save(template, skip_jobs: true)
 
     template_2 = template.dup

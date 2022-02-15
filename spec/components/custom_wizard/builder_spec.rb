@@ -20,6 +20,7 @@ describe CustomWizard::Builder do
   let(:permitted_json) { get_wizard_fixture("wizard/permitted") }
   let(:permitted_param_json) { get_wizard_fixture("step/permitted_params") }
   let(:user_condition_json) { get_wizard_fixture("condition/user_condition") }
+  let(:prefill_json) { get_wizard_fixture("field/prefill") }
 
   let(:boolean_field_condition_json) {
     JSON.parse(
@@ -33,6 +34,12 @@ describe CustomWizard::Builder do
     Group.refresh_automatic_group!(:trust_level_3)
     CustomWizard::Template.save(wizard_template, skip_jobs: true)
     @template = CustomWizard::Template.find('super_mega_fun_wizard')
+  end
+
+  def perform_update(step_id, submission)
+    updater = @wizard.create_updater(step_id, submission)
+    updater.update
+    updater
   end
 
   context 'disabled' do
@@ -101,6 +108,7 @@ describe CustomWizard::Builder do
 
     context "with restricted permissions" do
       before do
+        enable_subscription("standard")
         @template[:permitted] = permitted_json["permitted"]
         CustomWizard::Template.save(@template.as_json)
       end
@@ -155,13 +163,21 @@ describe CustomWizard::Builder do
       end
     end
 
-    it 'returns prefilled data' do
-      expect(
-        CustomWizard::Builder.new(@template[:id], user).build
-          .steps.first
-          .fields.first
-          .value
-      ).to eq('I am prefilled')
+    context "prefilled data" do
+      before do
+        enable_subscription("standard")
+        @template[:steps][0][:fields][0][:prefill] = prefill_json["prefill"]
+        CustomWizard::Template.save(@template.as_json)
+      end
+
+      it "works" do
+        expect(
+          CustomWizard::Builder.new(@template[:id], user).build
+            .steps.first
+            .fields.first
+            .value
+        ).to eq('I am prefilled')
+      end
     end
 
     context "user has partially completed" do
@@ -190,12 +206,14 @@ describe CustomWizard::Builder do
         end
 
         it 'does not return saved submissions' do
+          @wizard = CustomWizard::Builder.new(@template[:id], user).build
+          perform_update('step_1', step_1_field_1: 'Text input')
           expect(
             CustomWizard::Builder.new(@template[:id], user).build
               .steps.first
               .fields.first
               .value
-          ).to eq('I am prefilled')
+          ).to eq(nil)
         end
       end
     end
@@ -213,7 +231,7 @@ describe CustomWizard::Builder do
 
       context 'with required data' do
         before do
-          enable_subscription("standard")
+          enable_subscription("business")
           @template[:steps][0][:required_data] = required_data_json['required_data']
           @template[:steps][0][:required_data_message] = required_data_json['required_data_message']
           CustomWizard::Template.save(@template.as_json)
@@ -249,7 +267,7 @@ describe CustomWizard::Builder do
 
       context "with permitted params" do
         before do
-          enable_subscription("standard")
+          enable_subscription("business")
           @template[:steps][0][:permitted_params] = permitted_param_json['permitted_params']
           CustomWizard::Template.save(@template.as_json)
         end
@@ -298,14 +316,14 @@ describe CustomWizard::Builder do
             .build
             .steps.first
             .fields.length
-        ).to eq(4)
+        ).to eq(3)
       end
 
       context "with condition" do
         before do
           enable_subscription("standard")
           @template[:steps][0][:fields][0][:condition] = user_condition_json['condition']
-          @template[:steps][2][:fields][5][:condition] = boolean_field_condition_json['condition']
+          @template[:steps][2][:fields][2][:condition] = boolean_field_condition_json['condition']
           CustomWizard::Template.save(@template.as_json)
         end
 
@@ -326,18 +344,12 @@ describe CustomWizard::Builder do
 
           builder = CustomWizard::Builder.new(@template[:id], user)
           wizard = builder.build
-          expect(wizard.steps.last.fields.last.id).to eq(@template[:steps][2][:fields][5]['id'])
+          expect(wizard.steps.last.fields.last.id).to eq(@template[:steps][2][:fields][2]['id'])
         end
       end
     end
 
     context 'on update' do
-      def perform_update(step_id, submission)
-        updater = @wizard.create_updater(step_id, submission)
-        updater.update
-        updater
-      end
-
       it 'saves submissions' do
         @wizard = CustomWizard::Builder.new(@template[:id], user).build
         perform_update('step_1', step_1_field_1: 'Text input')

@@ -22,7 +22,6 @@ describe CustomWizard::UpdateValidator do
 
     @template[:steps][0][:fields][0][:min_length] = min_length
     @template[:steps][0][:fields][1][:min_length] = min_length
-    @template[:steps][0][:fields][2][:min_length] = min_length
 
     CustomWizard::Template.save(@template)
 
@@ -35,11 +34,6 @@ describe CustomWizard::UpdateValidator do
     expect(
       updater.errors.messages[:step_1_field_2].first
     ).to eq(I18n.t('wizard.field.too_short', label: 'Textarea', min: min_length))
-
-    updater = perform_validation('step_1', step_1_field_3: 'Te')
-    expect(
-      updater.errors.messages[:step_1_field_3].first
-    ).to eq(I18n.t('wizard.field.too_short', label: 'Composer', min: min_length))
   end
 
   it 'prevents submission if the length is over the max length' do
@@ -47,7 +41,6 @@ describe CustomWizard::UpdateValidator do
 
     @template[:steps][0][:fields][0][:max_length] = max_length
     @template[:steps][0][:fields][1][:max_length] = max_length
-    @template[:steps][0][:fields][2][:max_length] = max_length
 
     CustomWizard::Template.save(@template)
     long_string = "Our Competitive Capability solution offers platforms a suite of wholesale offerings. In the future, will you be able to effectively revolutionize synergies in your business? In the emerging market space, industry is ethically investing its mission critical executive searches. Key players will take ownership of their capabilities by iteratively right-sizing world-class visibilities. "
@@ -60,11 +53,6 @@ describe CustomWizard::UpdateValidator do
     expect(
       updater.errors.messages[:step_1_field_2].first
     ).to eq(I18n.t('wizard.field.too_long', label: 'Textarea', max: max_length))
-
-    updater = perform_validation('step_1', step_1_field_3: long_string)
-    expect(
-      updater.errors.messages[:step_1_field_3].first
-    ).to eq(I18n.t('wizard.field.too_long', label: 'Composer', max: max_length))
   end
 
   it "allows submission if the length is under or equal to the max length" do
@@ -72,7 +60,6 @@ describe CustomWizard::UpdateValidator do
 
     @template[:steps][0][:fields][0][:max_length] = max_length
     @template[:steps][0][:fields][1][:max_length] = max_length
-    @template[:steps][0][:fields][2][:max_length] = max_length
 
     CustomWizard::Template.save(@template)
     hundred_chars_string = "This is a line, exactly hundred characters long and not more even a single character more than that."
@@ -84,11 +71,6 @@ describe CustomWizard::UpdateValidator do
     updater = perform_validation('step_1', step_1_field_2: hundred_chars_string)
     expect(
       updater.errors.messages[:step_1_field_2].first
-    ).to eq(nil)
-
-    updater = perform_validation('step_1', step_1_field_3: hundred_chars_string)
-    expect(
-      updater.errors.messages[:step_1_field_3].first
     ).to eq(nil)
   end
 

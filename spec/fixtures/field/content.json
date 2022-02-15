@@ -1,0 +1,33 @@
+{
+  "content": [
+    {
+      "type": "association",
+      "pairs": [
+        {
+          "index": 0,
+          "key": "choice1",
+          "key_type": "text",
+          "value": "Choice 1",
+          "value_type": "text",
+          "connector": "equal"
+        },
+        {
+          "index": 1,
+          "key": "choice2",
+          "key_type": "text",
+          "value": "Choice 2",
+          "value_type": "text",
+          "connector": "association"
+        },
+        {
+          "index": 2,
+          "key": "choice3",
+          "key_type": "text",
+          "value": "Choice 3",
+          "value_type": "text",
+          "connector": "association"
+        }
+      ]
+    }
+  ]
+}

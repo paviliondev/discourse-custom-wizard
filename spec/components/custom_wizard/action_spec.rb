@@ -12,6 +12,7 @@ describe CustomWizard::Action do
   let(:create_group) { get_wizard_fixture("actions/create_group") }
   let(:add_to_group) { get_wizard_fixture("actions/add_to_group") }
   let(:send_message) { get_wizard_fixture("actions/send_message") }
+  let(:watch_categories) { get_wizard_fixture("actions/watch_categories") }
   let(:send_message_multi) { get_wizard_fixture("actions/send_message_multi") }
   let(:api_test_endpoint) { get_wizard_fixture("endpoints/test_endpoint") }
   let(:api_test_endpoint_body) { get_wizard_fixture("endpoints/test_endpoint_body") }
@@ -159,17 +160,6 @@ describe CustomWizard::Action do
     end
   end
 
-  it 'watches categories' do
-    wizard = CustomWizard::Builder.new(@template[:id], user).build
-    wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
-    wizard.create_updater(wizard.steps[1].id, {}).update
-
-    expect(CategoryUser.where(
-      category_id: category.id,
-      user_id: user.id
-    ).first.notification_level).to eq(0)
-  end
-
   it 're-routes a user' do
     wizard = CustomWizard::Builder.new(@template[:id], user).build
     updater = wizard.create_updater(wizard.steps.last.id, {})
@@ -177,7 +167,7 @@ describe CustomWizard::Action do
     expect(updater.result[:redirect_on_next]).to eq("https://google.com")
   end
 
-  context "subscription actions" do
+  context "standard subscription actions" do
     before do
       enable_subscription("standard")
     end
@@ -235,6 +225,38 @@ describe CustomWizard::Action do
       expect(post.exists?).to eq(true)
     end
 
+    it '#add_to_group' do
+      add_to_group["group"][0]["output"] = group.name
+      wizard_template['actions'] << add_to_group
+      update_template(wizard_template)
+
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      step_id = wizard.steps[0].id
+      updater = wizard.create_updater(step_id, step_1_field_1: "Text input").update
+
+      expect(group.users.first.username).to eq('angus')
+    end
+
+    it '#watch_categories' do
+      wizard_template['actions'] << watch_categories
+      update_template(wizard_template)
+
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
+      wizard.create_updater(wizard.steps[1].id, {}).update
+
+      expect(CategoryUser.where(
+        category_id: category.id,
+        user_id: user.id
+      ).first.notification_level).to eq(0)
+    end
+  end
+
+  context "business subscription actions" do
+    before do
+      enable_subscription("business")
+    end
+
     it '#create_category' do
       wizard_template['actions'] << create_category
       update_template(wizard_template)
@@ -254,19 +276,6 @@ describe CustomWizard::Action do
       wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
 
       expect(Group.where(name: wizard.current_submission.fields['action_9']).exists?).to eq(true)
-    end
-
-    it '#add_to_group' do
-      wizard_template['actions'] << create_group
-      wizard_template['actions'] << add_to_group
-      update_template(wizard_template)
-
-      wizard = CustomWizard::Builder.new(@template[:id], user).build
-      step_id = wizard.steps[0].id
-      updater = wizard.create_updater(step_id, step_1_field_1: "Text input").update
-      group = Group.find_by(name: wizard.current_submission.fields['action_9'])
-
-      expect(group.users.first.username).to eq('angus')
     end
 
     it '#send_to_api successful' do

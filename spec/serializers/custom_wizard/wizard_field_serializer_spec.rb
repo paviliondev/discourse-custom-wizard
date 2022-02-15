@@ -18,10 +18,10 @@ describe CustomWizard::FieldSerializer do
       scope: Guardian.new(user)
     ).as_json
 
-    expect(json_array.size).to eq(4)
+    expect(json_array.size).to eq(3)
     expect(json_array[0][:label]).to eq("<p>Text</p>")
     expect(json_array[0][:description]).to eq("Text field description.")
-    expect(json_array[3][:index]).to eq(3)
+    expect(json_array[2][:index]).to eq(2)
   end
 
   it "should return optional field attributes" do

@@ -29,12 +29,12 @@ describe CustomWizard::StepSerializer do
       each_serializer: described_class,
       scope: Guardian.new(user)
     ).as_json
-    expect(json_array[0][:fields].length).to eq(4)
+    expect(json_array[0][:fields].length).to eq(3)
   end
 
   context 'with required data' do
     before do
-      enable_subscription("standard")
+      enable_subscription("business")
       wizard_template['steps'][0]['required_data'] = required_data_json['required_data']
       wizard_template['steps'][0]['required_data_message'] = required_data_json['required_data_message']
       CustomWizard::Template.save(wizard_template)

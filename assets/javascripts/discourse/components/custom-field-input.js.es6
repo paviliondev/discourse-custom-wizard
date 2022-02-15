@@ -2,7 +2,7 @@ import Component from "@ember/component";
 import discourseComputed, { observes } from "discourse-common/utils/decorators";
 import { alias, equal, or } from "@ember/object/computed";
 import I18n from "I18n";
-import { generateSubscriptionContent } from "../lib/wizard";
+import { buildSubscriptionContent } from "../lib/wizard";
 
 export default Component.extend({
   tagName: "tr",
@@ -38,12 +38,12 @@ export default Component.extend({
 
   @discourseComputed("subscription")
   customFieldTypes(subscription) {
-    return generateSubscriptionContent("custom_fields", "type", subscription);
+    return buildSubscriptionContent("custom_fields", "types", subscription);
   },
 
   @discourseComputed("subscription")
   customFieldKlasses(subscription) {
-    return generateSubscriptionContent("custom_fields", "klass", subscription);
+    return buildSubscriptionContent("custom_fields", "klass", subscription);
   },
 
   @observes("field.klass")

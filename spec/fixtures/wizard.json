@@ -17,26 +17,13 @@
           "label": "Text",
           "description": "Text field description.",
           "type": "text",
-          "min_length": "3",
-          "prefill": [
-            {
-              "type": "assignment",
-              "output": "I am prefilled",
-              "output_type": "text",
-              "output_connector": "set"
-            }
-          ]
+          "min_length": "3"
         },
         {
           "id": "step_1_field_2",
           "label": "Textarea",
           "type": "textarea",
           "min_length": ""
-        },
-        {
-          "id": "step_1_field_3",
-          "label": "Composer",
-          "type": "composer"
         },
         {
           "id": "step_1_field_4",
@@ -102,55 +89,7 @@
         {
           "id": "step_3_field_1",
           "label": "Custom Dropdown",
-          "type": "dropdown",
-          "content": [
-            {
-              "type": "association",
-              "pairs": [
-                {
-                  "index": 0,
-                  "key": "choice1",
-                  "key_type": "text",
-                  "value": "Choice 1",
-                  "value_type": "text",
-                  "connector": "equal"
-                },
-                {
-                  "index": 1,
-                  "key": "choice2",
-                  "key_type": "text",
-                  "value": "Choice 2",
-                  "value_type": "text",
-                  "connector": "association"
-                },
-                {
-                  "index": 2,
-                  "key": "choice3",
-                  "key_type": "text",
-                  "value": "Choice 3",
-                  "value_type": "text",
-                  "connector": "association"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "step_3_field_2",
-          "label": "Tag",
-          "type": "tag"
-        },
-        {
-          "id": "step_3_field_3",
-          "label": "Category",
-          "type": "category",
-          "limit": 1,
-          "property": "id"
-        },
-        {
-          "id": "step_3_field_4",
-          "label": "Group",
-          "type": "group"
+          "type": "dropdown"
         },
         {
           "id": "step_3_field_5",
@@ -254,29 +193,6 @@
               "connector": "equal"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "action_5",
-      "run_after": "step_1",
-      "type": "watch_categories",
-      "notification_level": "tracking",
-      "wizard_user": true,
-      "categories": [
-        {
-          "type": "assignment",
-          "output": "action_8",
-          "output_type": "wizard_action",
-          "output_connector": "set"
-        }
-      ],
-      "mute_remainder": [
-        {
-          "type": "assignment",
-          "output": "true",
-          "output_type": "text",
-          "output_connector": "set"
         }
       ]
     },

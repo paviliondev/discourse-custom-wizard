@@ -920,6 +920,7 @@ $error: #ef1700;
 
   &:not(.subscribed) .subscription-settings {
     filter: blur(1px);
+    pointer-events: none;
   }
 }
 

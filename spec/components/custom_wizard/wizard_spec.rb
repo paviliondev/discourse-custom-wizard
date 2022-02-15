@@ -14,6 +14,7 @@ describe CustomWizard::Wizard do
     @permitted_template = template_json.dup
     @permitted_template["permitted"] = permitted_json["permitted"]
     @wizard = CustomWizard::Wizard.new(template_json, user)
+    enable_subscription("standard")
   end
 
   def append_steps

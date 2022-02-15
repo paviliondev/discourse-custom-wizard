@@ -19,6 +19,11 @@ class CustomWizard::Subscription
     @subscription.active?
   end
 
+  def can_use_feature?(klass, attribute, value)
+    t = @subscription.determine_feature_subscription_type(klass, attribute, value)
+    !t || @subscription.has_required_type?(t)
+  end
+
   def server
     "test.thepavilion.io"
   end

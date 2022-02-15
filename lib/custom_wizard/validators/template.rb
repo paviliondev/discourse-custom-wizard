@@ -13,34 +13,26 @@ class CustomWizard::TemplateValidator
     data = @data
 
     check_id(data, :wizard)
-    check_required(data, :wizard)
     validate_after_time
-    validate_subscription(data, :wizard)
+    validate_class(data, :wizard)
 
     data[:steps].each do |step|
-      check_required(step, :step)
-      validate_subscription(step, :step)
+      validate_class(step, :step)
 
       if step[:fields].present?
         step[:fields].each do |field|
-          validate_subscription(field, :field)
-          check_required(field, :field)
+          validate_class(field, :field)
         end
       end
     end
 
     if data[:actions].present?
       data[:actions].each do |action|
-        validate_subscription(action, :action)
-        check_required(action, :action)
+        validate_class(action, :action)
       end
     end
 
-    if errors.any?
-      false
-    else
-      true
-    end
+    !errors.any?
   end
 
   def self.required
@@ -52,56 +44,25 @@ class CustomWizard::TemplateValidator
     }
   end
 
-  def self.subscription
-    {
-      wizard: {
-        save_submissions: 'false',
-        restart_on_revisit: 'true',
-      },
-      step: {
-        condition: 'present',
-        index: 'conditional',
-        required_data: 'present',
-        permitted_params: 'present'
-      },
-      field: {
-        condition: 'present',
-        index: 'conditional'
-      },
-      action: {
-        type: %w[
-          send_message
-          add_to_group
-          create_category
-          create_group
-          send_to_api
-        ]
-      }
-    }
-  end
-
   private
 
-  def check_required(object, type)
-    self.class.required[type].each do |property|
-      if object[property].blank?
-        errors.add :base, I18n.t("wizard.validation.required", property: property)
+  def validate_class(object, klass)
+    check_required(object, klass)
+    validate_subscription(object, klass)
+  end
+
+  def check_required(object, klass)
+    self.class.required[klass].each do |attribute|
+      if object[attribute].blank?
+        errors.add :base, I18n.t("wizard.validation.required", attribute: attribute)
       end
     end
   end
 
-  def validate_subscription(object, type)
-    self.class.subscription[type].each do |property, subscription_type|
-      val = object[property.to_s]
-      is_subscription = (val != nil) && (
-        subscription_type === 'present' && val.present? ||
-        (['true', 'false'].include?(subscription_type) && cast_bool(val) == cast_bool(subscription_type)) ||
-        (subscription_type === 'conditional' && val.is_a?(Hash)) ||
-        (subscription_type.is_a?(Array) && subscription_type.include?(val))
-      )
-
-      if is_subscription && !@subscription.subscribed?
-        errors.add :base, I18n.t("wizard.validation.subscription", type: type.to_s, property: property)
+  def validate_subscription(object, klass)
+    object.keys.each do |attribute|
+      if !@subscription.can_use_feature?(klass, attribute, object[attribute])
+        errors.add :base, I18n.t("wizard.validation.subscription", class: klass.to_s, attribute: attribute)
       end
     end
   end

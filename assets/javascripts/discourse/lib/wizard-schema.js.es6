@@ -71,7 +71,7 @@ const field = {
     type: null,
     condition: null,
   },
-  types: {},
+  type: {},
   mapped: ["prefill", "content", "condition", "index"],
   required: ["id", "type"],
   dependent: {},
@@ -84,7 +84,7 @@ const action = {
     run_after: "wizard_completion",
     type: null,
   },
-  types: {
+  type: {
     create_topic: {
       title: null,
       post: null,
@@ -208,19 +208,25 @@ const wizardSchema = {
   step,
   field,
   custom_field,
-  action
+  action,
 };
 
-export function hasRequiredSubscription(currentSubscriptionType, featureSubscriptionType) {
+export function hasRequiredSubscription(
+  currentSubscriptionType,
+  featureSubscriptionType
+) {
   const types = wizardSchema.subscription.types;
-  return types.indexOf(currentSubscriptionType) >= types.indexOf(featureSubscriptionType);
+  return (
+    types.indexOf(currentSubscriptionType) >=
+    types.indexOf(featureSubscriptionType)
+  );
 }
 
-export function subscriptionType(feature, attribute, value) {
-  let attributes =  wizardSchema.subscription.features[feature];
+export function subscriptionType(klass, attribute, value) {
+  let attributes = wizardSchema.subscription.features[klass];
 
   if (!attributes || !attributes[attribute] || !attributes[attribute][value]) {
-    return wizardSchema.subscription_types[0];
+    return wizardSchema.subscription.types[0];
   } else {
     return attributes[attribute][value];
   }
@@ -228,7 +234,12 @@ export function subscriptionType(feature, attribute, value) {
 
 export function buildSchema(model) {
   wizardSchema.subscription = {};
-  wizardSchema.subscription.features = model.subscription_features;
+
+  let features = model.subscription_features;
+  features["field"]["types"] = features["field"]["type"];
+  features["action"]["types"] = features["action"]["type"];
+
+  wizardSchema.subscription.features = features;
   wizardSchema.subscription.types = model.subscription_types;
   wizardSchema.field.types = model.field_types;
   wizardSchema.field.validations = model.realtime_validations;

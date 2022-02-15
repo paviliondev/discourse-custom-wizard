@@ -1,9 +1,9 @@
 import { default as discourseComputed } from "discourse-common/utils/decorators";
 import { empty, equal, or } from "@ember/object/computed";
 import {
+  buildSubscriptionContent,
   notificationLevels,
   selectKitContent,
-  generateSubscriptionContent
 } from "../lib/wizard";
 import { computed } from "@ember/object";
 import UndoChanges from "../mixins/undo-changes";
@@ -99,6 +99,6 @@ export default Component.extend(UndoChanges, {
 
   @discourseComputed("subscription")
   actionTypes(subscription) {
-    return generateSubscriptionContent("action", "types", subscription);
+    return buildSubscriptionContent("action", "type", subscription);
   },
 });

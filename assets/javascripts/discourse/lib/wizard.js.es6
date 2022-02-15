@@ -1,8 +1,9 @@
 import EmberObject from "@ember/object";
 import wizardSchema, {
   hasRequiredSubscription,
-  subscriptionType
+  subscriptionType,
 } from "./wizard-schema";
+import I18n from "I18n";
 
 function selectKitContent(content) {
   return content.map((i) => ({ id: i, name: i }));
@@ -113,23 +114,22 @@ function wizardFieldList(steps = [], opts = {}) {
   }, []);
 }
 
-function buildSubscriptionContent(feature, attribute, currentSubscription) {
-  let attributes = wizardSchema[feature];
+function buildSubscriptionContent(klass, attribute, currentSubscription) {
+  let attributes = wizardSchema[klass];
   let values = attributes[attribute];
 
-  if (typeof values === 'object') {
-    values = Object.keys(values):
+  if (typeof values === "object") {
+    values = Object.keys(values);
   }
 
   return values.map((value) => {
-    let subscriptionType = subscriptionType(feature, attribute, value);
-
+    let type = subscriptionType(klass, attribute, value);
     return {
       id: value,
-      name: I18n.t(`admin.wizard.${feature}.${attribute}.${value}`),
-      subscription: subscriptionType,
-      disabled: hasRequiredSubscription(currentSubscription, subscriptionType)
-    }
+      name: I18n.t(`admin.wizard.${klass}.${attribute}.${value}.label`),
+      subscription: type,
+      disabled: hasRequiredSubscription(currentSubscription, type),
+    };
   });
 }
 
@@ -144,5 +144,5 @@ export {
   notificationLevels,
   wizardFieldList,
   sentenceCase,
-  buildSubscriptionContent
+  buildSubscriptionContent,
 };

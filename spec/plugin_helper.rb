@@ -33,6 +33,7 @@ def enable_subscription(type)
   # CustomWizard::Subscription.new
   CustomWizard::Subscription.any_instance.stubs(:subscribed?).returns(true)
   CustomWizard::Subscription.any_instance.stubs(:type).returns(type)
+  CustomWizard::Subscription::Subscription.any_instance.stubs(:type).returns(type)
 end
 
 def disable_subscription

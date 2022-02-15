@@ -47,7 +47,7 @@ en:
         value: "Value"
         profile: "profile"
         type: "Type"
-        none: "Make a selection"              
+        none: "Make a selection"
         submission_key: 'submission key'
         param_key: 'param'
         group: "Group"
@@ -126,9 +126,9 @@ en:
           hide: "Hide"
           preview: "{{action}} Preview"
           popover: "{{action}} Fields"
-        
+
         input:
-          conditional: 
+          conditional:
             name: 'if'
             output: 'then'
           assignment:
@@ -137,7 +137,7 @@ en:
             name: 'map'
           validation:
             name: 'ensure'
-  
+
         selector:
           label:
             text: "text"
@@ -175,7 +175,7 @@ en:
           dependent: "{{property}} is dependent on {{dependent}}"
           conflict: "{{type}} with {{property}} '{{value}}' already exists"
           after_time: "After time invalid"
-        
+
         step:
           header: "Steps"
           title: "Title"
@@ -189,7 +189,7 @@ en:
           force_final:
             label: "Conditional Final Step"
             description: "Display this step as the final step if conditions on later steps have not passed when the user reaches this step."
-        
+
         field:
           header: "Fields"
           label: "Label"
@@ -211,7 +211,7 @@ en:
           property: "Property"
           prefill: "Prefill"
           content: "Content"
-          date_time_format: 
+          date_time_format:
             label: "Format"
             instructions: "<a href='https://momentjs.com/docs/#/displaying/format/' target='_blank'>Moment.js format</a>"
           validations:
@@ -228,7 +228,7 @@ en:
               weeks: "Weeks"
               months: "Months"
               years: "Years"
-          
+
           type:
             text: "Text"
             textarea: Textarea
@@ -247,7 +247,7 @@ en:
             date: Date
             time: Time
             date_time: Date & Time
-        
+
         connector:
           and: "and"
           or: "or"
@@ -261,7 +261,7 @@ en:
           regex: '=~'
           association: '→'
           is: 'is'
-        
+
         action:
           header: "Actions"
           include: "Include Fields"
@@ -269,8 +269,7 @@ en:
           post: "Post"
           topic_attr: "Topic Attribute"
           interpolate_fields: "Insert wizard fields using the field_id in w{}. Insert user fields using field key in u{}."
-          
-          run_after: 
+          run_after:
             label: "Run After"
             wizard_completion: "Wizard Completion"
           custom_fields:
@@ -282,81 +281,83 @@ en:
           suppress_notifications:
             label: "Suppress Notifications"
             description: "Suppress normal notifications triggered by post creation"
-          send_message:
-            label: "Send Message"
-            recipient: "Recipient"
-          create_topic:
-            label: "Create Topic"
-            category: "Category"
-            tags: "Tags"
-            visible: "Visible"
-          open_composer:
-            label: "Open Composer"
-          update_profile:
-            label: "Update Profile"
-            setting: "Fields"
-            key: "field"
-          watch_categories:
-            label: "Watch Categories"
-            categories: "Categories"
-            mute_remainder: "Mute Remainder"
-            notification_level:
-              label: "Notification Level"
-              regular: "Normal"
-              watching: "Watching"
-              tracking: "Tracking"
-              watching_first_post: "Watching First Post"
-              muted: "Muted"
-            select_a_notification_level: "Select level"
-            wizard_user: "Wizard User"
-            usernames: "Users"
-          post_builder:
-            checkbox: "Post Builder"
-            label: "Builder"
-            user_properties: "User Properties"
-            wizard_fields: "Wizard Fields"
-            wizard_actions: "Wizard Actions"
-            placeholder: "Insert wizard fields using the field_id in w{}. Insert user properties using property in u{}."
-          add_to_group:
-            label: "Add to Group"
-          route_to:
-            label: "Route To"
-            url: "Url"
-            code: "Code"
-          send_to_api:
-            label: "Send to API"
-            api: "API"
-            endpoint: "Endpoint"
-            select_an_api: "Select an API"
-            select_an_endpoint: "Select an endpoint"
-            body: "Body"
-            body_placeholder: "JSON"
-          create_category:
-            label: "Create Category"
-            name: Name
-            slug: Slug
-            color: Color
-            text_color: Text color
-            parent_category: Parent Category
-            permissions: Permissions
-          create_group:
-            label: Create Group
-            name: Name
-            full_name: Full Name
-            title: Title
-            bio_raw: About
-            owner_usernames: Owners
-            usernames: Members
-            grant_trust_level: Automatic Trust Level
-            mentionable_level: Mentionable Level
-            messageable_level: Messageable Level
-            visibility_level: Visibility Level
-            members_visibility_level: Members Visibility Level
-        
+
+          type:
+            send_message:
+              label: "Send Message"
+              recipient: "Recipient"
+            create_topic:
+              label: "Create Topic"
+              category: "Category"
+              tags: "Tags"
+              visible: "Visible"
+            open_composer:
+              label: "Open Composer"
+            update_profile:
+              label: "Update Profile"
+              setting: "Fields"
+              key: "field"
+            watch_categories:
+              label: "Watch Categories"
+              categories: "Categories"
+              mute_remainder: "Mute Remainder"
+              notification_level:
+                label: "Notification Level"
+                regular: "Normal"
+                watching: "Watching"
+                tracking: "Tracking"
+                watching_first_post: "Watching First Post"
+                muted: "Muted"
+              select_a_notification_level: "Select level"
+              wizard_user: "Wizard User"
+              usernames: "Users"
+            post_builder:
+              checkbox: "Post Builder"
+              label: "Builder"
+              user_properties: "User Properties"
+              wizard_fields: "Wizard Fields"
+              wizard_actions: "Wizard Actions"
+              placeholder: "Insert wizard fields using the field_id in w{}. Insert user properties using property in u{}."
+            add_to_group:
+              label: "Add to Group"
+            route_to:
+              label: "Route To"
+              url: "Url"
+              code: "Code"
+            send_to_api:
+              label: "Send to API"
+              api: "API"
+              endpoint: "Endpoint"
+              select_an_api: "Select an API"
+              select_an_endpoint: "Select an endpoint"
+              body: "Body"
+              body_placeholder: "JSON"
+            create_category:
+              label: "Create Category"
+              name: Name
+              slug: Slug
+              color: Color
+              text_color: Text color
+              parent_category: Parent Category
+              permissions: Permissions
+            create_group:
+              label: Create Group
+              name: Name
+              full_name: Full Name
+              title: Title
+              bio_raw: About
+              owner_usernames: Owners
+              usernames: Members
+              grant_trust_level: Automatic Trust Level
+              mentionable_level: Mentionable Level
+              messageable_level: Messageable Level
+              visibility_level: Visibility Level
+              members_visibility_level: Members Visibility Level
+
         custom_field:
           nav_label: "Custom Fields"
           add: "Add"
-          external: 
+          external:
             label: "from another plugin"
             title: "This custom field has been added by another plugin. You can use it in your wizards but you can't edit the field here."
           name:
@@ -385,7 +386,7 @@ en:
             basic_category: "Category"
             basic_group: "Group"
             post: "Post"
-            
+
         submissions:
           nav_label: "Submissions"
           title: "{{name}} Submissions"
@@ -467,7 +468,7 @@ en:
 
         subscription_container:
           title: Subscriber Features
-          subscribed: 
+          subscribed:
             label: Subscribed
             title: You're subscribed and can use these features
           not_subscribed:
@@ -635,7 +636,7 @@ en:
       yourself_confirm:
         title: "Did you forget to add recipients?"
         body: "Right now this message is only being sent to yourself!"
-    
+
     realtime_validations:
       similar_topics:
         insufficient_characters: "Type a minimum 5 characters to start looking for similar topics"

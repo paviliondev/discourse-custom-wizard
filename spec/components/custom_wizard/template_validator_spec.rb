@@ -6,6 +6,7 @@ describe CustomWizard::TemplateValidator do
   let(:template) { get_wizard_fixture("wizard") }
   let(:create_category) { get_wizard_fixture("actions/create_category") }
   let(:user_condition) { get_wizard_fixture("condition/user_condition") }
+  let(:permitted_json) { get_wizard_fixture("wizard/permitted") }
 
   it "validates valid templates" do
     expect(
@@ -45,7 +46,7 @@ describe CustomWizard::TemplateValidator do
 
   context "without subscription" do
     it "invalidates subscription wizard attributes" do
-      template[:save_submissions] = false
+      template[:permitted] = permitted_json["permitted"]
       expect(
         CustomWizard::TemplateValidator.new(template).perform
       ).to eq(false)
@@ -73,13 +74,13 @@ describe CustomWizard::TemplateValidator do
     end
   end
 
-  context "with subscription" do
+  context "with standard subscription" do
     before do
       enable_subscription("standard")
     end
 
     it "validates wizard attributes" do
-      template[:save_submissions] = false
+      template[:permitted] = permitted_json["permitted"]
       expect(
         CustomWizard::TemplateValidator.new(template).perform
       ).to eq(true)
@@ -97,6 +98,12 @@ describe CustomWizard::TemplateValidator do
       expect(
         CustomWizard::TemplateValidator.new(template).perform
       ).to eq(true)
+    end
+  end
+
+  context "with business subscription" do
+    before do
+      enable_subscription("business")
     end
 
     it "validates actions" do
