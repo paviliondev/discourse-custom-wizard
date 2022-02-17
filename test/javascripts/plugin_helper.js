@@ -1,6 +1,6 @@
 // discourse-skip-module
 /*global document, Logster, QUnit */
-
+console.log('starting test_helper')
 window.Discourse = {};
 window.Wizard = {};
 Wizard.SiteSettings = {};
@@ -21,7 +21,7 @@ Discourse.SiteSettings = Wizard.SiteSettings;
 //= require jquery.debug
 //= require handlebars
 //= require ember-template-compiler
-//= require wizard-application
+//= require wizard-custom
 //= require wizard-vendor
 //= require_tree ./helpers
 //= require_tree ./acceptance
@@ -29,7 +29,7 @@ Discourse.SiteSettings = Wizard.SiteSettings;
 //= require_tree ./components
 //= require ./wizard-pretender
 //= require test-shims
-
+console.log ("end of require")
 document.addEventListener("DOMContentLoaded", function () {
   document.body.insertAdjacentHTML(
     "afterbegin",
@@ -47,12 +47,7 @@ if (window.Logster) {
 }
 Ember.Test.adapter = window.QUnitAdapter.create();
 
-let createPretendServer = requirejs(
-  "wizard/test/wizard-pretender",
-  null,
-  null,
-  false
-).default;
+/*let createPretendServer = requirejs("./wizard-pretender", null, null, false).default;
 
 let server;
 QUnit.testStart(function () {
@@ -61,9 +56,9 @@ QUnit.testStart(function () {
 
 QUnit.testDone(function () {
   server.shutdown();
-});
+});*/
 
-let _testApp = requirejs("wizard/test/helpers/start-app").default();
+let _testApp = requirejs("./helpers/start-app").default();
 let _buildResolver = requirejs("discourse-common/resolver").buildResolver;
 window.setResolver(_buildResolver("wizard").create({ namespace: _testApp }));
 
@@ -72,3 +67,4 @@ Object.keys(requirejs.entries).forEach(function (entry) {
     requirejs(entry, null, null, true);
   }
 });
+console.log ("end of helper")
