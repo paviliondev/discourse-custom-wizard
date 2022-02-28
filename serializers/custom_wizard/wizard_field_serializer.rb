@@ -101,7 +101,7 @@ class CustomWizard::FieldSerializer < ::ApplicationSerializer
     object.content
   end
 
-  def content
+  def tag_groups
     object.tag_groups
   end
 
