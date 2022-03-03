@@ -154,15 +154,6 @@ class CustomWizard::Builder
           end
         end
 
-        if content[:type] == 'assignment' && field_template['type'] === 'dropdown'
-          content[:result] = content[:result].map do |item|
-            {
-              id: item,
-              name: item
-            }
-          end
-        end
-
         params[:content] = content[:result]
       end
     end
