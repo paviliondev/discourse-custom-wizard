@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 plugin = "discourse-custom-wizard"
 
 SimpleCov.configure do
