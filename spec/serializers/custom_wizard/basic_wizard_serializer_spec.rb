@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../../plugin_helper'
-
 describe CustomWizard::BasicWizardSerializer do
   fab!(:user) { Fabricate(:user) }
   let(:template) { get_wizard_fixture("wizard") }

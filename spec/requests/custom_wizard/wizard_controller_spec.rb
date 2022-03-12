@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require_relative '../../plugin_helper'
 
 describe CustomWizard::WizardController do
   fab!(:user) { Fabricate(:user, username: 'angus', email: "angus@email.com", trust_level: TrustLevel[3]) }
@@ -60,6 +59,15 @@ describe CustomWizard::WizardController do
       CustomWizard::Submission.new(@wizard, redirect_to: "/t/2").save
       put '/w/super-mega-fun-wizard/skip.json'
       expect(response.parsed_body['redirect_to']).to eq('/t/2')
+    end
+
+    it 'deletes the users redirect_to_wizard if present' do
+      user.custom_fields['redirect_to_wizard'] = @template["id"]
+      user.save_custom_fields(true)
+      @wizard = CustomWizard::Wizard.create(@template["id"], user)
+      put '/w/super-mega-fun-wizard/skip.json'
+      expect(response.status).to eq(200)
+      expect(user.reload.redirect_to_wizard).to eq(nil)
     end
 
     it "deletes the submission if user has filled up some data" do

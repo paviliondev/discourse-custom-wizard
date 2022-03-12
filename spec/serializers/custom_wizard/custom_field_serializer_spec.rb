@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../../plugin_helper'
-
 describe CustomWizard::CustomFieldSerializer do
   fab!(:user) { Fabricate(:user) }
   let(:custom_field_json) { get_wizard_fixture("custom_field/custom_fields") }

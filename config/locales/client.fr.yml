@@ -2,14 +2,13 @@ fr:
   js:
     wizard:
       complete_custom: "Bienvenu·e sur %{site_name} ! Commençons avec <a href='%{wizard_url}' data-auto-route='true'>l'assistant %{wizard_name}</a> ✨"
-
   admin_js:
     admin:
       wizard:
         label: "Assistants"
-        new: "Nouveau"
-        custom_label: "Personnalisé"
-        submissions_label: "Contributions"
+        nav_label: "Wizards"
+        select: "Select a wizard"
+        create: "Create Wizard"
         name: "Nom"
         name_placeholder: "nom de l'assistant"
         background: "Fond d'écran"
@@ -33,39 +32,133 @@ fr:
         required_label: "Les utilisatrices doivent compléter l'assistant."
         prompt_completion: "Invitation"
         prompt_completion_label: "Inviter l'utilisatrice à compléter l'assistant."
+        restart_on_revisit: "Restart"
+        restart_on_revisit_label: "Clear submissions on each visit."
+        resume_on_revisit: "Resume"
+        resume_on_revisit_label: "Ask the user if they want to resume on each visit."
         theme_id: "Thème"
         no_theme: "Choisir un thème (optionnel)"
         save: "Sauvegarder"
         remove: "Supprimer l'assistant"
-        header: "Assistant"
         add: "Ajouter"
         url: "URL"
         key: "Clé"
-        or: "Ou"
         value: "Valeur"
-        id: "Id"
-        id_placeholder: "Utilise des tirets-bas (_). Ne peut être modifié."
-        key_placeholder: "Clé de traduction"
-        custom_text_placeholder: "Remplace la traduction"
-        custom_field_placeholder: "Champ personnalisé"
-        user_field_placeholder: "Champ utilisateur"
+        profile: "profile"
+        translation: "Translation"
+        translation_placeholder: "key"
         type: "Type"
         none: "Faire une sélection"
-        select_field: "Choisir un champ"
+        submission_key: 'submission key'
+        param_key: 'param'
+        group: "Group"
+        permitted: "Permitted"
+        advanced: "Advanced"
+        undo: "Undo"
+        clear: "Clear"
+        select_type: "Select a type"
+        condition: "Condition"
+        index: "Index"
+        category_settings:
+          custom_wizard:
+            title: "Custom Wizard"
+            create_topic_wizard: "Select a wizard to replace the new topic composer in this category."
+        message:
+          wizard:
+            select: "Select a wizard, or create a new one"
+            edit: "You're editing a wizard"
+            create: "You're creating a new wizard"
+            documentation: "Check out the wizard documentation"
+            contact: "Contact the developer"
+          field:
+            type: "Select a field type"
+            edit: "You're editing a field"
+            documentation: "Check out the field documentation"
+          action:
+            type: "Select an action type"
+            edit: "You're editing an action"
+            documentation: "Check out the action documentation"
+          custom_fields:
+            create: "View, create, edit and destroy custom fields"
+            saved: "Saved custom field"
+            error: "Failed to save: {{messages}}"
+            documentation: Check out the custom field documentation
+          manager:
+            info: "Export, import or destroy wizards"
+            documentation: Check out the manager documentation
+            none_selected: Please select atleast one wizard
+            no_file: Please choose a file to import
+            file_size_error: The file size must be 512kb or less
+            file_format_error: The file must be a .json file
+            server_error: "Error: {{message}}"
+            importing: Importing wizards...
+            destroying: Destroying wizards...
+            import_complete: Import complete
+            destroy_complete: Destruction complete
+        editor:
+          show: "Show"
+          hide: "Hide"
+          preview: "{{action}} Preview"
+          popover: "{{action}} Fields"
+        input:
+          conditional:
+            name: 'if'
+            output: 'then'
+          assignment:
+            name: 'set'
+          association:
+            name: 'map'
+          validation:
+            name: 'ensure'
+        selector:
+          label:
+            text: "text"
+            wizard_field: "wizard field"
+            wizard_action: "wizard action"
+            user_field: "user field"
+            user_field_options: "user field options"
+            user: "user"
+            category: "category"
+            tag: "tag"
+            group: "group"
+            list: "list"
+            custom_field: "custom field"
+            value: "value"
+          placeholder:
+            text: "Enter text"
+            property: "Select property"
+            wizard_field: "Select field"
+            wizard_action: "Select action"
+            user_field: "Select field"
+            user_field_options: "Select field"
+            user: "Select user"
+            category: "Select category"
+            tag: "Select tag"
+            group: "Select group"
+            list: "Enter item"
+            custom_field: "Select field"
+            value: "Select value"
         error:
-          name_required: "Les assistants doivent porter un nom."
-          steps_required: "Les assistants doivent comporter au-moins une étape."
-          id_required: "Tous les assistants, étapes, champs et actions ont besoin d'un identifiant."
-          type_required: "Tous les champs ont besoin d'un type."
-          after_time_need_time: "Le délai est activé mais aucune heure n'est établie."
-          after_time_invalid: "Le délai est invalide."
+          failed: "failed to save wizard"
+          required: "{{type}} requires {{property}}"
+          invalid: "{{property}} is invalid"
+          dependent: "{{property}} is dependent on {{dependent}}"
+          conflict: "{{type}} with {{property}} '{{value}}' already exists"
+          after_time: "After time invalid"
         step:
           header: "Étapes"
           title: "Titre"
           banner: "Bannière"
           description: "Description"
+          required_data:
+            label: "Required"
+            not_permitted_message: "Message shown when required data not present"
+          permitted_params:
+            label: "Params"
+          force_final:
+            label: "Conditional Final Step"
+            description: "Display this step as the final step if conditions on later steps have not passed when the user reaches this step."
         field:
-          type: "Choisir un type"
           header: "Champs"
           label: "Étiquette"
           description: "Description"
@@ -75,35 +168,252 @@ fr:
           required_label: "Le champ est obligatoire"
           min_length: "Longueur min."
           min_length_placeholder: "Longueur minimale en nombre de caractères"
+          max_length: "Max Length"
+          max_length_placeholder: "Maximum length in characters"
+          char_counter: "Character Counter"
+          char_counter_placeholder: "Display Character Counter"
+          field_placeholder: "Field Placeholder"
+          file_types: "File Types"
+          preview_template: "Template"
+          limit: "Limit"
+          property: "Property"
+          prefill: "Prefill"
+          content: "Content"
+          date_time_format:
+            label: "Format"
+            instructions: "<a href='https://momentjs.com/docs/#/displaying/format/' target='_blank'>Moment.js format</a>"
+          validations:
+            header: "Realtime Validations"
+            enabled: "Enabled"
+            similar_topics: "Similar Topics"
+            position: "Position"
+            above: "Above"
+            below: "Below"
+            categories: "Categories"
+            max_topic_age: "Max Topic Age"
+            time_units:
+              days: "Days"
+              weeks: "Weeks"
+              months: "Months"
+              years: "Years"
+          type:
+            text: "Text"
+            textarea: Textarea
+            composer: Composer
+            composer_preview: Composer Preview
+            text_only: Text Only
+            number: Number
+            checkbox: Checkbox
+            url: Url
+            upload: Upload
+            dropdown: Dropdown
+            tag: Tag
+            category: Category
+            group: Group
+            user_selector: User Selector
+            date: Date
+            time: Time
+            date_time: Date & Time
+        connector:
+          and: "and"
+          or: "or"
+          then: "then"
+          set: "set"
+          equal: '='
+          greater: '>'
+          less: '<'
+          greater_or_equal: '>='
+          less_or_equal: '<='
+          regex: '=~'
+          association: '→'
+          is: 'is'
         action:
           header: "Actions <sup>*</sup>"
           include: "Inclure les champs"
           title: "Titre"
           post: "Message"
-          add_fields: "Champs {{type}}"
-          available_fields: "* Si 'Conserver les soumissions à l'assistant' est inactif, seuls les champs de l'étape courante sont disponibles pour les actions de cette étape."
           topic_attr: "Attribut du sujet"
+          interpolate_fields: "Insert wizard fields using the field_id in w{}. Insert user fields using field key in u{}."
+          run_after:
+            label: "Run After"
+            wizard_completion: "Wizard Completion"
+          custom_fields:
+            label: "Custom"
+            key: "field"
+          skip_redirect:
+            label: "Redirect"
+            description: "Don't redirect the user to this {{type}} after the wizard completes"
+          suppress_notifications:
+            label: "Suppress Notifications"
+            description: "Suppress normal notifications triggered by post creation"
           send_message:
             label: "Envoyer un message"
             recipient: "Destinataire"
           create_topic:
             label: "Créer un sujet"
             category: "Catégorie"
+            tags: "Tags"
+            visible: "Visible"
+          open_composer:
+            label: "Open Composer"
           update_profile:
             label: "Mettre à jour le profil"
+            setting: "Fields"
+            key: "field"
+          watch_categories:
+            label: "Watch Categories"
+            categories: "Categories"
+            mute_remainder: "Mute Remainder"
+            notification_level:
+              label: "Notification Level"
+              regular: "Normal"
+              watching: "Watching"
+              tracking: "Tracking"
+              watching_first_post: "Watching First Post"
+              muted: "Muted"
+            select_a_notification_level: "Select level"
+            wizard_user: "Wizard User"
+            usernames: "Users"
           post_builder:
             checkbox: "Générateur de message"
             label: "Générateur"
-            user_fields: "Champs utilisateurs : "
+            user_properties: "User Properties"
             wizard_fields: "Champs de l'assistant : "
+            wizard_actions: "Wizard Actions"
             placeholder: "Insérer les champs de l'assistant en utilisant l'identifiant du champ dans w{}. Insérer les champs utilisateurs en utilisant la clé du champ dans u{}."
-          custom_title: "Titre personnalisé"
-          custom_category:
-            label: "Catégorie personnalisée"
-            wizard_field: "Champ de l'assistant"
-            user_field: "Champ utilisateur"
-
+          add_to_group:
+            label: "Add to Group"
+          route_to:
+            label: "Route To"
+            url: "Url"
+            code: "Code"
+          send_to_api:
+            label: "Send to API"
+            api: "API"
+            endpoint: "Endpoint"
+            select_an_api: "Select an API"
+            select_an_endpoint: "Select an endpoint"
+            body: "Body"
+            body_placeholder: "JSON"
+          create_category:
+            label: "Create Category"
+            name: Name
+            slug: Slug
+            color: Color
+            text_color: Text color
+            parent_category: Parent Category
+            permissions: Permissions
+          create_group:
+            label: Create Group
+            name: Name
+            full_name: Full Name
+            title: Title
+            bio_raw: About
+            owner_usernames: Owners
+            usernames: Members
+            grant_trust_level: Automatic Trust Level
+            mentionable_level: Mentionable Level
+            messageable_level: Messageable Level
+            visibility_level: Visibility Level
+            members_visibility_level: Members Visibility Level
+        custom_field:
+          nav_label: "Custom Fields"
+          add: "Add"
+          external:
+            label: "from another plugin"
+            title: "This custom field has been added by another plugin. You can use it in your wizards but you can't edit the field here."
+          name:
+            label: "Name"
+            select: "underscored_name"
+          type:
+            label: "Type"
+            select: "Select a type"
+            string: "String"
+            integer: "Integer"
+            boolean: "Boolean"
+            json: "JSON"
+          klass:
+            label: "Class"
+            select: "Select a class"
+            post: "Post"
+            category: "Category"
+            topic: "Topic"
+            group: "Group"
+            user: "User"
+          serializers:
+            label: "Serializers"
+            select: "Select serializers"
+            topic_view: "Topic View"
+            topic_list_item: "Topic List Item"
+            basic_category: "Category"
+            basic_group: "Group"
+            post: "Post"
+        submissions:
+          nav_label: "Submissions"
+          title: "{{name}} Submissions"
+          download: "Download"
+        api:
+          label: "API"
+          nav_label: 'APIs'
+          select: "Select API"
+          create: "Create API"
+          new: 'New API'
+          name: "Name (can't be changed)"
+          name_placeholder: 'Underscored'
+          title: 'Title'
+          title_placeholder: 'Display name'
+          remove: 'Delete'
+          save: "Save"
+          auth:
+            label: "Authorization"
+            btn: 'Authorize'
+            settings: "Settings"
+            status: "Status"
+            redirect_uri: "Redirect url"
+            type: 'Type'
+            type_none: 'Select a type'
+            url: "Authorization url"
+            token_url: "Token url"
+            client_id: 'Client id'
+            client_secret: 'Client secret'
+            username: 'username'
+            password: 'password'
+            params:
+              label: 'Params'
+              new: 'New param'
+          status:
+            label: "Status"
+            authorized: 'Authorized'
+            not_authorized: "Not authorized"
+            code: "Code"
+            access_token: "Access token"
+            refresh_token: "Refresh token"
+            expires_at: "Expires at"
+            refresh_at: "Refresh at"
+          endpoint:
+            label: "Endpoints"
+            add: "Add endpoint"
+            name: "Endpoint name"
+            method: "Select a method"
+            url: "Enter a url"
+            content_type: "Select a content type"
+            success_codes: "Select success codes"
+          log:
+            label: "Logs"
+        log:
+          nav_label: "Logs"
+        manager:
+          nav_label: Manager
+          title: Manage Wizards
+          export: Export
+          import: Import
+          imported: imported
+          upload: Select wizards.json
+          destroy: Destroy
+          destroyed: destroyed
   wizard_js:
+    group:
+      select: "Select a group"
     location:
       name:
         title: "Nom (optionnel)"
@@ -120,6 +430,13 @@ fr:
       city:
         title: "Ville ou village"
         desc: "par ex. : Paris"
+      coordinates: "Coordinates"
+      lat:
+        title: "Latitude"
+        desc: "e.g. -31.9456702"
+      lon:
+        title: "Longitude"
+        desc: "e.g. 115.8626477"
       country_code:
         title: "Pays"
         placeholder: "Choisir un pays"
@@ -136,18 +453,38 @@ fr:
       validation:
         neighbourhood: "Merci de saisir un quartier."
         city: "Merci de saisir le nom d'une commune."
+        street: "Please enter a Number and Street."
+        postalcode: "Please enter a Postal Code (Zip)."
         countrycode: "Merci de choisir un pays."
+        coordinates: "Please complete the set of coordinates."
         geo_location: "Chercher et sélectionner un résultat."
-
     select_kit:
-      filter_placeholder: "Chercher..."
-
+      default_header_text: Select...
+      no_content: No matches found
+      filter_placeholder: Chercher...
+      filter_placeholder_with_any: Search or create...
+      create: "Create: '{{content}}'"
+      max_content_reached:
+        one: "You can only select {{count}} item."
+        other: "You can only select {{count}} items."
+      min_content_not_reached:
+        one: "Select at least {{count}} item."
+        other: "Select at least {{count}} items."
     wizard:
       completed: "Vous en avez terminé avec cet assistant."
       not_permitted: "Vous devez obtenir un niveau de confiance à {{level}} ou plus pour accéder à cet assistant."
       none: "Il n'y a pas d'assistant ici."
       return_to_site: "Retourner à {{siteName}}"
-
+      requires_login: "You need to be logged in to access this wizard."
+      reset: "Reset this wizard."
+      step_not_permitted: "You're not permitted to view this step."
+      incomplete_submission:
+        title: "Continue editing your draft submission from %{date}?"
+        resume: "Continue"
+        restart: "Start over"
+      x_characters:
+        one: "%{count} Character"
+        other: "%{count} Characters"
     wizard_composer:
       show_preview: "Prévisualiser le message"
       hide_preview: "Modifier le message"
@@ -184,3 +521,11 @@ fr:
       yourself_confirm:
         title: "Avez-vous oublié d'ajouter des destinataires ?"
         body: "Pour l'instant ce message n'est envoyé qu'à vous !"
+    realtime_validations:
+      similar_topics:
+        insufficient_characters: "Type a minimum 5 characters to start looking for similar topics"
+        insufficient_characters_categories: "Type a minimum 5 characters to start looking for similar topics in %{catLinks}"
+        results: "Your topic is similar to..."
+        no_results: "No similar topics."
+        loading: "Looking for similar topics..."
+        show: "show"

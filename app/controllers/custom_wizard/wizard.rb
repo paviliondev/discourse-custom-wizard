@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class CustomWizard::WizardController < ::ApplicationController
   include ApplicationHelper
-  prepend_view_path(Rails.root.join('plugins', 'discourse-custom-wizard', 'views'))
+  prepend_view_path(Rails.root.join('plugins', 'discourse-custom-wizard', 'app', 'views'))
   layout 'wizard'
 
   before_action :ensure_plugin_enabled
@@ -61,17 +61,13 @@ class CustomWizard::WizardController < ::ApplicationController
     end
 
     result = success_json
-    user = current_user
 
-    if user && wizard.can_access?
-      submission = wizard.current_submission
-
-      if submission.present? && submission.redirect_to
-        result.merge!(redirect_to: submission.redirect_to)
+    if current_user && wizard.can_access?
+      if redirect_to = wizard.current_submission&.redirect_to
+        result.merge!(redirect_to: redirect_to)
       end
 
-      submission.remove if submission.present?
-      wizard.reset
+      wizard.cleanup_on_skip!
     end
 
     render json: result

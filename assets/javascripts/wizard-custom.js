@@ -53,13 +53,14 @@
 //= require discourse/app/initializers/jquery-plugins
 //= require discourse/app/pre-initializers/sniff-capabilities
 
+//= require pretty-text-bundle
+
 //= require ember-addons/decorator-alias
 //= require ember-addons/macro-alias
 //= require ember-addons/fmt
 //= require polyfills
 
 //= require markdown-it-bundle
-//= require lodash.js
 //= require template_include.js
 //= require itsatrap.js
 //= require caret_position.js

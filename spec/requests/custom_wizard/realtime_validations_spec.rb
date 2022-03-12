@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../../plugin_helper'
-
 describe CustomWizard::RealtimeValidationsController do
 
   fab!(:validation_type) { "test_stub" }

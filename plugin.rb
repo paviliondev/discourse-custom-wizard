@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Create custom wizards for topic creation, onboarding, user surveys and much more.
-# version: 1.16.3
+# version: 1.18.4
 # authors: Angus McLeod, Faizaan Gagan, Robert Barrow, Keegan George
 # contact_emails: support@thepavilion.io
 # url: https://github.com/paviliondev/discourse-custom-wizard
 
 gem 'liquid', '5.0.1', require: true
 register_asset 'stylesheets/admin/admin.scss', :desktop
+
 enabled_site_setting :custom_wizard_enabled
 
 config = Rails.application.config
@@ -126,15 +127,20 @@ after_initialize do
     ../app/serializers/custom_wizard/subscription/subscription_serializer.rb
     ../app/serializers/custom_wizard/subscription_serializer.rb
     ../app/serializers/custom_wizard/notice_serializer.rb
-    ..//lib/custom_wizard/extensions/extra_locales_controller.rb
-    ..//lib/custom_wizard/extensions/invites_controller.rb
-    ..//lib/custom_wizard/extensions/users_controller.rb
-    ..//lib/custom_wizard/extensions/custom_field/preloader.rb
-    ..//lib/custom_wizard/extensions/custom_field/serializer.rb
-    ..//lib/custom_wizard/extensions/custom_field/extension.rb
+    ../lib/custom_wizard/extensions/extra_locales_controller.rb
+    ../lib/custom_wizard/extensions/invites_controller.rb
+    ../lib/custom_wizard/extensions/users_controller.rb
+    ../lib/custom_wizard/extensions/tags_controller.rb
+    ../lib/custom_wizard/extensions/guardian.rb
+    ../lib/custom_wizard/extensions/custom_field/preloader.rb
+    ../lib/custom_wizard/extensions/custom_field/serializer.rb
+    ../lib/custom_wizard/extensions/custom_field/extension.rb
+    ../lib/custom_wizard/extensions/discourse_tagging.rb
   ].each do |path|
     load File.expand_path(path, __FILE__)
   end
+
+  Liquid::Template.error_mode = :strict
 
   # preloaded category custom fields
   %w[
@@ -144,6 +150,10 @@ after_initialize do
   end
 
   Liquid::Template.register_filter(::CustomWizard::LiquidFilter::FirstNonEmpty)
+
+  add_to_class(:topic, :wizard_submission_id) do
+    custom_fields['wizard_submission_id']
+  end
 
   add_class_method(:wizard, :user_requires_completion?) do |user|
     wizard_result = self.new(user).requires_completion?
@@ -164,8 +174,16 @@ after_initialize do
     !!custom_redirect
   end
 
+  add_to_class(:user, :redirect_to_wizard) do
+    if custom_fields['redirect_to_wizard'].present?
+      custom_fields['redirect_to_wizard']
+    else
+      nil
+    end
+  end
+
   add_to_class(:users_controller, :wizard_path) do
-    if custom_wizard_redirect = current_user.custom_fields['redirect_to_wizard']
+    if custom_wizard_redirect = current_user.redirect_to_wizard
       "#{Discourse.base_url}/w/#{custom_wizard_redirect.dasherize}"
     else
       "#{Discourse.base_url}/wizard"
@@ -173,7 +191,7 @@ after_initialize do
   end
 
   add_to_serializer(:current_user, :redirect_to_wizard) do
-    object.custom_fields['redirect_to_wizard']
+    object.redirect_to_wizard
   end
 
   on(:user_approved) do |user|
@@ -183,15 +201,19 @@ after_initialize do
   end
 
   add_to_class(:application_controller, :redirect_to_wizard_if_required) do
-    wizard_id = current_user.custom_fields['redirect_to_wizard']
     @excluded_routes ||= SiteSetting.wizard_redirect_exclude_paths.split('|') + ['/w/']
     url = request.referer || request.original_url
+    excluded_route = @excluded_routes.any? { |str| /#{str}/ =~ url }
+    not_api = request.format === 'text/html'
 
-    if request.format === 'text/html' && !@excluded_routes.any? { |str| /#{str}/ =~ url } && wizard_id
-      if request.referer !~ /\/w\// && request.referer !~ /\/invites\//
-        CustomWizard::Wizard.set_wizard_redirect(current_user, wizard_id, request.referer)
-      end
-      if CustomWizard::Template.exists?(wizard_id)
+    if not_api && !excluded_route
+      wizard_id = current_user.redirect_to_wizard
+
+      if CustomWizard::Template.can_redirect_users?(wizard_id)
+        if url !~ /\/w\// && url !~ /\/invites\//
+          CustomWizard::Wizard.set_wizard_redirect(current_user, wizard_id, url)
+        end
+
         redirect_to "/w/#{wizard_id.dasherize}"
       end
     end
@@ -218,6 +240,7 @@ after_initialize do
   ::ExtraLocalesController.prepend ExtraLocalesControllerCustomWizard
   ::InvitesController.prepend InvitesControllerCustomWizard
   ::UsersController.prepend CustomWizardUsersController
+  ::Guardian.prepend CustomWizardGuardian
 
   full_path = "#{Rails.root}/plugins/discourse-custom-wizard/assets/stylesheets/wizard/wizard_custom.scss"
   if Stylesheet::Importer.respond_to?(:plugin_assets)
@@ -255,6 +278,11 @@ after_initialize do
       archetype: CustomWizard::Notice.archetypes[:plugin_status]
     )
     warning_notices.any? ? ActionView::Base.full_sanitizer.sanitize(warning_notices.first.message, tags: %w(a)) : nil
+  end
+
+  reloadable_patch do |plugin|
+    ::TagsController.prepend CustomWizardTagsController
+    ::DiscourseTagging.singleton_class.prepend CustomWizardDiscourseTagging
   end
 
   DiscourseEvent.trigger(:custom_wizard_ready)

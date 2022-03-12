@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require_relative '../../../plugin_helper'
 
 describe CustomWizard::AdminManagerController do
   fab!(:admin_user) { Fabricate(:user, admin: true) }
@@ -10,11 +9,8 @@ describe CustomWizard::AdminManagerController do
 
     template_2 = template.dup
     template_2["id"] = 'super_mega_fun_wizard_2'
-
     template_3 = template.dup
     template_3["id"] = 'super_mega_fun_wizard_3'
-    template_3["after_signup"] = true
-
     @template_array = [template, template_2, template_3]
 
     FileUtils.mkdir_p(file_from_fixtures_tmp_folder) unless Dir.exists?(file_from_fixtures_tmp_folder)

@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require_relative '../../plugin_helper'
 
 describe CustomWizard::StepsController do
   fab!(:user) { Fabricate(:user, username: 'angus', email: "angus@email.com", trust_level: TrustLevel[3]) }

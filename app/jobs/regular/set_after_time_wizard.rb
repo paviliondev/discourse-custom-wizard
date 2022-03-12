@@ -14,6 +14,8 @@ module Jobs
             end
           end
 
+          CustomWizard::Template.clear_cache_keys
+
           MessageBus.publish "/redirect_to_wizard", wizard.id, user_ids: user_ids
         end
       end

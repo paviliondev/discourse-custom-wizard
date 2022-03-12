@@ -16,6 +16,7 @@ class CustomWizard::FieldSerializer < ::ApplicationSerializer
              :limit,
              :property,
              :content,
+             :tag_groups,
              :validations,
              :max_length,
              :char_counter,
@@ -91,6 +92,10 @@ class CustomWizard::FieldSerializer < ::ApplicationSerializer
 
   def content
     object.content
+  end
+
+  def tag_groups
+    object.tag_groups
   end
 
   def validations
