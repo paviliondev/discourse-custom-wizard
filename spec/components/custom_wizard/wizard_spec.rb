@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../../plugin_helper'
-
 describe CustomWizard::Wizard do
   fab!(:user) { Fabricate(:user) }
   fab!(:trusted_user) { Fabricate(:user, trust_level: TrustLevel[3]) }

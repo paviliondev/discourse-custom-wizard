@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../plugin_helper'
-
 describe "Sprockets: require_tree_discourse directive" do
   let(:discourse_asset_path) {
     "#{Rails.root}/app/assets/javascripts/"

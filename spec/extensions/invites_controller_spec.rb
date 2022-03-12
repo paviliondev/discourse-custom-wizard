@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require_relative '../plugin_helper'
 
 describe InvitesControllerCustomWizard, type: :request do
   fab!(:topic) { Fabricate(:topic) }

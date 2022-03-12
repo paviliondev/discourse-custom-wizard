@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../../plugin_helper.rb'
-
 describe CustomWizard::Cache do
   it "writes and reads values to the cache" do
     CustomWizard::Cache.new('list').write([1, 2, 3])

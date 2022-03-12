@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../../plugin_helper'
-
 describe CustomWizard::StepSerializer do
   fab!(:user) { Fabricate(:user) }
 

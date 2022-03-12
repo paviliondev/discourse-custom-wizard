@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require_relative '../plugin_helper'
 
 describe ExtraLocalesControllerCustomWizard, type: :request do
   let(:new_user) { Fabricate(:user, trust_level: TrustLevel[0]) }

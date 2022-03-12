@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require_relative '../../plugin_helper'
 
 describe CustomWizard::Action do
   fab!(:user) { Fabricate(:user, name: "Angus", username: 'angus', email: "angus@email.com", trust_level: TrustLevel[2]) }

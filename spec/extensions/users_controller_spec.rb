@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require_relative '../plugin_helper'
 
 describe CustomWizardUsersController, type: :request do
   let(:template) do

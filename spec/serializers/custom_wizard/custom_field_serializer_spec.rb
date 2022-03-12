@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../../plugin_helper'
-
 describe CustomWizard::CustomFieldSerializer do
   fab!(:user) { Fabricate(:user) }
 
