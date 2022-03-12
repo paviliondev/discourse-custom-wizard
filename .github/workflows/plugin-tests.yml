@@ -143,6 +143,7 @@ jobs:
         if: matrix.build_type == 'backend' && steps.check_spec.outputs.files_exists == 'true'
         run: |
           if [ -e plugins/${{ steps.repo-name.outputs.value }}/.simplecov ]
+          then
             cp plugins/${{ steps.repo-name.outputs.value }}/.simplecov .simplecov
             export COVERAGE=1
           fi
