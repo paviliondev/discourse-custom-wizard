@@ -63,22 +63,22 @@ after_initialize do
   %w[
     ../lib/custom_wizard/engine.rb
     ../config/routes.rb
-    ../controllers/custom_wizard/admin/admin.rb
-    ../controllers/custom_wizard/admin/wizard.rb
-    ../controllers/custom_wizard/admin/submissions.rb
-    ../controllers/custom_wizard/admin/api.rb
-    ../controllers/custom_wizard/admin/logs.rb
-    ../controllers/custom_wizard/admin/manager.rb
-    ../controllers/custom_wizard/admin/custom_fields.rb
-    ../controllers/custom_wizard/admin/subscription.rb
-    ../controllers/custom_wizard/admin/notice.rb
-    ../controllers/custom_wizard/wizard.rb
-    ../controllers/custom_wizard/steps.rb
-    ../controllers/custom_wizard/realtime_validations.rb
-    ../jobs/regular/refresh_api_access_token.rb
-    ../jobs/regular/set_after_time_wizard.rb
-    ../jobs/scheduled/custom_wizard/update_subscription.rb
-    ../jobs/scheduled/custom_wizard/update_notices.rb
+    ../app/controllers/custom_wizard/admin/admin.rb
+    ../app/controllers/custom_wizard/admin/wizard.rb
+    ../app/controllers/custom_wizard/admin/submissions.rb
+    ../app/controllers/custom_wizard/admin/api.rb
+    ../app/controllers/custom_wizard/admin/logs.rb
+    ../app/controllers/custom_wizard/admin/manager.rb
+    ../app/controllers/custom_wizard/admin/custom_fields.rb
+    ../app/controllers/custom_wizard/admin/subscription.rb
+    ../app/controllers/custom_wizard/admin/notice.rb
+    ../app/controllers/custom_wizard/wizard.rb
+    ../app/controllers/custom_wizard/steps.rb
+    ../app/controllers/custom_wizard/realtime_validations.rb
+    ../app/jobs/regular/refresh_api_access_token.rb
+    ../app/jobs/regular/set_after_time_wizard.rb
+    ../app/jobs/scheduled/custom_wizard/update_subscription.rb
+    ../app/jobs/scheduled/custom_wizard/update_notices.rb
     ../lib/custom_wizard/validators/template.rb
     ../lib/custom_wizard/validators/update.rb
     ../lib/custom_wizard/action_result.rb
@@ -108,30 +108,30 @@ after_initialize do
     ../lib/custom_wizard/api/log_entry.rb
     ../lib/custom_wizard/liquid_extensions/first_non_empty.rb
     ../lib/custom_wizard/exceptions/exceptions.rb
-    ../serializers/custom_wizard/api/authorization_serializer.rb
-    ../serializers/custom_wizard/api/basic_endpoint_serializer.rb
-    ../serializers/custom_wizard/api/endpoint_serializer.rb
-    ../serializers/custom_wizard/api/log_serializer.rb
-    ../serializers/custom_wizard/api_serializer.rb
-    ../serializers/custom_wizard/basic_api_serializer.rb
-    ../serializers/custom_wizard/basic_wizard_serializer.rb
-    ../serializers/custom_wizard/custom_field_serializer.rb
-    ../serializers/custom_wizard/wizard_field_serializer.rb
-    ../serializers/custom_wizard/wizard_step_serializer.rb
-    ../serializers/custom_wizard/wizard_serializer.rb
-    ../serializers/custom_wizard/log_serializer.rb
-    ../serializers/custom_wizard/submission_serializer.rb
-    ../serializers/custom_wizard/realtime_validation/similar_topics_serializer.rb
-    ../serializers/custom_wizard/subscription/authentication_serializer.rb
-    ../serializers/custom_wizard/subscription/subscription_serializer.rb
-    ../serializers/custom_wizard/subscription_serializer.rb
-    ../serializers/custom_wizard/notice_serializer.rb
-    ../extensions/extra_locales_controller.rb
-    ../extensions/invites_controller.rb
-    ../extensions/users_controller.rb
-    ../extensions/custom_field/preloader.rb
-    ../extensions/custom_field/serializer.rb
-    ../extensions/custom_field/extension.rb
+    ../app/serializers/custom_wizard/api/authorization_serializer.rb
+    ../app/serializers/custom_wizard/api/basic_endpoint_serializer.rb
+    ../app/serializers/custom_wizard/api/endpoint_serializer.rb
+    ../app/serializers/custom_wizard/api/log_serializer.rb
+    ../app/serializers/custom_wizard/api_serializer.rb
+    ../app/serializers/custom_wizard/basic_api_serializer.rb
+    ../app/serializers/custom_wizard/basic_wizard_serializer.rb
+    ../app/serializers/custom_wizard/custom_field_serializer.rb
+    ../app/serializers/custom_wizard/wizard_field_serializer.rb
+    ../app/serializers/custom_wizard/wizard_step_serializer.rb
+    ../app/serializers/custom_wizard/wizard_serializer.rb
+    ../app/serializers/custom_wizard/log_serializer.rb
+    ../app/serializers/custom_wizard/submission_serializer.rb
+    ../app/serializers/custom_wizard/realtime_validation/similar_topics_serializer.rb
+    ../app/serializers/custom_wizard/subscription/authentication_serializer.rb
+    ../app/serializers/custom_wizard/subscription/subscription_serializer.rb
+    ../app/serializers/custom_wizard/subscription_serializer.rb
+    ../app/serializers/custom_wizard/notice_serializer.rb
+    ..//lib/custom_wizard/extensions/extra_locales_controller.rb
+    ..//lib/custom_wizard/extensions/invites_controller.rb
+    ..//lib/custom_wizard/extensions/users_controller.rb
+    ..//lib/custom_wizard/extensions/custom_field/preloader.rb
+    ..//lib/custom_wizard/extensions/custom_field/serializer.rb
+    ..//lib/custom_wizard/extensions/custom_field/extension.rb
   ].each do |path|
     load File.expand_path(path, __FILE__)
   end
