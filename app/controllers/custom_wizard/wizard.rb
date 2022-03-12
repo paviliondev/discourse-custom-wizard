@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class CustomWizard::WizardController < ::ApplicationController
   include ApplicationHelper
-  prepend_view_path(Rails.root.join('plugins', 'discourse-custom-wizard', 'views'))
+  prepend_view_path(Rails.root.join('plugins', 'discourse-custom-wizard', 'app', 'views'))
   layout 'wizard'
 
   before_action :ensure_plugin_enabled

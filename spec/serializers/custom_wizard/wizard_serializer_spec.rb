@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../../plugin_helper'
-
 describe CustomWizard::WizardSerializer do
   fab!(:user) { Fabricate(:user) }
   fab!(:category) { Fabricate(:category) }

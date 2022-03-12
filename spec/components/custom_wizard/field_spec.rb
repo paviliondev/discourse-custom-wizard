@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require_relative '../../plugin_helper'
 
 describe CustomWizard::Field do
   let(:field_hash) do
