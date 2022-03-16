@@ -35,6 +35,7 @@ export default {
     const Session = requirejs("discourse/models/session").default;
     const session = Session.current();
     session.set("highlightJsPath", setupData.highlightJsPath);
+    session.set("markdownItUrl", setupData.markdownItUrl);
 
     [
       'register-files',
