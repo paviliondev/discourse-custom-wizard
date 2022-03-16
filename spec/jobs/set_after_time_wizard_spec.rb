@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../plugin_helper'
-
 describe Jobs::SetAfterTimeWizard do
   fab!(:user1) { Fabricate(:user) }
   fab!(:user2) { Fabricate(:user) }

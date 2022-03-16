@@ -105,7 +105,7 @@ class CustomWizard::Builder
       required: field_template['required']
     }
 
-    %w(label description image key validations min_length max_length char_counter).each do |key|
+    %w(label description image key validations min_length max_length char_counter tag_groups).each do |key|
       params[key.to_sym] = field_template[key] if field_template[key]
     end
 
@@ -169,15 +169,6 @@ class CustomWizard::Builder
             {
               id: item[:key],
               name: item[:value]
-            }
-          end
-        end
-
-        if content[:type] == 'assignment' && field_template['type'] === 'dropdown'
-          content[:result] = content[:result].map do |item|
-            {
-              id: item,
-              name: item
             }
           end
         end

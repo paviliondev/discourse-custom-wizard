@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require_relative '../../plugin_helper'
 
 describe CustomWizard::Step do
   let(:step_hash) { get_wizard_fixture("step/step") }

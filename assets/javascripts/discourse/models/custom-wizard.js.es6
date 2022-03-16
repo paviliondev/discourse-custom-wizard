@@ -28,7 +28,7 @@ const CustomWizard = EmberObject.extend({
         contentType: "application/json",
         data: JSON.stringify(data),
       }).then((result) => {
-        if (result.error) {
+        if (result.backend_validation_error) {
           reject(result);
         } else {
           resolve(result);

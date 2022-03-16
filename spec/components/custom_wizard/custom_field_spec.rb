@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../../plugin_helper'
-
 describe CustomWizard::CustomField do
   let(:custom_field_json) { get_wizard_fixture("custom_field/custom_fields") }
   let(:custom_field_subscription_json) { get_wizard_fixture("custom_field/subscription_custom_fields") }

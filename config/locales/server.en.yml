@@ -6,7 +6,7 @@ en:
 
   wizard:
     custom_title: "Wizard"
-    
+
     custom_field:
       error:
         required_attribute: "'%{attr}' is a required attribute"
@@ -18,7 +18,7 @@ en:
         name_already_taken: "'%{name}' is already taken as a custom field name"
         save_default: "Failed to save custom field '%{name}'"
         subscription_type: "%{type} custom fields require a subscription"
-    
+
     field:
       too_short: "%{label} must be at least %{min} characters"
       too_long: "%{label} must not be more than %{max} characters"
@@ -27,30 +27,32 @@ en:
       invalid_file: "%{label} must be a %{types}"
       invalid_date: "Invalid date"
       invalid_time: "Invalid time"
-    
+
     none: "We couldn't find a wizard at that address."
     no_skip: "Wizard can't be skipped"
     export:
       error:
         select_one: "Please select at least one valid wizard"
         invalid_wizards: "No valid wizards selected"
-    
+
     import:
       error:
         no_file: "No file selected"
         file_large: "File too large"
         invalid_json: "File is not a valid json file"
-    
+
     destroy:
       error:
         no_template: No template found
         default: Error destroying wizard
-    
+
     validation:
       required: "%{property} is required"
       conflict: "Wizard with id '%{wizard_id}' already exists"
-      after_time: "After time setting is invalid"
-      subscription: "%{type} %{property} is subscription only"
+      after_signup: "You can only have one 'after signup' wizard at a time. %{wizard_id} has 'after signup' enabled."
+      after_signup_after_time: "You can't use 'after time' and 'after signup' on the same wizard."
+      after_time: "After time setting is invalid."
+      liquid_syntax_error: "Liquid syntax error in %{attribute}: %{message}"
 
     notice:
       connection_error: "Failed to connect to http://%{domain}"
@@ -62,7 +64,7 @@ en:
           title: Unable to connect to the Custom Wizard Plugin status server
           message: Please check the Custom Wizard Plugin status on [%{domain}](http://%{domain}) before updating Discourse. If this issue persists contact <a href="mailto:support@thepavilion.io">support@thepavilion.io</a> for further assistance.
       subscription_message:
-        connection_error: 
+        connection_error:
           title: Unable to connect to the Custom Wizard Plugin subscription server
           message: If this issue persists contact <a href="mailto:support@thepavilion.io">support@thepavilion.io</a> for further assistance.
 

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../../plugin_helper'
-
 describe CustomWizard::FieldSerializer do
   fab!(:user) { Fabricate(:user) }
   let(:template) { get_wizard_fixture("wizard") }
@@ -18,7 +16,7 @@ describe CustomWizard::FieldSerializer do
       scope: Guardian.new(user)
     ).as_json
 
-    expect(json_array.size).to eq(4)
+    expect(json_array.size).to eq(@wizard.steps.first.fields.size)
     expect(json_array[0][:label]).to eq("<p>Text</p>")
     expect(json_array[0][:description]).to eq("Text field description.")
     expect(json_array[3][:index]).to eq(3)

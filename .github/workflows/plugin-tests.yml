@@ -49,10 +49,17 @@ jobs:
           --health-retries 5
 
     steps:
+      - uses: haya14busa/action-cond@v1
+        id: discourse_branch
+        with:
+          cond: ${{  github.base_ref == 'stable' }}
+          if_true: "stable"
+          if_false: "tests-passed"
+
       - uses: actions/checkout@v2
         with:
           repository: discourse/discourse
-          ref: "${{ (github.base_ref || github.ref) }}"
+          ref: ${{ steps.discourse_branch.outputs.value }}
           fetch-depth: 1
 
       - name: Fetch Repo Name
@@ -63,6 +70,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: plugins/${{ steps.repo-name.outputs.value }}
+          ref: "${{ github.base_ref }}"
           fetch-depth: 1
 
       - name: Check spec existence
@@ -133,7 +141,13 @@ jobs:
 
       - name: Plugin RSpec with Coverage
         if: matrix.build_type == 'backend' && steps.check_spec.outputs.files_exists == 'true'
-        run: SIMPLECOV=1 bin/rake plugin:spec[${{ steps.repo-name.outputs.value }}]
+        run: |
+          if [ -e plugins/${{ steps.repo-name.outputs.value }}/.simplecov ]
+          then
+            cp plugins/${{ steps.repo-name.outputs.value }}/.simplecov .simplecov
+            export COVERAGE=1
+          fi
+          bin/rake plugin:spec[${{ steps.repo-name.outputs.value }}]
 
       - name: Plugin QUnit
         if: matrix.build_type == 'frontend' && steps.check_qunit.outputs.files_exists == 'true'

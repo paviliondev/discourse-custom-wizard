@@ -514,7 +514,12 @@ class CustomWizard::Action
 
   def basic_topic_params
     params = {
-      skip_validations: true
+      skip_validations: true,
+      topic_opts: {
+        custom_fields: {
+          wizard_submission_id: @wizard.current_submission.id
+        }
+      }
     }
 
     params[:title] = CustomWizard::Mapper.new(

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../../plugin_helper'
-
 describe "custom field extensions" do
   let!(:topic) { Fabricate(:topic) }
   let!(:post) { Fabricate(:post) }
