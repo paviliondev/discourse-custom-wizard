@@ -7,12 +7,12 @@ class CustomWizard::SubmissionSerializer < ApplicationSerializer
   has_one :user, serializer: ::BasicUserSerializer, embed: :objects
 
   def include_user?
-   object.user.present?
+    object.user.present?
   end
 
   def fields
     @fields ||= begin
-     result = {}
+      result = {}
 
      object.wizard.template['steps'].each do |step|
        step['fields'].each do |field|
