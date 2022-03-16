@@ -1,5 +1,3 @@
-/* eslint no-undef: 0*/
-
 import computed from "discourse-common/utils/decorators";
 import { isLTR, isRTL, siteDir } from "discourse/lib/text-direction";
 import WizardI18n from "../lib/wizard-i18n";
@@ -15,7 +13,7 @@ export default Ember.TextField.extend({
 
   @computed
   dir() {
-    if (Wizard.SiteSettings.support_mixed_text_direction) {
+    if (this.siteSettings.support_mixed_text_direction) {
       let val = this.value;
       if (val) {
         return isRTL(val) ? "rtl" : "ltr";
@@ -26,7 +24,7 @@ export default Ember.TextField.extend({
   },
 
   keyUp() {
-    if (Wizard.SiteSettings.support_mixed_text_direction) {
+    if (this.siteSettings.support_mixed_text_direction) {
       let val = this.value;
       if (isRTL(val)) {
         this.set("dir", "rtl");

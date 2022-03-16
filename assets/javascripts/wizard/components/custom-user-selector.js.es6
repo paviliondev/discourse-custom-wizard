@@ -1,6 +1,6 @@
 import {
   default as computed,
-  observes,
+  observes
 } from "discourse-common/utils/decorators";
 import { renderAvatar } from "discourse/helpers/user-avatar";
 import userSearch from "../lib/user-search";
@@ -55,7 +55,6 @@ export default Ember.TextField.extend({
     let self = this,
       selected = [],
       groups = [],
-      currentUser = this.currentUser,
       includeMentionableGroups =
         this.get("includeMentionableGroups") === "true",
       includeMessageableGroups =
@@ -66,13 +65,8 @@ export default Ember.TextField.extend({
     function excludedUsernames() {
       // hack works around some issues with allowAny eventing
       const usernames = self.get("single") ? [] : selected;
-
-      if (currentUser && self.get("excludeCurrentUser")) {
-        return usernames.concat([currentUser.get("username")]);
-      }
       return usernames;
     }
-
     $(this.element)
       .val(this.get("usernames"))
       .autocomplete({
@@ -84,7 +78,6 @@ export default Ember.TextField.extend({
 
         dataSource(term) {
           const termRegex = /[^a-zA-Z0-9_\-\.@\+]/;
-
           let results = userSearch({
             term: term.replace(termRegex, ""),
             topicId: self.get("topicId"),

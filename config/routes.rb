@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 CustomWizard::Engine.routes.draw do
+  get 'qunit' => 'wizard#qunit'
   get ':wizard_id' => 'wizard#index'
   put ':wizard_id/skip' => 'wizard#skip'
   get ':wizard_id/steps' => 'wizard#index'

@@ -20,7 +20,7 @@ class ::CustomWizard::UpdateValidator
     field_id = field.id.to_s
     value = @updater.submission[field_id]
     min_length = false
-    label = field.raw[:label] || I18n.t("#{field.key}.label")
+    label = field.raw[:label]
     type = field.type
     required = field.required
     min_length = field.min_length if is_text_type(field)
