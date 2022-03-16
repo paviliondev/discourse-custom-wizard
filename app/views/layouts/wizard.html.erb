@@ -11,10 +11,8 @@
     <%= preload_script "locales/#{I18n.locale}" %>
     <%= preload_script "ember_jquery" %>
     <%= preload_script "wizard-vendor" %>
-    <%= preload_script "wizard-application" %>
-    <%= preload_script "wizard-custom-globals" %>
-    <%= preload_script "wizard-raw-templates" %>
     <%= preload_script "wizard-custom" %>
+    <%= preload_script "wizard-raw-templates" %>
     <%= preload_script "wizard-plugin" %>
     <%= preload_script "pretty-text-bundle" %>
     <script src="<%= ExtraLocalesController.url("wizard") %>"></script>
@@ -58,5 +56,7 @@
         <%= raw SvgSprite.bundle %>
       </div>
     </div>
+
+    <div class="hidden" id="data-preloaded-wizard" data-preloaded-wizard="<%= preloaded_json %>"></div>
   </body>
 </html>

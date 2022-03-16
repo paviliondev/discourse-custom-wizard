@@ -1,10 +1,21 @@
-import CustomWizard from "../models/custom";
+import CustomWizard from "../models/wizard";
+import discourseComputed from "discourse-common/utils/decorators";
+import Component from "@ember/component";
+import { dasherize } from "@ember/string";
 
-export default Ember.Component.extend({
-  siteName: function () {
-    /*eslint no-undef:0*/
-    return Wizard.SiteSettings.title;
-  }.property(),
+export default Component.extend({
+  classNameBindings: [":wizard-no-access", "reasonClass"],
+  layoutName: "wizard/templates/components/wizard-no-access",
+
+  @discourseComputed("reason")
+  reasonClass(reason) {
+    return dasherize(reason);
+  },
+
+  @discourseComputed
+  siteName() {
+    return this.siteSettings.title || "";
+  },
 
   actions: {
     skip() {

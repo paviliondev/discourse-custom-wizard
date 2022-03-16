@@ -1,7 +1,10 @@
 import { observes } from "discourse-common/utils/decorators";
 import Category from "discourse/models/category";
+import Component from "@ember/component";
 
-export default Ember.Component.extend({
+export default Component.extend({
+  layoutName: "wizard/templates/components/wizard-field-category",
+
   didInsertElement() {
     const property = this.field.property || "id";
     const value = this.field.value;

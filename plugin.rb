@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Create custom wizards for topic creation, onboarding, user surveys and much more.
-# version: 1.18.4
+# version: 1.19.0
 # authors: Angus McLeod, Faizaan Gagan, Robert Barrow, Keegan George
 # contact_emails: support@thepavilion.io
 # url: https://github.com/paviliondev/discourse-custom-wizard
@@ -19,9 +19,8 @@ config.assets.paths << "#{plugin_asset_path}/stylesheets/wizard"
 if Rails.env.production?
   config.assets.precompile += %w{
     wizard-custom-guest.js
-    wizard-custom-globals.js
-    wizard-custom.js
     wizard-custom-start.js
+    wizard-custom.js
     wizard-plugin.js.erb
     wizard-raw-templates.js.erb
   }

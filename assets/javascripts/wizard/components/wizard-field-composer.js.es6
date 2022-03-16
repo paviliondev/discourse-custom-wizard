@@ -3,8 +3,11 @@ import {
   observes,
 } from "discourse-common/utils/decorators";
 import EmberObject from "@ember/object";
+import Component from "@ember/component";
 
-export default Ember.Component.extend({
+export default Component.extend({
+  layoutName: "wizard/templates/components/wizard-field-composer",
+
   showPreview: false,
   classNameBindings: [
     ":wizard-field-composer",

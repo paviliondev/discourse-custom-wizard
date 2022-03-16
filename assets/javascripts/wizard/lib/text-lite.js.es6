@@ -3,6 +3,8 @@ import { default as PrettyText, buildOptions } from "pretty-text/pretty-text";
 import Handlebars from "handlebars";
 import getURL from "discourse-common/lib/get-url";
 import { getOwner } from "discourse-common/lib/get-owner";
+import { Promise } from "rsvp";
+import Session from "discourse/models/session";
 
 export function cook(text, options) {
   if (!options) {
@@ -18,11 +20,15 @@ export function cook(text, options) {
 // everything should eventually move to async API and this should be renamed
 // cook
 export function cookAsync(text, options) {
-  if (Discourse.MarkdownItURL) {
-    return loadScript(Discourse.MarkdownItURL)
-      .then(() => cook(text, options))
-      .catch((e) => Ember.Logger.error(e));
+  let markdownItURL = Session.currentProp("markdownItURL");
+  if (markdownItURL) {
+    return (
+      loadScript(markdownItURL)
+        .then(() => cook(text, options))
+        // eslint-disable-next-line no-console
+        .catch((e) => console.error(e))
+    );
   } else {
-    return Ember.RSVP.Promise.resolve(cook(text));
+    return Promise.resolve(cook(text));
   }
 }

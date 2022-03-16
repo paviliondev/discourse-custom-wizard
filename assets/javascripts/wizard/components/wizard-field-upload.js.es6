@@ -3,11 +3,15 @@ import Component from "@ember/component";
 import { computed } from "@ember/object";
 
 export default Component.extend(UppyUploadMixin, {
+  layoutName: "wizard/templates/components/wizard-field-upload",
   classNames: ["wizard-field-upload"],
   classNameBindings: ["isImage"],
   uploading: false,
   type: computed(function () {
     return `wizard_${this.field.id}`;
+  }),
+  id: computed(function () {
+    return `wizard_field_upload_${this.field.id}`;
   }),
   isImage: computed("field.value.extension", function () {
     return (

@@ -4,6 +4,7 @@ import { observes } from "discourse-common/utils/decorators";
 
 export default Component.extend({
   classNames: ["wizard-similar-topics"],
+  layoutName: "wizard/templates/components/wizard-similar-topics",
   showTopics: true,
 
   didInsertElement() {

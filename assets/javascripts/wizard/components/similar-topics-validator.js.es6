@@ -10,6 +10,7 @@ import { dasherize } from "@ember/string";
 
 export default WizardFieldValidator.extend({
   classNames: ["similar-topics-validator"],
+  layoutName: "wizard/templates/components/similar-topics-validator",
   similarTopics: null,
   hasInput: notEmpty("field.value"),
   hasSimilarTopics: notEmpty("similarTopics"),

@@ -1,0 +1,15 @@
+import Component from "@ember/component";
+
+export default Component.extend({
+  layoutName: "wizard/templates/components/wizard-field-dropdown",
+
+  keyPress(e) {
+    e.stopPropagation();
+  },
+
+  actions: {
+    onChangeValue(value) {
+      this.set("field.value", value);
+    },
+  },
+});

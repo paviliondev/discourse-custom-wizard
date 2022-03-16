@@ -73,18 +73,6 @@ jobs:
           ref: "${{ github.base_ref }}"
           fetch-depth: 1
 
-      - name: Check spec existence
-        id: check_spec
-        uses: andstor/file-existence-action@v1
-        with:
-          files: "plugins/${{ steps.repo-name.outputs.value }}/spec"
-
-      - name: Check qunit existence
-        id: check_qunit
-        uses: andstor/file-existence-action@v1
-        with:
-          files: "plugins/${{ steps.repo-name.outputs.value }}/test/javascripts"
-
       - name: Setup Git
         run: |
           git config --global user.email "ci@ci.invalid"
@@ -140,7 +128,7 @@ jobs:
           bin/rake db:migrate
 
       - name: Plugin RSpec with Coverage
-        if: matrix.build_type == 'backend' && steps.check_spec.outputs.files_exists == 'true'
+        if: matrix.build_type == 'backend'
         run: |
           if [ -e plugins/${{ steps.repo-name.outputs.value }}/.simplecov ]
           then
@@ -150,6 +138,6 @@ jobs:
           bin/rake plugin:spec[${{ steps.repo-name.outputs.value }}]
 
       - name: Plugin QUnit
-        if: matrix.build_type == 'frontend' && steps.check_qunit.outputs.files_exists == 'true'
-        run: bundle exec rake plugin:qunit['${{ steps.repo-name.outputs.value }}','1200000']
+        if: matrix.build_type == 'frontend'
+        run: QUNIT_SKIP_CORE=1 LOAD_PLUGINS=1 QUNIT_EMBER_CLI=0 bin/rake "qunit:test['600000','/w/qunit']"
         timeout-minutes: 30

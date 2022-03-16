@@ -7,6 +7,7 @@ import userSearch from "../lib/user-search";
 import WizardI18n from "../lib/wizard-i18n";
 import Handlebars from "handlebars";
 import { isEmpty } from "@ember/utils";
+import TextField from "@ember/component/text-field";
 
 const template = function (params) {
   const options = params.options;
@@ -31,7 +32,7 @@ const template = function (params) {
   return new Handlebars.SafeString(html).string;
 };
 
-export default Ember.TextField.extend({
+export default TextField.extend({
   attributeBindings: ["autofocus", "maxLength"],
   autocorrect: false,
   autocapitalize: false,
@@ -55,7 +56,6 @@ export default Ember.TextField.extend({
     let self = this,
       selected = [],
       groups = [],
-      currentUser = this.currentUser,
       includeMentionableGroups =
         this.get("includeMentionableGroups") === "true",
       includeMessageableGroups =
@@ -66,13 +66,8 @@ export default Ember.TextField.extend({
     function excludedUsernames() {
       // hack works around some issues with allowAny eventing
       const usernames = self.get("single") ? [] : selected;
-
-      if (currentUser && self.get("excludeCurrentUser")) {
-        return usernames.concat([currentUser.get("username")]);
-      }
       return usernames;
     }
-
     $(this.element)
       .val(this.get("usernames"))
       .autocomplete({
@@ -84,7 +79,6 @@ export default Ember.TextField.extend({
 
         dataSource(term) {
           const termRegex = /[^a-zA-Z0-9_\-\.@\+]/;
-
           let results = userSearch({
             term: term.replace(termRegex, ""),
             topicId: self.get("topicId"),

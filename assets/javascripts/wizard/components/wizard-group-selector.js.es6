@@ -3,6 +3,7 @@ import { computed } from "@ember/object";
 import { makeArray } from "discourse-common/lib/helpers";
 
 export default ComboBox.extend({
+  layoutName: "wizard/templates/components/wizard-group-selector",
   content: computed("groups.[]", "field.content.[]", function () {
     const whitelist = makeArray(this.field.content);
     return this.groups
