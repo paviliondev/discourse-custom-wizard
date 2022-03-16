@@ -1,6 +1,6 @@
 import {
   default as computed,
-  observes
+  observes,
 } from "discourse-common/utils/decorators";
 import { renderAvatar } from "discourse/helpers/user-avatar";
 import userSearch from "../lib/user-search";

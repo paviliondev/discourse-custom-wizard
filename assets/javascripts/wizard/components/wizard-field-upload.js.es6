@@ -3,7 +3,7 @@ import Component from "@ember/component";
 import { computed } from "@ember/object";
 
 export default Component.extend(UppyUploadMixin, {
-  layoutName: 'wizard/templates/components/wizard-field-upload',
+  layoutName: "wizard/templates/components/wizard-field-upload",
   classNames: ["wizard-field-upload"],
   classNameBindings: ["isImage"],
   uploading: false,

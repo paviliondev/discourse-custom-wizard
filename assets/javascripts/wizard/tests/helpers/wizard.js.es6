@@ -26,20 +26,20 @@ const allFieldsWizard = cloneJSON(wizard);
 allFieldsWizard.steps[0].fields = [
   ...allFieldsWizard.steps[0].fields,
   ...allFieldsWizard.steps[1].fields,
-  ...allFieldsWizard.steps[2].fields
+  ...allFieldsWizard.steps[2].fields,
 ];
 allFieldsWizard.steps = [cloneJSON(allFieldsWizard.steps[0])];
-allFieldsWizard.categories = cloneJSON(categoriesJson['categories']);
-allFieldsWizard.groups = cloneJSON(groupsJson['groups']);
+allFieldsWizard.categories = cloneJSON(categoriesJson["categories"]);
+allFieldsWizard.groups = cloneJSON(groupsJson["groups"]);
 
-const getWizard = function(response) {
+const getWizard = function (response) {
   return {
     verb: "get",
     path: "/w/wizard",
     status: 200,
-    response
-  }
-}
+    response,
+  };
+};
 
 export {
   getWizard,
@@ -48,5 +48,5 @@ export {
   wizardCompleted,
   stepNotPermitted,
   allFieldsWizard,
-  wizard
-}
+  wizard,
+};

@@ -1,23 +1,5 @@
 import Pretender from "pretender";
 
-function parsePostData(query) {
-  const result = {};
-  query.split("&").forEach(function (part) {
-    const item = part.split("=");
-    const firstSeg = decodeURIComponent(item[0]);
-    const m = /^([^\[]+)\[([^\]]+)\]/.exec(firstSeg);
-
-    const val = decodeURIComponent(item[1]).replace(/\+/g, " ");
-    if (m) {
-      result[m[1]] = result[m[1]] || {};
-      result[m[1]][m[2]] = val;
-    } else {
-      result[firstSeg] = val;
-    }
-  });
-  return result;
-}
-
 function response(code, obj) {
   if (typeof code === "object") {
     obj = code;
@@ -42,7 +24,7 @@ export default function (cb) {
     return body;
   };
 
-  server.unhandledRequest = function (verb, path, request) {
+  server.unhandledRequest = function (verb, path) {
     const error =
       "Unhandled request in test environment: " + path + " (" + verb + ")";
     window.console.error(error);

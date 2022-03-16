@@ -6,7 +6,7 @@ import { getToken } from "wizard/lib/ajax";
 export default Component.extend({
   classNames: ["validator"],
   classNameBindings: ["isValid", "isInvalid"],
-  layoutName: 'wizard/templates/components/validator',
+  layoutName: "wizard/templates/components/validator",
   validMessageKey: null,
   invalidMessageKey: null,
   isValid: null,

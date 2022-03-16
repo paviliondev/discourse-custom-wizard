@@ -26,7 +26,7 @@ export default Route.extend({
   },
 
   renderTemplate() {
-    this.render('wizard/templates/step');
+    this.render("wizard/templates/step");
   },
 
   setupController(controller, model) {

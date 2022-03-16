@@ -75,5 +75,5 @@ export default EmberObject.extend(ValidState, {
     this.setValid(valid);
 
     return valid;
-  }
+  },
 });

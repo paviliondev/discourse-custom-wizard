@@ -13,7 +13,7 @@ import { uploadIcon } from "discourse/lib/uploads";
 import { dasherize } from "@ember/string";
 
 export default ComposerEditor.extend({
-  layoutName: 'wizard/templates/components/wizard-composer-editor',
+  layoutName: "wizard/templates/components/wizard-composer-editor",
   classNameBindings: ["fieldClass"],
   allowUpload: true,
   showLink: false,

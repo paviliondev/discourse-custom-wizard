@@ -1,11 +1,13 @@
 export default {
   run(app, container) {
     const getToken = requirejs("wizard/lib/ajax").getToken;
-    const isTesting = requirejs("discourse-common/config/environment").isTesting;
+    const isTesting = requirejs("discourse-common/config/environment")
+      .isTesting;
 
-    if (!isTesting) {
+    if (!isTesting()) {
       // Add a CSRF token to all AJAX requests
       let token = getToken();
+      const session = container.lookup("session:main");
       session.set("csrfToken", token);
       let callbacks = $.Callbacks();
       $.ajaxPrefilter(callbacks.fire);
@@ -140,5 +142,5 @@ export default {
         return resArray;
       };
     }
-  }
+  },
 };

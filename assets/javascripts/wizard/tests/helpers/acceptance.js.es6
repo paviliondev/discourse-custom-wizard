@@ -6,18 +6,20 @@ let server;
 let app;
 
 function acceptance(name, requests, cb) {
-  module(`Acceptance: ${name}`, function(hooks) {
-    hooks.beforeEach(function() {
-      server = setupPretender(function(pretender) {
-        requests.forEach(req => {
-          pretender[req.verb](req.path, () => (response(req.status, req.response)));
+  module(`Acceptance: ${name}`, function (hooks) {
+    hooks.beforeEach(function () {
+      server = setupPretender(function (pretender) {
+        requests.forEach((req) => {
+          pretender[req.verb](req.path, () =>
+            response(req.status, req.response)
+          );
         });
         return pretender;
       });
       app = startApp();
     });
 
-    hooks.afterEach(function() {
+    hooks.afterEach(function () {
       app.destroy();
       server.shutdown();
     });
@@ -28,9 +30,7 @@ function acceptance(name, requests, cb) {
 
 export default acceptance;
 
-export {
-  server
-};
+export { server };
 
 // The discourse/test/helpers/qunit-helpers file has many functions and imports
 // we don't need, so there will be some duplciation here.

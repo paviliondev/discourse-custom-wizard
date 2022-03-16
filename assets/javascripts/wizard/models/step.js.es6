@@ -71,11 +71,7 @@ export default EmberObject.extend(ValidState, {
       type: "PUT",
       data: { fields },
     }).catch((response) => {
-      if (
-        response &&
-        response.responseJSON &&
-        response.responseJSON.errors
-      ) {
+      if (response && response.responseJSON && response.responseJSON.errors) {
         let wizardErrors = [];
         response.responseJSON.errors.forEach((err) => {
           if (err.field === wizardId) {

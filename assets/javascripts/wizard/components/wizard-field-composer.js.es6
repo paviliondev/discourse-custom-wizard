@@ -5,7 +5,7 @@ import {
 import EmberObject from "@ember/object";
 
 export default Ember.Component.extend({
-  layoutName: 'wizard/templates/components/wizard-field-composer',
+  layoutName: "wizard/templates/components/wizard-field-composer",
 
   showPreview: false,
   classNameBindings: [

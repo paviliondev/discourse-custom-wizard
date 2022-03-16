@@ -7,7 +7,7 @@ import { ajax } from "discourse/lib/ajax";
 import { on } from "discourse-common/utils/decorators";
 
 export default Component.extend({
-  layoutName: 'wizard/templates/components/wizard-field-composer-preview',
+  layoutName: "wizard/templates/components/wizard-field-composer-preview",
 
   @on("init")
   updatePreview() {

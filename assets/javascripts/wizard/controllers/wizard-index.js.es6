@@ -6,19 +6,19 @@ const reasons = {
   noWizard: "none",
   requiresLogin: "requires_login",
   notPermitted: "not_permitted",
-  completed: "completed"
-}
+  completed: "completed",
+};
 
 export default Controller.extend({
-  noAccess: or('noWizard', 'requiresLogin', 'notPermitted', 'completed'),
+  noAccess: or("noWizard", "requiresLogin", "notPermitted", "completed"),
 
-  @discourseComputed('noAccessReason')
+  @discourseComputed("noAccessReason")
   noAccessI18nKey(reason) {
-    return reason ? `wizard.${reasons[reason]}` : 'wizard.none';
+    return reason ? `wizard.${reasons[reason]}` : "wizard.none";
   },
 
   @discourseComputed
   noAccessReason() {
-    return Object.keys(reasons).find(reason => this.get(reason));
-  }
+    return Object.keys(reasons).find((reason) => this.get(reason));
+  },
 });

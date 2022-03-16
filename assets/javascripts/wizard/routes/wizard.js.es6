@@ -1,5 +1,4 @@
 import { findCustomWizard, updateCachedWizard } from "../models/wizard";
-import { ajax } from "wizard/lib/ajax";
 import WizardI18n from "../lib/wizard-i18n";
 import Route from "@ember/routing/route";
 import { scheduleOnce } from "@ember/runloop";
@@ -20,7 +19,7 @@ export default Route.extend({
     const title = WizardI18n("wizard.incomplete_submission.title", {
       date: moment(wizardModel.submission_last_updated_at).format(
         "MMMM Do YYYY"
-      )
+      ),
     });
 
     const buttons = [
@@ -49,7 +48,7 @@ export default Route.extend({
   },
 
   renderTemplate() {
-    this.render('wizard/templates/wizard');
+    this.render("wizard/templates/wizard");
   },
 
   setupController(controller, model) {
