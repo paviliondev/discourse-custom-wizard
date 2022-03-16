@@ -11,7 +11,6 @@ export default Component.extend({
   invalidMessageKey: null,
   isValid: null,
   isInvalid: equal("isValid", false),
-  layoutName: "wizard/templates/components/validator",
 
   init() {
     this._super(...arguments);
