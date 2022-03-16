@@ -13,8 +13,7 @@
 {{#if step.permitted}}
   {{wizard-step step=step
                 wizard=wizard
-                goNext="goNext"
+                goNext=(action "goNext")
                 goBack=(action "goBack")
-                finished="finished"
-                showMessage="showMessage"}}
+                showMessage=(action "showMessage")}}
 {{/if}}

@@ -87,7 +87,7 @@ export default Component.extend({
   @observes("step.message")
   _handleMessage: function () {
     const message = this.get("step.message");
-    this.sendAction("showMessage", message);
+    this.showMessage(message);
   },
 
   keyPress(event) {
@@ -162,7 +162,7 @@ export default Component.extend({
         if (response["final"]) {
           CustomWizard.finished(response);
         } else {
-          this.sendAction("goNext", response);
+          this.goNext(response);
         }
       })
       .catch(() => this.animateInvalidFields())
@@ -181,7 +181,7 @@ export default Component.extend({
     },
 
     showMessage(message) {
-      this.sendAction("showMessage", message);
+      this.sendAction(message);
     },
 
     stylingDropdownChanged(id, value) {

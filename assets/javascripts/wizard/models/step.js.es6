@@ -3,6 +3,7 @@ import ValidState from "wizard/mixins/valid-state";
 import { ajax } from "wizard/lib/ajax";
 import discourseComputed from "discourse-common/utils/decorators";
 import { translatedText } from "discourse/plugins/discourse-custom-wizard/wizard/lib/wizard-i18n";
+import { later } from "@ember/runloop";
 
 export default EmberObject.extend(ValidState, {
   id: null,
@@ -105,6 +106,6 @@ export default EmberObject.extend(ValidState, {
       state: "error",
       text: message,
     });
-    Ember.run.later(() => this.set("message", null), 6000);
+    later(() => this.set("message", null), 6000);
   },
 });

@@ -113,8 +113,7 @@ CustomWizard.reopenClass({
         }
       });
 
-      Site.currentProp("categoriesList", categories);
-      Site.currentProp("sortedCategories", categories);
+      Site.currentProp("categories", categories);
       Site.currentProp("listByActivity", categories);
       Site.currentProp("categoriesById", categoriesById);
       Site.currentProp(

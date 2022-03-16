@@ -7,6 +7,7 @@ import userSearch from "../lib/user-search";
 import WizardI18n from "../lib/wizard-i18n";
 import Handlebars from "handlebars";
 import { isEmpty } from "@ember/utils";
+import TextField from "@ember/component/text-field";
 
 const template = function (params) {
   const options = params.options;
@@ -31,7 +32,7 @@ const template = function (params) {
   return new Handlebars.SafeString(html).string;
 };
 
-export default Ember.TextField.extend({
+export default TextField.extend({
   attributeBindings: ["autofocus", "maxLength"],
   autocorrect: false,
   autocapitalize: false,

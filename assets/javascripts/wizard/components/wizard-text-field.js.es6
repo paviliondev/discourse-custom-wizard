@@ -1,8 +1,9 @@
 import computed from "discourse-common/utils/decorators";
 import { isLTR, isRTL, siteDir } from "discourse/lib/text-direction";
 import WizardI18n from "../lib/wizard-i18n";
+import TextField from "@ember/component/text-field";
 
-export default Ember.TextField.extend({
+export default TextField.extend({
   attributeBindings: [
     "autocorrect",
     "autocapitalize",

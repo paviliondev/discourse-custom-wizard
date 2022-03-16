@@ -22,6 +22,11 @@ export default {
     const DEditor = requirejs("discourse/components/d-editor").default;
     const { clipboardHelpers } = requirejs("discourse/lib/utilities");
     const toMarkdown = requirejs("discourse/lib/to-markdown").default;
+    const discourseComputed = requirejs("discourse-common/utils/decorators")
+      .default;
+    const WizardI18n = requirejs(
+      "discourse/plugins/discourse-custom-wizard/wizard/lib/wizard-i18n"
+    ).default;
     const isInside = (text, regex) => {
       const matches = text.match(regex);
       return matches && matches.length % 2;
@@ -44,6 +49,17 @@ export default {
             "_wizardReplaceText"
           );
         }
+      },
+
+      @discourseComputed("placeholder", "placeholderOverride")
+      placeholderTranslated(placeholder, placeholderOverride) {
+        if (placeholderOverride) {
+          return placeholderOverride;
+        }
+        if (placeholder) {
+          return WizardI18n(placeholder);
+        }
+        return null;
       },
 
       _wizardInsertText(args = {}) {
