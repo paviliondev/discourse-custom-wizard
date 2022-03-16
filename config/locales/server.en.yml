@@ -54,20 +54,6 @@ en:
       after_time: "After time setting is invalid."
       liquid_syntax_error: "Liquid syntax error in %{attribute}: %{message}"
 
-    notice:
-      connection_error: "Failed to connect to http://%{domain}"
-      compatibility_issue:
-        title: The Custom Wizard Plugin is incompatibile with the latest version of Discourse.
-        message: Please check the Custom Wizard Plugin status on [%{domain}](http://%{domain}) before updating Discourse.
-      plugin_status:
-        connection_error:
-          title: Unable to connect to the Custom Wizard Plugin status server
-          message: Please check the Custom Wizard Plugin status on [%{domain}](http://%{domain}) before updating Discourse. If this issue persists contact <a href="mailto:support@thepavilion.io">support@thepavilion.io</a> for further assistance.
-      subscription_message:
-        connection_error:
-          title: Unable to connect to the Custom Wizard Plugin subscription server
-          message: If this issue persists contact <a href="mailto:support@thepavilion.io">support@thepavilion.io</a> for further assistance.
-
   site_settings:
     custom_wizard_enabled: "Enable custom wizards."
     wizard_redirect_exclude_paths: "Routes excluded from wizard redirects."

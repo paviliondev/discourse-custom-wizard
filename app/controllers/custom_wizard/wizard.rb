@@ -11,7 +11,6 @@ class CustomWizard::WizardController < ::ActionController::Base
 
   before_action :preload_wizard_json
   before_action :ensure_plugin_enabled
-  before_action :update_subscription, only: [:index]
   before_action :ensure_logged_in, only: [:skip]
 
   helper_method :wizard_page_title
@@ -122,9 +121,5 @@ class CustomWizard::WizardController < ::ActionController::Base
     unless SiteSetting.custom_wizard_enabled
       redirect_to path("/")
     end
-  end
-
-  def update_subscription
-    CustomWizard::Subscription.update
   end
 end
