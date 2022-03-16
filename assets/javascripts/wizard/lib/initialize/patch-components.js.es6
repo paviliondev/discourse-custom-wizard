@@ -1,93 +1,25 @@
-import { dasherize } from "@ember/string";
-import discourseComputed from "discourse-common/utils/decorators";
-
 export default {
-  name: "custom-wizard-field",
-  initialize() {
-    if (window.location.pathname.indexOf("/w/") < 0) {
-      return;
+  run(app, container) {
+    const getToken = requirejs("wizard/lib/ajax").getToken;
+    const isTesting = requirejs("discourse-common/config/environment").isTesting;
+
+    if (!isTesting) {
+      // Add a CSRF token to all AJAX requests
+      let token = getToken();
+      session.set("csrfToken", token);
+      let callbacks = $.Callbacks();
+      $.ajaxPrefilter(callbacks.fire);
+
+      callbacks.add(function (options, originalOptions, xhr) {
+        if (!options.crossDomain) {
+          xhr.setRequestHeader("X-CSRF-Token", session.get("csrfToken"));
+        }
+      });
     }
 
-    const FieldComponent = requirejs("wizard/components/wizard-field").default;
-    const FieldModel = requirejs("wizard/models/wizard-field").default;
-    const { cook } = requirejs(
-      "discourse/plugins/discourse-custom-wizard/wizard/lib/text-lite"
-    );
     const DEditor = requirejs("discourse/components/d-editor").default;
     const { clipboardHelpers } = requirejs("discourse/lib/utilities");
     const toMarkdown = requirejs("discourse/lib/to-markdown").default;
-
-    FieldComponent.reopen({
-      classNameBindings: ["field.id"],
-
-      @discourseComputed("field.type")
-      textType(fieldType) {
-        return ["text", "textarea"].includes(fieldType);
-      },
-
-      cookedDescription: function () {
-        return cook(this.get("field.description"));
-      }.property("field.description"),
-
-      inputComponentName: function () {
-        const type = this.get("field.type");
-        const id = this.get("field.id");
-        if (["text_only"].includes(type)) {
-          return false;
-        }
-        return dasherize(type === "component" ? id : `wizard-field-${type}`);
-      }.property("field.type", "field.id"),
-    });
-
-    const StandardFieldValidation = [
-      "text",
-      "number",
-      "textarea",
-      "dropdown",
-      "tag",
-      "image",
-      "user_selector",
-      "text_only",
-      "composer",
-      "category",
-      "group",
-      "date",
-      "time",
-      "date_time",
-    ];
-
-    FieldModel.reopen({
-      check() {
-        if (this.customCheck) {
-          return this.customCheck();
-        }
-
-        let valid = this.valid;
-
-        if (!this.required) {
-          this.setValid(true);
-          return true;
-        }
-
-        const val = this.get("value");
-        const type = this.get("type");
-
-        if (type === "checkbox") {
-          valid = val;
-        } else if (type === "upload") {
-          valid = val && val.id > 0;
-        } else if (StandardFieldValidation.indexOf(type) > -1) {
-          valid = val && val.toString().length > 0;
-        } else if (type === "url") {
-          valid = true;
-        }
-
-        this.setValid(valid);
-
-        return valid;
-      },
-    });
-
     const isInside = (text, regex) => {
       const matches = text.match(regex);
       return matches && matches.length % 2;
@@ -194,5 +126,19 @@ export default {
         }
       },
     });
-  },
+
+    // IE11 Polyfill - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries#Polyfill
+    if (!Object.entries) {
+      Object.entries = function (obj) {
+        let ownProps = Object.keys(obj),
+          i = ownProps.length,
+          resArray = new Array(i); // preallocate the Array
+        while (i--) {
+          resArray[i] = [ownProps[i], obj[ownProps[i]]];
+        }
+
+        return resArray;
+      };
+    }
+  }
 };

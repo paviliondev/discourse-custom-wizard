@@ -6,6 +6,7 @@ module ExtraLocalesControllerCustomWizard
       path = URI(request.referer).path
       wizard_path = path.split('/w/').last
       wizard_id = wizard_path.split('/').first
+      return true if wizard_id == "qunit"
       CustomWizard::Template.exists?(wizard_id.underscore)
     end
   end

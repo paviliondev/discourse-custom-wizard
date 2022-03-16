@@ -1,9 +1,9 @@
 import { default as computed } from "discourse-common/utils/decorators";
 import getUrl from "discourse-common/lib/get-url";
-import WizardField from "wizard/models/wizard-field";
+import Field from "./field";
 import { ajax } from "wizard/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
-import Step from "wizard/models/step";
+import Step from "./step";
 import EmberObject from "@ember/object";
 import Site from "./site";
 
@@ -73,7 +73,11 @@ CustomWizard.reopenClass({
             }
           });
 
-          stepObj.fields = stepObj.fields.map((f) => WizardField.create(f));
+          stepObj.fields = stepObj.fields.map((f) => {
+            f.wizardId = wizardJson.id;
+            f.stepId = stepObj.id;
+            return Field.create(f);
+          });
 
           return stepObj;
         })

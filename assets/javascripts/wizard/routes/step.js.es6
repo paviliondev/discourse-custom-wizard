@@ -1,7 +1,8 @@
 import WizardI18n from "../lib/wizard-i18n";
-import { getCachedWizard } from "../models/custom";
+import { getCachedWizard } from "../models/wizard";
+import Route from "@ember/routing/route";
 
-export default Ember.Route.extend({
+export default Route.extend({
   beforeModel() {
     this.set("wizard", getCachedWizard());
   },
@@ -19,9 +20,13 @@ export default Ember.Route.extend({
 
   afterModel(model) {
     if (model.completed) {
-      return this.transitionTo("index");
+      return this.transitionTo("wizard.index");
     }
     return model.set("wizardId", this.wizard.id);
+  },
+
+  renderTemplate() {
+    this.render('wizard/templates/step');
   },
 
   setupController(controller, model) {

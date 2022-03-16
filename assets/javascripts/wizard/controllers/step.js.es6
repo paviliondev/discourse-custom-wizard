@@ -1,7 +1,10 @@
-import StepController from "wizard/controllers/step";
+import Controller from "@ember/controller";
 import getUrl from "discourse-common/lib/get-url";
 
-export default StepController.extend({
+export default Controller.extend({
+  wizard: null,
+  step: null,
+
   actions: {
     goNext(response) {
       let nextStepId = response["next_step_id"];
@@ -12,12 +15,12 @@ export default StepController.extend({
         const wizardId = this.get("wizard.id");
         window.location.href = getUrl(`/w/${wizardId}/steps/${nextStepId}`);
       } else {
-        this.transitionToRoute("custom.step", nextStepId);
+        this.transitionToRoute("step", nextStepId);
       }
     },
 
     goBack() {
-      this.transitionToRoute("custom.step", this.get("step.previous"));
+      this.transitionToRoute("step", this.get("step.previous"));
     },
 
     showMessage(message) {

@@ -1,37 +1,26 @@
-/* eslint no-undef: 0*/
-
-import { findCustomWizard, updateCachedWizard } from "../models/custom";
+import { findCustomWizard, updateCachedWizard } from "../models/wizard";
 import { ajax } from "wizard/lib/ajax";
 import WizardI18n from "../lib/wizard-i18n";
+import Route from "@ember/routing/route";
+import { scheduleOnce } from "@ember/runloop";
+import { getOwner } from "discourse-common/lib/get-owner";
 
-export default Ember.Route.extend({
+export default Route.extend({
   beforeModel(transition) {
-    this.set("queryParams", transition.intent.queryParams);
+    if (transition.intent.queryParams) {
+      this.set("queryParams", transition.intent.queryParams);
+    }
   },
 
   model(params) {
     return findCustomWizard(params.wizard_id, this.get("queryParams"));
   },
 
-  renderTemplate() {
-    this.render("custom");
-    const wizardModel = this.modelFor("custom");
-    const stepModel = this.modelFor("custom.step");
-
-    if (
-      wizardModel.resume_on_revisit &&
-      wizardModel.submission_last_updated_at &&
-      stepModel.index > 0
-    ) {
-      this.showDialog(wizardModel);
-    }
-  },
-
   showDialog(wizardModel) {
     const title = WizardI18n("wizard.incomplete_submission.title", {
       date: moment(wizardModel.submission_last_updated_at).format(
         "MMMM Do YYYY"
-      ),
+      )
     });
 
     const buttons = [
@@ -57,28 +46,36 @@ export default Ember.Route.extend({
 
   afterModel(model) {
     updateCachedWizard(model);
+  },
 
-    return ajax({
-      url: `/site/settings`,
-      type: "GET",
-    }).then((result) => {
-      $.extend(Wizard.SiteSettings, result);
-    });
+  renderTemplate() {
+    this.render('wizard/templates/wizard');
   },
 
   setupController(controller, model) {
-    const background = model ? model.get("background") : "AliceBlue";
-    Ember.run.scheduleOnce("afterRender", this, function () {
-      $("body.custom-wizard").css("background", background);
+    const background = model ? model.get("background") : "";
+
+    scheduleOnce("afterRender", this, function () {
+      $("body").css("background", background);
 
       if (model && model.id) {
-        $("#custom-wizard-main").addClass(model.id.dasherize());
+        $(getOwner(this).rootElement).addClass(model.id.dasherize());
       }
     });
+
     controller.setProperties({
       customWizard: true,
-      logoUrl: Wizard.SiteSettings.logo_small,
+      logoUrl: this.siteSettings.logo_small,
       reset: null,
     });
+
+    const stepModel = this.modelFor("step");
+    if (
+      model.resume_on_revisit &&
+      model.submission_last_updated_at &&
+      stepModel.index > 0
+    ) {
+      this.showDialog(model);
+    }
   },
 });
