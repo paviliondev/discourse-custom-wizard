@@ -169,8 +169,6 @@ export default Component.extend({
       .finally(() => this.set("saving", false));
   },
 
-  keyPress() {},
-
   actions: {
     quit() {
       this.get("wizard").skip();
