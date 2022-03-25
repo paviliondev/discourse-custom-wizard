@@ -47,7 +47,7 @@ en:
         value: "Value"
         profile: "profile"
         type: "Type"
-        none: "Make a selection"              
+        none: "Make a selection"
         submission_key: 'submission key'
         param_key: 'param'
         group: "Group"
@@ -126,9 +126,9 @@ en:
           hide: "Hide"
           preview: "{{action}} Preview"
           popover: "{{action}} Fields"
-        
+
         input:
-          conditional: 
+          conditional:
             name: 'if'
             output: 'then'
           assignment:
@@ -137,7 +137,7 @@ en:
             name: 'map'
           validation:
             name: 'ensure'
-  
+
         selector:
           label:
             text: "text"
@@ -175,7 +175,7 @@ en:
           dependent: "{{property}} is dependent on {{dependent}}"
           conflict: "{{type}} with {{property}} '{{value}}' already exists"
           after_time: "After time invalid"
-        
+
         step:
           header: "Steps"
           title: "Title"
@@ -189,7 +189,7 @@ en:
           force_final:
             label: "Conditional Final Step"
             description: "Display this step as the final step if conditions on later steps have not passed when the user reaches this step."
-        
+
         field:
           header: "Fields"
           label: "Label"
@@ -212,7 +212,7 @@ en:
           prefill: "Prefill"
           content: "Content"
           tag_groups: "Tag Groups"
-          date_time_format: 
+          date_time_format:
             label: "Format"
             instructions: "<a href='https://momentjs.com/docs/#/displaying/format/' target='_blank'>Moment.js format</a>"
           validations:
@@ -229,7 +229,7 @@ en:
               weeks: "Weeks"
               months: "Months"
               years: "Years"
-          
+
           type:
             text: "Text"
             textarea: Textarea
@@ -248,7 +248,7 @@ en:
             date: Date
             time: Time
             date_time: Date & Time
-        
+
         connector:
           and: "and"
           or: "or"
@@ -262,7 +262,7 @@ en:
           regex: '=~'
           association: '→'
           is: 'is'
-        
+
         action:
           header: "Actions"
           include: "Include Fields"
@@ -270,8 +270,8 @@ en:
           post: "Post"
           topic_attr: "Topic Attribute"
           interpolate_fields: "Insert wizard fields using the field_id in w{}. Insert user fields using field key in u{}."
-          
-          run_after: 
+
+          run_after:
             label: "Run After"
             wizard_completion: "Wizard Completion"
           custom_fields:
@@ -353,11 +353,11 @@ en:
             messageable_level: Messageable Level
             visibility_level: Visibility Level
             members_visibility_level: Members Visibility Level
-        
+
         custom_field:
           nav_label: "Custom Fields"
           add: "Add"
-          external: 
+          external:
             label: "from another plugin"
             title: "This custom field has been added by another plugin. You can use it in your wizards but you can't edit the field here."
           name:
@@ -386,7 +386,7 @@ en:
             basic_category: "Category"
             basic_group: "Group"
             post: "Post"
-            
+
         submissions:
           nav_label: "Submissions"
           title: "{{name}} Submissions"
@@ -468,59 +468,22 @@ en:
 
         subscription_container:
           title: Subscriber Features
-          subscribed: 
+          subscribed:
             label: Subscribed
             title: You're subscribed and can use these features
           not_subscribed:
             label: Not Subscribed
             title: Subscribe to use these features
-
-        subscription:
-          nav_label: Subscription
-          label: In subscription
-          additional_label: "Add subscription"
-          title: Custom Wizard Subscription
-          authorize: Authorize
-          authorized: Authorized
-          unauthorize: cancel
-          not_subscribed: You're not currently subscribed
-          subscription:
-            title:
-              standard: Standard Subscription
-              business: Business Subscription
-            status:
-              active: Active
-              inactive: Inactive
-            update: Update
-            last_updated: Last updated
-
-        notice:
-          plugin: Custom Wizard Plugin
-          message: Message
-          time: Time
-          status: Status
-          title: Title
-          dismiss:
-            label: Dismiss
-            title: Dismiss notice
-          dismiss_all:
-            label: Dismiss All
-            title: Dismiss all informational Custom Wizard notices
-            confirm: Are you sure you want to dismiss all informational Custom Wizard notices?
-          active: active
-          created_at: issued
-          updated_at: updated
-          expired_at: expired
-          dismissed_at: dismissed
           type:
-            label: Type
-            info: Information
-            warning: Warning
-            connection_error: Connection Error
-
-        notices:
-          nav_label: Notices
-          title: Plugin Notices
+            none:
+              label: Not Subscribed
+              title: There is no Custom Wizard subscription active on this forum.
+            business:
+              label: Business
+              title: There is a Custom Wizard Business subscription active on this forum.
+            standard:
+              label: Standard
+              title: There is a Custom Wizard Standard subscription active on this forum.
 
   wizard_js:
     group:
@@ -636,7 +599,7 @@ en:
       yourself_confirm:
         title: "Did you forget to add recipients?"
         body: "Right now this message is only being sent to yourself!"
-    
+
     realtime_validations:
       similar_topics:
         insufficient_characters: "Type a minimum 5 characters to start looking for similar topics"

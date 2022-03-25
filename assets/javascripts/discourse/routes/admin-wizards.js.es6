@@ -7,21 +7,17 @@ export default DiscourseRoute.extend({
   },
 
   setupController(controller, model) {
-    controller.set("api_section", model.api_section);
-
-    if (model.active_notice_count) {
-      controller.set("activeNoticeCount", model.active_notice_count);
-    }
-    if (model.featured_notices) {
-      controller.set("featuredNotices", model.featured_notices);
-    }
-
-    controller.subscribe();
+    controller.setProperties({
+      subscribed: model.subscribed,
+      subscriptionType: model.subscription_type,
+      subscriptionAttributes: model.subscription_attributes,
+      subscriptionClientInstalled: model.subscription_client_installed
+    });
   },
 
   afterModel(model, transition) {
     if (transition.targetName === "adminWizards.index") {
       this.transitionTo("adminWizardsWizard");
     }
-  },
+  }
 });

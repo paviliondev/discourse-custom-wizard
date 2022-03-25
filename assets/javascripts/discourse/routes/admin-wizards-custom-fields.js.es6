@@ -9,13 +9,9 @@ export default DiscourseRoute.extend({
 
   setupController(controller, model) {
     const customFields = A(model.custom_fields || []);
-    const subscribed = model.subscribed;
-    const subscription = model.subscription;
 
     controller.setProperties({
-      customFields,
-      subscribed,
-      subscription,
+      customFields
     });
   },
 });

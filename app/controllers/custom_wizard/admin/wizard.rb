@@ -10,9 +10,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
       ),
       field_types: CustomWizard::Field.types,
       realtime_validations: CustomWizard::RealtimeValidation.types,
-      custom_fields: custom_field_list,
-      subscribed: CustomWizard::Subscription.subscribed?,
-      subscription: CustomWizard::Subscription.type
+      custom_fields: custom_field_list
     )
   end
 

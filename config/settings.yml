@@ -1,5 +1,5 @@
 plugins:
-  custom_wizard_enabled: 
+  custom_wizard_enabled:
     default: true
     client: true
   wizard_redirect_exclude_paths:

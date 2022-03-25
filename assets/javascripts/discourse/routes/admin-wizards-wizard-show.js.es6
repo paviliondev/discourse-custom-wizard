@@ -38,9 +38,7 @@ export default DiscourseRoute.extend({
       wizard,
       currentStep: wizard.steps[0],
       currentAction: wizard.actions[0],
-      creating: model.create,
-      subscribed: parentModel.subscribed,
-      subscription: parentModel.subscription,
+      creating: model.create
     };
 
     controller.setProperties(props);

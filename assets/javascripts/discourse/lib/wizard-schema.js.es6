@@ -203,100 +203,16 @@ const custom_field = {
   type: ["string", "boolean", "integer", "json"],
 };
 
-const subscription_levels = {
-  standard: {
-    actions: ["send_message", "add_to_group", "watch_categories"],
-    custom_fields: {
-      klass: [],
-      type: ["json"],
-    },
-  },
-
-  business: {
-    actions: ["create_category", "create_group", "send_to_api"],
-    custom_fields: {
-      klass: ["group", "category"],
-      type: [],
-    },
-  },
-};
+field.type = Object.keys(field.types);
+action.type = Object.keys(action.types);
 
 const wizardSchema = {
   wizard,
   step,
   field,
   custom_field,
-  action,
-  subscription_levels,
+  action
 };
-
-export function requiringAdditionalSubscription(
-  currentSubscription,
-  category,
-  subCategory
-) {
-  switch (category) {
-    case "actions":
-      switch (currentSubscription) {
-        case "business":
-          return [];
-        case "standard":
-          return subscription_levels["business"][category];
-        default:
-          return subscription_levels["standard"][category].concat(
-            subscription_levels["business"][category]
-          );
-      }
-    case "custom_fields":
-      switch (currentSubscription) {
-        case "business":
-          return [];
-        case "standard":
-          return subscription_levels["business"][category][subCategory];
-        default:
-          return subscription_levels["standard"][category][subCategory].concat(
-            subscription_levels["business"][category][subCategory]
-          );
-      }
-    default:
-      return [];
-  }
-}
-
-export function subscriptionLevel(type, category, subCategory) {
-  switch (category) {
-    case "actions":
-      if (subscription_levels["business"].actions.includes(type)) {
-        return "business";
-      } else {
-        if (subscription_levels["standard"].actions.includes(type)) {
-          return "standard";
-        } else {
-          return "";
-        }
-      }
-    case "custom_fields":
-      if (
-        subscription_levels["business"].custom_fields[subCategory].includes(
-          type
-        )
-      ) {
-        return "business";
-      } else {
-        if (
-          subscription_levels["standard"].custom_fields[subCategory].includes(
-            type
-          )
-        ) {
-          return "standard";
-        } else {
-          return "";
-        }
-      }
-    default:
-      return "";
-  }
-}
 
 export function buildFieldTypes(types) {
   wizardSchema.field.types = types;

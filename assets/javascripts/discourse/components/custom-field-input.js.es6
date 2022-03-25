@@ -3,29 +3,6 @@ import discourseComputed, { observes } from "discourse-common/utils/decorators";
 import { alias, equal, or } from "@ember/object/computed";
 import I18n from "I18n";
 
-import wizardSchema, {
-  requiringAdditionalSubscription,
-  subscriptionLevel,
-} from "discourse/plugins/discourse-custom-wizard/discourse/lib/wizard-schema";
-
-const generateContent = function (kategory, subscription) {
-  let unsubscribedCustomFields = requiringAdditionalSubscription(
-    subscription,
-    "custom_fields",
-    kategory
-  );
-  return wizardSchema.custom_field[kategory].reduce((result, item) => {
-    let disabled = unsubscribedCustomFields.includes(item);
-    result.push({
-      id: item,
-      name: I18n.t(`admin.wizard.custom_field.${kategory}.${item}`),
-      subscription: subscriptionLevel(item, "custom_fields", kategory),
-      disabled,
-    });
-    return result;
-  }, []);
-};
-
 export default Component.extend({
   tagName: "tr",
   topicSerializers: ["topic_view", "topic_list_item"],
@@ -56,16 +33,6 @@ export default Component.extend({
         return result;
       }, []);
     }
-  },
-
-  @discourseComputed("subscription")
-  customFieldTypes(subscription) {
-    return generateContent("type", subscription);
-  },
-
-  @discourseComputed("subscription")
-  customFieldKlasses(subscription) {
-    return generateContent("klass", subscription);
   },
 
   @observes("field.klass")

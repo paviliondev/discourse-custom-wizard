@@ -5,16 +5,12 @@
 # authors: Angus McLeod, Faizaan Gagan, Robert Barrow, Keegan George
 # contact_emails: support@thepavilion.io
 # url: https://github.com/paviliondev/discourse-custom-wizard
+# subscription_url: https://coop.pavilion.tech
 
 gem 'liquid', '5.0.1', require: true
 register_asset 'stylesheets/admin/admin.scss', :desktop
 
 enabled_site_setting :custom_wizard_enabled
-
-config = Rails.application.config
-plugin_asset_path = "#{Rails.root}/plugins/discourse-custom-wizard/assets"
-config.assets.paths << "#{plugin_asset_path}/javascripts"
-config.assets.paths << "#{plugin_asset_path}/stylesheets/wizard"
 
 if Rails.env.production?
   config.assets.precompile += %w{
@@ -59,6 +55,24 @@ class ::Sprockets::DirectiveProcessor
   end
 end
 
+## Override necessary due to 'assets/javascripts/wizard', particularly its tests.
+def each_globbed_asset
+  if @path
+    root_path = "#{File.dirname(@path)}/assets/javascripts/discourse"
+
+    Dir.glob(["#{root_path}/**/*"]).sort.each do |f|
+      f_str = f.to_s
+      if File.directory?(f)
+        yield [f, true]
+      elsif f_str.end_with?(".js.es6") || f_str.end_with?(".hbs") || f_str.end_with?(".hbr")
+        yield [f, false]
+      elsif transpile_js && f_str.end_with?(".js")
+        yield [f, false]
+      end
+    end
+  end
+end
+
 after_initialize do
   %w[
     ../lib/custom_wizard/engine.rb
@@ -91,6 +105,7 @@ after_initialize do
     ../lib/custom_wizard/step_updater.rb
     ../lib/custom_wizard/step.rb
     ../lib/custom_wizard/submission.rb
+    ../lib/custom_wizard/subscription.rb
     ../lib/custom_wizard/template.rb
     ../lib/custom_wizard/wizard.rb
     ../lib/custom_wizard/api/api.rb

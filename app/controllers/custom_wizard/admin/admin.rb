@@ -3,8 +3,12 @@ class CustomWizard::AdminController < ::Admin::AdminController
   before_action :ensure_admin
 
   def index
+    subcription = CustomWizard::Subscription.new
     render_json_dump(
-      api_section: ["business"].include?(CustomWizard::Subscription.type)
+      subscribed: subcription.subscribed?,
+      subscription_type: subcription.type,
+      subscription_attributes: CustomWizard::Subscription.attributes,
+      subscription_client_installed: subcription.client_installed?
     )
   end
 
