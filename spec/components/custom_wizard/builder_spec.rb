@@ -100,6 +100,7 @@ describe CustomWizard::Builder do
 
     context "with restricted permissions" do
       before do
+        enable_subscription("standard")
         @template[:permitted] = permitted_json["permitted"]
         CustomWizard::Template.save(@template.as_json)
       end
@@ -304,7 +305,7 @@ describe CustomWizard::Builder do
         before do
           enable_subscription("standard")
           @template[:steps][0][:fields][0][:condition] = user_condition_json['condition']
-          @template[:steps][2][:fields][5][:condition] = boolean_field_condition_json['condition']
+          @template[:steps][2][:fields][0][:condition] = boolean_field_condition_json['condition']
           CustomWizard::Template.save(@template.as_json)
         end
 
@@ -325,7 +326,7 @@ describe CustomWizard::Builder do
 
           builder = CustomWizard::Builder.new(@template[:id], user)
           wizard = builder.build
-          expect(wizard.steps.last.fields.last.id).to eq(@template[:steps][2][:fields][5]['id'])
+          expect(wizard.steps.last.fields.last.id).to eq(@template[:steps][2][:fields][0]['id'])
         end
       end
     end

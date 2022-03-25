@@ -40,14 +40,15 @@ describe CustomWizard::WizardController do
     end
 
     it 'lets user skip if user cant access wizard' do
+      enable_subscription("standard")
       @template["permitted"] = permitted_json["permitted"]
       CustomWizard::Template.save(@template, skip_jobs: true)
-
       put '/w/super-mega-fun-wizard/skip.json'
       expect(response.status).to eq(200)
     end
 
     it 'returns a no skip message if user is not allowed to skip' do
+      enable_subscription("standard")
       @template['required'] = 'true'
       CustomWizard::Template.save(@template)
       put '/w/super-mega-fun-wizard/skip.json'

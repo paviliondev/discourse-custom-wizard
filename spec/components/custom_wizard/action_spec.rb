@@ -8,6 +8,7 @@ describe CustomWizard::Action do
   let(:wizard_template) { get_wizard_fixture("wizard") }
   let(:open_composer) { get_wizard_fixture("actions/open_composer") }
   let(:create_category) { get_wizard_fixture("actions/create_category") }
+  let(:watch_categories) { get_wizard_fixture("actions/watch_categories") }
   let(:create_group) { get_wizard_fixture("actions/create_group") }
   let(:add_to_group) { get_wizard_fixture("actions/add_to_group") }
   let(:send_message) { get_wizard_fixture("actions/send_message") }
@@ -158,17 +159,6 @@ describe CustomWizard::Action do
     end
   end
 
-  it 'watches categories' do
-    wizard = CustomWizard::Builder.new(@template[:id], user).build
-    wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
-    wizard.create_updater(wizard.steps[1].id, {}).update
-
-    expect(CategoryUser.where(
-      category_id: category.id,
-      user_id: user.id
-    ).first.notification_level).to eq(0)
-  end
-
   it 're-routes a user' do
     wizard = CustomWizard::Builder.new(@template[:id], user).build
     updater = wizard.create_updater(wizard.steps.last.id, {})
@@ -176,9 +166,23 @@ describe CustomWizard::Action do
     expect(updater.result[:redirect_on_next]).to eq("https://google.com")
   end
 
-  context "subscription actions" do
+  context "standard subscription actions" do
     before do
       enable_subscription("standard")
+    end
+
+    it 'watches categories' do
+      watch_categories[:categories][0][:output] = category.id
+      wizard_template[:actions] << watch_categories
+      update_template(wizard_template)
+
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
+
+      expect(CategoryUser.where(
+        category_id: category.id,
+        user_id: user.id
+      ).first.notification_level).to eq(2)
     end
 
     it '#send_message' do
@@ -233,9 +237,16 @@ describe CustomWizard::Action do
       expect(topic.first.allowed_groups.map(&:name)).to include('cool_group', 'cool_group_1')
       expect(post.exists?).to eq(true)
     end
+  end
+
+  context "business subscription actions" do
+    before do
+      enable_subscription("business")
+    end
 
     it '#create_category' do
       wizard_template['actions'] << create_category
+      wizard_template['actions'] << create_group
       update_template(wizard_template)
 
       wizard = CustomWizard::Builder.new(@template[:id], user).build

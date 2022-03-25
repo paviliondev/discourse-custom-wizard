@@ -51,16 +51,7 @@ class CustomWizard::Subscription
           business: ['*']
         },
         type: {
-          none: ['label', 'description', 'image', 'required', 'placeholder', 'file'],
-          standard: ['*'],
-          business: ['*']
-        },
-        prefill: {
-          standard: ['*'],
-          business: ['*']
-        },
-        content: {
-          none: [],
+          none: ['text', 'textarea', 'text_only', 'date', 'time', 'date_time', 'number', 'checkbox', 'dropdown', 'upload'],
           standard: ['*'],
           business: ['*']
         },
@@ -72,8 +63,8 @@ class CustomWizard::Subscription
       },
       action: {
         type: {
-          none: [],
-          standard: ['send_message', 'watch_categories', 'add_to_group'],
+          none: ['create_topic', 'update_profile', 'open_composer', 'route_to'],
+          standard: ['create_topic', 'update_profile', 'open_composer', 'route_to', 'send_message', 'watch_categories', 'add_to_group'],
           business: ['*']
         }
       },
@@ -108,7 +99,7 @@ class CustomWizard::Subscription
     return false if values.blank?
 
     ## Subscription type supports all values of the attribute.
-    return true if values === "*"
+    return true if values.first === "*"
 
     ## Subscription type supports some values of the attributes.
     values.include?(value)
@@ -167,5 +158,13 @@ class CustomWizard::Subscription
 
   def self.type
     new.type
+  end
+
+  def self.client_installed?
+    new.client_installed?
+  end
+
+  def self.includes?(feature, attribute, value)
+    new.includes?(feature, attribute, value)
   end
 end

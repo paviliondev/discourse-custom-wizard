@@ -5,6 +5,7 @@ describe CustomWizard::WizardSerializer do
   fab!(:category) { Fabricate(:category) }
   let(:template) { get_wizard_fixture("wizard") }
   let(:similar_topics_validation) { get_wizard_fixture("field/validation/similar_topics") }
+  let(:advanced_fields) { get_wizard_fixture("field/advanced_types") }
 
   before do
     CustomWizard::Template.save(template, skip_jobs: true)
@@ -52,43 +53,51 @@ describe CustomWizard::WizardSerializer do
     expect(json[:wizard][:uncategorized_category_id].present?).to eq(false)
   end
 
-  it "should return categories if there is a category selector field" do
-    json = CustomWizard::WizardSerializer.new(
-      CustomWizard::Builder.new(@template[:id], user).build,
-      scope: Guardian.new(user)
-    ).as_json
-    expect(json[:wizard][:categories].present?).to eq(true)
-    expect(json[:wizard][:uncategorized_category_id].present?).to eq(true)
-  end
+  context "advanced fields" do
+    before do
+      enable_subscription("standard")
+      @template[:steps][0][:fields].push(*advanced_fields['fields'])
+      CustomWizard::Template.save(@template, skip_jobs: true)
+    end
 
-  it "should return categories if there is a similar topics validation scoped to category(s)" do
-    @template[:steps][0][:fields][0][:validations] = similar_topics_validation[:validations]
-    CustomWizard::Template.save(@template)
+    it "should return categories if there is a category selector field" do
+      json = CustomWizard::WizardSerializer.new(
+        CustomWizard::Builder.new(@template[:id], user).build,
+        scope: Guardian.new(user)
+      ).as_json
+      expect(json[:wizard][:categories].present?).to eq(true)
+      expect(json[:wizard][:uncategorized_category_id].present?).to eq(true)
+    end
 
-    json = CustomWizard::WizardSerializer.new(
-      CustomWizard::Builder.new(@template[:id], user).build,
-      scope: Guardian.new(user)
-    ).as_json
-    expect(json[:wizard][:categories].present?).to eq(true)
-    expect(json[:wizard][:uncategorized_category_id].present?).to eq(true)
-  end
+    it "should return categories if there is a similar topics validation scoped to category(s)" do
+      @template[:steps][0][:fields][0][:validations] = similar_topics_validation[:validations]
+      CustomWizard::Template.save(@template)
 
-  it 'should return groups if there is a group selector field' do
-    json = CustomWizard::WizardSerializer.new(
-      CustomWizard::Builder.new(@template[:id], user).build,
-      scope: Guardian.new(user)
-    ).as_json
-    expect(json[:wizard][:groups].length).to eq(8)
-  end
+      json = CustomWizard::WizardSerializer.new(
+        CustomWizard::Builder.new(@template[:id], user).build,
+        scope: Guardian.new(user)
+      ).as_json
+      expect(json[:wizard][:categories].present?).to eq(true)
+      expect(json[:wizard][:uncategorized_category_id].present?).to eq(true)
+    end
 
-  it 'should not return groups if there is not a group selector field' do
-    @template[:steps][2][:fields].delete_at(3)
-    CustomWizard::Template.save(@template)
+    it 'should return groups if there is a group selector field' do
+      json = CustomWizard::WizardSerializer.new(
+        CustomWizard::Builder.new(@template[:id], user).build,
+        scope: Guardian.new(user)
+      ).as_json
+      expect(json[:wizard][:groups].length).to eq(8)
+    end
 
-    json = CustomWizard::WizardSerializer.new(
-      CustomWizard::Builder.new(@template[:id], user).build,
-      scope: Guardian.new(user)
-    ).as_json
-    expect(json[:wizard][:groups].present?).to eq(false)
+    it 'should not return groups if there is not a group selector field' do
+      @template[:steps][0][:fields].reject! { |f| f["type"] === "group" }
+      CustomWizard::Template.save(@template)
+
+      json = CustomWizard::WizardSerializer.new(
+        CustomWizard::Builder.new(@template[:id], user).build,
+        scope: Guardian.new(user)
+      ).as_json
+      expect(json[:wizard][:groups].present?).to eq(false)
+    end
   end
 end

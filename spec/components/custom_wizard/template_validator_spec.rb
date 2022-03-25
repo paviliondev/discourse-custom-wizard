@@ -5,6 +5,8 @@ describe CustomWizard::TemplateValidator do
   let(:template) { get_wizard_fixture("wizard") }
   let(:create_category) { get_wizard_fixture("actions/create_category") }
   let(:user_condition) { get_wizard_fixture("condition/user_condition") }
+  let(:permitted_json) { get_wizard_fixture("wizard/permitted") }
+  let(:composer_preview) { get_wizard_fixture("field/composer_preview") }
 
   let(:valid_liquid_template) {
     <<-LIQUID.strip
@@ -104,7 +106,7 @@ describe CustomWizard::TemplateValidator do
 
   context "without subscription" do
     it "invalidates subscription wizard attributes" do
-      template[:save_submissions] = false
+      template[:permitted] = permitted_json['permitted']
       expect(
         CustomWizard::TemplateValidator.new(template).perform
       ).to eq(false)
@@ -134,11 +136,11 @@ describe CustomWizard::TemplateValidator do
 
   context "with subscription" do
     before do
-      enable_subscription("standard")
+      enable_subscription("business")
     end
 
     it "validates wizard attributes" do
-      template[:save_submissions] = false
+      template[:permitted] = permitted_json['permitted']
       expect(
         CustomWizard::TemplateValidator.new(template).perform
       ).to eq(true)
@@ -227,7 +229,9 @@ describe CustomWizard::TemplateValidator do
         end
 
         it "validates preview templates" do
-          template[:steps][0][:fields][4][:preview_template] = invalid_liquid_template
+          enable_subscription("standard")
+          template[:steps][0][:fields] << composer_preview
+          template[:steps][0][:fields][3][:preview_template] = invalid_liquid_template
           expect_validation_failure("step_1_field_5.preview_template", liquid_syntax_error)
         end
       end

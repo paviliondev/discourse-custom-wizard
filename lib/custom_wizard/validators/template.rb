@@ -54,15 +54,6 @@ class CustomWizard::TemplateValidator
     }
   end
 
-  def self.subscription
-    {
-      wizard: ['save_submissions', 'restart_on_revisit'],
-      step: ['condition', 'index', 'required_data', 'permitted_params'],
-      field: ['condition', 'index'],
-      action: ['type']
-    }
-  end
-
   private
 
   def check_required(object, type)
@@ -74,8 +65,10 @@ class CustomWizard::TemplateValidator
   end
 
   def validate_subscription(object, type)
-    self.class.subscription[type].each do |property|
-      if !@subscription.includes?(type, property, object[property])
+    object.keys.each do |property|
+      value = object[property]
+
+      if !@subscription.includes?(type, property.to_sym, value)
         errors.add :base, I18n.t("wizard.validation.subscription", type: type.to_s, property: property)
       end
     end
