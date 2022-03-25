@@ -14,7 +14,6 @@ import I18n from "I18n";
 export default Controller.extend({
   hasName: notEmpty("wizard.name"),
 
-
   @observes("currentStep")
   resetCurrentObjects() {
     const currentStep = this.currentStep;

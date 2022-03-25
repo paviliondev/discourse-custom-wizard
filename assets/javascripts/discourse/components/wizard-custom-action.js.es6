@@ -1,5 +1,4 @@
 import { default as discourseComputed } from "discourse-common/utils/decorators";
-import wizardSchema from "discourse/plugins/discourse-custom-wizard/discourse/lib/wizard-schema";
 import { subscriptionSelectKitContent } from "discourse/plugins/discourse-custom-wizard/discourse/lib/wizard-subscription";
 import { empty, equal, or } from "@ember/object/computed";
 import { notificationLevels, selectKitContent } from "../lib/wizard";

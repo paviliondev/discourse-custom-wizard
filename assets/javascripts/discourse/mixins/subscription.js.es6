@@ -9,18 +9,22 @@ export default Mixin.create({
 
   @discourseComputed
   adminWizards() {
-    return getOwner(this).lookup('controller:admin-wizards');
+    return getOwner(this).lookup("controller:admin-wizards");
   },
 
-  subscribed: readOnly('adminWizards.subscribed'),
-  subscriptionType: readOnly('adminWizards.subscriptionType'),
-  businessSubscription: readOnly('adminWizards.businessSubscription'),
-  standardSubscription: readOnly('adminWizards.standardSubscription'),
-  subscriptionAttributes: readOnly('adminWizards.subscriptionAttributes'),
-  subscriptionClientInstalled: readOnly('adminWizards.subscriptionClientInstalled'),
+  subscribed: readOnly("adminWizards.subscribed"),
+  subscriptionType: readOnly("adminWizards.subscriptionType"),
+  businessSubscription: readOnly("adminWizards.businessSubscription"),
+  standardSubscription: readOnly("adminWizards.standardSubscription"),
+  subscriptionAttributes: readOnly("adminWizards.subscriptionAttributes"),
+  subscriptionClientInstalled: readOnly(
+    "adminWizards.subscriptionClientInstalled"
+  ),
 
   @discourseComputed("subscriptionClientInstalled")
   subscriptionLink(subscriptionClientInstalled) {
-    return subscriptionClientInstalled ? this.subscriptionClientUrl : this.subscriptionLandingUrl;
-  }
+    return subscriptionClientInstalled
+      ? this.subscriptionClientUrl
+      : this.subscriptionLandingUrl;
+  },
 });

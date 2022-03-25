@@ -38,7 +38,7 @@ export default DiscourseRoute.extend({
       wizard,
       currentStep: wizard.steps[0],
       currentAction: wizard.actions[0],
-      creating: model.create
+      creating: model.create,
     };
 
     controller.setProperties(props);

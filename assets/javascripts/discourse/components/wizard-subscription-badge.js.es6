@@ -5,7 +5,7 @@ import DiscourseURL from "discourse/lib/url";
 import I18n from "I18n";
 
 export default Component.extend(Subscription, {
-  tagName: 'a',
+  tagName: "a",
   classNameBindings: [":wizard-subscription-badge", "subscriptionType"],
   attributeBindings: ["title"],
 
@@ -26,5 +26,5 @@ export default Component.extend(Subscription, {
 
   click() {
     DiscourseURL.routeTo(this.subscriptionLink);
-  }
+  },
 });

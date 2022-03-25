@@ -847,7 +847,7 @@ $error: #ef1700;
   .subscription-header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: .25em;
+    margin-bottom: 0.25em;
 
     h3 {
       margin: 0;
@@ -871,7 +871,7 @@ $error: #ef1700;
   box-sizing: border-box;
   position: relative;
   cursor: pointer;
-  padding: .5em .65em;
+  padding: 0.5em 0.65em;
   background-color: rgba($primary-medium, 0.05);
   border: 1.5px solid rgba($primary-medium, 0.5);
   color: $primary-medium;

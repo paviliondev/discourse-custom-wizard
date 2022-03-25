@@ -11,7 +11,7 @@ export default DiscourseRoute.extend({
     const customFields = A(model.custom_fields || []);
 
     controller.setProperties({
-      customFields
+      customFields,
     });
   },
 });

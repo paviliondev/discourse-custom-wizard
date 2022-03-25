@@ -1,7 +1,5 @@
 import DiscourseURL from "discourse/lib/url";
 import { withPluginApi } from "discourse/lib/plugin-api";
-import { isPresent } from "@ember/utils";
-import { A } from "@ember/array";
 import getUrl from "discourse-common/lib/get-url";
 
 export default {

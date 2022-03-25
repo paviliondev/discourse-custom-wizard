@@ -11,7 +11,7 @@ export default DiscourseRoute.extend({
       subscribed: model.subscribed,
       subscriptionType: model.subscription_type,
       subscriptionAttributes: model.subscription_attributes,
-      subscriptionClientInstalled: model.subscription_client_installed
+      subscriptionClientInstalled: model.subscription_client_installed,
     });
   },
 
@@ -19,5 +19,5 @@ export default DiscourseRoute.extend({
     if (transition.targetName === "adminWizards.index") {
       this.transitionTo("adminWizardsWizard");
     }
-  }
+  },
 });

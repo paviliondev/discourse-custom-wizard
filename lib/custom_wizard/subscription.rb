@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CustomWizard::Subscription
   STANDARD_PRODUCT_ID = 'prod_LNAGVAaIqDsHmB'
   BUSINESS_PRODUCT_ID = 'prod_LNABQ50maBQ1pY'

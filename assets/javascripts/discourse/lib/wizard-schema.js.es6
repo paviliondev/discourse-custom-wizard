@@ -211,7 +211,7 @@ const wizardSchema = {
   step,
   field,
   custom_field,
-  action
+  action,
 };
 
 export function buildFieldTypes(types) {
