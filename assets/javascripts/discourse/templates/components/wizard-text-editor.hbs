@@ -6,13 +6,13 @@
 <div class="wizard-editor-gutter">
   {{#if previewEnabled}}
     {{d-button
-      action="togglePreview"
+      action=(action "togglePreview")
       translatedLabel=previewLabel}}
   {{/if}}
 
   {{#if fieldsEnabled}}
     {{d-button
-      action="togglePopover"
+      action=(action "togglePopover")
       translatedLabel=popoverLabel}}
 
     {{#if showPopover}}

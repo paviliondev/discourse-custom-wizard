@@ -101,7 +101,7 @@
         {{input type="checkbox" checked=wizard.after_time}}
         <span>{{i18n "admin.wizard.after_time_label"}}</span>
         {{d-button
-          action="setNextSessionScheduled"
+          action=(action "setNextSessionScheduled")
           translatedLabel=nextSessionScheduledLabel
           class="btn-after-time"
           icon="far-calendar"}}
@@ -176,7 +176,7 @@
       currentActionId=currentAction.id
       wizard=wizard
       apis=apis
-      removeAction="removeAction"
+      removeAction=(action "removeAction")
       wizardFields=wizardFields}}
   {{/each}}
 
