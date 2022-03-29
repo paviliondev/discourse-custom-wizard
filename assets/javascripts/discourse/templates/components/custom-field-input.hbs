@@ -34,17 +34,17 @@
       {{/if}}
     {{/if}}
     {{d-button
-      action="destroy"
+      action=(action "destroy")
       icon="trash-alt"
       class="destroy"
       disabled=destroyDisabled}}
     {{d-button
       icon="save"
-      action="save"
+      action=(action "save")
       disabled=saveDisabled
       class="save"}}
     {{d-button
-      action="close"
+      action=(action "close")
       icon="times"
       disabled=closeDisabled}}
   </td>
@@ -69,7 +69,7 @@
     </td>
   {{else}}
     <td class="actions">
-      {{d-button action="edit" icon="pencil-alt"}}
+      {{d-button action=(action "edit") icon="pencil-alt"}}
     </td>
   {{/if}}
 {{/if}}
