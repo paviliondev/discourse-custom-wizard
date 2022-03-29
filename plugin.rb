@@ -13,10 +13,11 @@ register_asset 'stylesheets/admin/admin.scss', :desktop
 enabled_site_setting :custom_wizard_enabled
 
 if Rails.env.production?
-  config.assets.precompile += %w{
+  Rails.application.config.assets.precompile += %w{
     wizard-custom-guest.js
     wizard-custom-start.js
     wizard-custom.js
+    wizard-qunit.js
     wizard-plugin.js.erb
     wizard-raw-templates.js.erb
   }
