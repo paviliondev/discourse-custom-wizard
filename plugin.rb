@@ -23,6 +23,13 @@ if Rails.env.production?
   }
 end
 
+if Rails.env.test?
+  config = Rails.application.config
+  plugin_asset_path = "#{Rails.root}/plugins/discourse-custom-wizard/assets"
+  config.assets.paths << "#{plugin_asset_path}/javascripts"
+  config.assets.paths << "#{plugin_asset_path}/stylesheets/wizard"
+end
+
 if respond_to?(:register_svg_icon)
   register_svg_icon "far-calendar"
   register_svg_icon "chevron-right"
