@@ -2,20 +2,14 @@
   {{nav-item route="adminWizardsWizard" label="admin.wizard.nav_label"}}
   {{nav-item route="adminWizardsCustomFields" label="admin.wizard.custom_field.nav_label"}}
   {{nav-item route="adminWizardsSubmissions" label="admin.wizard.submissions.nav_label"}}
-  {{#if api_section}}
+  {{#if businessSubscription}}
     {{nav-item route="adminWizardsApi" label="admin.wizard.api.nav_label"}}
   {{/if}}
   {{nav-item route="adminWizardsLogs" label="admin.wizard.log.nav_label"}}
   {{nav-item route="adminWizardsManager" label="admin.wizard.manager.nav_label"}}
-  {{nav-item route="adminWizardsSubscription" label="admin.wizard.subscription.nav_label"}}
 
   <div class="admin-actions">
-    <div class="wizard-notices-link">
-      {{nav-item tagName="div" route="adminWizardsNotices" label="admin.wizard.notices.nav_label"}}
-      {{#if activeNoticeCount}}
-        <span class="active-notice-count">{{activeNoticeCount}}</span>
-      {{/if}}
-    </div>
+    {{wizard-subscription-badge}}
     <a target="_blank" class="btn btn-pavilion-support" rel="noreferrer noopener" href="https://thepavilion.io/w/support" title={{i18n "admin.wizard.support_button.title"}}>
       {{d-icon "far-life-ring"}}{{i18n "admin.wizard.support_button.label"}}
     </a>

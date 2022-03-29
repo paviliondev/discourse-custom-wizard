@@ -1,8 +1,9 @@
 import Component from "@ember/component";
 import discourseComputed from "discourse-common/utils/decorators";
+import Subscription from "../mixins/subscription";
 
-export default Component.extend({
-  classNameBindings: [":subscription-container", "subscribed"],
+export default Component.extend(Subscription, {
+  classNameBindings: [":wizard-subscription-container", "subscribed"],
 
   @discourseComputed("subscribed")
   subscribedIcon(subscribed) {

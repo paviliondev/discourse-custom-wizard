@@ -5,16 +5,12 @@
 # authors: Angus McLeod, Faizaan Gagan, Robert Barrow, Keegan George
 # contact_emails: support@thepavilion.io
 # url: https://github.com/paviliondev/discourse-custom-wizard
+# subscription_url: https://coop.pavilion.tech
 
 gem 'liquid', '5.0.1', require: true
 register_asset 'stylesheets/admin/admin.scss', :desktop
 
 enabled_site_setting :custom_wizard_enabled
-
-config = Rails.application.config
-plugin_asset_path = "#{Rails.root}/plugins/discourse-custom-wizard/assets"
-config.assets.paths << "#{plugin_asset_path}/javascripts"
-config.assets.paths << "#{plugin_asset_path}/stylesheets/wizard"
 
 if Rails.env.production?
   config.assets.precompile += %w{
@@ -59,6 +55,24 @@ class ::Sprockets::DirectiveProcessor
   end
 end
 
+## Override necessary due to 'assets/javascripts/wizard', particularly its tests.
+def each_globbed_asset
+  if @path
+    root_path = "#{File.dirname(@path)}/assets/javascripts/discourse"
+
+    Dir.glob(["#{root_path}/**/*"]).sort.each do |f|
+      f_str = f.to_s
+      if File.directory?(f)
+        yield [f, true]
+      elsif f_str.end_with?(".js.es6") || f_str.end_with?(".hbs") || f_str.end_with?(".hbr")
+        yield [f, false]
+      elsif transpile_js && f_str.end_with?(".js")
+        yield [f, false]
+      end
+    end
+  end
+end
+
 after_initialize do
   %w[
     ../lib/custom_wizard/engine.rb
@@ -70,15 +84,11 @@ after_initialize do
     ../app/controllers/custom_wizard/admin/logs.rb
     ../app/controllers/custom_wizard/admin/manager.rb
     ../app/controllers/custom_wizard/admin/custom_fields.rb
-    ../app/controllers/custom_wizard/admin/subscription.rb
-    ../app/controllers/custom_wizard/admin/notice.rb
     ../app/controllers/custom_wizard/wizard.rb
     ../app/controllers/custom_wizard/steps.rb
     ../app/controllers/custom_wizard/realtime_validations.rb
     ../app/jobs/regular/refresh_api_access_token.rb
     ../app/jobs/regular/set_after_time_wizard.rb
-    ../app/jobs/scheduled/custom_wizard/update_subscription.rb
-    ../app/jobs/scheduled/custom_wizard/update_notices.rb
     ../lib/custom_wizard/validators/template.rb
     ../lib/custom_wizard/validators/update.rb
     ../lib/custom_wizard/action_result.rb
@@ -95,13 +105,9 @@ after_initialize do
     ../lib/custom_wizard/step_updater.rb
     ../lib/custom_wizard/step.rb
     ../lib/custom_wizard/submission.rb
+    ../lib/custom_wizard/subscription.rb
     ../lib/custom_wizard/template.rb
     ../lib/custom_wizard/wizard.rb
-    ../lib/custom_wizard/notice.rb
-    ../lib/custom_wizard/notice/connection_error.rb
-    ../lib/custom_wizard/subscription.rb
-    ../lib/custom_wizard/subscription/subscription.rb
-    ../lib/custom_wizard/subscription/authentication.rb
     ../lib/custom_wizard/api/api.rb
     ../lib/custom_wizard/api/authorization.rb
     ../lib/custom_wizard/api/endpoint.rb
@@ -122,10 +128,6 @@ after_initialize do
     ../app/serializers/custom_wizard/log_serializer.rb
     ../app/serializers/custom_wizard/submission_serializer.rb
     ../app/serializers/custom_wizard/realtime_validation/similar_topics_serializer.rb
-    ../app/serializers/custom_wizard/subscription/authentication_serializer.rb
-    ../app/serializers/custom_wizard/subscription/subscription_serializer.rb
-    ../app/serializers/custom_wizard/subscription_serializer.rb
-    ../app/serializers/custom_wizard/notice_serializer.rb
     ../lib/custom_wizard/extensions/extra_locales_controller.rb
     ../lib/custom_wizard/extensions/invites_controller.rb
     ../lib/custom_wizard/extensions/users_controller.rb
@@ -269,14 +271,6 @@ after_initialize do
 
   CustomWizard::CustomField.serializers.each do |serializer_klass|
     "#{serializer_klass}_serializer".classify.constantize.prepend CustomWizardCustomFieldSerializer
-  end
-
-  AdminDashboardData.add_problem_check do
-    warning_notices = CustomWizard::Notice.list(
-      type: CustomWizard::Notice.types[:warning],
-      archetype: CustomWizard::Notice.archetypes[:plugin_status]
-    )
-    warning_notices.any? ? ActionView::Base.full_sanitizer.sanitize(warning_notices.first.message, tags: %w(a)) : nil
   end
 
   reloadable_patch do |plugin|

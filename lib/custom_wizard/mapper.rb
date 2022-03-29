@@ -47,7 +47,6 @@ class CustomWizard::Mapper
     @data = params[:data] || {}
     @user = params[:user]
     @opts = params[:opts] || {}
-    @subscription = CustomWizard::Subscription.new
   end
 
   def perform
@@ -252,7 +251,7 @@ class CustomWizard::Mapper
       end
     end
 
-    if opts[:template] && @subscription.subscribed?
+    if opts[:template] && CustomWizard::Subscription.subscribed?
       template = Liquid::Template.parse(string)
       string = template.render(data)
     end

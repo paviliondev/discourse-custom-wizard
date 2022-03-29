@@ -1,125 +1,104 @@
 # frozen_string_literal: true
 
-require_relative '../../plugin_helper'
-
 describe CustomWizard::Subscription do
-  fab!(:user) { Fabricate(:user) }
-
-  it "initializes subscription authentication and subscription" do
-    subscription = described_class.new
-    expect(subscription.authentication.class).to eq(CustomWizard::Subscription::Authentication)
-    expect(subscription.subscription.class).to eq(CustomWizard::Subscription::Subscription)
+  def undefine_client_classes
+    Object.send(:remove_const, :SubscriptionClient) if Object.constants.include?(:SubscriptionClient)
+    Object.send(:remove_const, :SubscriptionClientSubscription) if Object.constants.include?(:SubscriptionClientSubscription)
   end
 
-  it "returns authorized and subscribed states" do
-    subscription = described_class.new
-    expect(subscription.authorized?).to eq(false)
-    expect(subscription.subscribed?).to eq(false)
+  def define_client_classes
+    load File.expand_path("#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/subscription_client.rb", __FILE__)
   end
 
-  context "subscription" do
+  def stub_client_methods
+    [:active, :where, :order, :first].each do |method|
+      SubscriptionClientSubscription.stubs(method)
+        .returns(SubscriptionClientSubscription)
+    end
+    SubscriptionClientSubscription.stubs(:product_id).returns(SecureRandom.hex(8))
+  end
+
+  after do
+    undefine_client_classes
+  end
+
+  it "detects the subscription client" do
+    expect(described_class.client_installed?).to eq(false)
+  end
+
+  context "without a subscription client" do
+    it "is not subscribed" do
+      expect(described_class.subscribed?).to eq(false)
+    end
+
+    it "has none type" do
+      subscription = described_class.new
+      expect(subscription.type).to eq(:none)
+    end
+
+    it "non subscriber features are included" do
+      expect(described_class.includes?(:wizard, :after_signup, true)).to eq(true)
+    end
+
+    it "ubscriber features are not included" do
+      expect(described_class.includes?(:wizard, :permitted, {})).to eq(false)
+    end
+  end
+
+  context "with subscription client" do
     before do
-      @subscription = described_class.new
+      define_client_classes
+      stub_client_methods
     end
 
-    it "updates valid subscriptions" do
-      stub_subscription_request(200, valid_subscription)
-      expect(@subscription.update).to eq(true)
-      expect(@subscription.subscribed?).to eq(true)
+    it "detects the subscription client" do
+      expect(described_class.client_installed?).to eq(true)
     end
 
-    it "handles invalid subscriptions" do
-      stub_subscription_request(200, invalid_subscription)
-      expect(@subscription.update).to eq(false)
-      expect(@subscription.subscribed?).to eq(false)
+    context "without a subscription" do
+      it "has none type" do
+        expect(described_class.type).to eq(:none)
+      end
+
+      it "non subscriber features are included" do
+        expect(described_class.includes?(:wizard, :after_signup, true)).to eq(true)
+      end
+
+      it "subscriber features are not included" do
+        expect(described_class.includes?(:wizard, :permitted, {})).to eq(false)
+      end
     end
 
-    it "handles subscription http errors" do
-      stub_subscription_request(404, {})
-      expect(@subscription.update).to eq(false)
-      expect(@subscription.subscribed?).to eq(false)
+    context "with standard subscription" do
+      before do
+        SubscriptionClientSubscription.stubs(:product_id).returns(CustomWizard::Subscription::STANDARD_PRODUCT_ID)
+      end
+
+      it "detects standard type" do
+        expect(described_class.type).to eq(:standard)
+      end
+
+      it "standard features are included" do
+        expect(described_class.includes?(:wizard, :type, 'send_message')).to eq(true)
+      end
+
+      it "business features are not included" do
+        expect(described_class.includes?(:action, :type, 'create_category')).to eq(false)
+      end
     end
 
-    it "destroys subscriptions" do
-      stub_subscription_request(200, valid_subscription)
-      expect(@subscription.update).to eq(true)
-      expect(@subscription.destroy_subscription).to eq(true)
-      expect(@subscription.subscribed?).to eq(false)
-    end
+    context "with business subscription" do
+      before do
+        SubscriptionClientSubscription.stubs(:product_id).returns(CustomWizard::Subscription::BUSINESS_PRODUCT_ID)
+      end
 
-    it "has class aliases" do
-      authenticate_subscription
-      stub_subscription_request(200, valid_subscription)
-      expect(described_class.update).to eq(true)
-      expect(described_class.subscribed?).to eq(true)
-    end
-  end
+      it "detects business type" do
+        expect(described_class.type).to eq(:business)
+      end
 
-  context "authentication" do
-    before do
-      @subscription = described_class.new
-      user.update!(admin: true)
-    end
-
-    it "generates a valid authentication request url" do
-      request_id = SecureRandom.hex(32)
-      uri = URI(@subscription.authentication_url(user.id, request_id))
-      expect(uri.host).to eq(@subscription.server)
-
-      parsed_query = Rack::Utils.parse_query uri.query
-      expect(parsed_query['public_key'].present?).to eq(true)
-      expect(parsed_query['nonce'].present?).to eq(true)
-      expect(parsed_query['client_id'].present?).to eq(true)
-      expect(parsed_query['auth_redirect'].present?).to eq(true)
-      expect(parsed_query['application_name']).to eq(SiteSetting.title)
-      expect(parsed_query['scopes']).to eq(@subscription.scope)
-    end
-
-    def generate_payload(request_id, user_id)
-      uri = URI(@subscription.authentication_url(user_id, request_id))
-      keys = @subscription.authentication.get_keys(request_id)
-      raw_payload = {
-        key: "12345",
-        nonce: keys.nonce,
-        push: false,
-        api: UserApiKeysController::AUTH_API_VERSION
-      }.to_json
-      public_key = OpenSSL::PKey::RSA.new(keys.pem)
-      Base64.encode64(public_key.public_encrypt(raw_payload))
-    end
-
-    it "handles authentication response if request and response is valid" do
-      request_id = SecureRandom.hex(32)
-      payload = generate_payload(request_id, user.id)
-
-      expect(@subscription.authentication_response(request_id, payload)).to eq(true)
-      expect(@subscription.authorized?).to eq(true)
-    end
-
-    it "discards authentication response if user who made request as not an admin" do
-      user.update!(admin: false)
-
-      request_id = SecureRandom.hex(32)
-      payload = generate_payload(request_id, user.id)
-
-      expect(@subscription.authentication_response(request_id, payload)).to eq(false)
-      expect(@subscription.authorized?).to eq(false)
-    end
-
-    it "discards authentication response if request_id is invalid" do
-      payload = generate_payload(SecureRandom.hex(32), user.id)
-
-      expect(@subscription.authentication_response(SecureRandom.hex(32), payload)).to eq(false)
-      expect(@subscription.authorized?).to eq(false)
-    end
-
-    it "destroys authentication" do
-      request_id = SecureRandom.hex(32)
-      payload = generate_payload(request_id, user.id)
-      @subscription.authentication_response(request_id, payload)
-
-      expect(@subscription.destroy_authentication).to eq(true)
-      expect(@subscription.authorized?).to eq(false)
+      it "business are included" do
+        expect(described_class.includes?(:action, :type, 'create_category')).to eq(true)
+      end
     end
   end
 end

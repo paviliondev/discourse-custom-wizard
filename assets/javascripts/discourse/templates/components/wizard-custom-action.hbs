@@ -14,7 +14,8 @@
   <div class="setting-value">
     {{wizard-subscription-selector
       value=action.type
-      content=actionTypes
+      feature="action"
+      attribute="type"
       onChange=(action "changeType")
       options=(hash
         none="admin.wizard.select_type"

@@ -58,16 +58,6 @@ export default {
           path: "/manager",
           resetNamespace: true,
         });
-
-        this.route("adminWizardsSubscription", {
-          path: "/subscription",
-          resetNamespace: true,
-        });
-
-        this.route("adminWizardsNotices", {
-          path: "/notices",
-          resetNamespace: true,
-        });
       }
     );
   },

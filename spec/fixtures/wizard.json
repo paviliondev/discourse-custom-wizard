@@ -34,22 +34,10 @@
           "min_length": ""
         },
         {
-          "id": "step_1_field_3",
-          "label": "Composer",
-          "type": "composer"
-        },
-        {
           "id": "step_1_field_4",
           "label": "I'm only text",
           "description": "",
           "type": "text_only"
-        },
-        {
-          "id": "step_1_field_5",
-          "label": "I'm a preview",
-          "description": "",
-          "type": "composer_preview",
-          "preview_template": "w{step_1_field_1}"
         }
       ],
       "description": "Text inputs!"
@@ -86,11 +74,6 @@
           "id": "step_2_field_5",
           "label": "Checkbox",
           "type": "checkbox"
-        },
-        {
-          "id": "step_2_field_6",
-          "label": "Url",
-          "type": "url"
         },
         {
           "id": "step_2_field_7",
@@ -141,35 +124,6 @@
               ]
             }
           ]
-        },
-        {
-          "id": "step_3_field_2",
-          "label": "Tag",
-          "type": "tag"
-        },
-        {
-          "id": "step_3_field_3",
-          "label": "Category",
-          "type": "category",
-          "limit": 1,
-          "property": "id"
-        },
-        {
-          "id": "step_3_field_4",
-          "label": "Group",
-          "type": "group"
-        },
-        {
-          "id": "step_3_field_5",
-          "label": "User Selector",
-          "description": "",
-          "type": "user_selector"
-        },
-        {
-          "id": "step_3_field_6",
-          "label": "Conditional User Selector",
-          "description": "Shown when checkbox in step_2_field_5 is true",
-          "type": "user_selector"
         }
       ],
       "description": "Unfortunately not the edible type :sushi: "
@@ -261,29 +215,6 @@
               "connector": "equal"
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "action_5",
-      "run_after": "step_1",
-      "type": "watch_categories",
-      "notification_level": "tracking",
-      "wizard_user": true,
-      "categories": [
-        {
-          "type": "assignment",
-          "output": "action_8",
-          "output_type": "wizard_action",
-          "output_connector": "set"
-        }
-      ],
-      "mute_remainder": [
-        {
-          "type": "assignment",
-          "output": "true",
-          "output_type": "text",
-          "output_connector": "set"
         }
       ]
     },

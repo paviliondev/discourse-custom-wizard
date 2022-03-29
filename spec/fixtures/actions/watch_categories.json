@@ -1,0 +1,23 @@
+{
+  "id": "action_5",
+  "run_after": "step_1",
+  "type": "watch_categories",
+  "notification_level": "tracking",
+  "wizard_user": true,
+  "categories": [
+    {
+      "type": "assignment",
+      "output": "",
+      "output_type": "text",
+      "output_connector": "set"
+    }
+  ],
+  "mute_remainder": [
+    {
+      "type": "assignment",
+      "output": "true",
+      "output_type": "text",
+      "output_connector": "set"
+    }
+  ]
+}

@@ -54,34 +54,6 @@ class CustomWizard::TemplateValidator
     }
   end
 
-  def self.subscription
-    {
-      wizard: {
-        save_submissions: 'false',
-        restart_on_revisit: 'true',
-      },
-      step: {
-        condition: 'present',
-        index: 'conditional',
-        required_data: 'present',
-        permitted_params: 'present'
-      },
-      field: {
-        condition: 'present',
-        index: 'conditional'
-      },
-      action: {
-        type: %w[
-          send_message
-          add_to_group
-          create_category
-          create_group
-          send_to_api
-        ]
-      }
-    }
-  end
-
   private
 
   def check_required(object, type)
@@ -93,16 +65,10 @@ class CustomWizard::TemplateValidator
   end
 
   def validate_subscription(object, type)
-    self.class.subscription[type].each do |property, subscription_type|
-      val = object[property.to_s]
-      is_subscription = (val != nil) && (
-        subscription_type === 'present' && val.present? ||
-        (['true', 'false'].include?(subscription_type) && cast_bool(val) == cast_bool(subscription_type)) ||
-        (subscription_type === 'conditional' && val.is_a?(Hash)) ||
-        (subscription_type.is_a?(Array) && subscription_type.include?(val))
-      )
+    object.keys.each do |property|
+      value = object[property]
 
-      if is_subscription && !@subscription.subscribed?
+      if !@subscription.includes?(type, property.to_sym, value)
         errors.add :base, I18n.t("wizard.validation.subscription", type: type.to_s, property: property)
       end
     end
@@ -146,10 +112,6 @@ class CustomWizard::TemplateValidator
     if invalid_time || active_time.blank? || active_time < Time.now.utc
       errors.add :base, I18n.t("wizard.validation.after_time")
     end
-  end
-
-  def cast_bool(val)
-    ActiveRecord::Type::Boolean.new.cast(val)
   end
 
   def validate_liquid_template(object, type)

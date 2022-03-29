@@ -2,16 +2,22 @@
   <td>
     {{wizard-subscription-selector
       value=field.klass
-      content=customFieldKlasses
-      none="admin.wizard.custom_field.klass.select"
-      onChange=(action (mut field.klass))}}
+      feature="custom_field"
+      attribute="klass"
+      onChange=(action (mut field.klass))
+      options=(hash
+        none="admin.wizard.custom_field.klass.select"
+      )}}
   </td>
   <td>
     {{wizard-subscription-selector
       value=field.type
-      content=customFieldTypes
-      none="admin.wizard.custom_field.type.select"
-      onChange=(action (mut field.type))}}
+      feature="custom_field"
+      attribute="type"
+      onChange=(action (mut field.type))
+      options=(hash
+        none="admin.wizard.custom_field.type.select"
+      )}}
   </td>
   <td class="input">
     {{input
@@ -22,8 +28,10 @@
     {{multi-select
       value=field.serializers
       content=serializerContent
-      none="admin.wizard.custom_field.serializers.select"
-      onChange=(action (mut field.serializers))}}
+      onChange=(action (mut field.serializers))
+      options=(hash
+        none="admin.wizard.custom_field.serializers.select"
+      )}}
   </td>
   <td class="actions">
     {{#if loading}}

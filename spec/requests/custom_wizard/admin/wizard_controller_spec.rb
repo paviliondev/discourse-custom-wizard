@@ -8,6 +8,7 @@ describe CustomWizard::AdminWizardController do
 
   before do
     CustomWizard::Template.save(template, skip_jobs: true)
+    enable_subscription("standard")
 
     template_2 = template.dup
     template_2["id"] = 'super_mega_fun_wizard_2'

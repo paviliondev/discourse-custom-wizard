@@ -45,17 +45,5 @@ Discourse::Application.routes.append do
     get 'admin/wizards/manager/export' => 'admin_manager#export'
     post 'admin/wizards/manager/import' => 'admin_manager#import'
     delete 'admin/wizards/manager/destroy' => 'admin_manager#destroy'
-
-    get 'admin/wizards/subscription' => 'admin_subscription#index'
-    post 'admin/wizards/subscription' => 'admin_subscription#update_subscription'
-    get 'admin/wizards/subscription/authorize' => 'admin_subscription#authorize'
-    get 'admin/wizards/subscription/authorize/callback' => 'admin_subscription#authorize_callback'
-    delete 'admin/wizards/subscription/authorize' => 'admin_subscription#destroy_authentication'
-
-    get 'admin/wizards/notice' => 'admin_notice#index'
-    put 'admin/wizards/notice/:notice_id/dismiss' => 'admin_notice#dismiss'
-    put 'admin/wizards/notice/:notice_id/hide' => 'admin_notice#hide'
-    put 'admin/wizards/notice/dismiss' => 'admin_notice#dismiss_all'
-    get 'admin/wizards/notices' => 'admin_notice#index'
   end
 end

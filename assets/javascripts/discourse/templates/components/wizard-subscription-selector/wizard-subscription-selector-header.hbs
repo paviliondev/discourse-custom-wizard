@@ -7,8 +7,10 @@
     shouldDisplayClearableButton=shouldDisplayClearableButton
   }}
 
-  {{#if selectedContent.subscription}}
-    <span class="subscription-label">{{i18n "admin.wizard.subscription.label"}}</span>
+  {{#if selectedContent.subscriptionType}}
+    <span class="subscription-label">
+      {{selectedContent.subscriptionType}}
+    </span>
   {{/if}}
 
   {{d-icon caretIcon class="caret-icon"}}
