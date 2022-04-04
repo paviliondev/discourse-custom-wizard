@@ -185,9 +185,9 @@
     items=wizard.actions
     generateLabels=true}}
 
-  {{#each wizard.actions as |wizardAction|}}
+  {{#each wizard.actions as |action|}}
     {{wizard-custom-action
-      action=wizardAction
+      action=action
       currentActionId=currentAction.id
       wizard=wizard
       apis=apis
