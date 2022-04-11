@@ -26,6 +26,7 @@ jobs:
       RAILS_ENV: test
       PGUSER: discourse
       PGPASSWORD: discourse
+      LOAD_PLUGINS: 1
 
     strategy:
       fail-fast: false
