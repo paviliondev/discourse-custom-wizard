@@ -1,4 +1,5 @@
 // discourse-skip-module
+/*global document, Logster, QUnit */
 
 document.addEventListener("DOMContentLoaded", function () {
   document.body.insertAdjacentHTML(
@@ -15,3 +16,9 @@ Object.keys(requirejs.entries).forEach(function (entry) {
     requirejs(entry);
   }
 });
+
+if (window.Logster) {
+  Logster.enabled = false;
+} else {
+  window.Logster = { enabled: false };
+}

@@ -56,20 +56,16 @@ jobs:
           if_true: "stable"
           if_false: "tests-passed"
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: discourse/discourse
           ref: ${{ steps.discourse_branch.outputs.value }}
           fetch-depth: 1
 
-      - name: Fetch Repo Name
-        id: repo-name
-        run: echo "::set-output name=value::$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')"
-
       - name: Install plugin
         uses: actions/checkout@v2
         with:
-          path: plugins/${{ steps.repo-name.outputs.value }}
+          path: plugins/${{ github.event.repository.name }}
           ref: "${{ github.base_ref }}"
           fetch-depth: 1
 
@@ -139,5 +135,5 @@ jobs:
 
       - name: Plugin QUnit
         if: matrix.build_type == 'frontend'
-        run: bundle exec rake plugin:qunit['${{ steps.repo-name.outputs.value }}','1200000']
-        timeout-minutes: 30
+        run: QUNIT_SKIP_CORE=1 LOAD_PLUGINS=1 QUNIT_EMBER_CLI=0 bin/rake qunit:test['1200000','/w/qunit']
+        timeout-minutes: 10
