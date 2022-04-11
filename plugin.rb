@@ -17,7 +17,6 @@ if Rails.env.production?
     wizard-custom-guest.js
     wizard-custom-start.js
     wizard-custom.js
-    wizard-qunit.js
     wizard-plugin.js.erb
     wizard-raw-templates.js.erb
   }
@@ -145,6 +144,7 @@ after_initialize do
     ../lib/custom_wizard/extensions/custom_field/serializer.rb
     ../lib/custom_wizard/extensions/custom_field/extension.rb
     ../lib/custom_wizard/extensions/discourse_tagging.rb
+    ../lib/custom_wizard/extensions/content_security_policy_extension.rb
   ].each do |path|
     load File.expand_path(path, __FILE__)
   end
@@ -250,6 +250,7 @@ after_initialize do
   ::InvitesController.prepend InvitesControllerCustomWizard
   ::UsersController.prepend CustomWizardUsersController
   ::Guardian.prepend CustomWizardGuardian
+  ::ContentSecurityPolicy::Extension.singleton_class.prepend CustomWizardContentSecurityPolicyExtension
 
   full_path = "#{Rails.root}/plugins/discourse-custom-wizard/assets/stylesheets/wizard/wizard_custom.scss"
   if Stylesheet::Importer.respond_to?(:plugin_assets)
