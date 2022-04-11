@@ -22,8 +22,6 @@ if Rails.env.production?
   }
 end
 
-puts "BEFORE ADD ASSET PATHS"
-
 if Rails.env.test?
   config = Rails.application.config
   plugin_asset_path = "#{Rails.root}/plugins/discourse-custom-wizard/assets"
@@ -81,8 +79,6 @@ def each_globbed_asset
     end
   end
 end
-
-puts "LOADING CUSTOM WIZARD PLUGIN"
 
 after_initialize do
   %w[
@@ -148,7 +144,6 @@ after_initialize do
     ../lib/custom_wizard/extensions/custom_field/serializer.rb
     ../lib/custom_wizard/extensions/custom_field/extension.rb
     ../lib/custom_wizard/extensions/discourse_tagging.rb
-    ../lib/custom_wizard/extensions/content_security_policy_extension.rb
   ].each do |path|
     load File.expand_path(path, __FILE__)
   end
@@ -254,8 +249,6 @@ after_initialize do
   ::InvitesController.prepend InvitesControllerCustomWizard
   ::UsersController.prepend CustomWizardUsersController
   ::Guardian.prepend CustomWizardGuardian
-  puts "PREPENDING CSP EXTENSION"
-  ::ContentSecurityPolicy::Extension.singleton_class.prepend CustomWizardContentSecurityPolicyExtension
 
   full_path = "#{Rails.root}/plugins/discourse-custom-wizard/assets/stylesheets/wizard/wizard_custom.scss"
   if Stylesheet::Importer.respond_to?(:plugin_assets)
