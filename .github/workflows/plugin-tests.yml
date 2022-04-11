@@ -26,7 +26,7 @@ jobs:
       RAILS_ENV: test
       PGUSER: discourse
       PGPASSWORD: discourse
-      LOAD_PLUGINS: 1
+      LOAD_PLUGINS: "1"
 
     strategy:
       fail-fast: false
@@ -150,5 +150,5 @@ jobs:
 
       - name: Wizard QUnit
         if: matrix.build_type == 'frontend'
-        run: QUNIT_SKIP_CORE=1 LOAD_PLUGINS=1 QUNIT_EMBER_CLI=0 bin/rake qunit:test['1200000','/w/qunit']
+        run: QUNIT_SKIP_CORE=1 LOAD_PLUGINS=1 QUNIT_EMBER_CLI=0 bin/rake qunit:test['600000','/w/qunit']
         timeout-minutes: 10

@@ -80,6 +80,8 @@ def each_globbed_asset
   end
 end
 
+puts "LOADING CUSTOM WIZARD PLUGIN"
+
 after_initialize do
   %w[
     ../lib/custom_wizard/engine.rb
