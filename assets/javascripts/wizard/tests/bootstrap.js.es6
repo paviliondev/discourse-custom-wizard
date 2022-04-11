@@ -1,4 +1,5 @@
 // discourse-skip-module
+/*global document, Logster, QUnit */
 
 if (window.location.pathname.indexOf("/w/") > -1 && Ember.testing) {
   document.addEventListener("DOMContentLoaded", function () {
@@ -16,4 +17,10 @@ if (window.location.pathname.indexOf("/w/") > -1 && Ember.testing) {
       requirejs(entry);
     }
   });
+
+  if (window.Logster) {
+    Logster.enabled = false;
+  } else {
+    window.Logster = { enabled: false };
+  }
 }
