@@ -48,7 +48,7 @@ jobs:
           fetch-depth: 1
 
       - name: Install plugin
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: plugins/${{ github.event.repository.name }}
           ref: "${{ github.base_ref }}"
@@ -140,12 +140,12 @@ jobs:
       - name: RSpec with Coverage
         if: matrix.build_type == 'backend'
         run: |
-          if [ -e plugins/${{ steps.repo-name.outputs.value }}/.simplecov ]
+          if [ -e plugins/${{ github.event.repository.name }}/.simplecov ]
           then
-            cp plugins/${{ steps.repo-name.outputs.value }}/.simplecov .simplecov
+            cp plugins/${{ github.event.repository.name }}/.simplecov .simplecov
             export COVERAGE=1
           fi
-          bin/rake plugin:spec[${{ steps.repo-name.outputs.value }}]
+          bin/rake plugin:spec[${{ github.event.repository.name }}]
 
       - name: Wizard QUnit
         if: matrix.build_type == 'frontend'
