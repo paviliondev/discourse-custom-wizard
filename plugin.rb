@@ -22,6 +22,8 @@ if Rails.env.production?
   }
 end
 
+puts "BEFORE ADD ASSET PATHS"
+
 if Rails.env.test?
   config = Rails.application.config
   plugin_asset_path = "#{Rails.root}/plugins/discourse-custom-wizard/assets"
@@ -252,6 +254,7 @@ after_initialize do
   ::InvitesController.prepend InvitesControllerCustomWizard
   ::UsersController.prepend CustomWizardUsersController
   ::Guardian.prepend CustomWizardGuardian
+  puts "PREPENDING CSP EXTENSION"
   ::ContentSecurityPolicy::Extension.singleton_class.prepend CustomWizardContentSecurityPolicyExtension
 
   full_path = "#{Rails.root}/plugins/discourse-custom-wizard/assets/stylesheets/wizard/wizard_custom.scss"

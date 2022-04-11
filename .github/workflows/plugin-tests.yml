@@ -112,7 +112,7 @@ jobs:
         with:
           path: tmp/app-cache
           key: >-
-            ${{ hashFiles('.github/workflows/tests.yml') }}-
+            ${{ hashFiles('.github/workflows/plugin-tests.yml') }}-
             ${{ hashFiles('db/**/*', 'plugins/**/db/**/*') }}-
 
       - name: Restore database from cache
