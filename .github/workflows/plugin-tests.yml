@@ -51,7 +51,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           path: plugins/${{ github.event.repository.name }}
-          ref: "${{ github.base_ref }}"
+          ref: "${{ github.head_ref }}"
           fetch-depth: 1
 
       - name: Setup Git
@@ -149,5 +149,5 @@ jobs:
 
       - name: Wizard QUnit
         if: matrix.build_type == 'frontend'
-        run: LOAD_PLUGINS=1 QUNIT_EMBER_CLI=0 RAILS_ENABLE_TEST_LOG=1 QUNIT_SKIP_CORE=1 bin/rake qunit:test['600000','/w/qunit']
+        run: LOAD_PLUGINS=1 QUNIT_EMBER_CLI=0 QUNIT_SKIP_CORE=1 bin/rake qunit:test['600000','/w/qunit']
         timeout-minutes: 10
