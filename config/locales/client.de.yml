@@ -200,8 +200,8 @@ de:
           type:
             text: "Text"
             textarea: Textarea
-            composer: Composer
-            composer_preview: Composer Preview
+            composer: Editor
+            composer_preview: Editor-Vorschau
             text_only: Text Only
             number: Number
             checkbox: Checkbox
@@ -256,7 +256,7 @@ de:
             tags: "Tags"
             visible: "Visible"
           open_composer:
-            label: "Open Composer"
+            label: "Editor öffnen"
           update_profile:
             label: "Update Profile"
             setting: "Fields"
@@ -480,7 +480,7 @@ de:
       reset: "Diesen Wizard zurücksetzen."
       step_not_permitted: "Du bist nicht berechtigt, diesen Schritt anzusehen."
       incomplete_submission:
-        title: "Continue editing your draft submission from %{date}?"
+        title: "Mit dem gespeicherten Entwurf vom %{date} fortsetzen?"
         resume: "Weiter"
         restart: "Neu beginnen"
       x_characters:
@@ -492,27 +492,27 @@ de:
       quote_post_title: "Gesamten Beitrag zitieren"
       bold_label: "F"
       bold_title: "Fett"
-      bold_text: "strong text"
-      italic_label: "I"
-      italic_title: "Emphasis"
-      italic_text: "emphasized text"
-      link_title: "Hyperlink"
-      link_description: "enter link description here"
-      link_dialog_title: "Insert Hyperlink"
-      link_optional_text: "optional title"
-      link_url_placeholder: "http://example.com"
-      quote_title: "Blockquote"
-      quote_text: "Blockquote"
-      blockquote_text: "Blockquote"
-      code_title: "Preformatted text"
-      code_text: "indent preformatted text by 4 spaces"
-      paste_code_text: "type or paste code here"
-      upload_title: "Upload"
-      upload_description: "enter upload description here"
-      olist_title: "Numbered List"
-      ulist_title: "Bulleted List"
-      list_item: "List item"
-      toggle_direction: "Toggle Direction"
+      bold_text: "fett gedruckter Text"
+      italic_label: "K"
+      italic_title: "Betonung"
+      italic_text: "betonter Text"
+      link_title: "Link"
+      link_description: "hier Linkbeschreibung eingeben"
+      link_dialog_title: "Link einfügen"
+      link_optional_text: "optionaler Titel"
+      link_url_placeholder: "http://beispiel.com"
+      quote_title: "Blockzitat"
+      quote_text: "Blockzitat"
+      blockquote_text: "Blockzitat"
+      code_title: "Vorformatierter Text"
+      code_text: "vorformatierten Text mit 4 Leerzeichen einrücken"
+      paste_code_text: "tippe oder füge den Code hier ein"
+      upload_title: "Hochladen"
+      upload_description: "gib hier eine Beschreibung des Uploads ein"
+      olist_title: "Nummerierte Liste"
+      ulist_title: "Aufzählung"
+      list_item: "Listenelement"
+      toggle_direction: "Schreibrichtung wechseln"
       help: "Markdown Hilfe"
       collapse: "den Editor minimieren"
       abandon: "Editor schließen und Entwurf verwerfen"
