@@ -2,7 +2,7 @@ de:
   admin:
     wizard:
       submission:
-        no_user: "deleted (user_id: %{user_id})"
+        no_user: "gelöscht (user_id: %{user_id})"
   wizard:
     custom_title: "Wizard"
     custom_field:
@@ -24,23 +24,23 @@ de:
       invalid_date: "Invalid date"
       invalid_time: "Invalid time"
     none: "We couldn't find a wizard at that address."
-    no_skip: "Wizard can't be skipped"
+    no_skip: "Wizard kann nicht übersprungen werden"
     export:
       error:
-        select_one: "Please select at least one valid wizard"
-        invalid_wizards: "No valid wizards selected"
+        select_one: "Bitte wähle mindestens einen gültigen Wizard"
+        invalid_wizards: "Keine gültigen Wizards ausgewählt"
     import:
       error:
-        no_file: "No file selected"
-        file_large: "File too large"
-        invalid_json: "File is not a valid json file"
+        no_file: "Keine Datei ausgewählt"
+        file_large: "Datei ist zu groß"
+        invalid_json: "Datei ist keine gültige json-Datei"
     destroy:
       error:
-        no_template: No template found
-        default: Error destroying wizard
+        no_template: Kein Template gefunden
+        default: Fehler beim Löschen des Wizards
     validation:
-      required: "%{property} is required"
-      conflict: "Wizard with id '%{wizard_id}' already exists"
+      required: "%{property} ist erforderlich"
+      conflict: "Wizard mit id '%{wizard_id}' existiert bereits"
       after_signup: "You can only have one 'after signup' wizard at a time. %{wizard_id} has 'after signup' enabled."
       after_signup_after_time: "You can't use 'after time' and 'after signup' on the same wizard."
       after_time: "After time setting is invalid."
