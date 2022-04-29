@@ -459,5 +459,20 @@ describe CustomWizard::Mapper do
         expect(result).to eq("")
       end
     end
+
+    it "replaces curly braces in user content with braces" do
+      params_with_curly_braces = {
+        "step_1_field_1" => "Some code with braces {%s}"
+      }
+      template = "w{step_1_field_1}"
+      mapper = create_template_mapper(params_with_curly_braces, user1)
+      result = mapper.interpolate(
+        template.dup,
+        template: true,
+        user: true,
+        wizard: true
+      )
+      expect(result).to eq("Some code with braces (%s)")
+    end
   end
 end

@@ -232,7 +232,12 @@ class CustomWizard::Mapper
     end
 
     if opts[:wizard]
-      string.gsub!(/w\{(.*?)\}/) { |match| recurse(data, [*$1.split('.')]) || '' }
+      string.gsub!(/w\{(.*?)\}/) do |match|
+        content = recurse(data, [*$1.split('.')]) || ''
+        # Curly braces are used by liquid, so they can't be part of the content.
+        # TODO: Ideally these would be escaped somehow.
+        content.gsub(/{/, "(").gsub(/}/, ")") if opts[:template]
+      end
     end
 
     if opts[:value]
