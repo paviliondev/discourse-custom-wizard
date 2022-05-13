@@ -220,11 +220,11 @@ describe CustomWizard::CustomField do
     end
 
     it "lists custom field records added by other plugins " do
-      expect(CustomWizard::CustomField.external_list.length).to eq(11)
+      expect(CustomWizard::CustomField.external_list.length).to eq(8)
     end
 
     it "lists all custom field records" do
-      expect(CustomWizard::CustomField.full_list.length).to eq(15)
+      expect(CustomWizard::CustomField.full_list.length).to eq(12)
     end
   end
 

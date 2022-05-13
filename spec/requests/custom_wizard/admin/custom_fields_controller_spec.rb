@@ -18,7 +18,7 @@ describe CustomWizard::AdminCustomFieldsController do
 
   it "returns the full list of custom fields" do
     get "/admin/wizards/custom-fields.json"
-    expect(response.parsed_body.length).to eq(15)
+    expect(response.parsed_body.length).to eq(12)
   end
 
   it "saves custom fields" do
