@@ -259,12 +259,12 @@ describe CustomWizard::CustomField do
       expect(CustomWizard::CustomField.list_by(:serializers, ['post']).length).to eq(0)
     end
 
-    it "custom field records added by other plugins " do
-      expect(CustomWizard::CustomField.external_list.length).to be > 10
+    it "lists custom field records added by other plugins " do
+      expect(CustomWizard::CustomField.external_list.length).to eq(8)
     end
 
-    it "all custom field records" do
-      expect(CustomWizard::CustomField.full_list.length).to be > 12
+    it "lists all custom field records" do
+      expect(CustomWizard::CustomField.full_list.length).to eq(12)
     end
   end
 

@@ -64,13 +64,13 @@ export default {
 
       _wizardInsertText(args = {}) {
         if (args.fieldId === this.fieldId) {
-          this._insertText(args.text, args.options);
+          this.insertText(args.text, args.options);
         }
       },
 
       _wizardReplaceText(args = {}) {
         if (args.fieldId === this.fieldId) {
-          this._replaceText(args.oldVal, args.newVal, (args.opts = {}));
+          this.replaceText(args.oldVal, args.newVal, (args.opts = {}));
         }
       },
 
@@ -89,7 +89,7 @@ export default {
         let html = clipboard.getData("text/html");
         let handled = false;
 
-        const { pre, lineVal } = this._getSelected(null, { lineVal: true });
+        const { pre, lineVal } = this.getSelected(null, { lineVal: true });
         const isInlinePasting = pre.match(/[^\n]$/);
         const isCodeBlock = isInside(pre, /(^|\n)```/g);
 
@@ -100,7 +100,7 @@ export default {
           !isCodeBlock
         ) {
           plainText = plainText.trim().replace(/\r/g, "");
-          const table = this._extractTable(plainText);
+          const table = this.extractTable(plainText);
           if (table) {
             this.appEvents.trigger("wizard-editor:insert-text", {
               fieldId: this.fieldId,
