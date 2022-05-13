@@ -52,34 +52,38 @@ export default SingleSelectComponent.extend(Subscription, {
 
   @discourseComputed("feature", "attribute")
   content(feature, attribute) {
-    return wizardSchema[feature][attribute].map((value) => {
-      let requiredSubscriptionType = this.requiredSubscriptionType(
-        feature,
-        attribute,
-        value
-      );
-      return {
-        id: value,
-        name: I18n.t(nameKey(feature, attribute, value)),
-        subscriptionType: requiredSubscriptionType,
-        disabled: !subscriptionTypeSufficient(
-          this.subscriptionType,
-          requiredSubscriptionType
-        ),
-      };
-    }).sort(function(a, b) {
-      if (a.subscriptionType && !b.subscriptionType) {
-        return 1;
-      }
-      if (!a.subscriptionType && b.subscriptionType) {
-        return -1;
-      }
-      if (a.subscriptionType == b.subscriptionType) {
-        return a.subscriptionType ? a.subscriptionType.localeCompare(b.subscriptionType) : 0;
-      } else {
-        return a.subscriptionType === 'standard' ? -1 : 0;
-      }
-    });
+    return wizardSchema[feature][attribute]
+      .map((value) => {
+        let requiredSubscriptionType = this.requiredSubscriptionType(
+          feature,
+          attribute,
+          value
+        );
+        return {
+          id: value,
+          name: I18n.t(nameKey(feature, attribute, value)),
+          subscriptionType: requiredSubscriptionType,
+          disabled: !subscriptionTypeSufficient(
+            this.subscriptionType,
+            requiredSubscriptionType
+          ),
+        };
+      })
+      .sort(function (a, b) {
+        if (a.subscriptionType && !b.subscriptionType) {
+          return 1;
+        }
+        if (!a.subscriptionType && b.subscriptionType) {
+          return -1;
+        }
+        if (a.subscriptionType === b.subscriptionType) {
+          return a.subscriptionType
+            ? a.subscriptionType.localeCompare(b.subscriptionType)
+            : 0;
+        } else {
+          return a.subscriptionType === "standard" ? -1 : 0;
+        }
+      });
   },
 
   modifyComponentForRow() {
