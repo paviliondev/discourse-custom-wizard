@@ -67,6 +67,18 @@ export default SingleSelectComponent.extend(Subscription, {
           requiredSubscriptionType
         ),
       };
+    }).sort(function(a, b) {
+      if (a.subscriptionType && !b.subscriptionType) {
+        return 1;
+      }
+      if (!a.subscriptionType && b.subscriptionType) {
+        return -1;
+      }
+      if (a.subscriptionType == b.subscriptionType) {
+        return a.subscriptionType ? a.subscriptionType.localeCompare(b.subscriptionType) : 0;
+      } else {
+        return a.subscriptionType === 'standard' ? -1 : 0;
+      }
     });
   },
 
