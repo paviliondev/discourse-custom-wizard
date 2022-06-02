@@ -59,12 +59,15 @@
 
     & > label.field-label {
       order: 1;
-      font-weight: 400;
     }
 
     & > .field-description {
       margin-top: 0;
       order: 2;
+    }
+
+    & > .field-label + .field-description {
+      margin-left: .5em;
     }
   }
 
