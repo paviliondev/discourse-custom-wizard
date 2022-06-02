@@ -1,6 +1,7 @@
 import DiscourseURL from "discourse/lib/url";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import getUrl from "discourse-common/lib/get-url";
+import { observes } from "discourse-common/utils/decorators";
 
 export default {
   name: "custom-wizard-edits",
@@ -33,6 +34,16 @@ export default {
               this._super();
             }
           },
+        },
+      });
+
+      api.modifyClass("component:uppy-image-uploader", {
+        // Needed to ensure appEvents get registered when navigating between steps
+        @observes("id")
+        initOnStepChange() {
+          if (/wizard-field|wizard-step/.test(this.id)) {
+            this._initialize();
+          }
         },
       });
     });
