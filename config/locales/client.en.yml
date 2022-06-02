@@ -447,6 +447,7 @@ en:
 
           log:
             label: "Logs"
+            clear: clear
 
         log:
           nav_label: "Logs"

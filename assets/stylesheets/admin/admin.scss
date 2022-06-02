@@ -79,7 +79,8 @@ $error: #ef1700;
     }
   }
 
-  & + div {
+  & + div,
+  & + div + div {
     margin-top: 30px;
   }
 }
@@ -212,6 +213,7 @@ $error: #ef1700;
 
 .wizard-header {
   margin-bottom: 20px;
+  display: flex;
 
   &.large {
     font-size: 1.5em;
@@ -253,11 +255,12 @@ $error: #ef1700;
   }
 
   &.medium {
-    font-size: 1.3em;
+    font-size: 1.2em;
   }
 
   &.small {
     font-size: 1em;
+    font-weight: 700;
     margin-bottom: 5px;
   }
 
@@ -266,8 +269,9 @@ $error: #ef1700;
   }
 
   .controls {
+    font-size: 1rem;
+    display: flex;
     margin-left: auto;
-    margin-right: 0.5rem;
   }
 }
 

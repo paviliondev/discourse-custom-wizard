@@ -88,6 +88,11 @@ export default Controller.extend({
   twoLeggedOauth: equal("api.authType", "oauth_2"),
   threeLeggedOauth: equal("api.authType", "oauth_3"),
 
+  @discourseComputed("api.isNew")
+  nameClass(isNew) {
+    return isNew ? "new" : "saved";
+  },
+
   actions: {
     addParam() {
       this.get("api.authParams").pushObject({});
