@@ -489,8 +489,8 @@ hr:
         few: "%{count} Characters"
         other: "%{count} Characters"
     wizard_composer:
-      show_preview: "Preview Post"
-      hide_preview: "Edit Post"
+      show_preview: "Preview"
+      hide_preview: "Edit"
       quote_post_title: "Quote whole post"
       bold_label: "B"
       bold_title: "Strong"
