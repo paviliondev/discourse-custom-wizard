@@ -19,7 +19,7 @@
   <div class="setting-label">
     <label>{{i18n "admin.wizard.field.required"}}</label>
   </div>
-  
+
   <div class="setting-value">
     <span>{{i18n "admin.wizard.field.required_label"}}</span>
     {{input type="checkbox" checked=field.required}}
@@ -54,7 +54,7 @@
   <div class="setting-label">
     <label>{{i18n "admin.wizard.type"}}</label>
   </div>
-  
+
   <div class="setting-value">
     {{combo-box
       value=field.type
@@ -216,7 +216,9 @@
 
     <div class="setting-value">
       {{tag-group-chooser
+        id=(concat field.id "-tag-groups")
         tagGroups=field.tag_groups
+        onChange=(action (mut field.tag_groups))
       }}
     </div>
   </div>
@@ -257,7 +259,7 @@
           <div class="setting-label">
             <label>{{i18n "admin.wizard.field.property"}}</label>
           </div>
-          
+
           <div class="setting-value">
             {{combo-box
               value=field.property
