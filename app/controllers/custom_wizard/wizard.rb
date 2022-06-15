@@ -6,7 +6,7 @@ class CustomWizard::WizardController < ::ActionController::Base
   include CanonicalURL::ControllerExtensions
   include GlobalPath
 
-  prepend_view_path(Rails.root.join('plugins', 'discourse-custom-wizard', 'views'))
+  prepend_view_path(Rails.root.join('plugins', 'discourse-custom-wizard', 'app', 'views'))
   layout :set_wizard_layout
 
   before_action :preload_wizard_json
@@ -47,10 +47,8 @@ class CustomWizard::WizardController < ::ActionController::Base
     result = { success: 'OK' }
 
     if current_user && wizard.can_access?
-      submission = wizard.current_submission
-
-      if submission.present? && submission.redirect_to
-        result.merge!(redirect_to: submission.redirect_to)
+      if redirect_to = wizard.current_submission&.redirect_to
+        result.merge!(redirect_to: redirect_to)
       end
 
       wizard.cleanup_on_skip!

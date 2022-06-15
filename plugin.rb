@@ -52,6 +52,24 @@ class ::Sprockets::DirectiveProcessor
   end
 end
 
+## Override necessary due to 'assets/javascripts/wizard', particularly its tests.
+def each_globbed_asset
+  if @path
+    root_path = "#{File.dirname(@path)}/assets/javascripts/discourse"
+
+    Dir.glob(["#{root_path}/**/*"]).sort.each do |f|
+      f_str = f.to_s
+      if File.directory?(f)
+        yield [f, true]
+      elsif f_str.end_with?(".js.es6") || f_str.end_with?(".hbs") || f_str.end_with?(".hbr")
+        yield [f, false]
+      elsif transpile_js && f_str.end_with?(".js")
+        yield [f, false]
+      end
+    end
+  end
+end
+
 after_initialize do
   %w[
     ../lib/custom_wizard/engine.rb
