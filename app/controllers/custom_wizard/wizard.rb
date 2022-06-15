@@ -44,7 +44,7 @@ class CustomWizard::WizardController < ::ActionController::Base
       return render json: { error: I18n.t('wizard.no_skip') }
     end
 
-    result = success_json
+    result = { success: 'OK' }
 
     if current_user && wizard.can_access?
       submission = wizard.current_submission
