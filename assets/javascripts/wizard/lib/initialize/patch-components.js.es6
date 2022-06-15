@@ -1,5 +1,5 @@
 export default {
-  run(_, container) {
+  run(app, container) {
     const getToken = requirejs("wizard/lib/ajax").getToken;
     const isTesting = requirejs("discourse-common/config/environment")
       .isTesting;

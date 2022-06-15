@@ -57,6 +57,7 @@ CustomWizard.reopenClass({
       wizardJson.steps = wizardJson.steps
         .map((step) => {
           const stepObj = Step.create(step);
+          stepObj.wizardId = wizardJson.id;
 
           stepObj.fields.sort((a, b) => {
             return parseFloat(a.number) - parseFloat(b.number);
