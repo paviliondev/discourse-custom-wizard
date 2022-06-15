@@ -12,7 +12,7 @@ import CustomWizard from "../models/wizard";
 const alreadyWarned = {};
 
 export default Component.extend({
-  layoutName: 'wizard/templates/components/wizard-step',
+  layoutName: "wizard/templates/components/wizard-step",
   classNameBindings: [":wizard-step", "step.id"],
   saving: null,
 
@@ -27,7 +27,7 @@ export default Component.extend({
   },
 
   @discourseComputed("step.index", "wizard.required")
-  showQuitButton: (index, required) => (index === 0 && !required),
+  showQuitButton: (index, required) => index === 0 && !required,
 
   showNextButton: not("step.final"),
   showDoneButton: alias("step.final"),

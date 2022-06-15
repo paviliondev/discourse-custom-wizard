@@ -24,12 +24,14 @@ export default {
       ["site:main", site, false],
       ["session:main", session, false],
       ["service:store", Store, true],
-      ["adapter:rest", RestAdapter, true]
+      ["adapter:rest", RestAdapter, true],
     ];
 
-    registrations.forEach(registration => {
+    registrations.forEach((registration) => {
       if (!app.hasRegistration(registration[0])) {
-        app.register(registration[0], registration[1], { instantiate: registration[2] });
+        app.register(registration[0], registration[1], {
+          instantiate: registration[2],
+        });
       }
     });
 
@@ -52,5 +54,5 @@ export default {
     }
 
     site.set("can_create_tag", false);
-  }
-}
+  },
+};

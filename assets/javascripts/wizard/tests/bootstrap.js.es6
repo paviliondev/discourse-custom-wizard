@@ -1,5 +1,5 @@
 // discourse-skip-module
-/*global document, Logster, QUnit */
+/*global document, Logster */
 
 if (window.location.pathname.indexOf("/w/") > -1 && Ember.testing) {
   document.addEventListener("DOMContentLoaded", function () {

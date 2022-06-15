@@ -5,16 +5,13 @@ import wizardJson from "../fixtures/wizard";
 const update = cloneJSON(updateJson);
 update.wizard = cloneJSON(wizardJson);
 
-const saveStep = function(response) {
+const saveStep = function (response) {
   return {
     verb: "put",
-    path: '/w/wizard/steps/:step_id',
+    path: "/w/wizard/steps/:step_id",
     status: 200,
-    response
-  }
-}
+    response,
+  };
+};
 
-export {
-  saveStep,
-  update
-}
+export { saveStep, update };

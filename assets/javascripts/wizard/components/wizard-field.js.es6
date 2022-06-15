@@ -4,8 +4,13 @@ import discourseComputed from "discourse-common/utils/decorators";
 import { cook } from "discourse/plugins/discourse-custom-wizard/wizard/lib/text-lite";
 
 export default Component.extend({
-  layoutName: 'wizard/templates/components/wizard-field',
-  classNameBindings: [":wizard-field", "typeClasses", "field.invalid", "field.id"],
+  layoutName: "wizard/templates/components/wizard-field",
+  classNameBindings: [
+    ":wizard-field",
+    "typeClasses",
+    "field.invalid",
+    "field.id",
+  ],
 
   @discourseComputed("field.type", "field.id")
   typeClasses: (type, id) =>

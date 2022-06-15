@@ -4,7 +4,13 @@ import Route from "@ember/routing/route";
 export default Route.extend({
   beforeModel() {
     const wizard = getCachedWizard();
-    if (wizard && wizard.user && wizard.permitted && !wizard.completed && wizard.start) {
+    if (
+      wizard &&
+      wizard.user &&
+      wizard.permitted &&
+      !wizard.completed &&
+      wizard.start
+    ) {
       this.replaceWith("step", wizard.start);
     }
   },
@@ -14,7 +20,7 @@ export default Route.extend({
   },
 
   renderTemplate() {
-    this.render('wizard/templates/wizard-index');
+    this.render("wizard/templates/wizard-index");
   },
 
   setupController(controller, model) {
@@ -39,5 +45,5 @@ export default Route.extend({
     } else {
       controller.set("noWizard", true);
     }
-  }
+  },
 });

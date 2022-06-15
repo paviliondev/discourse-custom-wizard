@@ -4,17 +4,17 @@ import Component from "@ember/component";
 import { dasherize } from "@ember/string";
 
 export default Component.extend({
-  classNameBindings: [':wizard-no-access', 'reasonClass'],
-  layoutName: 'wizard/templates/components/wizard-no-access',
+  classNameBindings: [":wizard-no-access", "reasonClass"],
+  layoutName: "wizard/templates/components/wizard-no-access",
 
-  @discourseComputed('reason')
+  @discourseComputed("reason")
   reasonClass(reason) {
     return dasherize(reason);
   },
 
   @discourseComputed
   siteName() {
-    return (this.siteSettings.title || '');
+    return this.siteSettings.title || "";
   },
 
   actions: {
