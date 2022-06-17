@@ -1,5 +1,5 @@
 import EmberObject from "@ember/object";
-import ValidState from "wizard/mixins/valid-state";
+import ValidState from "discourse/plugins/discourse-custom-wizard/wizard/mixins/valid-state";
 import discourseComputed from "discourse-common/utils/decorators";
 import { translatedText } from "discourse/plugins/discourse-custom-wizard/wizard/lib/wizard-i18n";
 

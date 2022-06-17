@@ -1,7 +1,7 @@
 import { default as computed } from "discourse-common/utils/decorators";
 import getUrl from "discourse-common/lib/get-url";
 import Field from "./field";
-import { ajax } from "wizard/lib/ajax";
+import { ajax } from "../lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import Step from "./step";
 import EmberObject from "@ember/object";

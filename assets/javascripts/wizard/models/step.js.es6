@@ -1,6 +1,6 @@
 import EmberObject from "@ember/object";
-import ValidState from "wizard/mixins/valid-state";
-import { ajax } from "wizard/lib/ajax";
+import ValidState from "discourse/plugins/discourse-custom-wizard/wizard/mixins/valid-state";
+import { ajax } from "../lib/ajax";
 import discourseComputed from "discourse-common/utils/decorators";
 import { translatedText } from "discourse/plugins/discourse-custom-wizard/wizard/lib/wizard-i18n";
 import { later } from "@ember/runloop";

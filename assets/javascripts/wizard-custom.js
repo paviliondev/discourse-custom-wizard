@@ -1,8 +1,6 @@
 //= require_tree_discourse truth-helpers/addon
 //= require_tree_discourse discourse-common/addon
 //= require_tree_discourse select-kit/addon
-//= require_tree_discourse wizard/lib
-//= require_tree_discourse wizard/mixins
 //= require_tree_discourse discourse/app/lib
 //= require_tree_discourse discourse/app/mixins
 
@@ -76,6 +74,7 @@
 //= require_tree ./wizard/controllers
 //= require_tree ./wizard/helpers
 //= require_tree ./wizard/lib
+//= require_tree ./wizard/mixins
 //= require_tree ./wizard/models
 //= require_tree ./wizard/routes
 //= require_tree ./wizard/templates

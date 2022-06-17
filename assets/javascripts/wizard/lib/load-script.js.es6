@@ -1,4 +1,4 @@
-import { ajax } from "wizard/lib/ajax";
+import { ajax } from "./ajax";
 import getURL, { getURLWithCDN } from "discourse-common/lib/get-url";
 import { run } from "@ember/runloop";
 import { Promise } from "rsvp";
