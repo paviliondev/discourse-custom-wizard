@@ -1,3 +1,5 @@
+// discourse-skip-module
+
 var define, requirejs;
 
 (function () {
@@ -171,7 +173,7 @@ var define, requirejs;
       I18n: {
         // eslint-disable-next-line
         default: I18n,
-      },
+      }
     };
   }
 

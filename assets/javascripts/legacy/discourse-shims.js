@@ -1,3 +1,5 @@
+// discourse-skip-module
+
 define("message-bus-client", ["exports"], function (__exports__) {
   __exports__.default = window.MessageBus;
 });

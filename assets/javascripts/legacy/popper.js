@@ -1,3 +1,5 @@
+// discourse-skip-module
+
 /**
  * @popperjs/core v2.10.2 - MIT License
  */

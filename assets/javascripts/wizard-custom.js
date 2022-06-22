@@ -1,3 +1,5 @@
+// discourse-skip-module
+
 //= require_tree_discourse truth-helpers/addon
 //= require_tree_discourse discourse-common/addon
 //= require_tree_discourse select-kit/addon
@@ -58,7 +60,6 @@
 //= require ember-addons/fmt
 //= require polyfills
 //= require markdown-it-bundle.js
-//= require legacy/discourse-shims
 
 //= require ./wizard/application
 //= require ./wizard/router

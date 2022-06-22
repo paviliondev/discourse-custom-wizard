@@ -1,3 +1,5 @@
+// discourse-skip-module
+
 /* eslint-disable */
 Object.setPrototypeOf =
   Object.setPrototypeOf ||

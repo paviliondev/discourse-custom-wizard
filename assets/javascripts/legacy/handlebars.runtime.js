@@ -1,3 +1,5 @@
+// discourse-skip-module
+
 /**!
 
  @license
