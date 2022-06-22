@@ -1,3 +1,5 @@
+// discourse-skip-module
+
 /*global define:false */
 /**
  * Copyright 2012-2017 Craig Campbell

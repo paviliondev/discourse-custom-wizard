@@ -1,3 +1,5 @@
+// discourse-skip-module
+
 /**!
 * tippy.js v6.3.7
 * (c) 2017-2021 atomiks

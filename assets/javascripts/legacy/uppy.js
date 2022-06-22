@@ -1,3 +1,5 @@
+// discourse-skip-module
+
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){let c="function"===typeof require&&require;if(!f&&c){return c(i,!0);}if(u){return u(i,!0);}let a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a;}let p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){let n=e[i][1][r];return o(n||r);},p,p.exports,r,e,n,t);}return n[i].exports;}for(var u="function"===typeof require&&require,i=0;i<t.length;i++){o(t[i]);}return o;}return r;})()({1:[function(require,module,exports){
 // Adapted from https://github.com/Flet/prettier-bytes/
 // Changing 1000 bytes to 1024, so we can keep uppercase KB vs kB
@@ -2508,7 +2510,7 @@ const defaultOptions = {
 
 class RestrictionError extends Error {
   constructor() {
-    super(...arguments);
+    super();
     this.isRestriction = true;
   }
 
@@ -2708,7 +2710,7 @@ let _updateUI = /*#__PURE__*/_classPrivateFieldLooseKey("updateUI");
 
 class UIPlugin extends BasePlugin {
   constructor() {
-    super(...arguments);
+    super();
     Object.defineProperty(this, _updateUI, {
       writable: true,
       value: void 0
