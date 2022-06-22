@@ -20,6 +20,7 @@ config.assets.paths << "#{plugin_asset_path}/stylesheets/wizard"
 
 if Rails.env.production?
   config.assets.precompile += %w{
+    ember_jquery.js
     wizard-custom-guest.js
     wizard-custom-start.js
     wizard-custom.js
