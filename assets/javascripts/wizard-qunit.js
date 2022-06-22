@@ -1,5 +1,5 @@
 //= require legacy/env
-//= require jquery.debug
+//= require legacy/jquery
 //= require ember.debug
 //= require route-recognizer
 //= require fake_xml_http_request
