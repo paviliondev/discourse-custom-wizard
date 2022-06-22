@@ -25,6 +25,7 @@ if Rails.env.production?
     wizard-custom.js
     wizard-plugin.js.erb
     wizard-raw-templates.js.erb
+    wizard-vendor.js
   }
 end
 
