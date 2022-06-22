@@ -1,4 +1,4 @@
-.custom-wizard {
+body.custom-wizard .wizard-column {
   .wizard-step-contents {
     position: relative;
     display: flex;
@@ -9,7 +9,7 @@
     margin-bottom: 10px;
   }
 
-  .wizard-step-title {
+  h1.wizard-step-title {
     flex: 0;
 
     p {

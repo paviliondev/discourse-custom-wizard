@@ -57,16 +57,8 @@
 //= require ember-addons/macro-alias
 //= require ember-addons/fmt
 //= require polyfills
-
-//= require markdown-it-bundle
-//= require template_include.js
-//= require itsatrap.js
-//= require caret_position.js
-//= require popper.js
-//= require uppy.js
-//= require bootstrap-modal.js
-//= require bootbox.js
-//= require discourse-shims
+//= require markdown-it-bundle.js
+//= require legacy/discourse-shims
 
 //= require ./wizard/application
 //= require ./wizard/router

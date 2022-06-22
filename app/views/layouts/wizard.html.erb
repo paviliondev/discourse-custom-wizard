@@ -15,7 +15,7 @@
     <%= preload_script "wizard-raw-templates" %>
     <%= preload_script "wizard-plugin" %>
     <%= preload_script "pretty-text-bundle" %>
-    <script src="<%= ExtraLocalesController.url("wizard") %>"></script>
+    <%= preload_script_url ExtraLocalesController.url("wizard") %>
     <%= csrf_meta_tags %>
 
     <%- unless customization_disabled? %>
@@ -34,7 +34,7 @@
     <title><%= wizard_page_title %></title>
   </head>
 
-  <body class='custom-wizard'>
+  <body class='custom-wizard wizard'>
     <%- unless customization_disabled? %>
       <%= raw wizard_theme_lookup("header") %>
     <%- end %>

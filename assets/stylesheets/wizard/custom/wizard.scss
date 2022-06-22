@@ -1,10 +1,12 @@
-.custom-wizard {
-  background-color: var(--secondary);
+body.custom-wizard {
+  background: var(--secondary);
   color: var(--primary);
   font-size: 1.1em;
+  padding: 1.5em 0;
 
   .wizard-column {
     background-color: var(--secondary);
+    margin: 0 auto;
 
     .wizard-field .input-area {
       margin: 0.5em 0;
@@ -62,7 +64,7 @@
 /* IE11 hacks */
 
 @media all and (-ms-high-contrast: none) {
-  .custom-wizard {
+  body.custom-wizard {
     div.wizard-step-contents {
       display: block;
     }
