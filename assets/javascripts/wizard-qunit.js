@@ -1,4 +1,4 @@
-//= require env
+//= require legacy/env
 //= require jquery.debug
 //= require ember.debug
 //= require route-recognizer
