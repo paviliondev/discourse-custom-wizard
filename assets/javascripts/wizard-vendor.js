@@ -11,3 +11,4 @@
 //= require legacy/popper.js
 //= require legacy/tippy.umd.js
 //= require legacy/discourse-shims.js
+//= require legacy/xss.min.js
