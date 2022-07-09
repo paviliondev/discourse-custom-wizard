@@ -1,7 +1,27 @@
 // discourse-skip-module
 
 //= require_tree_discourse truth-helpers/addon
-//= require_tree_discourse discourse-common/addon
+
+//= require legacy/resolver
+//= require legacy/raw-templates
+
+//= require_tree_discourse discourse-common/addon/config
+//= require_tree_discourse discourse-common/addon/helpers
+//= require discourse-common/addon/lib/get-owner
+//= require discourse-common/addon/lib/object
+//= require discourse-common/addon/lib/helpers
+//= require discourse-common/addon/lib/get-url
+//= require discourse-common/addon/lib/deprecated
+//= require discourse-common/addon/lib/suffix-trie
+//= require discourse-common/addon/lib/debounce
+//= require discourse-common/addon/lib/raw-handlebars
+//= require discourse-common/addon/lib/raw-handlebars-helpers
+//= require discourse-common/addon/lib/escape
+//= require discourse-common/addon/lib/icon-library
+//= require discourse-common/addon/lib/attribute-hook
+//= require discourse-common/addon/lib/dom-from-string
+//= require_tree_discourse discourse-common/addon/utils
+
 //= require_tree_discourse select-kit/addon
 //= require_tree_discourse discourse/app/lib
 //= require_tree_discourse discourse/app/mixins

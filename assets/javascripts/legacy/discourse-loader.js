@@ -7,7 +7,8 @@ var define, requirejs;
   let ALIASES = {
     "ember-addons/ember-computed-decorators":
       "discourse-common/utils/decorators",
-    "discourse/lib/raw-templates": "discourse-common/lib/raw-templates",
+    "discourse/lib/raw-templates": "discourse/plugins/discourse-custom-wizard/legacy/raw-templates",
+    "discourse-common/lib/raw-templates": "discourse/plugins/discourse-custom-wizard/legacy/raw-templates",
     "preload-store": "discourse/lib/preload-store",
     "fixtures/user_fixtures": "discourse/tests/fixtures/user-fixtures",
   };
