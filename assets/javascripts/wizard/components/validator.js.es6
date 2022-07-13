@@ -1,7 +1,7 @@
 import Component from "@ember/component";
 import { equal } from "@ember/object/computed";
 import { ajax } from "discourse/lib/ajax";
-import { getToken } from "wizard/lib/ajax";
+import { getToken } from "../lib/ajax";
 
 export default Component.extend({
   classNames: ["validator"],

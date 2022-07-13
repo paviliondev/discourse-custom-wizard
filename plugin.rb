@@ -27,6 +27,18 @@ plugin_asset_path = "#{Rails.root}/plugins/discourse-custom-wizard/assets"
 config.assets.paths << "#{plugin_asset_path}/javascripts"
 config.assets.paths << "#{plugin_asset_path}/stylesheets/wizard"
 
+if Rails.env.production?
+  config.assets.precompile += %w{
+    ember_jquery.js
+    wizard-custom-guest.js
+    wizard-custom-start.js
+    wizard-custom.js
+    wizard-plugin.js.erb
+    wizard-raw-templates.js.erb
+    wizard-vendor.js
+  }
+end
+
 if respond_to?(:register_svg_icon)
   register_svg_icon "far-calendar"
   register_svg_icon "chevron-right"

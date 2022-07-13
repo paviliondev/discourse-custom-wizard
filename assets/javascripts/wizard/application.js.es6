@@ -1,4 +1,4 @@
-import { buildResolver } from "discourse-common/resolver";
+import { buildResolver } from "discourse/plugins/discourse-custom-wizard/legacy/resolver";
 import Application from "@ember/application";
 import WizardInitializer from "./lib/initialize/wizard";
 import { isTesting } from "discourse-common/config/environment";

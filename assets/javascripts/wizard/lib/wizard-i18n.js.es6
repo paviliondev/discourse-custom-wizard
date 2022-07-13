@@ -13,16 +13,16 @@ const getThemeId = () => {
   }
 };
 
+const getThemeKey = (key) => {
+  const themeId = getThemeId();
+  return `theme_translations.${themeId}.${key}`;
+};
+
 const translationExists = (key) => {
   return (
     I18n.findTranslation(key, { locale: I18n.locale }) ||
     I18n.findTranslation(key, { locale: I18n.defaultLocale })
   );
-};
-
-const getThemeKey = (key) => {
-  const themeId = getThemeId();
-  return `theme_translations.${themeId}.${key}`;
 };
 
 const translatedText = (key, value) => {

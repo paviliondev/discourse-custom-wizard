@@ -3,7 +3,7 @@ import {
   default as discourseComputed,
   on,
 } from "discourse-common/utils/decorators";
-import { findRawTemplate } from "discourse-common/lib/raw-templates";
+import { findRawTemplate } from "discourse/plugins/discourse-custom-wizard/legacy/raw-templates";
 import { scheduleOnce } from "@ember/runloop";
 import { caretPosition, inCodeBlock } from "discourse/lib/utilities";
 import highlightSyntax from "discourse/lib/highlight-syntax";

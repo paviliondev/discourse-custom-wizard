@@ -216,7 +216,9 @@
 
     <div class="setting-value">
       {{tag-group-chooser
+        id=(concat field.id "-tag-groups")
         tagGroups=field.tag_groups
+        onChange=(action (mut field.tag_groups))
       }}
     </div>
   </div>

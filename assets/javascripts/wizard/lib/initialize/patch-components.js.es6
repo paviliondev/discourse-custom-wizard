@@ -1,6 +1,8 @@
 export default {
   run(app, container) {
-    const getToken = requirejs("wizard/lib/ajax").getToken;
+    const getToken = requirejs(
+      "discourse/plugins/discourse-custom-wizard/wizard/lib/ajax"
+    ).getToken;
     const isTesting = requirejs("discourse-common/config/environment")
       .isTesting;
 
