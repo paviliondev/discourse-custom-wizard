@@ -12,6 +12,7 @@ class CustomWizard::WizardController < ::ActionController::Base
   before_action :preload_wizard_json
   before_action :ensure_plugin_enabled
   before_action :ensure_logged_in, only: [:skip]
+  around_action :with_resolved_locale
 
   helper_method :wizard_page_title
   helper_method :wizard_theme_id
@@ -113,6 +114,13 @@ class CustomWizard::WizardController < ::ActionController::Base
   def store_preloaded(key, json)
     @preloaded ||= {}
     @preloaded[key] = json.gsub("</", "<\\/")
+  end
+
+  ## Simplified version of with_resolved_locale in ApplicationController
+  def with_resolved_locale
+    locale = current_user ? current_user.effective_locale : SiteSetting.default_locale
+    I18n.ensure_all_loaded!
+    I18n.with_locale(locale) { yield }
   end
 
   private
