@@ -20,6 +20,7 @@
 //= require discourse-common/addon/lib/icon-library
 //= require discourse-common/addon/lib/attribute-hook
 //= require discourse-common/addon/lib/dom-from-string
+//= require discourse-common/addon/lib/later
 //= require_tree_discourse discourse-common/addon/utils
 
 //= require_tree_discourse select-kit/addon

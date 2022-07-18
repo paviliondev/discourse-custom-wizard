@@ -90,16 +90,6 @@ export default Component.extend({
     this.showMessage(message);
   },
 
-  keyPress(event) {
-    if (event.key === "Enter") {
-      if (this.showDoneButton) {
-        this.send("quit");
-      } else {
-        this.send("nextStep");
-      }
-    }
-  },
-
   @discourseComputed("step.index", "wizard.totalSteps")
   barStyle(displayIndex, totalSteps) {
     let ratio = parseFloat(displayIndex) / parseFloat(totalSteps - 1);
