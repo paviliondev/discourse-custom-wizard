@@ -1,40 +1,13 @@
 # frozen_string_literal: true
-class CustomWizard::WizardController < ::ActionController::Base
-  helper ApplicationHelper
-
-  include CurrentUser
-  include CanonicalURL::ControllerExtensions
-  include GlobalPath
-
-  prepend_view_path(Rails.root.join('plugins', 'discourse-custom-wizard', 'app', 'views'))
-  layout :set_wizard_layout
-
-  before_action :preload_wizard_json
+class CustomWizard::WizardController < ::ApplicationController
   before_action :ensure_plugin_enabled
   before_action :ensure_logged_in, only: [:skip]
-  around_action :with_resolved_locale
-
-  helper_method :wizard_page_title
-  helper_method :wizard_theme_id
-  helper_method :wizard_theme_lookup
-  helper_method :wizard_theme_translations_lookup
-
-  def set_wizard_layout
-    action_name === 'qunit' ? 'qunit' : 'wizard'
-  end
 
   def index
-    respond_to do |format|
-      format.json do
-        if wizard.present?
-          render json: CustomWizard::WizardSerializer.new(wizard, scope: guardian, root: false).as_json, status: 200
-        else
-          render json: { error: I18n.t('wizard.none') }
-        end
-      end
-      format.html do
-        render "default/empty"
-      end
+    if wizard.present?
+      render json: CustomWizard::WizardSerializer.new(wizard, scope: guardian, root: false).as_json, status: 200
+    else
+      render json: { error: I18n.t('wizard.none') }
     end
   end
 

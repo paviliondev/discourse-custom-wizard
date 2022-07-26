@@ -10,25 +10,9 @@ gem 'liquid', '5.0.1', require: true
 
 register_asset 'stylesheets/common/wizard-admin.scss'
 register_asset 'stylesheets/common/wizard-mapper.scss'
+register_asset 'stylesheets/common/wizard-custom.scss'
 
 enabled_site_setting :custom_wizard_enabled
-
-config = Rails.application.config
-plugin_asset_path = "#{Rails.root}/plugins/discourse-custom-wizard/assets"
-config.assets.paths << "#{plugin_asset_path}/javascripts"
-config.assets.paths << "#{plugin_asset_path}/stylesheets/wizard"
-
-if Rails.env.production?
-  config.assets.precompile += %w{
-    ember_jquery.js
-    wizard-custom-guest.js
-    wizard-custom-start.js
-    wizard-custom.js
-    wizard-plugin.js.erb
-    wizard-raw-templates.js.erb
-    wizard-vendor.js
-  }
-end
 
 if respond_to?(:register_svg_icon)
   register_svg_icon "far-calendar"
@@ -36,40 +20,6 @@ if respond_to?(:register_svg_icon)
   register_svg_icon "chevron-left"
   register_svg_icon "save"
   register_svg_icon "arrow-right"
-end
-
-class ::Sprockets::DirectiveProcessor
-  def process_require_tree_discourse_directive(path = ".")
-    raise CustomWizard::SprocketsEmptyPath, "path cannot be empty" if path == "."
-
-    discourse_asset_path = "#{Rails.root}/app/assets/javascripts/"
-    path = File.expand_path(path, discourse_asset_path)
-    stat = @environment.stat(path)
-
-    if stat && stat.directory?
-      require_paths(*@environment.stat_sorted_tree_with_dependencies(path))
-    else
-      raise CustomWizard::SprocketsFileNotFound, "#{path} not found in discourse core"
-    end
-  end
-end
-
-## Override necessary due to 'assets/javascripts/wizard', particularly its tests.
-def each_globbed_asset
-  if @path
-    root_path = "#{File.dirname(@path)}/assets/javascripts/discourse"
-
-    Dir.glob(["#{root_path}/**/*"]).sort.each do |f|
-      f_str = f.to_s
-      if File.directory?(f)
-        yield [f, true]
-      elsif f_str.end_with?(".js.es6") || f_str.end_with?(".hbs") || f_str.end_with?(".hbr")
-        yield [f, false]
-      elsif transpile_js && f_str.end_with?(".js")
-        yield [f, false]
-      end
-    end
-  end
 end
 
 after_initialize do
