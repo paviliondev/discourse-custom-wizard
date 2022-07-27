@@ -36,9 +36,9 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-              const semver = require('semver');
-              const { head_version, base_version } = process.env;
+            const semver = require('semver');
+            const { head_version, base_version } = process.env;
 
-              if (semver.lte(head_version, base_version)) {
-                core.setFailed("Head version is equal to or lower than base version.");
-              }
+            if (semver.lte(head_version, base_version)) {
+              core.setFailed("Head version is equal to or lower than base version.");
+            }

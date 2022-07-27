@@ -5,13 +5,15 @@ import {
   count,
   query,
   exists,
-  visible
+  visible,
 } from "discourse/tests/helpers/qunit-helpers";
 import { stepNotPermitted, wizard, update } from "../helpers/wizard";
 
 acceptance("Step | Not permitted", function (needs) {
   needs.pretender((server, helper) => {
-    server.get("/w/wizard.json", (request) => (helper.response(stepNotPermitted)));
+    server.get("/w/wizard.json", (request) =>
+      helper.response(stepNotPermitted)
+    );
   });
 
   test("Shows not permitted message", async function (assert) {
@@ -22,8 +24,10 @@ acceptance("Step | Not permitted", function (needs) {
 
 acceptance("Step | Step", function (needs) {
   needs.pretender((server, helper) => {
-    server.get("/w/wizard.json", (request) => (helper.response(wizard)));
-    server.put("/w/wizard/steps/:step_id", (request) => (helper.response(update)));
+    server.get("/w/wizard.json", (request) => helper.response(wizard));
+    server.put("/w/wizard/steps/:step_id", (request) =>
+      helper.response(update)
+    );
   });
 
   test("Renders the step", async function (assert) {

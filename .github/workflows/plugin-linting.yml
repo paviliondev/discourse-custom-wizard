@@ -8,7 +8,7 @@ on:
       - stable
   pull_request:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: "0 0 * * *"
 
 jobs:
   build:
@@ -48,7 +48,7 @@ jobs:
 
       # Until templates are converted
       #- name: Ember template lint
-        #run: yarn ember-template-lint assets/javascripts
+      #run: yarn ember-template-lint assets/javascripts
 
       - name: Rubocop
         run: bundle exec rubocop .

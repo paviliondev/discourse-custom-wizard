@@ -15,7 +15,7 @@ import {
 
 acceptance("Wizard | Not logged in", function (needs) {
   needs.pretender((server, helper) => {
-    server.get("/w/wizard.json", (request) => (helper.response(wizardNoUser)));
+    server.get("/w/wizard.json", (request) => helper.response(wizardNoUser));
   });
 
   test("Wizard no access requires login", async function (assert) {
@@ -24,25 +24,24 @@ acceptance("Wizard | Not logged in", function (needs) {
   });
 });
 
-acceptance(
-  "Wizard | Not permitted",
-  function (needs) {
-    needs.user();
-    needs.pretender((server, helper) => {
-      server.get("/w/wizard.json", (request) => (helper.response(wizardNotPermitted)));
-    });
+acceptance("Wizard | Not permitted", function (needs) {
+  needs.user();
+  needs.pretender((server, helper) => {
+    server.get("/w/wizard.json", (request) =>
+      helper.response(wizardNotPermitted)
+    );
+  });
 
-    test("Wizard no access not permitted", async function (assert) {
-      await visit("/w/wizard");
-      assert.ok(exists(".wizard-no-access.not-permitted"));
-    });
-  }
-);
+  test("Wizard no access not permitted", async function (assert) {
+    await visit("/w/wizard");
+    assert.ok(exists(".wizard-no-access.not-permitted"));
+  });
+});
 
 acceptance("Wizard | Completed", function (needs) {
   needs.user();
   needs.pretender((server, helper) => {
-    server.get("/w/wizard.json", (request) => (helper.response(wizardCompleted)));
+    server.get("/w/wizard.json", (request) => helper.response(wizardCompleted));
   });
 
   test("Wizard no access completed", async function (assert) {

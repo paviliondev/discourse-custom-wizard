@@ -5,7 +5,7 @@ import {
   count,
   query,
   exists,
-  visible
+  visible,
 } from "discourse/tests/helpers/qunit-helpers";
 import { allFieldsWizard } from "../helpers/wizard";
 import tagsJson from "../fixtures/tags";
@@ -13,9 +13,11 @@ import usersJson from "../fixtures/users";
 
 acceptance("Field | Fields", function (needs) {
   needs.pretender((server, helper) => {
-    server.get("/w/wizard.json", (request) => (helper.response(allFieldsWizard)));
-    server.get("/tags/filter/search", (request) => (helper.response({ results: tagsJson["tags"] })));
-    server.get("/u/search/users", (request) => (helper.response(usersJson)));
+    server.get("/w/wizard.json", (request) => helper.response(allFieldsWizard));
+    server.get("/tags/filter/search", (request) =>
+      helper.response({ results: tagsJson["tags"] })
+    );
+    server.get("/u/search/users", (request) => helper.response(usersJson));
   });
 
   test("Text", async function (assert) {
@@ -138,9 +140,7 @@ acceptance("Field | Fields", function (needs) {
     await visit("/w/wizard");
     assert.ok(visible(".wizard-field.category-field .multi-select-header"));
     await click(".wizard-field.category-field .select-kit-header");
-    assert.ok(
-      exists(".wizard-field.category-field .select-kit-collection li")
-    );
+    assert.ok(exists(".wizard-field.category-field .select-kit-collection li"));
   });
 
   test("Group", async function (assert) {

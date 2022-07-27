@@ -43,5 +43,5 @@ export {
   stepNotPermitted,
   allFieldsWizard,
   wizard,
-  update
+  update,
 };
