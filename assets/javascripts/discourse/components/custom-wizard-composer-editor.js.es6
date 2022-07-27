@@ -34,7 +34,7 @@ export default ComposerEditor.extend({
     if (this.siteSettings.enable_mentions) {
       $input.autocomplete({
         template: findRawTemplate("user-selector-autocomplete"),
-        dataSource: (term) => this.userSearchTerm.call(this, term),
+        dataSource: (term) => this._userSearchTerm.call(this, term),
         key: "@",
         transformComplete: (v) => v.username || v.name,
         afterComplete: (value) => {

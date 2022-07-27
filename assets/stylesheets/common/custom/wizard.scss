@@ -16,7 +16,7 @@ body.custom-wizard {
     width: 100%;
     border: 1px solid var(--primary-low-mid);
     border-radius: 5px;
-    margin: 0 auto;
+    margin: 0 auto 2.5em auto;
 
     .wizard-field .input-area {
       margin: 0.5em 0;
@@ -144,12 +144,12 @@ body.custom-wizard {
   .wizard-column .action-link {
     color: var(--tertiary);
   }
-}
 
-.no-access-gutter {
-  margin-top: 10px;
-  display: flex;
-  justify-content: flex-end;
+  .no-access-gutter {
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+  }
 }
 
 /* IE11 hacks */

@@ -1,8 +1,13 @@
 import { findCustomWizard, updateCachedWizard } from "../models/custom-wizard";
 import I18n from "I18n";
-import Route from "@ember/routing/route";
+import DiscourseRoute from "discourse/routes/discourse";
 
-export default Route.extend({
+export default DiscourseRoute.extend({
+  titleToken() {
+    const wizard = this.modelFor('custom-wizard');
+    return wizard ? (wizard.name || wizard.id) : I18n.t('wizard.custom_title');
+  },
+
   beforeModel(transition) {
     if (transition.intent.queryParams) {
       this.set("queryParams", transition.intent.queryParams);

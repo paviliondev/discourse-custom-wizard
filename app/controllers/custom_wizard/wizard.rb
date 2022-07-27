@@ -3,7 +3,7 @@ class CustomWizard::WizardController < ::ApplicationController
   before_action :ensure_plugin_enabled
   before_action :ensure_logged_in, only: [:skip]
 
-  def index
+  def show
     if wizard.present?
       render json: CustomWizard::WizardSerializer.new(wizard, scope: guardian, root: false).as_json, status: 200
     else
@@ -31,25 +31,7 @@ class CustomWizard::WizardController < ::ApplicationController
     render json: result
   end
 
-  def qunit
-    raise Discourse::InvalidAccess.new if Rails.env.production?
-
-    respond_to do |format|
-      format.html do
-        render "default/empty"
-      end
-    end
-  end
-
   protected
-
-  def ensure_logged_in
-    raise Discourse::NotLoggedIn.new unless current_user.present?
-  end
-
-  def guardian
-    @guardian ||= Guardian.new(current_user, request)
-  end
 
   def wizard
     @wizard ||= begin
@@ -59,41 +41,6 @@ class CustomWizard::WizardController < ::ApplicationController
       opts[:reset] = params[:reset]
       builder.build(opts, params)
     end
-  end
-
-  def wizard_page_title
-    wizard ? (wizard.name || wizard.id) : I18n.t('wizard.custom_title')
-  end
-
-  def wizard_theme_id
-    wizard ? wizard.theme_id : nil
-  end
-
-  def wizard_theme_lookup(name)
-    Theme.lookup_field(wizard_theme_id, view_context.mobile_view? ? :mobile : :desktop, name)
-  end
-
-  def wizard_theme_translations_lookup
-    Theme.lookup_field(wizard_theme_id, :translations, I18n.locale)
-  end
-
-  def preload_wizard_json
-    return if request.xhr? || request.format.json?
-    return if request.method != "GET"
-
-    store_preloaded("siteSettings", SiteSetting.client_settings_json)
-  end
-
-  def store_preloaded(key, json)
-    @preloaded ||= {}
-    @preloaded[key] = json.gsub("</", "<\\/")
-  end
-
-  ## Simplified version of with_resolved_locale in ApplicationController
-  def with_resolved_locale
-    locale = current_user ? current_user.effective_locale : SiteSetting.default_locale
-    I18n.ensure_all_loaded!
-    I18n.with_locale(locale) { yield }
   end
 
   private
