@@ -4,8 +4,8 @@ import DiscourseRoute from "discourse/routes/discourse";
 
 export default DiscourseRoute.extend({
   titleToken() {
-    const wizard = this.modelFor('custom-wizard');
-    return wizard ? (wizard.name || wizard.id) : I18n.t('wizard.custom_title');
+    const wizard = this.modelFor("custom-wizard");
+    return wizard ? wizard.name || wizard.id : I18n.t("wizard.custom_title");
   },
 
   beforeModel(transition) {
