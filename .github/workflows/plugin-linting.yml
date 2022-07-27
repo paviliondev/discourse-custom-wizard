@@ -42,9 +42,7 @@ jobs:
       - name: Prettier
         run: |
           yarn prettier -v
-          if [ -d "assets" ]; then \
-            yarn prettier --list-different "assets/javascripts/discourse/**/*.{scss,js,es6}" ; \
-          fi
+          yarn prettier --list-different "assets/javascripts/discourse/**/*.{scss,js,es6}"
 
       - name: Rubocop
         run: bundle exec rubocop .
