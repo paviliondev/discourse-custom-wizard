@@ -129,7 +129,6 @@ body.custom-wizard {
   input.date-picker {
     font-size: 1.1487em;
     padding: 6px;
-    border: 1px solid var(--primary);
     transition: border-color 0.5s;
   }
 
@@ -180,6 +179,7 @@ body.custom-wizard {
       &:focus::placeholder {
         color: transparent;
       }
+      width: 100%;
     }
   }
 
