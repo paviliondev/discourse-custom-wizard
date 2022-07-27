@@ -27,9 +27,7 @@ acceptance("Wizard | Not logged in", function (needs) {
 acceptance("Wizard | Not permitted", function (needs) {
   needs.user();
   needs.pretender((server, helper) => {
-    server.get("/w/wizard.json", () =>
-      helper.response(wizardNotPermitted)
-    );
+    server.get("/w/wizard.json", () => helper.response(wizardNotPermitted));
   });
 
   test("Wizard no access not permitted", async function (assert) {

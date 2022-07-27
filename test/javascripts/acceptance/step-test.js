@@ -11,9 +11,7 @@ import { stepNotPermitted, update, wizard } from "../helpers/wizard";
 
 acceptance("Step | Not permitted", function (needs) {
   needs.pretender((server, helper) => {
-    server.get("/w/wizard.json", () =>
-      helper.response(stepNotPermitted)
-    );
+    server.get("/w/wizard.json", () => helper.response(stepNotPermitted));
   });
 
   test("Shows not permitted message", async function (assert) {
@@ -25,9 +23,7 @@ acceptance("Step | Not permitted", function (needs) {
 acceptance("Step | Step", function (needs) {
   needs.pretender((server, helper) => {
     server.get("/w/wizard.json", () => helper.response(wizard));
-    server.put("/w/wizard/steps/:step_id", () =>
-      helper.response(update)
-    );
+    server.put("/w/wizard/steps/:step_id", () => helper.response(update));
   });
 
   test("Renders the step", async function (assert) {
