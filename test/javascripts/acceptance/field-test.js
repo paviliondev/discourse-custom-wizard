@@ -3,8 +3,8 @@ import { test } from "qunit";
 import {
   acceptance,
   count,
-  query,
   exists,
+  query,
   visible,
 } from "discourse/tests/helpers/qunit-helpers";
 import { allFieldsWizard } from "../helpers/wizard";
@@ -13,11 +13,11 @@ import usersJson from "../fixtures/users";
 
 acceptance("Field | Fields", function (needs) {
   needs.pretender((server, helper) => {
-    server.get("/w/wizard.json", (request) => helper.response(allFieldsWizard));
-    server.get("/tags/filter/search", (request) =>
+    server.get("/w/wizard.json", () => helper.response(allFieldsWizard));
+    server.get("/tags/filter/search", () =>
       helper.response({ results: tagsJson["tags"] })
     );
-    server.get("/u/search/users", (request) => helper.response(usersJson));
+    server.get("/u/search/users", () => helper.response(usersJson));
   });
 
   test("Text", async function (assert) {

@@ -1,10 +1,10 @@
-import { visit, settled } from "@ember/test-helpers";
+import { visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import {
   acceptance,
   count,
-  query,
   exists,
+  query,
 } from "discourse/tests/helpers/qunit-helpers";
 import {
   wizard,
@@ -15,7 +15,7 @@ import {
 
 acceptance("Wizard | Not logged in", function (needs) {
   needs.pretender((server, helper) => {
-    server.get("/w/wizard.json", (request) => helper.response(wizardNoUser));
+    server.get("/w/wizard.json", () => helper.response(wizardNoUser));
   });
 
   test("Wizard no access requires login", async function (assert) {
@@ -27,7 +27,7 @@ acceptance("Wizard | Not logged in", function (needs) {
 acceptance("Wizard | Not permitted", function (needs) {
   needs.user();
   needs.pretender((server, helper) => {
-    server.get("/w/wizard.json", (request) =>
+    server.get("/w/wizard.json", () =>
       helper.response(wizardNotPermitted)
     );
   });
@@ -41,7 +41,7 @@ acceptance("Wizard | Not permitted", function (needs) {
 acceptance("Wizard | Completed", function (needs) {
   needs.user();
   needs.pretender((server, helper) => {
-    server.get("/w/wizard.json", (request) => helper.response(wizardCompleted));
+    server.get("/w/wizard.json", () => helper.response(wizardCompleted));
   });
 
   test("Wizard no access completed", async function (assert) {
@@ -53,7 +53,7 @@ acceptance("Wizard | Completed", function (needs) {
 acceptance("Wizard | Wizard", function (needs) {
   needs.user();
   needs.pretender((server, helper) => {
-    server.get("/w/wizard.json", (request) => {
+    server.get("/w/wizard.json", () => {
       return helper.response(wizard);
     });
   });

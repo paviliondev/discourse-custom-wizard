@@ -128,7 +128,6 @@ export default Controller.extend({
       const api = this.get("api");
       const name = api.name;
       const authType = api.authType;
-      let refreshList = false; // eslint-disable-line
       let error;
 
       if (!name || !authType) {
@@ -141,11 +140,6 @@ export default Controller.extend({
 
       if (api.title) {
         data["title"] = api.title;
-      }
-
-      const originalTitle = this.get("api.originalTitle");
-      if (api.get("isNew") || (originalTitle && api.title !== originalTitle)) {
-        refreshList = true; // eslint-disable-line
       }
 
       if (api.get("isNew")) {

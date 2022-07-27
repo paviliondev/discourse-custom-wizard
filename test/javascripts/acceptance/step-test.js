@@ -3,15 +3,15 @@ import { test } from "qunit";
 import {
   acceptance,
   count,
-  query,
   exists,
+  query,
   visible,
 } from "discourse/tests/helpers/qunit-helpers";
-import { stepNotPermitted, wizard, update } from "../helpers/wizard";
+import { stepNotPermitted, update, wizard } from "../helpers/wizard";
 
 acceptance("Step | Not permitted", function (needs) {
   needs.pretender((server, helper) => {
-    server.get("/w/wizard.json", (request) =>
+    server.get("/w/wizard.json", () =>
       helper.response(stepNotPermitted)
     );
   });
@@ -24,8 +24,8 @@ acceptance("Step | Not permitted", function (needs) {
 
 acceptance("Step | Step", function (needs) {
   needs.pretender((server, helper) => {
-    server.get("/w/wizard.json", (request) => helper.response(wizard));
-    server.put("/w/wizard/steps/:step_id", (request) =>
+    server.get("/w/wizard.json", () => helper.response(wizard));
+    server.put("/w/wizard/steps/:step_id", () =>
       helper.response(update)
     );
   });
