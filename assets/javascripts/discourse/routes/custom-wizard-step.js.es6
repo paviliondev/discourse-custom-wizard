@@ -1,5 +1,5 @@
 import I18n from "I18n";
-import { getCachedWizard } from "../models/wizard";
+import { getCachedWizard } from "../models/custom-wizard";
 import Route from "@ember/routing/route";
 
 export default Route.extend({

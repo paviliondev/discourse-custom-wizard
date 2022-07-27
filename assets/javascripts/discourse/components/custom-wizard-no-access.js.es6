@@ -1,4 +1,4 @@
-import CustomWizard from "../models/wizard";
+import CustomWizard from "../models/custom-wizard";
 import discourseComputed from "discourse-common/utils/decorators";
 import Component from "@ember/component";
 import { dasherize } from "@ember/string";

@@ -38,6 +38,7 @@ export default {
       });
 
       api.modifyClass("component:uppy-image-uploader", {
+        pluginId: "custom-wizard",
         // Needed to ensure appEvents get registered when navigating between steps
         @observes("id")
         initOnStepChange() {

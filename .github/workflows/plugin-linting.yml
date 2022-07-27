@@ -46,8 +46,9 @@ jobs:
             yarn prettier --list-different "assets/javascripts/{discourse,wizard}/**/*.{scss,js,es6}" ; \
           fi
 
-      - name: Ember template lint
-        run: yarn ember-template-lint assets/javascripts
+      # Until templates are converted
+      #- name: Ember template lint
+        #run: yarn ember-template-lint assets/javascripts
 
       - name: Rubocop
         run: bundle exec rubocop .

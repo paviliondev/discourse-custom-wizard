@@ -1,4 +1,4 @@
-import { findCustomWizard, updateCachedWizard } from "../models/wizard";
+import { findCustomWizard, updateCachedWizard } from "../models/custom-wizard";
 import I18n from "I18n";
 import Route from "@ember/routing/route";
 
@@ -50,6 +50,7 @@ export default Route.extend({
       customWizard: true,
       logoUrl: this.siteSettings.logo_small,
       reset: null,
+      model,
     });
 
     const stepModel = this.modelFor("step");
@@ -60,21 +61,16 @@ export default Route.extend({
     ) {
       this.showDialog(model);
     }
-  },
 
-  getWizardBackground() {
-    const wizard = this.controllerFor("custom-wizard").get("model");
-    return wizard ? wizard.get("background") : "";
+    const background = model.get("background");
+    if (background) {
+      document.body.style.background = background;
+    }
   },
 
   activate() {
     if (!document.body.classList.contains("custom-wizard")) {
       document.body.classList.add("custom-wizard");
-    }
-
-    const background = this.getWizardBackground();
-    if (background) {
-      document.body.style.background = background;
     }
   },
 
@@ -83,9 +79,6 @@ export default Route.extend({
       document.body.classList.remove("custom-wizard");
     }
 
-    const background = this.getWizardBackground();
-    if (background) {
-      document.body.style.background = "";
-    }
+    document.body.style.background = "";
   },
 });

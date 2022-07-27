@@ -1,20 +1,33 @@
 import { click, visit } from "@ember/test-helpers";
 import { test } from "qunit";
-import { exists } from "../helpers/test";
-import acceptance, { count, query, visible } from "../helpers/acceptance";
-import { getWizard, stepNotPermitted, wizard } from "../helpers/wizard";
-import { saveStep, update } from "../helpers/step";
+import {
+  acceptance,
+  count,
+  query,
+  exists,
+  visible
+} from "discourse/tests/helpers/qunit-helpers";
+import { stepNotPermitted, wizard, update } from "../helpers/wizard";
 
-acceptance("Step | Not permitted", [getWizard(stepNotPermitted)], function () {
+acceptance("Step | Not permitted", function (needs) {
+  needs.pretender((server, helper) => {
+    server.get("/w/wizard.json", (request) => (helper.response(stepNotPermitted)));
+  });
+
   test("Shows not permitted message", async function (assert) {
-    await visit("/wizard");
+    await visit("/w/wizard");
     assert.ok(exists(".step-message.not-permitted"));
   });
 });
 
-acceptance("Step | Step", [getWizard(wizard), saveStep(update)], function () {
+acceptance("Step | Step", function (needs) {
+  needs.pretender((server, helper) => {
+    server.get("/w/wizard.json", (request) => (helper.response(wizard)));
+    server.put("/w/wizard/steps/:step_id", (request) => (helper.response(update)));
+  });
+
   test("Renders the step", async function (assert) {
-    await visit("/wizard");
+    await visit("/w/wizard");
     assert.strictEqual(
       query(".wizard-step-title p").textContent.trim(),
       "Text"
@@ -33,7 +46,7 @@ acceptance("Step | Step", [getWizard(wizard), saveStep(update)], function () {
   });
 
   test("Goes to the next step", async function (assert) {
-    await visit("/wizard");
+    await visit("/w/wizard");
     assert.ok(visible(".wizard-step.step_1"), true);
     await click(".wizard-btn.next");
     assert.ok(visible(".wizard-step.step_2"), true);

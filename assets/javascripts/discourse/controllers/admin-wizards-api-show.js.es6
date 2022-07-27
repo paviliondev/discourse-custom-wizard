@@ -20,29 +20,8 @@ export default Controller.extend({
     "application/x-www-form-urlencoded",
   ]),
   successCodes: selectKitContent([
-    100,
-    101,
-    102,
-    200,
-    201,
-    202,
-    203,
-    204,
-    205,
-    206,
-    207,
-    208,
-    226,
-    300,
-    301,
-    302,
-    303,
-    303,
-    304,
-    305,
-    306,
-    307,
-    308,
+    100, 101, 102, 200, 201, 202, 203, 204, 205, 206, 207, 208, 226, 300, 301,
+    302, 303, 303, 304, 305, 306, 307, 308,
   ]),
 
   @discourseComputed(
@@ -166,7 +145,7 @@ export default Controller.extend({
 
       const originalTitle = this.get("api.originalTitle");
       if (api.get("isNew") || (originalTitle && api.title !== originalTitle)) {
-        refreshList = true;
+        refreshList = true; // eslint-disable-line
       }
 
       if (api.get("isNew")) {

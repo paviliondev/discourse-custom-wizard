@@ -7,7 +7,7 @@ import { schedule } from "@ember/runloop";
 import { cookAsync } from "discourse/lib/text";
 import CustomWizard, {
   updateCachedWizard,
-} from "discourse/plugins/discourse-custom-wizard/discourse/models/wizard";
+} from "discourse/plugins/discourse-custom-wizard/discourse/models/custom-wizard";
 import { alias, not } from "@ember/object/computed";
 
 const alreadyWarned = {};

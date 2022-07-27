@@ -60,6 +60,7 @@ body.custom-wizard {
     & > label.field-label {
       order: 1;
       font-weight: 400;
+      margin-bottom: 0;
     }
 
     & > .field-description {
@@ -70,6 +71,7 @@ body.custom-wizard {
 
   .url-field input {
     width: 100%;
+    max-width: 500px;
     font-size: 1.1487em;
     padding: 6px;
     transition: border-color 0.5s;
@@ -136,9 +138,15 @@ body.custom-wizard {
     position: absolute !important;
   }
 
-  .d-time-input .select-kit.combo-box .select-kit-header {
-    font-size: 1.1487em;
-    padding: 6px;
+  .d-time-input {
+    .select-kit.combo-box {
+      width: 90px;
+
+      .select-kit-header {
+        font-size: 1.1487em;
+        padding: 6px;
+      }
+    }
   }
 
   .d-date-time-input {

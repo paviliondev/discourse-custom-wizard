@@ -132,3 +132,8 @@ jobs:
             export COVERAGE=1
           fi
           bin/rake plugin:spec[${{ steps.repo-name.outputs.value }}]
+
+      - name: Plugin QUnit
+        if: matrix.build_type == 'frontend'
+        run: bin/rake plugin:qunit['${{ steps.repo-name.outputs.value }}','1200000']
+        timeout-minutes: 30
