@@ -120,18 +120,6 @@ class CustomWizard::Builder
       params[:property] = field_template['property']
     end
 
-    if field_template['type'] === 'category' || (
-          field_template['validations'] &&
-          field_template['validations']['similar_topics'] &&
-          field_template['validations']['similar_topics']['categories'].present?
-        )
-      @wizard.needs_categories = true
-    end
-
-    if field_template['type'] === 'group'
-      @wizard.needs_groups = true
-    end
-
     if (content_inputs = field_template['content']).present?
       content = CustomWizard::Mapper.new(
         inputs: content_inputs,

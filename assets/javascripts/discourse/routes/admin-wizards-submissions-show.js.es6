@@ -1,11 +1,11 @@
-import CustomWizard from "../models/custom-wizard";
+import CustomWizardAdmin from "../models/custom-wizard-admin";
 import DiscourseRoute from "discourse/routes/discourse";
 
 const excludedMetaFields = ["route_to", "redirect_on_complete", "redirect_to"];
 
 export default DiscourseRoute.extend({
   model(params) {
-    return CustomWizard.submissions(params.wizardId);
+    return CustomWizardAdmin.submissions(params.wizardId);
   },
 
   setupController(controller, model) {

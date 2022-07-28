@@ -23,8 +23,6 @@ class CustomWizard::Wizard
                 :restart_on_revisit,
                 :resume_on_revisit,
                 :permitted,
-                :needs_categories,
-                :needs_groups,
                 :steps,
                 :step_ids,
                 :field_ids,
@@ -54,8 +52,6 @@ class CustomWizard::Wizard
     @after_time_scheduled = attrs['after_time_scheduled']
     @required = cast_bool(attrs['required'])
     @permitted = attrs['permitted'] || nil
-    @needs_categories = false
-    @needs_groups = false
     @theme_id = attrs['theme_id']
 
     if attrs['theme'].present?
@@ -241,14 +237,6 @@ class CustomWizard::Wizard
       context: id,
       subject: "reset"
     )
-  end
-
-  def categories
-    @categories ||= ::Site.new(Guardian.new(user)).categories
-  end
-
-  def groups
-    @groups ||= ::Site.new(Guardian.new(user)).groups
   end
 
   def update_step_ids

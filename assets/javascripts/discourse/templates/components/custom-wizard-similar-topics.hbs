@@ -1,0 +1,11 @@
+{{#if showTopics}}
+  <ul>
+    {{#each topics as |topic|}}
+      <li>{{custom-wizard-similar-topic topic=topic}}</li>
+    {{/each}}
+  </ul>
+{{else}}
+  <a role="button" class="show-topics" {{action "toggleShowTopics"}}>
+    {{i18n "realtime_validations.similar_topics.show"}}
+  </a>
+{{/if}}

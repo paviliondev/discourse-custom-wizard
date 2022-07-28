@@ -5,7 +5,7 @@ export default {
   after: "message-bus",
 
   initialize: function (container) {
-    const messageBus = container.lookup("message-bus:main");
+    const messageBus = container.lookup("service:message-bus");
     const siteSettings = container.lookup("site-settings:main");
 
     if (!siteSettings.custom_wizard_enabled || !messageBus) {

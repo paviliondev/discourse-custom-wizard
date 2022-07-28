@@ -40,7 +40,7 @@ describe CustomWizard::Submission do
     expect(described_class.list(@wizard, user_id: user.id).size).to eq(1)
   end
 
-  context "#cleanup_incomplete_submissions" do
+  describe "#cleanup_incomplete_submissions" do
     it "cleans up redundant incomplete submissions on each build" do
       freeze_time Time.now + 1
       described_class.new(@wizard, step_1_field_1: "I am the second submission").save
