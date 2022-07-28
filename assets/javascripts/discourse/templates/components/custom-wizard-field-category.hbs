@@ -1,6 +1,8 @@
 {{custom-wizard-category-selector
   categories=categories
   whitelist=field.content
-  maximum=field.limit
   onChange=(action (mut categories))
-  tabindex=field.tabindex}}
+  tabindex=field.tabindex
+  options=(hash
+    maximum=field.limit
+  )}}

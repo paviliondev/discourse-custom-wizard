@@ -16,6 +16,8 @@ en:
       x_characters:
         one: "%{count} Character"
         other: "%{count} Characters"
+      quit: "Maybe Later"
+      done_custom: "Done"
 
     wizard_composer:
       show_preview: "Preview Post"
