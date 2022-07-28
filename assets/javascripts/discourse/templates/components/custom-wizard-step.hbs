@@ -13,11 +13,11 @@
     <div class="wizard-step-description">{{cookedDescription}}</div>
   {{/if}}
 
-  {{#wizard-step-form step=step}}
+  {{#custom-wizard-step-form step=step}}
     {{#each step.fields as |field|}}
       {{custom-wizard-field field=field step=step wizard=wizard}}
     {{/each}}
-  {{/wizard-step-form}}
+  {{/custom-wizard-step-form}}
 </div>
 
 <div class="wizard-step-footer">
