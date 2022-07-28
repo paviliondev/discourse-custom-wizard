@@ -192,15 +192,6 @@ describe CustomWizard::Wizard do
     ).to eq(false)
   end
 
-  it "lists the site groups" do
-    expect(@wizard.groups.length).to eq(8)
-  end
-
-  it "lists the site categories" do
-    Site.clear_cache
-    expect(@wizard.categories.length).to eq(1)
-  end
-
   context "submissions" do
     before do
       CustomWizard::Submission.new(@wizard, step_1_field_1: "I am a user submission").save
