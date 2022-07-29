@@ -58,7 +58,7 @@ export default DiscourseRoute.extend({
       model,
     });
 
-    const stepModel = this.modelFor("step");
+    const stepModel = this.modelFor("custom-wizard-step");
     if (
       model.resume_on_revisit &&
       model.submission_last_updated_at &&
