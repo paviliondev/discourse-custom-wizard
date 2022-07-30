@@ -18,6 +18,12 @@ eo:
         other: "%{count} Characters"
       quit: "Maybe Later"
       done_custom: "Done"
+      back: "Back"
+      next: "Next"
+      step: "%{current} of %{total}"
+      upload: "Upload"
+      uploading: "Uploading..."
+      upload_error: "Sorry, there was an error uploading that file. Please try again."
     wizard_composer:
       show_preview: "Preview Post"
       hide_preview: "Edit Post"
