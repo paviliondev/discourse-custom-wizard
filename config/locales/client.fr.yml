@@ -5,21 +5,21 @@ fr:
       completed: "You have completed this wizard."
       not_permitted: "You are not permitted to access this wizard."
       none: "There is no wizard here."
-      return_to_site: "Return to {{siteName}}"
+      return_to_site: "Retour vers {{siteName}}"
       requires_login: "You need to be logged in to access this wizard."
       reset: "Reset this wizard."
       step_not_permitted: "You're not permitted to view this step."
       incomplete_submission:
         title: "Continue editing your draft submission from %{date}?"
-        resume: "Continue"
-        restart: "Start over"
+        resume: "Continuer"
+        restart: "Recommencer"
       x_characters:
         one: "%{count} Character"
         other: "%{count} Characters"
       quit: "Maybe Later"
-      done_custom: "Done"
-      back: "Back"
-      next: "Next"
+      done_custom: "Terminé"
+      back: "Précédent"
+      next: "Suivant"
       step: "%{current} of %{total}"
       upload: "Upload"
       uploading: "Uploading..."
@@ -55,7 +55,7 @@ fr:
       collapse: "minimize the composer panel"
       abandon: "close composer and discard draft"
       modal_ok: "OK"
-      modal_cancel: "Cancel"
+      modal_cancel: "Annuler"
       cant_send_pm: "Sorry, you can't send a message to %{username}."
       yourself_confirm:
         title: "Did you forget to add recipients?"
@@ -111,7 +111,7 @@ fr:
         key: "Clé"
         value: "Valeur"
         profile: "profile"
-        translation: "Translation"
+        translation: "Traduction"
         translation_placeholder: "key"
         type: "Type"
         none: "Faire une sélection"
@@ -119,10 +119,10 @@ fr:
         param_key: 'param'
         group: "Group"
         permitted: "Permitted"
-        advanced: "Advanced"
+        advanced: "Avancés"
         undo: "Undo"
         clear: "Clear"
-        select_type: "Select a type"
+        select_type: "Sélectionnez un type"
         condition: "Condition"
         index: "Index"
         category_settings:
@@ -159,7 +159,7 @@ fr:
             server_error: "Error: {{message}}"
             importing: Importing wizards...
             destroying: Destroying wizards...
-            import_complete: Import complete
+            import_complete: Importation terminée
             destroy_complete: Destruction complete
         editor:
           show: "Show"
@@ -189,7 +189,7 @@ fr:
             group: "group"
             list: "list"
             custom_field: "custom field"
-            value: "value"
+            value: "valeur"
           placeholder:
             text: "Enter text"
             property: "Select property"
@@ -217,7 +217,7 @@ fr:
           banner: "Bannière"
           description: "Description"
           required_data:
-            label: "Required"
+            label: "Requis"
             not_permitted_message: "Message shown when required data not present"
           permitted_params:
             label: "Params"
@@ -242,7 +242,7 @@ fr:
           file_types: "File Types"
           preview_template: "Template"
           limit: "Limit"
-          property: "Property"
+          property: "Propriété"
           prefill: "Prefill"
           content: "Content"
           tag_groups: "Tag Groups"
@@ -259,9 +259,9 @@ fr:
             categories: "Categories"
             max_topic_age: "Max Topic Age"
             time_units:
-              days: "Days"
-              weeks: "Weeks"
-              months: "Months"
+              days: "Jours"
+              weeks: "Semaines"
+              months: "Mois"
               years: "Years"
           type:
             text: "Text"
@@ -279,11 +279,11 @@ fr:
             group: Group
             user_selector: User Selector
             date: Date
-            time: Time
-            date_time: Date & Time
+            time: Heure
+            date_time: Date & Heure
         connector:
-          and: "and"
-          or: "or"
+          and: "et"
+          or: "ou"
           then: "then"
           set: "set"
           equal: '='
@@ -366,7 +366,7 @@ fr:
             label: "Create Category"
             name: Name
             slug: Slug
-            color: Color
+            color: Couleur
             text_color: Text color
             parent_category: Parent Category
             permissions: Permissions
@@ -374,10 +374,10 @@ fr:
             label: Create Group
             name: Name
             full_name: Full Name
-            title: Title
+            title: Titre
             bio_raw: About
             owner_usernames: Owners
-            usernames: Members
+            usernames: Membres
             grant_trust_level: Automatic Trust Level
             mentionable_level: Mentionable Level
             messageable_level: Messageable Level
@@ -418,7 +418,7 @@ fr:
         submissions:
           nav_label: "Submissions"
           title: "{{name}} Submissions"
-          download: "Download"
+          download: "Télécharger"
         api:
           label: "API"
           nav_label: 'APIs'
@@ -472,8 +472,8 @@ fr:
         manager:
           nav_label: Manager
           title: Manage Wizards
-          export: Export
-          import: Import
+          export: Exporter
+          import: Importer
           imported: imported
           upload: Select wizards.json
           destroy: Destroy
@@ -521,7 +521,7 @@ fr:
         neighbourhood: "Merci de saisir un quartier."
         city: "Merci de saisir le nom d'une commune."
         street: "Please enter a Number and Street."
-        postalcode: "Please enter a Postal Code (Zip)."
+        postalcode: "Veuillez saisir un code postal (Zip)."
         countrycode: "Merci de choisir un pays."
         coordinates: "Please complete the set of coordinates."
         geo_location: "Chercher et sélectionner un résultat."
