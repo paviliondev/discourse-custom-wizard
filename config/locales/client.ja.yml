@@ -54,7 +54,7 @@ ja:
       collapse: "minimize the composer panel"
       abandon: "close composer and discard draft"
       modal_ok: "OK"
-      modal_cancel: "Cancel"
+      modal_cancel: "キャンセル"
       cant_send_pm: "Sorry, you can't send a message to %{username}."
       yourself_confirm:
         title: "Did you forget to add recipients?"
@@ -112,7 +112,7 @@ ja:
         profile: "profile"
         translation: "Translation"
         translation_placeholder: "key"
-        type: "Type"
+        type: "タイプ"
         none: "Make a selection"
         submission_key: 'submission key'
         param_key: 'param'
