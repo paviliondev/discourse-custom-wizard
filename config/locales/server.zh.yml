@@ -31,7 +31,7 @@ zh-CN:
         invalid_wizards: "No valid wizards selected"
     import:
       error:
-        no_file: "No file selected"
+        no_file: "未选中任何文件"
         file_large: "文件过大"
         invalid_json: "文件不是一个有效的 json 文件"
     destroy:
