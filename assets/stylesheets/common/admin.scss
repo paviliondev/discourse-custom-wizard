@@ -1,8 +1,8 @@
-@import "wizard/mapper";
-@import "wizard/manager";
-@import "wizard/api";
+@import "admin/mapper";
+@import "admin/manager";
+@import "admin/api";
 @import "common/components/buttons";
-@import "wizard/variables";
+@import "admin/variables";
 
 $expired: #339b18;
 $info: #038ae7;
