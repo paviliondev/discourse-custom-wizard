@@ -21,6 +21,7 @@ acceptance("Step | Not permitted", function (needs) {
 });
 
 acceptance("Step | Step", function (needs) {
+  needs.user();
   needs.pretender((server, helper) => {
     server.get("/w/wizard.json", () => helper.response(wizard));
     server.put("/w/wizard/steps/:step_id", () => helper.response(update));

@@ -4,7 +4,12 @@ import Route from "@ember/routing/route";
 
 export default Route.extend({
   beforeModel() {
-    this.set("wizard", getCachedWizard());
+    const wizard = getCachedWizard();
+    this.set("wizard", wizard);
+
+    if (!wizard || !wizard.user || !wizard.permitted || wizard.completed) {
+      this.replaceWith("customWizard");
+    }
   },
 
   model(params) {

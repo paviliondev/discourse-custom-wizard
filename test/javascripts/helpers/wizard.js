@@ -34,7 +34,7 @@ allFieldsWizard.categories = cloneJSON(categoriesJson["categories"]);
 allFieldsWizard.groups = cloneJSON(groupsJson["groups"]);
 
 const update = cloneJSON(updateJson);
-update.wizard = cloneJSON(wizardJson);
+update.wizard = cloneJSON(wizard);
 
 export {
   wizardNoUser,

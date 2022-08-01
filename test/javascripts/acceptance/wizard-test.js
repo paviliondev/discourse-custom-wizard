@@ -18,8 +18,13 @@ acceptance("Wizard | Not logged in", function (needs) {
     server.get("/w/wizard.json", () => helper.response(wizardNoUser));
   });
 
-  test("Wizard no access requires login", async function (assert) {
+  test("Requires login", async function (assert) {
     await visit("/w/wizard");
+    assert.ok(exists(".wizard-no-access.requires-login"));
+  });
+
+  test("Requires login if a step path is used", async function (assert) {
+    await visit("/w/wizard/steps/1");
     assert.ok(exists(".wizard-no-access.requires-login"));
   });
 });
