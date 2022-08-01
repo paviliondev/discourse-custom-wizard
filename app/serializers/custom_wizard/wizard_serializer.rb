@@ -9,14 +9,10 @@ class CustomWizard::WizardSerializer < CustomWizard::BasicWizardSerializer
              :completed,
              :required,
              :permitted,
-             :uncategorized_category_id,
-             :categories,
-             :subscribed,
              :resume_on_revisit
 
   has_many :steps, serializer: ::CustomWizard::StepSerializer, embed: :objects
   has_one :user, serializer: ::BasicUserSerializer, embed: :objects
-  has_many :groups, serializer: ::BasicGroupSerializer, embed: :objects
 
   def completed
     object.completed?
@@ -46,29 +42,5 @@ class CustomWizard::WizardSerializer < CustomWizard::BasicWizardSerializer
 
   def include_steps?
     !include_completed?
-  end
-
-  def include_categories?
-    object.needs_categories
-  end
-
-  def include_groups?
-    object.needs_groups
-  end
-
-  def uncategorized_category_id
-    SiteSetting.uncategorized_category_id
-  end
-
-  def include_uncategorized_category_id?
-    object.needs_categories
-  end
-
-  def categories
-    object.categories.map { |c| c.to_h }
-  end
-
-  def subscribed
-    CustomWizard::Subscription.subscribed?
   end
 end

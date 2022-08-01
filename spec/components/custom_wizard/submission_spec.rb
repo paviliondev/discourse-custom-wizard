@@ -47,7 +47,7 @@ describe CustomWizard::Submission do
     end
   end
 
-  context "#cleanup_incomplete_submissions" do
+  describe "#cleanup_incomplete_submissions" do
     it "cleans up redundant incomplete submissions on each build" do
       freeze_time Time.now + 1
       described_class.new(@wizard, step_1_field_1: "I am the second submission").save

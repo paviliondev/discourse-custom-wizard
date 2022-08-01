@@ -1,0 +1,19 @@
+{{custom-wizard-composer-editor
+  field=field
+  composer=composer
+  wizard=wizard
+  groupsMentioned=(action "groupsMentioned")
+  cannotSeeMention=(action "cannotSeeMention")
+  importQuote=(action "importQuote")
+  togglePreview=(action "togglePreview")
+  afterRefresh=(action "afterRefresh")}}
+
+<div class="bottom-bar">
+  <button class="wizard-btn toggle-preview" {{action "togglePreview"}} type="button">
+    <span class="d-button-label">{{i18n togglePreviewLabel}}</span>
+  </button>
+
+  {{#if field.char_counter}}
+    {{char-counter field.value field.max_length}}
+  {{/if}}
+</div>

@@ -3,14 +3,12 @@ name: Plugin Tests
 on:
   push:
     branches:
-      - stable
       - main
+      - stable
   pull_request:
-  schedule:
-    - cron: '0 */12 * * *'
 
 concurrency:
-  group: plugin-tests-${{ format('{0}-{1}', github.head_ref || github.run_number, github.job) }}
+  group: tests-${{ format('{0}-{1}', github.head_ref || github.run_number, github.job) }}
   cancel-in-progress: true
 
 jobs:
@@ -34,24 +32,15 @@ jobs:
         build_type: ["backend", "frontend"]
 
     steps:
-      - uses: haya14busa/action-cond@v1
-        id: discourse_branch
-        with:
-          cond: ${{  github.base_ref == 'stable' }}
-          if_true: "stable"
-          if_false: "tests-passed"
-
       - uses: actions/checkout@v3
         with:
           repository: discourse/discourse
-          ref: ${{ steps.discourse_branch.outputs.value }}
           fetch-depth: 1
 
       - name: Install plugin
         uses: actions/checkout@v3
         with:
           path: plugins/${{ github.event.repository.name }}
-          ref: "${{ github.head_ref }}"
           fetch-depth: 1
 
       - name: Setup Git
@@ -112,7 +101,7 @@ jobs:
         with:
           path: tmp/app-cache
           key: >-
-            ${{ hashFiles('.github/workflows/plugin-tests.yml') }}-
+            ${{ hashFiles('.github/workflows/tests.yml') }}-
             ${{ hashFiles('db/**/*', 'plugins/**/db/**/*') }}-
 
       - name: Restore database from cache
@@ -137,17 +126,11 @@ jobs:
         if: steps.app-cache.outputs.cache-hit != 'true'
         run: rm -rf tmp/app-cache/uploads && cp -r public/uploads tmp/app-cache/uploads
 
-      - name: RSpec with Coverage
+      - name: Plugin RSpec
         if: matrix.build_type == 'backend'
-        run: |
-          if [ -e plugins/${{ github.event.repository.name }}/.simplecov ]
-          then
-            cp plugins/${{ github.event.repository.name }}/.simplecov .simplecov
-            export COVERAGE=1
-          fi
-          bin/rake plugin:spec[${{ github.event.repository.name }}]
+        run: bin/rake plugin:spec[${{ github.event.repository.name }}]
 
-      - name: Wizard QUnit
+      - name: Plugin QUnit
         if: matrix.build_type == 'frontend'
-        run: LOAD_PLUGINS=1 QUNIT_EMBER_CLI=0 QUNIT_SKIP_CORE=1 bin/rake qunit:test['600000','/w/qunit']
+        run: QUNIT_EMBER_CLI=1 bundle exec rake plugin:qunit['${{ github.event.repository.name }}','1200000']
         timeout-minutes: 10

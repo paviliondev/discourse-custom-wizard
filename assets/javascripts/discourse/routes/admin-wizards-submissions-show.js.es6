@@ -1,11 +1,12 @@
 import { A } from "@ember/array";
 import EmberObject from "@ember/object";
+import CustomWizardAdmin from "../models/custom-wizard-admin";
 import DiscourseRoute from "discourse/routes/discourse";
 import CustomWizard from "../models/custom-wizard";
 
 export default DiscourseRoute.extend({
   model(params) {
-    return CustomWizard.submissions(params.wizardId);
+    return CustomWizardAdmin.submissions(params.wizardId);
   },
 
   setupController(controller, model) {

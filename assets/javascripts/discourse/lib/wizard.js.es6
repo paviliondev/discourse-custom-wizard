@@ -1,5 +1,6 @@
 import EmberObject from "@ember/object";
 import wizardSchema from "./wizard-schema";
+import I18n from "I18n";
 
 function selectKitContent(content) {
   return content.map((i) => ({ id: i, name: i }));
@@ -31,6 +32,10 @@ function camelCase(string) {
   return string.replace(/([-_][a-z])/gi, ($1) => {
     return $1.toUpperCase().replace("-", "").replace("_", "");
   });
+}
+
+function translationOrText(i18nKey, text) {
+  return I18n.findTranslation(i18nKey) ? I18n.t(i18nKey) : text;
 }
 
 const userProperties = [
@@ -121,4 +126,5 @@ export {
   notificationLevels,
   wizardFieldList,
   sentenceCase,
+  translationOrText,
 };
