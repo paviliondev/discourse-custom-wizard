@@ -66,6 +66,11 @@ acceptance("Wizard | Wizard", function (needs) {
     assert.ok(query(".wizard-column"), true);
   });
 
+  test("Applies the wizard body class", async function (assert) {
+    await visit("/w/wizard");
+    assert.ok($("body.custom-wizard").length);
+  });
+
   test("Applies the body background color", async function (assert) {
     await visit("/w/wizard");
     assert.ok($("body")[0].style.background);
@@ -94,5 +99,10 @@ acceptance("Wizard | Wizard", function (needs) {
     assert.strictEqual(count(".wizard-step-form .wizard-field"), 6);
     assert.ok(exists(".wizard-step-footer .wizard-progress"), true);
     assert.ok(exists(".wizard-step-footer .wizard-buttons"), true);
+  });
+
+  test("Removes the wizard body class when navigating away", async function (assert) {
+    await visit("/");
+    assert.strictEqual($("body.custom-wizard").length, 0);
   });
 });

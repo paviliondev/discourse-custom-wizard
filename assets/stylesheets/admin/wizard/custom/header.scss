@@ -1,7 +1,9 @@
-body.custom-wizard .d-header,
-.global-notice,
-.create-topics-notice,
-.top-notices-outlet,
-.consent_banner {
-  display: none;
+body.custom-wizard {
+  .d-header,
+  .global-notice,
+  .create-topics-notice,
+  .top-notices-outlet,
+  .consent_banner {
+    display: none;
+  }
 }
