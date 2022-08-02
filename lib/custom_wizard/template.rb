@@ -32,6 +32,7 @@ class CustomWizard::Template
     end
 
     self.class.clear_cache_keys
+    remove_unused_wizard_upload_references
 
     @data[:id]
   end
@@ -62,6 +63,7 @@ class CustomWizard::Template
     end
 
     clear_cache_keys
+    remove_wizard_upload_references
 
     true
   end
@@ -175,5 +177,34 @@ class CustomWizard::Template
     if !object[:index].is_a?(Array)
       object.delete(:index)
     end
+  end
+
+  def collect_upload_ids
+    upload_ids = []
+
+    @data[:steps].each do |step|
+      upload_ids << step[:banner_upload_id] if step[:banner_upload_id]
+
+      step[:fields].each do |field|
+        upload_ids << field[:image_upload_id] if field[:image_upload_id]
+      end
+    end
+
+    upload_ids
+  end
+
+  def wizard_upload_references
+    @wizard_upload_references ||= begin
+      record = PluginStoreRow.find_by(plugin_name: CustomWizard::PLUGIN_NAME, key: @data[:id])
+      UploadReference.where(target_type: "CustomWizard", target_id: custom_wizard_record.id)
+    end
+  end
+
+  def remove_unused_wizard_upload_references
+    wizard_upload_references.where.not(upload_id: collect_upload_ids).delete_all
+  end
+
+  def remove_wizard_upload_references
+    wizard_upload_references.delete_all
   end
 end

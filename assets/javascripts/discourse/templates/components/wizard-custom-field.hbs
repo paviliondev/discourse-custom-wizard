@@ -44,7 +44,7 @@
       imageUrl=field.image
       onUploadDone=(action "imageUploadDone")
       onUploadDeleted=(action "imageUploadDeleted")
-      type="wizard-step"
+      type=(concat "wizard-" wizard.id)
       class="no-repeat contain-image"
       id=(concat "wizard-field-" field.id "-image-upload")}}
   </div>

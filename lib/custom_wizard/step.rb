@@ -16,6 +16,7 @@ class CustomWizard::Step
                 :next,
                 :previous,
                 :banner,
+                :banner_upload_id,
                 :disabled,
                 :description_vars,
                 :last_step,
