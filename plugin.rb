@@ -226,21 +226,5 @@ after_initialize do
     ::DiscourseTagging.singleton_class.prepend CustomWizardDiscourseTagging
   end
 
-  on(:after_upload_creation) do |upload, opts|
-    from_wizard = opts[:type].include?("wizard-")
-    wizard_id = opts[:type].split("wizard-").last
-    wizard_record = PluginStoreRow.find_by(plugin_name: CustomWizard::PLUGIN_NAME, key: wizard_id)
-
-    if wizard_record
-      UploadReference.create(
-        upload_id: upload.id,
-        target_type: "CustomWizard",
-        target_id: wizard_record.id,
-        created_at: Time.zone.now,
-        updated_at: Time.zone.now
-      )
-    end
-  end
-
   DiscourseEvent.trigger(:custom_wizard_ready)
 end
