@@ -29,6 +29,7 @@ class CustomWizard::Template
     ActiveRecord::Base.transaction do
       schedule_save_jobs unless opts[:skip_jobs]
       PluginStore.set(CustomWizard::PLUGIN_NAME, @data[:id], @data)
+      ensure_wizard_upload_references!
     end
 
     self.class.clear_cache_keys
@@ -52,11 +53,16 @@ class CustomWizard::Template
     PluginStore.get(CustomWizard::PLUGIN_NAME, wizard_id)
   end
 
+  def self.find_record(wizard_id)
+    PluginStoreRow.find_by(plugin_name: CustomWizard::PLUGIN_NAME, key: wizard_id)
+  end
+
   def self.remove(wizard_id)
     wizard = CustomWizard::Wizard.create(wizard_id)
     return false if !wizard
 
     ActiveRecord::Base.transaction do
+      ensure_wizard_upload_references!(wizard_id)
       PluginStore.remove(CustomWizard::PLUGIN_NAME, wizard.id)
       clear_user_wizard_redirect(wizard_id, after_time: !!wizard.after_time)
     end
@@ -123,6 +129,18 @@ class CustomWizard::Template
     CustomWizard::Cache.new(AFTER_TIME_CACHE_KEY).delete
   end
 
+  def self.ensure_wizard_upload_references!(wizard_id, wizard_upload_ids = [])
+    wizard_record = find_record(wizard_id)
+
+    if wizard_record
+      UploadReference.ensure_exist!(
+        upload_ids: wizard_upload_ids,
+        target_type: "PluginStoreRow",
+        target_id: wizard_record.id
+      )
+    end
+  end
+
   private
 
   def normalize_data
@@ -175,5 +193,20 @@ class CustomWizard::Template
     if !object[:index].is_a?(Array)
       object.delete(:index)
     end
+  end
+
+  def ensure_wizard_upload_references!
+    upload_ids = []
+
+    @data[:steps].each do |step|
+      upload_ids << step[:banner_upload_id] if step[:banner_upload_id]
+
+      step[:fields].each do |field|
+        upload_ids << field[:image_upload_id] if field[:image_upload_id]
+      end
+    end
+
+    upload_ids = upload_ids.select { |upload_id| Upload.exists?(upload_id) }
+    self.class.ensure_wizard_upload_references!(@data[:id], upload_ids)
   end
 end
