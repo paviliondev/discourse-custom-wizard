@@ -26,14 +26,14 @@ export default Component.extend({
     bannerUploadDone(upload) {
       this.setProperties({
         "step.banner": upload.url,
-        "step.banner_upload_id": upload.id
+        "step.banner_upload_id": upload.id,
       });
     },
 
     bannerUploadDeleted() {
       this.setProperties({
         "step.banner": null,
-        "step.banner_upload_id": null
+        "step.banner_upload_id": null,
       });
     },
   },

@@ -146,14 +146,14 @@ export default Component.extend(UndoChanges, {
     imageUploadDone(upload) {
       this.setProperties({
         "field.image": upload.url,
-        "field.image_upload_id": upload.id
+        "field.image_upload_id": upload.id,
       });
     },
 
     imageUploadDeleted() {
       this.setProperties({
         "field.image": null,
-        "field.image_upload_id": null
+        "field.image_upload_id": null,
       });
     },
   },
