@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Create custom wizards
-# version: 1.22.3
-# authors: Angus McLeod
+# version: 1.22.4
+# authors: Angus McLeod, Faizaan Gagan, Robert Barrow, Keegan George
 # url: https://github.com/paviliondev/discourse-custom-wizard
-# contact emails: angus@pavilion.tech
+# contact_emails: angus@pavilion.tech
+# subscription_url: https://coop.pavilion.tech
 
 gem 'liquid', '5.0.1', require: true
 
