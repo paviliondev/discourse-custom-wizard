@@ -11,6 +11,7 @@ class CustomWizard::Field
               :label,
               :description,
               :image,
+              :image_upload_id,
               :validations,
               :min_length,
               :max_length,
