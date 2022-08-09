@@ -823,7 +823,7 @@ $error: #ef1700;
   vertical-align: middle;
 }
 
-.btn.btn-pavilion-support {
+.btn[href].btn-pavilion-support {
   background: var(--pavilion-primary);
   color: var(--pavilion-secondary);
 
