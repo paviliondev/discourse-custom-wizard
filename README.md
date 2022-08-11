@@ -2,7 +2,7 @@
 
 The Custom Wizard Plugin lets you make user wizards for your Discourse forum. Better user onboarding, structured posting, data enrichment, automated actions and much more for your community.
 
-<img src="https://camo.githubusercontent.com/593432f1fc9658ffca104065668cc88fa21dffcd3002cb78ffd50c71f33a2523/68747470733a2f2f706176696c696f6e2d6173736574732e6e7963332e63646e2e6469676974616c6f6365616e7370616365732e636f6d2f706c7567696e732f77697a6172642d7265706f7369746f72792d62616e6e65722e706e67" alt="" data-canonical-src="https://pavilion-assets.nyc3.cdn.digitaloceanspaces.com/plugins/wizard-repository-banner.png" style="max-width: 100%;" width="600">
+<img src="https://camo.githubusercontent.com/593432f1fc9658ffca104065668cc88fa21dffcd3002cb78ffd50c71f33a2523/68747470733a2f2f706176696c696f6e2d6173736574732e6e7963332e63646e2e6469676974616c6f6365616e7370616365732e636f6d2f706c7567696e732f77697a6172642d7265706f7369746f72792d62616e6e65722e706e67" alt="" data-canonical-src="https://pavilion-assets.nyc3.cdn.digitaloceanspaces.com/plugins/wizard-repository-banner.png" style="max-width: 100%;" width="400">
 
 ## Install
 
