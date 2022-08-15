@@ -6,7 +6,7 @@ import { observes } from "discourse-common/utils/decorators";
 export default {
   name: "custom-wizard-edits",
   initialize(container) {
-    const siteSettings = container.lookup("site-settings:main");
+    const siteSettings = container.lookup("service:site-settings");
 
     if (!siteSettings.custom_wizard_enabled) {
       return;

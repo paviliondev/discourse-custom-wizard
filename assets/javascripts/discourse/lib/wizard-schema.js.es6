@@ -226,7 +226,7 @@ export function buildFieldValidations(validations) {
   wizardSchema.field.validations = validations;
 }
 
-const siteSettings = getOwner(this).lookup("site-settings:main");
+const siteSettings = getOwner(this).lookup("service:site-settings");
 if (siteSettings.wizard_apis_enabled) {
   wizardSchema.action.types.send_to_api = {
     api: null,
