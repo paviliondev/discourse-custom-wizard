@@ -68,7 +68,7 @@ export default Controller.extend({
       file: null,
       filename: null,
     });
-    $("#file-upload").val("");
+    document.getElementById("custom-wizard-file-upload").value = "";
   },
 
   @observes("importing", "destroying")
@@ -83,7 +83,7 @@ export default Controller.extend({
 
   actions: {
     upload() {
-      $("#file-upload").click();
+      document.getElementById("custom-wizard-file-upload").click();
     },
 
     clearFile() {
@@ -102,7 +102,7 @@ export default Controller.extend({
       if (maxFileSize < file.size) {
         this.setMessage("error", "file_size_error");
         this.set("file", null);
-        $("#file-upload").val("");
+        document.getElementById("custom-wizard-file-upload").value = "";
       } else {
         this.setProperties({
           file,
