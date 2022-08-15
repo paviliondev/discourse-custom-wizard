@@ -11,11 +11,11 @@
       </div>
     {{/if}}
 
-    <Input
-      id="file-upload"
-      @type="file"
+    {{input
+      id="custom-wizard-file-upload"
+      type="file"
       accept="application/json"
-      {{on "input" (action "setFile" value="target.value")}} />
+      input=(action "setFile")}}
     {{d-button
       id="upload-button"
       label="admin.wizard.manager.upload"
