@@ -6,7 +6,7 @@ The Custom Wizard Plugin lets you make user wizards for your Discourse forum. Be
 
 ## Install
 
-Please install both this plugin and the [Subscription Client Plugin](https://github.com/paviliondev/discourse-subscription-client) as you would install any Discourse plugin. The Subscription Client is not necessary for the plugin to work, but it is advisable to get the most out of it ([more on why here](https://custom-wizard.pavilion.tech/subscriptions)).
+Please install both this plugin and the [Subscription Client Plugin](https://github.com/paviliondev/discourse-subscription-client) as you would install any Discourse plugin. The Subscription Client is not necessary for the Custom Wizard Plugin to work, but it is needed to get the most out of it ([more on why here](https://custom-wizard.pavilion.tech/subscriptions)).
 
 If you're not sure how to install a plugin in Discourse, please follow the [plugin installation guide](https://meta.discourse.org/t/install-a-plugin/19157) or contact your Discourse hosting provider.
 
