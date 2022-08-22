@@ -1,5 +1,6 @@
 import ComposerEditor from "discourse/components/composer-editor";
 import {
+  bind,
   default as discourseComputed,
   on,
 } from "discourse-common/utils/decorators";
@@ -11,6 +12,9 @@ import { alias } from "@ember/object/computed";
 import Site from "discourse/models/site";
 import { uploadIcon } from "discourse/lib/uploads";
 import { dasherize } from "@ember/string";
+
+const IMAGE_MARKDOWN_REGEX =
+  /!\[(.*?)\|(\d{1,4}x\d{1,4})(,\s*\d{1,3}%)?(.*?)\]\((upload:\/\/.*?)\)(?!(.*`))/g;
 
 export default ComposerEditor.extend({
   classNameBindings: ["fieldClass"],
@@ -25,7 +29,7 @@ export default ComposerEditor.extend({
   popupMenuOptions: [],
   draftStatus: "null",
   replyPlaceholder: alias("field.translatedPlaceholder"),
-  uploadingFieldId: null,
+  wizardEventFieldId: null,
 
   @on("didInsertElement")
   _composerEditorInit() {
@@ -76,7 +80,6 @@ export default ComposerEditor.extend({
 
     const wizardEventNames = ["insert-text", "replace-text"];
     const eventPrefix = this.eventPrefix;
-    const session = this.get("session");
     this.appEvents.reopen({
       trigger(name, ...args) {
         let eventParts = name.split(":");
@@ -87,26 +90,8 @@ export default ComposerEditor.extend({
           currentEventPrefix !== "wizard-editor" &&
           wizardEventNames.some((wen) => wen === currentEventName)
         ) {
-          let wizardName = name.replace(eventPrefix, "wizard-editor");
-          if (currentEventName === "insert-text") {
-            args = {
-              text: args[0],
-            };
-          }
-          if (currentEventName === "replace-text") {
-            args = {
-              oldVal: args[0],
-              newVal: args[1],
-            };
-          }
-          let wizardArgs = Object.assign(
-            {},
-            {
-              fieldId: session.get("uploadingFieldId"),
-            },
-            args
-          );
-          return this._super(wizardName, wizardArgs);
+          let wizardEventName = name.replace(eventPrefix, "wizard-editor");
+          return this._super(wizardEventName, ...args);
         } else {
           return this._super(name, ...args);
         }
@@ -136,6 +121,28 @@ export default ComposerEditor.extend({
     if ($(e.target).hasClass("wizard-composer-hyperlink")) {
       this.set("showHyperlinkBox", false);
     }
+  },
+
+  @bind
+  _handleImageDeleteButtonClick(event) {
+    if (!event.target.classList.contains("delete-image-button")) {
+      return;
+    }
+
+    const index = parseInt(
+      event.target.closest(".button-wrapper").dataset.imageIndex,
+      10
+    );
+    const matchingPlaceholder =
+      this.get("composer.reply").match(IMAGE_MARKDOWN_REGEX);
+
+    this.session.set("wizardEventFieldId", this.field.id);
+    this.appEvents.trigger(
+      "composer:replace-text",
+      matchingPlaceholder[index],
+      "",
+      { regex: IMAGE_MARKDOWN_REGEX, index }
+    );
   },
 
   actions: {
@@ -213,7 +220,7 @@ export default ComposerEditor.extend({
     },
 
     showUploadModal() {
-      this.session.set("uploadingFieldId", this.field.id);
+      this.session.set("wizardEventFieldId", this.field.id);
       document.getElementById(this.fileUploadElementId).click();
     },
   },
