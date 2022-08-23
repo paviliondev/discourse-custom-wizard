@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Forms for Discourse. Better onboarding, structured posting, data enrichment, automated actions and much more.
-# version: 1.22.6
+# version: 1.22.7
 # authors: Angus McLeod, Faizaan Gagan, Robert Barrow, Keegan George
 # url: https://github.com/paviliondev/discourse-custom-wizard
 # contact_emails: development@pavilion.tech
