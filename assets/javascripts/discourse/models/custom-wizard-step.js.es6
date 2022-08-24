@@ -4,6 +4,7 @@ import { ajax } from "discourse/lib/ajax";
 import discourseComputed from "discourse-common/utils/decorators";
 import { later } from "@ember/runloop";
 import { translationOrText } from "discourse/plugins/discourse-custom-wizard/discourse/lib/wizard";
+import { extractError } from "discourse/lib/ajax-error";
 
 export default EmberObject.extend(ValidState, {
   id: null,
@@ -72,6 +73,9 @@ export default EmberObject.extend(ValidState, {
       type: "PUT",
       data: { fields },
     }).catch((response) => {
+      if (response.jqXHR) {
+        response = response.jqXHR;
+      }
       if (response && response.responseJSON && response.responseJSON.errors) {
         let wizardErrors = [];
         response.responseJSON.errors.forEach((err) => {
