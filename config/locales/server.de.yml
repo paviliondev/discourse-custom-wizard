@@ -4,36 +4,36 @@ de:
       submission:
         no_user: "gelöscht (user_id: %{user_id})"
   wizard:
-    custom_title: "Wizard"
+    custom_title: "Assistent"
     custom_field:
       error:
-        required_attribute: "'%{attr}' is a required attribute"
-        unsupported_class: "'%{class}' is not a supported class"
-        unsupported_serializers: "'%{serializers}' are not supported serializers for '%{class}'"
-        unsupported_type: "%{type} is not a supported custom field type"
-        name_invalid: "'%{name}' is not a valid custom field name"
-        name_too_short: "'%{name}' is too short for a custom field name (min length is #{min_length})"
-        name_already_taken: "'%{name}' is already taken as a custom field name"
-        save_default: "Failed to save custom field '%{name}'"
+        required_attribute: "'%{attr}' ist ein Pflicht-Attribut"
+        unsupported_class: "'%{class}' ist keine unterstützte Klasse"
+        unsupported_serializers: "'%{serializers}' sind keine unterstützten Serialisierer für '%{class} '"
+        unsupported_type: "%{type} ist kein unterstützter benutzerdefinierter Feldtyp"
+        name_invalid: "'%{name}' ist kein gültiger benutzerdefinierter Feldname"
+        name_too_short: "'%{name}' ist zu kurz für einen benutzerdefinierten Feldnamen (min. Länge ist #{min_length})"
+        name_already_taken: "'%{name}' wird bereits als benutzerdefinierter Feldname benutzt"
+        save_default: "Fehler beim Speichern des benutzerdefinierten Feldes '%{name}'"
     field:
-      too_short: "%{label} must be at least %{min} characters"
-      too_long: "%{label} must not be more than %{max} characters"
-      required: "%{label} is required."
-      not_url: "%{label} must be a valid url"
-      invalid_file: "%{label} must be a %{types}"
-      invalid_date: "Invalid date"
-      invalid_time: "Invalid time"
-    none: "We couldn't find a wizard at that address."
-    no_skip: "Wizard kann nicht übersprungen werden"
+      too_short: "%{label} muss mindestens %{min} Zeichen lang sein"
+      too_long: "%{label} darf nicht mehr als %{max} Zeichen lang sein"
+      required: "%{label} ist erforderlich."
+      not_url: "%{label} muss eine gültige URL sein"
+      invalid_file: "%{label} muss ein %{types} sein"
+      invalid_date: "Ungültiges Datum"
+      invalid_time: "Ungültige Uhrzeit"
+    none: "Wir konnten keinen Assistenten an dieser Adresse finden."
+    no_skip: "Assistent kann nicht übersprungen werden"
     export:
       error:
-        select_one: "Bitte wähle mindestens einen gültigen Wizard"
+        select_one: "Bitte wählen Sie mindestens einen gültigen Assistenten aus"
         invalid_wizards: "Keine gültigen Wizards ausgewählt"
     import:
       error:
         no_file: "Keine Datei ausgewählt"
         file_large: "Datei ist zu groß"
-        invalid_json: "Datei ist keine gültige json-Datei"
+        invalid_json: "Datei ist keine gültige json Datei"
     destroy:
       error:
         no_template: Kein Template gefunden
@@ -41,12 +41,12 @@ de:
     validation:
       required: "%{property} ist erforderlich"
       conflict: "Wizard mit id '%{wizard_id}' existiert bereits"
-      after_signup: "You can only have one 'after signup' wizard at a time. %{wizard_id} has 'after signup' enabled."
-      after_signup_after_time: "You can't use 'after time' and 'after signup' on the same wizard."
-      after_time: "After time setting is invalid."
-      liquid_syntax_error: "Liquid syntax error in %{attribute}: %{message}"
+      after_signup: "Du kannst nur einen \"Nach der Anmeldung\" Assistenten gleichzeitig haben. %{wizard_id} hat \"nach der Anmeldung\" aktiviert."
+      after_signup_after_time: "Du kannst nicht 'nach Zeit und 'nach Anmeldung' bei dem gleichen Assistenten verwenden."
+      after_time: "Nach Zeit Einstellung ist ungültig."
+      liquid_syntax_error: "Liquid-Syntax-Fehler in %{attribute}: %{message}"
   site_settings:
-    custom_wizard_enabled: "Enable custom wizards."
-    wizard_redirect_exclude_paths: "Routes excluded from wizard redirects."
-    wizard_recognised_image_upload_formats: "File types which will result in upload displaying an image preview"
-    wizard_apis_enabled: "Enable API features (experimental)."
+    custom_wizard_enabled: "Benutzerdefinierte Assistenten aktivieren."
+    wizard_redirect_exclude_paths: "Routen, die von Assistenten-Weiterleitungen ausgeschlossen sind."
+    wizard_recognised_image_upload_formats: "Dateitypen, die dazu führen, dass der Upload eine Vorschau anzeigen wird"
+    wizard_apis_enabled: "API-Funktionen aktivieren (experimentell)."
