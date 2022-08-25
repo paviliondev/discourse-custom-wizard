@@ -194,14 +194,14 @@ export default ComposerEditor.extend({
       }
     },
 
-    previewUpdated($preview) {
-      highlightSyntax($preview[0], this.siteSettings, this.session);
+    previewUpdated(preview) {
+      highlightSyntax(preview, this.siteSettings, this.session);
 
       if (this.siteSettings.mentionables_enabled) {
         const { linkSeenMentionableItems } = requirejs(
           "discourse/plugins/discourse-mentionables/discourse/lib/mentionable-items-preview-styling"
         );
-        linkSeenMentionableItems($preview, this.siteSettings);
+        linkSeenMentionableItems(preview, this.siteSettings);
       }
       this._super(...arguments);
     },
