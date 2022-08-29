@@ -51,7 +51,7 @@ export default Component.extend(UndoChanges, {
     };
   }),
 
-  messageUrl: "https://thepavilion.io/t/2810",
+  messageUrl: "https://plugins.discourse.pavilion.tech/t/action-settings",
 
   @discourseComputed("action.type")
   messageKey(type) {

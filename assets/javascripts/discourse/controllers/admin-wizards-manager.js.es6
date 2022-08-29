@@ -7,7 +7,7 @@ import I18n from "I18n";
 import { underscore } from "@ember/string";
 
 export default Controller.extend({
-  messageUrl: "https://thepavilion.io/t/3652",
+  messageUrl: "https://plugins.discourse.pavilion.tech/t/wizard-manager",
   messageKey: "info",
   messageIcon: "info-circle",
   messageClass: "info",

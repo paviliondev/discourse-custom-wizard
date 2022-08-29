@@ -28,7 +28,7 @@ export default Component.extend(UndoChanges, {
   isComposerPreview: equal("field.type", "composer_preview"),
   categoryPropertyTypes: selectKitContent(["id", "slug"]),
   showAdvanced: alias("field.type"),
-  messageUrl: "https://thepavilion.io/t/2809",
+  messageUrl: "https://plugins.discourse.pavilion.tech/t/field-settings",
 
   @discourseComputed("field.type")
   validations(type) {
