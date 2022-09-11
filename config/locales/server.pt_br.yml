@@ -6,27 +6,55 @@ pt_br:
 
   wizard:
     custom_title: "Assistente"
+
+    custom_field:
+      error:
+        required_attribute: "'%{attr}' é um atributo obrigatório"
+        unsupported_class: "'%{class}' não é uma classe suportada"
+        unsupported_serializers: "'%{serializers}' não são serializadores suportados por '%{class}'"
+        unsupported_type: "%{type} não é um tipo de campo customizado suportado"
+        name_invalid: "'%{name}' não é um nome de campo customizado válido"
+        name_too_short: "'%{name}' é muito curto para o nome de um campo customizado (o comprimento mínimo é #{min_length})"
+        name_already_taken: "'%{name}' já está em uso como nome de campo customizado"
+        save_default: "Falha ao salvar o campo customizado '%{name}'"
+
     field:
-      too_short: "%{label} precisa ter no mínimo %{min} caracteres"
+      too_short: "%{label} deve ter ao menos %{min} caracteres"
+      too_long: "%{label} deve ter no máximo %{max} caracteres"
       required: "%{label} é obrigatório."
-      not_url: "%{label} precisa ser uma url válida"
-      invalid_file: "%{label} precisa ser um %{types}"
-    
+      not_url: "%{label} deve ser uma url válida"
+      invalid_file: "%{label} deve ser um %{types}"
+      invalid_date: "Data inválida"
+      invalid_time: "Horário inválido"
+
     none: "Não conseguimos encontrar um assistente neste endereço."
     no_skip: "O Assistente não pode ser pulado"
     export:
       error:
-        select_one: "Por favor selecione pelo menos um assistente"
-    
+        select_one: "Por favor selecione ao menos um assistente"
+        invalid_wizards: "Nenhum assistente válido foi selecionado"
+
     import:
       error:
         no_file: "Nenhum arquivo selecionado"
         file_large: "Arquivo muito grande"
         invalid_json: "Arquivo não é um arquivo JSON válido"
-        no_valid_wizards: "Arquivo não contém nenhum assistente válido"
+
+    destroy:
+      error:
+        no_template: Nenhum template foi encontrado
+        default: Erro ao destruir assistente
+    
+    validation:
+      required: "%{property} é obrigatório"
+      conflict: "Um assistente com o id '%{wizard_id}' já existe"
+      after_signup: "Você só pode ter apenas um assiste com 'após cadastro' ativo. %{wizard_id} já possui essa propriedade ativa."
+      after_signup_after_time: "Você não pode usar 'após tempo' e 'após cadastro' no mesmo assistente."
+      after_time: "A configuração do 'após tempo' é inválida."
+      liquid_syntax_error: "Erro de sintaxe líquida em %{attribute}: %{message}"
 
   site_settings:
     custom_wizard_enabled: "Habilitar Assistentes Customizados."
-    wizard_redirect_exclude_paths: "Rotas excluídas da redireção do assistente."
-    wizard_recognised_image_upload_formats: "Tipo de arquivo que resultará no upload mostrando uma imagem de prévia"
+    wizard_redirect_exclude_paths: "Rotas excluídas dos redirecionamentos do assistente."
+    wizard_recognised_image_upload_formats: "Tipo de arquivo que resultará no upload exibindo uma imagem de prévia"
     wizard_apis_enabled: "Habilitar ferramentas API (experimental)."
