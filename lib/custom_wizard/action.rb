@@ -46,6 +46,10 @@ class CustomWizard::Action
   def create_topic
     params = basic_topic_params.merge(public_topic_params)
 
+    CustomWizard::Field.action_callbacks.each do |acb|
+      params = acb.call(params, @wizard, @action, @submission)
+    end
+
     if params[:title].present? && params[:raw].present?
       creator = PostCreator.new(user, params)
       post = creator.create

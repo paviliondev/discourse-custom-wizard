@@ -131,18 +131,18 @@ class CustomWizard::Field
     }
   end
 
-  def self.require_assets
-    @require_assets ||= {}
+  def self.action_callbacks
+    @acbs ||= []
   end
 
-  def self.register(type, plugin = nil, asset_paths = [], opts = {})
+  def self.register(type, plugin = nil, opts = {})
     if type
       types[type.to_sym] ||= {}
       types[type.to_sym] = opts[:type_opts] if opts[:type_opts].present?
     end
 
-    if plugin && asset_paths
-      require_assets[plugin] = asset_paths
+    if opts[:action_callback].present? && opts[:action_callback].is_a?(Proc)
+      action_callbacks << opts[:action_callback]
     end
   end
 end
