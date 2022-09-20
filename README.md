@@ -10,16 +10,16 @@ If you're not sure how to install a plugin in Discourse, please follow the [plug
 
 ## Documentation
 
-[Read the full documentation here](https://plugins.discourse.pavilion.tech/c/discourse-custom-wizard/documentation), or go directly to the relevant section
+[Read the full documentation here](https://discourse.pluginmanager.org/c/discourse-custom-wizard/documentation), or go directly to the relevant section
 
-- [Wizard Administration](https://plugins.discourse.pavilion.tech/t/wizard-administration)
-- [Wizard Settings](https://plugins.discourse.pavilion.tech/t/wizard-settings)
-- [Step Settings](https://plugins.discourse.pavilion.tech/t/step-settings)
-- [Field Settings](https://plugins.discourse.pavilion.tech/t/field-settings)
-- [Conditional Settings](https://plugins.discourse.pavilion.tech/t/conditional-settings)
-- [Field Interpolation](https://plugins.discourse.pavilion.tech/t/field-interpolation)
-- [Wizard Examples and Templates](https://plugins.discourse.pavilion.tech/t/wizard-examples-and-templates)
+- [Wizard Administration](https://discourse.pluginmanager.org/t/wizard-administration)
+- [Wizard Settings](https://discourse.pluginmanager.org/t/wizard-settings)
+- [Step Settings](https://discourse.pluginmanager.org/t/step-settings)
+- [Field Settings](https://discourse.pluginmanager.org/t/field-settings)
+- [Conditional Settings](https://discourse.pluginmanager.org/t/conditional-settings)
+- [Field Interpolation](https://discourse.pluginmanager.org/t/field-interpolation)
+- [Wizard Examples and Templates](https://discourse.pluginmanager.org/t/wizard-examples-and-templates)
 
 ## Support
 
-- [Report a bug](https://plugins.discourse.pavilion.tech/w/bug-report)
+- [Report a bug](https://discourse.pluginmanager.org/w/bug-report)

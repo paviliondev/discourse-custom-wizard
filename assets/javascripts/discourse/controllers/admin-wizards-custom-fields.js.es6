@@ -4,7 +4,7 @@ import CustomWizardCustomField from "../models/custom-wizard-custom-field";
 export default Controller.extend({
   messageKey: "create",
   fieldKeys: ["klass", "type", "name", "serializers"],
-  documentationUrl: "https://plugins.discourse.pavilion.tech/t/custom-fields",
+  documentationUrl: "https://discourse.pluginmanager.org/t/custom-fields",
 
   actions: {
     addField() {

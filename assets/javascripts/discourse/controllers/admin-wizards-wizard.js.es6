@@ -22,5 +22,5 @@ export default Controller.extend({
   },
 
   messageUrl:
-    "https://plugins.discourse.pavilion.tech/c/discourse-custom-wizard/documentation",
+    "https://discourse.pluginmanager.org/c/discourse-custom-wizard/documentation",
 });
