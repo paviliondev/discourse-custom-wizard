@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
-# about: Create custom wizards for topic creation, onboarding, user surveys and much more.
+# about: Forms for Discourse. Better onboarding, structured posting, data enrichment, automated actions and much more.
 # version: 2.0.0-beta.1
 # authors: Angus McLeod, Faizaan Gagan, Robert Barrow, Keegan George
-# contact_emails: support@thepavilion.io
 # url: https://github.com/paviliondev/discourse-custom-wizard
+# contact_emails: development@pavilion.tech
 # subscription_url: https://coop.pavilion.tech
 
 gem 'liquid', '5.0.1', require: true

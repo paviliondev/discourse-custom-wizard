@@ -2,6 +2,7 @@ import CustomWizard from "../models/custom-wizard";
 import discourseComputed from "discourse-common/utils/decorators";
 import Component from "@ember/component";
 import { dasherize } from "@ember/string";
+import getURL from "discourse-common/lib/get-url";
 
 export default Component.extend({
   classNameBindings: [":wizard-no-access", "reasonClass"],
@@ -18,7 +19,11 @@ export default Component.extend({
 
   actions: {
     skip() {
-      CustomWizard.skip(this.get("wizardId"));
+      if (this.currentUser) {
+        CustomWizard.skip(this.get("wizardId"));
+      } else {
+        window.location = getURL("/");
+      }
     },
   },
 });

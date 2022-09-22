@@ -72,6 +72,9 @@ export default EmberObject.extend(ValidState, {
       type: "PUT",
       data: { fields },
     }).catch((response) => {
+      if (response.jqXHR) {
+        response = response.jqXHR;
+      }
       if (response && response.responseJSON && response.responseJSON.errors) {
         let wizardErrors = [];
         response.responseJSON.errors.forEach((err) => {

@@ -9,6 +9,24 @@ $info: #038ae7;
 $warning: #d47e00;
 $error: #ef1700;
 
+.announcement {
+  margin-left: auto;
+
+  a {
+    display: flex;
+    color: #fff;
+    background-color: #3c1c8d;
+    padding: 6px 12px;
+    text-decoration: none;
+
+    img {
+      width: 20px;
+      height: 20px;
+      margin-right: 0.5rem;
+    }
+  }
+}
+
 .admin-wizard-controls {
   display: flex;
   align-items: center;

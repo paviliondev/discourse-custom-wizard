@@ -481,8 +481,8 @@ class CustomWizard::Action
 
         registered = registered_fields.select { |f| f.name == name }.first
         if registered.present?
-          klass = registered.klass
-          type = registered.type
+          klass = registered.klass.to_sym
+          type = registered.type.to_sym
         end
 
         next if type === :json && json_attr.blank?

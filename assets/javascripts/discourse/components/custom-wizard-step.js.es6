@@ -134,10 +134,7 @@ export default Component.extend({
           {
             scrollTop: $element.offset().top - 200,
           },
-          400,
-          function () {
-            $element.wiggle(2, 100);
-          }
+          400
         );
       }
     });

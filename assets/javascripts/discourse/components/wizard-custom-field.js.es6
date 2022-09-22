@@ -27,7 +27,7 @@ export default Component.extend(UndoChanges, {
   isTextType: or("isText", "isTextarea", "isComposer"),
   isComposerPreview: equal("field.type", "composer_preview"),
   categoryPropertyTypes: selectKitContent(["id", "slug"]),
-  messageUrl: "https://thepavilion.io/t/2809",
+  messageUrl: "https://discourse.pluginmanager.org/t/field-settings",
 
   @discourseComputed("field.type")
   validations(type) {
