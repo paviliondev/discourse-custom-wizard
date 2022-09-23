@@ -373,4 +373,22 @@ describe CustomWizard::Action do
       expect(log_entry.status).to eq('FAIL')
     end
   end
+
+  it 'registers callbacks' do
+    described_class.register_callback(:before_create_topic) do |params, wizard, action, submission|
+      params[:topic_opts][:custom_fields]["topic_custom_field"] = true
+      params
+    end
+
+    wizard = CustomWizard::Builder.new(@template[:id], user).build
+    action = CustomWizard::Action.new(
+      wizard: wizard,
+      action: create_topic.with_indifferent_access,
+      submission: wizard.current_submission
+    )
+    action.perform
+
+    expect(action.result.success?).to eq(true)
+    expect(Topic.find(action.result.output).custom_fields["topic_custom_field"]).to eq("t")
+  end
 end

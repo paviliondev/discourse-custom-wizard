@@ -98,4 +98,9 @@ export default Component.extend(UndoChanges, {
   actionTypes() {
     return subscriptionSelectKitContent("action", "types");
   },
+
+  @discourseComputed("fieldTypes")
+  hasEventsField(fieldTypes) {
+    return fieldTypes.map((ft) => ft.id).includes("event");
+  },
 });
