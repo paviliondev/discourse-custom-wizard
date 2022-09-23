@@ -28,7 +28,7 @@ export default SingleSelectComponent.extend(Subscription, {
   allowedSubscriptionTypes(feature, attribute, value) {
     let attributes = this.subscriptionAttributes[feature];
     if (!attributes || !attributes[attribute]) {
-      return ['none'];
+      return ["none"];
     }
     let allowedTypes = [];
     Object.keys(attributes[attribute]).forEach((subscriptionType) => {
@@ -50,17 +50,20 @@ export default SingleSelectComponent.extend(Subscription, {
           value
         );
 
-        let subscriptionRequired = allowedSubscriptionTypes.length &&
-          !allowedSubscriptionTypes.includes('none');
+        let subscriptionRequired =
+          allowedSubscriptionTypes.length &&
+          !allowedSubscriptionTypes.includes("none");
 
         let attrs = {
           id: value,
           name: I18n.t(nameKey(feature, attribute, value)),
-          subscriptionRequired
+          subscriptionRequired,
         };
 
         if (subscriptionRequired) {
-          let subscribed = allowedSubscriptionTypes.includes(this.subscriptionType);
+          let subscribed = allowedSubscriptionTypes.includes(
+            this.subscriptionType
+          );
           let selectorKey = subscribed ? "subscribed" : "not_subscribed";
           let selectorLabel = `admin.wizard.subscription.${selectorKey}.selector`;
 

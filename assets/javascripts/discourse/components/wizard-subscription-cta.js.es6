@@ -10,7 +10,9 @@ export default Component.extend(Subscription, {
 
   @discourseComputed("subscribed")
   i18nKey(subscribed) {
-    return `admin.wizard.subscription.cta.${subscribed ? "subscribed" : "none"}`;
+    return `admin.wizard.subscription.cta.${
+      subscribed ? "subscribed" : "none"
+    }`;
   },
 
   @discourseComputed("subscribed")
