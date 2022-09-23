@@ -43,10 +43,14 @@ class CustomWizard::Action
     @mapper ||= CustomWizard::Mapper.new(user: user, data: mapper_data)
   end
 
+  def callbacks_for(action)
+    self.class.callbacks[action] || []
+  end
+
   def create_topic
     params = basic_topic_params.merge(public_topic_params)
 
-    CustomWizard::Field.action_callbacks.each do |acb|
+    callbacks_for(:before_create_topic).each do |acb|
       params = acb.call(params, @wizard, @action, @submission)
     end
 
@@ -419,6 +423,15 @@ class CustomWizard::Action
     else
       log_error("Category creation failed", category.errors.messages)
     end
+  end
+
+  def self.callbacks
+    @callbacks ||= {}
+  end
+
+  def self.register_callback(action, &block)
+    callbacks[action] ||= []
+    callbacks[action] << block
   end
 
   private

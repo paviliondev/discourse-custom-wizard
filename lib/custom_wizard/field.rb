@@ -131,10 +131,6 @@ class CustomWizard::Field
     }
   end
 
-  def self.action_callbacks
-    @acbs ||= []
-  end
-
   def self.require_assets
     Rails.logger.warn("Custom Wizard field regisration no longer requires asset registration. Support will be removed in v2.1.0.")
 
@@ -152,10 +148,6 @@ class CustomWizard::Field
     if type
       types[type.to_sym] ||= {}
       types[type.to_sym] = opts[:type_opts] if opts[:type_opts].present?
-    end
-
-    if opts[:action_callback].present? && opts[:action_callback].is_a?(Proc)
-      action_callbacks << opts[:action_callback]
     end
   end
 end
