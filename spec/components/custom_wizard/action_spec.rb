@@ -300,13 +300,12 @@ describe CustomWizard::Action do
   end
 
   it 'registers callbacks' do
-    wizard = CustomWizard::Builder.new(@template[:id], user).build
-
     described_class.register_callback(:before_create_topic) do |params, wizard, action, submission|
       params[:topic_opts][:custom_fields]["topic_custom_field"] = true
       params
     end
 
+    wizard = CustomWizard::Builder.new(@template[:id], user).build
     action = CustomWizard::Action.new(
       wizard: wizard,
       action: create_topic.with_indifferent_access,
