@@ -102,6 +102,7 @@ const action = {
       custom_fields: null,
       skip_redirect: null,
       suppress_notifications: null,
+      add_event: null,
     },
     send_message: {
       title: null,
@@ -198,6 +199,7 @@ const action = {
     "messageable_level",
     "visibility_level",
     "members_visibility_level",
+    "add_event",
   ],
   advanced: [
     "code",

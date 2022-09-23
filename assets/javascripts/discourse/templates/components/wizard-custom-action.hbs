@@ -158,6 +158,25 @@
         )}}
     </div>
   </div>
+
+  {{#if hasEventsField}}
+    <div class="setting full">
+      <div class="setting-label">
+        <label>{{i18n "admin.wizard.action.create_topic.add_event"}}</label>
+      </div>
+
+      <div class="setting-value">
+        {{wizard-mapper
+          inputs=action.add_event
+          property="add_event"
+          onUpdate=(action "mappedFieldUpdated")
+          options=(hash
+            wizardFieldSelection=true
+            context="action"
+          )}}
+      </div>
+    </div>
+  {{/if}}
 {{/if}}
 
 {{#if sendMessage}}

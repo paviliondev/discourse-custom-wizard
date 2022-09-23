@@ -293,6 +293,7 @@ en:
             date: Date
             time: Time
             date_time: Date & Time
+            event: Event (Events Plugin)
 
         connector:
           and: "and"
@@ -336,6 +337,7 @@ en:
             category: "Category"
             tags: "Tags"
             visible: "Visible"
+            add_event: "Add Event (Events Plugin)"
           open_composer:
             label: "Open Composer"
           update_profile:

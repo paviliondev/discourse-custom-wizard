@@ -101,4 +101,9 @@ export default Component.extend(UndoChanges, {
     }
     return apis.find((a) => a.name === api).endpoints;
   },
+
+  @discourseComputed("fieldTypes")
+  hasEventsField(fieldTypes) {
+    return fieldTypes.map((ft) => ft.id).includes("event");
+  },
 });

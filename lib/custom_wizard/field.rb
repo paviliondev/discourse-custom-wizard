@@ -132,17 +132,22 @@ class CustomWizard::Field
   end
 
   def self.require_assets
+    Rails.logger.warn("Custom Wizard field regisration no longer requires asset registration. Support will be removed in v2.1.0.")
+
     @require_assets ||= {}
   end
 
-  def self.register(type, plugin = nil, asset_paths = [], opts = {})
+  def self.register(type, plugin = nil, opts = {}, legacy_opts = {})
+    if opts.is_a?(Array)
+      Rails.logger.warn("Custom Wizard field regisration no longer requires asset registration. Support will be removed in v2.1.0.")
+
+      require_assets[plugin] = opts
+      opts = legacy_opts
+    end
+
     if type
       types[type.to_sym] ||= {}
       types[type.to_sym] = opts[:type_opts] if opts[:type_opts].present?
-    end
-
-    if plugin && asset_paths
-      require_assets[plugin] = asset_paths
     end
   end
 end
