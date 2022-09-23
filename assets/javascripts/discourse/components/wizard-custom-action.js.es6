@@ -1,5 +1,4 @@
 import { default as discourseComputed } from "discourse-common/utils/decorators";
-import { subscriptionSelectKitContent } from "discourse/plugins/discourse-custom-wizard/discourse/lib/wizard-subscription";
 import { empty, equal, or } from "@ember/object/computed";
 import { notificationLevels, selectKitContent } from "../lib/wizard";
 import { computed } from "@ember/object";
@@ -92,11 +91,6 @@ export default Component.extend(UndoChanges, {
       return [];
     }
     return apis.find((a) => a.name === api).endpoints;
-  },
-
-  @discourseComputed
-  actionTypes() {
-    return subscriptionSelectKitContent("action", "types");
   },
 
   @discourseComputed("fieldTypes")
