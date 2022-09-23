@@ -1,12 +1,8 @@
 # frozen_string_literal: true
 
 describe CustomWizard::CustomField do
-
-  let(:custom_field_json) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/custom_field/custom_fields.json"
-    ).read)
-  }
+  let(:custom_field_json) { get_wizard_fixture("custom_field/custom_fields") }
+  let(:custom_field_subscription_json) { get_wizard_fixture("custom_field/subscription_custom_fields") }
 
   before do
     CustomWizard::CustomField.invalidate_cache
@@ -102,8 +98,8 @@ describe CustomWizard::CustomField do
 
     it "does not save with an unsupported serializer" do
       invalid_field_json = custom_field_json['custom_fields'].first
-      invalid_field_json['klass'] = 'category'
-      invalid_field_json['serializers'] = ['category', 'site_category']
+      invalid_field_json['klass'] = 'post'
+      invalid_field_json['serializers'] = ['post', 'post_revision']
 
       custom_field = CustomWizard::CustomField.new(nil, invalid_field_json)
 
@@ -111,8 +107,8 @@ describe CustomWizard::CustomField do
       expect(custom_field.valid?).to eq(false)
       expect(custom_field.errors.full_messages.first).to eq(
         I18n.t("wizard.custom_field.error.unsupported_serializers",
-          class: "category",
-          serializers: "category, site_category"
+          class: "post",
+          serializers: "post_revision"
         )
       )
       expect(
@@ -194,6 +190,50 @@ describe CustomWizard::CustomField do
         ).exists?
       ).to eq(false)
     end
+
+    it "does not save subscription field types without a subscription" do
+      subscription_field_json = custom_field_subscription_json['custom_fields'].first
+      custom_field = CustomWizard::CustomField.new(nil, subscription_field_json)
+
+      expect(custom_field.save).to eq(false)
+      expect(custom_field.valid?).to eq(false)
+      expect(custom_field.errors.full_messages.first).to eq(
+        I18n.t("wizard.custom_field.error.subscription_type", type: "json")
+      )
+    end
+
+    it "does not save subscription field classes without a subscription" do
+      subscription_field_json = custom_field_subscription_json['custom_fields'].second
+      custom_field = CustomWizard::CustomField.new(nil, subscription_field_json)
+
+      expect(custom_field.save).to eq(false)
+      expect(custom_field.valid?).to eq(false)
+      expect(custom_field.errors.full_messages.first).to eq(
+        I18n.t("wizard.custom_field.error.subscription_type", type: "category")
+      )
+    end
+
+    context "with a subscription" do
+      before do
+        enable_subscription("business")
+      end
+
+      it "saves subscription field types" do
+        subscription_field_json = custom_field_subscription_json['custom_fields'].first
+        custom_field = CustomWizard::CustomField.new(nil, subscription_field_json)
+
+        expect(custom_field.save).to eq(true)
+        expect(custom_field.valid?).to eq(true)
+      end
+
+      it "saves subscription field classes" do
+        subscription_field_json = custom_field_subscription_json['custom_fields'].second
+        custom_field = CustomWizard::CustomField.new(nil, subscription_field_json)
+
+        expect(custom_field.save).to eq(true)
+        expect(custom_field.valid?).to eq(true)
+      end
+    end
   end
 
   context "lists" do
@@ -203,15 +243,15 @@ describe CustomWizard::CustomField do
       end
     end
 
-    it "lists saved custom field records" do
-      expect(CustomWizard::CustomField.list.length).to eq(4)
+    it "saved custom field records" do
+      expect(CustomWizard::CustomField.list.length).to eq(2)
     end
 
-    it "lists saved custom field records by attribute value" do
+    it "saved custom field records by attribute value" do
       expect(CustomWizard::CustomField.list_by(:klass, 'topic').length).to eq(1)
     end
 
-    it "lists saved custom field records by optional values" do
+    it "saved custom field records by optional values" do
       field_json = custom_field_json['custom_fields'].first
       field_json['serializers'] = nil
 
@@ -220,11 +260,11 @@ describe CustomWizard::CustomField do
     end
 
     it "lists custom field records added by other plugins " do
-      expect(CustomWizard::CustomField.external_list.length).to eq(8)
+      expect(CustomWizard::CustomField.external_list.length).to be > 2
     end
 
     it "lists all custom field records" do
-      expect(CustomWizard::CustomField.full_list.length).to eq(12)
+      expect(CustomWizard::CustomField.full_list.length).to be > 2
     end
   end
 

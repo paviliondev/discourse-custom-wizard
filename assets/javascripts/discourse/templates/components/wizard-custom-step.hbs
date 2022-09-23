@@ -34,88 +34,72 @@
   </div>
 </div>
 
-{{wizard-advanced-toggle showAdvanced=step.showAdvanced}}
-
-{{#if step.showAdvanced}}
-  <div class="advanced-settings">
-
-    <div class="setting full field-mapper-setting">
-      <div class="setting-label">
-        <label>{{i18n "admin.wizard.condition"}}</label>
-      </div>
-
-      <div class="setting-value">
-        {{wizard-mapper
-          inputs=step.condition
-          options=stepConditionOptions}}
-      </div>
+{{#wizard-subscription-container}}
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.condition"}}</label>
     </div>
 
-    <div class="setting full">
-      <div class="setting-label"></div>
-      <div class="setting-value force-final">
-        <h4>{{i18n "admin.wizard.step.force_final.label"}}</h4>
-        {{input type="checkbox" checked=step.force_final}}
-        <span>{{i18n "admin.wizard.step.force_final.description"}}</span>
-      </div>
-    </div>
-
-    <div class="setting full field-mapper-setting">
-      <div class="setting-label">
-        <label>{{i18n "admin.wizard.step.required_data.label"}}</label>
-      </div>
-      <div class="setting-value">
-        {{wizard-mapper
-          inputs=step.required_data
-          options=(hash
-            inputTypes="validation"
-            inputConnector="and"
-            wizardFieldSelection="value"
-            userFieldSelection="value"
-            keyPlaceholder="admin.wizard.submission_key"
-            context="step"
-          )}}
-        {{#if step.required_data}}
-          <div class="required-data-message">
-            <div class="label">
-              {{i18n "admin.wizard.step.required_data.not_permitted_message"}}
-            </div>
-            {{input value=step.required_data_message}}
-          </div>
-        {{/if}}
-      </div>
-    </div>
-
-    <div class="setting full field-mapper-setting">
-      <div class="setting-label">
-        <label>{{i18n "admin.wizard.step.permitted_params.label"}}</label>
-      </div>
-      <div class="setting-value">
-        {{wizard-mapper
-          inputs=step.permitted_params
-          options=(hash
-            pairConnector="set"
-            inputTypes="association"
-            keyPlaceholder="admin.wizard.param_key"
-            valuePlaceholder="admin.wizard.submission_key"
-            context="step"
-          )}}
-      </div>
-    </div>
-
-    <div class="setting">
-      <div class="setting-label">
-        <label>{{i18n "admin.wizard.translation"}}</label>
-      </div>
-      <div class="setting-value">
-        {{input
-          name="key"
-          value=step.key
-          placeholderKey="admin.wizard.translation_placeholder"}}
-      </div>
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=step.condition
+        options=stepConditionOptions}}
     </div>
   </div>
-{{/if}}
+
+  <div class="setting full">
+    <div class="setting-label"></div>
+    <div class="setting-value force-final">
+      <h4>{{i18n "admin.wizard.step.force_final.label"}}</h4>
+      {{input type="checkbox" checked=step.force_final}}
+      <span>{{i18n "admin.wizard.step.force_final.description"}}</span>
+    </div>
+  </div>
+
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.step.required_data.label"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=step.required_data
+        options=(hash
+          inputTypes="validation"
+          inputConnector="and"
+          wizardFieldSelection="value"
+          userFieldSelection="value"
+          keyPlaceholder="admin.wizard.submission_key"
+          context="step"
+        )}}
+      {{#if step.required_data}}
+        <div class="required-data-message">
+          <div class="label">
+            {{i18n "admin.wizard.step.required_data.not_permitted_message"}}
+          </div>
+          {{input value=step.required_data_message}}
+        </div>
+      {{/if}}
+    </div>
+  </div>
+
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.step.permitted_params.label"}}</label>
+    </div>
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=step.permitted_params
+        options=(hash
+          pairConnector="set"
+          inputTypes="association"
+          keyPlaceholder="admin.wizard.param_key"
+          valuePlaceholder="admin.wizard.submission_key"
+          context="step"
+        )}}
+    </div>
+  </div>
+{{/wizard-subscription-container}}
 
 {{wizard-links
   itemType="field"
@@ -130,5 +114,6 @@
     currentFieldId=currentField.id
     fieldTypes=fieldTypes
     removeField="removeField"
-    wizardFields=wizardFields}}
+    wizardFields=wizardFields
+    subscribed=subscribed}}
 {{/each}}

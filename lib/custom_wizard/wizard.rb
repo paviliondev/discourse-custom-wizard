@@ -31,7 +31,8 @@ class CustomWizard::Wizard
                 :actions,
                 :action_ids,
                 :user,
-                :submissions
+                :submissions,
+                :template
 
   attr_reader   :all_step_ids
 
@@ -77,6 +78,7 @@ class CustomWizard::Wizard
 
     @actions = attrs['actions'] || []
     @action_ids = @actions.map { |a| a['id'] }
+    @template = attrs
   end
 
   def cast_bool(val)
@@ -262,7 +264,7 @@ class CustomWizard::Wizard
 
   def submissions
     return nil unless user.present?
-    @submissions ||= CustomWizard::Submission.list(self, user_id: user.id)
+    @submissions ||= CustomWizard::Submission.list(self, user_id: user.id).submissions
   end
 
   def current_submission
@@ -312,10 +314,10 @@ class CustomWizard::Wizard
     end
   end
 
-  def self.list(user, template_opts: {}, not_completed: false)
+  def self.list(user, template_opts = {}, not_completed = false)
     return [] unless user
 
-    CustomWizard::Template.list(template_opts).reduce([]) do |result, template|
+    CustomWizard::Template.list(**template_opts).reduce([]) do |result, template|
       wizard = new(template, user)
       result.push(wizard) if wizard.can_access? && (
         !not_completed || !wizard.completed?
@@ -327,7 +329,7 @@ class CustomWizard::Wizard
   def self.after_signup(user)
     wizards = list(
       user,
-      template_opts: {
+      {
         setting: 'after_signup',
         order: "(value::json ->> 'permitted') IS NOT NULL DESC"
       }
@@ -338,11 +340,11 @@ class CustomWizard::Wizard
   def self.prompt_completion(user)
     wizards = list(
       user,
-      template_opts: {
+      {
         setting: 'prompt_completion',
         order: "(value::json ->> 'permitted') IS NOT NULL DESC"
       },
-      not_completed: true
+      true
     )
     if wizards.any?
       wizards.map do |w|

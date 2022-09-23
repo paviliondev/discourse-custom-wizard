@@ -1,21 +1,8 @@
 # frozen_string_literal: true
 
 describe CustomWizard::Step do
-  let(:step_hash) do
-    JSON.parse(
-      File.open(
-        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/step/step.json"
-      ).read
-    ).with_indifferent_access
-  end
-
-  let(:field_hash) do
-    JSON.parse(
-      File.open(
-        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/field/field.json"
-      ).read
-    ).with_indifferent_access
-  end
+  let(:step_hash) { get_wizard_fixture("step/step") }
+  let(:field_hash) { get_wizard_fixture("field/field") }
 
   before do
     @step = CustomWizard::Step.new(step_hash[:id])

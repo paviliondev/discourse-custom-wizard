@@ -1,0 +1,104 @@
+{
+  "id": "action_9",
+  "run_after": "step_1",
+  "type": "create_group",
+  "title": [
+    {
+      "type": "assignment",
+      "output": "New Group Member",
+      "output_type": "text",
+      "output_connector": "set"
+    }
+  ],
+  "custom_fields": [
+    {
+      "type": "association",
+      "pairs": [
+        {
+          "index": 0,
+          "key": "group_custom_field",
+          "key_type": "text",
+          "value": "step_3_field_1",
+          "value_type": "wizard_field",
+          "connector": "association"
+        }
+      ]
+    }
+  ],
+  "name": [
+    {
+      "type": "assignment",
+      "output": "step_1_field_1",
+      "output_type": "wizard_field",
+      "output_connector": "set"
+    }
+  ],
+  "full_name": [
+    {
+      "type": "assignment",
+      "output": "step_1_field_1",
+      "output_type": "wizard_field",
+      "output_connector": "set"
+    }
+  ],
+  "usernames": [
+    {
+      "type": "assignment",
+      "output_type": "user",
+      "output_connector": "set",
+      "output": [
+        "angus1"
+      ]
+    }
+  ],
+  "owner_usernames": [
+    {
+      "type": "assignment",
+      "output_type": "user",
+      "output_connector": "set",
+      "output": [
+        "angus"
+      ]
+    }
+  ],
+  "grant_trust_level": [
+    {
+      "type": "assignment",
+      "output": "3",
+      "output_type": "text",
+      "output_connector": "set"
+    }
+  ],
+  "mentionable_level": [
+    {
+      "type": "assignment",
+      "output": "1",
+      "output_type": "text",
+      "output_connector": "set"
+    }
+  ],
+  "messageable_level": [
+    {
+      "type": "assignment",
+      "output": "2",
+      "output_type": "text",
+      "output_connector": "set"
+    }
+  ],
+  "visibility_level": [
+    {
+      "type": "assignment",
+      "output": "3",
+      "output_type": "text",
+      "output_connector": "set"
+    }
+  ],
+  "members_visibility_level": [
+    {
+      "type": "assignment",
+      "output": "99",
+      "output_type": "text",
+      "output_connector": "set"
+    }
+  ]
+}

@@ -1,21 +1,11 @@
 # frozen_string_literal: true
 
 describe ApplicationController do
-  fab!(:user) {
-    Fabricate(
-      :user,
-      username: 'angus',
-      email: "angus@email.com",
-      trust_level: TrustLevel[3]
-    )
-  }
+  fab!(:user) { Fabricate(:user, username: 'angus', email: "angus@email.com", trust_level: TrustLevel[3]) }
+  let(:wizard_template) { get_wizard_fixture("wizard") }
 
   before do
-    CustomWizard::Template.save(
-      JSON.parse(File.open(
-          "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-      ).read),
-    skip_jobs: true)
+    CustomWizard::Template.save(wizard_template, skip_jobs: true)
     @template = CustomWizard::Template.find('super_mega_fun_wizard')
   end
 

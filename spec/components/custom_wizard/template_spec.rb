@@ -2,18 +2,9 @@
 
 describe CustomWizard::Template do
   fab!(:user) { Fabricate(:user) }
+  let(:template_json) { get_wizard_fixture("wizard") }
+  let(:permitted_json) { get_wizard_fixture("wizard/permitted") }
   fab!(:upload) { Fabricate(:upload) }
-
-  let(:template_json) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-    ).read)
-  }
-  let(:permitted_json) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard/permitted.json"
-    ).read)
-  }
 
   before do
     CustomWizard::Template.save(template_json, skip_jobs: true)
@@ -125,6 +116,8 @@ describe CustomWizard::Template do
 
   context "wizard template list" do
     before do
+      enable_subscription('standard')
+
       template_json_2 = template_json.dup
       template_json_2["id"] = 'super_mega_fun_wizard_2'
       template_json_2["permitted"] = permitted_json['permitted']

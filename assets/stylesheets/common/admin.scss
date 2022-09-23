@@ -1,7 +1,13 @@
-@import "wizard-mapper";
-@import "wizard-manager";
-@import "wizard-api";
+@import "admin/mapper";
+@import "admin/manager";
+@import "admin/api";
 @import "common/components/buttons";
+@import "admin/variables";
+
+$expired: #339b18;
+$info: #038ae7;
+$warning: #d47e00;
+$error: #ef1700;
 
 .announcement {
   margin-left: auto;
@@ -25,10 +31,23 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  min-height: 34px;
 
   & + .wizard-message + div {
     margin-top: 20px;
+  }
+
+  h3 {
+    margin-bottom: 0;
+  }
+}
+
+.admin-wizards .admin-actions {
+  display: flex;
+
+  .btn-pavilion-support {
+    margin-left: 10px;
   }
 }
 
@@ -78,35 +97,68 @@
     }
   }
 
-  & + div {
+  & + div,
+  & + div + div {
     margin-top: 30px;
   }
 }
 
-.wizard-submissions {
+.wizard-table {
   overflow: scroll;
 
-  table td {
+  table td:not(.small) {
     min-width: 150px;
   }
-}
 
-.admin-wizards-logs {
-  .admin-wizard-controls {
-    h3 {
-      margin: 0 7px;
+  table thead th {
+    text-transform: capitalize;
+  }
+
+  .wizard-table-icon-item {
+    display: flex;
+    align-items: center;
+
+    svg {
+      margin-right: 5px;
     }
   }
 
-  .wizard-logs {
-    .date {
-      width: 100px;
+  .wizard-table-checkbox-true {
+    text-transform: capitalize;
+    color: var(--success);
+  }
+
+  .wizard-table-checkbox-false {
+    text-transform: capitalize;
+    color: var(--danger);
+  }
+
+  .wizard-table-long-text {
+    &-content {
+      white-space: nowrap;
+      word-wrap: break-word;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 250px;
+      margin-bottom: 0;
+
+      &.text-expanded {
+        white-space: normal;
+      }
     }
+
+    a {
+      font-size: var(--font-down-1);
+    }
+  }
+
+  .wizard-table-composer-text {
+    font-family: monospace;
   }
 }
 
 .wizard-settings-parent {
-  padding: 20px;
+  padding: 1em;
   border: 1px solid var(--primary-low);
 }
 
@@ -127,8 +179,18 @@
 
 .wizard-basic-details,
 .wizard-custom-field,
-.advanced-settings {
+.subscription-settings {
   @extend .wizard-settings-group;
+}
+
+.admin-wizard-container.settings {
+  .wizard-settings {
+    .wizard-subscription-container {
+      [class~="setting"] {
+        margin-bottom: 0;
+      }
+    }
+  }
 }
 
 .wizard-custom-field {
@@ -169,6 +231,7 @@
 
 .wizard-header {
   margin-bottom: 20px;
+  display: flex;
 
   &.large {
     font-size: 1.5em;
@@ -187,6 +250,10 @@
       margin-bottom: 0;
     }
 
+    button {
+      font-size: 1rem;
+    }
+
     .download-link {
       font-size: 1rem;
       line-height: 20px;
@@ -202,24 +269,27 @@
         font-size: 1rem;
         background-color: var(--primary-low);
       }
-
-      button {
-        font-size: 1rem;
-      }
     }
   }
 
   &.medium {
-    font-size: 1.3em;
+    font-size: 1.2em;
   }
 
   &.small {
     font-size: 1em;
+    font-weight: 700;
     margin-bottom: 5px;
   }
 
   &.underline {
     text-decoration: underline;
+  }
+
+  .controls {
+    font-size: 1rem;
+    display: flex;
+    margin-left: auto;
   }
 }
 
@@ -261,7 +331,7 @@
         font-size: 0.85em;
       }
 
-      span {
+      > span {
         font-size: 0.929em;
       }
 
@@ -394,14 +464,16 @@
     .setting-gutter {
       margin-top: 5px;
     }
-  }
 
-  .advanced-settings {
-    width: 100%;
-    margin-top: 30px;
+    &.subscription {
+      .setting-label {
+        display: flex;
+        flex-direction: column;
 
-    [class~="setting"]:first-of-type {
-      border-top: none;
+        label {
+          margin: 0;
+        }
+      }
     }
   }
 
@@ -699,27 +771,59 @@
   }
 }
 
-.realtime-validations > ul {
+.admin-wizard-container.settings .realtime-validations .setting-value > ul {
   list-style: none;
   margin: 0;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
 
   > li {
-    background-color: var(--primary-low);
+    border: 1px solid var(--primary);
     padding: 1em;
     margin: 0 0 1em 0;
 
-    input {
-      margin-bottom: 0;
+    .setting-title {
+      display: flex;
+      align-items: center;
+
+      h4 {
+        margin: 0 15px 0 0;
+      }
+
+      input[type="checkbox"] {
+        margin: 0 5px 0 0;
+      }
+    }
+
+    .setting-label {
+      width: 100px;
+    }
+
+    .setting-value {
+      display: flex;
+      align-items: center;
+
+      .input .select-kit,
+      > .select-kit {
+        max-width: unset !important;
+      }
+
+      > span {
+        margin-right: 1em;
+      }
     }
   }
 }
 
 .validation-container {
   display: flex;
+  flex-direction: column;
   padding: 1em 0;
 
   .validation-section {
-    width: 250px;
+    min-width: 250px;
+    margin: 0.5em 0;
   }
 }
 
@@ -735,4 +839,114 @@
 .select-kit.time-unit-selector {
   width: 80px;
   vertical-align: middle;
+}
+
+.btn.btn-pavilion-support {
+  background: var(--pavilion-primary);
+  color: var(--pavilion-secondary);
+
+  .d-icon {
+    color: var(--pavilion-secondary);
+  }
+
+  &:hover,
+  &:focus {
+    background: darken($pavilion_primary, 5%);
+
+    &[href],
+    svg.d-icon {
+      color: darken($pavilion_secondary, 10%);
+    }
+  }
+}
+
+.wizard-subscription-container {
+  width: 100%;
+  padding: 1em;
+  background-color: rgba($pavilion_primary, 0.1);
+
+  .subscription-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.25em;
+
+    h3 {
+      margin: 0;
+    }
+
+    a {
+      color: var(--primary);
+    }
+  }
+
+  &:not(.subscribed) .subscription-settings {
+    filter: blur(1px);
+    pointer-events: none;
+  }
+}
+
+.wizard-subscription-badge {
+  display: inline-flex;
+  align-items: center;
+  max-height: 34px;
+  box-sizing: border-box;
+  position: relative;
+  cursor: pointer;
+  padding: 0.5em 0.65em;
+  background-color: rgba($primary-medium, 0.05);
+  border: 1.5px solid rgba($primary-medium, 0.5);
+  color: $primary-medium;
+
+  &:hover {
+    color: $primary-medium;
+  }
+
+  svg {
+    width: 15px;
+    height: 15px;
+    margin-right: 0.45em;
+    margin-bottom: 0.15em;
+  }
+
+  &.standard {
+    background-color: rgba($subscription_standard, 0.05);
+    border: 1.5px solid rgba($subscription_standard, 0.5);
+    color: $subscription_standard;
+  }
+
+  &.business {
+    background-color: $subscription_business;
+    border: 1.5px solid $subscription_business;
+    color: $secondary;
+  }
+
+  &.community {
+    background-color: $subscription_community;
+    border: 1.5px solid $pavilion_primary;
+    color: $pavilion_primary;
+  }
+
+  .d-icon {
+    margin-right: 0.75em;
+  }
+}
+
+.wizard-subscription-selector.select-kit.single-select {
+  .select-kit-row {
+    .texts {
+      display: flex;
+      align-items: center;
+    }
+    &.disabled {
+      background: var(--primary-low);
+      cursor: unset;
+    }
+  }
+
+  .subscription-label {
+    margin-left: 0.75em;
+    padding-top: 0.25em;
+    color: var(--pavilion-primary);
+    font-size: 0.75em;
+  }
 }

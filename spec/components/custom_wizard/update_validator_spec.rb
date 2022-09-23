@@ -2,12 +2,8 @@
 
 describe CustomWizard::UpdateValidator do
   fab!(:user) { Fabricate(:user) }
-
-  let(:template) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-    ).read).with_indifferent_access
-  }
+  let(:template) { get_wizard_fixture("wizard") }
+  let(:url_field) { get_wizard_fixture("field/url") }
 
   before do
     CustomWizard::Template.save(template, skip_jobs: true)
@@ -26,7 +22,6 @@ describe CustomWizard::UpdateValidator do
 
     @template[:steps][0][:fields][0][:min_length] = min_length
     @template[:steps][0][:fields][1][:min_length] = min_length
-    @template[:steps][0][:fields][2][:min_length] = min_length
 
     CustomWizard::Template.save(@template)
 
@@ -39,11 +34,6 @@ describe CustomWizard::UpdateValidator do
     expect(
       updater.errors.messages[:step_1_field_2].first
     ).to eq(I18n.t('wizard.field.too_short', label: 'Textarea', min: min_length))
-
-    updater = perform_validation('step_1', step_1_field_3: 'Te')
-    expect(
-      updater.errors.messages[:step_1_field_3].first
-    ).to eq(I18n.t('wizard.field.too_short', label: 'Composer', min: min_length))
   end
 
   it 'prevents submission if the length is over the max length' do
@@ -51,7 +41,6 @@ describe CustomWizard::UpdateValidator do
 
     @template[:steps][0][:fields][0][:max_length] = max_length
     @template[:steps][0][:fields][1][:max_length] = max_length
-    @template[:steps][0][:fields][2][:max_length] = max_length
 
     CustomWizard::Template.save(@template)
     long_string = "Our Competitive Capability solution offers platforms a suite of wholesale offerings. In the future, will you be able to effectively revolutionize synergies in your business? In the emerging market space, industry is ethically investing its mission critical executive searches. Key players will take ownership of their capabilities by iteratively right-sizing world-class visibilities. "
@@ -64,11 +53,6 @@ describe CustomWizard::UpdateValidator do
     expect(
       updater.errors.messages[:step_1_field_2].first
     ).to eq(I18n.t('wizard.field.too_long', label: 'Textarea', max: max_length))
-
-    updater = perform_validation('step_1', step_1_field_3: long_string)
-    expect(
-      updater.errors.messages[:step_1_field_3].first
-    ).to eq(I18n.t('wizard.field.too_long', label: 'Composer', max: max_length))
   end
 
   it "allows submission if the length is under or equal to the max length" do
@@ -76,7 +60,6 @@ describe CustomWizard::UpdateValidator do
 
     @template[:steps][0][:fields][0][:max_length] = max_length
     @template[:steps][0][:fields][1][:max_length] = max_length
-    @template[:steps][0][:fields][2][:max_length] = max_length
 
     CustomWizard::Template.save(@template)
     hundred_chars_string = "This is a line, exactly hundred characters long and not more even a single character more than that."
@@ -88,11 +71,6 @@ describe CustomWizard::UpdateValidator do
     updater = perform_validation('step_1', step_1_field_2: hundred_chars_string)
     expect(
       updater.errors.messages[:step_1_field_2].first
-    ).to eq(nil)
-
-    updater = perform_validation('step_1', step_1_field_3: hundred_chars_string)
-    expect(
-      updater.errors.messages[:step_1_field_3].first
     ).to eq(nil)
   end
 
@@ -136,25 +114,33 @@ describe CustomWizard::UpdateValidator do
     ).to eq(I18n.t('wizard.field.required', label: 'Textarea'))
   end
 
-  it 'validates url fields' do
-    updater = perform_validation('step_2', step_2_field_6: 'https://discourse.com')
-    expect(
-      updater.errors.messages[:step_2_field_6].first
-    ).to eq(nil)
-  end
+  context "subscription fields" do
+    before do
+      enable_subscription("standard")
+    end
 
-  it 'does not validate url fields with non-url inputs' do
-    updater = perform_validation('step_2', step_2_field_6: 'discourse')
-    expect(
-      updater.errors.messages[:step_2_field_6].first
-    ).to eq(I18n.t('wizard.field.not_url', label: 'Url'))
-  end
+    it 'validates url fields' do
+      updater = perform_validation('step_2', step_2_field_6: 'https://discourse.com')
+      expect(
+        updater.errors.messages[:step_2_field_6].first
+      ).to eq(nil)
+    end
 
-  it 'validates empty url fields' do
-    updater = perform_validation('step_2', step_2_field_6: '')
-    expect(
-      updater.errors.messages[:step_2_field_6].first
-    ).to eq(nil)
+    it 'does not validate url fields with non-url inputs' do
+      template[:steps][0][:fields] << url_field
+      CustomWizard::Template.save(template)
+      updater = perform_validation('step_1', step_2_field_6: 'discourse')
+      expect(
+        updater.errors.messages[:step_2_field_6].first
+      ).to eq(I18n.t('wizard.field.not_url', label: 'Url'))
+    end
+
+    it 'validates empty url fields' do
+      updater = perform_validation('step_2', step_2_field_6: '')
+      expect(
+        updater.errors.messages[:step_2_field_6].first
+      ).to eq(nil)
+    end
   end
 
   it 'validates date fields' do

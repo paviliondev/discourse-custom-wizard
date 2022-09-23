@@ -1,17 +1,15 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Forms for Discourse. Better onboarding, structured posting, data enrichment, automated actions and much more.
-# version: 1.22.10
-# authors: Angus McLeod, Faizaan Gagan, Robert Barrow, Keegan George
+# version: 2.0.0
+# authors: Angus McLeod, Faizaan Gagan, Robert Barrow, Keegan George, Kaitlin Maddever
 # url: https://github.com/paviliondev/discourse-custom-wizard
 # contact_emails: development@pavilion.tech
 # subscription_url: https://coop.pavilion.tech
 
 gem 'liquid', '5.0.1', require: true
-
-register_asset 'stylesheets/common/wizard-admin.scss'
-register_asset 'stylesheets/common/wizard-mapper.scss'
-register_asset 'stylesheets/common/wizard-custom.scss'
+register_asset 'stylesheets/common/admin.scss'
+register_asset 'stylesheets/common/wizard.scss'
 
 enabled_site_setting :custom_wizard_enabled
 
@@ -20,7 +18,16 @@ if respond_to?(:register_svg_icon)
   register_svg_icon "chevron-right"
   register_svg_icon "chevron-left"
   register_svg_icon "save"
+  register_svg_icon "sliders-h"
+  register_svg_icon "calendar"
+  register_svg_icon "check"
+  register_svg_icon "times"
+  register_svg_icon "clock"
+  register_svg_icon "link"
+  register_svg_icon "comment-alt"
+  register_svg_icon "far-life-ring"
   register_svg_icon "arrow-right"
+  register_svg_icon "bolt"
 end
 
 after_initialize do
@@ -37,8 +44,8 @@ after_initialize do
     ../app/controllers/custom_wizard/wizard.rb
     ../app/controllers/custom_wizard/steps.rb
     ../app/controllers/custom_wizard/realtime_validations.rb
-    ../app/jobs/refresh_api_access_token.rb
-    ../app/jobs/set_after_time_wizard.rb
+    ../app/jobs/regular/refresh_api_access_token.rb
+    ../app/jobs/regular/set_after_time_wizard.rb
     ../lib/custom_wizard/validators/template.rb
     ../lib/custom_wizard/validators/update.rb
     ../lib/custom_wizard/action_result.rb
@@ -55,6 +62,7 @@ after_initialize do
     ../lib/custom_wizard/step_updater.rb
     ../lib/custom_wizard/step.rb
     ../lib/custom_wizard/submission.rb
+    ../lib/custom_wizard/subscription.rb
     ../lib/custom_wizard/template.rb
     ../lib/custom_wizard/wizard.rb
     ../lib/custom_wizard/api/api.rb
@@ -79,9 +87,9 @@ after_initialize do
     ../app/serializers/custom_wizard/realtime_validation/similar_topics_serializer.rb
     ../lib/custom_wizard/extensions/extra_locales_controller.rb
     ../lib/custom_wizard/extensions/invites_controller.rb
-    ../lib/custom_wizard/extensions/guardian.rb
     ../lib/custom_wizard/extensions/users_controller.rb
     ../lib/custom_wizard/extensions/tags_controller.rb
+    ../lib/custom_wizard/extensions/guardian.rb
     ../lib/custom_wizard/extensions/custom_field/preloader.rb
     ../lib/custom_wizard/extensions/custom_field/serializer.rb
     ../lib/custom_wizard/extensions/custom_field/extension.rb

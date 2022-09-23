@@ -1,11 +1,7 @@
 # frozen_string_literal: true
 
 describe CustomWizardUsersController, type: :request do
-  let(:template) do
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-    ).read)
-  end
+  let(:template) { get_wizard_fixture("wizard") }
 
   before do
     @controller = UsersController.new

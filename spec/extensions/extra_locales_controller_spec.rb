@@ -3,18 +3,8 @@
 describe ExtraLocalesControllerCustomWizard, type: :request do
   let(:new_user) { Fabricate(:user, trust_level: TrustLevel[0]) }
   let(:staff_user) { Fabricate(:moderator) }
-
-  let(:template) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-    ).read)
-  }
-
-  let(:permitted) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard/permitted.json"
-    ).read)
-  }
+  let(:template) { get_wizard_fixture("wizard") }
+  let(:permitted) { get_wizard_fixture("wizard/permitted") }
 
   before do
     CustomWizard::Template.save(template, skip_jobs: true)

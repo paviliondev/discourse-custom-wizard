@@ -19,7 +19,6 @@ const wizard = {
     permitted: null,
   },
   mapped: ["permitted"],
-  advanced: ["restart_on_revisit"],
   required: ["id"],
   dependent: {
     after_time: "after_time_scheduled",
@@ -41,7 +40,6 @@ const step = {
     id: null,
     index: null,
     title: null,
-    key: null,
     banner: null,
     banner_upload_id: null,
     raw_description: null,
@@ -52,7 +50,6 @@ const step = {
     force_final: false,
   },
   mapped: ["required_data", "permitted_params", "condition", "index"],
-  advanced: ["required_data", "permitted_params", "condition", "index"],
   required: ["id"],
   dependent: {},
   objectArrays: {
@@ -71,14 +68,13 @@ const field = {
     image: null,
     image_upload_id: null,
     description: null,
+    property: null,
     required: null,
-    key: null,
     type: null,
     condition: null,
   },
   types: {},
   mapped: ["prefill", "content", "condition", "index"],
-  advanced: ["property", "key", "condition", "index"],
   required: ["id", "type"],
   dependent: {},
   objectArrays: {},
@@ -201,22 +197,24 @@ const action = {
     "members_visibility_level",
     "add_event",
   ],
-  advanced: [
-    "code",
-    "custom_fields",
-    "skip_redirect",
-    "suppress_notifications",
-    "required",
-  ],
   required: ["id", "type"],
   dependent: {},
   objectArrays: {},
 };
 
+const custom_field = {
+  klass: ["topic", "post", "group", "category"],
+  type: ["string", "boolean", "integer", "json"],
+};
+
+field.type = Object.keys(field.types);
+action.type = Object.keys(action.types);
+
 const wizardSchema = {
   wizard,
   step,
   field,
+  custom_field,
   action,
 };
 

@@ -1,0 +1,15 @@
+<div class="select-kit-header-wrapper">
+
+  {{component selectKit.options.selectedNameComponent
+    tabindex=tabindex
+    item=selectedContent
+    selectKit=selectKit
+    shouldDisplayClearableButton=shouldDisplayClearableButton
+  }}
+
+  {{#if subscriptionRequired}}
+    <span class="subscription-label">{{i18n selectorLabel}}</span>
+  {{/if}}
+
+  {{d-icon caretIcon class="caret-icon"}}
+</div>

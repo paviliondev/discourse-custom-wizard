@@ -1,6 +1,6 @@
 {{#if showUndo}}
   {{d-button
-    action="undoChanges"
+    action=(action "undoChanges")
     icon=undoIcon
     label=undoKey
     class="undo-changes"}}
@@ -224,70 +224,50 @@
   </div>
 {{/if}}
 
-{{#if showAdvanced}}
-  {{wizard-advanced-toggle showAdvanced=field.showAdvanced}}
+{{#wizard-subscription-container}}
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.condition"}}</label>
+    </div>
 
-  {{#if field.showAdvanced}}
-    <div class="advanced-settings">
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=field.condition
+        options=fieldConditionOptions}}
+    </div>
+  </div>
 
-      <div class="setting full field-mapper-setting">
-        <div class="setting-label">
-          <label>{{i18n "admin.wizard.condition"}}</label>
-        </div>
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.index"}}</label>
+    </div>
 
-        <div class="setting-value">
-          {{wizard-mapper
-            inputs=field.condition
-            options=fieldConditionOptions}}
-        </div>
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=field.index
+        options=fieldIndexOptions}}
+    </div>
+  </div>
+
+  {{#if isCategory}}
+    <div class="setting">
+      <div class="setting-label">
+        <label>{{i18n "admin.wizard.field.property"}}</label>
       </div>
 
-      <div class="setting full field-mapper-setting">
-        <div class="setting-label">
-          <label>{{i18n "admin.wizard.index"}}</label>
-        </div>
-
-        <div class="setting-value">
-          {{wizard-mapper
-            inputs=field.index
-            options=fieldIndexOptions}}
-        </div>
+      <div class="setting-value">
+        {{combo-box
+          value=field.property
+          content=categoryPropertyTypes
+          onChange=(action (mut field.property))
+          options=(hash
+            none="admin.wizard.selector.placeholder.property"
+          )}}
       </div>
-
-      {{#if isCategory}}
-        <div class="setting">
-          <div class="setting-label">
-            <label>{{i18n "admin.wizard.field.property"}}</label>
-          </div>
-
-          <div class="setting-value">
-            {{combo-box
-              value=field.property
-              content=categoryPropertyTypes
-              onChange=(action (mut field.property))
-              options=(hash
-                none="admin.wizard.selector.placeholder.property"
-              )}}
-          </div>
-        </div>
-      {{/if}}
-
-      <div class="setting">
-        <div class="setting-label">
-          <label>{{i18n "admin.wizard.translation"}}</label>
-        </div>
-        <div class="setting-value medium">
-          {{input
-            name="key"
-            value=field.key
-            class="medium"
-            placeholderKey="admin.wizard.translation_placeholder"}}
-        </div>
-      </div>
-
-      {{#if validations}}
-        {{wizard-realtime-validations field=field validations=validations}}
-      {{/if}}
     </div>
   {{/if}}
-{{/if}}
+
+  {{#if validations}}
+    {{wizard-realtime-validations field=field validations=validations}}
+  {{/if}}
+{{/wizard-subscription-container}}

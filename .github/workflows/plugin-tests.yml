@@ -8,7 +8,7 @@ on:
   pull_request:
 
 concurrency:
-  group: plugin-tests-${{ format('{0}-{1}', github.head_ref || github.run_number, github.job) }}
+  group: tests-${{ format('{0}-{1}', github.head_ref || github.run_number, github.job) }}
   cancel-in-progress: true
 
 jobs:

@@ -3,19 +3,12 @@
 describe CustomWizard::WizardSerializer do
   fab!(:user) { Fabricate(:user) }
   fab!(:category) { Fabricate(:category) }
-
-  let(:similar_topics_validation) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/field/validation/similar_topics.json"
-    ).read)
-  }
+  let(:template) { get_wizard_fixture("wizard") }
+  let(:similar_topics_validation) { get_wizard_fixture("field/validation/similar_topics") }
+  let(:advanced_fields) { get_wizard_fixture("field/advanced_types") }
 
   before do
-    CustomWizard::Template.save(
-      JSON.parse(File.open(
-        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-      ).read),
-    skip_jobs: true)
+    CustomWizard::Template.save(template, skip_jobs: true)
     @template = CustomWizard::Template.find('super_mega_fun_wizard')
   end
 

@@ -1,29 +1,12 @@
 # frozen_string_literal: true
 
 describe CustomWizard::WizardController do
-  fab!(:user) {
-    Fabricate(
-      :user,
-      username: 'angus',
-      email: "angus@email.com",
-      trust_level: TrustLevel[3]
-    )
-  }
-
-  let(:permitted_json) {
-    JSON.parse(
-      File.open(
-        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard/permitted.json"
-      ).read
-    )
-  }
+  fab!(:user) { Fabricate(:user, username: 'angus', email: "angus@email.com", trust_level: TrustLevel[3]) }
+  let(:wizard_template) { get_wizard_fixture("wizard") }
+  let(:permitted_json) { get_wizard_fixture("wizard/permitted") }
 
   before do
-    CustomWizard::Template.save(
-      JSON.parse(File.open(
-        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-      ).read),
-    skip_jobs: true)
+    CustomWizard::Template.save(wizard_template, skip_jobs: true)
     @template = CustomWizard::Template.find("super_mega_fun_wizard")
     sign_in(user)
   end
@@ -57,14 +40,15 @@ describe CustomWizard::WizardController do
     end
 
     it 'lets user skip if user cant access wizard' do
+      enable_subscription("standard")
       @template["permitted"] = permitted_json["permitted"]
       CustomWizard::Template.save(@template, skip_jobs: true)
-
       put '/w/super-mega-fun-wizard/skip.json'
       expect(response.status).to eq(200)
     end
 
     it 'returns a no skip message if user is not allowed to skip' do
+      enable_subscription("standard")
       @template['required'] = 'true'
       CustomWizard::Template.save(@template)
       put '/w/super-mega-fun-wizard/skip.json'
@@ -92,9 +76,9 @@ describe CustomWizard::WizardController do
       CustomWizard::Submission.new(@wizard, step_1_field_1: "Hello World").save
       current_submission = @wizard.current_submission
       put '/w/super-mega-fun-wizard/skip.json'
-      list = CustomWizard::Submission.list(@wizard)
+      submissions = CustomWizard::Submission.list(@wizard).submissions
 
-      expect(list.any? { |submission| submission.id == current_submission.id }).to eq(false)
+      expect(submissions.any? { |submission| submission.id == current_submission.id }).to eq(false)
     end
 
     it "starts from the first step if user visits after skipping the wizard" do

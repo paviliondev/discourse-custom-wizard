@@ -97,11 +97,6 @@ function buildObjectArray(json, type) {
   if (present(json)) {
     json.forEach((objJson, objectIndex) => {
       let object = buildObject(objJson, type, objectIndex);
-
-      if (hasAdvancedProperties(object, type)) {
-        object.set("showAdvanced", true);
-      }
-
       array.pushObject(object);
     });
   }
@@ -112,19 +107,9 @@ function buildObjectArray(json, type) {
 function buildBasicProperties(json, type, props, objectIndex = null) {
   listProperties(type).forEach((p) => {
     props[p] = buildProperty(json, p, type, objectIndex);
-
-    if (hasAdvancedProperties(json, type)) {
-      props.showAdvanced = true;
-    }
   });
 
   return props;
-}
-
-function hasAdvancedProperties(object, type) {
-  return Object.keys(object).some((p) => {
-    return wizardSchema[type].advanced.indexOf(p) > -1 && present(object[p]);
-  });
 }
 
 /// to be removed: necessary due to action array being moved from step to wizard

@@ -5,11 +5,7 @@ describe Jobs::SetAfterTimeWizard do
   fab!(:user2) { Fabricate(:user) }
   fab!(:user3) { Fabricate(:user) }
 
-  let(:template) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-    ).read).with_indifferent_access
-  }
+  let(:template) { get_wizard_fixture("wizard") }
 
   it "sets wizard redirect for all users " do
     after_time_template = template.dup

@@ -1,8 +1,8 @@
 import { default as discourseComputed } from "discourse-common/utils/decorators";
-import { and, empty, equal, or } from "@ember/object/computed";
+import { subscriptionSelectKitContent } from "discourse/plugins/discourse-custom-wizard/discourse/lib/wizard-subscription";
+import { empty, equal, or } from "@ember/object/computed";
 import { notificationLevels, selectKitContent } from "../lib/wizard";
 import { computed } from "@ember/object";
-import wizardSchema from "../lib/wizard-schema";
 import UndoChanges from "../mixins/undo-changes";
 import Component from "@ember/component";
 import I18n from "I18n";
@@ -25,8 +25,6 @@ export default Component.extend(UndoChanges, {
   createGroup: equal("action.type", "create_group"),
   apiEmpty: empty("action.api"),
   groupPropertyTypes: selectKitContent(["id", "name"]),
-  hasAdvanced: or("hasCustomFields", "routeTo"),
-  showAdvanced: and("hasAdvanced", "action.type"),
   hasCustomFields: or(
     "basicTopicFields",
     "updateProfile",
@@ -36,12 +34,6 @@ export default Component.extend(UndoChanges, {
   basicTopicFields: or("createTopic", "sendMessage", "openComposer"),
   publicTopicFields: or("createTopic", "openComposer"),
   showPostAdvanced: or("createTopic", "sendMessage"),
-  actionTypes: Object.keys(wizardSchema.action.types).map((type) => {
-    return {
-      id: type,
-      name: I18n.t(`admin.wizard.action.${type}.label`),
-    };
-  }),
   availableNotificationLevels: notificationLevels.map((type) => {
     return {
       id: type,
@@ -100,6 +92,11 @@ export default Component.extend(UndoChanges, {
       return [];
     }
     return apis.find((a) => a.name === api).endpoints;
+  },
+
+  @discourseComputed
+  actionTypes() {
+    return subscriptionSelectKitContent("action", "types");
   },
 
   @discourseComputed("fieldTypes")

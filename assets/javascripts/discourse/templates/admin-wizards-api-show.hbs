@@ -21,11 +21,11 @@
     {{/if}}
   </div>
 
-  <div class="wizard-header">
+  <div class="wizard-header large">
     {{#if api.isNew}}
       {{i18n "admin.wizard.api.new"}}
     {{else}}
-      {{api.title}}
+      <span>{{api.title}}</span>
     {{/if}}
   </div>
 
@@ -35,12 +35,12 @@
       {{input value=api.title placeholder=(i18n "admin.wizard.api.title_placeholder")}}
     </div>
 
-    <div class="name">
+    <div class="name {{nameClass}}">
       <label>{{i18n "admin.wizard.api.name"}}</label>
       {{#if api.isNew}}
         {{input value=api.name placeholder=(i18n "admin.wizard.api.name_placeholder")}}
       {{else}}
-        {{api.name}}
+        <span>{{api.name}}</span>
       {{/if}}
     </div>
   </div>
@@ -63,7 +63,7 @@
     {{/if}}
   </div>
 
-  <div class="wizard-header">
+  <div class="wizard-header medium">
     {{i18n "admin.wizard.api.auth.label"}}
   </div>
 </div>
@@ -71,7 +71,7 @@
 <div class="wizard-api-authentication">
   <div class="settings">
 
-    <div class="wizard-header medium">
+    <div class="wizard-header small">
       {{i18n "admin.wizard.api.auth.settings"}}
     </div>
 
@@ -174,7 +174,7 @@
         {{/if}}
       </div>
 
-      <div class="wizard-header medium">
+      <div class="wizard-header small">
         {{i18n "admin.wizard.api.status.label"}}
       </div>
 
@@ -220,7 +220,7 @@
   {{/if}}
 </div>
 
-<div class="wizard-header">
+<div class="wizard-header medium">
   {{i18n "admin.wizard.api.endpoint.label"}}
 </div>
 
@@ -277,11 +277,15 @@
   {{/if}}
 </div>
 
-<div class="wizard-header">
+<div class="wizard-header medium">
   {{i18n "admin.wizard.api.log.label"}}
-  {{d-button action=(action "clearLogs")
-             icon="trash-alt"
-             class="clear-logs"}}
+
+  <div class="controls">
+    {{d-button
+      action=(action "clearLogs")
+      class="clear-logs"
+      label="admin.wizard.api.log.clear"}}
+  </div>
 </div>
 
 <div class="wizard-api-log">
@@ -300,7 +304,7 @@
             <td>{{logentry.time}}</td>
             <td class="user-image">
               <div class="user-image-inner">
-                <a href={{logentry.userpath}} data-user-card={{logentry.username}}>{{avatar logentry imageSize="large"}}</a>
+                <a href={{logentry.userpath}} data-user-card={{logentry.username}}>{{avatar logentry imageSize="medium"}}</a>
               </div>
             </td>
             <td>{{logentry.status}}</td>

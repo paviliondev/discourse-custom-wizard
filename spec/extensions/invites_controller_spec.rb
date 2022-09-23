@@ -3,12 +3,7 @@
 describe InvitesControllerCustomWizard, type: :request do
   fab!(:topic) { Fabricate(:topic) }
   let(:invite) { Invite.generate(topic.user, email: "angus@mcleod.org", topic: topic) }
-
-  let(:template) do
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-    ).read)
-  end
+  let(:template) { get_wizard_fixture("wizard") }
 
   before do
     @controller = InvitesController.new

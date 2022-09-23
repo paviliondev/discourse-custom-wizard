@@ -7,11 +7,8 @@ describe "custom field extensions" do
   fab!(:group) { Fabricate(:group) }
   fab!(:user) { Fabricate(:user) }
 
-  let(:custom_field_json) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/custom_field/custom_fields.json"
-    ).read)
-  }
+  let(:custom_field_json) { get_wizard_fixture("custom_field/custom_fields") }
+  let(:subscription_custom_field_json) { get_wizard_fixture("custom_field/subscription_custom_fields") }
 
   before do
     custom_field_json['custom_fields'].each do |field_json|
@@ -73,43 +70,54 @@ describe "custom field extensions" do
     end
   end
 
-  context "category" do
-    it "registers category custom fields" do
-      category
-      expect(Category.get_custom_field_type("category_field_1")).to eq(:json)
+  context "subscription custom fields" do
+    before do
+      enable_subscription("business")
+
+      subscription_custom_field_json['custom_fields'].each do |field_json|
+        custom_field = CustomWizard::CustomField.new(nil, field_json)
+        custom_field.save
+      end
     end
 
-    it "adds category custom fields to the basic category serializer" do
-      category.custom_fields["category_field_1"] = { a: 1, b: 2 }.to_json
-      category.save_custom_fields(true)
+    context "category" do
+      it "registers" do
+        category
+        expect(Category.get_custom_field_type("category_field_1")).to eq(:json)
+      end
 
-      serializer = BasicCategorySerializer.new(
-        category,
-        scope: Guardian.new(user),
-        root: false
-      ).as_json
+      it "adds custom fields to the basic category serializer" do
+        category.custom_fields["category_field_1"] = { a: 1, b: 2 }.to_json
+        category.save_custom_fields(true)
 
-      expect(serializer[:category_field_1]).to eq({ a: 1, b: 2 }.to_json)
+        serializer = BasicCategorySerializer.new(
+          category,
+          scope: Guardian.new(user),
+          root: false
+        ).as_json
+
+        expect(serializer[:category_field_1]).to eq({ a: 1, b: 2 }.to_json)
+      end
     end
-  end
 
-  context "group" do
-    it "registers group custom fields" do
-      group
-      expect(Group.get_custom_field_type("group_field_1")).to eq(:string)
-    end
+    context "group" do
+      it "registers" do
+        group
+        expect(Group.get_custom_field_type("group_field_1")).to eq(:string)
+      end
 
-    it "adds group custom fields to the basic group serializer" do
-      group.custom_fields["group_field_1"] = "Hello"
-      group.save_custom_fields(true)
+      it "adds custom fields to the basic group serializer" do
+        group.custom_fields["group_field_1"] = "Hello"
+        group.save_custom_fields(true)
 
-      serializer = BasicGroupSerializer.new(
-        group,
-        scope: Guardian.new(user),
-        root: false
-      ).as_json
+        serializer = BasicGroupSerializer.new(
+          group,
+          scope: Guardian.new(user),
+          root: false
+        ).as_json
 
-      expect(serializer[:group_field_1]).to eq("Hello")
+        expect(serializer[:group_field_1]).to eq("Hello")
+      end
     end
   end
 end

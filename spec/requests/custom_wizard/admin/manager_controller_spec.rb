@@ -2,12 +2,7 @@
 
 describe CustomWizard::AdminManagerController do
   fab!(:admin_user) { Fabricate(:user, admin: true) }
-
-  let(:template) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-    ).read)
-  }
+  let(:template) { get_wizard_fixture("wizard") }
 
   before do
     sign_in(admin_user)

@@ -20,7 +20,7 @@ export default {
       return existing.apply(this, [path, opts]);
     };
 
-    withPluginApi("0.8.7", (api) => {
+    withPluginApi("0.8.36", (api) => {
       api.modifyClass("component:d-navigation", {
         pluginId: "custom-wizard",
         actions: {

@@ -67,6 +67,10 @@ body.custom-wizard {
       margin-top: 0;
       order: 2;
     }
+
+    & > .field-label + .field-description {
+      margin-left: 0.5em;
+    }
   }
 
   .url-field input {

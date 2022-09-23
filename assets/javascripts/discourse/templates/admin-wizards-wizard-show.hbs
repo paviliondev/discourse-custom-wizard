@@ -101,7 +101,7 @@
         {{input type="checkbox" checked=wizard.after_time}}
         <span>{{i18n "admin.wizard.after_time_label"}}</span>
         {{d-button
-          action="setNextSessionScheduled"
+          action=(action "setNextSessionScheduled")
           translatedLabel=nextSessionScheduledLabel
           class="btn-after-time"
           icon="far-calendar"}}
@@ -126,43 +126,27 @@
       </div>
     </div>
 
-    {{wizard-advanced-toggle showAdvanced=wizard.showAdvanced}}
-
-    {{#if wizard.showAdvanced}}
-      <div class="advanced-settings">
-
-        <div class="setting">
-          <div class="setting-label">
-            <label>{{i18n "admin.wizard.save_submissions"}}</label>
-          </div>
-          <div class="setting-value">
-            {{input type="checkbox" checked=wizard.save_submissions}}
-            <span>{{i18n "admin.wizard.save_submissions_label"}}</span>
-          </div>
+    {{#wizard-subscription-container}}
+      <div class="setting">
+        <div class="setting-label">
+          <label>{{i18n "admin.wizard.save_submissions"}}</label>
         </div>
-
-        <div class="setting">
-          <div class="setting-label">
-            <label>{{i18n "admin.wizard.restart_on_revisit"}}</label>
-          </div>
-          <div class="setting-value">
-            {{input type="checkbox" checked=wizard.restart_on_revisit}}
-            <span>{{i18n "admin.wizard.restart_on_revisit_label"}}</span>
-          </div>
+        <div class="setting-value">
+          {{input type="checkbox" checked=wizard.save_submissions}}
+          <span>{{i18n "admin.wizard.save_submissions_label"}}</span>
         </div>
-
-        <div class="setting">
-          <div class="setting-label">
-            <label>{{i18n "admin.wizard.resume_on_revisit"}}</label>
-          </div>
-          <div class="setting-value">
-            {{input type="checkbox" checked=wizard.resume_on_revisit}}
-            <span>{{i18n "admin.wizard.resume_on_revisit_label"}}</span>
-          </div>
-        </div>
-
       </div>
-    {{/if}}
+
+      <div class="setting">
+        <div class="setting-label">
+          <label>{{i18n "admin.wizard.restart_on_revisit"}}</label>
+        </div>
+        <div class="setting-value">
+          {{input type="checkbox" checked=wizard.restart_on_revisit}}
+          <span>{{i18n "admin.wizard.restart_on_revisit_label"}}</span>
+        </div>
+      </div>
+    {{/wizard-subscription-container}}
   </div>
 
   {{wizard-links
@@ -176,7 +160,8 @@
       wizard=wizard
       currentField=currentField
       wizardFields=wizardFields
-      fieldTypes=fieldTypes}}
+      fieldTypes=fieldTypes
+      subscribed=subscribed}}
   {{/if}}
 
   {{wizard-links
@@ -185,9 +170,9 @@
     items=wizard.actions
     generateLabels=true}}
 
-  {{#each wizard.actions as |action|}}
+  {{#each wizard.actions as |wizardAction|}}
     {{wizard-custom-action
-      action=action
+      action=wizardAction
       currentActionId=currentAction.id
       wizard=wizard
       apis=apis

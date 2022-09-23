@@ -2,12 +2,12 @@
 
 describe CustomWizard::TemplateValidator do
   fab!(:user) { Fabricate(:user) }
+  let(:template) { get_wizard_fixture("wizard") }
+  let(:create_category) { get_wizard_fixture("actions/create_category") }
+  let(:user_condition) { get_wizard_fixture("condition/user_condition") }
+  let(:permitted_json) { get_wizard_fixture("wizard/permitted") }
+  let(:composer_preview) { get_wizard_fixture("field/composer_preview") }
 
-  let(:template) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-    ).read).with_indifferent_access
-  }
   let(:valid_liquid_template) {
     <<-LIQUID.strip
         {%- assign hello = "Topic Form 1" %}
@@ -104,6 +104,70 @@ describe CustomWizard::TemplateValidator do
     ).to eq(false)
   end
 
+  context "without subscription" do
+    it "invalidates subscription wizard attributes" do
+      template[:permitted] = permitted_json['permitted']
+      expect(
+        CustomWizard::TemplateValidator.new(template).perform
+      ).to eq(false)
+    end
+
+    it "invalidates subscription step attributes" do
+      template[:steps][0][:condition] = user_condition['condition']
+      expect(
+        CustomWizard::TemplateValidator.new(template).perform
+      ).to eq(false)
+    end
+
+    it "invalidates subscription field attributes" do
+      template[:steps][0][:fields][0][:condition] = user_condition['condition']
+      expect(
+        CustomWizard::TemplateValidator.new(template).perform
+      ).to eq(false)
+    end
+
+    it "invalidates subscription actions" do
+      template[:actions] << create_category
+      expect(
+        CustomWizard::TemplateValidator.new(template).perform
+      ).to eq(false)
+    end
+  end
+
+  context "with subscription" do
+    before do
+      enable_subscription("business")
+    end
+
+    it "validates wizard attributes" do
+      template[:permitted] = permitted_json['permitted']
+      expect(
+        CustomWizard::TemplateValidator.new(template).perform
+      ).to eq(true)
+    end
+
+    it "validates step attributes" do
+      template[:steps][0][:condition] = user_condition['condition']
+      expect(
+        CustomWizard::TemplateValidator.new(template).perform
+      ).to eq(true)
+    end
+
+    it "validates field attributes" do
+      template[:steps][0][:fields][0][:condition] = user_condition['condition']
+      expect(
+        CustomWizard::TemplateValidator.new(template).perform
+      ).to eq(true)
+    end
+
+    it "validates actions" do
+      template[:actions] << create_category
+      expect(
+        CustomWizard::TemplateValidator.new(template).perform
+      ).to eq(true)
+    end
+  end
+
   context "steps" do
     CustomWizard::TemplateValidator.required[:step].each do |attribute|
       it "invalidates if \"#{attribute.to_s}\" is not present" do
@@ -165,7 +229,9 @@ describe CustomWizard::TemplateValidator do
         end
 
         it "validates preview templates" do
-          template[:steps][0][:fields][4][:preview_template] = invalid_liquid_template
+          enable_subscription("standard")
+          template[:steps][0][:fields] << composer_preview
+          template[:steps][0][:fields][3][:preview_template] = invalid_liquid_template
           expect_validation_failure("step_1_field_5.preview_template", liquid_syntax_error)
         end
       end

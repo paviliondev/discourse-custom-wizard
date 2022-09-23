@@ -39,13 +39,8 @@ class CustomWizard::StepSerializer < ::ApplicationSerializer
     object.previous.present?
   end
 
-  def i18n_key
-    @i18n_key ||= "wizard.step.#{object.id}".underscore
-  end
-
   def title
-    return PrettyText.cook(object.title) if object.title
-    PrettyText.cook(I18n.t("#{object.key || i18n_key}.title", default: ''))
+    I18n.t("#{i18n_key}.title", default: object.title, base_url: Discourse.base_url)
   end
 
   def include_title?
@@ -53,8 +48,7 @@ class CustomWizard::StepSerializer < ::ApplicationSerializer
   end
 
   def description
-    return object.description if object.description
-    PrettyText.cook(I18n.t("#{object.key || i18n_key}.description", default: '', base_url: Discourse.base_url))
+    I18n.t("#{i18n_key}.description", default: object.description, base_url: Discourse.base_url)
   end
 
   def include_description?
@@ -79,5 +73,11 @@ class CustomWizard::StepSerializer < ::ApplicationSerializer
 
   def final
     object.final?
+  end
+
+  protected
+
+  def i18n_key
+    @i18n_key ||= "#{object.wizard.id}.#{object.id}".underscore
   end
 end

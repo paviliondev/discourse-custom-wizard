@@ -114,8 +114,6 @@ en:
         key: "Key"
         value: "Value"
         profile: "profile"
-        translation: "Translation"
-        translation_placeholder: "key"
         type: "Type"
         none: "Make a selection"
         submission_key: 'submission key'
@@ -128,6 +126,9 @@ en:
         select_type: "Select a type"
         condition: "Condition"
         index: "Index"
+        edit_columns: "Edit Columns"
+        expand_text: "Read More"
+        collapse_text: "Show Less"
         category_settings:
           custom_wizard:
             title: "Custom Wizard"
@@ -160,11 +161,30 @@ en:
             no_file: Please choose a file to import
             file_size_error: The file size must be 512kb or less
             file_format_error: The file must be a .json file
-            server_error: "Error: {{message}}"
             importing: Importing wizards...
             destroying: Destroying wizards...
             import_complete: Import complete
             destroy_complete: Destruction complete
+          subscription:
+            documentation: Check out the subscription documentation
+            authorize: "Authorize this forum to use your Custom Wizard subscription plan on %{server}."
+            not_subscribed: "You've authorized, but are not currently subscribed to a Custom Wizard plan on %{server}."
+            subscription_expiring: "Your subscription is active, but will expire in the next 48 hours."
+            subscription_active: "Your subscription is active."
+            subscription_inactive: "Your subscription is inactive on this forum. Read more in <a href='https://thepavilion.io/t/3652'>the documentation</a>."
+            unauthorized: "You're unauthorized. If you have a subscription, it will become inactive in the next 48 hours."
+            unauthorize_failed: Failed to unauthorize.
+          submissions:
+            select: "Select a wizard to see its submissions"
+            viewing: "You're viewing the submissions of the %{wizardName}"
+            documentation: "Check out the submissions documentation"
+          logs:
+            select: "Select a wizard to see its logs"
+            viewing: "View recent logs for wizards on the forum"
+            documentation: "Check out the logs documentation"
+          notices:
+            info: "Plugin status and subscription notices"
+            documentation: Check out the notices documentation
 
         editor:
           show: "Show"
@@ -227,10 +247,10 @@ en:
           banner: "Banner"
           description: "Description"
           required_data:
-            label: "Required"
+            label: "Required Data"
             not_permitted_message: "Message shown when required data not present"
           permitted_params:
-            label: "Params"
+            label: "Permitted Params"
           force_final:
             label: "Conditional Final Step"
             description: "Display this step as the final step if conditions on later steps have not passed when the user reaches this step."
@@ -247,9 +267,9 @@ en:
           min_length_placeholder: "Minimum length in characters"
           max_length: "Max Length"
           max_length_placeholder: "Maximum length in characters"
-          char_counter: "Character Counter"
+          char_counter: "Counter"
           char_counter_placeholder: "Display Character Counter"
-          field_placeholder: "Field Placeholder"
+          field_placeholder: "Placeholder"
           file_types: "File Types"
           preview_template: "Template"
           limit: "Limit"
@@ -261,7 +281,7 @@ en:
             label: "Format"
             instructions: "<a href='https://momentjs.com/docs/#/displaying/format/' target='_blank'>Moment.js format</a>"
           validations:
-            header: "Realtime Validations"
+            header: "Validations"
             enabled: "Enabled"
             similar_topics: "Similar Topics"
             position: "Position"
@@ -438,6 +458,9 @@ en:
           nav_label: "Submissions"
           title: "{{name}} Submissions"
           download: "Download"
+          group_id: "Group ID"
+          category_id: "Category ID"
+          composer_preview: "Composer Preview"
 
         api:
           label: "API"
@@ -491,9 +514,15 @@ en:
 
           log:
             label: "Logs"
+            clear: clear
 
         log:
           nav_label: "Logs"
+          title: "{{name}} Logs"
+          date: Date
+          action: Action
+          user: User
+          message: Message
 
         manager:
           nav_label: Manager
@@ -504,6 +533,38 @@ en:
           upload: Select wizards.json
           destroy: Destroy
           destroyed: destroyed
+
+        subscription:
+          title: Subscriber Features
+          subscribed:
+            label: Subscribed
+            title: You're subscribed and can use these features
+            selector: subscribed
+          not_subscribed:
+            label: Not Subscribed
+            title: Subscribe to use these features
+            selector: not subscribed
+          type:
+            none:
+              label: Not Subscribed
+              title: There is no Custom Wizard subscription active on this forum.
+            business:
+              label: Business
+              title: There is a Custom Wizard Business subscription active on this forum.
+            standard:
+              label: Standard
+              title: There is a Custom Wizard Standard subscription active on this forum.
+            community:
+              label: Community
+              title: There is a Custom Wizard Community subscription active on this forum.
+          cta:
+            none:
+              label: Get a Subscription
+              title: Get a subscription for this forum.
+            subscribed:
+              label: Support
+              title: Get support for your subscription.
+
 
   wizard_js:
     group:

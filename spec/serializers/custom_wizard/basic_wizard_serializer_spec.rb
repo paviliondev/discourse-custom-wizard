@@ -2,13 +2,10 @@
 
 describe CustomWizard::BasicWizardSerializer do
   fab!(:user) { Fabricate(:user) }
+  let(:template) { get_wizard_fixture("wizard") }
 
   it 'should return basic wizard attributes' do
-    CustomWizard::Template.save(
-      JSON.parse(File.open(
-        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-      ).read),
-    skip_jobs: true)
+    CustomWizard::Template.save(template, skip_jobs: true)
     json = CustomWizard::BasicWizardSerializer.new(
       CustomWizard::Builder.new("super_mega_fun_wizard", user).build,
       scope: Guardian.new(user)
