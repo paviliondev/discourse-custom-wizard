@@ -7,10 +7,8 @@
     shouldDisplayClearableButton=shouldDisplayClearableButton
   }}
 
-  {{#if selectedContent.subscriptionType}}
-    <span class="subscription-label">
-      {{selectedContent.subscriptionType}}
-    </span>
+  {{#if subscriptionRequired}}
+    <span class="subscription-label">{{i18n selectorLabel}}</span>
   {{/if}}
 
   {{d-icon caretIcon class="caret-icon"}}

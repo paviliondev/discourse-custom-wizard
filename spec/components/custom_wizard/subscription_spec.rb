@@ -96,7 +96,21 @@ describe CustomWizard::Subscription do
         expect(described_class.type).to eq(:business)
       end
 
-      it "business are included" do
+      it "business features are included" do
+        expect(described_class.includes?(:action, :type, 'create_category')).to eq(true)
+      end
+    end
+
+    context "with community subscription" do
+      before do
+        SubscriptionClientSubscription.stubs(:product_id).returns(CustomWizard::Subscription::COMMUNITY_PRODUCT_ID)
+      end
+
+      it "detects community type" do
+        expect(described_class.type).to eq(:community)
+      end
+
+      it "community features are included" do
         expect(described_class.includes?(:action, :type, 'create_category')).to eq(true)
       end
     end

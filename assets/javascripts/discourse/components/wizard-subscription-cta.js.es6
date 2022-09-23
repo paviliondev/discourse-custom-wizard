@@ -1,17 +1,21 @@
 import Component from "@ember/component";
 import discourseComputed from "discourse-common/utils/decorators";
 import Subscription from "../mixins/subscription";
-import DiscourseURL from "discourse/lib/url";
 import I18n from "I18n";
 
 export default Component.extend(Subscription, {
   tagName: "a",
-  classNameBindings: [":wizard-subscription-badge", "subscriptionType"],
+  classNameBindings: [":btn", ":btn-pavilion-support", "subscriptionType"],
   attributeBindings: ["title"],
 
-  @discourseComputed("subscriptionType")
-  i18nKey(type) {
-    return `admin.wizard.subscription.type.${type ? type : "none"}`;
+  @discourseComputed("subscribed")
+  i18nKey(subscribed) {
+    return `admin.wizard.subscription.cta.${subscribed ? "subscribed" : "none"}`;
+  },
+
+  @discourseComputed("subscribed")
+  icon(subscribed) {
+    return subscribed ? "far-life-ring" : "external-link-alt";
   },
 
   @discourseComputed("i18nKey")
@@ -25,6 +29,6 @@ export default Component.extend(Subscription, {
   },
 
   click() {
-    DiscourseURL.routeTo(this.subscriptionLink);
+    window.open(this.subscriptionCtaLink, "_blank").focus();
   },
 });

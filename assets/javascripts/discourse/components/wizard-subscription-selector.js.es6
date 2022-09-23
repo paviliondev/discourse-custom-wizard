@@ -1,10 +1,6 @@
 import SingleSelectComponent from "select-kit/components/single-select";
 import Subscription from "../mixins/subscription";
 import wizardSchema from "discourse/plugins/discourse-custom-wizard/discourse/lib/wizard-schema";
-import {
-  subscriptionTypeSufficient,
-  subscriptionTypes,
-} from "discourse/plugins/discourse-custom-wizard/discourse/lib/wizard-subscription";
 import discourseComputed from "discourse-common/utils/decorators";
 import I18n from "I18n";
 
@@ -29,45 +25,50 @@ export default SingleSelectComponent.extend(Subscription, {
     caretDownIcon: "caret-down",
   },
 
-  requiredSubscriptionType(feature, attribute, value) {
+  allowedSubscriptionTypes(feature, attribute, value) {
     let attributes = this.subscriptionAttributes[feature];
     if (!attributes || !attributes[attribute]) {
-      return null;
+      return ['none'];
     }
-
-    let requiredType = null;
-    Object.keys(attributes[attribute]).some((subscriptionType) => {
+    let allowedTypes = [];
+    Object.keys(attributes[attribute]).forEach((subscriptionType) => {
       let values = attributes[attribute][subscriptionType];
       if (values[0] === "*" || values.includes(value)) {
-        if (subscriptionTypes.includes(subscriptionType)) {
-          requiredType = subscriptionType;
-        }
-        return true;
+        allowedTypes.push(subscriptionType);
       }
-      return false;
     });
-
-    return requiredType;
+    return allowedTypes;
   },
 
   @discourseComputed("feature", "attribute")
   content(feature, attribute) {
     return wizardSchema[feature][attribute]
       .map((value) => {
-        let requiredSubscriptionType = this.requiredSubscriptionType(
+        let allowedSubscriptionTypes = this.allowedSubscriptionTypes(
           feature,
           attribute,
           value
         );
-        return {
+
+        let subscriptionRequired = allowedSubscriptionTypes.length &&
+          !allowedSubscriptionTypes.includes('none');
+
+        let attrs = {
           id: value,
           name: I18n.t(nameKey(feature, attribute, value)),
-          subscriptionType: requiredSubscriptionType,
-          disabled: !subscriptionTypeSufficient(
-            this.subscriptionType,
-            requiredSubscriptionType
-          ),
+          subscriptionRequired
         };
+
+        if (subscriptionRequired) {
+          let subscribed = allowedSubscriptionTypes.includes(this.subscriptionType);
+          let selectorKey = subscribed ? "subscribed" : "not_subscribed";
+          let selectorLabel = `admin.wizard.subscription.${selectorKey}.selector`;
+
+          attrs.disabled = !subscribed;
+          attrs.selectorLabel = selectorLabel;
+        }
+
+        return attrs;
       })
       .sort(function (a, b) {
         if (a.subscriptionType && !b.subscriptionType) {

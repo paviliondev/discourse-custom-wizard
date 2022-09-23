@@ -9,9 +9,7 @@
 
 <div class="texts">
   <span class="name">{{html-safe label}}</span>
-  {{#if item.subscriptionType}}
-    <span class="subscription-label">
-      {{item.subscriptionType}}
-    </span>
+  {{#if item.subscriptionRequired}}
+    <span class="subscription-label">{{i18n item.selectorLabel}}</span>
   {{/if}}
 </div>

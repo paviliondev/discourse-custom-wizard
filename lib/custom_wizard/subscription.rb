@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 class CustomWizard::Subscription
-  STANDARD_PRODUCT_ID = 'prod_LNAGVAaIqDsHmB'
-  BUSINESS_PRODUCT_ID = 'prod_LNABQ50maBQ1pY'
+  STANDARD_PRODUCT_ID = 'prod_MH11woVoZU5AWb'
+  BUSINESS_PRODUCT_ID = 'prod_MH0wT627okh3Ef'
+  COMMUNITY_PRODUCT_ID = 'prod_MU7l9EjxhaukZ7'
 
   def self.attributes
     {
@@ -9,75 +10,88 @@ class CustomWizard::Subscription
         required: {
           none: [],
           standard: ['*'],
-          business: ['*']
+          business: ['*'],
+          community: ['*']
         },
         permitted: {
           none: [],
           standard: ['*'],
-          business: ['*']
+          business: ['*'],
+          community: ['*']
         }
       },
       step: {
         condition: {
           none: [],
           standard: ['*'],
-          business: ['*']
+          business: ['*'],
+          community: ['*']
         },
         index: {
           none: [],
           standard: ['*'],
-          business: ['*']
+          business: ['*'],
+          community: ['*']
         },
         required_data: {
           none: [],
           standard: ['*'],
-          business: ['*']
+          business: ['*'],
+          community: ['*']
         },
         permitted_params: {
           none: [],
           standard: ['*'],
-          business: ['*']
+          business: ['*'],
+          community: ['*']
         }
       },
       field: {
         condition: {
           none: [],
           standard: ['*'],
-          business: ['*']
+          business: ['*'],
+          community: ['*']
         },
         index: {
           none: [],
           standard: ['*'],
-          business: ['*']
+          business: ['*'],
+          community: ['*']
         },
         type: {
           none: ['text', 'textarea', 'text_only', 'date', 'time', 'date_time', 'number', 'checkbox', 'dropdown', 'upload'],
           standard: ['*'],
-          business: ['*']
+          business: ['*'],
+          community: ['*']
         },
         realtime_validations: {
           none: [],
           standard: ['*'],
-          business: ['*']
+          business: ['*'],
+          community: ['*']
         }
       },
       action: {
         type: {
           none: ['create_topic', 'update_profile', 'open_composer', 'route_to'],
           standard: ['create_topic', 'update_profile', 'open_composer', 'route_to', 'send_message', 'watch_categories', 'add_to_group'],
-          business: ['*']
+          business: ['*'],
+          community: ['*']
         }
       },
       custom_field: {
         klass: {
           none: ['topic', 'post'],
           standard: ['topic', 'post'],
-          business: ['*']
+          business: ['*'],
+          community: ['*']
         },
         type: {
           none: ['string', 'boolean', 'integer'],
           standard: ['string', 'boolean', 'integer'],
-          business: ['*']
+          business: ['*'],
+          community: ['*']
         }
       }
     }
@@ -109,10 +123,11 @@ class CustomWizard::Subscription
     return :none unless subscribed?
     return :standard if standard?
     return :business if business?
+    return :community if community?
   end
 
   def subscribed?
-    standard? || business?
+    standard? || business? || community?
   end
 
   def standard?
@@ -121,6 +136,10 @@ class CustomWizard::Subscription
 
   def business?
     @subscription.product_id === BUSINESS_PRODUCT_ID
+  end
+
+  def community?
+    @subscription.product_id === COMMUNITY_PRODUCT_ID
   end
 
   def client_installed?
@@ -132,7 +151,7 @@ class CustomWizard::Subscription
 
     if client_installed?
       subscription = SubscriptionClientSubscription.active
-        .where(product_id: [STANDARD_PRODUCT_ID, BUSINESS_PRODUCT_ID])
+        .where(product_id: [STANDARD_PRODUCT_ID, BUSINESS_PRODUCT_ID, COMMUNITY_PRODUCT_ID])
         .order("product_id = '#{BUSINESS_PRODUCT_ID}' DESC")
         .first
     end
@@ -150,6 +169,10 @@ class CustomWizard::Subscription
 
   def self.business?
     new.business?
+  end
+
+  def self.community?
+    new.community?
   end
 
   def self.standard?

@@ -129,9 +129,6 @@ en:
         edit_columns: "Edit Columns"
         expand_text: "Read More"
         collapse_text: "Show Less"
-        support_button:
-          title: "Request Support"
-          label: "Support"
         category_settings:
           custom_wizard:
             title: "Custom Wizard"
@@ -535,14 +532,16 @@ en:
           destroy: Destroy
           destroyed: destroyed
 
-        subscription_container:
+        subscription:
           title: Subscriber Features
           subscribed:
             label: Subscribed
             title: You're subscribed and can use these features
+            selector: subscribed
           not_subscribed:
             label: Not Subscribed
             title: Subscribe to use these features
+            selector: not subscribed
           type:
             none:
               label: Not Subscribed
@@ -553,6 +552,17 @@ en:
             standard:
               label: Standard
               title: There is a Custom Wizard Standard subscription active on this forum.
+            community:
+              label: Community
+              title: There is a Custom Wizard Community subscription active on this forum.
+          cta:
+            none:
+              label: Get a Subscription
+              title: Get a subscription for this forum.
+            subscribed:
+              label: Support
+              title: Get support for your subscription.
+
 
   wizard_js:
     group:

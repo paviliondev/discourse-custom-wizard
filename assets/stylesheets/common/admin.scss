@@ -841,7 +841,7 @@ $error: #ef1700;
   vertical-align: middle;
 }
 
-.btn[href].btn-pavilion-support {
+.btn.btn-pavilion-support {
   background: var(--pavilion-primary);
   color: var(--pavilion-secondary);
 
@@ -918,6 +918,12 @@ $error: #ef1700;
     background-color: $subscription_business;
     border: 1.5px solid $subscription_business;
     color: $secondary;
+  }
+
+  &.community {
+    background-color: $subscription_community;
+    border: 1.5px solid $pavilion_primary;
+    color: $pavilion_primary;
   }
 
   .d-icon {

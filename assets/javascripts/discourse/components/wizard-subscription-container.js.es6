@@ -12,14 +12,14 @@ export default Component.extend(Subscription, {
 
   @discourseComputed("subscribed")
   subscribedLabel(subscribed) {
-    return `admin.wizard.subscription_container.${
+    return `admin.wizard.subscription.${
       subscribed ? "subscribed" : "not_subscribed"
     }.label`;
   },
 
   @discourseComputed("subscribed")
   subscribedTitle(subscribed) {
-    return `admin.wizard.subscription_container.${
+    return `admin.wizard.subscription.${
       subscribed ? "subscribed" : "not_subscribed"
     }.title`;
   },

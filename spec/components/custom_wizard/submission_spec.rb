@@ -17,7 +17,7 @@ describe CustomWizard::Submission do
     ).to eq("I am user submission")
   end
 
-  context "#list" do
+  describe "#list" do
     before do
       template_json_2 = template_json.dup
       template_json_2["id"] = "super_mega_fun_wizard_2"
