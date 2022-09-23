@@ -298,4 +298,23 @@ describe CustomWizard::Action do
     updater.update
     expect(updater.result[:redirect_on_next]).to eq("https://google.com")
   end
+
+  it 'registers callbacks' do
+    wizard = CustomWizard::Builder.new(@template[:id], user).build
+
+    described_class.register_callback(:before_create_topic) do |params, wizard, action, submission|
+      params[:topic_opts][:custom_fields]["topic_custom_field"] = true
+      params
+    end
+
+    action = CustomWizard::Action.new(
+      wizard: wizard,
+      action: create_topic.with_indifferent_access,
+      submission: wizard.current_submission
+    )
+    action.perform
+
+    expect(action.result.success?).to eq(true)
+    expect(Topic.find(action.result.output).custom_fields["topic_custom_field"]).to eq("t")
+  end
 end
