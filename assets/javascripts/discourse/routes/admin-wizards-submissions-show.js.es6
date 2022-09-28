@@ -9,15 +9,45 @@ export default DiscourseRoute.extend({
   },
 
   setupController(controller, model) {
-    const fields = model.fields.map((f) => {
-      const fieldsObject = EmberObject.create(f);
-      fieldsObject.enabled = true;
-      return fieldsObject;
+    let fields = [
+      EmberObject.create({ id: "username", label: "User", enabled: true }),
+    ];
+    let submissions = [];
+
+    model.submissions.forEach((s) => {
+      let submission = {
+        username: s.user,
+      };
+
+      Object.keys(s.fields).forEach((fieldId) => {
+        if (!fields.some((field) => field.id === fieldId)) {
+          fields.push(
+            EmberObject.create({
+              id: fieldId,
+              label: s.fields[fieldId].label,
+              enabled: true,
+            })
+          );
+        }
+        submission[fieldId] = s.fields[fieldId];
+      });
+
+      submission["submitted_at"] = s.submitted_at;
+      submissions.push(EmberObject.create(submission));
     });
+
+    let submittedAt = {
+      id: "submitted_at",
+      label: "Submitted At",
+      enabled: true,
+    };
+
+    fields.push(EmberObject.create(submittedAt));
+
     controller.setProperties({
       wizard: model.wizard,
       fields: A(fields),
-      submissions: A(model.submissions),
+      submissions: A(submissions),
       total: model.total,
     });
   },
