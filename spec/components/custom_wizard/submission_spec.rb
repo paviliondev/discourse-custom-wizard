@@ -78,7 +78,7 @@ describe CustomWizard::Submission do
       submissions = described_class.list(@wizard, user_id: @wizard.user.id).submissions
 
       expect(submissions.length).to eq(1)
-      expect(submissions.first.fields["step_1_field_1"]).to eq("I am the third submission")
+      expect(submissions.first.fields["step_1_field_1"]).to eq("I am the second submission")
     end
 
     it "handles submissions with and without 'updated_at' field correctly" do
