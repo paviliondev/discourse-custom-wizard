@@ -20,7 +20,7 @@ export default Controller.extend({
     CustomWizardAdmin.submissions(wizardId, page)
       .then((result) => {
         if (result.submissions) {
-          const { fields, submissions } = formatModel(result);
+          const { submissions } = formatModel(result);
 
           this.get("submissions").pushObjects(submissions);
         }

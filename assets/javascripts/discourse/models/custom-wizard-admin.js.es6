@@ -215,8 +215,8 @@ CustomWizardAdmin.reopenClass({
     return ajax(`/admin/wizards/submissions/${wizardId}`, {
       type: "GET",
       data: {
-        page
-      }
+        page,
+      },
     }).catch(popupAjaxError);
   },
 

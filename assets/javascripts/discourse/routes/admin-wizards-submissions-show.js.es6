@@ -9,7 +9,7 @@ export default DiscourseRoute.extend({
   },
 
   setupController(controller, model) {
-    const { fields, submissions }  = formatModel(model);
+    const { fields, submissions } = formatModel(model);
 
     controller.setProperties({
       wizard: model.wizard,
