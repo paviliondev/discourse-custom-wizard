@@ -19,6 +19,8 @@ describe CustomWizard::Submission do
 
   describe "#list" do
     before do
+      freeze_time Time.now
+
       template_json_2 = template_json.dup
       template_json_2["id"] = "super_mega_fun_wizard_2"
       CustomWizard::Template.save(template_json_2, skip_jobs: true)
@@ -28,7 +30,7 @@ describe CustomWizard::Submission do
       @count = CustomWizard::Submission::PAGE_LIMIT + 20
 
       @count.times do |index|
-        described_class.new(@wizard, step_1_field_1: "I am user submission #{index + 1}").save
+        described_class.new(@wizard, step_1_field_1: "I am user submission #{index + 1}", submitted_at: Time.now + (index + 1).minutes).save
       end
       described_class.new(@wizard2, step_1_field_1: "I am another user's submission").save
       described_class.new(@wizard3, step_1_field_1: "I am a user submission on another wizard").save
@@ -44,6 +46,10 @@ describe CustomWizard::Submission do
 
     it "paginates submission lists" do
       expect(described_class.list(@wizard, page: 1).submissions.size).to eq((@count + 2) - CustomWizard::Submission::PAGE_LIMIT)
+    end
+
+    it "orders submissions by submitted_at" do
+      expect(described_class.list(@wizard).submissions.first.submitted_at.to_datetime.change(usec: 0)).to eq((Time.now + @count.minutes).change(usec: 0))
     end
   end
 

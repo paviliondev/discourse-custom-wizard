@@ -25,9 +25,9 @@ export default Component.extend({
   textState: "text-collapsed",
   toggleText: I18n.t("admin.wizard.expand_text"),
 
-  @discourseComputed("value", "isUser")
-  hasValue(value, isUser) {
-    if (isUser) {
+  @discourseComputed("value", "isUser", "isSubmittedAt")
+  hasValue(value, isUser, isSubmittedAt) {
+    if (isUser || isSubmittedAt) {
       return value;
     }
     return value && value.value;

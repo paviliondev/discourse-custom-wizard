@@ -3,7 +3,8 @@ import { empty } from "@ember/object/computed";
 import discourseComputed from "discourse-common/utils/decorators";
 import { fmt } from "discourse/lib/computed";
 import showModal from "discourse/lib/show-modal";
-import CustomWizard from "../models/custom-wizard";
+import CustomWizardAdmin from "../models/custom-wizard-admin";
+import { formatModel } from "../lib/wizard-submission";
 
 export default Controller.extend({
   downloadUrl: fmt("wizard.id", "/admin/wizards/submissions/%@/download"),
@@ -16,10 +17,12 @@ export default Controller.extend({
     const wizardId = this.get("wizard.id");
 
     this.set("loadingMore", true);
-    CustomWizard.submissions(wizardId, page)
+    CustomWizardAdmin.submissions(wizardId, page)
       .then((result) => {
         if (result.submissions) {
-          this.get("submissions").pushObjects(result.submissions);
+          const { fields, submissions } = formatModel(result);
+
+          this.get("submissions").pushObjects(submissions);
         }
       })
       .finally(() => {
@@ -27,7 +30,7 @@ export default Controller.extend({
       });
   },
 
-  @discourseComputed("submissions", "fields.@each.enabled")
+  @discourseComputed("submissions.[]", "fields.@each.enabled")
   displaySubmissions(submissions, fields) {
     let result = [];
 

@@ -148,6 +148,7 @@ class CustomWizard::Submission
     end
 
     result.total = result.submissions.size
+    result.submissions.sort_by! { |h| [h.submitted_at ? 1 : 0, h.submitted_at] }.reverse!
 
     if !page.nil?
       start = page * PAGE_LIMIT

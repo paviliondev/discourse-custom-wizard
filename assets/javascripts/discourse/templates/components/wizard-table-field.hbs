@@ -152,8 +152,8 @@
   {{/if}}
 
   {{#if isSubmittedAt}}
-    <span class="date" title={{value.value}}>
-      {{d-icon "clock"}}{{format-date value format="tiny"}}
+    <span class="date" title={{value}}>
+      {{raw-date value}}
     </span>
   {{/if}}
 {{else}}
