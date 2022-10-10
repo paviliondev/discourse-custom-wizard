@@ -99,6 +99,7 @@ const action = {
       skip_redirect: null,
       suppress_notifications: null,
       add_event: null,
+      add_location: null,
     },
     send_message: {
       title: null,
@@ -196,6 +197,7 @@ const action = {
     "visibility_level",
     "members_visibility_level",
     "add_event",
+    "add_location",
   ],
   required: ["id", "type"],
   dependent: {},

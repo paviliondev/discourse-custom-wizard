@@ -94,7 +94,12 @@ export default Component.extend(UndoChanges, {
   },
 
   @discourseComputed("fieldTypes")
-  hasEventsField(fieldTypes) {
+  hasEventField(fieldTypes) {
     return fieldTypes.map((ft) => ft.id).includes("event");
+  },
+
+  @discourseComputed("fieldTypes")
+  hasLocationField(fieldTypes) {
+    return fieldTypes.map((ft) => ft.id).includes("location");
   },
 });

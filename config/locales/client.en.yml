@@ -358,6 +358,7 @@ en:
             tags: "Tags"
             visible: "Visible"
             add_event: "Add Event (Events Plugin)"
+            add_location: "Add Location (Locations Plugin)"
           open_composer:
             label: "Open Composer"
           update_profile:

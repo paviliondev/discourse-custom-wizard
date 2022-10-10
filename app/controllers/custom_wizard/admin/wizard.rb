@@ -164,7 +164,8 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
         messageable_level: mapped_params,
         visibility_level: mapped_params,
         members_visibility_level: mapped_params,
-        add_event: mapped_params
+        add_event: mapped_params,
+        add_location: mapped_params
       ]
     )
   end

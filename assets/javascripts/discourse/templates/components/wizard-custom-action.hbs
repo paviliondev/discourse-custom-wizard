@@ -161,7 +161,7 @@
     </div>
   </div>
 
-  {{#if hasEventsField}}
+  {{#if hasEventField}}
     <div class="setting full">
       <div class="setting-label">
         <label>{{i18n "admin.wizard.action.create_topic.add_event"}}</label>
@@ -171,6 +171,25 @@
         {{wizard-mapper
           inputs=action.add_event
           property="add_event"
+          onUpdate=(action "mappedFieldUpdated")
+          options=(hash
+            wizardFieldSelection=true
+            context="action"
+          )}}
+      </div>
+    </div>
+  {{/if}}
+
+  {{#if hasLocationField}}
+    <div class="setting full">
+      <div class="setting-label">
+        <label>{{i18n "admin.wizard.action.create_topic.add_location"}}</label>
+      </div>
+
+      <div class="setting-value">
+        {{wizard-mapper
+          inputs=action.add_location
+          property="add_location"
           onUpdate=(action "mappedFieldUpdated")
           options=(hash
             wizardFieldSelection=true
