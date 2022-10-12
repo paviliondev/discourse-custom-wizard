@@ -71,6 +71,16 @@ export default Component.extend({
     });
   },
 
+  getNextIndex() {
+    const items = this.items;
+    if (!items || items.length === 0) {
+      return 0;
+    }
+    const lastItem = items[items.length - 1];
+    const lastNumber = lastItem.id.split("_").pop();
+    return Number(lastNumber);
+  },
+
   actions: {
     add() {
       const items = this.get("items");
@@ -78,7 +88,7 @@ export default Component.extend({
       let params = setWizardDefaults({}, itemType);
 
       params.isNew = true;
-      params.index = items.length;
+      params.index = this.getNextIndex();
 
       let id = `${itemType}_${params.index + 1}`;
       if (itemType === "field") {
