@@ -27,12 +27,6 @@ class CustomWizard::Subscription
           business: ['*'],
           community: ['*']
         },
-        index: {
-          none: [],
-          standard: ['*'],
-          business: ['*'],
-          community: ['*']
-        },
         required_data: {
           none: [],
           standard: ['*'],
@@ -48,12 +42,6 @@ class CustomWizard::Subscription
       },
       field: {
         condition: {
-          none: [],
-          standard: ['*'],
-          business: ['*'],
-          community: ['*']
-        },
-        index: {
           none: [],
           standard: ['*'],
           business: ['*'],
