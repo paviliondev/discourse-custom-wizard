@@ -76,9 +76,10 @@ export default Component.extend({
     if (!items || items.length === 0) {
       return 0;
     }
-    const lastItem = items[items.length - 1];
-    const lastNumber = lastItem.id.split("_").pop();
-    return Number(lastNumber);
+    const numbers = items
+      .map((i) => Number(i.id.split("_").pop()))
+      .sort((a, b) => a - b);
+    return numbers[numbers.length - 1];
   },
 
   actions: {
