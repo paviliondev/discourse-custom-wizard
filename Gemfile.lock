@@ -30,7 +30,7 @@ GEM
     unicode-display_width (2.3.0)
 
 PLATFORMS
-  arm64-darwin-21
+  ruby
 
 DEPENDENCIES
   rubocop-discourse
