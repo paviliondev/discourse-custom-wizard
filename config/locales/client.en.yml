@@ -277,6 +277,7 @@ en:
           prefill: "Prefill"
           content: "Content"
           tag_groups: "Tag Groups"
+          can_create_tag: "Can Create Tag"
           date_time_format:
             label: "Format"
             instructions: "<a href='https://momentjs.com/docs/#/displaying/format/' target='_blank'>Moment.js format</a>"

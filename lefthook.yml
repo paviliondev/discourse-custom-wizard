@@ -20,9 +20,6 @@ pre-commit:
       glob: "*.js"
       include: "app/assets/javascripts|plugins/.+?/assets/javascripts"
       run: yarn eslint -f compact --quiet {staged_files}
-    i18n-lint:
-      glob: "**/{client,server}.en.yml"
-      run: bundle exec ruby script/i18n_lint.rb {staged_files}
 
 lints:
   parallel: true
@@ -36,6 +33,3 @@ lints:
       run: yarn prettier --list-different **/*.scss
     eslint:
       run: yarn eslint -f compact --quiet --ext .js .
-    i18n-lint:
-      glob: "**/{client,server}.en.yml"
-      run: bundle exec ruby script/i18n_lint.rb {all_files}

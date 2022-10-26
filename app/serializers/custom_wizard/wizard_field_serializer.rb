@@ -17,6 +17,7 @@ class CustomWizard::FieldSerializer < ::ApplicationSerializer
              :property,
              :content,
              :tag_groups,
+             :can_create_tag,
              :validations,
              :max_length,
              :char_counter,
@@ -96,6 +97,10 @@ class CustomWizard::FieldSerializer < ::ApplicationSerializer
 
   def tag_groups
     object.tag_groups
+  end
+
+  def can_create_tag
+    object.can_create_tag
   end
 
   def validations
