@@ -183,16 +183,6 @@ $error: #ef1700;
   @extend .wizard-settings-group;
 }
 
-.admin-wizard-container.settings {
-  .wizard-settings {
-    .wizard-subscription-container {
-      [class~="setting"] {
-        margin-bottom: 0;
-      }
-    }
-  }
-}
-
 .wizard-custom-field {
   background: transparent;
   background-color: var(--primary-very-low);
@@ -868,7 +858,7 @@ $error: #ef1700;
   .subscription-header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 0.25em;
+    margin-bottom: 0.5em;
 
     h3 {
       margin: 0;

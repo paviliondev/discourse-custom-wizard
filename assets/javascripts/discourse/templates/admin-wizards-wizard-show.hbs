@@ -55,21 +55,11 @@
   <div class="wizard-settings">
     <div class="setting">
       <div class="setting-label">
-        <label>{{i18n "admin.wizard.required"}}</label>
+        <label>{{i18n "admin.wizard.save_submissions"}}</label>
       </div>
       <div class="setting-value">
-        {{input type="checkbox" checked=wizard.required}}
-        <span>{{i18n "admin.wizard.required_label"}}</span>
-      </div>
-    </div>
-
-    <div class="setting">
-      <div class="setting-label">
-        <label>{{i18n "admin.wizard.after_signup"}}</label>
-      </div>
-      <div class="setting-value">
-        {{input type="checkbox" checked=wizard.after_signup}}
-        <span>{{i18n "admin.wizard.after_signup_label"}}</span>
+        {{input type="checkbox" checked=wizard.save_submissions}}
+        <span>{{i18n "admin.wizard.save_submissions_label"}}</span>
       </div>
     </div>
 
@@ -80,6 +70,16 @@
       <div class="setting-value">
         {{input type="checkbox" checked=wizard.multiple_submissions}}
         <span>{{i18n "admin.wizard.multiple_submissions_label"}}</span>
+      </div>
+    </div>
+
+    <div class="setting">
+      <div class="setting-label">
+        <label>{{i18n "admin.wizard.after_signup"}}</label>
+      </div>
+      <div class="setting-value">
+        {{input type="checkbox" checked=wizard.after_signup}}
+        <span>{{i18n "admin.wizard.after_signup_label"}}</span>
       </div>
     </div>
 
@@ -108,32 +108,14 @@
       </div>
     </div>
 
-    <div class="setting full field-mapper-setting">
-      <div class="setting-label">
-        <label>{{i18n "admin.wizard.permitted"}}</label>
-      </div>
-      <div class="setting-value">
-        {{wizard-mapper
-          inputs=wizard.permitted
-          options=(hash
-            context="wizard"
-            inputTypes="assignment,validation"
-            groupSelection="output"
-            userFieldSelection="key"
-            textSelection="value"
-            inputConnector="and"
-          )}}
-      </div>
-    </div>
-
     {{#wizard-subscription-container}}
       <div class="setting">
         <div class="setting-label">
-          <label>{{i18n "admin.wizard.save_submissions"}}</label>
+          <label>{{i18n "admin.wizard.required"}}</label>
         </div>
         <div class="setting-value">
-          {{input type="checkbox" checked=wizard.save_submissions}}
-          <span>{{i18n "admin.wizard.save_submissions_label"}}</span>
+          {{input type="checkbox" checked=wizard.required}}
+          <span>{{i18n "admin.wizard.required_label"}}</span>
         </div>
       </div>
 
@@ -144,6 +126,24 @@
         <div class="setting-value">
           {{input type="checkbox" checked=wizard.restart_on_revisit}}
           <span>{{i18n "admin.wizard.restart_on_revisit_label"}}</span>
+        </div>
+      </div>
+
+      <div class="setting full field-mapper-setting">
+        <div class="setting-label">
+          <label>{{i18n "admin.wizard.permitted"}}</label>
+        </div>
+        <div class="setting-value">
+          {{wizard-mapper
+            inputs=wizard.permitted
+            options=(hash
+              context="wizard"
+              inputTypes="assignment,validation"
+              groupSelection="output"
+              userFieldSelection="key"
+              textSelection="value"
+              inputConnector="and"
+            )}}
         </div>
       </div>
     {{/wizard-subscription-container}}

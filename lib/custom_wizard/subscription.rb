@@ -18,6 +18,12 @@ class CustomWizard::Subscription
           standard: ['*'],
           business: ['*'],
           community: ['*']
+        },
+        restart_on_revisit: {
+          none: [],
+          standard: ['*'],
+          business: ['*'],
+          community: ['*']
         }
       },
       step: {
