@@ -114,6 +114,16 @@ describe CustomWizard::UpdateValidator do
     ).to eq(I18n.t('wizard.field.required', label: 'Textarea'))
   end
 
+  it 'requires required fields with blank string values' do
+    @template[:steps][0][:fields][1][:required] = true
+    CustomWizard::Template.save(@template)
+
+    updater = perform_validation('step_1', step_1_field_2: "")
+    expect(
+      updater.errors.messages[:step_1_field_2].first
+    ).to eq(I18n.t('wizard.field.required', label: 'Textarea'))
+  end
+
   context "subscription fields" do
     before do
       enable_subscription("standard")

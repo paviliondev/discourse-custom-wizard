@@ -28,7 +28,7 @@ class ::CustomWizard::UpdateValidator
     file_types = field.file_types
     format = field.format
 
-    if required && !value
+    if required && !value.present?
       @updater.errors.add(field_id, I18n.t('wizard.field.required', label: label))
     end
 
