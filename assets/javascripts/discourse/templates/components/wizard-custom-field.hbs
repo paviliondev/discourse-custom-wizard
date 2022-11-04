@@ -222,6 +222,18 @@
       }}
     </div>
   </div>
+
+  <div class="setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.field.can_create_tag"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{input
+        type="checkbox"
+        checked=field.can_create_tag}}
+    </div>
+  </div>
 {{/if}}
 
 {{#wizard-subscription-container}}

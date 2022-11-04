@@ -135,6 +135,10 @@ class CustomWizard::Builder
       params[:limit] = field_template['limit']
     end
 
+    if field_template['type'] === 'tag'
+      params[:can_create_tag] = standardise_boolean(field_template['can_create_tag'])
+    end
+
     if field_template['type'] === 'category'
       params[:property] = field_template['property']
     end
