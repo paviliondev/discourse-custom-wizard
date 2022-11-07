@@ -16,7 +16,7 @@ en:
       x_characters:
         one: "%{count} Character"
         other: "%{count} Characters"
-      quit: "Maybe Later"
+      quit: "Exit"
       done_custom: "Done"
       back: "Back"
       next: "Next"
