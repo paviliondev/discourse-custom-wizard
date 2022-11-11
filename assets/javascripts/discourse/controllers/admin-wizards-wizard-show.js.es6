@@ -39,7 +39,7 @@ export default Controller.extend({
     let baseUrl = (window.location.href).split('/admin');
     if (baseUrl.length > 1) {
       return baseUrl[0] + "/w/" + dasherize(wizardId);
-    } 
+    }
     return window.location.origin + "/w/" + dasherize(wizardId);
   },
 
