@@ -4,4 +4,6 @@ The security of Discourse plugins are premised on the security of [Discourse](ht
 
 ## Reporting a Vulnerability
 
-If you find a security vulnerability that is specific to this plugin, please report it to development@pavilion.tech. All commits specific to security are prefixed with SECURITY.
+If you find a security vulnerability that is specific to this plugin, please report it to development@pavilion.tech.\
+
+Security issues always take precedence over all other work. All commits specific to security are prefixed with SECURITY.
