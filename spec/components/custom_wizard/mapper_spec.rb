@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 describe CustomWizard::Mapper do
   fab!(:user1) {
     Fabricate(:user,
@@ -253,6 +252,36 @@ describe CustomWizard::Mapper do
         data: data,
         user: user1
       ).perform).to eq("Time: #{Time.now.strftime("%B %-d, %Y")}")
+    end
+
+    it "avatar" do
+      expect(CustomWizard::Mapper.new(
+        inputs: inputs['interpolate_avatar'],
+        data: data,
+        user: user1
+      ).perform).to eq("Avatar: ![avatar](#{user1.small_avatar_url})")
+    end
+
+    it "avatar with invalid size" do
+      avatar_inputs = inputs['interpolate_avatar'].dup
+      avatar_inputs[0]["output"] = "Avatar: ![avatar](u{avatar.345})"
+
+      expect(CustomWizard::Mapper.new(
+        inputs: avatar_inputs,
+        data: data,
+        user: user1
+      ).perform).to eq("Avatar: ![avatar](#{user1.small_avatar_url})")
+    end
+
+    it "avatar with valid size" do
+      avatar_inputs = inputs['interpolate_avatar'].dup
+      avatar_inputs[0]["output"] = "Avatar: ![avatar](u{avatar.120})"
+
+      expect(CustomWizard::Mapper.new(
+        inputs: avatar_inputs,
+        data: data,
+        user: user1
+      ).perform).to eq("Avatar: ![avatar](#{user1.avatar_template_url.gsub("{size}", "120")})")
     end
   end
 

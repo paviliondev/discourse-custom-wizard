@@ -6,7 +6,6 @@ import Component from "@ember/component";
 import I18n from "I18n";
 
 const excludedUserProperties = [
-  "avatar",
   "profile_background",
   "card_background",
 ];
@@ -57,7 +56,7 @@ export default Component.extend({
 
   @discourseComputed("wizardActions")
   wizardActionList(wizardActions) {
-    return wizardActions.map((a) => ` w{${a.id}}`);
+    return (wizardActions || []).map((a) => ` w{${a.id}}`);
   },
 
   actions: {
