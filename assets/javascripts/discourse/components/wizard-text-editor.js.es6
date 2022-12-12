@@ -5,10 +5,7 @@ import { scheduleOnce } from "@ember/runloop";
 import Component from "@ember/component";
 import I18n from "I18n";
 
-const excludedUserProperties = [
-  "profile_background",
-  "card_background",
-];
+const excludedUserProperties = ["profile_background", "card_background"];
 
 export default Component.extend({
   classNames: "wizard-text-editor",
