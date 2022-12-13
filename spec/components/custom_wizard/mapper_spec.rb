@@ -1,4 +1,5 @@
-# frozen_string_literal: true
+# rubocop:disable Style/FrozenStringLiteralComment
+
 describe CustomWizard::Mapper do
   fab!(:user1) {
     Fabricate(:user,
