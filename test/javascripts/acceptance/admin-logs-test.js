@@ -15,31 +15,8 @@ acceptance("Admin | Logs", function (needs) {
         { id: "this_is_testing_wizard", name: "This is testing wizard" },
       ]);
     });
+
     server.get("admin/wizards/logs/this_is_testing_wizard", () => {
-      return helper.response({
-        wizard: {
-          id: "this_is_testing_wizard",
-          name: "This is testing wizard",
-        },
-        logs: [
-          {
-            date: "2022-12-12T09:41:57.888-04:00",
-            action: "create_topic",
-            username: "someuser",
-            message:
-              "error: invalid topic params - title: ; post: creating a text for this text area that is being displayed here.",
-            user: {
-              id: 1,
-              username: "someuser",
-              name: null,
-              avatar_template: "",
-            },
-          },
-        ],
-        total: 1,
-      });
-    });
-    server.get("admin/wizards/logs/this_is_testing_wizard?page=0", () => {
       return helper.response({
         wizard: {
           id: "this_is_testing_wizard",
@@ -333,14 +310,16 @@ acceptance("Admin | Logs", function (needs) {
       "it displays logs for a selected wizard"
     );
     assert.ok(find("table"));
-    assert.ok(findAll("table tbody tr").length === 1, "Displays logs list");
-    // TODO: FIX updating list by refreshing button
+    assert.ok(findAll("table tbody tr").length === 2, "Displays logs list");
+
     const refreshButton = find(".refresh.btn");
     await click(refreshButton);
+    assert.ok(find("table"));
     assert.ok(
       findAll("table tbody tr").length === 2,
-      "Displays refreshed logs list"
+      "Refresh button works correctly"
     );
+
     await wizards.expand();
     const li = find('[data-name="Select a wizard"]');
     await click(li);
