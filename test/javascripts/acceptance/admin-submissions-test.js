@@ -23,7 +23,7 @@ acceptance("Admin | Submissions", function (needs) {
         },
         submissions: [
           {
-            id: "a3aa3ba4ac590dc033cd2aa6",
+            id: "1",
             fields: {
               step_1_field_1: {
                 value:
@@ -35,9 +35,9 @@ acceptance("Admin | Submissions", function (needs) {
             submitted_at: "2022-12-12T09:41:57-04:00",
             user: {
               id: 1,
-              username: "juangura",
+              username: "someuser",
               name: null,
-              avatar_template: "/user_avatar/localhost/juangura/{size}/3_2.png",
+              avatar_template: "",
             },
           },
         ],
@@ -306,5 +306,11 @@ acceptance("Admin | Submissions", function (needs) {
       findAll("table tbody tr").length >= 1,
       "Displays submissions list"
     );
+
+    await wizards.expand();
+    const li = find('[data-name="Select a wizard"]');
+    await click(li);
+    const wizardContainerDiv = find(".admin-wizard-container");
+    assert.ok(wizardContainerDiv.children().length === 0, "the div is empty");
   });
 });
