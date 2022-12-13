@@ -48,7 +48,7 @@ export default Component.extend({
 
   @discourseComputed("wizardFields")
   wizardFieldList(wizardFields) {
-    return wizardFields.map((f) => ` w{${f.id}}`);
+    return (wizardFields || []).map((f) => ` w{${f.id}}`);
   },
 
   @discourseComputed("wizardActions")
