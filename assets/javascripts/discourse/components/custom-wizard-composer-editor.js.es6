@@ -149,7 +149,7 @@ export default ComposerEditor.extend({
     extraButtons(toolbar) {
       const component = this;
 
-      if (this.allowUpload && this.uploadIcon && !this.site.mobileView) {
+      if (this.allowUpload && this.uploadIcon) {
         toolbar.addButton({
           id: "upload",
           group: "insertions",

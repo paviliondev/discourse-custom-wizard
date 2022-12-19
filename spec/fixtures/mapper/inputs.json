@@ -89,6 +89,14 @@
       "output": "Time: v{time}"
     }
   ],
+  "interpolate_avatar": [
+    {
+      "type": "assignment",
+      "output_type": "text",
+      "output_connector": "set",
+      "output": "Avatar: ![avatar](u{avatar})"
+    }
+  ],
   "validation": [
     {
       "type": "validation",
