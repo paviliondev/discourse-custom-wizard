@@ -4,7 +4,7 @@ import {
   visible,
 } from "discourse/tests/helpers/qunit-helpers";
 import { test } from "qunit";
-import { visit } from "@ember/test-helpers";
+import { findAll, visit } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 
 acceptance("Admin | Custom Wizard", function (needs) {
@@ -65,6 +65,75 @@ acceptance("Admin | Custom Wizard", function (needs) {
             required_params: [],
           },
         },
+        custom_fields: [
+          {
+            id: "external",
+            klass: "category",
+            name: "require_topic_approval",
+            type: "boolean",
+            serializers: null,
+          },
+          {
+            id: "external",
+            klass: "category",
+            name: "require_reply_approval",
+            type: "boolean",
+            serializers: null,
+          },
+          {
+            id: "external",
+            klass: "category",
+            name: "num_auto_bump_daily",
+            type: "integer",
+            serializers: null,
+          },
+          {
+            id: "external",
+            klass: "category",
+            name: "has_chat_enabled",
+            type: "boolean",
+            serializers: null,
+          },
+          {
+            id: "external",
+            klass: "post",
+            name: "missing uploads",
+            type: "json",
+            serializers: null,
+          },
+          {
+            id: "external",
+            klass: "post",
+            name: "missing uploads ignored",
+            type: "boolean",
+            serializers: null,
+          },
+          {
+            id: "external",
+            klass: "post",
+            name: "notice",
+            type: "json",
+            serializers: null,
+          },
+          {
+            id: "external",
+            klass: "post",
+            name: "local_dates",
+            type: "json",
+            serializers: null,
+          },
+          {
+            id: "external",
+            klass: "post",
+            name: "has_polls",
+            type: "boolean",
+            serializers: null,
+          },
+        ],
+      });
+    });
+    server.get("admin/wizards/custom-fields", () => {
+      return helper.response({
         custom_fields: [
           {
             id: "external",
@@ -310,6 +379,40 @@ acceptance("Admin | Custom Wizard", function (needs) {
         ],
       });
     });
+    server.put("/admin/wizards/wizard/new_wizard_for_testing", () => {
+      return helper.response({
+        success: "OK",
+        wizard_id: "new_wizard_for_testing",
+      });
+    });
+    server.get("/admin/wizards/wizard/new_wizard_for_testing", () => {
+      return helper.response({
+        id: "new_wizard_for_testing",
+        name: "new wizard for testing",
+        save_submissions: true,
+        steps: [
+          {
+            id: "step_1",
+            fields: [
+              {
+                id: "step_1_field_1",
+                type: "text",
+                validations: {
+                  similar_topics: {},
+                },
+              },
+            ],
+          },
+        ],
+        actions: [
+          {
+            id: "action_1",
+            run_after: "wizard_completion",
+            type: "create_topic",
+          },
+        ],
+      });
+    });
   });
 
   test("viewing content for a selected wizard", async (assert) => {
@@ -442,12 +545,109 @@ acceptance("Admin | Custom Wizard", function (needs) {
     const actionOneText = "action_1 (action_1)";
     const actionOneBtn = find(`.action button:contains(${actionOneText})`);
     assert.equal(actionOneBtn.length, 1, "Creating an action");
+    assert.ok(
+      query(
+        ".wizard-custom-action .wizard-message .message-content"
+      ).innerText.includes("Select an action type"),
+      "it displays wizard select action message"
+    );
+    const actionTypeDropdown = selectKit(
+      ".wizard-custom-action .setting-value .select-kit"
+    );
+    await actionTypeDropdown.expand();
+    const listEnabled = findAll(
+      ".wizard-custom-action .setting .setting-value ul li:not(.disabled)"
+    );
+    const listDisabled = findAll(
+      ".wizard-custom-action .setting .setting-value ul li.disabled"
+    );
+    assert.ok(
+      listDisabled.length === 6,
+      "disabled items displayed correctly in action dropdown"
+    );
+    assert.ok(
+      listEnabled.length === 4,
+      "Enabled items displayed correctly in action dropdown"
+    );
+    await actionTypeDropdown.selectRowByValue("create_topic");
+    assert.ok(
+      query(".wizard-custom-action .message-content").innerText.includes(
+        "You're editing an action"
+      ),
+      "Create type action correctly selected"
+    );
+    let listTopicSettings = findAll(
+      ".admin-wizard-container .wizard-custom-action .setting"
+    );
+    assert.ok(
+      listTopicSettings.length === 10,
+      "Display all settings of create topic"
+    );
+    await actionTypeDropdown.expand();
+    await actionTypeDropdown.selectRowByValue("open_composer");
+    listTopicSettings = findAll(
+      ".admin-wizard-container .wizard-custom-action .setting"
+    );
+    assert.ok(
+      listTopicSettings.length === 8,
+      "Display all settings of open composer"
+    );
+    await actionTypeDropdown.expand();
+    await actionTypeDropdown.selectRowByValue("update_profile");
+    listTopicSettings = findAll(
+      ".admin-wizard-container .wizard-custom-action .setting"
+    );
+    assert.ok(
+      listTopicSettings.length === 4,
+      "Display all settings of update profile"
+    );
+    await actionTypeDropdown.expand();
+    await actionTypeDropdown.selectRowByValue("route_to");
+    listTopicSettings = findAll(
+      ".admin-wizard-container .wizard-custom-action .setting"
+    );
+    assert.ok(
+      listTopicSettings.length === 4,
+      "Display all settings of route to"
+    );
+    await actionTypeDropdown.expand();
+    const li = find('[data-name="Select a type"]');
+    await click(li);
+    listTopicSettings = findAll(
+      ".admin-wizard-container .wizard-custom-action .setting"
+    );
+    assert.ok(
+      listTopicSettings.length === 2,
+      "the settings options is empty when no action is selected"
+    );
+    await actionTypeDropdown.expand();
+    await actionTypeDropdown.selectRowByValue("create_topic");
+
+    assert.step("Step 5: Save changes");
+    const saveButton = find(
+      '.admin-wizard-buttons button:contains("Save Changes")'
+    );
+    assert.ok(
+      !visible('.admin-wizard-buttons button:contains("Delete Wizard")'),
+      "delete wizard button not displayed"
+    );
+    await click(saveButton);
+    assert.equal(
+      currentURL(),
+      "/admin/wizards/wizard/new_wizard_for_testing",
+      "clicking the button navigates to the correct URL"
+    );
+    assert.ok(
+      visible('.admin-wizard-buttons button:contains("Delete Wizard")'),
+      "delete wizard button visible"
+    );
     assert.verifySteps(
       [
         "Step 1: Inserting a title",
         "Step 2: Creating a step section",
         "Step 3: Creating a field section",
         "Step 4: Creating a action section",
+        "Step 5: Save changes",
       ],
       "All steps completed"
     );
