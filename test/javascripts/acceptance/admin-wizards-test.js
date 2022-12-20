@@ -1,4 +1,8 @@
-import { acceptance, query } from "discourse/tests/helpers/qunit-helpers";
+import {
+  acceptance,
+  query,
+  visible,
+} from "discourse/tests/helpers/qunit-helpers";
 import { test } from "qunit";
 import { visit } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
@@ -327,6 +331,125 @@ acceptance("Admin | Custom Wizard", function (needs) {
     const li = find('[data-name="Select a wizard"]');
     await click(li);
     const wizardContainerDiv = find(".admin-wizard-container");
-    assert.ok(wizardContainerDiv.children().length === 0, "the div is empty");
+    assert.ok(
+      wizardContainerDiv.children().length === 0,
+      "the content is empty when no wizard is selected"
+    );
+  });
+  test("creting a new wizard", async (assert) => {
+    await visit("/admin/wizards/wizard");
+    await click('button:contains("Create Wizard")');
+    assert.ok(
+      query(".message-content").innerText.includes(
+        "You're creating a new wizard"
+      ),
+      "it displays wizard creation message"
+    );
+    assert.step("Step 1: Inserting a title");
+    const wizardTitle = "New wizard for testing";
+    await fillIn(".wizard-header input", wizardTitle);
+    assert.equal(
+      $(".wizard-header input").val(),
+      wizardTitle,
+      "The title input is inserted"
+    );
+    const wizardLink = find("div.wizard-url a");
+    assert.equal(wizardLink.length, 1, "Wizard link was created");
+    assert.equal(
+      $.trim($("a[title='Subscribe to use these features']").text()),
+      "Not Subscribed",
+      "Show messsage and link of user not subscribed"
+    );
+    assert.equal(
+      find(".wizard-subscription-container").length,
+      1,
+      "Wizard subscription features are not accesible"
+    );
+    assert.step("Step 2: Creating a step section");
+    const stepAddBtn = find(".step .link-list button:contains('Add')");
+    await click(stepAddBtn);
+    const stepOneText = "step_1 (step_1)";
+    const stepOneBtn = find(`.step button:contains(${stepOneText})`);
+    assert.equal(stepOneBtn.length, 1, "Creating a step");
+    const stepTitle = "step title";
+    await fillIn(".wizard-custom-step input[name='title']", stepTitle);
+    const stepButtonText = $.trim(
+      $(".step div[data-id='step_1'] button").text()
+    );
+    assert.ok(
+      stepButtonText.includes(stepTitle),
+      "The step button changes according to title"
+    );
+    assert.equal(
+      find(".wizard-subscription-container").length,
+      2,
+      "Steps subscription features are not accesible"
+    );
+    // add field content
+    assert.step("Step 3: Creating a field section");
+    const fieldAddBtn = find(".field .link-list button:contains('Add')");
+    await click(fieldAddBtn);
+    assert.ok(
+      !visible(".wizard-custom-field button.undo-changes"),
+      "clear button is not rendered"
+    );
+    const fieldOneText = "step_1_field_1 (step_1_field_1)";
+    const fieldOneBtn = find(`.field button:contains(${fieldOneText})`);
+    assert.equal(fieldOneBtn.length, 1, "Creating a field");
+    const fieldTitle = "field title";
+    await fillIn(".wizard-custom-field input[name='label']", fieldTitle);
+    assert.ok(
+      visible(".wizard-custom-field button.undo-changes"),
+      "clear button is rendered after filling content"
+    );
+    let fieldButtonText = $.trim(
+      $(".field div[data-id='step_1_field_1'] button").text()
+    );
+    assert.ok(
+      fieldButtonText.includes(fieldTitle),
+      "The step button changes according to title"
+    );
+    const clearBtn = find(`.wizard-custom-field button.undo-changes`);
+    await click(clearBtn);
+    fieldButtonText = $(".field div[data-id='step_1_field_1'] button")
+      .text()
+      .trim();
+    assert.ok(
+      fieldButtonText.includes("step_1_field_1 (step_1_field_1)"),
+      "The field button changes to default title after clear button is clicked"
+    );
+    const fieldTypeDropdown = selectKit(
+      ".wizard-custom-field .setting-value .select-kit"
+    );
+    await fieldTypeDropdown.expand();
+    await fieldTypeDropdown.selectRowByValue("text");
+    assert.ok(
+      query(".wizard-custom-field .message-content").innerText.includes(
+        "You're editing a field"
+      ),
+      "Text tipe for field correctly selected"
+    );
+
+    assert.equal(
+      find(".wizard-subscription-container").length,
+      3,
+      "Field subscription features are not accesible"
+    );
+    // creating action content
+    assert.step("Step 4: Creating a action section");
+    const actionAddBtn = find(".action .link-list button:contains('Add')");
+    await click(actionAddBtn);
+    const actionOneText = "action_1 (action_1)";
+    const actionOneBtn = find(`.action button:contains(${actionOneText})`);
+    assert.equal(actionOneBtn.length, 1, "Creating an action");
+    assert.verifySteps(
+      [
+        "Step 1: Inserting a title",
+        "Step 2: Creating a step section",
+        "Step 3: Creating a field section",
+        "Step 4: Creating a action section",
+      ],
+      "All steps completed"
+    );
   });
 });
