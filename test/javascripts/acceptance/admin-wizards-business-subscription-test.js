@@ -592,7 +592,6 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
       listTopicSettings.length === 14,
       "Display all settings of create group"
     );
-    pauseTest();
     await actionTypeDropdown.expand();
     await actionTypeDropdown.selectRowByValue("create_topic");
 
