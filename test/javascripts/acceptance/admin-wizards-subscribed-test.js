@@ -7,7 +7,7 @@ import { test } from "qunit";
 import { findAll, visit } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 
-acceptance("Admin | Custom Wizard Subscribed", function (needs) {
+acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
   needs.user();
   needs.settings({
     custom_wizard_enabled: true,
@@ -415,30 +415,6 @@ acceptance("Admin | Custom Wizard Subscribed", function (needs) {
     });
   });
 
-  test("viewing content for a selected wizard", async (assert) => {
-    await visit("/admin/wizards/wizard");
-    assert.ok(
-      query(".message-content").innerText.includes(
-        "Select a wizard, or create a new one"
-      ),
-      "it displays wizard message"
-    );
-    const wizards = selectKit(".select-kit");
-    await wizards.expand();
-    await wizards.selectRowByValue("this_is_testing_wizard");
-    assert.ok(
-      query(".message-content").innerText.includes("You're editing a wizard"),
-      "it displays wizard message for a selected wizard"
-    );
-    await wizards.expand();
-    const li = find('[data-name="Select a wizard"]');
-    await click(li);
-    const wizardContainerDiv = find(".admin-wizard-container");
-    assert.ok(
-      wizardContainerDiv.children().length === 0,
-      "the content is empty when no wizard is selected"
-    );
-  });
   test("creting a new wizard", async (assert) => {
     await visit("/admin/wizards/wizard");
     await click('button:contains("Create Wizard")');
@@ -468,7 +444,11 @@ acceptance("Admin | Custom Wizard Subscribed", function (needs) {
       1,
       "Wizard subscription features are accesible"
     );
-
+    const subsFeature = find(
+      ".wizard-subscription-container .subscription-settings .setting-value input"
+    );
+    await click(subsFeature);
+    assert.ok(subsFeature.is(":checked"), "subscription feature available");
     assert.step("Step 2: Creating a step section");
     const stepAddBtn = find(".step .link-list button:contains('Add')");
     await click(stepAddBtn);
@@ -489,7 +469,6 @@ acceptance("Admin | Custom Wizard Subscribed", function (needs) {
       2,
       "Steps subscription features are accesible"
     );
-    // add field content
     assert.step("Step 3: Creating a field section");
     const fieldAddBtn = find(".field .link-list button:contains('Add')");
     await click(fieldAddBtn);
@@ -566,7 +545,7 @@ acceptance("Admin | Custom Wizard Subscribed", function (needs) {
 
     assert.ok(
       listDisabled.length === 3,
-      "disabled items displayed correctly in action dropdown"
+      "Disabled items displayed correctly in action dropdown"
     );
     assert.ok(
       listEnabled.length === 7,
@@ -587,41 +566,31 @@ acceptance("Admin | Custom Wizard Subscribed", function (needs) {
       "Display all settings of create topic"
     );
     await actionTypeDropdown.expand();
-    await actionTypeDropdown.selectRowByValue("open_composer");
+    await actionTypeDropdown.selectRowByValue("send_message");
     listTopicSettings = findAll(
       ".admin-wizard-container .wizard-custom-action .setting"
     );
     assert.ok(
-      listTopicSettings.length === 8,
-      "Display all settings of open composer"
+      listTopicSettings.length === 9,
+      "Display all settings of send message"
     );
     await actionTypeDropdown.expand();
-    await actionTypeDropdown.selectRowByValue("update_profile");
+    await actionTypeDropdown.selectRowByValue("watch_categories");
     listTopicSettings = findAll(
       ".admin-wizard-container .wizard-custom-action .setting"
     );
     assert.ok(
-      listTopicSettings.length === 4,
-      "Display all settings of update profile"
+      listTopicSettings.length === 7,
+      "Display all settings of watch categories"
     );
     await actionTypeDropdown.expand();
-    await actionTypeDropdown.selectRowByValue("route_to");
+    await actionTypeDropdown.selectRowByValue("add_to_group");
     listTopicSettings = findAll(
       ".admin-wizard-container .wizard-custom-action .setting"
     );
     assert.ok(
-      listTopicSettings.length === 4,
-      "Display all settings of route to"
-    );
-    await actionTypeDropdown.expand();
-    const li = find('[data-name="Select a type"]');
-    await click(li);
-    listTopicSettings = findAll(
-      ".admin-wizard-container .wizard-custom-action .setting"
-    );
-    assert.ok(
-      listTopicSettings.length === 2,
-      "the settings options is empty when no action is selected"
+      listTopicSettings.length === 3,
+      "Display all settings of add to group"
     );
     await actionTypeDropdown.expand();
     await actionTypeDropdown.selectRowByValue("create_topic");
