@@ -7,7 +7,7 @@ import { test } from "qunit";
 import { findAll, visit } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 
-acceptance("Admin | Custom Wizard", function (needs) {
+acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
   needs.user();
   needs.settings({
     custom_wizard_enabled: true,
