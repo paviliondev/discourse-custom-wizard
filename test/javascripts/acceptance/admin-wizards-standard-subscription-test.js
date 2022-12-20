@@ -595,7 +595,7 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
     await actionTypeDropdown.expand();
     await actionTypeDropdown.selectRowByValue("create_topic");
 
-    assert.step("Step 5: Save changes");
+    assert.step("Step 5: Save wizard");
     const saveButton = find(
       '.admin-wizard-buttons button:contains("Save Changes")'
     );
@@ -619,7 +619,7 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
         "Step 2: Creating a step section",
         "Step 3: Creating a field section",
         "Step 4: Creating a action section",
-        "Step 5: Save changes",
+        "Step 5: Save wizard",
       ],
       "All steps completed"
     );
