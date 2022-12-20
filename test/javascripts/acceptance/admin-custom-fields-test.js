@@ -5,7 +5,6 @@ import {
 } from "discourse/tests/helpers/qunit-helpers";
 import { test } from "qunit";
 import { findAll, visit } from "@ember/test-helpers";
-// import selectKit from "discourse/tests/helpers/select-kit-helper";
 
 acceptance("Admin | Custom Fields", function (needs) {
   needs.user();
@@ -343,7 +342,5 @@ acceptance("Admin | Custom Fields", function (needs) {
     assert.ok(visible(".input"), "custom field name is present");
     assert.ok(visible(".multi-select"), "custom field serializer is present");
     assert.ok(visible(".actions"), "custom field action buttons are present");
-
-    // TODO: Adding a new custom field
   });
 });

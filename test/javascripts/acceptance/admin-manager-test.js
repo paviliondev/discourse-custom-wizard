@@ -307,7 +307,6 @@ acceptance("Admin | Manager", function (needs) {
     const exportCheck = checkbox[0];
     const destroyCheck = checkbox[1];
 
-    // Find the button and check if it has the "selected" class
     const exportButton = find("#export-button");
     assert.ok(
       exportButton.hasAttribute("disabled"),
@@ -323,7 +322,6 @@ acceptance("Admin | Manager", function (needs) {
       exportButton.hasAttribute("disabled"),
       "the export button is disabled when export checkbox is unchecked"
     );
-    // destroy button
     const destroyButton = find("#destroy-button");
     assert.ok(
       destroyButton.hasAttribute("disabled"),

@@ -518,9 +518,7 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
       3,
       "Field subscription features are accesible"
     );
-    // creating action content
     assert.step("Step 4: Creating a action section");
-
     const actionAddBtn = find(".action .link-list button:contains('Add')");
     await click(actionAddBtn);
     const actionOneText = "action_1 (action_1)";
