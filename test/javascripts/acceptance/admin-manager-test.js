@@ -1,5 +1,5 @@
 import { acceptance, query } from "discourse/tests/helpers/qunit-helpers";
-import { skip } from "qunit";
+import { test } from "qunit";
 import { click, find, findAll, settled, visit } from "@ember/test-helpers";
 
 acceptance("Admin | Manager", function (needs) {
@@ -163,7 +163,7 @@ acceptance("Admin | Manager", function (needs) {
         subscription_client_installed: false,
       });
     });
-    server.get("admin/wizards/wizard", () => {
+    server.get("/admin/wizards/wizard", () => {
       return helper.response({
         wizard_list: [
           { id: "this_is_testing_wizard", name: "This is testing wizard" },
@@ -282,7 +282,7 @@ acceptance("Admin | Manager", function (needs) {
     });
   });
   // TODO Review failing test
-  skip("viewing manager fields content", async (assert) => {
+  test("viewing manager fields content", async (assert) => {
     await visit("/admin/wizards/manager");
     await settled();
     assert.ok(
