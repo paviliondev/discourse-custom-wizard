@@ -4,7 +4,7 @@ import {
   visible,
 } from "discourse/tests/helpers/qunit-helpers";
 import { test } from "qunit";
-import { findAll, visit } from "@ember/test-helpers";
+import { findAll, settled, visit } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 
 acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
@@ -417,6 +417,7 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
 
   test("viewing content for a selected wizard", async (assert) => {
     await visit("/admin/wizards/wizard");
+    await settled();
     assert.ok(
       query(".message-content").innerText.includes(
         "Select a wizard, or create a new one"
@@ -426,13 +427,16 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
     const wizards = selectKit(".select-kit");
     await wizards.expand();
     await wizards.selectRowByValue("this_is_testing_wizard");
+    await settled();
     assert.ok(
       query(".message-content").innerText.includes("You're editing a wizard"),
       "it displays wizard message for a selected wizard"
     );
     await wizards.expand();
+    await settled();
     const li = find('[data-name="Select a wizard"]');
     await click(li);
+    await settled();
     const wizardContainerDiv = find(".admin-wizard-container");
     assert.ok(
       wizardContainerDiv.children().length === 0,
@@ -442,6 +446,7 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
   test("creting a new wizard", async (assert) => {
     await visit("/admin/wizards/wizard");
     await click('button:contains("Create Wizard")');
+    await settled();
     assert.ok(
       query(".message-content").innerText.includes(
         "You're creating a new wizard"
@@ -451,6 +456,7 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
     assert.step("Step 1: Inserting a title");
     const wizardTitle = "New wizard for testing";
     await fillIn(".wizard-header input", wizardTitle);
+    await settled();
     assert.equal(
       $(".wizard-header input").val(),
       wizardTitle,
@@ -471,11 +477,13 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
     assert.step("Step 2: Creating a step section");
     const stepAddBtn = find(".step .link-list button:contains('Add')");
     await click(stepAddBtn);
+    await settled();
     const stepOneText = "step_1 (step_1)";
     const stepOneBtn = find(`.step button:contains(${stepOneText})`);
     assert.equal(stepOneBtn.length, 1, "Creating a step");
     const stepTitle = "step title";
     await fillIn(".wizard-custom-step input[name='title']", stepTitle);
+    await settled();
     const stepButtonText = $.trim(
       $(".step div[data-id='step_1'] button").text()
     );
@@ -492,6 +500,7 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
     assert.step("Step 3: Creating a field section");
     const fieldAddBtn = find(".field .link-list button:contains('Add')");
     await click(fieldAddBtn);
+    await settled();
     assert.ok(
       !visible(".wizard-custom-field button.undo-changes"),
       "clear button is not rendered"
@@ -501,6 +510,7 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
     assert.equal(fieldOneBtn.length, 1, "Creating a field");
     const fieldTitle = "field title";
     await fillIn(".wizard-custom-field input[name='label']", fieldTitle);
+    await settled();
     assert.ok(
       visible(".wizard-custom-field button.undo-changes"),
       "clear button is rendered after filling content"
@@ -514,6 +524,7 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
     );
     const clearBtn = find(`.wizard-custom-field button.undo-changes`);
     await click(clearBtn);
+    await settled();
     fieldButtonText = $(".field div[data-id='step_1_field_1'] button")
       .text()
       .trim();
@@ -526,6 +537,7 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
     );
     await fieldTypeDropdown.expand();
     await fieldTypeDropdown.selectRowByValue("text");
+    await settled();
     assert.ok(
       query(".wizard-custom-field .message-content").innerText.includes(
         "You're editing a field"
@@ -542,6 +554,7 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
     assert.step("Step 4: Creating a action section");
     const actionAddBtn = find(".action .link-list button:contains('Add')");
     await click(actionAddBtn);
+    await settled();
     const actionOneText = "action_1 (action_1)";
     const actionOneBtn = find(`.action button:contains(${actionOneText})`);
     assert.equal(actionOneBtn.length, 1, "Creating an action");
@@ -555,6 +568,7 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
       ".wizard-custom-action .setting-value .select-kit"
     );
     await actionTypeDropdown.expand();
+    await settled();
     const listEnabled = findAll(
       ".wizard-custom-action .setting .setting-value ul li:not(.disabled)"
     );
@@ -570,6 +584,7 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
       "Enabled items displayed correctly in action dropdown"
     );
     await actionTypeDropdown.selectRowByValue("create_topic");
+    await settled();
     assert.ok(
       query(".wizard-custom-action .message-content").innerText.includes(
         "You're editing an action"
@@ -585,6 +600,7 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
     );
     await actionTypeDropdown.expand();
     await actionTypeDropdown.selectRowByValue("open_composer");
+    await settled();
     listTopicSettings = findAll(
       ".admin-wizard-container .wizard-custom-action .setting"
     );
@@ -594,6 +610,7 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
     );
     await actionTypeDropdown.expand();
     await actionTypeDropdown.selectRowByValue("update_profile");
+    await settled();
     listTopicSettings = findAll(
       ".admin-wizard-container .wizard-custom-action .setting"
     );
@@ -603,6 +620,7 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
     );
     await actionTypeDropdown.expand();
     await actionTypeDropdown.selectRowByValue("route_to");
+    await settled();
     listTopicSettings = findAll(
       ".admin-wizard-container .wizard-custom-action .setting"
     );
@@ -611,8 +629,10 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
       "Display all settings of route to"
     );
     await actionTypeDropdown.expand();
+    await settled();
     const li = find('[data-name="Select a type"]');
     await click(li);
+    await settled();
     listTopicSettings = findAll(
       ".admin-wizard-container .wizard-custom-action .setting"
     );
@@ -622,7 +642,7 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
     );
     await actionTypeDropdown.expand();
     await actionTypeDropdown.selectRowByValue("create_topic");
-
+    await settled();
     assert.step("Step 5: Save changes");
     const saveButton = find(
       '.admin-wizard-buttons button:contains("Save Changes")'
@@ -632,6 +652,7 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
       "delete wizard button not displayed"
     );
     await click(saveButton);
+    await settled();
     assert.equal(
       currentURL(),
       "/admin/wizards/wizard/new_wizard_for_testing",

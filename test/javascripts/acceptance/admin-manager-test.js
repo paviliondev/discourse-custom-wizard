@@ -1,6 +1,6 @@
 import { acceptance, query } from "discourse/tests/helpers/qunit-helpers";
 import { test } from "qunit";
-import { click, find, findAll, visit } from "@ember/test-helpers";
+import { click, find, findAll, settled, visit } from "@ember/test-helpers";
 
 acceptance("Admin | Manager", function (needs) {
   needs.user();
@@ -290,6 +290,7 @@ acceptance("Admin | Manager", function (needs) {
   });
   test("viewing manager fields content", async (assert) => {
     await visit("/admin/wizards/manager");
+    await settled();
     assert.ok(
       query(".message-content").innerText.includes(
         "Export, import or destroy wizards"
@@ -313,11 +314,13 @@ acceptance("Admin | Manager", function (needs) {
       "the export button is disabled when export checkbox is unchecked"
     );
     await click(exportCheck);
+    await settled();
     assert.ok(
       !exportButton.hasAttribute("disabled"),
       "the export button is enabled when export checkbox is clicked"
     );
     await click(exportCheck);
+    await settled();
     assert.ok(
       exportButton.hasAttribute("disabled"),
       "the export button is disabled when export checkbox is unchecked"
@@ -328,11 +331,13 @@ acceptance("Admin | Manager", function (needs) {
       "the destroy button is disabled when destroy checkbox is unchecked"
     );
     await click(destroyCheck);
+    await settled();
     assert.ok(
       !destroyButton.hasAttribute("disabled"),
       "the destroy button is enabled when destroy checkbox is clicked"
     );
     await click(destroyCheck);
+    await settled();
     assert.ok(
       destroyButton.hasAttribute("disabled"),
       "the destroy button is disabled when destroy checkbox is unchecked"

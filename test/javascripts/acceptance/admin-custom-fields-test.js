@@ -4,7 +4,7 @@ import {
   visible,
 } from "discourse/tests/helpers/qunit-helpers";
 import { test } from "qunit";
-import { findAll, visit } from "@ember/test-helpers";
+import { findAll, settled, visit } from "@ember/test-helpers";
 
 acceptance("Admin | Custom Fields", function (needs) {
   needs.user();
@@ -322,6 +322,7 @@ acceptance("Admin | Custom Fields", function (needs) {
 
   test("viewing custom fields tab", async (assert) => {
     await visit("/admin/wizards/custom-fields");
+    await settled();
     assert.ok(find("table"));
     assert.ok(findAll("table tbody tr").length === 9);
     assert.ok(
@@ -331,6 +332,7 @@ acceptance("Admin | Custom Fields", function (needs) {
       "it displays wizard message"
     );
     await click(".btn-icon-text");
+    await settled();
     assert.ok(
       visible(".wizard-subscription-selector"),
       "custom field class is present"
