@@ -426,6 +426,7 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
     );
     const wizards = selectKit(".select-kit");
     await wizards.expand();
+    await settled();
     await wizards.selectRowByValue("this_is_testing_wizard");
     await settled();
     assert.ok(
@@ -445,6 +446,7 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
   });
   test("creting a new wizard", async (assert) => {
     await visit("/admin/wizards/wizard");
+    await settled();
     await click('button:contains("Create Wizard")');
     await settled();
     assert.ok(
