@@ -417,6 +417,7 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
 
   test("creting a new wizard", async (assert) => {
     await visit("/admin/wizards/wizard");
+    await settled();
     await click('button:contains("Create Wizard")');
     await settled();
     assert.ok(
