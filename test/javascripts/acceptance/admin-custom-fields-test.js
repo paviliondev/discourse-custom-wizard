@@ -3,7 +3,7 @@ import {
   query,
   visible,
 } from "discourse/tests/helpers/qunit-helpers";
-import { test } from "qunit";
+import { skip } from "qunit";
 import { findAll, settled, visit } from "@ember/test-helpers";
 
 acceptance("Admin | Custom Fields", function (needs) {
@@ -320,7 +320,7 @@ acceptance("Admin | Custom Fields", function (needs) {
     });
   });
 
-  test("viewing custom fields tab", async (assert) => {
+  skip("viewing custom fields tab", async (assert) => {
     await visit("/admin/wizards/custom-fields");
     await settled();
     assert.ok(find("table"));
