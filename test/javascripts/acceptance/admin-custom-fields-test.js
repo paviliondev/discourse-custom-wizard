@@ -14,7 +14,7 @@ acceptance("Admin | Custom Fields", function (needs) {
   });
 
   needs.pretender((server, helper) => {
-    server.get("admin/wizards/wizard", () => {
+    server.get("/admin/wizards/wizard", () => {
       return helper.response({
         wizard_list: [
           { id: "this_is_testing_wizard", name: "This is testing wizard" },
@@ -249,7 +249,7 @@ acceptance("Admin | Custom Fields", function (needs) {
         subscription_client_installed: false,
       });
     });
-    server.get("admin/wizards/custom-fields", () => {
+    server.get("/admin/wizards/custom-fields", () => {
       return helper.response({
         custom_fields: [
           {

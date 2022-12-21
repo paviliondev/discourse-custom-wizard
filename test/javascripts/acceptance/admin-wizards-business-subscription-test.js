@@ -15,7 +15,7 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
   });
 
   needs.pretender((server, helper) => {
-    server.get("admin/wizards/wizard", () => {
+    server.get("/admin/wizards/wizard", () => {
       return helper.response({
         wizard_list: [
           { id: "this_is_testing_wizard", name: "This is testing wizard" },
@@ -132,7 +132,7 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
         ],
       });
     });
-    server.get("admin/wizards/custom-fields", () => {
+    server.get("/admin/wizards/custom-fields", () => {
       return helper.response({
         custom_fields: [
           {
@@ -319,13 +319,13 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
         subscription_client_installed: false,
       });
     });
-    server.get("admin/wizards/api", () => {
+    server.get("/admin/wizards/api", () => {
       return helper.response([]);
     });
-    server.get("admin/customize/user_fields", () => {
+    server.get("/admin/customize/user_fields", () => {
       return helper.response({ user_fields: [] });
     });
-    server.get("admin/wizards/wizard/this_is_testing_wizard", () => {
+    server.get("/admin/wizards/wizard/this_is_testing_wizard", () => {
       return helper.response({
         id: "this_is_testing_wizard",
         name: "This is testing wizard",

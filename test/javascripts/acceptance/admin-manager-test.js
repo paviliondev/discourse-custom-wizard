@@ -9,14 +9,14 @@ acceptance("Admin | Manager", function (needs) {
     available_locales: JSON.stringify([{ name: "English", value: "en" }]),
   });
   needs.pretender((server, helper) => {
-    server.get("admin/wizards/manager", () => {
+    server.get("/admin/wizards/manager", () => {
       return helper.response({
         failed: "FAILED",
         error: "Please select at least one valid wizard",
       });
     });
 
-    server.get("admin/wizards/manager/this_is_testing_wizard", () => {
+    server.get("/admin/wizards/manager/this_is_testing_wizard", () => {
       return helper.response({
         wizard: {
           id: "this_is_testing_wizard",
