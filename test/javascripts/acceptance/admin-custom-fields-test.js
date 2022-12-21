@@ -4,7 +4,7 @@ import {
   visible,
 } from "discourse/tests/helpers/qunit-helpers";
 import { test } from "qunit";
-import { findAll, settled, visit } from "@ember/test-helpers";
+import { findAll, visit } from "@ember/test-helpers";
 import {
   getCustomFields,
   getUnsubscribedAdminWizards,
