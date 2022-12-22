@@ -70,11 +70,6 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
     );
     const wizardLink = find("div.wizard-url a");
     assert.equal(wizardLink.length, 1, "Wizard link was created");
-    assert.notEqual(
-      $.trim($("a[title='Subscribe to use these features']").text()),
-      "Not Subscribed",
-      "Don't show messsage of unsubscribed user"
-    );
     assert.equal(
       find(".wizard-subscription-container a:contains('Subscribed')").length,
       1,
