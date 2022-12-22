@@ -6,6 +6,13 @@ import {
 import { test } from "qunit";
 import { findAll, settled, visit } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
+import {
+  getAdminTestingWizard,
+  getBusinessAdminWizard,
+  getCreatedWizard,
+  getCustomFields,
+  getWizard,
+} from "../helpers/admin-wizard";
 
 acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
   needs.user();
@@ -16,308 +23,13 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
 
   needs.pretender((server, helper) => {
     server.get("/admin/wizards/wizard", () => {
-      return helper.response({
-        wizard_list: [
-          { id: "this_is_testing_wizard", name: "This is testing wizard" },
-        ],
-        field_types: {
-          text: {
-            min_length: null,
-            max_length: null,
-            prefill: null,
-            char_counter: null,
-            validations: null,
-            placeholder: null,
-          },
-          textarea: {
-            min_length: null,
-            max_length: null,
-            prefill: null,
-            char_counter: null,
-            placeholder: null,
-          },
-          composer: {
-            min_length: null,
-            max_length: null,
-            char_counter: null,
-            placeholder: null,
-          },
-          text_only: {},
-          composer_preview: { preview_template: null },
-          date: { format: "YYYY-MM-DD" },
-          time: { format: "HH:mm" },
-          date_time: { format: "" },
-          number: {},
-          checkbox: {},
-          url: { min_length: null },
-          upload: { file_types: ".jpg,.jpeg,.png" },
-          dropdown: { prefill: null, content: null },
-          tag: { limit: null, prefill: null, content: null, tag_groups: null },
-          category: { limit: 1, property: "id", prefill: null, content: null },
-          group: { prefill: null, content: null },
-          user_selector: {},
-        },
-        realtime_validations: {
-          similar_topics: {
-            types: ["text"],
-            component: "similar-topics-validator",
-            backend: true,
-            required_params: [],
-          },
-        },
-        custom_fields: [
-          {
-            id: "external",
-            klass: "category",
-            name: "require_topic_approval",
-            type: "boolean",
-            serializers: null,
-          },
-          {
-            id: "external",
-            klass: "category",
-            name: "require_reply_approval",
-            type: "boolean",
-            serializers: null,
-          },
-          {
-            id: "external",
-            klass: "category",
-            name: "num_auto_bump_daily",
-            type: "integer",
-            serializers: null,
-          },
-          {
-            id: "external",
-            klass: "category",
-            name: "has_chat_enabled",
-            type: "boolean",
-            serializers: null,
-          },
-          {
-            id: "external",
-            klass: "post",
-            name: "missing uploads",
-            type: "json",
-            serializers: null,
-          },
-          {
-            id: "external",
-            klass: "post",
-            name: "missing uploads ignored",
-            type: "boolean",
-            serializers: null,
-          },
-          {
-            id: "external",
-            klass: "post",
-            name: "notice",
-            type: "json",
-            serializers: null,
-          },
-          {
-            id: "external",
-            klass: "post",
-            name: "local_dates",
-            type: "json",
-            serializers: null,
-          },
-          {
-            id: "external",
-            klass: "post",
-            name: "has_polls",
-            type: "boolean",
-            serializers: null,
-          },
-        ],
-      });
+      return helper.response(getWizard);
     });
     server.get("/admin/wizards/custom-fields", () => {
-      return helper.response({
-        custom_fields: [
-          {
-            id: "external",
-            klass: "category",
-            name: "require_topic_approval",
-            type: "boolean",
-            serializers: null,
-          },
-          {
-            id: "external",
-            klass: "category",
-            name: "require_reply_approval",
-            type: "boolean",
-            serializers: null,
-          },
-          {
-            id: "external",
-            klass: "category",
-            name: "num_auto_bump_daily",
-            type: "integer",
-            serializers: null,
-          },
-          {
-            id: "external",
-            klass: "category",
-            name: "has_chat_enabled",
-            type: "boolean",
-            serializers: null,
-          },
-          {
-            id: "external",
-            klass: "post",
-            name: "missing uploads",
-            type: "json",
-            serializers: null,
-          },
-          {
-            id: "external",
-            klass: "post",
-            name: "missing uploads ignored",
-            type: "boolean",
-            serializers: null,
-          },
-          {
-            id: "external",
-            klass: "post",
-            name: "notice",
-            type: "json",
-            serializers: null,
-          },
-          {
-            id: "external",
-            klass: "post",
-            name: "local_dates",
-            type: "json",
-            serializers: null,
-          },
-          {
-            id: "external",
-            klass: "post",
-            name: "has_polls",
-            type: "boolean",
-            serializers: null,
-          },
-        ],
-      });
+      return helper.response(getCustomFields);
     });
     server.get("/admin/wizards", () => {
-      return helper.response({
-        subscribed: true,
-        subscription_type: "business",
-        subscription_attributes: {
-          wizard: {
-            required: {
-              none: [],
-              standard: ["*"],
-              business: ["*"],
-              community: ["*"],
-            },
-            permitted: {
-              none: [],
-              standard: ["*"],
-              business: ["*"],
-              community: ["*"],
-            },
-            restart_on_revisit: {
-              none: [],
-              standard: ["*"],
-              business: ["*"],
-              community: ["*"],
-            },
-          },
-          step: {
-            condition: {
-              none: [],
-              standard: ["*"],
-              business: ["*"],
-              community: ["*"],
-            },
-            required_data: {
-              none: [],
-              standard: ["*"],
-              business: ["*"],
-              community: ["*"],
-            },
-            permitted_params: {
-              none: [],
-              standard: ["*"],
-              business: ["*"],
-              community: ["*"],
-            },
-          },
-          field: {
-            condition: {
-              none: [],
-              standard: ["*"],
-              business: ["*"],
-              community: ["*"],
-            },
-            type: {
-              none: [
-                "text",
-                "textarea",
-                "text_only",
-                "date",
-                "time",
-                "date_time",
-                "number",
-                "checkbox",
-                "dropdown",
-                "upload",
-              ],
-              standard: ["*"],
-              business: ["*"],
-              community: ["*"],
-            },
-            realtime_validations: {
-              none: [],
-              standard: ["*"],
-              business: ["*"],
-              community: ["*"],
-            },
-          },
-          action: {
-            type: {
-              none: [
-                "create_topic",
-                "update_profile",
-                "open_composer",
-                "route_to",
-              ],
-              standard: [
-                "create_topic",
-                "update_profile",
-                "open_composer",
-                "route_to",
-                "send_message",
-                "watch_categories",
-                "add_to_group",
-              ],
-              business: ["*"],
-              community: ["*"],
-            },
-          },
-          custom_field: {
-            klass: {
-              none: ["topic", "post"],
-              standard: ["topic", "post"],
-              business: ["*"],
-              community: ["*"],
-            },
-            type: {
-              none: ["string", "boolean", "integer"],
-              standard: ["string", "boolean", "integer"],
-              business: ["*"],
-              community: ["*"],
-            },
-          },
-          api: {
-            all: { none: [], standard: [], business: ["*"], community: ["*"] },
-          },
-        },
-        subscription_client_installed: false,
-      });
+      return helper.response(getBusinessAdminWizard);
     });
     server.get("/admin/wizards/api", () => {
       return helper.response([]);
@@ -326,58 +38,7 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
       return helper.response({ user_fields: [] });
     });
     server.get("/admin/wizards/wizard/this_is_testing_wizard", () => {
-      return helper.response({
-        id: "this_is_testing_wizard",
-        name: "This is testing wizard",
-        save_submissions: true,
-        after_time: false,
-        after_time_scheduled: "2022-12-12T13:45:00.000Z",
-        prompt_completion: true,
-        steps: [
-          {
-            id: "step_1",
-            title: "step 1",
-            raw_description: "This is a description for step 1 sads",
-            fields: [
-              {
-                id: "step_1_field_1",
-                label: "label field",
-                description: "this is the label description",
-                type: "textarea",
-                placeholder: "insert a textarea text here.",
-              },
-            ],
-            description: "This is a description for step 1 sads",
-          },
-        ],
-        actions: [
-          {
-            id: "action_1",
-            run_after: "wizard_completion",
-            type: "create_topic",
-            skip_redirect: false,
-            post: "step_1_field_1",
-            post_builder: false,
-            title: [
-              {
-                type: "assignment",
-                output: "Testing title",
-                output_type: "text",
-                output_connector: "set",
-                pairs: [],
-              },
-            ],
-            category: [
-              {
-                type: "assignment",
-                output_type: "category",
-                output_connector: "set",
-                output: [30],
-              },
-            ],
-          },
-        ],
-      });
+      return helper.response(getAdminTestingWizard);
     });
     server.put("/admin/wizards/wizard/new_wizard_for_testing", () => {
       return helper.response({
@@ -386,40 +47,13 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
       });
     });
     server.get("/admin/wizards/wizard/new_wizard_for_testing", () => {
-      return helper.response({
-        id: "new_wizard_for_testing",
-        name: "new wizard for testing",
-        save_submissions: true,
-        steps: [
-          {
-            id: "step_1",
-            fields: [
-              {
-                id: "step_1_field_1",
-                type: "text",
-                validations: {
-                  similar_topics: {},
-                },
-              },
-            ],
-          },
-        ],
-        actions: [
-          {
-            id: "action_1",
-            run_after: "wizard_completion",
-            type: "create_topic",
-          },
-        ],
-      });
+      return helper.response(getCreatedWizard);
     });
   });
 
   test("creting a new wizard", async (assert) => {
     await visit("/admin/wizards/wizard");
-    await settled();
     await click('button:contains("Create Wizard")');
-    await settled();
     assert.ok(
       query(".message-content").innerText.includes(
         "You're creating a new wizard"
@@ -429,7 +63,6 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
     assert.step("Step 1: Inserting a title");
     const wizardTitle = "New wizard for testing";
     await fillIn(".wizard-header input", wizardTitle);
-    await settled();
     assert.equal(
       $(".wizard-header input").val(),
       wizardTitle,
@@ -451,18 +84,15 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
       ".wizard-subscription-container .subscription-settings .setting-value input"
     );
     await click(subsFeature);
-    await settled();
     assert.ok(subsFeature.is(":checked"), "subscription feature available");
     assert.step("Step 2: Creating a step section");
     const stepAddBtn = find(".step .link-list button:contains('Add')");
     await click(stepAddBtn);
-    await settled();
     const stepOneText = "step_1 (step_1)";
     const stepOneBtn = find(`.step button:contains(${stepOneText})`);
     assert.equal(stepOneBtn.length, 1, "Creating a step");
     const stepTitle = "step title";
     await fillIn(".wizard-custom-step input[name='title']", stepTitle);
-    await settled();
     const stepButtonText = $.trim(
       $(".step div[data-id='step_1'] button").text()
     );
@@ -478,7 +108,6 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
     assert.step("Step 3: Creating a field section");
     const fieldAddBtn = find(".field .link-list button:contains('Add')");
     await click(fieldAddBtn);
-    await settled();
     assert.ok(
       !visible(".wizard-custom-field button.undo-changes"),
       "clear button is not rendered"
@@ -488,7 +117,6 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
     assert.equal(fieldOneBtn.length, 1, "Creating a field");
     const fieldTitle = "field title";
     await fillIn(".wizard-custom-field input[name='label']", fieldTitle);
-    await settled();
     assert.ok(
       visible(".wizard-custom-field button.undo-changes"),
       "clear button is rendered after filling content"
@@ -502,7 +130,6 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
     );
     const clearBtn = find(`.wizard-custom-field button.undo-changes`);
     await click(clearBtn);
-    await settled();
     fieldButtonText = $(".field div[data-id='step_1_field_1'] button")
       .text()
       .trim();
@@ -515,14 +142,12 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
     );
     await fieldTypeDropdown.expand();
     await fieldTypeDropdown.selectRowByValue("text");
-    await settled();
     assert.ok(
       query(".wizard-custom-field .message-content").innerText.includes(
         "You're editing a field"
       ),
       "Text tipe for field correctly selected"
     );
-
     assert.equal(
       find(".wizard-subscription-container a:contains('Subscribed')").length,
       3,
@@ -533,7 +158,6 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
 
     const actionAddBtn = find(".action .link-list button:contains('Add')");
     await click(actionAddBtn);
-    await settled();
     const actionOneText = "action_1 (action_1)";
     const actionOneBtn = find(`.action button:contains(${actionOneText})`);
     assert.equal(actionOneBtn.length, 1, "Creating an action");
@@ -547,14 +171,12 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
       ".wizard-custom-action .setting-value .select-kit"
     );
     await actionTypeDropdown.expand();
-    await settled();
     const listEnabled = findAll(
       ".wizard-custom-action .setting .setting-value ul li:not(.disabled)"
     );
     const listDisabled = findAll(
       ".wizard-custom-action .setting .setting-value ul li.disabled"
     );
-
     assert.ok(
       listDisabled.length === 0,
       "Disabled items displayed correctly in action dropdown"
@@ -564,7 +186,6 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
       "Enabled items displayed correctly in action dropdown"
     );
     await actionTypeDropdown.selectRowByValue("create_topic");
-    await settled();
     assert.ok(
       query(".wizard-custom-action .message-content").innerText.includes(
         "You're editing an action"
@@ -580,7 +201,6 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
     );
     await actionTypeDropdown.expand();
     await actionTypeDropdown.selectRowByValue("send_to_api");
-    await settled();
     listTopicSettings = findAll(
       ".admin-wizard-container .wizard-custom-action .setting"
     );
@@ -590,7 +210,6 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
     );
     await actionTypeDropdown.expand();
     await actionTypeDropdown.selectRowByValue("create_category");
-    await settled();
     listTopicSettings = findAll(
       ".admin-wizard-container .wizard-custom-action .setting"
     );
@@ -600,7 +219,6 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
     );
     await actionTypeDropdown.expand();
     await actionTypeDropdown.selectRowByValue("create_group");
-    await settled();
     listTopicSettings = findAll(
       ".admin-wizard-container .wizard-custom-action .setting"
     );
@@ -610,7 +228,6 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
     );
     await actionTypeDropdown.expand();
     await actionTypeDropdown.selectRowByValue("create_topic");
-    await settled();
     assert.step("Step 5: Save wizard");
     const saveButton = find(
       '.admin-wizard-buttons button:contains("Save Changes")'
@@ -620,7 +237,6 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
       "delete wizard button not displayed"
     );
     await click(saveButton);
-    await settled();
     assert.equal(
       currentURL(),
       "/admin/wizards/wizard/new_wizard_for_testing",
