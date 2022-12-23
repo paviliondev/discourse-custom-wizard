@@ -1,0 +1,15 @@
+{
+  "id": "action_3",
+  "run_after": "step_1",
+  "type": "watch_tags",
+  "notification_level": "tracking",
+  "wizard_user": true,
+  "tags": [
+    {
+      "type": "assignment",
+      "output": "tag1",
+      "output_type": "text",
+      "output_connector": "set"
+    }
+  ]
+}
