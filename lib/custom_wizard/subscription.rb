@@ -69,7 +69,7 @@ class CustomWizard::Subscription
       action: {
         type: {
           none: ['create_topic', 'update_profile', 'open_composer', 'route_to'],
-          standard: ['create_topic', 'update_profile', 'open_composer', 'route_to', 'send_message', 'watch_categories', 'add_to_group'],
+          standard: ['create_topic', 'update_profile', 'open_composer', 'route_to', 'send_message', 'watch_categories', 'watch_tags', 'add_to_group'],
           business: ['*'],
           community: ['*']
         }
