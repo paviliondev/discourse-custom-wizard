@@ -182,7 +182,7 @@ class CustomWizard::Builder
     if field_template['description'].present?
       params[:description] = mapper.interpolate(
         field_template['description'],
-        user: true,
+        user: @wizard.user.present?,
         value: true,
         wizard: true,
         template: true
@@ -192,7 +192,7 @@ class CustomWizard::Builder
     if field_template['preview_template'].present?
       preview_template = mapper.interpolate(
         field_template['preview_template'],
-        user: true,
+        user: @wizard.user.present?,
         value: true,
         wizard: true,
         template: true
@@ -204,7 +204,7 @@ class CustomWizard::Builder
     if field_template['placeholder'].present?
       params[:placeholder] = mapper.interpolate(
         field_template['placeholder'],
-        user: true,
+        user: @wizard.user.present?,
         value: true,
         wizard: true,
         template: true
@@ -248,7 +248,7 @@ class CustomWizard::Builder
     if step_template['description']
       step.description = mapper.interpolate(
         step_template['description'],
-        user: true,
+        user: @wizard.user.present?,
         value: true,
         wizard: true,
         template: true

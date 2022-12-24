@@ -15,8 +15,10 @@ const wizard = {
     prompt_completion: null,
     restart_on_revisit: null,
     resume_on_revisit: null,
+    allow_guests: null,
     theme_id: null,
     permitted: null,
+    allow_guests: null
   },
   mapped: ["permitted"],
   required: ["id"],
@@ -204,6 +206,14 @@ const action = {
   objectArrays: {},
 };
 
+const filters = {
+  allow_guests: {
+    action: {
+      type: ['route_to']
+    }
+  }
+}
+
 const custom_field = {
   klass: ["topic", "post", "group", "category"],
   type: ["string", "boolean", "integer", "json"],
@@ -218,6 +228,7 @@ const wizardSchema = {
   field,
   custom_field,
   action,
+  filters
 };
 
 export function buildFieldTypes(types) {

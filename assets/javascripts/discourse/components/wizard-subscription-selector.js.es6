@@ -40,9 +40,26 @@ export default SingleSelectComponent.extend(Subscription, {
     return allowedTypes;
   },
 
-  @discourseComputed("feature", "attribute")
-  content(feature, attribute) {
-    return wizardSchema[feature][attribute]
+  contentList(feature, attribute, allowGuests) {
+    let attributes = wizardSchema[feature][attribute];
+
+    if (allowGuests) {
+      const filteredFeature = wizardSchema.filters.allow_guests[feature];
+      if (filteredFeature) {
+
+        const filteredAttribute = filteredFeature[attribute];
+        if (filteredAttribute) {
+          attributes = attributes.filter(a => filteredAttribute.includes(a))
+        }
+      }
+    }
+
+    return attributes;
+  },
+
+  @discourseComputed("feature", "attribute", "wizard.allow_guests")
+  content(feature, attribute, allowGuests) {
+    return this.contentList(feature, attribute, allowGuests)
       .map((value) => {
         let allowedSubscriptionTypes = this.allowedSubscriptionTypes(
           feature,

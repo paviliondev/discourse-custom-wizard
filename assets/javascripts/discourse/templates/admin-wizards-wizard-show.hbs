@@ -146,6 +146,16 @@
             )}}
         </div>
       </div>
+
+      <div class="setting full">
+        <div class="setting-label">
+          <label>{{i18n "admin.wizard.allow_guests"}}</label>
+        </div>
+        <div class="setting-value">
+          {{input type="checkbox" checked=wizard.allow_guests}}
+          <span>{{i18n "admin.wizard.allow_guests_label"}}</span>
+        </div>
+      </div>
     {{/wizard-subscription-container}}
   </div>
 

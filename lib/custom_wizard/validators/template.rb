@@ -39,6 +39,7 @@ class CustomWizard::TemplateValidator
         validate_subscription(action, :action)
         check_required(action, :action)
         validate_liquid_template(action, :action)
+        validate_action(action)
       end
     end
 
@@ -77,6 +78,12 @@ class CustomWizard::TemplateValidator
   def check_id(object, type)
     if type === :wizard && @opts[:create] && CustomWizard::Template.exists?(object[:id])
       errors.add :base, I18n.t("wizard.validation.conflict", wizard_id: object[:id])
+    end
+  end
+
+  def validate_action(action)
+    if @data[:allow_guests] && CustomWizard::Action::REQUIRES_USER.include?(action[:type])
+      errors.add :base, I18n.t("wizard.validation.conflict", wizard_id: action[:id])
     end
   end
 

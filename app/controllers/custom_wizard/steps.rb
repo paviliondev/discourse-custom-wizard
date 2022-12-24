@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class CustomWizard::StepsController < ::ApplicationController
-  before_action :ensure_logged_in
   before_action :ensure_can_update
 
   def update

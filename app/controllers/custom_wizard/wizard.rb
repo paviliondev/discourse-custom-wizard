@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class CustomWizard::WizardController < ::ApplicationController
   before_action :ensure_plugin_enabled
-  before_action :ensure_logged_in, only: [:skip]
 
   def show
     if wizard.present?

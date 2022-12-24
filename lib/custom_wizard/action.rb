@@ -6,6 +6,15 @@ class CustomWizard::Action
                 :guardian,
                 :result
 
+  REQUIRES_USER = %w[
+    create_topic
+    update_profile
+    open_composer
+    send_message
+    watch_categories
+    add_to_group
+  ]
+
   def initialize(opts)
     @wizard = opts[:wizard]
     @action = opts[:action]
@@ -17,6 +26,12 @@ class CustomWizard::Action
   end
 
   def perform
+    if REQUIRES_USER.include?(action['id']) && !@user
+      log_error("action requires user", "id: #{action['id']};")
+      @result.success = false
+      return @result
+    end
+
     ActiveRecord::Base.transaction do
       self.send(action['type'].to_sym)
     end

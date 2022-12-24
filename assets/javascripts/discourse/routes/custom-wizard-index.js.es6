@@ -6,7 +6,6 @@ export default Route.extend({
     const wizard = getCachedWizard();
     if (
       wizard &&
-      wizard.user &&
       wizard.permitted &&
       !wizard.completed &&
       wizard.start
@@ -26,7 +25,7 @@ export default Route.extend({
       const wizardId = model.get("id");
       const user = model.get("user");
       const name = model.get("name");
-      const requiresLogin = !user;
+      const requiresLogin = !user && !model.get("allow_guests");
       const notPermitted = !permitted;
 
       const props = {

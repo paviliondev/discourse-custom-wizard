@@ -9,7 +9,8 @@ class CustomWizard::WizardSerializer < CustomWizard::BasicWizardSerializer
              :completed,
              :required,
              :permitted,
-             :resume_on_revisit
+             :resume_on_revisit,
+             :allow_guests
 
   has_many :steps, serializer: ::CustomWizard::StepSerializer, embed: :objects
   has_one :user, serializer: ::BasicUserSerializer, embed: :objects

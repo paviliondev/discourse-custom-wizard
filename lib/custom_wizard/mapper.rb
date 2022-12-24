@@ -229,7 +229,7 @@ class CustomWizard::Mapper
   def interpolate(string, opts = { user: true, wizard: true, value: true, template: false })
     return string if string.blank? || string.frozen?
 
-    if opts[:user]
+    if opts[:user] && @user.present?
       string.gsub!(/u\{(.*?)\}/) { |match| map_user_field($1) || '' }
     end
 
