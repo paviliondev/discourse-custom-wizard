@@ -15,6 +15,7 @@ export default Component.extend(UndoChanges, {
   createTopic: equal("action.type", "create_topic"),
   updateProfile: equal("action.type", "update_profile"),
   watchCategories: equal("action.type", "watch_categories"),
+  watchTags: equal("action.type", "watch_tags"),
   sendMessage: equal("action.type", "send_message"),
   openComposer: equal("action.type", "open_composer"),
   sendToApi: equal("action.type", "send_to_api"),
@@ -36,9 +37,7 @@ export default Component.extend(UndoChanges, {
   availableNotificationLevels: notificationLevels.map((type) => {
     return {
       id: type,
-      name: I18n.t(
-        `admin.wizard.action.watch_categories.notification_level.${type}`
-      ),
+      name: I18n.t(`admin.wizard.action.watch_x.notification_level.${type}`),
     };
   }),
 

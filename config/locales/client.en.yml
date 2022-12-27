@@ -370,6 +370,10 @@ en:
             label: "Watch Categories"
             categories: "Categories"
             mute_remainder: "Mute Remainder"
+          watch_tags:
+            label: "Watch Tags"
+            tags: "Tags"
+          watch_x:
             notification_level:
               label: "Notification Level"
               regular: "Normal"
