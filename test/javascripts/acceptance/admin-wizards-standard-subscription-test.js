@@ -171,7 +171,7 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
       ".wizard-custom-action .setting .setting-value ul li.disabled"
     );
     assert.ok(
-      listDisabled.length === 3,
+      listDisabled.length === 4,
       "Disabled items displayed correctly in action dropdown"
     );
     assert.ok(

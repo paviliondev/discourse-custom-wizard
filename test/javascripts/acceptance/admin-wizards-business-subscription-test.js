@@ -177,7 +177,7 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
       "Disabled items displayed correctly in action dropdown"
     );
     assert.ok(
-      listEnabled.length === 10,
+      listEnabled.length === 11,
       "Enabled items displayed correctly in action dropdown"
     );
     await actionTypeDropdown.selectRowByValue("create_topic");
