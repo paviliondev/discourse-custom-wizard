@@ -1,5 +1,5 @@
 import { acceptance, query } from "discourse/tests/helpers/qunit-helpers";
-import { skip } from "qunit";
+import { test } from "qunit";
 import { findAll, visit } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 import {
@@ -30,7 +30,7 @@ acceptance("Admin | Logs", function (needs) {
       return helper.response(getWizard);
     });
   });
-  skip("viewing logs fields tab", async (assert) => {
+  test("viewing logs fields tab", async (assert) => {
     await visit("/admin/wizards/logs");
     const wizards = selectKit(".select-kit");
     assert.ok(
