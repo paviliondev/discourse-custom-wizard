@@ -51,6 +51,13 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
     });
   });
 
+  test("Displaying all tabs including API", async (assert) => {
+    await visit("/admin/wizards");
+    const list = find(".admin-controls li");
+    const count = list.length;
+    assert.equal(count, 6, "There should be 6 admin tabs");
+  });
+
   test("creting a new wizard", async (assert) => {
     await visit("/admin/wizards/wizard");
     await click('button:contains("Create Wizard")');
