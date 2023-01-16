@@ -1,6 +1,7 @@
-import { acceptance } from "discourse/tests/helpers/qunit-helpers";
+import { acceptance, query } from "discourse/tests/helpers/qunit-helpers";
 import { test } from "qunit";
 import { visit } from "@ember/test-helpers";
+import selectKit from "discourse/tests/helpers/select-kit-helper";
 import {
   getBusinessAdminWizard,
   getCustomFields,
@@ -30,10 +31,10 @@ acceptance("Admin | API tab", function (needs) {
     server.get("/admin/customize/user_fields", () => {
       return helper.response({ user_fields: [] });
     });
-    server.put("/admin/wizards/api/gresgres", () => {
+    server.put("/admin/wizards/api/new_api", () => {
       return helper.response({
         success: "OK",
-        name: "gresgres",
+        name: "new_api",
       });
     });
   });
@@ -43,5 +44,60 @@ acceptance("Admin | API tab", function (needs) {
     const list = find(".admin-controls li");
     const count = list.length;
     assert.equal(count, 6, "There should be 6 admin tabs");
+    // create new api
+    await click('button:contains("Create API")');
+    assert.ok(
+      query(".wizard-header.large").innerText.includes("New API"),
+      "it displays API creation message"
+    );
+    // fill data
+    await fillIn('.metadata input[placeholder="Display name"]', "new API");
+    await fillIn('.metadata input[placeholder="Underscored"]', "new_api");
+    const fieldTypeDropdown = selectKit(
+      ".wizard-api-authentication .settings .control-group.auth-type .select-kit"
+    );
+    await fieldTypeDropdown.expand();
+    await fieldTypeDropdown.selectRowByValue("basic");
+    await fillIn(
+      ".wizard-api-authentication .settings .control-group:eq(1) .controls input",
+      "some_username"
+    );
+    await fillIn(
+      ".wizard-api-authentication .settings .control-group:eq(2) .controls input",
+      "some_password"
+    );
+    await click('.wizard-api-endpoints button:contains("Add endpoint")');
+    await fillIn(
+      '.wizard-api-endpoints .endpoint .top input[placeholder="Endpoint name"]',
+      "endpoint_name"
+    );
+    await fillIn(
+      '.wizard-api-endpoints .endpoint .top input[placeholder="Enter a url"]',
+      "https://test.api.com"
+    );
+    let endpointMethodDropdown = await selectKit(
+      '.wizard-api-endpoints .endpoint .bottom details:has(summary[name="Filter by: Select a method"])'
+    );
+    await endpointMethodDropdown.expand();
+    await endpointMethodDropdown.selectRowByValue("POST");
+
+    // let successCodesDropdown = await selectKit(
+    //   ".wizard-api-endpoints .endpoint .bottom .select-kit .multi-select"
+    // );
+    // await successCodesDropdown.expand();
+    // await successCodesDropdown.selectRowByValue("200");
+    pauseTest();
+    // let contentTypeDropdown = await selectKit(
+    //   '.wizard-api-endpoints .endpoint .bottom details:has(summary[name="Filter by: Select a content type"])'
+    // );
+    // await contentTypeDropdown.expand();
+    // await contentTypeDropdown.selectRowByValue("application/JSON");
+
+    // const contentTypeDropdown = selectKit(
+    //   ".wizard-api-endpoints .endpoint .bottom details"
+    // );
+    // await contentTypeDropdown.expand();
+    // await contentTypeDropdown.selectRowByValue("application/JSON");
+    // send a request
   });
 });
