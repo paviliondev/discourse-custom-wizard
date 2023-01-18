@@ -203,6 +203,8 @@ class CustomWizard::Mapper
   end
 
   def map_user_field(value)
+    return nil unless user
+
     if value.include?(User::USER_FIELD_PREFIX)
       user.custom_fields[value]
     elsif PROFILE_FIELDS.include?(value)

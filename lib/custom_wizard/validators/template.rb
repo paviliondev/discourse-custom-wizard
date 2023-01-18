@@ -83,7 +83,7 @@ class CustomWizard::TemplateValidator
 
   def validate_action(action)
     if @data[:allow_guests] && CustomWizard::Action::REQUIRES_USER.include?(action[:type])
-      errors.add :base, I18n.t("wizard.validation.conflict", wizard_id: action[:id])
+      errors.add :base, I18n.t("wizard.validation.allow_guests", object_id: action[:id])
     end
   end
 

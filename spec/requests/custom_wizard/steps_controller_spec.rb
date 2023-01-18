@@ -12,6 +12,40 @@ describe CustomWizard::StepsController do
     CustomWizard::Template.save(wizard_template, skip_jobs: true)
   end
 
+  context "with guest" do
+    it "does not perform a step update" do
+      put '/w/super-mega-fun-wizard/steps/step_1.json', params: {
+        fields: {
+          step_1_field_1: "Text input"
+        }
+      }
+      expect(response.status).to eq(403)
+    end
+
+    context "with allow_guests enabled" do
+      before do
+        new_template = wizard_template.dup
+        new_template["allow_guests"] = true
+        new_template.delete("actions")
+        result = CustomWizard::Template.save(new_template, skip_jobs: true)
+      end
+
+      it "performs a step update" do
+        put '/w/super-mega-fun-wizard/steps/step_1.json', params: {
+          fields: {
+            step_1_field_1: "Text input"
+          }
+        }
+        expect(response.status).to eq(200)
+        expect(response.parsed_body['wizard']['start']).to eq("step_2")
+
+        wizard_id = response.parsed_body['wizard']['id']
+        wizard = CustomWizard::Wizard.create(wizard_id, nil, cookies[:custom_wizard_guest_id])
+        expect(wizard.current_submission.fields['step_1_field_1']).to eq("Text input")
+      end
+    end
+  end
+
   context "with user" do
     before do
       sign_in(user)

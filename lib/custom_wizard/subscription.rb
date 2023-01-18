@@ -137,7 +137,6 @@ class CustomWizard::Subscription
   end
 
   def business?
-    return true
     @subscription.product_id === BUSINESS_PRODUCT_ID
   end
 

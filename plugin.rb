@@ -41,6 +41,7 @@ after_initialize do
     ../app/controllers/custom_wizard/admin/logs.rb
     ../app/controllers/custom_wizard/admin/manager.rb
     ../app/controllers/custom_wizard/admin/custom_fields.rb
+    ../app/controllers/custom_wizard/wizard_client.rb
     ../app/controllers/custom_wizard/wizard.rb
     ../app/controllers/custom_wizard/steps.rb
     ../app/controllers/custom_wizard/realtime_validations.rb
@@ -65,6 +66,7 @@ after_initialize do
     ../lib/custom_wizard/subscription.rb
     ../lib/custom_wizard/template.rb
     ../lib/custom_wizard/wizard.rb
+    ../lib/custom_wizard/user_history.rb
     ../lib/custom_wizard/api/api.rb
     ../lib/custom_wizard/api/authorization.rb
     ../lib/custom_wizard/api/endpoint.rb

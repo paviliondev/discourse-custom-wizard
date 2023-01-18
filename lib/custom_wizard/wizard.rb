@@ -4,8 +4,6 @@ require_dependency 'wizard/field'
 require_dependency 'wizard/step_updater'
 require_dependency 'wizard/builder'
 
-UserHistory.actions[:custom_wizard_step] = 1000
-
 class CustomWizard::Wizard
   include ActiveModel::SerializerSupport
 
@@ -32,13 +30,21 @@ class CustomWizard::Wizard
                 :actions,
                 :action_ids,
                 :user,
+                :guest_id,
                 :submissions,
                 :template
 
   attr_reader   :all_step_ids
 
-  def initialize(attrs = {}, user = nil)
-    @user = user
+  GUEST_ID_PREFIX ||= "guest"
+
+  def initialize(attrs = {}, user = nil, guest_id = nil)
+    if user
+      @user = user
+    elsif guest_id
+      @guest_id = guest_id
+    end
+
     attrs = attrs.with_indifferent_access
 
     @id = attrs['id']
@@ -81,6 +87,10 @@ class CustomWizard::Wizard
     @actions = attrs['actions'] || []
     @action_ids = @actions.map { |a| a['id'] }
     @template = attrs
+  end
+
+  def actor_id
+    user ? user.id : guest_id
   end
 
   def cast_bool(val)
@@ -143,17 +153,16 @@ class CustomWizard::Wizard
   end
 
   def last_completed_step_id
-    if user && unfinished? && last_completed_step = ::UserHistory.where(
-        acting_user_id: user.id,
-        action: ::UserHistory.actions[:custom_wizard_step],
-        context: id,
-        subject: all_step_ids
-      ).order("created_at").last
+    return nil unless actor_id && unfinished?
 
-      last_completed_step.subject
-    else
-      nil
-    end
+    last_completed_step = CustomWizard::UserHistory.where(
+      actor_id: actor_id,
+      action: CustomWizard::UserHistory.actions[:step],
+      context: id,
+      subject: all_step_ids
+    ).order("created_at").last
+
+    last_completed_step&.subject
   end
 
   def find_step(step_id)
@@ -163,15 +172,15 @@ class CustomWizard::Wizard
   def create_updater(step_id, submission)
     step = @steps.find { |s| s.id == step_id }
     wizard = self
-    CustomWizard::StepUpdater.new(user, wizard, step, submission)
+    CustomWizard::StepUpdater.new(wizard, step, submission)
   end
 
   def unfinished?
-    return nil if !user
+    return nil unless actor_id
 
-    most_recent = ::UserHistory.where(
-      acting_user_id: user.id,
-      action: ::UserHistory.actions[:custom_wizard_step],
+    most_recent = CustomWizard::UserHistory.where(
+      actor_id: actor_id,
+      action: CustomWizard::UserHistory.actions[:step],
       context: id,
     ).distinct.order('updated_at DESC').first
 
@@ -185,11 +194,11 @@ class CustomWizard::Wizard
   end
 
   def completed?
-    return nil if !user
+    return nil unless actor_id
 
-    history = ::UserHistory.where(
-      acting_user_id: user.id,
-      action: ::UserHistory.actions[:custom_wizard_step],
+    history = CustomWizard::UserHistory.where(
+      actor_id: actor_id,
+      action: CustomWizard::UserHistory.actions[:step],
       context: id
     )
 
@@ -202,6 +211,7 @@ class CustomWizard::Wizard
   end
 
   def permitted?
+    return nil unless actor_id
     return true if allow_guests
     return false unless user
     return true if user.admin? || permitted.blank?
@@ -230,6 +240,7 @@ class CustomWizard::Wizard
   end
 
   def can_access?
+    return nil unless actor_id
     return true if allow_guests
     return false unless user
     return true if user.admin
@@ -237,9 +248,11 @@ class CustomWizard::Wizard
   end
 
   def reset
-    ::UserHistory.create(
-      action: ::UserHistory.actions[:custom_wizard_step],
-      acting_user_id: user.id,
+    return nil unless actor_id
+
+    CustomWizard::UserHistory.create(
+      action: CustomWizard::UserHistory.actions[:step],
+      actor_id: actor_id,
       context: id,
       subject: "reset"
     )
@@ -267,8 +280,7 @@ class CustomWizard::Wizard
   end
 
   def submissions
-    return nil unless user.present?
-    @submissions ||= CustomWizard::Submission.list(self, user_id: user.id).submissions
+    @submissions ||= CustomWizard::Submission.list(self).submissions
   end
 
   def current_submission
@@ -304,15 +316,17 @@ class CustomWizard::Wizard
   end
 
   def remove_user_redirect
+    return unless user.present?
+
     if id == user.redirect_to_wizard
       user.custom_fields.delete('redirect_to_wizard')
       user.save_custom_fields(true)
     end
   end
 
-  def self.create(wizard_id, user = nil)
+  def self.create(wizard_id, user = nil, guest_id = nil)
     if template = CustomWizard::Template.find(wizard_id)
-      new(template.to_h, user)
+      new(template.to_h, user, guest_id)
     else
       false
     end
@@ -383,5 +397,9 @@ class CustomWizard::Wizard
     else
       false
     end
+  end
+
+  def self.generate_guest_id
+    "#{self::GUEST_ID_PREFIX}_#{SecureRandom.hex(12)}"
   end
 end

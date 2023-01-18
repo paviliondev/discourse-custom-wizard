@@ -10,7 +10,6 @@ class CustomWizard::Action
     create_topic
     update_profile
     open_composer
-    send_message
     watch_categories
     add_to_group
   ]
@@ -91,7 +90,6 @@ class CustomWizard::Action
   end
 
   def send_message
-
     if action['required'].present?
       required = CustomWizard::Mapper.new(
         inputs: action['required'],
@@ -138,13 +136,14 @@ class CustomWizard::Action
 
       params[:archetype] = Archetype.private_message
 
-      creator = PostCreator.new(user, params)
+      poster = @wizard.allow_guests ? Discourse.system_user : user
+      creator = PostCreator.new(poster, params)
       post = creator.create
 
       if creator.errors.present?
         messages = creator.errors.full_messages.join(" ")
         log_error("failed to create message", messages)
-      elsif action['skip_redirect'].blank?
+      elsif user && action['skip_redirect'].blank?
         @submission.redirect_on_complete = post.topic.url
       end
 
@@ -778,10 +777,12 @@ class CustomWizard::Action
   end
 
   def save_log
+    username = user ? user.username : @wizard.actor_id
+
     CustomWizard::Log.create(
       @wizard.id,
       action['type'],
-      user.username,
+      username,
       @log.join('; ')
     )
   end

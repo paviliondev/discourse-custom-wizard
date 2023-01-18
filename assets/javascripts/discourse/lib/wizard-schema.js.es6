@@ -209,7 +209,7 @@ const action = {
 const filters = {
   allow_guests: {
     action: {
-      type: ['route_to']
+      type: ['route_to', 'send_message']
     }
   }
 }
