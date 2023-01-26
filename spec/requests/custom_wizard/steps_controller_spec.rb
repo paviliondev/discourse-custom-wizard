@@ -24,6 +24,7 @@ describe CustomWizard::StepsController do
 
     context "with allow_guests enabled" do
       before do
+        enable_subscription("standard")
         new_template = wizard_template.dup
         new_template["allow_guests"] = true
         new_template.delete("actions")

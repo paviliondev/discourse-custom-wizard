@@ -6,6 +6,8 @@ import updateJson from "../fixtures/update";
 import { cloneJSON } from "discourse-common/lib/object";
 
 const wizardNoUser = cloneJSON(wizardJson);
+const wizardGuest = cloneJSON(wizardJson);
+wizardGuest.allow_guests = true;
 const wizard = cloneJSON(wizardJson);
 wizard.user = cloneJSON(userJson);
 
@@ -40,6 +42,7 @@ export {
   wizardNoUser,
   wizardNotPermitted,
   wizardCompleted,
+  wizardGuest,
   stepNotPermitted,
   allFieldsWizard,
   wizard,

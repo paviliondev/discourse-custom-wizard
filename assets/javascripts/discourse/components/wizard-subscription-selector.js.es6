@@ -46,10 +46,9 @@ export default SingleSelectComponent.extend(Subscription, {
     if (allowGuests) {
       const filteredFeature = wizardSchema.filters.allow_guests[feature];
       if (filteredFeature) {
-
         const filteredAttribute = filteredFeature[attribute];
         if (filteredAttribute) {
-          attributes = attributes.filter(a => filteredAttribute.includes(a))
+          attributes = attributes.filter((a) => filteredAttribute.includes(a));
         }
       }
     }

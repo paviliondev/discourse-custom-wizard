@@ -6,6 +6,7 @@ export default Route.extend({
     const wizard = getCachedWizard();
     if (
       wizard &&
+      (wizard.user || wizard.allow_guests) &&
       wizard.permitted &&
       !wizard.completed &&
       wizard.start

@@ -9,6 +9,7 @@ import {
 import {
   wizard,
   wizardCompleted,
+  wizardGuest,
   wizardNoUser,
   wizardNotPermitted,
 } from "../helpers/wizard";
@@ -104,5 +105,21 @@ acceptance("Wizard | Wizard", function (needs) {
   test("Removes the wizard body class when navigating away", async function (assert) {
     await visit("/");
     assert.strictEqual($("body.custom-wizard").length, 0);
+  });
+});
+
+acceptance("Wizard | Guest access", function (needs) {
+  needs.pretender((server, helper) => {
+    server.get("/w/wizard.json", () => helper.response(wizardGuest));
+  });
+
+  test("Does not require login", async function (assert) {
+    await visit("/w/wizard");
+    assert.ok(!exists(".wizard-no-access.requires-login"));
+  });
+
+  test("Starts", async function (assert) {
+    await visit("/w/wizard");
+    assert.ok(query(".wizard-column"), true);
   });
 });

@@ -18,7 +18,6 @@ const wizard = {
     allow_guests: null,
     theme_id: null,
     permitted: null,
-    allow_guests: null
   },
   mapped: ["permitted"],
   required: ["id"],
@@ -209,10 +208,10 @@ const action = {
 const filters = {
   allow_guests: {
     action: {
-      type: ['route_to', 'send_message']
-    }
-  }
-}
+      type: ["route_to", "send_message"],
+    },
+  },
+};
 
 const custom_field = {
   klass: ["topic", "post", "group", "category"],
@@ -228,7 +227,7 @@ const wizardSchema = {
   field,
   custom_field,
   action,
-  filters
+  filters,
 };
 
 export function buildFieldTypes(types) {
