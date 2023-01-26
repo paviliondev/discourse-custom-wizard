@@ -3,12 +3,14 @@
 describe CustomWizard::Action do
   fab!(:user) { Fabricate(:user, name: "Angus", username: 'angus', email: "angus@email.com", trust_level: TrustLevel[2]) }
   fab!(:category) { Fabricate(:category, name: 'cat1', slug: 'cat-slug') }
+  fab!(:tag) { Fabricate(:tag, name: 'tag1') }
   fab!(:group) { Fabricate(:group) }
 
   let(:wizard_template) { get_wizard_fixture("wizard") }
   let(:open_composer) { get_wizard_fixture("actions/open_composer") }
   let(:create_category) { get_wizard_fixture("actions/create_category") }
   let(:watch_categories) { get_wizard_fixture("actions/watch_categories") }
+  let(:watch_tags) { get_wizard_fixture("actions/watch_tags") }
   let(:create_group) { get_wizard_fixture("actions/create_group") }
   let(:add_to_group) { get_wizard_fixture("actions/add_to_group") }
   let(:send_message) { get_wizard_fixture("actions/send_message") }
@@ -217,6 +219,20 @@ describe CustomWizard::Action do
   context "standard subscription actions" do
     before do
       enable_subscription("standard")
+    end
+
+    it 'watches tags' do
+      watch_tags[:tags][0][:output] = tag.name
+      wizard_template[:actions] << watch_tags
+      update_template(wizard_template)
+
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
+
+      expect(TagUser.where(
+        tag_id: tag.id,
+        user_id: user.id
+      ).first.notification_level).to eq(2)
     end
 
     it 'watches categories' do

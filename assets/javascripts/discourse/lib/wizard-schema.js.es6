@@ -133,6 +133,12 @@ const action = {
       wizard_user: true,
       usernames: null,
     },
+    watch_tags: {
+      tags: null,
+      notification_level: null,
+      wizard_user: true,
+      usernames: null,
+    },
     send_to_api: {
       api: null,
       api_endpoint: null,

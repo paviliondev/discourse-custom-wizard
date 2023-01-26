@@ -204,6 +204,52 @@ class CustomWizard::Action
     end
   end
 
+  def watch_tags
+    tags = CustomWizard::Mapper.new(
+      inputs: action['tags'],
+      data: mapper_data,
+      user: user
+    ).perform
+
+    tags = [*tags]
+    level = action['notification_level'].to_sym
+
+    if level.blank?
+      log_error("Notifcation Level was not set. Exiting watch tags action")
+      return
+    end
+
+    users = []
+
+    if action['usernames']
+      mapped_users = CustomWizard::Mapper.new(
+        inputs: action['usernames'],
+        data: mapper_data,
+        user: user
+      ).perform
+
+      if mapped_users.present?
+        mapped_users = mapped_users.split(',')
+          .map { |username| User.find_by(username: username) }
+        users.push(*mapped_users)
+      end
+    end
+
+    if ActiveRecord::Type::Boolean.new.cast(action['wizard_user'])
+      users.push(user)
+    end
+
+    users.each do |user|
+      result = TagUser.batch_set(user, level, tags)
+
+      if result
+        log_success("#{user.username} notifications for #{tags} set to #{level}")
+      else
+        log_error("failed to set #{user.username} notifications for #{tags} to #{level}")
+      end
+    end
+  end
+
   def watch_categories
     watched_categories = CustomWizard::Mapper.new(
       inputs: action['categories'],
