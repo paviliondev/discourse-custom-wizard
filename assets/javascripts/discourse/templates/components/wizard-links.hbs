@@ -4,17 +4,16 @@
   {{#if anyLinks}}
     {{#each links as |link|}}
       <div data-id={{link.id}}>
-        {{d-button action="change" actionParam=link.id translatedLabel=link.label class=link.classes}}
+        {{d-button action=(action "change") actionParam=link.id translatedLabel=link.label class=link.classes}}
         {{#unless link.first}}
-          {{d-button action="back" actionParam=link icon="arrow-left" class="back"}}
+          {{d-button action=(action "back") actionParam=link icon="arrow-left" class="back"}}
         {{/unless}}
         {{#unless link.last}}
-          {{d-button action="forward" actionParam=link icon="arrow-right" class="forward"}}
+          {{d-button action=(action "forward") actionParam=link icon="arrow-right" class="forward"}}
         {{/unless}}
-        {{d-button action="remove" actionParam=link.id icon="times" class="remove"}}
+        {{d-button action=(action "remove") actionParam=link.id icon="times" class="remove"}}
       </div>
     {{/each}}
   {{/if}}
-  {{d-button action="add" label="admin.wizard.add" icon="plus"}}
+  {{d-button action=(action "add") label="admin.wizard.add" icon="plus"}}
 </div>
-

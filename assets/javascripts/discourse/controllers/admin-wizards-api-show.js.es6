@@ -11,7 +11,7 @@ export default Controller.extend({
   queryParams: ["refresh_list"],
   loadingSubscriptions: false,
   notAuthorized: not("api.authorized"),
-  endpointMethods: selectKitContent(["GET", "PUT", "POST", "PATCH", "DELETE"]),
+  endpointMethods: selectKitContent(["PUT", "POST", "PATCH", "DELETE"]),
   showRemove: not("isNew"),
   showRedirectUri: and("threeLeggedOauth", "api.name"),
   responseIcon: null,
@@ -88,6 +88,11 @@ export default Controller.extend({
   twoLeggedOauth: equal("api.authType", "oauth_2"),
   threeLeggedOauth: equal("api.authType", "oauth_3"),
 
+  @discourseComputed("api.isNew")
+  nameClass(isNew) {
+    return isNew ? "new" : "saved";
+  },
+
   actions: {
     addParam() {
       this.get("api.authParams").pushObject({});
@@ -149,7 +154,6 @@ export default Controller.extend({
       const api = this.get("api");
       const name = api.name;
       const authType = api.authType;
-      let refreshList = false; // eslint-disable-line
       let error;
 
       if (!name || !authType) {
@@ -162,11 +166,6 @@ export default Controller.extend({
 
       if (api.title) {
         data["title"] = api.title;
-      }
-
-      const originalTitle = this.get("api.originalTitle");
-      if (api.get("isNew") || (originalTitle && api.title !== originalTitle)) {
-        refreshList = true;
       }
 
       if (api.get("isNew")) {

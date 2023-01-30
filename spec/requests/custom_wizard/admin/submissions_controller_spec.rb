@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require_relative '../../../plugin_helper'
 
 describe CustomWizard::AdminSubmissionsController do
   fab!(:admin_user) { Fabricate(:user, admin: true) }
@@ -7,12 +6,7 @@ describe CustomWizard::AdminSubmissionsController do
   fab!(:user2) { Fabricate(:user) }
   fab!(:user3) { Fabricate(:user) }
 
-  let(:template) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-    ).read)
-  }
-
+  let(:template) { get_wizard_fixture("wizard") }
   let(:template_2) {
     temp = template.dup
     temp["id"] = "super_mega_fun_wizard_2"

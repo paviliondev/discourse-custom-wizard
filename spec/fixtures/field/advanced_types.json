@@ -1,0 +1,27 @@
+{
+  "fields": [
+    {
+      "id": "step_3_field_2",
+      "label": "Tag",
+      "type": "tag"
+    },
+    {
+      "id": "step_3_field_3",
+      "label": "Category",
+      "type": "category",
+      "limit": 1,
+      "property": "id"
+    },
+    {
+      "id": "step_3_field_4",
+      "label": "Group",
+      "type": "group"
+    },
+    {
+      "id": "step_3_field_5",
+      "label": "User Selector",
+      "description": "",
+      "type": "user_selector"
+    }
+  ]
+}

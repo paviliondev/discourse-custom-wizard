@@ -16,22 +16,6 @@
       "serializers": [
         "post"
       ]
-    },
-    {
-      "klass": "category",
-      "name": "category_field_1",
-      "type": "json",
-      "serializers": [
-        "basic_category"
-      ]
-    },
-    {
-      "klass": "group",
-      "name": "group_field_1",
-      "type": "string",
-      "serializers": [
-        "basic_group"
-      ]
     }
   ]
 }

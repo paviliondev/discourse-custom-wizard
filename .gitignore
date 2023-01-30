@@ -1,7 +1,8 @@
 coverage/*
 !coverage/.last_run.json
-gems/
+gems/*
 .bundle/
 auto_generated
 .DS_Store
 node_modules/
+vendor/*

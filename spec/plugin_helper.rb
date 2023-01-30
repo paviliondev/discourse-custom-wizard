@@ -1,17 +1,15 @@
 # frozen_string_literal: true
 
-if ENV['SIMPLECOV']
-  require 'simplecov'
-
-  SimpleCov.start do
-    root "plugins/discourse-custom-wizard"
-    track_files "plugins/discourse-custom-wizard/**/*.rb"
-    add_filter { |src| src.filename =~ /(\/spec\/|\/db\/|plugin\.rb|api|gems)/ }
-    SimpleCov.minimum_coverage 80
-  end
+def get_wizard_fixture(path)
+  JSON.parse(
+    File.open(
+      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/#{path}.json"
+    ).read
+  ).with_indifferent_access
 end
 
-require 'oj'
-Oj.default_options = Oj.default_options.merge(cache_str: -1)
-
-require 'rails_helper'
+def enable_subscription(type)
+  CustomWizard::Subscription.stubs(:client_installed?).returns(true)
+  CustomWizard::Subscription.stubs("#{type}?".to_sym).returns(true)
+  CustomWizard::Subscription.any_instance.stubs("#{type}?".to_sym).returns(true)
+end

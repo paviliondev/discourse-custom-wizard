@@ -6,6 +6,7 @@ class CustomWizard::TemplateValidator
   def initialize(data, opts = {})
     @data = data
     @opts = opts
+    @subscription = CustomWizard::Subscription.new
   end
 
   def perform
@@ -15,15 +16,18 @@ class CustomWizard::TemplateValidator
     check_required(data, :wizard)
     validate_after_signup
     validate_after_time
+    validate_subscription(data, :wizard)
 
     return false if errors.any?
 
     data[:steps].each do |step|
       check_required(step, :step)
+      validate_subscription(step, :step)
       validate_liquid_template(step, :step)
 
       if step[:fields].present?
         step[:fields].each do |field|
+          validate_subscription(field, :field)
           check_required(field, :field)
           validate_liquid_template(field, :field)
         end
@@ -32,6 +36,7 @@ class CustomWizard::TemplateValidator
 
     if data[:actions].present?
       data[:actions].each do |action|
+        validate_subscription(action, :action)
         check_required(action, :action)
         validate_liquid_template(action, :action)
       end
@@ -52,9 +57,19 @@ class CustomWizard::TemplateValidator
   private
 
   def check_required(object, type)
-    CustomWizard::TemplateValidator.required[type].each do |property|
+    self.class.required[type].each do |property|
       if object[property].blank?
         errors.add :base, I18n.t("wizard.validation.required", property: property)
+      end
+    end
+  end
+
+  def validate_subscription(object, type)
+    object.keys.each do |property|
+      value = object[property]
+
+      if !@subscription.includes?(type, property.to_sym, value)
+        errors.add :base, I18n.t("wizard.validation.subscription", type: type.to_s, property: property)
       end
     end
   end

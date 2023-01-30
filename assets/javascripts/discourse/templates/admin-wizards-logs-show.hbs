@@ -1,0 +1,45 @@
+{{#if logs}}
+  <div class="wizard-header large">
+    <label>
+      {{i18n "admin.wizard.log.title" name=wizard.name}}
+    </label>
+
+    <div class="controls">
+      {{d-button
+        label="refresh"
+        icon="sync"
+        action=(action "refresh")
+        class="refresh"}}
+    </div>
+  </div>
+
+  <div class="wizard-table">
+    {{#load-more selector=".wizard-table tr" action=(action "loadMore")}}
+      {{#if noResults}}
+        <p>{{i18n "search.no_results"}}</p>
+      {{else}}
+        <table>
+          <thead>
+            <tr>
+              <th class="date">{{i18n "admin.wizard.log.date"}}</th>
+              <th>{{i18n "admin.wizard.log.action"}}</th>
+              <th>{{i18n "admin.wizard.log.user"}}</th>
+              <th>{{i18n "admin.wizard.log.message"}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each logs as |log|}}
+              <tr>
+                {{#each-in log as |field value|}}
+                  <td class="small">{{wizard-table-field field=field value=value}}</td>
+                {{/each-in}}
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      {{/if}}
+
+      {{conditional-loading-spinner condition=refreshing}}
+    {{/load-more}}
+  </div>
+{{/if}}

@@ -1,17 +1,23 @@
 {{#if showInputs}}
   <td>
-    {{combo-box
+    {{wizard-subscription-selector
       value=field.klass
-      content=klassContent
-      none="admin.wizard.custom_field.klass.select"
-      onChange=(action (mut field.klass))}}
+      feature="custom_field"
+      attribute="klass"
+      onChange=(action (mut field.klass))
+      options=(hash
+        none="admin.wizard.custom_field.klass.select"
+      )}}
   </td>
   <td>
-    {{combo-box
+    {{wizard-subscription-selector
       value=field.type
-      content=typeContent
-      none="admin.wizard.custom_field.type.select"
-      onChange=(action (mut field.type))}}
+      feature="custom_field"
+      attribute="type"
+      onChange=(action (mut field.type))
+      options=(hash
+        none="admin.wizard.custom_field.type.select"
+      )}}
   </td>
   <td class="input">
     {{input
@@ -22,8 +28,10 @@
     {{multi-select
       value=field.serializers
       content=serializerContent
-      none="admin.wizard.custom_field.serializers.select"
-      onChange=(action (mut field.serializers))}}
+      onChange=(action (mut field.serializers))
+      options=(hash
+        none="admin.wizard.custom_field.serializers.select"
+      )}}
   </td>
   <td class="actions">
     {{#if loading}}
@@ -34,17 +42,17 @@
       {{/if}}
     {{/if}}
     {{d-button
-      action="destroy"
+      action=(action "destroy")
       icon="trash-alt"
       class="destroy"
       disabled=destroyDisabled}}
     {{d-button
       icon="save"
-      action="save"
+      action=(action "save")
       disabled=saveDisabled
       class="save"}}
     {{d-button
-      action="close"
+      action=(action "close")
       icon="times"
       disabled=closeDisabled}}
   </td>
@@ -69,7 +77,7 @@
     </td>
   {{else}}
     <td class="actions">
-      {{d-button action="edit" icon="pencil-alt"}}
+      {{d-button action=(action "edit") icon="pencil-alt"}}
     </td>
   {{/if}}
 {{/if}}

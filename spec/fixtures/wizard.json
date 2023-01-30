@@ -34,22 +34,10 @@
           "min_length": ""
         },
         {
-          "id": "step_1_field_3",
-          "label": "Composer",
-          "type": "composer"
-        },
-        {
           "id": "step_1_field_4",
           "label": "I'm only text",
           "description": "",
           "type": "text_only"
-        },
-        {
-          "id": "step_1_field_5",
-          "label": "I'm a preview",
-          "description": "",
-          "type": "composer_preview",
-          "preview_template": "w{step_1_field_1}"
         }
       ],
       "description": "Text inputs!"
@@ -86,11 +74,6 @@
           "id": "step_2_field_5",
           "label": "Checkbox",
           "type": "checkbox"
-        },
-        {
-          "id": "step_2_field_6",
-          "label": "Url",
-          "type": "url"
         },
         {
           "id": "step_2_field_7",
@@ -141,232 +124,12 @@
               ]
             }
           ]
-        },
-        {
-          "id": "step_3_field_2",
-          "label": "Tag",
-          "type": "tag"
-        },
-        {
-          "id": "step_3_field_3",
-          "label": "Category",
-          "type": "category",
-          "limit": 1,
-          "property": "id"
-        },
-        {
-          "id": "step_3_field_4",
-          "label": "Group",
-          "type": "group"
-        },
-        {
-          "id": "step_3_field_5",
-          "label": "User Selector",
-          "description": "",
-          "type": "user_selector"
-        },
-        {
-          "id": "step_3_field_6",
-          "label": "Conditional User Selector",
-          "description": "Shown when checkbox in step_2_field_5 is true",
-          "type": "user_selector"
         }
       ],
       "description": "Unfortunately not the edible type :sushi: "
     }
   ],
   "actions": [
-    {
-      "id": "action_9",
-      "run_after": "step_1",
-      "type": "create_group",
-      "title": [
-        {
-          "type": "assignment",
-          "output": "New Group Member",
-          "output_type": "text",
-          "output_connector": "set"
-        }
-      ],
-      "custom_fields": [
-        {
-          "type": "association",
-          "pairs": [
-            {
-              "index": 0,
-              "key": "group_custom_field",
-              "key_type": "text",
-              "value": "step_3_field_1",
-              "value_type": "wizard_field",
-              "connector": "association"
-            }
-          ]
-        }
-      ],
-      "name": [
-        {
-          "type": "assignment",
-          "output": "step_1_field_1",
-          "output_type": "wizard_field",
-          "output_connector": "set"
-        }
-      ],
-      "full_name": [
-        {
-          "type": "assignment",
-          "output": "step_1_field_1",
-          "output_type": "wizard_field",
-          "output_connector": "set"
-        }
-      ],
-      "usernames": [
-        {
-          "type": "assignment",
-          "output_type": "user",
-          "output_connector": "set",
-          "output": [
-            "angus1"
-          ]
-        }
-      ],
-      "owner_usernames": [
-        {
-          "type": "assignment",
-          "output_type": "user",
-          "output_connector": "set",
-          "output": [
-            "angus"
-          ]
-        }
-      ],
-      "grant_trust_level": [
-        {
-          "type": "assignment",
-          "output": "3",
-          "output_type": "text",
-          "output_connector": "set"
-        }
-      ],
-      "mentionable_level": [
-        {
-          "type": "assignment",
-          "output": "1",
-          "output_type": "text",
-          "output_connector": "set"
-        }
-      ],
-      "messageable_level": [
-        {
-          "type": "assignment",
-          "output": "2",
-          "output_type": "text",
-          "output_connector": "set"
-        }
-      ],
-      "visibility_level": [
-        {
-          "type": "assignment",
-          "output": "3",
-          "output_type": "text",
-          "output_connector": "set"
-        }
-      ],
-      "members_visibility_level": [
-        {
-          "type": "assignment",
-          "output": "99",
-          "output_type": "text",
-          "output_connector": "set"
-        }
-      ]
-    },
-    {
-      "id": "action_6",
-      "run_after": "step_1",
-      "type": "add_to_group",
-      "group": [
-        {
-          "type": "assignment",
-          "output": "action_9",
-          "output_type": "wizard_action",
-          "output_connector": "set"
-        }
-      ]
-    },
-    {
-      "id": "action_8",
-      "run_after": "step_1",
-      "type": "create_category",
-      "custom_fields": [
-        {
-          "type": "association",
-          "pairs": [
-            {
-              "index": 0,
-              "key": "category_custom_field",
-              "key_type": "text",
-              "value": "CC Val",
-              "value_type": "text",
-              "connector": "association"
-            }
-          ]
-        }
-      ],
-      "name": [
-        {
-          "type": "assignment",
-          "output": "step_1_field_1",
-          "output_type": "wizard_field",
-          "output_connector": "set"
-        }
-      ],
-      "slug": [
-        {
-          "type": "assignment",
-          "output": "step_1_field_1",
-          "output_type": "wizard_field",
-          "output_connector": "set"
-        }
-      ],
-      "permissions": [
-        {
-          "type": "association",
-          "pairs": [
-            {
-              "index": 0,
-              "key": "action_9",
-              "key_type": "wizard_action",
-              "value": "2",
-              "value_type": "text",
-              "connector": "association"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "action_5",
-      "run_after": "step_1",
-      "type": "watch_categories",
-      "notification_level": "tracking",
-      "wizard_user": true,
-      "categories": [
-        {
-          "type": "assignment",
-          "output": "action_8",
-          "output_type": "wizard_action",
-          "output_connector": "set"
-        }
-      ],
-      "mute_remainder": [
-        {
-          "type": "assignment",
-          "output": "true",
-          "output_type": "text",
-          "output_connector": "set"
-        }
-      ]
-    },
     {
       "id": "action_1",
       "run_after": "step_3",
@@ -476,59 +239,6 @@
       ]
     },
     {
-      "id": "action_2",
-      "run_after": "step_2",
-      "type": "send_message",
-      "post_builder": true,
-      "post_template": "I will interpolate some wizard fields w{step_1_field_1} w{step_1_field_2}",
-      "title": [
-        {
-          "type": "assignment",
-          "output": "Message title",
-          "output_type": "text",
-          "output_connector": "set"
-        }
-      ],
-      "recipient": [
-        {
-          "type": "assignment",
-          "output_type": "user",
-          "output_connector": "set",
-          "output": [
-            "angus1"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "action_11",
-      "run_after": "step_2",
-      "type": "send_message",
-      "post_builder": true,
-      "post_template": "I will interpolate some wizard fields w{step_1_field_1} w{step_1_field_2}",
-      "title": [
-        {
-          "type": "assignment",
-          "output": "Multiple Recipients title",
-          "output_type": "text",
-          "output_connector": "set"
-        }
-      ],
-      "recipient": [
-        {
-          "type": "assignment",
-          "output_type": "user",
-          "output_connector": "set",
-          "output": [
-            "angus1",
-            "faiz",
-            "cool_group",
-            "cool_group_1"
-          ]
-        }
-      ]
-    },
-    {
       "id": "action_3",
       "run_after": "step_2",
       "type": "open_composer",
@@ -540,24 +250,6 @@
           "output": "Title of the composer topic",
           "output_type": "text",
           "output_connector": "set"
-        }
-      ],
-      "category": [
-        {
-          "type": "assignment",
-          "output": "action_8",
-          "output_type": "wizard_action",
-          "output_connector": "set",
-          "pairs": [
-            {
-              "index": 0,
-              "key": "step_2_field_5",
-              "key_type": "wizard_field",
-              "value": "true",
-              "value_type": "text",
-              "connector": "is"
-            }
-          ]
         }
       ],
       "tags": [

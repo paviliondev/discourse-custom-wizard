@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../plugin_helper'
-
 describe ::TagsController, type: :request do
   fab!(:tag_1) { Fabricate(:tag, name: "Angus") }
   fab!(:tag_2) { Fabricate(:tag, name: "Faizaan") }

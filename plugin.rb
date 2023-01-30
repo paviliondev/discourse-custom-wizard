@@ -1,74 +1,51 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
-# about: Create custom wizards
-# version: 1.18.3.stable
-# authors: Angus McLeod
+# about: Forms for Discourse. Better onboarding, structured posting, data enrichment, automated actions and much more.
+# version: 2.1.4
+# authors: Angus McLeod, Faizaan Gagan, Robert Barrow, Keegan George, Kaitlin Maddever
 # url: https://github.com/paviliondev/discourse-custom-wizard
-# contact emails: angus@thepavilion.io
+# contact_emails: development@pavilion.tech
+# subscription_url: https://coop.pavilion.tech
 
 gem 'liquid', '5.0.1', require: true
-
-register_asset 'stylesheets/common/wizard-admin.scss'
-register_asset 'stylesheets/common/wizard-mapper.scss'
+register_asset 'stylesheets/common/admin.scss'
+register_asset 'stylesheets/common/wizard.scss'
 
 enabled_site_setting :custom_wizard_enabled
-
-config = Rails.application.config
-plugin_asset_path = "#{Rails.root}/plugins/discourse-custom-wizard/assets"
-config.assets.paths << "#{plugin_asset_path}/javascripts"
-config.assets.paths << "#{plugin_asset_path}/stylesheets/wizard"
-
-if Rails.env.production?
-  config.assets.precompile += %w{
-    wizard-custom-guest.js
-    wizard-custom-globals.js
-    wizard-custom.js
-    wizard-custom-start.js
-    wizard-plugin.js.erb
-    wizard-raw-templates.js.erb
-  }
-end
 
 if respond_to?(:register_svg_icon)
   register_svg_icon "far-calendar"
   register_svg_icon "chevron-right"
   register_svg_icon "chevron-left"
   register_svg_icon "save"
+  register_svg_icon "sliders-h"
+  register_svg_icon "calendar"
+  register_svg_icon "check"
+  register_svg_icon "times"
+  register_svg_icon "clock"
+  register_svg_icon "link"
+  register_svg_icon "comment-alt"
+  register_svg_icon "far-life-ring"
   register_svg_icon "arrow-right"
-end
-
-class ::Sprockets::DirectiveProcessor
-  def process_require_tree_discourse_directive(path = ".")
-    raise CustomWizard::SprocketsEmptyPath, "path cannot be empty" if path == "."
-
-    discourse_asset_path = "#{Rails.root}/app/assets/javascripts/"
-    path = File.expand_path(path, discourse_asset_path)
-    stat = @environment.stat(path)
-
-    if stat && stat.directory?
-      require_paths(*@environment.stat_sorted_tree_with_dependencies(path))
-    else
-      raise CustomWizard::SprocketsFileNotFound, "#{path} not found in discourse core"
-    end
-  end
+  register_svg_icon "bolt"
 end
 
 after_initialize do
   %w[
     ../lib/custom_wizard/engine.rb
     ../config/routes.rb
-    ../controllers/custom_wizard/admin/admin.rb
-    ../controllers/custom_wizard/admin/wizard.rb
-    ../controllers/custom_wizard/admin/submissions.rb
-    ../controllers/custom_wizard/admin/api.rb
-    ../controllers/custom_wizard/admin/logs.rb
-    ../controllers/custom_wizard/admin/manager.rb
-    ../controllers/custom_wizard/admin/custom_fields.rb
-    ../controllers/custom_wizard/wizard.rb
-    ../controllers/custom_wizard/steps.rb
-    ../controllers/custom_wizard/realtime_validations.rb
-    ../jobs/refresh_api_access_token.rb
-    ../jobs/set_after_time_wizard.rb
+    ../app/controllers/custom_wizard/admin/admin.rb
+    ../app/controllers/custom_wizard/admin/wizard.rb
+    ../app/controllers/custom_wizard/admin/submissions.rb
+    ../app/controllers/custom_wizard/admin/api.rb
+    ../app/controllers/custom_wizard/admin/logs.rb
+    ../app/controllers/custom_wizard/admin/manager.rb
+    ../app/controllers/custom_wizard/admin/custom_fields.rb
+    ../app/controllers/custom_wizard/wizard.rb
+    ../app/controllers/custom_wizard/steps.rb
+    ../app/controllers/custom_wizard/realtime_validations.rb
+    ../app/jobs/regular/refresh_api_access_token.rb
+    ../app/jobs/regular/set_after_time_wizard.rb
     ../lib/custom_wizard/validators/template.rb
     ../lib/custom_wizard/validators/update.rb
     ../lib/custom_wizard/action_result.rb
@@ -85,6 +62,7 @@ after_initialize do
     ../lib/custom_wizard/step_updater.rb
     ../lib/custom_wizard/step.rb
     ../lib/custom_wizard/submission.rb
+    ../lib/custom_wizard/subscription.rb
     ../lib/custom_wizard/template.rb
     ../lib/custom_wizard/wizard.rb
     ../lib/custom_wizard/api/api.rb
@@ -93,29 +71,29 @@ after_initialize do
     ../lib/custom_wizard/api/log_entry.rb
     ../lib/custom_wizard/liquid_extensions/first_non_empty.rb
     ../lib/custom_wizard/exceptions/exceptions.rb
-    ../serializers/custom_wizard/api/authorization_serializer.rb
-    ../serializers/custom_wizard/api/basic_endpoint_serializer.rb
-    ../serializers/custom_wizard/api/endpoint_serializer.rb
-    ../serializers/custom_wizard/api/log_serializer.rb
-    ../serializers/custom_wizard/api_serializer.rb
-    ../serializers/custom_wizard/basic_api_serializer.rb
-    ../serializers/custom_wizard/basic_wizard_serializer.rb
-    ../serializers/custom_wizard/custom_field_serializer.rb
-    ../serializers/custom_wizard/wizard_field_serializer.rb
-    ../serializers/custom_wizard/wizard_step_serializer.rb
-    ../serializers/custom_wizard/wizard_serializer.rb
-    ../serializers/custom_wizard/log_serializer.rb
-    ../serializers/custom_wizard/submission_serializer.rb
-    ../serializers/custom_wizard/realtime_validation/similar_topics_serializer.rb
-    ../extensions/extra_locales_controller.rb
-    ../extensions/invites_controller.rb
-    ../extensions/guardian.rb
-    ../extensions/users_controller.rb
-    ../extensions/tags_controller.rb
-    ../extensions/custom_field/preloader.rb
-    ../extensions/custom_field/serializer.rb
-    ../extensions/custom_field/extension.rb
-    ../extensions/discourse_tagging.rb
+    ../app/serializers/custom_wizard/api/authorization_serializer.rb
+    ../app/serializers/custom_wizard/api/basic_endpoint_serializer.rb
+    ../app/serializers/custom_wizard/api/endpoint_serializer.rb
+    ../app/serializers/custom_wizard/api/log_serializer.rb
+    ../app/serializers/custom_wizard/api_serializer.rb
+    ../app/serializers/custom_wizard/basic_api_serializer.rb
+    ../app/serializers/custom_wizard/basic_wizard_serializer.rb
+    ../app/serializers/custom_wizard/custom_field_serializer.rb
+    ../app/serializers/custom_wizard/wizard_field_serializer.rb
+    ../app/serializers/custom_wizard/wizard_step_serializer.rb
+    ../app/serializers/custom_wizard/wizard_serializer.rb
+    ../app/serializers/custom_wizard/log_serializer.rb
+    ../app/serializers/custom_wizard/submission_serializer.rb
+    ../app/serializers/custom_wizard/realtime_validation/similar_topics_serializer.rb
+    ../lib/custom_wizard/extensions/extra_locales_controller.rb
+    ../lib/custom_wizard/extensions/invites_controller.rb
+    ../lib/custom_wizard/extensions/users_controller.rb
+    ../lib/custom_wizard/extensions/tags_controller.rb
+    ../lib/custom_wizard/extensions/guardian.rb
+    ../lib/custom_wizard/extensions/custom_field/preloader.rb
+    ../lib/custom_wizard/extensions/custom_field/serializer.rb
+    ../lib/custom_wizard/extensions/custom_field/extension.rb
+    ../lib/custom_wizard/extensions/discourse_tagging.rb
   ].each do |path|
     load File.expand_path(path, __FILE__)
   end

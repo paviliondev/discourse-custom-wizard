@@ -66,11 +66,13 @@
   {{/if}}
 
   {{#if showUser}}
-    {{user-selector
-      includeMessageableGroups="true"
+    {{email-group-user-chooser
       placeholderKey=placeholderKey
-      usernames=value
+      value=value
       autocomplete="discourse"
-      onChangeCallback=(action "changeUserValue")}}
+      onChange=(action "changeUserValue")
+      options=(hash
+        includeMessageableGroups="true"
+      )}}
   {{/if}}
 </div>

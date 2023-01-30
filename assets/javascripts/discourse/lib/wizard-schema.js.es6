@@ -19,7 +19,6 @@ const wizard = {
     permitted: null,
   },
   mapped: ["permitted"],
-  advanced: ["restart_on_revisit"],
   required: ["id"],
   dependent: {
     after_time: "after_time_scheduled",
@@ -41,8 +40,8 @@ const step = {
     id: null,
     index: null,
     title: null,
-    key: null,
     banner: null,
+    banner_upload_id: null,
     raw_description: null,
     required_data: null,
     required_data_message: null,
@@ -51,7 +50,6 @@ const step = {
     force_final: false,
   },
   mapped: ["required_data", "permitted_params", "condition", "index"],
-  advanced: ["required_data", "permitted_params", "condition", "index"],
   required: ["id"],
   dependent: {},
   objectArrays: {
@@ -68,15 +66,15 @@ const field = {
     index: null,
     label: null,
     image: null,
+    image_upload_id: null,
     description: null,
+    property: null,
     required: null,
-    key: null,
     type: null,
     condition: null,
   },
   types: {},
   mapped: ["prefill", "content", "condition", "index"],
-  advanced: ["property", "key", "condition", "index"],
   required: ["id", "type"],
   dependent: {},
   objectArrays: {},
@@ -100,6 +98,8 @@ const action = {
       custom_fields: null,
       skip_redirect: null,
       suppress_notifications: null,
+      add_event: null,
+      add_location: null,
     },
     send_message: {
       title: null,
@@ -129,6 +129,12 @@ const action = {
       categories: null,
       notification_level: null,
       mute_remainder: null,
+      wizard_user: true,
+      usernames: null,
+    },
+    watch_tags: {
+      tags: null,
+      notification_level: null,
       wizard_user: true,
       usernames: null,
     },
@@ -196,23 +202,27 @@ const action = {
     "messageable_level",
     "visibility_level",
     "members_visibility_level",
-  ],
-  advanced: [
-    "code",
-    "custom_fields",
-    "skip_redirect",
-    "suppress_notifications",
-    "required",
+    "add_event",
+    "add_location",
   ],
   required: ["id", "type"],
   dependent: {},
   objectArrays: {},
 };
 
+const custom_field = {
+  klass: ["topic", "post", "group", "category"],
+  type: ["string", "boolean", "integer", "json"],
+};
+
+field.type = Object.keys(field.types);
+action.type = Object.keys(action.types);
+
 const wizardSchema = {
   wizard,
   step,
   field,
+  custom_field,
   action,
 };
 
@@ -224,7 +234,7 @@ export function buildFieldValidations(validations) {
   wizardSchema.field.validations = validations;
 }
 
-const siteSettings = getOwner(this).lookup("site-settings:main");
+const siteSettings = getOwner(this).lookup("service:site-settings");
 if (siteSettings.wizard_apis_enabled) {
   wizardSchema.action.types.send_to_api = {
     api: null,

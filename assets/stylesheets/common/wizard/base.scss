@@ -1,0 +1,65 @@
+body.custom-wizard {
+  input {
+    display: inline-block;
+    padding: 4px 10px;
+    margin-bottom: 9px;
+    font-size: 1em;
+    line-height: 1;
+    color: var(--primary);
+    background-color: var(--secondary);
+    border: 1px solid var(--primary-medium);
+    border-radius: 0;
+    box-sizing: border-box;
+  }
+
+  textarea {
+    height: auto;
+    background-color: var(--secondary);
+    border: 1px solid var(--primary-medium);
+    min-height: 150px;
+
+    &:focus {
+      border-color: var(--tertiary);
+      box-shadow: shadow("focus");
+      outline: 0;
+    }
+  }
+
+  input,
+  select,
+  textarea {
+    color: var(--primary);
+    caret-color: currentColor;
+
+    &[class*="span"] {
+      float: none;
+      margin-left: 0;
+    }
+
+    &[disabled],
+    &[readonly] {
+      cursor: not-allowed;
+      background-color: var(--primary-low);
+      border-color: var(--primary-low);
+    }
+
+    &:focus:required:invalid {
+      color: var(--danger);
+      border-color: var(--danger);
+    }
+
+    &:focus:required:invalid:focus {
+      border-color: var(--danger);
+      box-shadow: shadow("focus-danger");
+    }
+
+    &[type="checkbox"] {
+      margin-bottom: 0;
+      margin-right: 10px;
+    }
+  }
+
+  .body-length {
+    text-align: right;
+  }
+}

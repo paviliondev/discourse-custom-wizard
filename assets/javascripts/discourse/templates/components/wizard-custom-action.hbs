@@ -1,6 +1,6 @@
 {{#if showUndo}}
   {{d-button
-    action="undoChanges"
+    action=(action "undoChanges")
     icon=undoIcon
     label=undoKey
     class="undo-changes"}}
@@ -12,13 +12,15 @@
   </div>
 
   <div class="setting-value">
-    {{combo-box
+    {{wizard-subscription-selector
       value=action.type
-      content=actionTypes
+      feature="action"
+      attribute="type"
       onChange=(action "changeType")
       options=(hash
         none="admin.wizard.select_type"
-      )}}
+      )
+    }}
   </div>
 </div>
 
@@ -158,6 +160,44 @@
         )}}
     </div>
   </div>
+
+  {{#if hasEventField}}
+    <div class="setting full">
+      <div class="setting-label">
+        <label>{{i18n "admin.wizard.action.create_topic.add_event"}}</label>
+      </div>
+
+      <div class="setting-value">
+        {{wizard-mapper
+          inputs=action.add_event
+          property="add_event"
+          onUpdate=(action "mappedFieldUpdated")
+          options=(hash
+            wizardFieldSelection=true
+            context="action"
+          )}}
+      </div>
+    </div>
+  {{/if}}
+
+  {{#if hasLocationField}}
+    <div class="setting full">
+      <div class="setting-label">
+        <label>{{i18n "admin.wizard.action.create_topic.add_location"}}</label>
+      </div>
+
+      <div class="setting-value">
+        {{wizard-mapper
+          inputs=action.add_location
+          property="add_location"
+          onUpdate=(action "mappedFieldUpdated")
+          options=(hash
+            wizardFieldSelection=true
+            context="action"
+          )}}
+      </div>
+    </div>
+  {{/if}}
 {{/if}}
 
 {{#if sendMessage}}
@@ -346,7 +386,7 @@
 
   <div class="setting">
     <div class="setting-label">
-      <label>{{i18n "admin.wizard.action.watch_categories.notification_level.label"}}</label>
+      <label>{{i18n "admin.wizard.action.watch_x.notification_level.label"}}</label>
     </div>
 
     <div class="setting-value">
@@ -356,14 +396,14 @@
         onChange=(action (mut action.notification_level))
         options=(hash
           isDisabled=action.custom_title_enabled
-          none="admin.wizard.action.watch_categories.select_a_notification_level"
+          none="admin.wizard.action.watch_x.select_a_notification_level"
         )}}
     </div>
   </div>
 
   <div class="setting full">
     <div class="setting-label">
-      <label>{{i18n "admin.wizard.action.watch_categories.wizard_user"}}</label>
+      <label>{{i18n "admin.wizard.action.watch_x.wizard_user"}}</label>
     </div>
 
     <div class="setting-value">
@@ -373,7 +413,76 @@
 
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
-      <label>{{i18n "admin.wizard.action.watch_categories.usernames"}}</label>
+      <label>{{i18n "admin.wizard.action.watch_x.usernames"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.usernames
+        property="usernames"
+        onUpdate=(action "mappedFieldUpdated")
+        options=(hash
+          context="action"
+          wizardFieldSelection=true
+          userFieldSelection="key,value"
+          userSelection="output"
+        )}}
+    </div>
+  </div>
+{{/if}}
+
+{{#if watchTags}}
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.watch_tags.tags"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.tags
+        property="tags"
+        onUpdate=(action "mappedFieldUpdated")
+        options=(hash
+          textSelection="key,value"
+          tagSelection="output"
+          wizardFieldSelection=true
+          wizardActionSelection=true
+          userFieldSelection="key,value"
+          context="action"
+        )}}
+    </div>
+  </div>
+
+  <div class="setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.watch_x.notification_level.label"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{combo-box
+        value=action.notification_level
+        content=availableNotificationLevels
+        onChange=(action (mut action.notification_level))
+        options=(hash
+          isDisabled=action.custom_title_enabled
+          none="admin.wizard.action.watch_x.select_a_notification_level"
+        )}}
+    </div>
+  </div>
+
+  <div class="setting full">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.watch_x.wizard_user"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{input type="checkbox" checked=action.wizard_user}}
+    </div>
+  </div>
+
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.watch_x.usernames"}}</label>
     </div>
 
     <div class="setting-value">
@@ -714,99 +823,90 @@
   </div>
 {{/if}}
 
-{{#if showAdvanced}}
-  {{wizard-advanced-toggle showAdvanced=action.showAdvanced}}
-
-  {{#if action.showAdvanced}}
-    <div class="advanced-settings">
-
-      {{#if hasCustomFields}}
-        <div class="setting full field-mapper-setting">
-          <div class="setting-label">
-            <label>{{i18n "admin.wizard.action.custom_fields.label"}}</label>
-          </div>
-
-          <div class="setting-value">
-            {{wizard-mapper
-              inputs=action.custom_fields
-              property="custom_fields"
-              onUpdate=(action "mappedFieldUpdated")
-              options=(hash
-                inputTypes="association"
-                customFieldSelection="key"
-                wizardFieldSelection="value"
-                wizardActionSelection="value"
-                userFieldSelection="value"
-                keyPlaceholder="admin.wizard.action.custom_fields.key"
-                context=customFieldsContext
-              )}}
-          </div>
-        </div>
-      {{/if}}
-
-      {{#if sendMessage}}
-        <div class="setting full field-mapper-setting">
-          <div class="setting-label">
-            <label>{{i18n "admin.wizard.required"}}</label>
-          </div>
-
-          <div class="setting-value">
-            {{wizard-mapper
-              inputs=action.required
-              property="required"
-              onUpdate=(action "mappedFieldUpdated")
-              options=(hash
-                textSelection="value"
-                wizardFieldSelection=true
-                userFieldSelection=true
-                groupSelection=true
-                context="action"
-              )}}
-          </div>
-        </div>
-      {{/if}}
-
-      {{#if showPostAdvanced}}
-        <div class="setting full">
-          <div class="setting-label">
-            <label>{{i18n "admin.wizard.action.skip_redirect.label"}}</label>
-          </div>
-
-          <div class="setting-value">
-            {{input type="checkbox" checked=action.skip_redirect}}
-
-            <span>
-              {{i18n "admin.wizard.action.skip_redirect.description" type="topic"}}
-            </span>
-          </div>
-        </div>
-
-        <div class="setting full">
-          <div class="setting-label">
-            <label>{{i18n "admin.wizard.action.suppress_notifications.label"}}</label>
-          </div>
-
-          <div class="setting-value">
-            {{input type="checkbox" checked=action.suppress_notifications}}
-
-            <span>
-              {{i18n "admin.wizard.action.suppress_notifications.description" type="topic"}}
-            </span>
-          </div>
-        </div>
-      {{/if}}
-
-      {{#if routeTo}}
-        <div class="setting">
-          <div class="setting-label">
-            <label>{{i18n "admin.wizard.action.route_to.code"}}</label>
-          </div>
-
-          <div class="setting-value">
-            {{input value=action.code}}
-          </div>
-        </div>
-      {{/if}}
+{{#if hasCustomFields}}
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.custom_fields.label"}}</label>
     </div>
-  {{/if}}
+
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.custom_fields
+        property="custom_fields"
+        onUpdate=(action "mappedFieldUpdated")
+        options=(hash
+          inputTypes="association"
+          customFieldSelection="key"
+          wizardFieldSelection="value"
+          wizardActionSelection="value"
+          userFieldSelection="value"
+          keyPlaceholder="admin.wizard.action.custom_fields.key"
+          context=customFieldsContext
+        )}}
+    </div>
+  </div>
+{{/if}}
+
+{{#if sendMessage}}
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.required"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.required
+        property="required"
+        onUpdate=(action "mappedFieldUpdated")
+        options=(hash
+          textSelection="value"
+          wizardFieldSelection=true
+          userFieldSelection=true
+          groupSelection=true
+          context="action"
+        )}}
+    </div>
+  </div>
+{{/if}}
+
+{{#if showPostAdvanced}}
+  <div class="setting full">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.skip_redirect.label"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{input type="checkbox" checked=action.skip_redirect}}
+
+      <span>
+        {{i18n "admin.wizard.action.skip_redirect.description" type="topic"}}
+      </span>
+    </div>
+  </div>
+
+  <div class="setting full">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.suppress_notifications.label"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{input type="checkbox" checked=action.suppress_notifications}}
+
+      <span>
+        {{i18n "admin.wizard.action.suppress_notifications.description" type="topic"}}
+      </span>
+    </div>
+  </div>
+{{/if}}
+
+{{#if routeTo}}
+  <div class="setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.route_to.code"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{input value=action.code}}
+    </div>
+  </div>
 {{/if}}

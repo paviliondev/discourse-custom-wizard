@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Custom Wizard QUnit Test Runner</title>
+    <%= discourse_stylesheet_link_tag(:test_helper, theme_id: nil) %>
+    <%= discourse_stylesheet_link_tag :wizard, theme_id: nil %>
+    <%= discourse_stylesheet_link_tag :wizard_custom %>
+    <%= preload_script "locales/en" %>
+    <%= preload_script "ember_jquery" %>
+    <%= preload_script "wizard-vendor" %>
+    <%= preload_script "wizard-custom" %>
+    <%= preload_script "wizard-raw-templates" %>
+    <%= preload_script "wizard-plugin" %>
+    <%= preload_script "pretty-text-bundle" %>
+    <%= preload_script "wizard-qunit" %>
+    <%= csrf_meta_tags %>
+
+    <script src="<%= ExtraLocalesController.url("wizard") %>"></script>
+
+    <%= tag.meta id: 'data-discourse-setup', data: client_side_setup_data %>
+    <meta name="discourse_theme_id" content="">
+    <meta name="discourse-base-uri" content="<%= Discourse.base_path %>">
+  </head>
+  <body class="custom-wizard">
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+  </body>
+</html>

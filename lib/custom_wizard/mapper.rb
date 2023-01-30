@@ -211,6 +211,8 @@ class CustomWizard::Mapper
       user.send(value)
     elsif USER_OPTION_FIELDS.include?(value)
       user.user_option.send(value)
+    elsif value.include?('avatar')
+      get_avatar_url(value)
     else
       nil
     end
@@ -251,7 +253,7 @@ class CustomWizard::Mapper
       end
     end
 
-    if opts[:template]
+    if opts[:template] && CustomWizard::Subscription.subscribed?
       template = Liquid::Template.parse(string)
       string = template.render(data)
     end
@@ -268,5 +270,16 @@ class CustomWizard::Mapper
 
   def bool(value)
     ActiveRecord::Type::Boolean.new.cast(value)
+  end
+
+  def get_avatar_url(value)
+    parts = value.split('.')
+    valid_sizes = Discourse.avatar_sizes.to_a
+
+    if value === 'avatar' || parts.size === 1 || valid_sizes.exclude?(parts.last.to_i)
+      user.small_avatar_url
+    else
+      user.avatar_template_url.gsub("{size}", parts.last)
+    end
   end
 end
