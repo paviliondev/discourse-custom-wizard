@@ -5,11 +5,7 @@ import { scheduleOnce } from "@ember/runloop";
 import Component from "@ember/component";
 import I18n from "I18n";
 
-const excludedUserProperties = [
-  "avatar",
-  "profile_background",
-  "card_background",
-];
+const excludedUserProperties = ["profile_background", "card_background"];
 
 export default Component.extend({
   classNames: "wizard-text-editor",
@@ -52,12 +48,12 @@ export default Component.extend({
 
   @discourseComputed("wizardFields")
   wizardFieldList(wizardFields) {
-    return wizardFields.map((f) => ` w{${f.id}}`);
+    return (wizardFields || []).map((f) => ` w{${f.id}}`);
   },
 
   @discourseComputed("wizardActions")
   wizardActionList(wizardActions) {
-    return wizardActions.map((a) => ` w{${a.id}}`);
+    return (wizardActions || []).map((a) => ` w{${a.id}}`);
   },
 
   actions: {

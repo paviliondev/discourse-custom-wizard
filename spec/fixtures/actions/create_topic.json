@@ -1,0 +1,14 @@
+{
+  "id": "create_topic_1",
+  "type": "create_topic",
+  "post_builder": true,
+  "post_template": "First post in the topic!",
+  "title": [
+    {
+      "type": "assignment",
+      "output_type": "text",
+      "output_connector": "set",
+      "output": "My new topic"
+    }
+  ]
+}

@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 CustomWizard::Engine.routes.draw do
-  get ':wizard_id' => 'wizard#index'
+  get ':wizard_id' => 'wizard#show'
   put ':wizard_id/skip' => 'wizard#skip'
-  get ':wizard_id/steps' => 'wizard#index'
-  get ':wizard_id/steps/:step_id' => 'wizard#index'
+  get ':wizard_id/steps' => 'wizard#show'
+  get ':wizard_id/steps/:step_id' => 'wizard#show'
   put ':wizard_id/steps/:step_id' => 'steps#update'
 end
 
@@ -38,6 +38,7 @@ Discourse::Application.routes.append do
     get 'admin/wizards/api/:name/authorize' => 'admin_api#authorize'
 
     get 'admin/wizards/logs' => 'admin_logs#index'
+    get 'admin/wizards/logs/:wizard_id' => 'admin_logs#show'
 
     get 'admin/wizards/manager' => 'admin_manager#index'
     get 'admin/wizards/manager/export' => 'admin_manager#export'

@@ -1,0 +1,13 @@
+{
+  "id": "action_6",
+  "run_after": "step_1",
+  "type": "add_to_group",
+  "group": [
+    {
+      "type": "assignment",
+      "output": "action_9",
+      "output_type": "wizard_action",
+      "output_connector": "set"
+    }
+  ]
+}

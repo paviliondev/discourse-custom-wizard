@@ -1,0 +1,15 @@
+{{#if icons}}
+  <div class="icons">
+    <span class="selection-indicator"></span>
+    {{#each icons as |icon|}}
+      {{d-icon icon translatedtitle=(dasherize title)}}
+    {{/each}}
+  </div>
+{{/if}}
+
+<div class="texts">
+  <span class="name">{{html-safe label}}</span>
+  {{#if item.subscriptionRequired}}
+    <span class="subscription-label">{{i18n item.selectorLabel}}</span>
+  {{/if}}
+</div>

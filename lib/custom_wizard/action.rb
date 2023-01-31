@@ -43,8 +43,16 @@ class CustomWizard::Action
     @mapper ||= CustomWizard::Mapper.new(user: user, data: mapper_data)
   end
 
+  def callbacks_for(action)
+    self.class.callbacks[action] || []
+  end
+
   def create_topic
     params = basic_topic_params.merge(public_topic_params)
+
+    callbacks_for(:before_create_topic).each do |acb|
+      params = acb.call(params, @wizard, @action, @submission)
+    end
 
     if params[:title].present? && params[:raw].present?
       creator = PostCreator.new(user, params)
@@ -179,6 +187,52 @@ class CustomWizard::Action
       end
     else
       log_error("invalid profile fields params", "params: #{params.inspect}")
+    end
+  end
+
+  def watch_tags
+    tags = CustomWizard::Mapper.new(
+      inputs: action['tags'],
+      data: mapper_data,
+      user: user
+    ).perform
+
+    tags = [*tags]
+    level = action['notification_level'].to_sym
+
+    if level.blank?
+      log_error("Notifcation Level was not set. Exiting watch tags action")
+      return
+    end
+
+    users = []
+
+    if action['usernames']
+      mapped_users = CustomWizard::Mapper.new(
+        inputs: action['usernames'],
+        data: mapper_data,
+        user: user
+      ).perform
+
+      if mapped_users.present?
+        mapped_users = mapped_users.split(',')
+          .map { |username| User.find_by(username: username) }
+        users.push(*mapped_users)
+      end
+    end
+
+    if ActiveRecord::Type::Boolean.new.cast(action['wizard_user'])
+      users.push(user)
+    end
+
+    users.each do |user|
+      result = TagUser.batch_set(user, level, tags)
+
+      if result
+        log_success("#{user.username} notifications for #{tags} set to #{level}")
+      else
+        log_error("failed to set #{user.username} notifications for #{tags} to #{level}")
+      end
     end
   end
 
@@ -417,6 +471,15 @@ class CustomWizard::Action
     end
   end
 
+  def self.callbacks
+    @callbacks ||= {}
+  end
+
+  def self.register_callback(action, &block)
+    callbacks[action] ||= []
+    callbacks[action] << block
+  end
+
   private
 
   def action_category
@@ -481,8 +544,8 @@ class CustomWizard::Action
 
         registered = registered_fields.select { |f| f.name == name }.first
         if registered.present?
-          klass = registered.klass
-          type = registered.type
+          klass = registered.klass.to_sym
+          type = registered.type.to_sym
         end
 
         next if type === :json && json_attr.blank?
@@ -746,14 +809,11 @@ class CustomWizard::Action
   end
 
   def save_log
-    log = "wizard: #{@wizard.id}; action: #{action['type']}; user: #{user.username}"
-
-    if @log.any?
-      @log.each do |item|
-        log += "; #{item.to_s}"
-      end
-    end
-
-    CustomWizard::Log.create(log)
+    CustomWizard::Log.create(
+      @wizard.id,
+      action['type'],
+      user.username,
+      @log.join('; ')
+    )
   end
 end

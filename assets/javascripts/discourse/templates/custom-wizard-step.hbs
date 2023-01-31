@@ -1,0 +1,20 @@
+{{#if stepMessage}}
+  <div class="step-message {{stepMessage.state}}">
+    <div class="text">
+      {{stepMessage.text}}
+    </div>
+    {{#if showReset}}
+      <a role="button" class="reset-wizard" {{action "resetWizard"}}>
+        {{i18n "wizard.reset"}}
+      </a>
+    {{/if}}
+  </div>
+{{/if}}
+{{#if step.permitted}}
+  {{custom-wizard-step
+    step=step
+    wizard=wizard
+    goNext=(action "goNext")
+    goBack=(action "goBack")
+    showMessage=(action "showMessage")}}
+{{/if}}

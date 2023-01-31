@@ -12,10 +12,10 @@
     {{/if}}
 
     {{input
-      id="file-upload"
+      id="custom-wizard-file-upload"
       type="file"
       accept="application/json"
-      change=(action "setFile")}}
+      input=(action "setFile")}}
     {{d-button
       id="upload-button"
       label="admin.wizard.manager.upload"

@@ -1,4 +1,4 @@
-import CustomWizard from "../models/custom-wizard";
+import CustomWizardAdmin from "../models/custom-wizard-admin";
 import { ajax } from "discourse/lib/ajax";
 import DiscourseRoute from "discourse/routes/discourse";
 import I18n from "I18n";
@@ -20,7 +20,9 @@ export default DiscourseRoute.extend({
 
   setupController(controller, model) {
     const parentModel = this.modelFor("adminWizardsWizard");
-    const wizard = CustomWizard.create(!model || model.create ? {} : model);
+    const wizard = CustomWizardAdmin.create(
+      !model || model.create ? {} : model
+    );
     const fieldTypes = Object.keys(parentModel.field_types).map((type) => {
       return {
         id: type,

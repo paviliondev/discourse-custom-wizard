@@ -1,0 +1,10 @@
+{{custom-wizard-group-selector
+  groups=site.groups
+  field=field
+  whitelist=field.content
+  value=field.value
+  tabindex=field.tabindex
+  onChange=(action (mut field.value))
+  options=(hash
+    none="select_kit.default_header_text"
+  )}}

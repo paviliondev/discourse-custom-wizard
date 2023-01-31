@@ -71,6 +71,17 @@ export default Component.extend({
     });
   },
 
+  getNextIndex() {
+    const items = this.items;
+    if (!items || items.length === 0) {
+      return 0;
+    }
+    const numbers = items
+      .map((i) => Number(i.id.split("_").pop()))
+      .sort((a, b) => a - b);
+    return numbers[numbers.length - 1];
+  },
+
   actions: {
     add() {
       const items = this.get("items");
@@ -78,16 +89,9 @@ export default Component.extend({
       let params = setWizardDefaults({}, itemType);
 
       params.isNew = true;
+      params.index = this.getNextIndex();
 
-      let index = 0;
-      if (items.length) {
-        let last_item = items[items.length - 1];
-        index = Number(last_item.id.split("_").pop());
-      }
-
-      params.index = index;
-
-      let id = `${itemType}_${index + 1}`;
+      let id = `${itemType}_${params.index + 1}`;
       if (itemType === "field") {
         id = `${this.parentId}_${id}`;
       }

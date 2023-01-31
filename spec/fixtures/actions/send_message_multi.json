@@ -1,0 +1,28 @@
+{
+  "id": "action_11",
+  "run_after": "step_2",
+  "type": "send_message",
+  "post_builder": true,
+  "post_template": "I will interpolate some wizard fields w{step_1_field_1} w{step_1_field_2}",
+  "title": [
+    {
+      "type": "assignment",
+      "output": "Multiple Recipients title",
+      "output_type": "text",
+      "output_connector": "set"
+    }
+  ],
+  "recipient": [
+    {
+      "type": "assignment",
+      "output_type": "user",
+      "output_connector": "set",
+      "output": [
+        "angus1",
+        "faiz",
+        "cool_group",
+        "cool_group_1"
+      ]
+    }
+  ]
+}

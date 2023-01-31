@@ -1,0 +1,90 @@
+body.custom-wizard {
+  .wizard-btn {
+    border-radius: 2px;
+    font-size: var(--font-0);
+    border: 0;
+    padding: 0.5em;
+    transition: background-color 0.3s;
+    margin-right: 0.5em;
+    text-decoration: none;
+    background-color: var(--secondary);
+    color: var(--primary-very-high);
+    box-shadow: 0 1px 4px rgba(var(--always-black-rgb), 0.4);
+    cursor: pointer;
+
+    &.small {
+      padding: 0.25em 0.5em;
+      font-size: var(--font-down-1);
+    }
+
+    &:hover,
+    &:focus {
+      background-color: var(--primary-low);
+    }
+
+    &:active {
+      background-color: var(--primary-low-mid);
+    }
+
+    &:disabled,
+    &.disabled {
+      background-color: var(--primary-medium);
+    }
+
+    .d-icon-chevron-right {
+      margin-left: 0.25em;
+      font-size: 0.8em;
+    }
+    .d-icon-chevron-left {
+      margin-right: 0.25em;
+      font-size: 0.8em;
+    }
+  }
+
+  .wizard-btn.primary {
+    background-color: var(--tertiary);
+    color: var(--secondary);
+    box-shadow: 0 1px 4px rgba(var(--always-black-rgb), 0.6);
+
+    &:hover,
+    &:focus {
+      background-color: var(--tertiary-hover);
+    }
+
+    &:active {
+      background-color: var(--tertiary-high);
+    }
+
+    &:disabled {
+      background-color: var(--tertiary-low);
+    }
+  }
+
+  .wizard-btn.danger {
+    background-color: var(--danger);
+    color: var(--secondary);
+
+    &:hover,
+    &:focus {
+      background-color: var(--danger-hover);
+    }
+
+    &:active {
+      background-color: var(--danger-medium);
+    }
+
+    &:disabled {
+      background-color: var(--danger-low);
+    }
+  }
+
+  .action-link {
+    margin-right: 1em;
+    text-decoration: none;
+    color: var(--tertiary);
+
+    &:hover {
+      color: var(--tertiary-hover);
+    }
+  }
+}

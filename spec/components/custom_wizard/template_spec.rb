@@ -1,19 +1,10 @@
 # frozen_string_literal: true
-require_relative '../../plugin_helper'
 
 describe CustomWizard::Template do
   fab!(:user) { Fabricate(:user) }
-
-  let(:template_json) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-    ).read)
-  }
-  let(:permitted_json) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard/permitted.json"
-    ).read)
-  }
+  let(:template_json) { get_wizard_fixture("wizard") }
+  let(:permitted_json) { get_wizard_fixture("wizard/permitted") }
+  fab!(:upload) { Fabricate(:upload) }
 
   before do
     CustomWizard::Template.save(template_json, skip_jobs: true)
@@ -55,8 +46,78 @@ describe CustomWizard::Template do
     ).to eq(true)
   end
 
+  context "upload references" do
+    it "are added if a wizard has a step banner" do
+      template_json['steps'][0]['banner'] = upload.url
+      template_json['steps'][0]['banner_upload_id'] = upload.id
+      CustomWizard::Template.save(template_json, skip_jobs: true)
+      wizard_record = CustomWizard::Template.find_record(template_json["id"])
+      expect(
+        UploadReference.exists?(
+          upload_id: upload.id,
+          target_type: "PluginStoreRow",
+          target_id: wizard_record.id
+        )
+      ).to eq(true)
+    end
+
+    it "are added if a wizard has a field image" do
+      template_json['steps'][0]["fields"][0]['image'] = upload.url
+      template_json['steps'][0]["fields"][0]['image_upload_id'] = upload.id
+      CustomWizard::Template.save(template_json, skip_jobs: true)
+      wizard_record = CustomWizard::Template.find_record(template_json["id"])
+      expect(
+        UploadReference.exists?(
+          upload_id: upload.id,
+          target_type: "PluginStoreRow",
+          target_id: wizard_record.id
+        )
+      ).to eq(true)
+    end
+
+    it "are removed if a wizard step banner is removed" do
+      template_json['steps'][0]['banner'] = upload.url
+      template_json['steps'][0]['banner_upload_id'] = upload.id
+      CustomWizard::Template.save(template_json, skip_jobs: true)
+
+      template_json['steps'][0]['banner'] = nil
+      template_json['steps'][0]['banner_upload_id'] = nil
+      CustomWizard::Template.save(template_json, skip_jobs: true)
+      wizard_record = CustomWizard::Template.find_record(template_json["id"])
+      expect(
+        UploadReference.exists?(target_type: "PluginStoreRow")
+      ).to eq(false)
+    end
+
+    it "are removed if a wizard field image is removed" do
+      template_json['steps'][0]["fields"][0]['image'] = upload.url
+      template_json['steps'][0]["fields"][0]['image_upload_id'] = upload.id
+      CustomWizard::Template.save(template_json, skip_jobs: true)
+
+      template_json['steps'][0]["fields"][0]['image'] = nil
+      template_json['steps'][0]["fields"][0]['image_upload_id'] = nil
+      CustomWizard::Template.save(template_json, skip_jobs: true)
+      wizard_record = CustomWizard::Template.find_record(template_json["id"])
+      expect(
+        UploadReference.exists?(target_type: "PluginStoreRow")
+      ).to eq(false)
+    end
+
+    it "are removed if a wizard is removed" do
+      template_json['steps'][0]["fields"][0]['image'] = upload.url
+      template_json['steps'][0]["fields"][0]['image_upload_id'] = upload.id
+      CustomWizard::Template.save(template_json, skip_jobs: true)
+      CustomWizard::Template.remove(template_json["id"])
+      expect(
+        UploadReference.exists?(target_type: "PluginStoreRow")
+      ).to eq(false)
+    end
+  end
+
   context "wizard template list" do
     before do
+      enable_subscription('standard')
+
       template_json_2 = template_json.dup
       template_json_2["id"] = 'super_mega_fun_wizard_2'
       template_json_2["permitted"] = permitted_json['permitted']

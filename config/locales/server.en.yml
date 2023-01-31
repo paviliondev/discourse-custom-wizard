@@ -6,7 +6,7 @@ en:
 
   wizard:
     custom_title: "Wizard"
-    
+
     custom_field:
       error:
         required_attribute: "'%{attr}' is a required attribute"
@@ -17,7 +17,8 @@ en:
         name_too_short: "'%{name}' is too short for a custom field name (min length is #{min_length})"
         name_already_taken: "'%{name}' is already taken as a custom field name"
         save_default: "Failed to save custom field '%{name}'"
-    
+        subscription_type: "%{type} custom fields require a subscription"
+
     field:
       too_short: "%{label} must be at least %{min} characters"
       too_long: "%{label} must not be more than %{max} characters"
@@ -26,25 +27,25 @@ en:
       invalid_file: "%{label} must be a %{types}"
       invalid_date: "Invalid date"
       invalid_time: "Invalid time"
-    
+
     none: "We couldn't find a wizard at that address."
     no_skip: "Wizard can't be skipped"
     export:
       error:
         select_one: "Please select at least one valid wizard"
         invalid_wizards: "No valid wizards selected"
-    
+
     import:
       error:
         no_file: "No file selected"
         file_large: "File too large"
         invalid_json: "File is not a valid json file"
-    
+
     destroy:
       error:
         no_template: No template found
         default: Error destroying wizard
-    
+
     validation:
       required: "%{property} is required"
       conflict: "Wizard with id '%{wizard_id}' already exists"
@@ -52,9 +53,11 @@ en:
       after_signup_after_time: "You can't use 'after time' and 'after signup' on the same wizard."
       after_time: "After time setting is invalid."
       liquid_syntax_error: "Liquid syntax error in %{attribute}: %{message}"
+      subscription: "%{type} %{property} is subscription only" 
 
   site_settings:
     custom_wizard_enabled: "Enable custom wizards."
     wizard_redirect_exclude_paths: "Routes excluded from wizard redirects."
     wizard_recognised_image_upload_formats: "File types which will result in upload displaying an image preview"
     wizard_apis_enabled: "Enable API features (experimental)."
+    wizard_critical_notices_on_dashboard: "Show critical notices about the custom wizard plugin on the admin dashboard."

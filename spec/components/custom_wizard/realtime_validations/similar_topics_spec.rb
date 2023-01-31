@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../../../plugin_helper'
-
 describe ::CustomWizard::RealtimeValidation::SimilarTopics do
   let(:post) {  create_post(title: "matching similar topic") }
   let(:topic) {  post.topic }

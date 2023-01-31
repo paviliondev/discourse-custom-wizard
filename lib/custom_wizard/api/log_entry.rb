@@ -27,7 +27,7 @@ class CustomWizard::Api::LogEntry
       log_id = new_data['log_id']
     else
       data = {}
-      log_id = SecureRandom.hex(3)
+      log_id = SecureRandom.hex(8)
     end
 
     new_data.each do |k, v|

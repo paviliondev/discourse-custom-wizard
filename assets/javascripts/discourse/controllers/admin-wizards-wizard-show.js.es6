@@ -36,7 +36,8 @@ export default Controller.extend({
 
   @discourseComputed("wizard.id")
   wizardUrl(wizardId) {
-    return window.location.origin + "/w/" + dasherize(wizardId);
+    let baseUrl = window.location.href.split("/admin");
+    return baseUrl[0] + "/w/" + dasherize(wizardId);
   },
 
   @discourseComputed("wizard.after_time_scheduled")
@@ -92,7 +93,11 @@ export default Controller.extend({
       wizard
         .save(opts)
         .then((result) => {
-          this.send("afterSave", result.wizard_id);
+          if (result.wizard_id) {
+            this.send("afterSave", result.wizard_id);
+          } else if (result.errors) {
+            this.set("error", result.errors.join(", "));
+          }
         })
         .catch((result) => {
           this.set("error", this.getErrorMessage(result));
@@ -116,10 +121,6 @@ export default Controller.extend({
       });
 
       controller.setup();
-    },
-
-    toggleAdvanced() {
-      this.toggleProperty("wizard.showAdvanced");
     },
 
     copyUrl() {

@@ -1,2 +1,8 @@
 inherit_gem:
   rubocop-discourse: default.yml
+
+RSpec/ContextWording:
+  Enabled: false
+
+RSpec/DescribeClass:
+  Enabled: false

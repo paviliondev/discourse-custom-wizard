@@ -1,0 +1,16 @@
+$pavilion_primary: #3c1c8c;
+$pavilion_secondary: #ffffff;
+$pavilion_warning: rgb(243, 163, 61);
+
+$subscription_standard: $pavilion_primary;
+$subscription_business: #333;
+$subscription_community: #fff;
+
+:root {
+  --pavilion-primary: #{$pavilion_primary};
+  --pavilion-secondary: #{$pavilion_secondary};
+  --pavilion-warning: #{$pavilion_warning};
+  --subscription-standard: #{$subscription_standard};
+  --subscription-business: #{$subscription_business};
+  --subscription-community: #{$subscription_community};
+}

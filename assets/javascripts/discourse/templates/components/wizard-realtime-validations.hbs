@@ -1,50 +1,53 @@
-<h3>{{i18n "admin.wizard.field.validations.header"}}</h3>
-
-<ul>
-  {{#each-in field.validations as |type props|}}
-    <li>
-      <span class="setting-title">
-        <h4>{{i18n (concat "admin.wizard.field.validations." type)}}</h4>
-        {{input type="checkbox" checked=props.status}}
-        {{i18n "admin.wizard.field.validations.enabled"}}
-      </span>
-      <div class="validation-container">
-        <div class="validation-section">
-          <div class="setting-label">
-            <label>{{i18n "admin.wizard.field.validations.categories"}}</label>
+<div class="setting-label">
+  <label>{{i18n "admin.wizard.field.validations.header"}}</label>
+</div>
+<div class="setting-value full">
+  <ul>
+    {{#each-in field.validations as |type props|}}
+      <li>
+        <span class="setting-title">
+          <h4>{{i18n (concat "admin.wizard.field.validations." type)}}</h4>
+          {{input type="checkbox" checked=props.status}}
+          {{i18n "admin.wizard.field.validations.enabled"}}
+        </span>
+        <div class="validation-container">
+          <div class="validation-section">
+            <div class="setting-label">
+              <label>{{i18n "admin.wizard.field.validations.categories"}}</label>
+            </div>
+            <div class="setting-value">
+              {{category-selector
+                  categories=(get this (concat "validationBuffer." type ".categories"))
+                  onChange=(action "updateValidationCategories" type props)
+                  class="wizard"}}
+            </div>
           </div>
-          <div class="setting-value">
-            {{category-selector
-                categories=(get this (concat "validationBuffer." type ".categories"))
-                onChange=(action "updateValidationCategories" type props)
-                class="wizard"}}
+          <div class="validation-section">
+            <div class="setting-label">
+              <label>{{i18n "admin.wizard.field.validations.max_topic_age"}}</label>
+            </div>
+            <div class="setting-value">
+              {{input type="number" class="time-n-value" value=props.time_n_value}}
+              {{combo-box
+                  value=(readonly props.time_unit)
+                  content=timeUnits
+                  class="time-unit-selector"
+                  onChange=(action (mut props.time_unit))}}
+            </div>
+          </div>
+          <div class="validation-section">
+            <div class="setting-label">
+              <label>{{i18n "admin.wizard.field.validations.position"}}</label>
+            </div>
+            <div class="setting-value">
+              {{radio-button name=(concat type field.id) value="above" selection=props.position}}
+              <span>{{i18n "admin.wizard.field.validations.above"}}</span>
+              {{radio-button name=(concat type field.id) value="below" selection=props.position}}
+              <span>{{i18n "admin.wizard.field.validations.below"}}</span>
+            </div>
           </div>
         </div>
-        <div class="validation-section">
-          <div class="setting-label">
-            <label>{{i18n "admin.wizard.field.validations.max_topic_age"}}</label>
-          </div>
-          <div class="setting-value">
-            {{input type="number" class="time-n-value" value=props.time_n_value}}
-            {{combo-box
-                value=(readonly props.time_unit)
-                content=timeUnits
-                class="time-unit-selector"
-                onChange=(action (mut props.time_unit))}}
-          </div>
-        </div>
-        <div class="validation-section">
-          <div class="setting-label">
-            <label>{{i18n "admin.wizard.field.validations.position"}}</label>
-          </div>
-          <div class="setting-value">
-            {{radio-button name=(concat type field.id) value="above" selection=props.position}}
-            {{i18n "admin.wizard.field.validations.above"}}
-            {{radio-button name=(concat type field.id) value="below" selection=props.position}}
-            {{i18n "admin.wizard.field.validations.below"}}
-          </div>
-        </div>
-      </div>
-    </li>
-  {{/each-in}}
-</ul>
+      </li>
+    {{/each-in}}
+  </ul>
+</div>

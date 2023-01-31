@@ -1,0 +1,25 @@
+{{d-editor
+  tabindex=field.tabindex
+  value=composer.reply
+  placeholderOverride=replyPlaceholder
+  previewUpdated=(action "previewUpdated")
+  markdownOptions=markdownOptions
+  extraButtons=(action "extraButtons")
+  importQuote=(action "importQuote")
+  showUploadModal=(action "showUploadModal")
+  togglePreview=(action "togglePreview")
+  validation=validation
+  loading=composer.loading
+  showLink=showLink
+  wizardComposer=true
+  fieldId=field.id
+  disabled=disableTextarea
+  outletArgs=(hash composer=composer editorType="composer")}}
+
+<input
+  type="file"
+  id={{fileUploadElementId}}
+  class="wizard-composer-upload"
+  accept={{allowedFileTypes}}
+  multiple
+  >

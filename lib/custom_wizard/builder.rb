@@ -21,13 +21,6 @@ class CustomWizard::Builder
     @sorted_handlers.sort_by! { |h| -h[:priority] }
   end
 
-  def mapper
-    CustomWizard::Mapper.new(
-      user: @wizard.user,
-      data: @wizard.current_submission&.fields_and_meta
-    )
-  end
-
   def build(build_opts = {}, params = {})
     return nil if !SiteSetting.custom_wizard_enabled || !@wizard
     return @wizard if !@wizard.can_access? && !build_opts[:force]
@@ -79,6 +72,32 @@ class CustomWizard::Builder
     @wizard
   end
 
+  def check_condition(template)
+    if template['condition'].present?
+      result = CustomWizard::Mapper.new(
+        inputs: template['condition'],
+        user: @wizard.user,
+        data: @wizard.current_submission&.fields_and_meta,
+        opts: {
+          multiple: true
+        }
+      ).perform
+
+      result.any?
+    else
+      true
+    end
+  end
+
+  private
+
+  def mapper
+    CustomWizard::Mapper.new(
+      user: @wizard.user,
+      data: @wizard.current_submission&.fields_and_meta
+    )
+  end
+
   def append_field(step, step_template, field_template, build_opts)
     params = {
       id: field_template['id'],
@@ -116,20 +135,12 @@ class CustomWizard::Builder
       params[:limit] = field_template['limit']
     end
 
+    if field_template['type'] === 'tag'
+      params[:can_create_tag] = standardise_boolean(field_template['can_create_tag'])
+    end
+
     if field_template['type'] === 'category'
       params[:property] = field_template['property']
-    end
-
-    if field_template['type'] === 'category' || (
-          field_template['validations'] &&
-          field_template['validations']['similar_topics'] &&
-          field_template['validations']['similar_topics']['categories'].present?
-        )
-      @wizard.needs_categories = true
-    end
-
-    if field_template['type'] === 'group'
-      @wizard.needs_groups = true
     end
 
     if (content_inputs = field_template['content']).present?
@@ -210,23 +221,6 @@ class CustomWizard::Builder
         user: @wizard.user,
         data: @wizard.current_submission&.fields_and_meta
       ).perform
-    end
-  end
-
-  def check_condition(template)
-    if template['condition'].present?
-      result = CustomWizard::Mapper.new(
-        inputs: template['condition'],
-        user: @wizard.user,
-        data: @wizard.current_submission&.fields_and_meta,
-        opts: {
-          multiple: true
-        }
-      ).perform
-
-      result.any?
-    else
-      true
     end
   end
 

@@ -11,7 +11,7 @@ class CustomWizard::Field
               :label,
               :description,
               :image,
-              :key,
+              :image_upload_id,
               :validations,
               :min_length,
               :max_length,
@@ -22,6 +22,7 @@ class CustomWizard::Field
               :property,
               :content,
               :tag_groups,
+              :can_create_tag,
               :preview_template,
               :placeholder
 
@@ -37,7 +38,6 @@ class CustomWizard::Field
     @value = attrs[:value] || default_value
     @description = attrs[:description]
     @image = attrs[:image]
-    @key = attrs[:key]
     @validations = attrs[:validations]
     @min_length = attrs[:min_length]
     @max_length = attrs[:max_length]
@@ -48,6 +48,7 @@ class CustomWizard::Field
     @property = attrs[:property]
     @content = attrs[:content]
     @tag_groups = attrs[:tag_groups]
+    @can_create_tag = attrs[:can_create_tag]
     @preview_template = attrs[:preview_template]
     @placeholder = attrs[:placeholder]
   end
@@ -114,7 +115,8 @@ class CustomWizard::Field
         limit: nil,
         prefill: nil,
         content: nil,
-        tag_groups: nil
+        tag_groups: nil,
+        can_create_tag: false
       },
       category: {
         limit: 1,
@@ -131,17 +133,22 @@ class CustomWizard::Field
   end
 
   def self.require_assets
+    Rails.logger.warn("Custom Wizard field regisration no longer requires asset registration. Support will be removed in v2.1.0.")
+
     @require_assets ||= {}
   end
 
-  def self.register(type, plugin = nil, asset_paths = [], opts = {})
+  def self.register(type, plugin = nil, opts = {}, legacy_opts = {})
+    if opts.is_a?(Array)
+      Rails.logger.warn("Custom Wizard field regisration no longer requires asset registration. Support will be removed in v2.1.0.")
+
+      require_assets[plugin] = opts
+      opts = legacy_opts
+    end
+
     if type
       types[type.to_sym] ||= {}
       types[type.to_sym] = opts[:type_opts] if opts[:type_opts].present?
-    end
-
-    if plugin && asset_paths
-      require_assets[plugin] = asset_paths
     end
   end
 end

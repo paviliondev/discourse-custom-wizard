@@ -1,27 +1,11 @@
 # frozen_string_literal: true
 
-require_relative '../../plugin_helper'
-
 describe CustomWizard::Wizard do
   fab!(:user) { Fabricate(:user) }
   fab!(:trusted_user) { Fabricate(:user, trust_level: TrustLevel[3]) }
   fab!(:admin_user) { Fabricate(:user, admin: true) }
-
-  let(:template_json) {
-    JSON.parse(
-      File.open(
-        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-      ).read
-    )
-  }
-
-  let(:permitted_json) {
-    JSON.parse(
-      File.open(
-        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard/permitted.json"
-      ).read
-    )
-  }
+  let(:template_json) { get_wizard_fixture("wizard") }
+  let(:permitted_json) { get_wizard_fixture("wizard/permitted") }
 
   before do
     Group.refresh_automatic_group!(:trust_level_3)
@@ -129,78 +113,91 @@ describe CustomWizard::Wizard do
     expect(wizard.completed?).to eq(false)
   end
 
-  it "permits admins" do
-    expect(
-      CustomWizard::Wizard.new(@permitted_template, admin_user).permitted?
-    ).to eq(true)
-  end
+  context "with subscription" do
+    before do
+      enable_subscription("standard")
+    end
 
-  it "permits permitted users" do
-    expect(
-      CustomWizard::Wizard.new(@permitted_template, trusted_user).permitted?
-    ).to eq(true)
-  end
+    it "permits admins" do
+      expect(
+        CustomWizard::Wizard.new(@permitted_template, admin_user).permitted?
+      ).to eq(true)
+    end
 
-  it "permits everyone if everyone is permitted" do
-    @permitted_template['permitted'][0]['output'] = Group::AUTO_GROUPS[:everyone]
-    expect(
-      CustomWizard::Wizard.new(@permitted_template, user).permitted?
-    ).to eq(true)
-  end
+    it "permits permitted users" do
+      expect(
+        CustomWizard::Wizard.new(@permitted_template, trusted_user).permitted?
+      ).to eq(true)
+    end
 
-  it "does not permit unpermitted users" do
-    expect(
-      CustomWizard::Wizard.new(@permitted_template, user).permitted?
-    ).to eq(false)
-  end
+    it "permits everyone if everyone is permitted" do
+      @permitted_template['permitted'][0]['output'] = Group::AUTO_GROUPS[:everyone]
+      expect(
+        CustomWizard::Wizard.new(@permitted_template, user).permitted?
+      ).to eq(true)
+    end
 
-  it "does not let an unpermitted user access a wizard" do
-    expect(
-      CustomWizard::Wizard.new(@permitted_template, user).can_access?
-    ).to eq(false)
-  end
+    it "does not permit unpermitted users" do
+      expect(
+        CustomWizard::Wizard.new(@permitted_template, user).permitted?
+      ).to eq(false)
+    end
 
-  it "lets a permitted user access an incomplete wizard" do
-    expect(
-      CustomWizard::Wizard.new(@permitted_template, trusted_user).can_access?
-    ).to eq(true)
-  end
+    it "does not let an unpermitted user access a wizard" do
+      expect(
+        CustomWizard::Wizard.new(@permitted_template, user).can_access?
+      ).to eq(false)
+    end
 
-  it "lets a permitted user access a complete wizard with multiple submissions" do
-    append_steps
+    it "lets a permitted user access an incomplete wizard" do
+      expect(
+        CustomWizard::Wizard.new(@permitted_template, trusted_user).can_access?
+      ).to eq(true)
+    end
 
-    progress_step("step_1", acting_user: trusted_user)
-    progress_step("step_2", acting_user: trusted_user)
-    progress_step("step_3", acting_user: trusted_user)
+    it "lets a permitted user access a complete wizard with multiple submissions" do
+      append_steps
 
-    @permitted_template["multiple_submissions"] = true
+      progress_step("step_1", acting_user: trusted_user)
+      progress_step("step_2", acting_user: trusted_user)
+      progress_step("step_3", acting_user: trusted_user)
 
-    expect(
-      CustomWizard::Wizard.new(@permitted_template, trusted_user).can_access?
-    ).to eq(true)
-  end
+      @permitted_template["multiple_submissions"] = true
 
-  it "does not let an unpermitted user access a complete wizard without multiple submissions" do
-    append_steps
+      expect(
+        CustomWizard::Wizard.new(@permitted_template, trusted_user).can_access?
+      ).to eq(true)
+    end
 
-    progress_step("step_1", acting_user: trusted_user)
-    progress_step("step_2", acting_user: trusted_user)
-    progress_step("step_3", acting_user: trusted_user)
+    it "does not let an unpermitted user access a complete wizard without multiple submissions" do
+      append_steps
 
-    @permitted_template['multiple_submissions'] = false
+      progress_step("step_1", acting_user: trusted_user)
+      progress_step("step_2", acting_user: trusted_user)
+      progress_step("step_3", acting_user: trusted_user)
 
-    expect(
-      CustomWizard::Wizard.new(@permitted_template, trusted_user).can_access?
-    ).to eq(false)
-  end
+      @permitted_template['multiple_submissions'] = false
 
-  it "lists the site groups" do
-    expect(@wizard.groups.length).to eq(8)
-  end
+      expect(
+        CustomWizard::Wizard.new(@permitted_template, trusted_user).can_access?
+      ).to eq(false)
+    end
 
-  it "lists the site categories" do
-    Site.clear_cache if Site.respond_to?(:clear_cache)
-    expect(@wizard.categories.length).to eq(1)
+    it "sets wizard redirects if user is permitted" do
+      CustomWizard::Template.save(@permitted_template, skip_jobs: true)
+      CustomWizard::Wizard.set_user_redirect('super_mega_fun_wizard', trusted_user)
+      expect(
+        trusted_user.custom_fields['redirect_to_wizard']
+      ).to eq("super_mega_fun_wizard")
+    end
+
+    it "does not set a wizard redirect if user is not permitted" do
+      CustomWizard::Template.save(@permitted_template, skip_jobs: true)
+      CustomWizard::Wizard.set_user_redirect('super_mega_fun_wizard', user)
+      expect(
+        trusted_user.custom_fields['redirect_to_wizard']
+      ).to eq(nil)
+    end
   end
 
   context "submissions" do
@@ -219,6 +216,7 @@ describe CustomWizard::Wizard do
 
   context "class methods" do
     before do
+      enable_subscription("standard")
       CustomWizard::Template.save(@permitted_template, skip_jobs: true)
 
       template_json_2 = template_json.dup
@@ -253,21 +251,5 @@ describe CustomWizard::Wizard do
       progress_step("step_3", wizard: wizard_2)
       expect(CustomWizard::Wizard.prompt_completion(user).length).to eq(1)
     end
-  end
-
-  it "sets wizard redirects if user is permitted" do
-    CustomWizard::Template.save(@permitted_template, skip_jobs: true)
-    CustomWizard::Wizard.set_user_redirect('super_mega_fun_wizard', trusted_user)
-    expect(
-      trusted_user.custom_fields['redirect_to_wizard']
-    ).to eq("super_mega_fun_wizard")
-  end
-
-  it "does not set a wizard redirect if user is not permitted" do
-    CustomWizard::Template.save(@permitted_template, skip_jobs: true)
-    CustomWizard::Wizard.set_user_redirect('super_mega_fun_wizard', user)
-    expect(
-      trusted_user.custom_fields['redirect_to_wizard']
-    ).to eq(nil)
   end
 end

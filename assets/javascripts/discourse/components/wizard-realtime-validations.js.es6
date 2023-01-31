@@ -6,7 +6,8 @@ import discourseComputed from "discourse-common/utils/decorators";
 import I18n from "I18n";
 
 export default Component.extend({
-  classNames: ["realtime-validations"],
+  classNames: ["realtime-validations", "setting", "full", "subscription"],
+
   @discourseComputed
   timeUnits() {
     return ["days", "weeks", "months", "years"].map((unit) => {

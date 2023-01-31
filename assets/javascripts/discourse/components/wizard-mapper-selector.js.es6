@@ -377,7 +377,7 @@ export default Component.extend({
       this.changeValue(event.target.value);
     },
 
-    changeUserValue(previousValue, value) {
+    changeUserValue(value) {
       this.changeValue(value);
     },
   },
