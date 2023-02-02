@@ -29,7 +29,7 @@ class CustomWizard::Subscription
           none: [],
           standard: ['*'],
           business: ['*'],
-          community: ['*']
+          community: []
         }
       },
       step: {
