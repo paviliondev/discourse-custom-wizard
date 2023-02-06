@@ -42,5 +42,18 @@ describe ::TagsController, type: :request do
         expect(names).to contain_exactly(*all_tag_names)
       end
     end
+
+    context "tag group param is stored as an empty string" do
+      it "returns all tags" do
+        ::RequestStore.store[:tag_groups] = ""
+        get "/tags/filter/search.json", params: { q: '' }
+        expect(response.status).to eq(200)
+        results = response.parsed_body['results']
+        names = results.map { |result| result['name'] }
+
+        all_tag_names = Tag.all.pluck(:name)
+        expect(names).to contain_exactly(*all_tag_names)
+      end
+    end
   end
 end
