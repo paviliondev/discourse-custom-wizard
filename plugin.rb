@@ -88,7 +88,6 @@ after_initialize do
     ../lib/custom_wizard/extensions/extra_locales_controller.rb
     ../lib/custom_wizard/extensions/invites_controller.rb
     ../lib/custom_wizard/extensions/users_controller.rb
-    ../lib/custom_wizard/extensions/tags_controller.rb
     ../lib/custom_wizard/extensions/guardian.rb
     ../lib/custom_wizard/extensions/custom_field/preloader.rb
     ../lib/custom_wizard/extensions/custom_field/serializer.rb
@@ -231,7 +230,6 @@ after_initialize do
   end
 
   reloadable_patch do |plugin|
-    ::TagsController.prepend CustomWizardTagsController
     ::DiscourseTagging.singleton_class.prepend CustomWizardDiscourseTagging
   end
 
