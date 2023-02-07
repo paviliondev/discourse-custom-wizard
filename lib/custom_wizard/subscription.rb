@@ -24,12 +24,6 @@ class CustomWizard::Subscription
           standard: ['*'],
           business: ['*'],
           community: ['*']
-        },
-        allow_guests: {
-          none: [],
-          standard: ['*'],
-          business: ['*'],
-          community: []
         }
       },
       step: {

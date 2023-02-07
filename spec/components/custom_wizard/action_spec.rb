@@ -18,6 +18,7 @@ describe CustomWizard::Action do
   let(:api_test_endpoint) { get_wizard_fixture("endpoints/test_endpoint") }
   let(:api_test_endpoint_body) { get_wizard_fixture("endpoints/test_endpoint_body") }
   let(:api_test_no_authorization) { get_wizard_fixture("api/no_authorization") }
+  let(:guests_permitted) { get_wizard_fixture("wizard/guests_permitted") }
 
   def update_template(template)
     CustomWizard::Template.save(template, skip_jobs: true)
@@ -302,8 +303,8 @@ describe CustomWizard::Action do
       expect(post.exists?).to eq(true)
     end
 
-    it "send_message works with allow_guests enabled" do
-      wizard_template["allow_guests"] = true
+    it "send_message works with guests are permitted" do
+      wizard_template["permitted"] = guests_permitted["permitted"]
       wizard_template.delete("actions")
       wizard_template['actions'] = [send_message]
       update_template(wizard_template)

@@ -54,7 +54,7 @@ en:
       after_time: "After time setting is invalid."
       liquid_syntax_error: "Liquid syntax error in %{attribute}: %{message}"
       subscription: "%{type} %{property} is subscription only"
-      allow_guests: "%{object_id} is not permitted when allow_guests is enabled"
+      not_permitted_for_guests: "%{object_id} is not permitted when guests can access the wizard"
 
   site_settings:
     custom_wizard_enabled: "Enable custom wizards."

@@ -136,7 +136,7 @@ class CustomWizard::Action
 
       params[:archetype] = Archetype.private_message
 
-      poster = @wizard.allow_guests ? Discourse.system_user : user
+      poster = user || Discourse.system_user
       creator = PostCreator.new(poster, params)
       post = creator.create
 

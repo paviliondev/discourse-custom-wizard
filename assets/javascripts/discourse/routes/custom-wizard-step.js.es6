@@ -7,12 +7,7 @@ export default Route.extend({
     const wizard = getCachedWizard();
     this.set("wizard", wizard);
 
-    if (
-      !wizard ||
-      (!wizard.user && !wizard.allow_guests) ||
-      !wizard.permitted ||
-      wizard.completed
-    ) {
+    if (!wizard || !wizard.permitted || wizard.completed) {
       this.replaceWith("customWizard");
     }
   },

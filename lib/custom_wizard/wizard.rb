@@ -20,7 +20,6 @@ class CustomWizard::Wizard
                 :prompt_completion,
                 :restart_on_revisit,
                 :resume_on_revisit,
-                :allow_guests,
                 :permitted,
                 :steps,
                 :step_ids,
@@ -37,6 +36,7 @@ class CustomWizard::Wizard
   attr_reader   :all_step_ids
 
   GUEST_ID_PREFIX ||= "guest"
+  GUEST_GROUP_ID = -1
 
   def initialize(attrs = {}, user = nil, guest_id = nil)
     if user
@@ -55,7 +55,6 @@ class CustomWizard::Wizard
     @prompt_completion = cast_bool(attrs['prompt_completion'])
     @restart_on_revisit = cast_bool(attrs['restart_on_revisit'])
     @resume_on_revisit = cast_bool(attrs['resume_on_revisit'])
-    @allow_guests = cast_bool(attrs['allow_guests'])
     @after_signup = cast_bool(attrs['after_signup'])
     @after_time = cast_bool(attrs['after_time'])
     @after_time_scheduled = attrs['after_time_scheduled']
@@ -212,9 +211,8 @@ class CustomWizard::Wizard
 
   def permitted?
     return nil unless actor_id
-    return true if allow_guests
-    return false unless user
-    return true if user.admin? || permitted.blank?
+    return true if user && (user.admin? || permitted.blank?)
+    return false if !user && permitted.blank?
 
     mapper = CustomWizard::Mapper.new(
       inputs: permitted,
@@ -228,22 +226,22 @@ class CustomWizard::Wizard
     return true if mapper.blank?
 
     mapper.all? do |m|
-      if m[:type] === 'assignment'
-        [*m[:result]].include?(Group::AUTO_GROUPS[:everyone]) ||
-        GroupUser.exists?(group_id: m[:result], user_id: user.id)
-      elsif m[:type] === 'validation'
-        m[:result]
+      if !user
+        m[:type] === 'assignment' && [*m[:result]].include?(GUEST_GROUP_ID)
       else
-        true
+        if m[:type] === 'assignment'
+          [*m[:result]].include?(Group::AUTO_GROUPS[:everyone]) ||
+          GroupUser.exists?(group_id: m[:result], user_id: user.id)
+        elsif m[:type] === 'validation'
+          m[:result]
+        else
+          true
+        end
       end
     end
   end
 
   def can_access?
-    return nil unless actor_id
-    return true if allow_guests
-    return false unless user
-    return true if user.admin
     permitted? && (multiple_submissions || !completed?)
   end
 

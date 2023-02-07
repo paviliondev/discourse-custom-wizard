@@ -5,8 +5,16 @@ import wizardSchema from "../lib/wizard-schema";
 import { Promise } from "rsvp";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import discourseComputed from "discourse-common/utils/decorators";
+
+const GUEST_GROUP_ID = -1;
 
 const CustomWizardAdmin = EmberObject.extend({
+  @discourseComputed("permitted.@each")
+  allowGuests(permitted) {
+    return permitted.filter((p) => p.output === GUEST_GROUP_ID).length;
+  },
+
   save(opts) {
     return new Promise((resolve, reject) => {
       let wizard = this.buildJson(this, "wizard");

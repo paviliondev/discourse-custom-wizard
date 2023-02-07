@@ -82,8 +82,12 @@ class CustomWizard::TemplateValidator
   end
 
   def validate_action(action)
-    if @data[:allow_guests] && CustomWizard::Action::REQUIRES_USER.include?(action[:type])
-      errors.add :base, I18n.t("wizard.validation.allow_guests", object_id: action[:id])
+    guests_permitted = @data[:permitted] && @data[:permitted].any? do |m|
+      m[:output] === CustomWizard::Wizard::GUEST_GROUP_ID
+    end
+
+    if guests_permitted && CustomWizard::Action::REQUIRES_USER.include?(action[:type])
+      errors.add :base, I18n.t("wizard.validation.not_permitted_for_guests", object_id: action[:id])
     end
   end
 

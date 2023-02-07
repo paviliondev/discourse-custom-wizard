@@ -4,13 +4,7 @@ import Route from "@ember/routing/route";
 export default Route.extend({
   beforeModel() {
     const wizard = getCachedWizard();
-    if (
-      wizard &&
-      (wizard.user || wizard.allow_guests) &&
-      wizard.permitted &&
-      !wizard.completed &&
-      wizard.start
-    ) {
+    if (wizard && wizard.permitted && !wizard.completed && wizard.start) {
       this.replaceWith("customWizardStep", wizard.start);
     }
   },
@@ -26,7 +20,7 @@ export default Route.extend({
       const wizardId = model.get("id");
       const user = model.get("user");
       const name = model.get("name");
-      const requiresLogin = !user && !model.get("allow_guests");
+      const requiresLogin = !user && !permitted;
       const notPermitted = !permitted;
 
       const props = {

@@ -56,7 +56,7 @@ export default SingleSelectComponent.extend(Subscription, {
     return attributes;
   },
 
-  @discourseComputed("feature", "attribute", "wizard.allow_guests")
+  @discourseComputed("feature", "attribute", "wizard.allowGuests")
   content(feature, attribute, allowGuests) {
     return this.contentList(feature, attribute, allowGuests)
       .map((value) => {

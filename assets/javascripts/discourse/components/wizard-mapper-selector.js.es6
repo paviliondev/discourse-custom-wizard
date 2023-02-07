@@ -116,6 +116,9 @@ export default Component.extend({
   groupEnabled: computed("options.groupSelection", "inputType", function () {
     return this.optionEnabled("groupSelection");
   }),
+  guestGroup: computed("options.guestGroup", "inputType", function () {
+    return this.optionEnabled("guestGroup");
+  }),
   userEnabled: computed("options.userSelection", "inputType", function () {
     return this.optionEnabled("userSelection");
   }),
@@ -126,7 +129,26 @@ export default Component.extend({
     return this.connector === "is";
   }),
 
-  groups: alias("site.groups"),
+  @discourseComputed("site.groups", "guestGroup")
+  groups(groups, guestGroup) {
+    let result = groups;
+    if (!guestGroup) {
+      return result;
+    }
+
+    let guestIndex;
+    result.forEach((r, index) => {
+      if (r.id === 0) {
+        r.name = I18n.t("admin.wizard.selector.label.users");
+        guestIndex = index;
+      }
+    });
+    result.splice(guestIndex, 0, {
+      id: -1,
+      name: I18n.t("admin.wizard.selector.label.guests"),
+    });
+    return result;
+  },
   categories: alias("site.categories"),
   showComboBox: or(
     "showWizardField",

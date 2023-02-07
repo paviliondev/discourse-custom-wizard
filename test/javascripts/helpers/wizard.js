@@ -7,9 +7,10 @@ import { cloneJSON } from "discourse-common/lib/object";
 
 const wizardNoUser = cloneJSON(wizardJson);
 const wizardGuest = cloneJSON(wizardJson);
-wizardGuest.allow_guests = true;
+wizardGuest.permitted = true;
 const wizard = cloneJSON(wizardJson);
 wizard.user = cloneJSON(userJson);
+wizard.permitted = true;
 
 const wizardNotPermitted = cloneJSON(wizard);
 wizardNotPermitted.permitted = false;

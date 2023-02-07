@@ -7,9 +7,19 @@ describe CustomWizard::StepsController do
   let(:wizard_field_condition_template) { get_wizard_fixture("condition/wizard_field_condition") }
   let(:user_condition_template) { get_wizard_fixture("condition/user_condition") }
   let(:permitted_json) { get_wizard_fixture("wizard/permitted") }
+  let(:route_to_template) { get_wizard_fixture("actions/route_to") }
+  let(:guests_permitted) { get_wizard_fixture("wizard/guests_permitted") }
 
   before do
     CustomWizard::Template.save(wizard_template, skip_jobs: true)
+  end
+
+  def guest_template
+    temp = wizard_template.dup
+    temp["permitted"] = guests_permitted["permitted"]
+    temp.delete("actions")
+    temp["actions"] = [route_to_template]
+    temp
   end
 
   context "with guest" do
@@ -22,13 +32,10 @@ describe CustomWizard::StepsController do
       expect(response.status).to eq(403)
     end
 
-    context "with allow_guests enabled" do
+    context "with guests permitted" do
       before do
         enable_subscription("standard")
-        new_template = wizard_template.dup
-        new_template["allow_guests"] = true
-        new_template.delete("actions")
-        result = CustomWizard::Template.save(new_template, skip_jobs: true)
+        result = CustomWizard::Template.save(guest_template, skip_jobs: true)
       end
 
       it "performs a step update" do
@@ -43,6 +50,62 @@ describe CustomWizard::StepsController do
         wizard_id = response.parsed_body['wizard']['id']
         wizard = CustomWizard::Wizard.create(wizard_id, nil, cookies[:custom_wizard_guest_id])
         expect(wizard.current_submission.fields['step_1_field_1']).to eq("Text input")
+      end
+
+      context "raises an error" do
+        it "when the wizard doesnt exist" do
+          put '/w/not-super-mega-fun-wizard/steps/step_1.json'
+          expect(response.status).to eq(400)
+        end
+
+        it "when the user cant access the wizard" do
+          enable_subscription("standard")
+          new_template = guest_template.dup
+          new_template["permitted"] = permitted_json["permitted"]
+          CustomWizard::Template.save(new_template, skip_jobs: true)
+
+          put '/w/super-mega-fun-wizard/steps/step_1.json'
+          expect(response.status).to eq(403)
+        end
+
+        it "when the step doesnt exist" do
+          put '/w/super-mega-fun-wizard/steps/step_10.json'
+          expect(response.status).to eq(400)
+        end
+      end
+
+      it "works if the step has no fields" do
+        put '/w/super-mega-fun-wizard/steps/step_1.json'
+        expect(response.status).to eq(200)
+        expect(response.parsed_body['wizard']['start']).to eq("step_2")
+      end
+
+      it "returns an updated wizard when condition passes" do
+        new_template = guest_template.dup
+        new_template['steps'][1]['condition'] = wizard_field_condition_template['condition']
+        CustomWizard::Template.save(new_template, skip_jobs: true)
+
+        put '/w/super-mega-fun-wizard/steps/step_1.json', params: {
+          fields: {
+            step_1_field_1: "Condition will pass"
+          }
+        }
+        expect(response.status).to eq(200)
+        expect(response.parsed_body['wizard']['start']).to eq("step_2")
+      end
+
+      it "runs completion actions if guest has completed wizard" do
+        new_template = guest_template.dup
+
+        ## route_to action
+        new_template['actions'].last['run_after'] = 'wizard_completion'
+        CustomWizard::Template.save(new_template, skip_jobs: true)
+
+        put '/w/super-mega-fun-wizard/steps/step_1.json'
+        put '/w/super-mega-fun-wizard/steps/step_2.json'
+        put '/w/super-mega-fun-wizard/steps/step_3.json'
+        expect(response.status).to eq(200)
+        expect(response.parsed_body['redirect_on_complete']).to eq("https://google.com")
       end
     end
   end

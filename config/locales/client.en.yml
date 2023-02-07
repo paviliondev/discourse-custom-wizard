@@ -105,8 +105,6 @@ en:
         restart_on_revisit_label: "Clear submissions on each visit."
         resume_on_revisit: "Resume"
         resume_on_revisit_label: "Ask the user if they want to resume on each visit."
-        allow_guests: "Guests"
-        allow_guests_label: "Allow guests to use the wizard (disables user-specific features)."
         theme_id: "Theme"
         no_theme: "Select a Theme (optional)"
         save: "Save Changes"
@@ -219,6 +217,8 @@ en:
             list: "list"
             custom_field: "custom field"
             value: "value"
+            users: "users"
+            guests: "users and guests"
 
           placeholder:
             text: "Enter text"

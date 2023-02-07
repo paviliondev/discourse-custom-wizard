@@ -15,7 +15,6 @@ const wizard = {
     prompt_completion: null,
     restart_on_revisit: null,
     resume_on_revisit: null,
-    allow_guests: null,
     theme_id: null,
     permitted: null,
   },
