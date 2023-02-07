@@ -83,7 +83,7 @@ class CustomWizard::TemplateValidator
 
   def validate_action(action)
     guests_permitted = @data[:permitted] && @data[:permitted].any? do |m|
-      m[:output] === CustomWizard::Wizard::GUEST_GROUP_ID
+      m["output"].include?(CustomWizard::Wizard::GUEST_GROUP_ID)
     end
 
     if guests_permitted && CustomWizard::Action::REQUIRES_USER.include?(action[:type])

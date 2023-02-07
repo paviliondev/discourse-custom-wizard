@@ -10,9 +10,9 @@ import discourseComputed from "discourse-common/utils/decorators";
 const GUEST_GROUP_ID = -1;
 
 const CustomWizardAdmin = EmberObject.extend({
-  @discourseComputed("permitted.@each")
+  @discourseComputed("permitted.@each.output")
   allowGuests(permitted) {
-    return permitted.filter((p) => p.output === GUEST_GROUP_ID).length;
+    return permitted.filter((p) => p.output.includes(GUEST_GROUP_ID)).length;
   },
 
   save(opts) {
