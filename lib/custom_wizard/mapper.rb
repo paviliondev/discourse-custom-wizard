@@ -284,4 +284,8 @@ class CustomWizard::Mapper
       user.avatar_template_url.gsub("{size}", parts.last)
     end
   end
+
+  def self.mapped_value?(value)
+    value.is_a?(Array) && value.all? { |v| v.is_a?(Hash) && v.key?("type") }
+  end
 end

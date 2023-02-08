@@ -15,6 +15,7 @@ import {
 import Component from "@ember/component";
 import { bind, later } from "@ember/runloop";
 import I18n from "I18n";
+import Subscription from "../mixins/subscription";
 
 const customFieldActionMap = {
   topic: ["create_topic", "send_message"],
@@ -26,7 +27,7 @@ const customFieldActionMap = {
 
 const values = ["present", "true", "false"];
 
-export default Component.extend({
+export default Component.extend(Subscription, {
   classNameBindings: [":mapper-selector", "activeType"],
 
   showText: computed("activeType", function () {
@@ -129,24 +130,27 @@ export default Component.extend({
     return this.connector === "is";
   }),
 
-  @discourseComputed("site.groups", "guestGroup")
-  groups(groups, guestGroup) {
+  @discourseComputed("site.groups", "guestGroup", "subscriptionType")
+  groups(groups, guestGroup, subscriptionType) {
     let result = groups;
     if (!guestGroup) {
       return result;
     }
 
-    let guestIndex;
-    result.forEach((r, index) => {
-      if (r.id === 0) {
-        r.name = I18n.t("admin.wizard.selector.label.users");
-        guestIndex = index;
-      }
-    });
-    result.splice(guestIndex, 0, {
-      id: -1,
-      name: I18n.t("admin.wizard.selector.label.guests"),
-    });
+    if (["standard", "business"].includes(subscriptionType)) {
+      let guestIndex;
+      result.forEach((r, index) => {
+        if (r.id === 0) {
+          r.name = I18n.t("admin.wizard.selector.label.users");
+          guestIndex = index;
+        }
+      });
+      result.splice(guestIndex, 0, {
+        id: -1,
+        name: I18n.t("admin.wizard.selector.label.guests"),
+      });
+    }
+
     return result;
   },
   categories: alias("site.categories"),

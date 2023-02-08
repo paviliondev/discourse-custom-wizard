@@ -53,7 +53,7 @@ en:
       after_signup_after_time: "You can't use 'after time' and 'after signup' on the same wizard."
       after_time: "After time setting is invalid."
       liquid_syntax_error: "Liquid syntax error in %{attribute}: %{message}"
-      subscription: "%{type} %{property} is subscription only"
+      subscription: "%{type} %{property} usage is not supported on your subscription"
       not_permitted_for_guests: "%{object_id} is not permitted when guests can access the wizard"
 
   site_settings:

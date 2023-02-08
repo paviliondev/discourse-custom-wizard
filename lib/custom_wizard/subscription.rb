@@ -17,7 +17,7 @@ class CustomWizard::Subscription
           none: [],
           standard: ['*'],
           business: ['*'],
-          community: ['*']
+          community: ['*', "!#{CustomWizard::Wizard::GUEST_GROUP_ID}"]
         },
         restart_on_revisit: {
           none: [],
@@ -114,8 +114,15 @@ class CustomWizard::Subscription
     ## Subscription type does not support the attribute.
     return false if values.blank?
 
+    ## Value is an exception for the subscription type
+    if (exceptions = get_exceptions(values)).any?
+      value = mapped_output(value) if CustomWizard::Mapper.mapped_value?(value)
+      value = [*value].map(&:to_s)
+      return false if (exceptions & value).length > 0
+    end
+
     ## Subscription type supports all values of the attribute.
-    return true if values.first === "*"
+    return true if values.include?("*")
 
     ## Subscription type supports some values of the attributes.
     values.include?(value)
@@ -191,5 +198,22 @@ class CustomWizard::Subscription
 
   def self.includes?(feature, attribute, value)
     new.includes?(feature, attribute, value)
+  end
+
+  protected
+
+  def get_exceptions(values)
+    values.reduce([]) do |result, value|
+      result << value.split("!").last if value.start_with?("!")
+      result
+    end
+  end
+
+  def mapped_output(value)
+    value.reduce([]) do |result, v|
+      ## We can only validate mapped assignment values at the moment
+      result << v["output"] if v.is_a?(Hash) && v["type"] === "assignment"
+      result
+    end.flatten
   end
 end
