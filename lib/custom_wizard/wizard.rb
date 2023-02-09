@@ -335,7 +335,7 @@ class CustomWizard::Wizard
 
     CustomWizard::Template.list(**template_opts).reduce([]) do |result, template|
       wizard = new(template, user)
-      result.push(wizard) if wizard.can_access? && (
+      result.push(wizard) if wizard.permitted? && (
         !not_completed || !wizard.completed?
       )
       result
