@@ -30,6 +30,7 @@ class CustomWizard::TemplateValidator
           validate_subscription(field, :field)
           check_required(field, :field)
           validate_liquid_template(field, :field)
+          validate_guests(field, :field)
         end
       end
     end
@@ -39,7 +40,7 @@ class CustomWizard::TemplateValidator
         validate_subscription(action, :action)
         check_required(action, :action)
         validate_liquid_template(action, :action)
-        validate_action(action)
+        validate_guests(action, :action)
       end
     end
 
@@ -81,13 +82,18 @@ class CustomWizard::TemplateValidator
     end
   end
 
-  def validate_action(action)
+  def validate_guests(object, type)
     guests_permitted = @data[:permitted] && @data[:permitted].any? do |m|
       m["output"].include?(CustomWizard::Wizard::GUEST_GROUP_ID)
     end
+    return unless guests_permitted
 
-    if guests_permitted && CustomWizard::Action::REQUIRES_USER.include?(action[:type])
-      errors.add :base, I18n.t("wizard.validation.not_permitted_for_guests", object_id: action[:id])
+    if type === :action && CustomWizard::Action::REQUIRES_USER.include?(object[:type])
+      errors.add :base, I18n.t("wizard.validation.not_permitted_for_guests", object_id: object[:id])
+    end
+
+    if type === :field && CustomWizard::Field::REQUIRES_USER.include?(object[:type])
+      errors.add :base, I18n.t("wizard.validation.not_permitted_for_guests", object_id: object[:id])
     end
   end
 

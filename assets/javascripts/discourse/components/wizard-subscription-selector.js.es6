@@ -1,6 +1,6 @@
 import SingleSelectComponent from "select-kit/components/single-select";
 import Subscription from "../mixins/subscription";
-import wizardSchema from "discourse/plugins/discourse-custom-wizard/discourse/lib/wizard-schema";
+import { filterValues } from "discourse/plugins/discourse-custom-wizard/discourse/lib/wizard-schema";
 import discourseComputed from "discourse-common/utils/decorators";
 import I18n from "I18n";
 
@@ -40,25 +40,9 @@ export default SingleSelectComponent.extend(Subscription, {
     return allowedTypes;
   },
 
-  contentList(feature, attribute, allowGuests) {
-    let attributes = wizardSchema[feature][attribute];
-
-    if (allowGuests) {
-      const filteredFeature = wizardSchema.filters.allow_guests[feature];
-      if (filteredFeature) {
-        const filteredAttribute = filteredFeature[attribute];
-        if (filteredAttribute) {
-          attributes = attributes.filter((a) => filteredAttribute.includes(a));
-        }
-      }
-    }
-
-    return attributes;
-  },
-
   @discourseComputed("feature", "attribute", "wizard.allowGuests")
-  content(feature, attribute, allowGuests) {
-    return this.contentList(feature, attribute, allowGuests)
+  content(feature, attribute) {
+    return filterValues(this.wizard, feature, attribute)
       .map((value) => {
         let allowedSubscriptionTypes = this.allowedSubscriptionTypes(
           feature,

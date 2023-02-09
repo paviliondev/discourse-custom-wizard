@@ -10,6 +10,7 @@ import { later, scheduleOnce } from "@ember/runloop";
 import Controller from "@ember/controller";
 import copyText from "discourse/lib/copy-text";
 import I18n from "I18n";
+import { filterValues } from "discourse/plugins/discourse-custom-wizard/discourse/lib/wizard-schema";
 
 export default Controller.extend({
   hasName: notEmpty("wizard.name"),
@@ -59,6 +60,19 @@ export default Controller.extend({
     }
     return wizardFieldList(steps);
   },
+
+  @discourseComputed("fieldTypes", "wizard.allowGuests")
+  filteredFieldTypes(fieldTypes) {
+    const fieldTypeIds = fieldTypes.map((f) => f.id);
+    const allowedTypeIds = filterValues(
+      this.wizard,
+      "field",
+      "type",
+      fieldTypeIds
+    );
+    return fieldTypes.filter((f) => allowedTypeIds.includes(f.id));
+  },
+
   getErrorMessage(result) {
     if (result.backend_validation_error) {
       return result.backend_validation_error;

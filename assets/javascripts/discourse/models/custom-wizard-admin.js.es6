@@ -14,7 +14,8 @@ const CustomWizardAdmin = EmberObject.extend({
   allowGuests(permitted) {
     return (
       permitted &&
-      permitted.filter((p) => p.output.includes(GUEST_GROUP_ID)).length
+      permitted.filter((p) => p.output && p.output.includes(GUEST_GROUP_ID))
+        .length
     );
   },
 

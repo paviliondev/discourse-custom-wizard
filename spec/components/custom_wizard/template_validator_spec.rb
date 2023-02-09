@@ -147,12 +147,16 @@ describe CustomWizard::TemplateValidator do
       ).to eq(true)
     end
 
-    it "validates restrictions on wizards that permit guests" do
+    it "validates user-only features" do
       template[:permitted] = guests_permitted['permitted']
       validator = CustomWizard::TemplateValidator.new(template)
       expect(validator.perform).to eq(false)
-      expect(validator.errors.first.type).to eq(
+      errors = validator.errors.to_a
+      expect(errors).to include(
         I18n.t("wizard.validation.not_permitted_for_guests", object_id: "action_1")
+      )
+      expect(errors).to include(
+        I18n.t("wizard.validation.not_permitted_for_guests", object_id: "step_2_field_7")
       )
     end
 
