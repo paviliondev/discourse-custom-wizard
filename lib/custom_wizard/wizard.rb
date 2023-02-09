@@ -242,7 +242,7 @@ class CustomWizard::Wizard
   end
 
   def can_access?
-    permitted? && (multiple_submissions || !completed?)
+    permitted? && (user&.admin? || (multiple_submissions || !completed?))
   end
 
   def reset
