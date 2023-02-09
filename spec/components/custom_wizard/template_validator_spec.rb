@@ -8,6 +8,7 @@ describe CustomWizard::TemplateValidator do
   let(:permitted_json) { get_wizard_fixture("wizard/permitted") }
   let(:composer_preview) { get_wizard_fixture("field/composer_preview") }
   let(:guests_permitted) { get_wizard_fixture("wizard/guests_permitted") }
+  let(:upload_field) { get_wizard_fixture("field/upload") }
 
   let(:valid_liquid_template) {
     <<-LIQUID.strip
@@ -149,6 +150,7 @@ describe CustomWizard::TemplateValidator do
 
     it "validates user-only features" do
       template[:permitted] = guests_permitted['permitted']
+      template[:steps][0][:fields] << upload_field
       validator = CustomWizard::TemplateValidator.new(template)
       expect(validator.perform).to eq(false)
       errors = validator.errors.to_a
