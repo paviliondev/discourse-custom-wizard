@@ -80,14 +80,11 @@ describe CustomWizard::Builder do
 
       it 'returns no steps if user has completed it' do
         @template[:steps].each do |step|
-          UserHistory.create!(
-            {
-              action: UserHistory.actions[:custom_wizard_step],
-              acting_user_id: user.id,
-              context: @template[:id]
-            }.merge(
-              subject: step[:id]
-            )
+          CustomWizard::UserHistory.create!(
+            action: CustomWizard::UserHistory.actions[:step],
+            actor_id: user.id,
+            context: @template[:id],
+            subject: step[:id]
           )
         end
 

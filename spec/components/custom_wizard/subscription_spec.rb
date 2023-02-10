@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 describe CustomWizard::Subscription do
+  let(:guests_permitted) { get_wizard_fixture("wizard/guests_permitted") }
+
   def undefine_client_classes
     Object.send(:remove_const, :SubscriptionClient) if Object.constants.include?(:SubscriptionClient)
     Object.send(:remove_const, :SubscriptionClientSubscription) if Object.constants.include?(:SubscriptionClientSubscription)
@@ -40,7 +42,7 @@ describe CustomWizard::Subscription do
       expect(described_class.includes?(:wizard, :after_signup, true)).to eq(true)
     end
 
-    it "ubscriber features are not included" do
+    it "subscriber features are not included" do
       expect(described_class.includes?(:wizard, :permitted, {})).to eq(false)
     end
   end
@@ -66,6 +68,16 @@ describe CustomWizard::Subscription do
 
       it "subscriber features are not included" do
         expect(described_class.includes?(:wizard, :permitted, {})).to eq(false)
+      end
+    end
+
+    context "with a subscription" do
+      it "handles mapped values" do
+        SubscriptionClientSubscription.stubs(:product_id).returns(CustomWizard::Subscription::STANDARD_PRODUCT_ID)
+        expect(described_class.includes?(:wizard, :permitted, guests_permitted["permitted"])).to eq(true)
+
+        SubscriptionClientSubscription.stubs(:product_id).returns(CustomWizard::Subscription::COMMUNITY_PRODUCT_ID)
+        expect(described_class.includes?(:wizard, :permitted, guests_permitted["permitted"])).to eq(false)
       end
     end
 

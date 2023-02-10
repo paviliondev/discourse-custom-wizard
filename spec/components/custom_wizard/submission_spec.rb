@@ -4,6 +4,7 @@ describe CustomWizard::Submission do
   fab!(:user) { Fabricate(:user) }
   fab!(:user2) { Fabricate(:user) }
   let(:template_json) { get_wizard_fixture("wizard") }
+  let(:guest_id) { CustomWizard::Wizard.generate_guest_id }
 
   before do
     CustomWizard::Template.save(template_json, skip_jobs: true)
@@ -13,8 +14,18 @@ describe CustomWizard::Submission do
 
   it "saves a user's submission" do
     expect(
-      described_class.get(@wizard, user.id).fields["step_1_field_1"]
+      described_class.get(@wizard).fields["step_1_field_1"]
     ).to eq("I am user submission")
+  end
+
+  it "saves a guest's submission" do
+    CustomWizard::Template.save(template_json, skip_jobs: true)
+    @wizard = CustomWizard::Wizard.create(template_json["id"], nil, guest_id)
+    described_class.new(@wizard, step_1_field_1: "I am guest submission").save
+
+    expect(
+      described_class.get(@wizard).fields["step_1_field_1"]
+    ).to eq("I am guest submission")
   end
 
   describe "#list" do
@@ -37,14 +48,17 @@ describe CustomWizard::Submission do
     end
 
     it "list submissions by wizard" do
+      @wizard.user = nil
       expect(described_class.list(@wizard).total).to eq(@count + 2)
     end
 
     it "list submissions by wizard and user" do
-      expect(described_class.list(@wizard, user_id: user.id).total).to eq(@count + 1)
+      @wizard.user = user
+      expect(described_class.list(@wizard).total).to eq(@count + 1)
     end
 
     it "paginates submission lists" do
+      @wizard.user = nil
       expect(described_class.list(@wizard, page: 1).submissions.size).to eq((@count + 2) - CustomWizard::Submission::PAGE_LIMIT)
     end
 
@@ -59,7 +73,7 @@ describe CustomWizard::Submission do
       described_class.new(@wizard, step_1_field_1: "I am the second submission").save
       builder = CustomWizard::Builder.new(@wizard.id, @wizard.user)
       builder.build
-      submissions = described_class.list(@wizard, user_id: @wizard.user.id).submissions
+      submissions = described_class.list(@wizard).submissions
 
       expect(submissions.length).to eq(1)
       expect(submissions.first.fields["step_1_field_1"]).to eq("I am the second submission")
@@ -75,7 +89,7 @@ describe CustomWizard::Submission do
       PluginStore.set("#{@wizard.id}_submissions", @wizard.user.id, sub_data)
       builder = CustomWizard::Builder.new(@wizard.id, @wizard.user)
       builder.build
-      submissions = described_class.list(@wizard, user_id: @wizard.user.id).submissions
+      submissions = described_class.list(@wizard).submissions
 
       expect(submissions.length).to eq(1)
       expect(submissions.first.fields["step_1_field_1"]).to eq("I am the second submission")
@@ -92,7 +106,7 @@ describe CustomWizard::Submission do
 
       builder = CustomWizard::Builder.new(@wizard.id, @wizard.user)
       builder.build
-      submissions = described_class.list(@wizard, user_id: @wizard.user.id).submissions
+      submissions = described_class.list(@wizard).submissions
 
       expect(submissions.length).to eq(1)
       expect(submissions.first.fields["step_1_field_1"]).to eq("I am the third submission")

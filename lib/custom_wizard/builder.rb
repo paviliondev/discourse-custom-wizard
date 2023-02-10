@@ -2,10 +2,10 @@
 class CustomWizard::Builder
   attr_accessor :wizard, :updater, :template
 
-  def initialize(wizard_id, user = nil)
+  def initialize(wizard_id, user = nil, guest_id = nil)
     @template = CustomWizard::Template.create(wizard_id)
     return nil if @template.nil?
-    @wizard = CustomWizard::Wizard.new(template.data, user)
+    @wizard = CustomWizard::Wizard.new(template.data, user, guest_id)
   end
 
   def self.sorted_handlers
@@ -182,7 +182,7 @@ class CustomWizard::Builder
     if field_template['description'].present?
       params[:description] = mapper.interpolate(
         field_template['description'],
-        user: true,
+        user: @wizard.user,
         value: true,
         wizard: true,
         template: true
@@ -192,7 +192,7 @@ class CustomWizard::Builder
     if field_template['preview_template'].present?
       preview_template = mapper.interpolate(
         field_template['preview_template'],
-        user: true,
+        user: @wizard.user,
         value: true,
         wizard: true,
         template: true
@@ -204,7 +204,7 @@ class CustomWizard::Builder
     if field_template['placeholder'].present?
       params[:placeholder] = mapper.interpolate(
         field_template['placeholder'],
-        user: true,
+        user: @wizard.user,
         value: true,
         wizard: true,
         template: true
@@ -248,7 +248,7 @@ class CustomWizard::Builder
     if step_template['description']
       step.description = mapper.interpolate(
         step_template['description'],
-        user: true,
+        user: @wizard.user,
         value: true,
         wizard: true,
         template: true

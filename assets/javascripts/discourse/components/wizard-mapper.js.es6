@@ -32,6 +32,7 @@ export default Component.extend({
       pairConnector: options.pairConnector || null,
       outputConnector: options.outputConnector || null,
       context: options.context || null,
+      guestGroup: options.guestGroup || false,
     };
 
     let inputTypes = ["key", "value", "output"];

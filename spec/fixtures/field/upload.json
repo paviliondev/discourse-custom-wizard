@@ -1,0 +1,6 @@
+{
+  "id": "step_2_field_7",
+  "label": "Upload",
+  "type": "upload",
+  "file_types": ".jpg,.jpeg,.png"
+}

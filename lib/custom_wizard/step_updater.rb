@@ -5,8 +5,7 @@ class CustomWizard::StepUpdater
   attr_accessor :refresh_required, :result
   attr_reader :step, :submission
 
-  def initialize(current_user, wizard, step, submission)
-    @current_user = current_user
+  def initialize(wizard, step, submission)
     @wizard = wizard
     @step = step
     @refresh_required = false
@@ -22,9 +21,9 @@ class CustomWizard::StepUpdater
 
       @step.updater.call(self)
 
-      UserHistory.create(
-        action: UserHistory.actions[:custom_wizard_step],
-        acting_user_id: @current_user.id,
+      CustomWizard::UserHistory.create(
+        action: CustomWizard::UserHistory.actions[:step],
+        actor_id: @wizard.actor_id,
         context: @wizard.id,
         subject: @step.id
       )
