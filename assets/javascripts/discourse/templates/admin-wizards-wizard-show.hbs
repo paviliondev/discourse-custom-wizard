@@ -140,6 +140,7 @@
               context="wizard"
               inputTypes="assignment,validation"
               groupSelection="output"
+              guestGroup=true
               userFieldSelection="key"
               textSelection="value"
               inputConnector="and"
@@ -160,7 +161,7 @@
       wizard=wizard
       currentField=currentField
       wizardFields=wizardFields
-      fieldTypes=fieldTypes
+      fieldTypes=filteredFieldTypes
       subscribed=subscribed}}
   {{/if}}
 
@@ -178,7 +179,7 @@
       apis=apis
       removeAction="removeAction"
       wizardFields=wizardFields
-      fieldTypes=fieldTypes}}
+      fieldTypes=filteredFieldTypes}}
   {{/each}}
 
   <div class="admin-wizard-buttons">

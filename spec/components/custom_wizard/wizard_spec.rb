@@ -21,10 +21,10 @@ describe CustomWizard::Wizard do
     @wizard.update!
   end
 
-  def progress_step(step_id, acting_user: user, wizard: @wizard)
-    UserHistory.create(
-      action: UserHistory.actions[:custom_wizard_step],
-      acting_user_id: acting_user.id,
+  def progress_step(step_id, actor_id: user.id, wizard: @wizard)
+    CustomWizard::UserHistory.create(
+      action: CustomWizard::UserHistory.actions[:step],
+      actor_id: actor_id,
       context: wizard.id,
       subject: step_id
     )
@@ -158,9 +158,9 @@ describe CustomWizard::Wizard do
     it "lets a permitted user access a complete wizard with multiple submissions" do
       append_steps
 
-      progress_step("step_1", acting_user: trusted_user)
-      progress_step("step_2", acting_user: trusted_user)
-      progress_step("step_3", acting_user: trusted_user)
+      progress_step("step_1", actor_id: trusted_user.id)
+      progress_step("step_2", actor_id: trusted_user.id)
+      progress_step("step_3", actor_id: trusted_user.id)
 
       @permitted_template["multiple_submissions"] = true
 
@@ -172,9 +172,9 @@ describe CustomWizard::Wizard do
     it "does not let an unpermitted user access a complete wizard without multiple submissions" do
       append_steps
 
-      progress_step("step_1", acting_user: trusted_user)
-      progress_step("step_2", acting_user: trusted_user)
-      progress_step("step_3", acting_user: trusted_user)
+      progress_step("step_1", actor_id: trusted_user.id)
+      progress_step("step_2", actor_id: trusted_user.id)
+      progress_step("step_3", actor_id: trusted_user.id)
 
       @permitted_template['multiple_submissions'] = false
 

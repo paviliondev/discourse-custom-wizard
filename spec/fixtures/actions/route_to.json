@@ -1,0 +1,12 @@
+{
+  "id": "route_to",
+  "type": "route_to",
+  "url": [
+    {
+      "type": "assignment",
+      "output": "https://google.com",
+      "output_type": "text",
+      "output_connector": "set"
+    }
+  ]
+}

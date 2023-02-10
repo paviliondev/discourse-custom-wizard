@@ -23,7 +23,6 @@ class CustomWizard::Template
     normalize_data
     validate_data
     prepare_data
-
     return false if errors.any?
 
     ActiveRecord::Base.transaction do

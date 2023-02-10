@@ -203,6 +203,8 @@ class CustomWizard::Mapper
   end
 
   def map_user_field(value)
+    return nil unless user
+
     if value.include?(User::USER_FIELD_PREFIX)
       user.custom_fields[value]
     elsif PROFILE_FIELDS.include?(value)
@@ -229,7 +231,7 @@ class CustomWizard::Mapper
   def interpolate(string, opts = { user: true, wizard: true, value: true, template: false })
     return string if string.blank? || string.frozen?
 
-    if opts[:user]
+    if opts[:user] && @user.present?
       string.gsub!(/u\{(.*?)\}/) { |match| map_user_field($1) || '' }
     end
 
@@ -281,5 +283,9 @@ class CustomWizard::Mapper
     else
       user.avatar_template_url.gsub("{size}", parts.last)
     end
+  end
+
+  def self.mapped_value?(value)
+    value.is_a?(Array) && value.all? { |v| v.is_a?(Hash) && v.key?("type") }
   end
 end
