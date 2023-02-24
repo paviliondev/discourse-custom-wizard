@@ -27,6 +27,7 @@ describe CustomWizard::Subscription do
   end
 
   it "detects the subscription client" do
+    undefine_client_classes
     expect(described_class.client_installed?).to eq(false)
   end
 
