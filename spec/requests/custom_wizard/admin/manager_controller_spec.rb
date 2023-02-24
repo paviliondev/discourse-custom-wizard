@@ -13,7 +13,7 @@ describe CustomWizard::AdminManagerController do
     template_3["id"] = 'super_mega_fun_wizard_3'
     @template_array = [template, template_2, template_3]
 
-    FileUtils.mkdir_p(file_from_fixtures_tmp_folder) unless Dir.exists?(file_from_fixtures_tmp_folder)
+    FileUtils.mkdir_p(file_from_fixtures_tmp_folder) unless Dir.exist?(file_from_fixtures_tmp_folder)
     @tmp_file_path = File.join(file_from_fixtures_tmp_folder, SecureRandom.hex << 'wizards.json')
     File.write(@tmp_file_path, @template_array.to_json)
   end
