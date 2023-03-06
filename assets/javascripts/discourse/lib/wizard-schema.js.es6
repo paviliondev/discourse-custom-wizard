@@ -72,6 +72,7 @@ const field = {
     required: null,
     type: null,
     condition: null,
+    tag_groups: null
   },
   types: {},
   mapped: ["prefill", "content", "condition", "index"],
