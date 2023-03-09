@@ -72,7 +72,7 @@ const field = {
     required: null,
     type: null,
     condition: null,
-    tag_groups: null
+    tag_groups: null,
   },
   types: {},
   mapped: ["prefill", "content", "condition", "index"],
@@ -242,6 +242,10 @@ const custom_field = {
   type: ["string", "boolean", "integer", "json"],
 };
 
+export function buildFieldTypes(types) {
+  wizardSchema.field.types = types;
+}
+
 field.type = Object.keys(field.types);
 action.type = Object.keys(action.types);
 
@@ -261,7 +265,7 @@ export function buildFieldValidations(validations) {
 export function filterValues(currentWizard, feature, attribute, values = null) {
   values = values || wizardSchema[feature][attribute];
 
-  if (currentWizard.allowGuests) {
+  if (currentWizard && currentWizard.allowGuests) {
     const filteredFeature = wizardSchema.filters.allow_guests[feature];
     if (filteredFeature) {
       const filtered = filteredFeature[attribute];

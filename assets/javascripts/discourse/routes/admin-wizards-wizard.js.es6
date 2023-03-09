@@ -1,5 +1,5 @@
 import DiscourseRoute from "discourse/routes/discourse";
-import { buildFieldValidations } from "../lib/wizard-schema";
+import { buildFieldTypes, buildFieldValidations } from "../lib/wizard-schema";
 import EmberObject, { set } from "@ember/object";
 import { A } from "@ember/array";
 import { all } from "rsvp";
@@ -11,6 +11,7 @@ export default DiscourseRoute.extend({
   },
 
   afterModel(model) {
+    buildFieldTypes(model.field_types);
     buildFieldValidations(model.realtime_validations);
 
     return all([
