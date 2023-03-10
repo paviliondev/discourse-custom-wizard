@@ -131,9 +131,6 @@ describe CustomWizard::Wizard do
       expect(
         CustomWizard::Wizard.new(@permitted_template, trusted_user).permitted?
       ).to eq(true)
-      expect(
-        CustomWizard::Wizard.new(@guests_permitted_template, trusted_user).permitted?
-      ).to eq(true)
     end
 
     it "permits everyone if everyone is permitted" do
@@ -203,6 +200,30 @@ describe CustomWizard::Wizard do
       expect(
         trusted_user.custom_fields['redirect_to_wizard']
       ).to eq(nil)
+    end
+  end
+
+  context "with subscription and guest wizard" do
+    before do
+      enable_subscription("standard")
+    end
+
+    it "permits admins" do
+      expect(
+        CustomWizard::Wizard.new(@guests_permitted_template, admin_user).permitted?
+      ).to eq(true)
+    end
+
+    it "permits regular users" do
+      expect(
+        CustomWizard::Wizard.new(@guests_permitted_template, user).permitted?
+      ).to eq(true)
+    end
+
+    it "permits guests" do
+      expect(
+        CustomWizard::Wizard.new(@guests_permitted_template, nil, "guest123").permitted?
+      ).to eq(true)
     end
   end
 
