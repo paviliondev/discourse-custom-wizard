@@ -230,6 +230,7 @@ class CustomWizard::Wizard
         m[:type] === 'assignment' && [*m[:result]].include?(GUEST_GROUP_ID)
       else
         if m[:type] === 'assignment'
+          [*m[:result]].include?(GUEST_GROUP_ID) ||
           [*m[:result]].include?(Group::AUTO_GROUPS[:everyone]) ||
           GroupUser.exists?(group_id: m[:result], user_id: user.id)
         elsif m[:type] === 'validation'
