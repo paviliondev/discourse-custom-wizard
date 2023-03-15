@@ -79,9 +79,11 @@ export default ComposerEditor.extend({
     this._bindUploadTarget();
 
     const field = this.field;
-    this.editorInputClass = `.${dasherize(field.type)}-${dasherize(field.id)} .d-editor-input`;
+    this.editorInputClass = `.${dasherize(field.type)}-${dasherize(
+      field.id
+    )} .d-editor-input`;
 
-    this._uppyInstance.on('file-added', (file) => {
+    this._uppyInstance.on("file-added", () => {
       this.session.set("wizardEventFieldId", field.id);
     });
   },

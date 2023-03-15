@@ -4,7 +4,7 @@ import { get, set } from "@ember/object";
 import Mixin from "@ember/object/mixin";
 import { deepEqual } from "discourse-common/lib/object";
 
-var observedCache = [];
+let observedCache = [];
 
 export default Mixin.create({
   didInsertElement() {
@@ -36,7 +36,7 @@ export default Mixin.create({
     listProperties(componentType, opts).forEach((property) => {
       if (observedCache.includes(property)) {
         obj.removeObserver(property, this, this.toggleUndo);
-        observedCache = observedCache.filter(p => p !== property);
+        observedCache = observedCache.filter((p) => p !== property);
       }
     });
   },
