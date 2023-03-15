@@ -22,7 +22,7 @@ acceptance("Field | Fields", function (needs) {
 
   test("Text", async function (assert) {
     await visit("/w/wizard");
-    assert.ok(exists(".wizard-field.text-field input.wizard-focusable"));
+    assert.ok(exists(".wizardss-field.text-field input.wizard-focusable"));
   });
 
   test("Textarea", async function (assert) {
