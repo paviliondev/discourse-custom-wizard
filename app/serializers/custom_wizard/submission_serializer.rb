@@ -10,7 +10,7 @@ class CustomWizard::SubmissionSerializer < ApplicationSerializer
   end
 
   def user
-    ::BasicUserSerializer.new(object.wizard.user).as_json
+    ::BasicUserSerializer.new(object.wizard.user, root: false).as_json
   end
 
   def fields
