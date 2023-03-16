@@ -54,6 +54,70 @@ acceptance("Field | Fields", function (needs) {
       "Input in composer"
     );
   });
+  test("Composer - Hyperlink", async function (assert) {
+    await visit("/w/wizard");
+    assert.ok(
+      visible(".wizard-field.composer-field .wizard-field-composer textarea")
+    );
+    assert.ok(
+      exists(".wizard-field.composer-field .d-editor-button-bar button")
+    );
+    assert.ok(visible(".wizard-btn.toggle-preview"));
+    await fillIn(
+      ".wizard-field.composer-field .wizard-field-composer textarea",
+      "This is a link to "
+    );
+    assert.ok(
+      !exists(".insert-link.modal-body"),
+      "no hyperlink modal by default"
+    );
+    await click(
+      ".wizard-field.composer-field .wizard-field-composer  .d-editor button.link"
+    );
+    assert.ok(exists(".insert-link.modal-body"), "hyperlink modal visible");
+
+    await fillIn(".modal-body .link-url", "google.com");
+    await fillIn(".modal-body .link-text", "Google");
+    await click(".modal-footer button.btn-primary");
+
+    assert.strictEqual(
+      query(".wizard-field.composer-field .wizard-field-composer textarea")
+        .value,
+      "This is a link to [Google](https://google.com)",
+      "adds link with url and text, prepends 'https://'"
+    );
+
+    assert.ok(
+      !exists(
+        ".wizard-field.composer-field .wizard-field-composer .insert-link.modal-body"
+      ),
+      "modal dismissed after submitting link"
+    );
+
+    await fillIn(
+      ".wizard-field.composer-field .wizard-field-composer textarea",
+      "Reset textarea contents."
+    );
+
+    await click(
+      ".wizard-field.composer-field .wizard-field-composer .d-editor button.link"
+    );
+    await fillIn(".modal-body .link-url", "google.com");
+    await fillIn(".modal-body .link-text", "Google");
+    await click(".modal-footer button.btn-danger");
+
+    assert.strictEqual(
+      query(".wizard-field.composer-field .wizard-field-composer textarea")
+        .value,
+      "Reset textarea contents.",
+      "does not insert anything after cancelling"
+    );
+
+    assert.ok(
+      !exists(".insert-link.modal-body"),
+      "modal dismissed after cancelling"
+    );
+  });
 
   test("Text Only", async function (assert) {
     await visit("/w/wizard");

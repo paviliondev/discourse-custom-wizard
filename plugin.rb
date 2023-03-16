@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Forms for Discourse. Better onboarding, structured posting, data enrichment, automated actions and much more.
+<<<<<<< HEAD
 # version: 2.1.5
+=======
+# version: 2.2.9
+>>>>>>> main
 # authors: Angus McLeod, Faizaan Gagan, Robert Barrow, Keegan George, Kaitlin Maddever
 # url: https://github.com/paviliondev/discourse-custom-wizard
 # contact_emails: development@pavilion.tech
@@ -41,6 +45,7 @@ after_initialize do
     ../app/controllers/custom_wizard/admin/logs.rb
     ../app/controllers/custom_wizard/admin/manager.rb
     ../app/controllers/custom_wizard/admin/custom_fields.rb
+    ../app/controllers/custom_wizard/wizard_client.rb
     ../app/controllers/custom_wizard/wizard.rb
     ../app/controllers/custom_wizard/steps.rb
     ../app/controllers/custom_wizard/realtime_validations.rb
@@ -65,6 +70,7 @@ after_initialize do
     ../lib/custom_wizard/subscription.rb
     ../lib/custom_wizard/template.rb
     ../lib/custom_wizard/wizard.rb
+    ../lib/custom_wizard/user_history.rb
     ../lib/custom_wizard/api/api.rb
     ../lib/custom_wizard/api/authorization.rb
     ../lib/custom_wizard/api/endpoint.rb
@@ -88,7 +94,6 @@ after_initialize do
     ../lib/custom_wizard/extensions/extra_locales_controller.rb
     ../lib/custom_wizard/extensions/invites_controller.rb
     ../lib/custom_wizard/extensions/users_controller.rb
-    ../lib/custom_wizard/extensions/tags_controller.rb
     ../lib/custom_wizard/extensions/guardian.rb
     ../lib/custom_wizard/extensions/custom_field/preloader.rb
     ../lib/custom_wizard/extensions/custom_field/serializer.rb
@@ -230,7 +235,6 @@ after_initialize do
   end
 
   reloadable_patch do |plugin|
-    ::TagsController.prepend CustomWizardTagsController
     ::DiscourseTagging.singleton_class.prepend CustomWizardDiscourseTagging
   end
 

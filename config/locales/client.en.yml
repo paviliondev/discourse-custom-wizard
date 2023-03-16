@@ -217,6 +217,8 @@ en:
             list: "list"
             custom_field: "custom field"
             value: "value"
+            users: "users"
+            guests: "users and guests"
 
           placeholder:
             text: "Enter text"

@@ -72,6 +72,7 @@ const field = {
     required: null,
     type: null,
     condition: null,
+    tag_groups: null,
   },
   types: {},
   mapped: ["prefill", "content", "condition", "index"],
@@ -210,10 +211,40 @@ const action = {
   objectArrays: {},
 };
 
+const filters = {
+  allow_guests: {
+    field: {
+      type: [
+        "text",
+        "textarea",
+        "text_only",
+        "date",
+        "time",
+        "date_time",
+        "number",
+        "checkbox",
+        "url",
+        "dropdown",
+        "tag",
+        "category",
+        "group",
+        "user_selector",
+      ],
+    },
+    action: {
+      type: ["route_to", "send_message"],
+    },
+  },
+};
+
 const custom_field = {
   klass: ["topic", "post", "group", "category"],
   type: ["string", "boolean", "integer", "json"],
 };
+
+export function buildFieldTypes(types) {
+  wizardSchema.field.types = types;
+}
 
 field.type = Object.keys(field.types);
 action.type = Object.keys(action.types);
@@ -224,14 +255,27 @@ const wizardSchema = {
   field,
   custom_field,
   action,
+  filters,
 };
-
-export function buildFieldTypes(types) {
-  wizardSchema.field.types = types;
-}
 
 export function buildFieldValidations(validations) {
   wizardSchema.field.validations = validations;
+}
+
+export function filterValues(currentWizard, feature, attribute, values = null) {
+  values = values || wizardSchema[feature][attribute];
+
+  if (currentWizard && currentWizard.allowGuests) {
+    const filteredFeature = wizardSchema.filters.allow_guests[feature];
+    if (filteredFeature) {
+      const filtered = filteredFeature[attribute];
+      if (filtered) {
+        values = values.filter((v) => filtered.includes(v));
+      }
+    }
+  }
+
+  return values;
 }
 
 const siteSettings = getOwner(this).lookup("service:site-settings");
