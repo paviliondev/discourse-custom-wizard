@@ -134,8 +134,9 @@ class CustomWizard::Submission
         submission_user = list_user || User.find_by(id: record.key.to_i)
 
         submission_data.each do |data|
-          wizard.user = submission_user if submission_user.present?
-          result.submissions.push(new(wizard, data))
+          _wizard = wizard.clone
+          _wizard.user = submission_user if submission_user.present?
+          result.submissions.push(new(_wizard, data))
         end
       end
     end

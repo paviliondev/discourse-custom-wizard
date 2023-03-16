@@ -14,11 +14,12 @@ describe CustomWizard::SubmissionSerializer do
 
   before do
     CustomWizard::Template.save(template_json, skip_jobs: true)
+
     wizard = CustomWizard::Wizard.create(template_json["id"], user1)
-    CustomWizard::Submission.new(wizard,
-      step_1_field_1: "I am user submission",
-      submitted_at: Time.now.iso8601
-    ).save
+    CustomWizard::Submission.new(wizard, step_1_field_1: "I am user1 submission", submitted_at: Time.now.iso8601).save
+
+    wizard = CustomWizard::Wizard.create(template_json["id"], user2)
+    CustomWizard::Submission.new(wizard, step_1_field_1: "I am user2 submission", submitted_at: Time.now.iso8601).save
   end
 
   it 'should return submission attributes' do
@@ -30,12 +31,11 @@ describe CustomWizard::SubmissionSerializer do
       each_serializer: described_class
     ).as_json
 
-    expect(json_array.length).to eq(1)
+    expect(json_array.length).to eq(2)
     expect(json_array[0][:id].present?).to eq(true)
-    expect(json_array[0][:user]).to eq(
-      BasicUserSerializer.new(user1, root: false).as_json
-    )
     expect(json_array[0][:submitted_at].present?).to eq(true)
+    expect(json_array[0][:user]).to eq(BasicUserSerializer.new(user2, root: false).as_json)
+    expect(json_array[1][:user]).to eq(BasicUserSerializer.new(user1, root: false).as_json)
   end
 
   it "should return field values, types and labels" do
@@ -47,10 +47,10 @@ describe CustomWizard::SubmissionSerializer do
       each_serializer: described_class
     ).as_json
 
-    expect(json_array.length).to eq(1)
+    expect(json_array.length).to eq(2)
     expect(json_array[0][:fields].as_json).to eq({
       "step_1_field_1": {
-        "value": "I am user submission",
+        "value": "I am user2 submission",
         "type": "text",
         "label": "Text"
       }
