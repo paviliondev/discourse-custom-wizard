@@ -1,0 +1,17 @@
+{
+  "condition": [
+    {
+      "type": "validation",
+      "pairs": [
+        {
+          "index": 0,
+          "key": "trust_level",
+          "key_type": "user_field",
+          "value": "2",
+          "value_type": "text",
+          "connector": "greater_or_equal"
+        }
+      ]
+    }
+  ]
+}

@@ -9,6 +9,7 @@ describe CustomWizard::TemplateValidator do
   let(:composer_preview) { get_wizard_fixture("field/composer_preview") }
   let(:guests_permitted) { get_wizard_fixture("wizard/guests_permitted") }
   let(:upload_field) { get_wizard_fixture("field/upload") }
+  let(:validation_condition) { get_wizard_fixture("condition/validation_condition") }
 
   let(:valid_liquid_template) {
     <<-LIQUID.strip
@@ -178,6 +179,13 @@ describe CustomWizard::TemplateValidator do
 
     it "validates actions" do
       template[:actions] << create_category
+      expect(
+        CustomWizard::TemplateValidator.new(template).perform
+      ).to eq(true)
+    end
+
+    it "validates settings with validation conditions" do
+      template[:permitted] = validation_condition["condition"]
       expect(
         CustomWizard::TemplateValidator.new(template).perform
       ).to eq(true)
