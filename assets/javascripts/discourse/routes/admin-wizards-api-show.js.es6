@@ -11,7 +11,7 @@ export default DiscourseRoute.extend({
   },
 
   afterModel(model) {
-    if (!model) {
+    if (model === null) {
       return this.transitionTo("adminWizardsApi");
     }
   },
