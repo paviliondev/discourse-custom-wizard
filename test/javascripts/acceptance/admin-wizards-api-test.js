@@ -1,12 +1,13 @@
 import { acceptance, query } from "discourse/tests/helpers/qunit-helpers";
 import { test } from "qunit";
-import { click, select, visit } from "@ember/test-helpers";
+import { click, visit } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 import {
   getBusinessAdminWizard,
   getCustomFields,
   getNewApi,
   getWizard,
+  putNewApi,
 } from "../helpers/admin-wizard";
 
 acceptance("Admin | API tab", function (needs) {
@@ -39,73 +40,10 @@ acceptance("Admin | API tab", function (needs) {
       return helper.response({ user_fields: [] });
     });
     server.put("/admin/wizards/api/new_api", () => {
-      return helper.response({
-        success: "OK",
-        api: {
-          name: "new_api",
-          title: "new API",
-          authorization: {
-            auth_type: "basic",
-            auth_url: null,
-            token_url: null,
-            client_id: null,
-            client_secret: null,
-            authorized: null,
-            auth_params: [],
-            access_token: null,
-            refresh_token: null,
-            token_expires_at: null,
-            token_refresh_at: null,
-            code: null,
-            username: "some_username",
-            password: "some_password",
-          },
-          endpoints: [
-            {
-              id: "8371de",
-              name: "endpoint_name",
-              method: "POST",
-              url: "https://test.api.com",
-              content_type: "application/json",
-              success_codes: [200, 100],
-            },
-          ],
-          log: [],
-        },
-      });
+      return helper.response(putNewApi);
     });
     server.get("/admin/wizards/api/new_api", () => {
-      return helper.response({
-        name: "new_api",
-        title: "new API",
-        authorization: {
-          auth_type: "basic",
-          auth_url: null,
-          token_url: null,
-          client_id: null,
-          client_secret: null,
-          authorized: null,
-          auth_params: [],
-          access_token: null,
-          refresh_token: null,
-          token_expires_at: null,
-          token_refresh_at: null,
-          code: null,
-          username: "some_username",
-          password: "some_password",
-        },
-        endpoints: [
-          {
-            id: "8371de",
-            name: "endpoint_name",
-            method: "POST",
-            url: "https://test.api.com",
-            content_type: "application/json",
-            success_codes: [200, 100],
-          },
-        ],
-        log: [],
-      });
+      return helper.response(getNewApi);
     });
   });
 

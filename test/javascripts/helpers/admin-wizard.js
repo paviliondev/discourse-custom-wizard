@@ -683,6 +683,40 @@ const getNewApi = {
   ],
   log: [],
 };
+const putNewApi = {
+  success: "OK",
+  api: {
+    name: "new_api",
+    title: "new API",
+    authorization: {
+      auth_type: "basic",
+      auth_url: null,
+      token_url: null,
+      client_id: null,
+      client_secret: null,
+      authorized: null,
+      auth_params: [],
+      access_token: null,
+      refresh_token: null,
+      token_expires_at: null,
+      token_refresh_at: null,
+      code: null,
+      username: "some_username",
+      password: "some_password",
+    },
+    endpoints: [
+      {
+        id: "8371de",
+        name: "endpoint_name",
+        method: "POST",
+        url: "https://test.api.com",
+        content_type: "application/json",
+        success_codes: [200, 100],
+      },
+    ],
+    log: [],
+  },
+};
 export {
   getWizard,
   getUnsubscribedAdminWizards,
@@ -694,4 +728,5 @@ export {
   getAdminTestingWizard,
   getCreatedWizard,
   getNewApi,
+  putNewApi,
 };
