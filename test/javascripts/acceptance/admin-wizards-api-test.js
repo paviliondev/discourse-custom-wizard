@@ -1,10 +1,11 @@
 import { acceptance, query } from "discourse/tests/helpers/qunit-helpers";
 import { test } from "qunit";
-import { visit } from "@ember/test-helpers";
+import { click, select, visit } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 import {
   getBusinessAdminWizard,
   getCustomFields,
+  getNewApi,
   getWizard,
 } from "../helpers/admin-wizard";
 
@@ -26,7 +27,13 @@ acceptance("Admin | API tab", function (needs) {
       return helper.response(getCustomFields);
     });
     server.get("/admin/wizards/api", () => {
-      return helper.response([]);
+      return helper.response([
+        {
+          name: "new_api",
+          title: "new API",
+          endpoints: [{ id: "59e3b6", name: "ag" }],
+        },
+      ]);
     });
     server.get("/admin/customize/user_fields", () => {
       return helper.response({ user_fields: [] });
@@ -34,21 +41,90 @@ acceptance("Admin | API tab", function (needs) {
     server.put("/admin/wizards/api/new_api", () => {
       return helper.response({
         success: "OK",
+        api: {
+          name: "new_api",
+          title: "new API",
+          authorization: {
+            auth_type: "basic",
+            auth_url: null,
+            token_url: null,
+            client_id: null,
+            client_secret: null,
+            authorized: null,
+            auth_params: [],
+            access_token: null,
+            refresh_token: null,
+            token_expires_at: null,
+            token_refresh_at: null,
+            code: null,
+            username: "some_username",
+            password: "some_password",
+          },
+          endpoints: [
+            {
+              id: "8371de",
+              name: "endpoint_name",
+              method: "POST",
+              url: "https://test.api.com",
+              content_type: "application/json",
+              success_codes: [200, 100],
+            },
+          ],
+          log: [],
+        },
+      });
+    });
+    server.get("/admin/wizards/api/new_api", () => {
+      return helper.response({
         name: "new_api",
+        title: "new API",
+        authorization: {
+          auth_type: "basic",
+          auth_url: null,
+          token_url: null,
+          client_id: null,
+          client_secret: null,
+          authorized: null,
+          auth_params: [],
+          access_token: null,
+          refresh_token: null,
+          token_expires_at: null,
+          token_refresh_at: null,
+          code: null,
+          username: "some_username",
+          password: "some_password",
+        },
+        endpoints: [
+          {
+            id: "8371de",
+            name: "endpoint_name",
+            method: "POST",
+            url: "https://test.api.com",
+            content_type: "application/json",
+            success_codes: [200, 100],
+          },
+        ],
+        log: [],
       });
     });
   });
 
-  test("Visit API tab", async (assert) => {
+  test("Visit API tab", async function (assert) {
     await visit("/admin/wizards/api");
     const list = find(".admin-controls li");
     const count = list.length;
     assert.equal(count, 6, "There should be 6 admin tabs");
+
     // create new api
-    await click('button:contains("Create API")');
+    await click(".admin-wizard-controls button");
     assert.ok(
       query(".wizard-header.large").innerText.includes("New API"),
       "it displays API creation message"
+    );
+    assert.equal(
+      currentURL(),
+      "/admin/wizards/api/create",
+      "clicking the button navigates to the correct URL"
     );
     // fill data
     await fillIn('.metadata input[placeholder="Display name"]', "new API");
@@ -66,7 +142,7 @@ acceptance("Admin | API tab", function (needs) {
       ".wizard-api-authentication .settings .control-group:eq(2) .controls input",
       "some_password"
     );
-    await click('.wizard-api-endpoints button:contains("Add endpoint")');
+    await click(".wizard-api-endpoints button");
     await fillIn(
       '.wizard-api-endpoints .endpoint .top input[placeholder="Endpoint name"]',
       "endpoint_name"
@@ -75,29 +151,35 @@ acceptance("Admin | API tab", function (needs) {
       '.wizard-api-endpoints .endpoint .top input[placeholder="Enter a url"]',
       "https://test.api.com"
     );
-    let endpointMethodDropdown = await selectKit(
+    const endpointMethodDropdown = await selectKit(
       '.wizard-api-endpoints .endpoint .bottom details:has(summary[name="Filter by: Select a method"])'
     );
     await endpointMethodDropdown.expand();
     await endpointMethodDropdown.selectRowByValue("POST");
 
-    // let successCodesDropdown = await selectKit(
-    //   ".wizard-api-endpoints .endpoint .bottom .select-kit .multi-select"
-    // );
-    // await successCodesDropdown.expand();
-    // await successCodesDropdown.selectRowByValue("200");
-    pauseTest();
-    // let contentTypeDropdown = await selectKit(
-    //   '.wizard-api-endpoints .endpoint .bottom details:has(summary[name="Filter by: Select a content type"])'
-    // );
-    // await contentTypeDropdown.expand();
-    // await contentTypeDropdown.selectRowByValue("application/JSON");
+    const contentTypeDropdown = await selectKit(
+      '.wizard-api-endpoints .endpoint .bottom details:has(summary[name="Filter by: Select a content type"])'
+    );
+    await contentTypeDropdown.expand();
+    await contentTypeDropdown.selectRowByValue("application/json");
 
-    // const contentTypeDropdown = selectKit(
-    //   ".wizard-api-endpoints .endpoint .bottom details"
-    // );
-    // await contentTypeDropdown.expand();
-    // await contentTypeDropdown.selectRowByValue("application/JSON");
-    // send a request
+    const successCodesDropdown = await selectKit(
+      ".wizard-api-endpoints .endpoint .bottom details.multi-select"
+    );
+    await successCodesDropdown.expand();
+    await successCodesDropdown.selectRowByValue(200);
+    await successCodesDropdown.selectRowByValue(100);
+
+    assert.strictEqual(
+      successCodesDropdown.header().value(),
+      "200,100",
+      "group should be set"
+    );
+    await click(".wizard-api-header.page button.btn-primary");
+    assert.equal(
+      currentURL(),
+      "/admin/wizards/api/new_api",
+      "clicking the button navigates to the correct URL"
+    );
   });
 });
