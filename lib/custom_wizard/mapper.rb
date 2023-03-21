@@ -44,7 +44,7 @@ class CustomWizard::Mapper
 
   def initialize(params)
     @inputs = params[:inputs] || {}
-    @data = params[:data].with_indifferent_access || {}
+    @data = params[:data] ? params[:data].with_indifferent_access : {}
     @user = params[:user]
     @opts = params[:opts] || {}
   end
@@ -269,7 +269,7 @@ class CustomWizard::Mapper
     result = data[k]
 
     if keys.empty?
-      result.is_a?(Object) ? "" : result
+      result.is_a?(Hash) ? "" : result
     else
       self.recurse(result, keys)
     end
