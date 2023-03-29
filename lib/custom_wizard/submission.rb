@@ -84,6 +84,10 @@ class CustomWizard::Submission
     data
   end
 
+  def submitted?
+    !!submitted_at
+  end
+
   def self.get(wizard)
     data = PluginStore.get("#{wizard.id}_#{KEY}", wizard.actor_id).last
     new(wizard, data)
