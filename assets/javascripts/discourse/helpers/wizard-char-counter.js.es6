@@ -2,7 +2,7 @@ import { registerUnbound } from "discourse-common/lib/helpers";
 import I18n from "I18n";
 import Handlebars from "handlebars";
 
-export default registerUnbound("char-counter", function (body, maxLength) {
+export default registerUnbound("wizard-char-counter", function (body, maxLength) {
   let bodyLength = body ? body.length : 0;
   let finalString;
 
