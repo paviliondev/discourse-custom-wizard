@@ -115,8 +115,6 @@ export default Component.extend({
       schedule("afterRender", () => {
         if ($(".invalid .wizard-focusable").length) {
           this.animateInvalidFields();
-        } else {
-          $(".wizard-focusable:first").focus();
         }
       });
     });
