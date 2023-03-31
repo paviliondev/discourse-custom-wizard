@@ -1,1 +1,8 @@
-{{input id=field.id value=field.value class=fieldClass placeholder=field.translatedPlaceholder tabindex=field.tabindex autocomplete=autocomplete}}
+<Input
+  id={{this.field.id}}
+  @value={{this.field.value}}
+  tabindex={{this.field.tabindex}}
+  class={{this.fieldClass}}
+  placeholder={{this.field.translatedPlaceholder}}
+  autocomplete={{this.autocomplete}}
+/>

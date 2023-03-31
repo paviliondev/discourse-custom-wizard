@@ -58,6 +58,11 @@ describe CustomWizard::Mapper do
       "step_1_field_3" => "Value"
     }
   }
+  let(:template_params_object) {
+    {
+      "step_1_field_1": get_wizard_fixture("field/upload")
+    }
+  }
 
   def create_template_mapper(data, user)
     CustomWizard::Mapper.new(
@@ -446,6 +451,40 @@ describe CustomWizard::Mapper do
           template: false,
         )
         expect(result).to eq(template)
+      end
+
+      it "handles correct object variable references" do
+        template = <<-LIQUID.strip
+          {%- if "w{step_1_field_1.id}" == "step_2_field_7" -%}
+            Correct
+          {%- else -%}
+            Incorrect
+          {%-endif-%}
+        LIQUID
+        mapper = create_template_mapper(template_params_object, user1)
+        result = mapper.interpolate(
+          template.dup,
+          template: true,
+          wizard: true
+        )
+        expect(result).to eq("Correct")
+      end
+
+      it "handles incorrect object variable references" do
+        template = <<-LIQUID.strip
+          {%- if "w{step_1_field_1}" == "step_2_field_7" -%}
+            Correct
+          {%- else -%}
+            Incorrect
+          {%-endif-%}
+        LIQUID
+        mapper = create_template_mapper(template_params_object, user1)
+        result = mapper.interpolate(
+          template.dup,
+          template: true,
+          wizard: true
+        )
+        expect(result).to eq("Incorrect")
       end
 
       context "custom filter: 'first_non_empty'" do

@@ -176,6 +176,7 @@ class CustomWizard::Wizard
 
   def unfinished?
     return nil unless actor_id
+    return false if last_submission&.submitted?
 
     most_recent = CustomWizard::UserHistory.where(
       actor_id: actor_id,
@@ -194,6 +195,7 @@ class CustomWizard::Wizard
 
   def completed?
     return nil unless actor_id
+    return true if last_submission&.submitted?
 
     history = CustomWizard::UserHistory.where(
       actor_id: actor_id,
@@ -280,6 +282,10 @@ class CustomWizard::Wizard
 
   def submissions
     @submissions ||= CustomWizard::Submission.list(self).submissions
+  end
+
+  def last_submission
+    @last_submission ||= submissions&.last
   end
 
   def current_submission

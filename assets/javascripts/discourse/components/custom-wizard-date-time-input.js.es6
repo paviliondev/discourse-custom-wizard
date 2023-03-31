@@ -2,6 +2,8 @@ import DateTimeInput from "discourse/components/date-time-input";
 import discourseComputed from "discourse-common/utils/decorators";
 
 export default DateTimeInput.extend({
+  classNameBindings: ["fieldClass"],
+
   @discourseComputed("timeFirst", "tabindex")
   timeTabindex(timeFirst, tabindex) {
     return timeFirst ? tabindex : tabindex + 1;

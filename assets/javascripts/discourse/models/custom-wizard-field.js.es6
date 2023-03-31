@@ -72,7 +72,7 @@ export default EmberObject.extend(ValidState, {
       valid = true;
     }
 
-    this.setValid(valid);
+    this.setValid(Boolean(valid));
 
     return valid;
   },

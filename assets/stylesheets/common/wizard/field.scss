@@ -32,13 +32,8 @@ body.custom-wizard {
       }
     }
 
-    &.invalid {
-      textarea,
-      input[type="text"],
-      input[type="checkbox"],
-      .select-kit {
-        outline: 4px solid var(--danger);
-      }
+    &.invalid .wizard-focusable {
+      outline: 4px solid var(--danger);
     }
   }
 
