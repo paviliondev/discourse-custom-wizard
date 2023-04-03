@@ -1,6 +1,8 @@
 import I18n from "I18n";
 import { getCachedWizard } from "../models/custom-wizard";
 import Route from "@ember/routing/route";
+import { scrollTop } from "discourse/mixins/scroll-top";
+import { action } from "@ember/object";
 
 export default Route.extend({
   beforeModel() {
@@ -47,5 +49,11 @@ export default Route.extend({
     }
 
     controller.setProperties(props);
+  },
+
+  @action
+  didTransition() {
+    scrollTop();
+    return true;
   },
 });
