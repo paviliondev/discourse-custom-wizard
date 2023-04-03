@@ -3,9 +3,10 @@
     <label>{{i18n "admin.wizard.step.title"}}</label>
   </div>
   <div class="setting-value">
-    {{input
+    <Input
       name="title"
-      value=step.title}}
+      @value={{this.step.title}}
+    />
   </div>
 </div>
 
@@ -51,7 +52,10 @@
     <div class="setting-label"></div>
     <div class="setting-value force-final">
       <h4>{{i18n "admin.wizard.step.force_final.label"}}</h4>
-      {{input type="checkbox" checked=step.force_final}}
+      <Input
+        @type="checkbox"
+        @checked={{this.step.force_final}}
+      />
       <span>{{i18n "admin.wizard.step.force_final.description"}}</span>
     </div>
   </div>
@@ -77,7 +81,9 @@
           <div class="label">
             {{i18n "admin.wizard.step.required_data.not_permitted_message"}}
           </div>
-          {{input value=step.required_data_message}}
+          <Input
+            @value={{this.step.required_data_message}}
+          />
         </div>
       {{/if}}
     </div>

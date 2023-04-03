@@ -1,9 +1,10 @@
 {{#if wizard}}
   <div class="wizard-header large">
-    {{input
+    <Input
+      @value={{this.wizard.name}}
       name="name"
-      value=wizard.name
-      placeholderKey="admin.wizard.name_placeholder"}}
+      placeholder={{i18n "admin.wizard.name_placeholder"}}
+    />
 
     <div class="wizard-url">
       {{#if wizard.name}}
@@ -23,11 +24,12 @@
         <label>{{i18n "admin.wizard.background"}}</label>
       </div>
       <div class="setting-value">
-        {{input
+        <Input
+          @value={{this.wizard.background}}
           name="background"
-          value=wizard.background
-          placeholderKey="admin.wizard.background_placeholder"
-          class="small"}}
+          placeholder={{i18n "admin.wizard.background_placeholder"}}
+          class="small"
+        />
       </div>
     </div>
 
@@ -58,7 +60,10 @@
         <label>{{i18n "admin.wizard.save_submissions"}}</label>
       </div>
       <div class="setting-value">
-        {{input type="checkbox" checked=wizard.save_submissions}}
+        <Input
+          @type="checkbox"
+          @checked={{this.wizard.save_submissions}}
+        />
         <span>{{i18n "admin.wizard.save_submissions_label"}}</span>
       </div>
     </div>
@@ -68,7 +73,10 @@
         <label>{{i18n "admin.wizard.multiple_submissions"}}</label>
       </div>
       <div class="setting-value">
-        {{input type="checkbox" checked=wizard.multiple_submissions}}
+        <Input
+          @type="checkbox"
+          @checked={{this.wizard.multiple_submissions}}
+        />
         <span>{{i18n "admin.wizard.multiple_submissions_label"}}</span>
       </div>
     </div>
@@ -78,7 +86,10 @@
         <label>{{i18n "admin.wizard.after_signup"}}</label>
       </div>
       <div class="setting-value">
-        {{input type="checkbox" checked=wizard.after_signup}}
+        <Input
+          @type="checkbox"
+          @checked={{this.wizard.after_signup}}
+        />
         <span>{{i18n "admin.wizard.after_signup_label"}}</span>
       </div>
     </div>
@@ -88,7 +99,10 @@
         <label>{{i18n "admin.wizard.prompt_completion"}}</label>
       </div>
       <div class="setting-value">
-        {{input type="checkbox" checked=wizard.prompt_completion}}
+        <Input
+          @type="checkbox"
+          @checked={{this.wizard.prompt_completion}}
+        />
         <span>{{i18n "admin.wizard.prompt_completion_label"}}</span>
       </div>
     </div>
@@ -98,7 +112,10 @@
         <label>{{i18n "admin.wizard.after_time"}}</label>
       </div>
       <div class="setting-value">
-        {{input type="checkbox" checked=wizard.after_time}}
+        <Input
+          @type="checkbox"
+          @checked={{this.wizard.after_time}}
+        />
         <span>{{i18n "admin.wizard.after_time_label"}}</span>
         {{d-button
           action=(action "setNextSessionScheduled")
@@ -114,7 +131,10 @@
           <label>{{i18n "admin.wizard.required"}}</label>
         </div>
         <div class="setting-value">
-          {{input type="checkbox" checked=wizard.required}}
+          <Input
+            @type="checkbox"
+            @checked={{this.wizard.required}}
+          />
           <span>{{i18n "admin.wizard.required_label"}}</span>
         </div>
       </div>
@@ -124,7 +144,10 @@
           <label>{{i18n "admin.wizard.restart_on_revisit"}}</label>
         </div>
         <div class="setting-value">
-          {{input type="checkbox" checked=wizard.restart_on_revisit}}
+          <Input
+            @type="checkbox"
+            @checked={{this.wizard.restart_on_revisit}}
+          />
           <span>{{i18n "admin.wizard.restart_on_revisit_label"}}</span>
         </div>
       </div>

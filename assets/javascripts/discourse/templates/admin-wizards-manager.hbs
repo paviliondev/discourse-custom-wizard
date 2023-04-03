@@ -11,11 +11,12 @@
       </div>
     {{/if}}
 
-    {{input
+    <Input
       id="custom-wizard-file-upload"
-      type="file"
+      @type="file"
       accept="application/json"
-      input=(action "setFile")}}
+      {{on "input" (action "setFile")}}
+    />
     {{d-button
       id="upload-button"
       label="admin.wizard.manager.upload"
@@ -65,16 +66,18 @@
             {{/link-to}}
           </td>
           <td class="control-column">
-            {{input
-              type="checkbox"
+            <Input
+              @type="checkbox"
               class="export"
-              change=(action "selectWizard")}}
+              {{on "change" (action "selectWizard")}}
+            />
           </td>
           <td class="control-column">
-            {{input
-              type="checkbox"
+            <Input
+              @type="checkbox"
               class="destroy"
-              change=(action "selectWizard")}}
+              {{on "change" (action "selectWizard")}}
+            />
           </td>
         </tr>
       {{/each}}

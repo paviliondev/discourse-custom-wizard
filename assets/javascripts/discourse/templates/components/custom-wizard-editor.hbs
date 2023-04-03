@@ -40,7 +40,12 @@
       </div>
 
       {{conditional-loading-spinner condition=loading}}
-      {{textarea tabindex=tabindex value=value class="d-editor-input" placeholder=placeholder}}
+      <Textarea
+        tabindex={{this.tabindex}}
+        @value={{this.value}}
+        class="d-editor-input"
+        placeholder={{this.placeholder}}
+      />
     </div>
   {{/if}}
 </div>
