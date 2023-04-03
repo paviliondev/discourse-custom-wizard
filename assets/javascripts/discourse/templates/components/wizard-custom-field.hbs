@@ -11,7 +11,10 @@
     <label>{{i18n "admin.wizard.field.label"}}</label>
   </div>
   <div class="setting-value">
-    {{input name="label" value=field.label}}
+    <Input
+      name="label"
+      @value={{this.field.label}}
+    />
   </div>
 </div>
 
@@ -22,7 +25,10 @@
 
   <div class="setting-value">
     <span>{{i18n "admin.wizard.field.required_label"}}</span>
-    {{input type="checkbox" checked=field.required}}
+    <Input
+      @type="checkbox"
+      @checked={{this.field.required}}
+    />
   </div>
 </div>
 
@@ -31,7 +37,10 @@
     <label>{{i18n "admin.wizard.field.description"}}</label>
   </div>
   <div class="setting-value">
-    {{textarea name="description" value=field.description}}
+    <Textarea
+      name="description"
+      @value={{this.field.description}}
+    />
   </div>
 </div>
 
@@ -78,11 +87,12 @@
     </div>
 
     <div class="setting-value">
-      {{input
-        type="number"
+      <Input
+        @type="number"
         name="min_length"
-        value=field.min_length
-        class="small"}}
+        @value={{this.field.min_length}}
+        class="small"
+      />
     </div>
   </div>
 
@@ -92,11 +102,12 @@
     </div>
 
     <div class="setting-value">
-      {{input
-        type="number"
+      <Input
+        @type="number"
         name="max_length"
-        value=field.max_length
-        class="small"}}
+        @value={{this.field.max_length}}
+        class="small"
+      />
     </div>
   </div>
 
@@ -107,9 +118,10 @@
 
     <div class="setting-value">
       <span>{{i18n "admin.wizard.field.char_counter_placeholder"}}</span>
-      {{input
-        type="checkbox"
-        checked=field.char_counter}}
+      <Input
+        @type="checkbox"
+        @checked={{this.field.char_counter}}
+      />
     </div>
   </div>
 
@@ -119,10 +131,11 @@
     </div>
 
     <div class="setting-value">
-      {{textarea
+      <Textarea
         name="field_placeholder"
         class="medium"
-        value=field.placeholder}}
+        @value={{this.field.placeholder}}
+      />
     </div>
   </div>
 {{/if}}
@@ -134,7 +147,11 @@
     </div>
 
     <div class="setting-value">
-      {{textarea name="preview-template" value=field.preview_template class="preview-template"}}
+      <Textarea
+        name="preview-template"
+        class="preview-template"
+        @value={{this.field.preview_template}}
+      />
     </div>
   </div>
 {{/if}}
@@ -146,7 +163,10 @@
     </div>
 
     <div class="setting-value">
-      {{input value=field.file_types class="medium"}}
+      <Input
+        @value={{this.field.file_types}}
+        class="medium"
+      />
     </div>
   </div>
 {{/if}}
@@ -158,7 +178,11 @@
     </div>
 
     <div class="setting-value">
-      {{input type="number" value=field.limit class="small"}}
+      <Input
+        @type="number"
+        @value={{this.field.limit}}
+        class="small"
+      />
     </div>
   </div>
 {{/if}}
@@ -170,7 +194,10 @@
     </div>
 
     <div class="setting-value">
-      {{input value=field.format class="medium"}}
+      <Input
+        @value={{this.field.format}}
+        class="medium"
+      />
       <label>{{html-safe (i18n "admin.wizard.field.date_time_format.instructions")}}</label>
     </div>
   </div>
@@ -229,9 +256,10 @@
     </div>
 
     <div class="setting-value">
-      {{input
-        type="checkbox"
-        checked=field.can_create_tag}}
+      <Input
+        @type="checkbox"
+        @checked={{this.field.can_create_tag}}
+      />
     </div>
   </div>
 {{/if}}

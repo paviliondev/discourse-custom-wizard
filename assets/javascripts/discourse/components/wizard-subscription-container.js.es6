@@ -7,7 +7,7 @@ export default Component.extend(Subscription, {
 
   @discourseComputed("subscribed")
   subscribedIcon(subscribed) {
-    return subscribed ? "check" : "dash";
+    return subscribed ? "check" : "times";
   },
 
   @discourseComputed("subscribed")
