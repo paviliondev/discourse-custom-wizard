@@ -2,6 +2,7 @@
 
 describe CustomWizard::Action do
   fab!(:user) { Fabricate(:user, name: "Angus", username: 'angus', email: "angus@email.com", trust_level: TrustLevel[2]) }
+  fab!(:user1) { Fabricate(:user, name: "Angus One", username: 'angus1', email: "angus_one@email.com", trust_level: TrustLevel[2]) }
   fab!(:category) { Fabricate(:category, name: 'cat1', slug: 'cat-slug') }
   fab!(:tag) { Fabricate(:tag, name: 'tag1') }
   fab!(:group) { Fabricate(:group) }
@@ -350,7 +351,11 @@ describe CustomWizard::Action do
       wizard = CustomWizard::Builder.new(@template[:id], user).build
       wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
 
+      group_id = Group.where(name: wizard.current_submission.fields['action_9']).first.id
+      user_id =  User.find_by(username: wizard_template['actions'][4]['usernames'][0]["output"][0]).id
+
       expect(Group.where(name: wizard.current_submission.fields['action_9']).exists?).to eq(true)
+      expect(GroupUser.where(group_id: group_id, user_id: user_id).exists?).to eq(true)
     end
 
     it '#add_to_group' do

@@ -460,7 +460,11 @@ class CustomWizard::Action
         user_ids.each { |user_id| group.group_users.build(user_id: user_id) }
       end
 
-      log_success("Group created", group.name)
+      if group.save
+        log_success("Group created", group.name)
+      else
+        log_error("Group users creation failed", group.errors.messages)
+      end
 
       result.output = group.name
     else
