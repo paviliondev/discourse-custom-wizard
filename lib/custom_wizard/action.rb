@@ -456,14 +456,15 @@ class CustomWizard::Action
 
       if new_group_params[:usernames].present?
         user_ids = get_user_ids(new_group_params[:usernames])
+        if user_ids.count < new_group_params[:usernames].count
+          log_error("Warning, group creation: some users were not found!")
+        end
         user_ids -= owner_ids if owner_ids
         user_ids.each { |user_id| group.group_users.build(user_id: user_id) }
       end
 
       if group.save
         log_success("Group created", group.name)
-      else
-        log_error("Group users creation failed", group.errors.messages)
       end
 
       result.output = group.name

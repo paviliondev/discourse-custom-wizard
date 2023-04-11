@@ -13,6 +13,7 @@ describe CustomWizard::Action do
   let(:watch_categories) { get_wizard_fixture("actions/watch_categories") }
   let(:watch_tags) { get_wizard_fixture("actions/watch_tags") }
   let(:create_group) { get_wizard_fixture("actions/create_group") }
+  let(:create_group_with_nonexistant_user) { get_wizard_fixture("actions/create_group_bad_user") }
   let(:add_to_group) { get_wizard_fixture("actions/add_to_group") }
   let(:send_message) { get_wizard_fixture("actions/send_message") }
   let(:send_message_multi) { get_wizard_fixture("actions/send_message_multi") }
@@ -356,6 +357,20 @@ describe CustomWizard::Action do
 
       expect(Group.where(name: wizard.current_submission.fields['action_9']).exists?).to eq(true)
       expect(GroupUser.where(group_id: group_id, user_id: user_id).exists?).to eq(true)
+    end
+
+    it '#create_group completes successfully when user included in usernames does not exist but excludes users who do not exist and includes warning in log' do
+      wizard_template['actions'] << create_group_with_nonexistant_user
+      update_template(wizard_template)
+
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
+
+      group_id = Group.where(name: wizard.current_submission.fields['action_9']).first.id
+
+      expect(CustomWizard::Log.list_query.all.last.value.include? "some users were not found").to eq(true)
+      expect(Group.where(name: wizard.current_submission.fields['action_9']).exists?).to eq(true)
+      expect(GroupUser.where(group_id: group_id).count).to eq(1)
     end
 
     it '#add_to_group' do
