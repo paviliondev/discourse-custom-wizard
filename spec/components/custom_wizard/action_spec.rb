@@ -13,7 +13,7 @@ describe CustomWizard::Action do
   let(:watch_categories) { get_wizard_fixture("actions/watch_categories") }
   let(:watch_tags) { get_wizard_fixture("actions/watch_tags") }
   let(:create_group) { get_wizard_fixture("actions/create_group") }
-  let(:existentcreate_group_with_nonexistent_user) { get_wizard_fixture("actions/create_group_bad_user") }
+  let(:create_group_with_nonexistent_user) { get_wizard_fixture("actions/create_group_bad_user") }
   let(:add_to_group) { get_wizard_fixture("actions/add_to_group") }
   let(:send_message) { get_wizard_fixture("actions/send_message") }
   let(:send_message_multi) { get_wizard_fixture("actions/send_message_multi") }
@@ -360,7 +360,7 @@ describe CustomWizard::Action do
     end
 
     it '#create_group completes successfully when user included in usernames does not exist but excludes users who do not exist and includes warning in log' do
-      wizard_template['actions'] << existentcreate_group_with_nonexistent_user
+      wizard_template['actions'] << create_group_with_nonexistent_user
       update_template(wizard_template)
 
       wizard = CustomWizard::Builder.new(@template[:id], user).build
