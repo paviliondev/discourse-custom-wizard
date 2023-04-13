@@ -173,6 +173,8 @@ const action = {
       visibility_level: null,
       members_visibility_level: null,
       custom_fields: null,
+      public_exit: true,
+      public_admission: true,
     },
   },
   mapped: [
@@ -205,6 +207,8 @@ const action = {
     "members_visibility_level",
     "add_event",
     "add_location",
+    "public_exit",
+    "public_admission",
   ],
   required: ["id", "type"],
   dependent: {},
