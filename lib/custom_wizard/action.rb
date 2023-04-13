@@ -666,6 +666,8 @@ class CustomWizard::Action
       visibility_level
       members_visibility_level
       grant_trust_level
+      public_exit
+      public_admission
     ).each do |attr|
       input = action[attr]
 
