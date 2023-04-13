@@ -100,5 +100,21 @@
       "output_type": "text",
       "output_connector": "set"
     }
+  ],
+  "public_exit": [
+    {
+      "type": "assignment",
+      "output": "false",
+      "output_type": "text",
+      "output_connector": "set"
+    }
+  ],
+  "public_admission": [
+    {
+      "type": "assignment",
+      "output": "false",
+      "output_type": "text",
+      "output_connector": "set"
+    }
   ]
 }
