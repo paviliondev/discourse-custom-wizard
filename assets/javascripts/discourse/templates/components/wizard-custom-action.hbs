@@ -747,6 +747,24 @@
         )}}
     </div>
   </div>
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.create_group.primary_group"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=action.primary_group
+        property="primary_group"
+        onUpdate=(action "mappedFieldUpdated")
+        options=(hash
+          textSelection=true
+          wizardFieldSelection=true
+          userFieldSelection=true
+          context="action"
+        )}}
+    </div>
+  </div>
 {{/if}}
 
 {{#if createCategory}}
