@@ -385,6 +385,7 @@ de:
             members_visibility_level: Sichtbarkeitsstufe der Mitglieder
             public_exit: Erlaube Gruppenaustritt
             public_admission: Erlaube der Gruppe beizutreten
+            primary_group: Primäre Gruppe
         custom_field:
           nav_label: "Benutzerdefinierte Felder"
           add: "Hinzufügen"
