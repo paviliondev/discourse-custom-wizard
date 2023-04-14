@@ -116,5 +116,13 @@
       "output_type": "text",
       "output_connector": "set"
     }
+  ],
+  "primary_group": [
+    {
+      "type": "assignment",
+      "output": "false",
+      "output_type": "text",
+      "output_connector": "set"
+    }
   ]
 }
