@@ -175,6 +175,7 @@ const action = {
       custom_fields: null,
       public_exit: true,
       public_admission: true,
+      primary_group: true,
     },
   },
   mapped: [
@@ -209,6 +210,7 @@ const action = {
     "add_location",
     "public_exit",
     "public_admission",
+    "primary_group",
   ],
   required: ["id", "type"],
   dependent: {},
