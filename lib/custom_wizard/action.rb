@@ -668,6 +668,7 @@ class CustomWizard::Action
       grant_trust_level
       public_exit
       public_admission
+      primary_group
     ).each do |attr|
       input = action[attr]
 
