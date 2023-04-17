@@ -4,10 +4,13 @@ import { makeArray } from "discourse-common/lib/helpers";
 
 export default ComboBox.extend({
   content: computed("groups.[]", "field.content.[]", function () {
-    const whitelist = makeArray(this.field.content);
+    const blacklist = ["Administratoren"]; // Gruppe, die nicht ausgewählt werden kann
+    const selectedGroups = makeArray(this.field.content); // bereits ausgewählte Gruppen
     return this.groups
       .filter((group) => {
-        return !whitelist.length || whitelist.indexOf(group.id) > -1;
+        return blacklist.indexOf(group.name) === -1 && // Gruppe ist nicht in der Blacklist
+          (selectedGroups.length === 0 || // wenn keine Gruppen ausgewählt sind
+            selectedGroups.indexOf(group.id) > -1); // oder Gruppe bereits ausgewählt wurde
       })
       .map((g) => {
         return {
@@ -16,4 +19,14 @@ export default ComboBox.extend({
         };
       });
   }),
+
+  didInsertElement() {
+    // Setze alle Gruppen als bereits ausgewählt
+    this._super(...arguments);
+    const selectedGroups = makeArray(this.field.content);
+    const allGroups = this.content.map((g) => g.id);
+    const unselectedGroups = allGroups.filter((g) => !selectedGroups.includes(g));
+    this.updateValue([...selectedGroups, ...unselectedGroups]);
+  },
 });
+
