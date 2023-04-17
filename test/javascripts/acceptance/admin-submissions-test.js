@@ -1,6 +1,6 @@
 import { acceptance, query } from "discourse/tests/helpers/qunit-helpers";
 import { test } from "qunit";
-import { findAll, visit } from "@ember/test-helpers";
+import { click, findAll, visit } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 import {
   getUnsubscribedAdminWizards,
@@ -58,8 +58,7 @@ acceptance("Admin | Submissions", function (needs) {
     );
 
     await wizards.expand();
-    const li = find('[data-name="Select a wizard"]');
-    await click(li);
+    await click('[data-name="Select a wizard"]');
     const wizardContainerDiv = find(".admin-wizard-container");
     assert.ok(wizardContainerDiv.children().length === 0, "the div is empty");
   });
