@@ -7,7 +7,10 @@
       <li>
         <span class="setting-title">
           <h4>{{i18n (concat "admin.wizard.field.validations." type)}}</h4>
-          {{input type="checkbox" checked=props.status}}
+          <Input
+            @type="checkbox"
+            @checked={{this.props.status}}
+          />
           {{i18n "admin.wizard.field.validations.enabled"}}
         </span>
         <div class="validation-container">
@@ -27,7 +30,11 @@
               <label>{{i18n "admin.wizard.field.validations.max_topic_age"}}</label>
             </div>
             <div class="setting-value">
-              {{input type="number" class="time-n-value" value=props.time_n_value}}
+              <Input
+                @type="number"
+                @value={{this.props.time_n_value}}
+                class="time-n-value"
+              />
               {{combo-box
                   value=(readonly props.time_unit)
                   content=timeUnits
