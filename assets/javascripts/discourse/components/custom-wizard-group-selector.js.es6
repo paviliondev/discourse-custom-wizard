@@ -17,7 +17,8 @@ export default ComboBox.extend({
           id: g.id,
           name: g.full_name ? g.full_name : g.name,
         };
-      });
+      })
+      .filter((group) => group.name !== "Administratoren"); // Filtert die Gruppe "Administratoren" aus
   }),
 
   didInsertElement() {
@@ -29,4 +30,3 @@ export default ComboBox.extend({
     this.updateValue([...selectedGroups, ...unselectedGroups]);
   },
 });
-
