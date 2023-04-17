@@ -4,7 +4,7 @@ import {
   visible,
 } from "discourse/tests/helpers/qunit-helpers";
 import { test } from "qunit";
-import { findAll, visit } from "@ember/test-helpers";
+import { click, findAll, visit } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 import {
   getAdminTestingWizard,
@@ -74,8 +74,7 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
       "it displays wizard message for a selected wizard"
     );
     await wizards.expand();
-    const li = find('[data-name="Select a wizard"]');
-    await click(li);
+    await click('[data-name="Select a wizard"]');
     const wizardContainerDiv = find(".admin-wizard-container");
     assert.ok(
       wizardContainerDiv.children().length === 0,
@@ -84,14 +83,13 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
   });
   test("creting a new wizard", async (assert) => {
     await visit("/admin/wizards/wizard");
-    await click('button:contains("Create Wizard")');
+    await click(".admin-wizard-controls button");
     assert.ok(
       query(".message-content").innerText.includes(
         "You're creating a new wizard"
       ),
       "it displays wizard creation message"
     );
-    assert.step("Step 1: Inserting a title");
     const wizardTitle = "New wizard for testing";
     await fillIn(".wizard-header input", wizardTitle);
     assert.equal(
@@ -111,9 +109,7 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
       1,
       "Wizard subscription features are not accesible"
     );
-    assert.step("Step 2: Creating a step section");
-    const stepAddBtn = find(".step .link-list button:contains('Add')");
-    await click(stepAddBtn);
+    await click(".step .link-list button");
     const stepOneText = "step_1 (step_1)";
     const stepOneBtn = find(`.step button:contains(${stepOneText})`);
     assert.equal(stepOneBtn.length, 1, "Creating a step");
@@ -131,9 +127,7 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
       2,
       "Steps subscription features are not accesible"
     );
-    assert.step("Step 3: Creating a field section");
-    const fieldAddBtn = find(".field .link-list button:contains('Add')");
-    await click(fieldAddBtn);
+    await click(".field .link-list button");
     assert.ok(
       !visible(".wizard-custom-field button.undo-changes"),
       "clear button is not rendered"
@@ -154,8 +148,7 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
       fieldButtonText.includes(fieldTitle),
       "The step button changes according to title"
     );
-    const clearBtn = find(`.wizard-custom-field button.undo-changes`);
-    await click(clearBtn);
+    await click(`.wizard-custom-field button.undo-changes`);
     fieldButtonText = $(".field div[data-id='step_1_field_1'] button")
       .text()
       .trim();
@@ -179,9 +172,7 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
       3,
       "Field subscription features are not accesible"
     );
-    assert.step("Step 4: Creating a action section");
-    const actionAddBtn = find(".action .link-list button:contains('Add')");
-    await click(actionAddBtn);
+    await click(".action .link-list button");
     const actionOneText = "action_1 (action_1)";
     const actionOneBtn = find(`.action button:contains(${actionOneText})`);
     assert.equal(actionOneBtn.length, 1, "Creating an action");
@@ -251,8 +242,7 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
       "Display all settings of route to"
     );
     await actionTypeDropdown.expand();
-    const li = find('[data-name="Select a type"]');
-    await click(li);
+    await click('[data-name="Select a type"]');
     listTopicSettings = findAll(
       ".admin-wizard-container .wizard-custom-action .setting"
     );
@@ -262,15 +252,11 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
     );
     await actionTypeDropdown.expand();
     await actionTypeDropdown.selectRowByValue("create_topic");
-    assert.step("Step 5: Save changes");
-    const saveButton = find(
-      '.admin-wizard-buttons button:contains("Save Changes")'
-    );
     assert.ok(
       !visible('.admin-wizard-buttons button:contains("Delete Wizard")'),
       "delete wizard button not displayed"
     );
-    await click(saveButton);
+    await click(".admin-wizard-buttons button");
     assert.equal(
       currentURL(),
       "/admin/wizards/wizard/new_wizard_for_testing",
@@ -279,16 +265,6 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
     assert.ok(
       visible('.admin-wizard-buttons button:contains("Delete Wizard")'),
       "delete wizard button visible"
-    );
-    assert.verifySteps(
-      [
-        "Step 1: Inserting a title",
-        "Step 2: Creating a step section",
-        "Step 3: Creating a field section",
-        "Step 4: Creating a action section",
-        "Step 5: Save changes",
-      ],
-      "All steps completed"
     );
   });
 });
