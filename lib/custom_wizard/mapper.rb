@@ -30,6 +30,7 @@ class CustomWizard::Mapper
 
   OPERATORS = {
     equal: '==',
+    not_equal: "!=",
     greater: '>',
     less: '<',
     greater_or_equal: '>=',
