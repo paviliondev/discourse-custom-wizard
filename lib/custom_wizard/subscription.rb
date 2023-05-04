@@ -106,7 +106,7 @@ class CustomWizard::Subscription
 
   def initialize
     if CustomWizard::Subscription.client_installed?
-      result = DiscourseSubscriptionClient.find_subscriptions("discourse-custom-wizard")
+      result = SubscriptionClient.find_subscriptions("discourse-custom-wizard")
 
       if result&.any?
         slugs = result.supplier.product_slugs
@@ -176,7 +176,7 @@ class CustomWizard::Subscription
   end
 
   def self.client_installed?
-    defined?(DiscourseSubscriptionClient) == 'constant' && DiscourseSubscriptionClient.class == Module
+    defined?(SubscriptionClient) == 'constant' && SubscriptionClient.class == Module
   end
 
   def self.subscribed?
