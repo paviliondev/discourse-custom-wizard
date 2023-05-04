@@ -2,6 +2,7 @@
   field=field
   composer=composer
   wizard=wizard
+  fieldClass=fieldClass
   groupsMentioned=(action "groupsMentioned")
   cannotSeeMention=(action "cannotSeeMention")
   importQuote=(action "importQuote")
@@ -14,6 +15,6 @@
   </button>
 
   {{#if field.char_counter}}
-    {{char-counter field.value field.max_length}}
+    {{wizard-char-counter field.value field.max_length}}
   {{/if}}
 </div>

@@ -84,7 +84,7 @@ class CustomWizard::TemplateValidator
 
   def validate_guests(object, type)
     guests_permitted = @data[:permitted] && @data[:permitted].any? do |m|
-      m["output"].include?(CustomWizard::Wizard::GUEST_GROUP_ID)
+      m["output"]&.include?(CustomWizard::Wizard::GUEST_GROUP_ID)
     end
     return unless guests_permitted
 

@@ -79,7 +79,10 @@
         )}}
 
       <div class="setting-gutter">
-        {{input type="checkbox" checked=action.post_builder}}
+        <Input
+          @type="checkbox"
+          @checked={{this.action.post_builder}}
+        />
         <span>{{i18n "admin.wizard.action.post_builder.checkbox"}}</span>
       </div>
     </div>
@@ -408,7 +411,10 @@
     </div>
 
     <div class="setting-value">
-      {{input type="checkbox" checked=action.wizard_user}}
+      <Input
+        @type="checkbox"
+        @checked={{this.action.wizard_user}}
+      />
     </div>
   </div>
 
@@ -477,7 +483,10 @@
     </div>
 
     <div class="setting-value">
-      {{input type="checkbox" checked=action.wizard_user}}
+      <Input
+        @type="checkbox"
+        @checked={{this.action.wizard_user}}
+      />
     </div>
   </div>
 
@@ -716,7 +725,7 @@
         property="name"
         onUpdate=(action "mappedFieldUpdated")
         options=(hash
-          textSelection="key,value"
+          textSelection="key,value,output"
           wizardFieldSelection=true
           userFieldSelection="key,value"
           context="action"
@@ -877,7 +886,10 @@
     </div>
 
     <div class="setting-value">
-      {{input type="checkbox" checked=action.skip_redirect}}
+      <Input
+        @type="checkbox"
+        @checked={{this.action.skip_redirect}}
+      />
 
       <span>
         {{i18n "admin.wizard.action.skip_redirect.description" type="topic"}}
@@ -891,7 +903,10 @@
     </div>
 
     <div class="setting-value">
-      {{input type="checkbox" checked=action.suppress_notifications}}
+      <Input
+        @type="checkbox"
+        @checked={{this.action.suppress_notifications}}
+      />
 
       <span>
         {{i18n "admin.wizard.action.suppress_notifications.description" type="topic"}}
@@ -907,7 +922,7 @@
     </div>
 
     <div class="setting-value">
-      {{input value=action.code}}
+      <Input @value={{this.action.code}} />
     </div>
   </div>
 {{/if}}

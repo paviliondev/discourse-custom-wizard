@@ -84,6 +84,10 @@ class CustomWizard::Submission
     data
   end
 
+  def submitted?
+    !!submitted_at
+  end
+
   def self.get(wizard)
     data = PluginStore.get("#{wizard.id}_#{KEY}", wizard.actor_id).last
     new(wizard, data)
@@ -120,16 +124,23 @@ class CustomWizard::Submission
   end
 
   def self.list(wizard, order_by: nil, page: nil)
+    list_actor_id = wizard.actor_id
+    list_user = wizard.user if wizard.user.present?
+
     params = { plugin_name: "#{wizard.id}_#{KEY}" }
-    params[:key] = wizard.actor_id if wizard.actor_id
+    params[:key] = list_actor_id if list_actor_id
 
     query = PluginStoreRow.where(params)
     result = OpenStruct.new(submissions: [], total: nil)
 
     query.each do |record|
       if (submission_data = ::JSON.parse(record.value)).any?
+        submission_user = list_user || User.find_by(id: record.key.to_i)
+
         submission_data.each do |data|
-          result.submissions.push(new(wizard, data))
+          _wizard = wizard.clone
+          _wizard.user = submission_user if submission_user.present?
+          result.submissions.push(new(_wizard, data))
         end
       end
     end

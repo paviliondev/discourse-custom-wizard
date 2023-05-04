@@ -30,6 +30,7 @@ class CustomWizard::Mapper
 
   OPERATORS = {
     equal: '==',
+    not_equal: "!=",
     greater: '>',
     less: '<',
     greater_or_equal: '>=',
@@ -44,7 +45,7 @@ class CustomWizard::Mapper
 
   def initialize(params)
     @inputs = params[:inputs] || {}
-    @data = params[:data] || {}
+    @data = params[:data] ? params[:data].with_indifferent_access : {}
     @user = params[:user]
     @opts = params[:opts] || {}
   end
@@ -255,7 +256,7 @@ class CustomWizard::Mapper
       end
     end
 
-    if opts[:template] && CustomWizard::Subscription.subscribed?
+    if opts[:template] #&& CustomWizard::Subscription.subscribed?
       template = Liquid::Template.parse(string)
       string = template.render(data)
     end
@@ -267,7 +268,12 @@ class CustomWizard::Mapper
     return nil if data.nil?
     k = keys.shift
     result = data[k]
-    keys.empty? ? result : self.recurse(result, keys)
+
+    if keys.empty?
+      result.is_a?(Hash) ? "" : result
+    else
+      self.recurse(result, keys)
+    end
   end
 
   def bool(value)

@@ -6,11 +6,15 @@ describe CustomWizard::Wizard do
   fab!(:admin_user) { Fabricate(:user, admin: true) }
   let(:template_json) { get_wizard_fixture("wizard") }
   let(:permitted_json) { get_wizard_fixture("wizard/permitted") }
+  let(:guests_permitted_json) { get_wizard_fixture("wizard/guests_permitted") }
+  let(:step_json) { get_wizard_fixture("step/step") }
 
   before do
     Group.refresh_automatic_group!(:trust_level_3)
     @permitted_template = template_json.dup
     @permitted_template["permitted"] = permitted_json["permitted"]
+    @guests_permitted_template = template_json.dup
+    @guests_permitted_template["permitted"] = guests_permitted_json["permitted"]
     @wizard = CustomWizard::Wizard.new(template_json, user)
   end
 
@@ -70,6 +74,28 @@ describe CustomWizard::Wizard do
     expect(@wizard.start).to eq('step_1')
     progress_step('step_1')
     expect(@wizard.start).to eq('step_2')
+  end
+
+  it "determines the user's current step if steps are added" do
+    append_steps
+    progress_step('step_1')
+    progress_step('step_2')
+    progress_step("step_3")
+
+    fourth_step = step_json.dup
+    fourth_step['id'] = "step_4"
+    template = template_json.dup
+    template['steps'] << fourth_step
+
+    CustomWizard::Template.save(template, skip_jobs: true)
+
+    wizard = CustomWizard::Wizard.new(template, user)
+    template['steps'].each do |step_template|
+      wizard.append_step(step_template['id'])
+    end
+
+    expect(wizard.steps.size).to eq(4)
+    expect(wizard.start).to eq(nil)
   end
 
   it "creates a step updater" do
@@ -197,6 +223,30 @@ describe CustomWizard::Wizard do
       expect(
         trusted_user.custom_fields['redirect_to_wizard']
       ).to eq(nil)
+    end
+  end
+
+  context "with subscription and guest wizard" do
+    before do
+      enable_subscription("standard")
+    end
+
+    it "permits admins" do
+      expect(
+        CustomWizard::Wizard.new(@guests_permitted_template, admin_user).permitted?
+      ).to eq(true)
+    end
+
+    it "permits regular users" do
+      expect(
+        CustomWizard::Wizard.new(@guests_permitted_template, user).permitted?
+      ).to eq(true)
+    end
+
+    it "permits guests" do
+      expect(
+        CustomWizard::Wizard.new(@guests_permitted_template, nil, "guest123").permitted?
+      ).to eq(true)
     end
   end
 

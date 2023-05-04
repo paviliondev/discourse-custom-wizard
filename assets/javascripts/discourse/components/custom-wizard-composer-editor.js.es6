@@ -12,6 +12,7 @@ import { alias } from "@ember/object/computed";
 import Site from "discourse/models/site";
 import { uploadIcon } from "discourse/lib/uploads";
 import { dasherize } from "@ember/string";
+import showModal from "discourse/lib/show-modal";
 
 const IMAGE_MARKDOWN_REGEX = /!\[(.*?)\|(\d{1,4}x\d{1,4})(,\s*\d{1,3}%)?(.*?)\]\((upload:\/\/.*?)\)(?!(.*`))/g;
 
@@ -19,7 +20,6 @@ export default ComposerEditor.extend({
   classNameBindings: ["fieldClass"],
   allowUpload: true,
   showLink: false,
-  showHyperlinkBox: false,
   topic: null,
   showToolbar: true,
   focusTarget: "reply",
@@ -29,6 +29,7 @@ export default ComposerEditor.extend({
   draftStatus: "null",
   replyPlaceholder: alias("field.translatedPlaceholder"),
   wizardEventFieldId: null,
+  composerEventPrefix: "wizard-editor",
 
   @on("didInsertElement")
   _composerEditorInit() {
@@ -77,24 +78,13 @@ export default ComposerEditor.extend({
     $input.on("scroll", this._throttledSyncEditorAndPreviewScroll);
     this._bindUploadTarget();
 
-    const wizardEventNames = ["insert-text", "replace-text"];
-    const eventPrefix = this.eventPrefix;
-    this.appEvents.reopen({
-      trigger(name, ...args) {
-        let eventParts = name.split(":");
-        let currentEventPrefix = eventParts[0];
-        let currentEventName = eventParts[1];
+    const field = this.field;
+    this.editorInputClass = `.${dasherize(field.type)}-${dasherize(
+      field.id
+    )} .d-editor-input`;
 
-        if (
-          currentEventPrefix !== "wizard-editor" &&
-          wizardEventNames.some((wen) => wen === currentEventName)
-        ) {
-          let wizardEventName = name.replace(eventPrefix, "wizard-editor");
-          return this._super(wizardEventName, ...args);
-        } else {
-          return this._super(name, ...args);
-        }
-      },
+    this._uppyInstance.on("file-added", () => {
+      this.session.set("wizardEventFieldId", field.id);
     });
   },
 
@@ -114,12 +104,6 @@ export default ComposerEditor.extend({
   @discourseComputed()
   uploadIcon() {
     return uploadIcon(false, this.siteSettings);
-  },
-
-  click(e) {
-    if ($(e.target).hasClass("wizard-composer-hyperlink")) {
-      this.set("showHyperlinkBox", false);
-    }
   },
 
   @bind
@@ -165,7 +149,7 @@ export default ComposerEditor.extend({
         shortcut: "K",
         trimLeading: true,
         unshift: true,
-        sendAction: () => component.set("showHyperlinkBox", true),
+        sendAction: (event) => component.send("showLinkModal", event),
       });
 
       if (this.siteSettings.mentionables_enabled) {
@@ -206,17 +190,18 @@ export default ComposerEditor.extend({
       this._super(...arguments);
     },
 
-    addLink(linkName, linkUrl) {
-      let link = `[${linkName}](${linkUrl})`;
-      this.appEvents.trigger("wizard-editor:insert-text", {
-        fieldId: this.field.id,
-        text: link,
-      });
-      this.set("showHyperlinkBox", false);
-    },
+    showLinkModal(toolbarEvent) {
+      let linkText = "";
+      this._lastSel = toolbarEvent.selected;
 
-    hideBox() {
-      this.set("showHyperlinkBox", false);
+      if (this._lastSel) {
+        linkText = this._lastSel.value;
+      }
+
+      showModal("insert-hyperlink").setProperties({
+        linkText,
+        toolbarEvent,
+      });
     },
 
     showUploadModal() {

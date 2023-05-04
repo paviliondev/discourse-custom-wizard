@@ -20,9 +20,10 @@
       )}}
   </td>
   <td class="input">
-    {{input
-      value=field.name
-      placeholder=(i18n "admin.wizard.custom_field.name.select")}}
+    <Input
+      @value={{this.field.name}}
+      placeholder={{i18n "admin.wizard.custom_field.name.select"}}
+    />
   </td>
   <td class="multi-select">
     {{multi-select

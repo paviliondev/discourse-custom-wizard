@@ -1,1 +1,9 @@
-{{input type="number" step="0.01" id=field.id value=field.value tabindex=field.tabindex}}
+<Input
+  id={{this.field.id}}
+  step="0.01"
+  @type="number"
+  @value={{this.field.value}}
+  tabindex={{this.field.tabindex}}
+  class={{this.fieldClass}}
+/>
+

@@ -21,11 +21,12 @@
 
 <div class="input">
   {{#if showText}}
-    {{input
-      type="text"
-      value=value
-      placeholder=(i18n placeholderKey)
-      change=(action "changeInputValue")}}
+    <Input
+      @type="text"
+      @value={{this.value}}
+      placeholder={{i18n placeholderKey}}
+      {{on "change" (action "changeInputValue")}}
+    />
   {{/if}}
 
   {{#if showComboBox}}
