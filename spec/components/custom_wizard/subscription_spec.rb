@@ -83,6 +83,7 @@ describe CustomWizard::Subscription do
         result.supplier = SubscriptionClientSupplier.new(product_slugs)
         result.resource = SubscriptionClientResource.new
         result.subscriptions = [SubscriptionClientSubscription.new(product_id)]
+        result.products = product_slugs
         result
       end
       let!(:business_subscription_result) { get_subscription_result(business_product_id) }
