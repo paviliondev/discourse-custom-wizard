@@ -109,20 +109,19 @@ class CustomWizard::Subscription
       result = SubscriptionClient.find_subscriptions("discourse-custom-wizard")
 
       if result&.any?
-        slugs = result.supplier.product_slugs
-
-        if slugs.present?
-          ids_and_slugs = result.subscriptions.map do |subscription|
-            { id: subscription.product_id, slug: slugs[subscription.product_id] }
-          end
-
-          id_and_slug = ids_and_slugs.sort do |a, b|
-            PRODUCT_HIERARCHY[a[:slug]] - PRODUCT_HIERARCHY[b[:slug]]
-          end.first
-
-          @product_id = id_and_slug[:id]
-          @product_slug = id_and_slug[:slug]
+        ids_and_slugs = result.subscriptions.map do |subscription|
+          {
+            id: subscription.product_id,
+            slug: result.products[subscription.product_id]
+          }
         end
+
+        id_and_slug = ids_and_slugs.sort do |a, b|
+          PRODUCT_HIERARCHY[a[:slug]] - PRODUCT_HIERARCHY[b[:slug]]
+        end.first
+
+        @product_id = id_and_slug[:id]
+        @product_slug = id_and_slug[:slug]
       end
     end
   end
