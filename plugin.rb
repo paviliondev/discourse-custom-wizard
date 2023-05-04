@@ -5,7 +5,7 @@
 # authors: Angus McLeod, Faizaan Gagan, Robert Barrow, Keegan George, Kaitlin Maddever
 # url: https://github.com/paviliondev/discourse-custom-wizard
 # contact_emails: development@pavilion.tech
-# subscription_url: https://test2.pavilion.tech
+# subscription_url: https://coop.pavilion.tech
 
 gem 'liquid', '5.0.1', require: true
 register_asset 'stylesheets/common/admin.scss'
