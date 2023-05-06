@@ -40,7 +40,10 @@ acceptance("Admin | Custom Fields", function (needs) {
       ),
       "it displays wizard message"
     );
-    await click(".btn-icon-text");
+  });
+  test("add custom fields tab", async (assert) => {
+    await visit("/admin/wizards/custom-fields");
+    await click(".admin-wizard-controls .btn-icon-text");
     assert.ok(
       visible(".wizard-subscription-selector"),
       "custom field class is present"
