@@ -4,7 +4,7 @@ describe CustomWizard::LogSerializer do
   fab!(:user) { Fabricate(:user) }
 
   it 'should return log attributes' do
-    CustomWizard::Log.create('first-test-wizard', 'perform_first_action', 'first_test_user', 'First log message')
+    CustomWizard::Log.create('first-test-wizard', 'perform_first_action', 'first_test_user', 'First log message', 1.day.ago)
     CustomWizard::Log.create('second-test-wizard', 'perform_second_action', 'second_test_user', 'Second log message')
 
     json_array = ActiveModel::ArraySerializer.new(

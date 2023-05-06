@@ -291,6 +291,19 @@ describe CustomWizard::Mapper do
     end
   end
 
+  it "handles not equal pairs" do
+    expect(CustomWizard::Mapper.new(
+      inputs: inputs['not_equals_pair'],
+      data: data,
+      user: user1
+    ).perform).to eq(true)
+    expect(CustomWizard::Mapper.new(
+      inputs: inputs['not_equals_pair'],
+      data: data,
+      user: user2
+    ).perform).to eq(false)
+  end
+
   it "handles greater than pairs" do
     expect(CustomWizard::Mapper.new(
       inputs: inputs['greater_than_pair'],
