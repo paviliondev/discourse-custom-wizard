@@ -98,4 +98,41 @@ acceptance("Admin | Custom Fields Unsuscribed", function (needs) {
       "There is one disabled option for type"
     );
   });
+  test("change custom fields for unsubscribed plan", async (assert) => {
+    await visit("/admin/wizards/custom-fields");
+    await click(".admin-wizard-controls .btn-icon-text");
+
+    const dropdown1 = selectKit(
+      '.admin-wizard-container details:has(summary[name="Filter by: Select a class"])'
+    );
+    await dropdown1.expand();
+    await click('.select-kit-collection li[data-value="topic"]');
+    const serializerDropdown = selectKit(
+      ".admin-wizard-container details.multi-select"
+    );
+    await serializerDropdown.expand();
+    let enabledOptions1 = findAll(
+      ".admin-wizard-container details.multi-select ul li"
+    );
+    assert.equal(
+      enabledOptions1.length,
+      2,
+      "There are two enabled options in the serializer dropdown for Topic"
+    );
+    await serializerDropdown.collapse();
+    const dropdown2 = selectKit(
+      '.admin-wizard-container details:has(summary[name="Filter by: Topic"])'
+    );
+    await dropdown2.expand();
+    await click('.select-kit-collection li[data-value="post"]');
+    await serializerDropdown.expand();
+    let enabledOptions2 = findAll(
+      ".admin-wizard-container details.multi-select ul li"
+    );
+    assert.equal(
+      enabledOptions2.length,
+      1,
+      "There is one enabled option in the serializer dropdown for Post"
+    );
+  });
 });
