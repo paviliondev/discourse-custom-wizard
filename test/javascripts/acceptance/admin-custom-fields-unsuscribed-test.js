@@ -29,12 +29,45 @@ acceptance("Admin | Custom Fields Unsuscribed", function (needs) {
     server.get("/admin/wizards/custom-fields", () => {
       return helper.response(getCustomFields);
     });
+    server.put("/admin/wizards/custom-fields", () => {
+      return helper.response({ success: "OK" });
+    });
   });
+
+  async function selectTypeAndSerializerAndFillInName(
+    type,
+    serializer,
+    name,
+    summaryName
+  ) {
+    const typeDropdown = selectKit(
+      `.admin-wizard-container details:has(summary[name="${summaryName}"])`
+    );
+    await typeDropdown.expand();
+    await click(
+      `.select-kit-collection li[data-value="${type.toLowerCase()}"]`
+    );
+
+    const serializerDropdown = selectKit(
+      ".admin-wizard-container details.multi-select"
+    );
+    await serializerDropdown.expand();
+    await click(
+      `.select-kit-collection li[data-value="${serializer
+        .toLowerCase()
+        .replace(/ /g, "_")}"]`
+    );
+
+    await fillIn(".admin-wizard-container input", name);
+  }
 
   test("Navigate to custom fields tab", async (assert) => {
     await visit("/admin/wizards/custom-fields");
     assert.ok(find("table"));
-    assert.ok(findAll("table tbody tr").length === 9);
+    assert.ok(
+      findAll("table tbody tr").length === 4,
+      "Display loaded custom fields"
+    );
     assert.ok(
       query(".message-content").innerText.includes(
         "View, create, edit and destroy custom fields"
@@ -133,6 +166,77 @@ acceptance("Admin | Custom Fields Unsuscribed", function (needs) {
       enabledOptions2.length,
       1,
       "There is one enabled option in the serializer dropdown for Post"
+    );
+  });
+
+  test("Create Topic and Post custom fields", async (assert) => {
+    await visit("/admin/wizards/custom-fields");
+    assert.ok(
+      findAll("table tbody tr").length === 4,
+      "Display loaded custom fields"
+    );
+    await click(".admin-wizard-controls .btn-icon-text");
+
+    const dropdownTopic = selectKit(
+      '.admin-wizard-container details:has(summary[name="Filter by: Select a class"])'
+    );
+    await dropdownTopic.expand();
+    await click('.select-kit-collection li[data-value="topic"]');
+
+    await selectTypeAndSerializerAndFillInName(
+      "String",
+      "Topic View",
+      "Topic Custom Field",
+      "Filter by: Select a type"
+    );
+
+    await click(".actions .save");
+
+    assert.ok(
+      query(
+        ".admin-wizard-container tbody tr:first-child td:nth-child(1) label"
+      ).innerText.includes("topic"),
+      "Topic custom field is displayed"
+    );
+    assert.ok(
+      query(
+        ".admin-wizard-container tbody tr:first-child td:nth-child(3) label"
+      ).innerText.includes("Topic Custom Field"),
+      "Topic custom field name is displayed"
+    );
+
+    await click(".admin-wizard-controls .btn-icon-text");
+
+    const dropdownPost = selectKit(
+      '.admin-wizard-container details:has(summary[name="Filter by: Select a class"])'
+    );
+    await dropdownPost.expand();
+    await click('.select-kit-collection li[data-value="post"]');
+
+    await selectTypeAndSerializerAndFillInName(
+      "Boolean",
+      "Post",
+      "Post Custom Field",
+      "Filter by: Select a type"
+    );
+
+    await click(".actions .save");
+
+    assert.ok(
+      query(
+        ".admin-wizard-container tbody tr:first-child td:nth-child(1) label"
+      ).innerText.includes("post"),
+      "Post custom field is displayed"
+    );
+    assert.ok(
+      query(
+        ".admin-wizard-container tbody tr:first-child td:nth-child(3) label"
+      ).innerText.includes("Post Custom Field"),
+      "Post custom field name is displayed"
+    );
+    assert.ok(
+      findAll("table tbody tr").length === 6,
+      "Display added custom fields"
     );
   });
 });

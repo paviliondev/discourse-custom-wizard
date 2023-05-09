@@ -254,41 +254,6 @@ const getCustomFields = {
       type: "boolean",
       serializers: null,
     },
-    {
-      id: "external",
-      klass: "post",
-      name: "missing uploads",
-      type: "json",
-      serializers: null,
-    },
-    {
-      id: "external",
-      klass: "post",
-      name: "missing uploads ignored",
-      type: "boolean",
-      serializers: null,
-    },
-    {
-      id: "external",
-      klass: "post",
-      name: "notice",
-      type: "json",
-      serializers: null,
-    },
-    {
-      id: "external",
-      klass: "post",
-      name: "local_dates",
-      type: "json",
-      serializers: null,
-    },
-    {
-      id: "external",
-      klass: "post",
-      name: "has_polls",
-      type: "boolean",
-      serializers: null,
-    },
   ],
 };
 const getWizardTestingLog = {
