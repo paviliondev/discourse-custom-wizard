@@ -4,7 +4,7 @@ import {
   visible,
 } from "discourse/tests/helpers/qunit-helpers";
 import { test } from "qunit";
-import { click, findAll, visit } from "@ember/test-helpers";
+import { click, findAll, visit, waitUntil } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 import {
   getCustomFields,
@@ -30,6 +30,9 @@ acceptance("Admin | Custom Fields Unsuscribed", function (needs) {
       return helper.response(getCustomFields);
     });
     server.put("/admin/wizards/custom-fields", () => {
+      return helper.response({ success: "OK" });
+    });
+    server.delete("/admin/wizards/custom-fields/topic_custom_field", () => {
       return helper.response({ success: "OK" });
     });
   });
@@ -58,7 +61,28 @@ acceptance("Admin | Custom Fields Unsuscribed", function (needs) {
         .replace(/ /g, "_")}"]`
     );
 
-    await fillIn(".admin-wizard-container input", name);
+    await fillIn(
+      ".admin-wizard-container input",
+      name.toLowerCase().replace(/ /g, "_")
+    );
+  }
+
+  async function waitForSaveMessage() {
+    // Wait for the "Saved custom field" message to appear
+    await waitUntil(
+      () =>
+        document.querySelector(".message-content")?.innerText ===
+        "Saved custom field",
+      { timeout: 5000 }
+    );
+
+    // Wait for the message to change back to the original text
+    await waitUntil(
+      () =>
+        document.querySelector(".message-content")?.innerText ===
+        "View, create, edit and destroy custom fields",
+      { timeout: 15000 }
+    );
   }
 
   test("Navigate to custom fields tab", async (assert) => {
@@ -191,7 +215,8 @@ acceptance("Admin | Custom Fields Unsuscribed", function (needs) {
     );
 
     await click(".actions .save");
-
+    // Wait for the "Saved custom field" message to appear
+    await waitForSaveMessage();
     assert.ok(
       query(
         ".admin-wizard-container tbody tr:first-child td:nth-child(1) label"
@@ -201,7 +226,7 @@ acceptance("Admin | Custom Fields Unsuscribed", function (needs) {
     assert.ok(
       query(
         ".admin-wizard-container tbody tr:first-child td:nth-child(3) label"
-      ).innerText.includes("Topic Custom Field"),
+      ).innerText.includes("topic_custom_field"),
       "Topic custom field name is displayed"
     );
 
@@ -221,7 +246,8 @@ acceptance("Admin | Custom Fields Unsuscribed", function (needs) {
     );
 
     await click(".actions .save");
-
+    // Wait for the "Saved custom field" message to appear
+    await waitForSaveMessage();
     assert.ok(
       query(
         ".admin-wizard-container tbody tr:first-child td:nth-child(1) label"
@@ -231,12 +257,100 @@ acceptance("Admin | Custom Fields Unsuscribed", function (needs) {
     assert.ok(
       query(
         ".admin-wizard-container tbody tr:first-child td:nth-child(3) label"
-      ).innerText.includes("Post Custom Field"),
+      ).innerText.includes("post_custom_field"),
       "Post custom field name is displayed"
     );
     assert.ok(
       findAll("table tbody tr").length === 6,
       "Display added custom fields"
+    );
+  });
+  test("Update Topic custom field", async (assert) => {
+    await visit("/admin/wizards/custom-fields");
+    await click(".admin-wizard-controls .btn-icon-text");
+    const dropdownTopic = selectKit(
+      '.admin-wizard-container details:has(summary[name="Filter by: Select a class"])'
+    );
+    await dropdownTopic.expand();
+    await click('.select-kit-collection li[data-value="topic"]');
+    await selectTypeAndSerializerAndFillInName(
+      "String",
+      "Topic View",
+      "Topic Custom Field",
+      "Filter by: Select a type"
+    );
+    await click(".actions .save");
+    await waitForSaveMessage();
+    await click(".admin-wizard-container tbody tr:first-child button");
+    await selectTypeAndSerializerAndFillInName(
+      "Boolean",
+      "Topic List Item",
+      "Updated Topic Custom Field",
+      "Filter by: String"
+    );
+    await click(".admin-wizard-container tbody tr:first-child .save");
+    await waitForSaveMessage();
+    assert.ok(
+      query(
+        ".admin-wizard-container tbody tr:first-child td:nth-child(1) label"
+      ).innerText.includes("topic"),
+      "Topic custom field is displayed"
+    );
+    assert.ok(
+      query(
+        ".admin-wizard-container tbody tr:first-child td:nth-child(2) label"
+      ).innerText.includes("boolean"),
+      "Updated Type is displayed"
+    );
+    assert.ok(
+      query(
+        ".admin-wizard-container tbody tr:first-child td:nth-child(3) label"
+      ).innerText.includes("updated_topic_custom_field"),
+      "Updated Topic custom field name is displayed"
+    );
+    assert.ok(
+      query(
+        ".admin-wizard-container tbody tr:first-child td:nth-child(4)"
+      ).innerText.includes("topic_view"),
+      "Original Serializer is displayed"
+    );
+    assert.ok(
+      query(
+        ".admin-wizard-container tbody tr:first-child td:nth-child(4)"
+      ).innerText.includes("topic_list_item"),
+      "Updated Serializer is displayed"
+    );
+  });
+  test("Delete Topic custom field", async (assert) => {
+    await visit("/admin/wizards/custom-fields");
+    assert.ok(
+      findAll("table tbody tr").length === 4,
+      "Display loaded custom fields"
+    );
+    await click(".admin-wizard-controls .btn-icon-text");
+
+    const dropdownTopic = selectKit(
+      '.admin-wizard-container details:has(summary[name="Filter by: Select a class"])'
+    );
+    await dropdownTopic.expand();
+    await click('.select-kit-collection li[data-value="topic"]');
+    await selectTypeAndSerializerAndFillInName(
+      "String",
+      "Topic View",
+      "Topic Custom Field",
+      "Filter by: Select a type"
+    );
+    await click(".actions .save");
+    await waitForSaveMessage();
+    assert.ok(
+      findAll("table tbody tr").length === 5,
+      "Display added custom fields"
+    );
+    await click(".admin-wizard-container tbody tr:first-child button");
+    await click(".actions .destroy");
+    assert.ok(
+      findAll("table tbody tr").length === 4,
+      "Display custom fields without deleted fields"
     );
   });
 });
