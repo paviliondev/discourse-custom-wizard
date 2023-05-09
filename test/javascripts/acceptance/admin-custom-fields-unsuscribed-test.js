@@ -1,17 +1,13 @@
-import {
-  acceptance,
-  query,
-  visible,
-} from "discourse/tests/helpers/qunit-helpers";
+import { acceptance, query } from "discourse/tests/helpers/qunit-helpers";
 import { test } from "qunit";
-import { click, findAll, visit } from "@ember/test-helpers";
+import { findAll, visit } from "@ember/test-helpers";
 import {
   getCustomFields,
   getUnsubscribedAdminWizards,
   getWizard,
 } from "../helpers/admin-wizard";
 
-acceptance("Admin | Custom Fields", function (needs) {
+acceptance("Admin | Custom Fields Unsuscribed", function (needs) {
   needs.user();
   needs.settings({
     custom_wizard_enabled: true,
@@ -30,7 +26,7 @@ acceptance("Admin | Custom Fields", function (needs) {
     });
   });
 
-  test("viewing custom fields tab", async (assert) => {
+  test("Navigate to custom fields tab", async (assert) => {
     await visit("/admin/wizards/custom-fields");
     assert.ok(find("table"));
     assert.ok(findAll("table tbody tr").length === 9);
@@ -40,20 +36,5 @@ acceptance("Admin | Custom Fields", function (needs) {
       ),
       "it displays wizard message"
     );
-  });
-  test("add custom fields tab", async (assert) => {
-    await visit("/admin/wizards/custom-fields");
-    await click(".admin-wizard-controls .btn-icon-text");
-    assert.ok(
-      visible(".wizard-subscription-selector"),
-      "custom field class is present"
-    );
-    assert.ok(
-      visible(".wizard-subscription-selector-header"),
-      "custom field type is present"
-    );
-    assert.ok(visible(".input"), "custom field name is present");
-    assert.ok(visible(".multi-select"), "custom field serializer is present");
-    assert.ok(visible(".actions"), "custom field action buttons are present");
   });
 });
