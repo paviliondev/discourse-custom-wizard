@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class CustomWizard::Subscription
   STANDARD_PRODUCT_ID = 'prod_MH11woVoZU5AWb'
-  BUSINESS_PRODUCT_ID = 'prod_MH0wT627okh3Ef'
+  BUSINESS_PRODUCT_ID = 'prod_NWKl5xWIn5DA0i'
   COMMUNITY_PRODUCT_ID = 'prod_MU7l9EjxhaukZ7'
 
   def self.attributes
