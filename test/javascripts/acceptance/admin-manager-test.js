@@ -45,7 +45,7 @@ acceptance("Admin | Manager", function (needs) {
       () =>
         document.querySelector(".message-content")?.innerText ===
           "Export, import or destroy wizards" &&
-        !document.querySelector(".message-content")?.nextElementSibling &&
+        !document.querySelector(".message-block.primary ul") &&
         !find(".message-block.primary svg").classList.contains(
           "d-icon-check-circle"
         ),
