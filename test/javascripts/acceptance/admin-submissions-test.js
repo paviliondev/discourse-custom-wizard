@@ -205,4 +205,25 @@ acceptance("Admin | Submissions", function (needs) {
       .dom("table thead th:nth-child(2)")
       .hasText("User", "User column is displayed after reset");
   });
+  test("Download submissions", async (assert) => {
+    await visit("/admin/wizards/submissions");
+    const wizards = await selectKit(".select-kit");
+    await wizards.expand();
+    await wizards.selectRowByValue("this_is_testing_wizard");
+
+    const downloadLinks = findAll(".download-link");
+    assert.ok(downloadLinks.length > 1, "Download links are present");
+
+    const downloadLink = downloadLinks[1];
+    await click(downloadLink);
+
+    const expectedURL =
+      "/admin/wizards/submissions/this_is_testing_wizard/download";
+    const actualURL = new URL(downloadLink.href);
+    assert.equal(
+      actualURL.pathname,
+      expectedURL,
+      "Download link has correct URL"
+    );
+  });
 });
