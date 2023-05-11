@@ -52,7 +52,7 @@ acceptance("Admin | Manager", function (needs) {
       { timeout: 15000 }
     );
     // Wait an additional second after the conditions are met
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Ember.RSVP.Promise((resolve) => setTimeout(resolve, 1000));
   }
 
   test("viewing manager fields content", async (assert) => {

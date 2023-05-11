@@ -83,7 +83,7 @@ acceptance("Admin | Custom Fields Unsuscribed", function (needs) {
         "View, create, edit and destroy custom fields",
       { timeout: 15000 }
     );
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Ember.RSVP.Promise((resolve) => setTimeout(resolve, 1000));
   }
 
   test("Navigate to custom fields tab", async (assert) => {
