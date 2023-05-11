@@ -1,6 +1,6 @@
 import { acceptance, query } from "discourse/tests/helpers/qunit-helpers";
 import { test } from "qunit";
-import { click, find, findAll, visit } from "@ember/test-helpers";
+import { click, find, findAll, visit, waitUntil } from "@ember/test-helpers";
 import {
   getUnsubscribedAdminWizards,
   getWizard,
@@ -33,6 +33,24 @@ acceptance("Admin | Manager", function (needs) {
       });
     });
   });
+  async function waitForDestructionAndResetMessage() {
+    // Wait for the "Destruction complete" message to appear
+    await waitUntil(
+      () =>
+        document.querySelector(".message-content")?.innerText ===
+        "Destruction complete",
+      { timeout: 5000 }
+    );
+
+    // Wait for the message to change back to the original text
+    await waitUntil(
+      () =>
+        document.querySelector(".message-content")?.innerText ===
+        "Export, import or destroy wizards",
+      { timeout: 15000 }
+    );
+  }
+
   test("viewing manager fields content", async (assert) => {
     await visit("/admin/wizards/manager");
     assert.ok(
@@ -78,6 +96,7 @@ acceptance("Admin | Manager", function (needs) {
       "the destroy button is enabled when destroy checkbox is clicked"
     );
     await click("#destroy-button");
+    await waitForDestructionAndResetMessage();
     assert.notOk(
       find('table tr[data-wizard-id="this-is-testing-wizard"]'),
       "the wizard row is removed after destroy button is clicked"
