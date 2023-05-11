@@ -23,6 +23,15 @@ acceptance("Admin | Manager", function (needs) {
     server.get("/admin/wizards/wizard", () => {
       return helper.response(getWizard);
     });
+    server.delete("/admin/wizards/manager/destroy", () => {
+      return helper.response({
+        success: "OK",
+        destroyed: [
+          { id: "this_is_testing_wizard", name: "This is testing wizard" },
+        ],
+        failures: [],
+      });
+    });
   });
   test("viewing manager fields content", async (assert) => {
     await visit("/admin/wizards/manager");
@@ -68,10 +77,10 @@ acceptance("Admin | Manager", function (needs) {
       !destroyButton.hasAttribute("disabled"),
       "the destroy button is enabled when destroy checkbox is clicked"
     );
-    await click(destroyCheck);
-    assert.ok(
-      destroyButton.hasAttribute("disabled"),
-      "the destroy button is disabled when destroy checkbox is unchecked"
+    await click("#destroy-button");
+    assert.notOk(
+      find('table tr[data-wizard-id="this-is-testing-wizard"]'),
+      "the wizard row is removed after destroy button is clicked"
     );
   });
 });
