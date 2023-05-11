@@ -45,7 +45,10 @@ acceptance("Admin | Manager", function (needs) {
       () =>
         document.querySelector(".message-content")?.innerText ===
           "Export, import or destroy wizards" &&
-        !document.querySelector(".message-content")?.nextElementSibling,
+        !document.querySelector(".message-content")?.nextElementSibling &&
+        !find(".message-block.primary svg").classList.contains(
+          "d-icon-check-circle"
+        ),
       { timeout: 15000 }
     );
   }
@@ -74,6 +77,7 @@ acceptance("Admin | Manager", function (needs) {
       exportButton.hasAttribute("disabled"),
       "the export button is disabled when export checkbox is unchecked"
     );
+
     await click(exportCheck);
     assert.ok(
       !exportButton.hasAttribute("disabled"),
@@ -95,6 +99,7 @@ acceptance("Admin | Manager", function (needs) {
       "the destroy button is enabled when destroy checkbox is clicked"
     );
     await click("#destroy-button");
+
     assert.notOk(
       find('table tr[data-wizard-id="this-is-testing-wizard"]'),
       "the wizard row is removed after destroy button is clicked"
