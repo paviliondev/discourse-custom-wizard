@@ -65,13 +65,16 @@
   </div>
 
   <div class="setting-value">
-    {{combo-box
+    {{wizard-subscription-selector
       value=field.type
-      content=fieldTypes
+      feature="field"
+      attribute="type"
       onChange=(action "changeType")
+      wizard=wizard
       options=(hash
         none="admin.wizard.select_type"
-      )}}
+      )
+    }}
   </div>
 </div>
 
