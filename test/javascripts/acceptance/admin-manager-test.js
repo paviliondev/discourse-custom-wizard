@@ -34,7 +34,6 @@ acceptance("Admin | Manager", function (needs) {
     });
   });
   async function waitForDestructionAndResetMessage() {
-    // Wait for the "Destruction complete" message to appear
     await waitUntil(
       () =>
         document.querySelector(".message-content")?.innerText ===
@@ -42,11 +41,11 @@ acceptance("Admin | Manager", function (needs) {
       { timeout: 5000 }
     );
 
-    // Wait for the message to change back to the original text
     await waitUntil(
       () =>
         document.querySelector(".message-content")?.innerText ===
-        "Export, import or destroy wizards",
+          "Export, import or destroy wizards" &&
+        !document.querySelector(".message-content")?.nextElementSibling,
       { timeout: 15000 }
     );
   }
@@ -96,10 +95,10 @@ acceptance("Admin | Manager", function (needs) {
       "the destroy button is enabled when destroy checkbox is clicked"
     );
     await click("#destroy-button");
-    await waitForDestructionAndResetMessage();
     assert.notOk(
       find('table tr[data-wizard-id="this-is-testing-wizard"]'),
       "the wizard row is removed after destroy button is clicked"
     );
+    await waitForDestructionAndResetMessage();
   });
 });
