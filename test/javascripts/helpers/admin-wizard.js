@@ -1,6 +1,7 @@
 const getWizard = {
   wizard_list: [
     { id: "this_is_testing_wizard", name: "This is testing wizard" },
+    { id: "another_wizard", name: "another wizard" },
   ],
   field_types: {
     text: {
@@ -316,6 +317,56 @@ const getWizardSubmissions = {
     },
   ],
   total: 1,
+};
+const getAnotherWizardSubmission = {
+  wizard: { id: "another_wizard", name: "another wizard" },
+  submissions: [
+    {
+      id: "00925bcd58366d07fb698dc5",
+      fields: {
+        step_1_field_1: {
+          value: "More content here by user",
+          type: "text",
+          label: "Content to be inserted",
+        },
+        step_2_field_1: {
+          value: "body of the content created by the user",
+          type: "textarea",
+          label: "Step 2 content",
+        },
+      },
+      submitted_at: "2023-05-10T20:58:11-04:00",
+      user: {
+        id: 29,
+        username: "anotheruser",
+        name: null,
+        avatar_template: "",
+      },
+    },
+    {
+      id: "dc094efcd4873d6da4666c1a",
+      fields: {
+        step_1_field_1: {
+          value: "Title for the content being created",
+          type: "text",
+          label: "Content to be inserted",
+        },
+        step_2_field_1: {
+          value: "THis is the body of the content that will be created",
+          type: "textarea",
+          label: "Step 2 content",
+        },
+      },
+      submitted_at: "2023-05-10T20:56:14-04:00",
+      user: {
+        id: 1,
+        username: "someuser",
+        name: null,
+        avatar_template: "",
+      },
+    },
+  ],
+  total: 2,
 };
 const getBusinessAdminWizard = {
   subscribed: true,
@@ -694,4 +745,5 @@ export {
   getCreatedWizard,
   getNewApi,
   putNewApi,
+  getAnotherWizardSubmission,
 };
