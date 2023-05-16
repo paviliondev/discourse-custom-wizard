@@ -51,6 +51,15 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
     });
   });
 
+  async function appendText(selector, text) {
+    let element = document.querySelector(selector);
+    if (element) {
+      let currentValue = element.value;
+      let newValue = currentValue + text;
+      await fillIn(selector, newValue);
+    }
+  }
+
   test("Displaying all tabs except API", async (assert) => {
     await visit("/admin/wizards");
     const list = find(".admin-controls li");
@@ -132,6 +141,160 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
       !visible(".wizard-custom-field button.undo-changes"),
       "clear button is not rendered"
     );
+    await appendText(
+      ".wizard-custom-step .wizard-text-editor textarea",
+      "Input in step description composer"
+    );
+    await click(".wizard-custom-step .wizard-editor-gutter button:first-child");
+    assert.strictEqual(
+      query(
+        ".wizard-custom-step .wizard-text-editor .d-editor-preview-wrapper p"
+      ).textContent.trim(),
+      "Input in step description composer"
+    );
+    await appendText(
+      ".wizard-custom-step .wizard-text-editor textarea",
+      "\n\n**Bold text**"
+    );
+    let boldText = await query(
+      ".wizard-custom-step .wizard-text-editor .d-editor-preview-wrapper strong"
+    ).innerHTML.trim();
+    assert.strictEqual(
+      boldText,
+      "Bold text",
+      "The bold text in the preview wrapper should be 'Bold Text'"
+    );
+    await appendText(
+      ".wizard-custom-step .wizard-text-editor textarea",
+      "\n\n*emphasized text*"
+    );
+    let empText = await query(
+      ".wizard-custom-step .wizard-text-editor .d-editor-preview-wrapper em"
+    ).innerHTML.trim();
+    assert.strictEqual(
+      empText,
+      "emphasized text",
+      "The emphasized text in the preview wrapper should be 'emphasized text'"
+    );
+    await appendText(
+      ".wizard-custom-step .wizard-text-editor textarea",
+      "\n\n> Blockqoute text"
+    );
+    let blockquoteText = await query(
+      ".wizard-custom-step .wizard-text-editor .d-editor-preview-wrapper blockquote p"
+    ).innerHTML.trim();
+    assert.strictEqual(
+      blockquoteText,
+      "Blockqoute text",
+      "The emphasized text in the preview wrapper should be 'Blockqoute text'"
+    );
+    await appendText(
+      ".wizard-custom-step .wizard-text-editor textarea",
+      `\n\n\`\`\`
+      \code text
+      \n\`\`\``
+    );
+    let codeText = await query(
+      ".wizard-custom-step .wizard-text-editor .d-editor-preview-wrapper code"
+    ).innerHTML.trim();
+    assert.strictEqual(
+      codeText,
+      "code text",
+      "The emphasized text in the preview wrapper should be 'code text'"
+    );
+    await appendText(
+      ".wizard-custom-step .wizard-text-editor textarea",
+      `\n\n* List item\n* List item`
+    );
+    let listItems = findAll(
+      ".wizard-custom-step .wizard-text-editor .d-editor-preview-wrapper ul li"
+    );
+    assert.strictEqual(
+      listItems.length,
+      2,
+      "There should be two list items in the unordered list in the preview wrapper"
+    );
+    assert.strictEqual(
+      listItems[0].textContent.trim(),
+      "List item",
+      "The first list item should be 'List item'"
+    );
+    assert.strictEqual(
+      listItems[1].textContent.trim(),
+      "List item",
+      "The second list item should be 'List item'"
+    );
+    await appendText(
+      ".wizard-custom-step .wizard-text-editor textarea",
+      `\n\n1. List item\n1. List item`
+    );
+    let orderedListItems = findAll(
+      ".wizard-custom-step .wizard-text-editor .d-editor-preview-wrapper ol li"
+    );
+    assert.strictEqual(
+      orderedListItems.length,
+      2,
+      "There should be two list items in the ordered list in the preview wrapper"
+    );
+    assert.strictEqual(
+      orderedListItems[0].textContent.trim(),
+      "List item",
+      "The first list item should be 'List item'"
+    );
+    assert.strictEqual(
+      orderedListItems[1].textContent.trim(),
+      "List item",
+      "The second list item should be 'List item'"
+    );
+    await appendText(
+      ".wizard-custom-step .wizard-text-editor textarea",
+      `\n\n`
+    );
+    await click(
+      ".wizard-custom-step .wizard-text-editor .d-editor button.link"
+    );
+    assert.ok(exists(".insert-link.modal-body"), "hyperlink modal visible");
+
+    await fillIn(".modal-body .link-url", "google.com");
+    await fillIn(".modal-body .link-text", "Google");
+    await click(".modal-footer button.btn-primary");
+    let urlText = await query(
+      ".wizard-custom-step .wizard-text-editor .d-editor-preview-wrapper a"
+    ).innerHTML.trim();
+    assert.strictEqual(
+      urlText,
+      "Google",
+      "The link text in the preview wrapper should be 'Google'"
+    );
+    // pauseTest();
+    await click(
+      ".wizard-custom-step .wizard-text-editor .d-editor button.local-dates"
+    );
+    assert.ok(
+      exists(".discourse-local-dates-create-modal.modal-body"),
+      "Insert date-time modal visible"
+    );
+    assert.ok(
+      !exists(
+        ".discourse-local-dates-create-modal.modal-body .advanced-options"
+      ),
+      "Advanced mode not visible"
+    );
+    await click(".modal-footer button.advanced-mode-btn");
+    assert.ok(
+      exists(
+        ".discourse-local-dates-create-modal.modal-body .advanced-options"
+      ),
+      "Advanced mode is visible"
+    );
+    await click(".modal-footer button.btn-primary");
+    assert.ok(
+      exists(
+        ".wizard-custom-step .wizard-text-editor .d-editor-preview-wrapper span.discourse-local-date"
+      ),
+      "Date inserted"
+    );
+
     const fieldOneText = "step_1_field_1 (step_1_field_1)";
     const fieldOneBtn = find(`.field button:contains(${fieldOneText})`);
     assert.equal(fieldOneBtn.length, 1, "Creating a field");
@@ -144,9 +307,14 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
     let fieldButtonText = $.trim(
       $(".field div[data-id='step_1_field_1'] button").text()
     );
+    // pauseTest();
     assert.ok(
       fieldButtonText.includes(fieldTitle),
       "The step button changes according to title"
+    );
+    await fillIn(
+      ".wizard-custom-field textarea[name='description']",
+      "First step field description"
     );
     await click(`.wizard-custom-field button.undo-changes`);
     fieldButtonText = $(".field div[data-id='step_1_field_1'] button")
