@@ -244,6 +244,7 @@ const custom_field = {
 
 export function buildFieldTypes(types) {
   wizardSchema.field.types = types;
+  wizardSchema.field.type = Object.keys(types);
 }
 
 field.type = Object.keys(field.types);
