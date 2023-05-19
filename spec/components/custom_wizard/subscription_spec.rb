@@ -78,17 +78,18 @@ describe CustomWizard::Subscription do
     end
 
     context "with subscriptions" do
-      def get_subscription_result(product_id)
+      def get_subscription_result(product_ids)
         result = SubscriptionClient::Subscriptions::Result.new
         result.supplier = SubscriptionClientSupplier.new(product_slugs)
         result.resource = SubscriptionClientResource.new
-        result.subscriptions = [SubscriptionClientSubscription.new(product_id)]
+        result.subscriptions = product_ids.map { |product_id| SubscriptionClientSubscription.new(product_id) }
         result.products = product_slugs
         result
       end
-      let!(:business_subscription_result) { get_subscription_result(business_product_id) }
-      let!(:standard_subscription_result) { get_subscription_result(standard_product_id) }
-      let!(:community_subscription_result) { get_subscription_result(community_product_id) }
+      let!(:business_subscription_result) { get_subscription_result([business_product_id]) }
+      let!(:standard_subscription_result) { get_subscription_result([standard_product_id]) }
+      let!(:community_subscription_result) { get_subscription_result([community_product_id]) }
+      let!(:multiple_subscription_result) { get_subscription_result([community_product_id, business_product_id]) }
 
       it "handles mapped values" do
         SubscriptionClient.stubs(:find_subscriptions).returns(standard_subscription_result)
@@ -141,6 +142,16 @@ describe CustomWizard::Subscription do
 
         it "community features are included" do
           expect(described_class.includes?(:action, :type, 'create_category')).to eq(true)
+        end
+      end
+
+      context "with multiple subscriptions" do
+        before do
+          SubscriptionClient.stubs(:find_subscriptions).returns(multiple_subscription_result)
+        end
+
+        it "detects correct type in hierarchy" do
+          expect(described_class.type).to eq(:business)
         end
       end
     end

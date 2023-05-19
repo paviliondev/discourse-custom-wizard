@@ -117,7 +117,7 @@ class CustomWizard::Subscription
         end
 
         id_and_slug = ids_and_slugs.sort do |a, b|
-          PRODUCT_HIERARCHY[a[:slug]] - PRODUCT_HIERARCHY[b[:slug]]
+          PRODUCT_HIERARCHY.index(b[:slug]) - PRODUCT_HIERARCHY.index(a[:slug])
         end.first
 
         @product_id = id_and_slug[:id]
