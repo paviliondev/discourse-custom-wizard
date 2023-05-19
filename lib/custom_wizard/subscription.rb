@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 class CustomWizard::Subscription
-  STANDARD_PRODUCT_ID = 'prod_MH11woVoZU5AWb'
-  BUSINESS_PRODUCT_ID = 'prod_MH0wT627okh3Ef'
-  COMMUNITY_PRODUCT_ID = 'prod_MU7l9EjxhaukZ7'
+  PRODUCT_HIERARCHY = %w[
+    community
+    standard
+    business
+  ]
 
   def self.attributes
     {
@@ -99,8 +101,29 @@ class CustomWizard::Subscription
     }
   end
 
+  attr_accessor :product_id,
+                :product_slug
+
   def initialize
-    @subscription = find_subscription
+    if CustomWizard::Subscription.client_installed?
+      result = SubscriptionClient.find_subscriptions("discourse-custom-wizard")
+
+      if result&.any?
+        ids_and_slugs = result.subscriptions.map do |subscription|
+          {
+            id: subscription.product_id,
+            slug: result.products[subscription.product_id]
+          }
+        end
+
+        id_and_slug = ids_and_slugs.sort do |a, b|
+          PRODUCT_HIERARCHY[a[:slug]] - PRODUCT_HIERARCHY[b[:slug]]
+        end.first
+
+        @product_id = id_and_slug[:id]
+        @product_slug = id_and_slug[:slug]
+      end
+    end
   end
 
   def includes?(feature, attribute, value = nil)
@@ -140,36 +163,19 @@ class CustomWizard::Subscription
   end
 
   def standard?
-    @subscription.product_id === STANDARD_PRODUCT_ID
+    product_slug === "standard"
   end
 
   def business?
-    @subscription.product_id === BUSINESS_PRODUCT_ID
+    product_slug === "business"
   end
 
   def community?
-    @subscription.product_id === COMMUNITY_PRODUCT_ID
+    product_slug === "community"
   end
 
-  def client_installed?
+  def self.client_installed?
     defined?(SubscriptionClient) == 'constant' && SubscriptionClient.class == Module
-  end
-
-  def find_subscription
-    subscription = nil
-
-    if client_installed?
-      subscription = SubscriptionClientSubscription.active
-        .where(product_id: [STANDARD_PRODUCT_ID, BUSINESS_PRODUCT_ID, COMMUNITY_PRODUCT_ID])
-        .order("product_id = '#{BUSINESS_PRODUCT_ID}' DESC")
-        .first
-    end
-
-    unless subscription
-      subscription = OpenStruct.new(product_id: nil)
-    end
-
-    subscription
   end
 
   def self.subscribed?
@@ -190,10 +196,6 @@ class CustomWizard::Subscription
 
   def self.type
     new.type
-  end
-
-  def self.client_installed?
-    new.client_installed?
   end
 
   def self.includes?(feature, attribute, value)
