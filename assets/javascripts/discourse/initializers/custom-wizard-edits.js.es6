@@ -69,7 +69,7 @@ export default {
         },
 
         _wizardInsertText(text, options) {
-          if (this.session.wizardEventFieldId === this.fieldId) {
+          if (this.session.wizardEventFieldId === this.fieldId && this.element) {
             this.insertText(text, options);
           }
         },
