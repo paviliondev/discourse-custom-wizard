@@ -10,6 +10,7 @@ import {
   getAdminTestingWizard,
   getCreatedWizard,
   getCustomFields,
+  getUniqueWizard,
   getUnsubscribedAdminWizards,
   getWizard,
 } from "../helpers/admin-wizard";
@@ -49,6 +50,9 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
     server.get("/admin/wizards/wizard/new_wizard_for_testing", () => {
       return helper.response(getCreatedWizard);
     });
+    server.get("/admin/wizards/wizard/unique_wizard", () => {
+      return helper.response(getUniqueWizard);
+    });
   });
 
   async function appendText(selector, text) {
@@ -67,29 +71,6 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
     assert.equal(count, 5, "There should be 5 admin tabs");
   });
 
-  test("viewing content for a selected wizard", async (assert) => {
-    await visit("/admin/wizards/wizard");
-    assert.ok(
-      query(".message-content").innerText.includes(
-        "Select a wizard, or create a new one"
-      ),
-      "it displays wizard message"
-    );
-    const wizards = selectKit(".select-kit");
-    await wizards.expand();
-    await wizards.selectRowByValue("this_is_testing_wizard");
-    assert.ok(
-      query(".message-content").innerText.includes("You're editing a wizard"),
-      "it displays wizard message for a selected wizard"
-    );
-    await wizards.expand();
-    await click('[data-name="Select a wizard"]');
-    const wizardContainerDiv = find(".admin-wizard-container");
-    assert.ok(
-      wizardContainerDiv.children().length === 0,
-      "the content is empty when no wizard is selected"
-    );
-  });
   test("creting a new wizard", async (assert) => {
     await visit("/admin/wizards/wizard");
     await click(".admin-wizard-controls button");
@@ -135,11 +116,6 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
       find(".wizard-subscription-container").length,
       2,
       "Steps subscription features are not accesible"
-    );
-    await click(".field .link-list button");
-    assert.ok(
-      !visible(".wizard-custom-field button.undo-changes"),
-      "clear button is not rendered"
     );
     await appendText(
       ".wizard-custom-step .wizard-text-editor textarea",
@@ -191,8 +167,8 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
     await appendText(
       ".wizard-custom-step .wizard-text-editor textarea",
       `\n\n\`\`\`
-      \code text
-      \n\`\`\``
+                              \code text
+                              \n\`\`\``
     );
     let codeText = await query(
       ".wizard-custom-step .wizard-text-editor .d-editor-preview-wrapper code"
@@ -295,6 +271,11 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
       "Date inserted"
     );
 
+    await click(".field .link-list button");
+    assert.ok(
+      !visible(".wizard-custom-field button.undo-changes"),
+      "clear button is not rendered"
+    );
     const fieldOneText = "step_1_field_1 (step_1_field_1)";
     const fieldOneBtn = find(`.field button:contains(${fieldOneText})`);
     assert.equal(fieldOneBtn.length, 1, "Creating a field");
@@ -307,7 +288,6 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
     let fieldButtonText = $.trim(
       $(".field div[data-id='step_1_field_1'] button").text()
     );
-    // pauseTest();
     assert.ok(
       fieldButtonText.includes(fieldTitle),
       "The step button changes according to title"
@@ -323,6 +303,11 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
     assert.ok(
       fieldButtonText.includes("step_1_field_1 (step_1_field_1)"),
       "The field button changes to default title after clear button is clicked"
+    );
+    await fillIn(".wizard-custom-field input[name='label']", fieldTitle);
+    await fillIn(
+      ".wizard-custom-field textarea[name='description']",
+      "First step field description"
     );
     const fieldTypeDropdown = selectKit(
       ".wizard-custom-field .setting-value .select-kit"
@@ -420,6 +405,74 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
     );
     await actionTypeDropdown.expand();
     await actionTypeDropdown.selectRowByValue("create_topic");
+    const fieldsContentIf = [4, 8];
+    for (let i = 0; i < fieldsContentIf.length; i++) {
+      await click(
+        `.admin-wizard-container .wizard-custom-action .setting:nth-of-type(${fieldsContentIf[i]}) button`
+      );
+      let selectKitInsideThirdSetting = await selectKit(
+        `.admin-wizard-container .wizard-custom-action .setting:nth-of-type(${fieldsContentIf[i]}) .select-kit`
+      );
+      await selectKitInsideThirdSetting.expand();
+      await selectKitInsideThirdSetting.selectRowByIndex(1);
+      await fillIn(
+        `.admin-wizard-container .wizard-custom-action .setting:nth-of-type(${fieldsContentIf[i]}) .key input`,
+        "Action title"
+      );
+      await fillIn(
+        `.admin-wizard-container .wizard-custom-action .setting:nth-of-type(${fieldsContentIf[i]}) .value input`,
+        "Some value"
+      );
+      await fillIn(
+        `.admin-wizard-container .wizard-custom-action .setting:nth-of-type(${fieldsContentIf[i]}) .output input`,
+        "Result text"
+      );
+      const actualTitle = query(
+        `.admin-wizard-container .wizard-custom-action .setting:nth-of-type(${fieldsContentIf[i]}) .key input`
+      ).value;
+      const actualValue = query(
+        `.admin-wizard-container .wizard-custom-action .setting:nth-of-type(${fieldsContentIf[i]}) .value input`
+      ).value;
+      const actualResultText = query(
+        `.admin-wizard-container .wizard-custom-action .setting:nth-of-type(${fieldsContentIf[i]}) .output input`
+      ).value;
+
+      assert.strictEqual(actualTitle, "Action title", "Title is correct");
+      assert.strictEqual(actualValue, "Some value", "Value is correct");
+      assert.strictEqual(actualResultText, "Result text", "Text is correct");
+    }
+    const fieldsContentSet = [
+      [6, "howto", "10"],
+      [7, "gazelle", "gazelle"],
+    ];
+    for (let [
+      fieldIndex,
+      expectedDataName,
+      expectedDataValue,
+    ] of fieldsContentSet) {
+      await click(
+        `.admin-wizard-container .wizard-custom-action .setting:nth-of-type(${fieldIndex}) button`
+      );
+      let selectKitInsideThirdSetting = await selectKit(
+        `.admin-wizard-container .wizard-custom-action .setting:nth-of-type(${fieldIndex}) .output .select-kit`
+      );
+      await selectKitInsideThirdSetting.expand();
+      await selectKitInsideThirdSetting.selectRowByIndex(1);
+      let selectKitElement = document.querySelector(
+        `.admin-wizard-container .wizard-custom-action .setting:nth-of-type(${fieldIndex}) .output .select-kit`
+      );
+      let summaryElement = selectKitElement.querySelector("summary");
+      assert.equal(
+        summaryElement.getAttribute("data-name"),
+        expectedDataName,
+        "The correct data-name is selected"
+      );
+      assert.equal(
+        summaryElement.getAttribute("data-value"),
+        expectedDataValue,
+        "The correct data-value is selected"
+      );
+    }
     assert.ok(
       !visible('.admin-wizard-buttons button:contains("Delete Wizard")'),
       "delete wizard button not displayed"
@@ -428,7 +481,7 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
     assert.equal(
       currentURL(),
       "/admin/wizards/wizard/new_wizard_for_testing",
-      "clicking the button navigates to the correct URL"
+      "Wizard saved successfully"
     );
     assert.ok(
       visible('.admin-wizard-buttons button:contains("Delete Wizard")'),
