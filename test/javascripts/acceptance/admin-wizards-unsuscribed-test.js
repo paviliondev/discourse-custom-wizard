@@ -242,7 +242,6 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
       "Google",
       "The link text in the preview wrapper should be 'Google'"
     );
-    // pauseTest();
     await click(
       ".wizard-custom-step .wizard-text-editor .d-editor button.local-dates"
     );
@@ -487,5 +486,102 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
       visible('.admin-wizard-buttons button:contains("Delete Wizard")'),
       "delete wizard button visible"
     );
+  });
+  test("viewing content for a selected wizard", async (assert) => {
+    await visit("/admin/wizards/wizard");
+    assert.ok(
+      query(".message-content").innerText.includes(
+        "Select a wizard, or create a new one"
+      ),
+      "it displays wizard message"
+    );
+    const wizards = selectKit(".select-kit");
+    await wizards.expand();
+
+    await wizards.selectRowByValue("unique_wizard");
+    assert.ok(
+      query(".message-content").innerText.includes("You're editing a wizard"),
+      "it displays wizard message for a selected wizard"
+    );
+    assert.equal(
+      query(".admin-wizard-container .wizard-header input").value,
+      getUniqueWizard.name,
+      "The wizard name is correctly displayed"
+    );
+    // Save wizard Submissions
+    assert.equal(
+      query(".wizard-settings .setting:nth-of-type(1) input").checked,
+      getUniqueWizard.save_submissions,
+      "The save submissions flag is correctly set"
+    );
+
+    // Multiple Submissions
+    assert.equal(
+      query(".wizard-settings .setting:nth-of-type(2) input").checked,
+      getUniqueWizard.multiple_submissions,
+      "The multiple submissions flag is correctly set"
+    );
+
+    // After Signup
+    assert.equal(
+      query(".wizard-settings .setting:nth-of-type(3) input").checked,
+      getUniqueWizard.after_signup,
+      "The after signup flag is correctly set"
+    );
+
+    // Prompt Completion
+    assert.equal(
+      query(".wizard-settings .setting:nth-of-type(4) input").checked,
+      getUniqueWizard.prompt_completion,
+      "The prompt completion flag is correctly set"
+    );
+    // step content
+    for (let i = 0; i < getUniqueWizard.steps.length; i++) {
+      // click on the step that is needed
+      await click(
+        `.wizard-links.step .link-list div:nth-of-type(${
+          i + 1
+        }) button.btn-text`
+      );
+      assert.equal(
+        query(".wizard-custom-step  input[name='title']").value,
+        getUniqueWizard.steps[i].title,
+        "Step title is correct"
+      );
+      assert.equal(
+        query(".wizard-custom-step .wizard-text-editor textarea").value,
+        getUniqueWizard.steps[i].description,
+        "Step description is correct"
+      );
+      // field content
+      for (let j = 0; j < getUniqueWizard.steps[i].fields.length; j++) {
+        await click(
+          `.wizard-links.field .link-list div:nth-of-type(${
+            j + 1
+          }) button.btn-text`
+        );
+        assert.equal(
+          query(".wizard-custom-field.visible .setting:nth-of-type(1) input")
+            .value,
+          getUniqueWizard.steps[i].fields[j].label,
+          "Field title is correct"
+        );
+        assert.equal(
+          query(".wizard-custom-field.visible .setting:nth-of-type(3) textarea")
+            .value,
+          getUniqueWizard.steps[i].fields[j].description,
+          "Field description is correct"
+        );
+        let selectTypeElement = document.querySelector(
+          `.admin-wizard-container .wizard-custom-field.visible .setting:nth-of-type(5) .select-kit`
+        );
+        let summaryElement = selectTypeElement.querySelector("summary");
+        assert.equal(
+          summaryElement.getAttribute("data-value"),
+          getUniqueWizard.steps[i].fields[j].type,
+          "The correct data-value is selected"
+        );
+      }
+    }
   });
 });
