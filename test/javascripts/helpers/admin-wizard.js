@@ -2,6 +2,7 @@ const getWizard = {
   wizard_list: [
     { id: "this_is_testing_wizard", name: "This is testing wizard" },
     { id: "another_wizard", name: "another wizard" },
+    { id: "unique_wizard", name: "Unique wizard for testing" },
   ],
   field_types: {
     text: {
@@ -644,20 +645,30 @@ const getAdminTestingWizard = {
 };
 const getCreatedWizard = {
   id: "new_wizard_for_testing",
-  name: "new wizard for testing",
+  name: "New wizard for testing",
   save_submissions: true,
+  multiple_submissions: false,
+  after_signup: false,
+  prompt_completion: false,
   steps: [
     {
       id: "step_1",
+      title: "step title",
+      raw_description:
+        'Input in step description composer\n\n**Bold text**\n\n*emphasized text*\n\n\u003e Blockqoute text\n\n```\n                              code text\n                              \n```\n\n* List item\n* List item\n\n1. List item\n1. List item\n\n[Google](https://google.com)[date=2023-05-25 timezone="America/La_Paz"]',
       fields: [
         {
           id: "step_1_field_1",
+          label: "field title",
+          description: "First step field description",
           type: "text",
-          validations: {
-            similar_topics: {},
-          },
+          min_length: "1",
+          placeholder: "Insert text here",
+          validations: { similar_topics: {} },
         },
       ],
+      description:
+        'Input in step description composer\n\n**Bold text**\n\n*emphasized text*\n\n\u003e Blockqoute text\n\n```\n                              code text\n                              \n```\n\n* List item\n* List item\n\n1. List item\n1. List item\n\n[Google](https://google.com)[date=2023-05-25 timezone="America/La_Paz"]',
     },
   ],
   actions: [
@@ -665,9 +676,182 @@ const getCreatedWizard = {
       id: "action_1",
       run_after: "wizard_completion",
       type: "create_topic",
+      post_builder: false,
+      post_template: "Wizard Fields w{step_1_field_1}",
+      title: [
+        {
+          type: "conditional",
+          output: "Result text",
+          output_type: "text",
+          output_connector: "then",
+          pairs: [
+            {
+              index: 0,
+              key: "Action title",
+              key_type: "text",
+              value: "Some value",
+              value_type: "text",
+              connector: "equal",
+            },
+          ],
+        },
+      ],
+      category: [
+        {
+          type: "assignment",
+          output_type: "category",
+          output_connector: "set",
+          output: [10],
+        },
+      ],
+      tags: [
+        {
+          type: "assignment",
+          output_type: "tag",
+          output_connector: "set",
+          pairs: [],
+          output: ["gazelle"],
+        },
+      ],
+      visible: [
+        {
+          type: "conditional",
+          output: "Result text",
+          output_type: "text",
+          output_connector: "then",
+          pairs: [
+            {
+              index: 0,
+              key: "Action title",
+              key_type: "text",
+              value: "Some value",
+              value_type: "text",
+              connector: "equal",
+            },
+          ],
+        },
+      ],
     },
   ],
 };
+const getUniqueWizard = {
+  id: "unique_wizard",
+  name: "Unique wizard for testing",
+  save_submissions: true,
+  multiple_submissions: false,
+  after_signup: false,
+  prompt_completion: false,
+  steps: [
+    {
+      id: "step_1",
+      title: "step title",
+      raw_description:
+        'Input in step description composer\n\n**Bold text**\n\n*emphasized text*\n\n\u003e Blockqoute text\n\n```\n                              code text\n                              \n```\n\n* List item\n* List item\n\n1. List item\n1. List item\n\n[Google](https://google.com)[date=2023-05-25 timezone="America/La_Paz"]',
+      fields: [
+        {
+          id: "step_1_field_1",
+          label: "field title",
+          description: "First step field description",
+          type: "text",
+          min_length: "1",
+          placeholder: "Insert text here",
+          validations: { similar_topics: {} },
+        },
+      ],
+      description:
+        'Input in step description composer\n\n**Bold text**\n\n*emphasized text*\n\n\u003e Blockqoute text\n\n```\n                              code text\n                              \n```\n\n* List item\n* List item\n\n1. List item\n1. List item\n\n[Google](https://google.com)[date=2023-05-25 timezone="America/La_Paz"]',
+    },
+    {
+      id: "step_2",
+      title: "step title two",
+      raw_description: "Input in step description composer",
+      fields: [
+        {
+          id: "step_2_field_1",
+          label: "step 2 field title",
+          description: "First step field description",
+          type: "textarea",
+          min_length: "1",
+          placeholder: "Insert text here",
+          validations: { similar_topics: {} },
+        },
+        {
+          id: "step_2_field_2",
+          label: "step 2 field two title",
+          description: "Second Step field two field description",
+          type: "text",
+          min_length: "1",
+          placeholder: "Insert more text here",
+          validations: { similar_topics: {} },
+        },
+      ],
+      description: "Input in step description composer",
+    },
+  ],
+  actions: [
+    {
+      id: "action_1",
+      run_after: "wizard_completion",
+      type: "create_topic",
+      post_builder: false,
+      post_template: "Wizard Fields w{step_1_field_1}",
+      title: [
+        {
+          type: "conditional",
+          output: "Result text",
+          output_type: "text",
+          output_connector: "then",
+          pairs: [
+            {
+              index: 0,
+              key: "Action title",
+              key_type: "text",
+              value: "Some value",
+              value_type: "text",
+              connector: "equal",
+            },
+          ],
+        },
+      ],
+      category: [
+        {
+          type: "assignment",
+          output_type: "category",
+          output_connector: "set",
+          output: [10],
+        },
+      ],
+      tags: [
+        {
+          type: "assignment",
+          output_type: "tag",
+          output_connector: "set",
+          pairs: [],
+          output: ["gazelle"],
+        },
+      ],
+      visible: [
+        {
+          type: "conditional",
+          output: "Result text",
+          output_type: "text",
+          output_connector: "then",
+          pairs: [
+            {
+              index: 0,
+              key: "Action title",
+              key_type: "text",
+              value: "Some value",
+              value_type: "text",
+              connector: "equal",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
 const getNewApi = {
   name: "new_api",
   title: "new API",
@@ -746,4 +930,5 @@ export {
   getNewApi,
   putNewApi,
   getAnotherWizardSubmission,
+  getUniqueWizard,
 };
