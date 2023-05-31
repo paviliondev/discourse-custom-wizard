@@ -14,6 +14,10 @@ describe CustomWizard::AdminController do
     end
 
     context "without a subscription" do
+      before do
+        disable_subscriptions
+      end
+
       it "returns the right subscription details" do
         get "/admin/wizards.json"
         expect(response.parsed_body["subscribed"]).to eq(false)
