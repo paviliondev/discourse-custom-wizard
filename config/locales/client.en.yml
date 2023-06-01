@@ -324,6 +324,7 @@ en:
           then: "then"
           set: "set"
           equal: '='
+          not_equal: '!='
           greater: '>'
           less: '<'
           greater_or_equal: '>='
