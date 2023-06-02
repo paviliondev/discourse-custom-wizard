@@ -281,13 +281,13 @@ describe CustomWizard::Mapper do
 
     it "avatar with valid size" do
       avatar_inputs = inputs['interpolate_avatar'].dup
-      avatar_inputs[0]["output"] = "Avatar: ![avatar](u{avatar.120})"
+      avatar_inputs[0]["output"] = "Avatar: ![avatar](u{avatar.144})"
 
       expect(CustomWizard::Mapper.new(
         inputs: avatar_inputs,
         data: data,
         user: user1
-      ).perform).to eq("Avatar: ![avatar](#{user1.avatar_template_url.gsub("{size}", "120")})")
+      ).perform).to eq("Avatar: ![avatar](#{user1.avatar_template_url.gsub("{size}", "144")})")
     end
   end
 
