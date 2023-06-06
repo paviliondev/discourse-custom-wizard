@@ -14,18 +14,23 @@ describe CustomWizard::AdminController do
     end
 
     context "without a subscription" do
+      before do
+        disable_subscriptions
+        define_client_classes
+      end
+
       it "returns the right subscription details" do
         get "/admin/wizards.json"
         expect(response.parsed_body["subscribed"]).to eq(false)
         expect(response.parsed_body["subscription_attributes"]).to eq(CustomWizard::Subscription.attributes.as_json)
-        expect(response.parsed_body["subscription_client_installed"]).to eq(false)
+        expect(response.parsed_body["subscription_client_installed"]).to eq(true)
       end
     end
 
     context "with a subscription" do
       before do
         enable_subscription("standard")
-        load File.expand_path("#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/subscription_client.rb", __FILE__)
+        define_client_classes
       end
 
       it "returns the right subscription details" do

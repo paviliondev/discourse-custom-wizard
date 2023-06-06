@@ -13,15 +13,6 @@ describe CustomWizard::Subscription do
     }
   }
 
-  def undefine_client_classes
-    Object.send(:remove_const, :SubscriptionClient) if Object.constants.include?(:SubscriptionClient)
-    Object.send(:remove_const, :SubscriptionClientSubscription) if Object.constants.include?(:SubscriptionClientSubscription)
-  end
-
-  def define_client_classes
-    load File.expand_path("#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/subscription_client.rb", __FILE__)
-  end
-
   after do
     undefine_client_classes
   end
