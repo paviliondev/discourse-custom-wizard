@@ -25,7 +25,7 @@ def disable_subscriptions
 end
 
 def undefine_client_classes
-  Object.send(:remove_const, :SubscriptionClient) if Object.constants.include?(:SubscriptionClient)
+  Object.send(:remove_const, :DiscourseSubscriptionClient) if Object.constants.include?(:DiscourseSubscriptionClient)
   Object.send(:remove_const, :SubscriptionClientSubscription) if Object.constants.include?(:SubscriptionClientSubscription)
 end
 
