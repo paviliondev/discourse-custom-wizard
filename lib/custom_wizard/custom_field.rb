@@ -90,7 +90,7 @@ class ::CustomWizard::CustomField
 
       if attr == 'serializers' && (unsupported = value - CLASSES[klass.to_sym]).length > 0
         add_error(I18n.t("#{i18n_key}.unsupported_serializers",
-          class: klass,
+                         class: klass,
           serializers: unsupported.join(", ")
         ))
       end
@@ -140,7 +140,7 @@ class ::CustomWizard::CustomField
   end
 
   def self.cached_list
-    ::CustomWizard::Cache.wrap(LIST_CACHE_KEY) do
+    @cached_list ||= ::CustomWizard::Cache.wrap(LIST_CACHE_KEY) do
       PluginStoreRow.where(plugin_name: NAMESPACE).map do |record|
         create_from_store(record).as_json.with_indifferent_access
       end
