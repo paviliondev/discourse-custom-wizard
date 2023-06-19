@@ -90,7 +90,7 @@ class ::CustomWizard::CustomField
 
       if attr == 'serializers' && (unsupported = value - CLASSES[klass.to_sym]).length > 0
         add_error(I18n.t("#{i18n_key}.unsupported_serializers",
-                         class: klass,
+          class: klass,
           serializers: unsupported.join(", ")
         ))
       end
