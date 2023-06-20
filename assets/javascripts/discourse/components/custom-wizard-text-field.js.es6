@@ -1,7 +1,7 @@
 import computed from "discourse-common/utils/decorators";
 import { isLTR, isRTL, siteDir } from "discourse/lib/text-direction";
 import I18n from "I18n";
-import TextField from "@ember/component/text-field";
+import TextField from "discourse/components/text-field";
 
 export default TextField.extend({
   attributeBindings: [

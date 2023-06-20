@@ -58,7 +58,7 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
     assert.equal(count, 5, "There should be 5 admin tabs");
   });
 
-  test("creting a new wizard", async (assert) => {
+  test("creating a new wizard", async (assert) => {
     await visit("/admin/wizards/wizard");
     await click(".admin-wizard-controls button");
     assert.ok(
