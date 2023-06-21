@@ -6,6 +6,7 @@ import {
   getWizard,
   getWizardTestingLog,
 } from "../helpers/admin-wizard";
+import { Promise } from "rsvp";
 
 acceptance("Admin | Manager", function (needs) {
   needs.user();
@@ -52,7 +53,7 @@ acceptance("Admin | Manager", function (needs) {
       { timeout: 15000 }
     );
     // Wait an additional second after the conditions are met
-    await new Ember.RSVP.Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 
   test("viewing manager fields content", async (assert) => {

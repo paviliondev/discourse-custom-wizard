@@ -4,6 +4,7 @@ import CustomWizardApi from "../models/custom-wizard-api";
 import { default as discourseComputed } from "discourse-common/utils/decorators";
 import { and, equal, not } from "@ember/object/computed";
 import { selectKitContent } from "../lib/wizard";
+import { underscore } from "@ember/string";
 import Controller from "@ember/controller";
 import I18n from "I18n";
 
@@ -118,7 +119,7 @@ export default Controller.extend({
 
       if (authType === "oauth_2") {
         this.set("authorizing", true);
-        ajax(`/admin/wizards/apis/${name.underscore()}/authorize`)
+        ajax(`/admin/wizards/apis/${underscore(name)}/authorize`)
           .catch(popupAjaxError)
           .then((result) => {
             if (result.success) {
@@ -187,11 +188,11 @@ export default Controller.extend({
           if (!api[rp]) {
             let key = rp.replace("auth", "");
             error = `${I18n.t(
-              `admin.wizard.api.auth.${key.underscore()}`
+              `admin.wizard.api.auth.${underscore(key)}`
             )} is required for ${authType}`;
             break;
           }
-          data[rp.underscore()] = api[rp];
+          data[underscore(rp)] = api[rp];
         }
       }
 
@@ -221,7 +222,7 @@ export default Controller.extend({
 
       this.set("updating", true);
 
-      ajax(`/admin/wizards/api/${name.underscore()}`, {
+      ajax(`/admin/wizards/api/${underscore(name)}`, {
         type: "PUT",
         data,
       })
@@ -244,7 +245,7 @@ export default Controller.extend({
 
       this.set("updating", true);
 
-      ajax(`/admin/wizards/api/${name.underscore()}`, {
+      ajax(`/admin/wizards/api/${underscore(name)}`, {
         type: "DELETE",
       })
         .catch(popupAjaxError)
@@ -262,7 +263,7 @@ export default Controller.extend({
         return;
       }
 
-      ajax(`/admin/wizards/api/${name.underscore()}/logs`, {
+      ajax(`/admin/wizards/api/${underscore(name)}/logs`, {
         type: "DELETE",
       })
         .catch(popupAjaxError)
