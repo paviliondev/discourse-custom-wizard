@@ -216,6 +216,7 @@ class ::CustomWizard::CustomField
   end
 
   def self.invalidate_cache
+    @cached_list = nil
     CustomWizard::Cache.new(LIST_CACHE_KEY).delete
     Discourse.clear_readonly!
     Discourse.request_refresh!
