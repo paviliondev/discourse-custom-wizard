@@ -237,6 +237,7 @@ describe CustomWizard::Wizard do
       append_steps
       expect(@wizard.unfinished?).to eq(true)
       progress_step('step_1')
+      progress_step('step_2')
       expect(@wizard.start).to eq('step_1')
     end
   end
