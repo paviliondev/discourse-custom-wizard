@@ -226,6 +226,21 @@ describe CustomWizard::Wizard do
     end
   end
 
+  context "with subscription and restart upon revisit" do
+    before do
+      enable_subscription("standard")
+      @wizard.restart_on_revisit = true
+      CustomWizard::Template.save(@wizard.as_json)
+    end
+
+    it "returns to step 1 if option to clear submissions on each visit is set" do
+      append_steps
+      expect(@wizard.unfinished?).to eq(true)
+      progress_step('step_1')
+      expect(@wizard.start).to eq('step_1')
+    end
+  end
+
   context "with subscription and guest wizard" do
     before do
       enable_subscription("standard")

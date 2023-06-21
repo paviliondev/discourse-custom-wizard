@@ -145,7 +145,7 @@ class CustomWizard::Wizard
         step.last_step = true
       end
 
-      if step.previous && step.previous.id === last_completed_step_id
+      if !@restart_on_revisit && step.previous && step.previous.id === last_completed_step_id
         @start = step.id
       end
     end
