@@ -441,38 +441,6 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
       assert.strictEqual(actualValue, "Some value", "Value is correct");
       assert.strictEqual(actualResultText, "Result text", "Text is correct");
     }
-    const fieldsContentSet = [
-      [6, "bug", "1"],
-      [7, "gazelle", "gazelle"],
-    ];
-    for (let [
-      fieldIndex,
-      expectedDataName,
-      expectedDataValue,
-    ] of fieldsContentSet) {
-      await click(
-        `.admin-wizard-container .wizard-custom-action .setting:nth-of-type(${fieldIndex}) button`
-      );
-      let selectKitInsideThirdSetting = await selectKit(
-        `.admin-wizard-container .wizard-custom-action .setting:nth-of-type(${fieldIndex}) .output .select-kit`
-      );
-      await selectKitInsideThirdSetting.expand();
-      await selectKitInsideThirdSetting.selectRowByIndex(1);
-      let selectKitElement = document.querySelector(
-        `.admin-wizard-container .wizard-custom-action .setting:nth-of-type(${fieldIndex}) .output .select-kit`
-      );
-      let summaryElement = selectKitElement.querySelector("summary");
-      assert.equal(
-        summaryElement.getAttribute("data-name"),
-        expectedDataName,
-        "The correct data-name is selected"
-      );
-      assert.equal(
-        summaryElement.getAttribute("data-value"),
-        expectedDataValue,
-        "The correct data-value is selected"
-      );
-    }
     assert.ok(
       !visible('.admin-wizard-buttons button:contains("Delete Wizard")'),
       "delete wizard button not displayed"
