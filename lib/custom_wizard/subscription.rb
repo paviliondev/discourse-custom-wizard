@@ -124,6 +124,8 @@ class CustomWizard::Subscription
         @product_slug = id_and_slug[:slug]
       end
     end
+
+    @product_slug ||= ENV["CUSTOM_WIZARD_PRODUCT_SLUG"]
   end
 
   def includes?(feature, attribute, value = nil)
@@ -153,8 +155,8 @@ class CustomWizard::Subscription
 
   def type
     return :none unless subscribed?
-    return :standard if standard?
     return :business if business?
+    return :standard if standard?
     return :community if community?
   end
 

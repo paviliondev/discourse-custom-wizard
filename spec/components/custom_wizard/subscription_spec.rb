@@ -147,4 +147,28 @@ describe CustomWizard::Subscription do
       end
     end
   end
+
+  context "with environment variable" do
+    before do
+      ENV["CUSTOM_WIZARD_PRODUCT_SLUG"] = "standard"
+    end
+
+    after do
+      ENV["CUSTOM_WIZARD_PRODUCT_SLUG"] = nil
+    end
+
+    it "enables the relevant subscription" do
+      expect(described_class.type).to eq(:standard)
+    end
+
+    context "with a subscription" do
+      before do
+        enable_subscription("business")
+      end
+
+      it "respects the subscription" do
+        expect(described_class.type).to eq(:business)
+      end
+    end
+  end
 end
