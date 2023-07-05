@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module SubscriptionClient
+module DiscourseSubscriptionClient
   def self.find_subscriptions(resource_name)
   end
 end
@@ -24,7 +24,7 @@ class SubscriptionClientSubscription
   end
 end
 
-module SubscriptionClient
+module DiscourseSubscriptionClient
   class Subscriptions
     class Result
       attr_accessor :supplier,
