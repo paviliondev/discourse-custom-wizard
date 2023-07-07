@@ -15,7 +15,7 @@ export default {
       window.location.href = wizardUrl;
     });
 
-    const ApplicationRoute = requirejs("discourse/routes/application").default
+    const ApplicationRoute = requirejs("discourse/routes/application").default;
 
     ApplicationRoute.reopen({
       actions: {
