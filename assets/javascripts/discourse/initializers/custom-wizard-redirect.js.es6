@@ -1,5 +1,3 @@
-import ApplicationRoute from "discourse/routes/application";
-
 export default {
   name: "custom-wizard-redirect",
   after: "message-bus",
@@ -16,6 +14,8 @@ export default {
       const wizardUrl = window.location.origin + "/w/" + wizardId;
       window.location.href = wizardUrl;
     });
+
+    const ApplicationRoute = requirejs("discourse/routes/application").default;
 
     ApplicationRoute.reopen({
       actions: {
