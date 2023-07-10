@@ -333,7 +333,7 @@ acceptance("Admin | Custom Fields Unsuscribed", function (needs) {
 
     const dropdownTopic = selectKit(
       '.admin-wizard-container details.summary[name="Filter by: Select a class"]'
-    )
+    );
     await dropdownTopic.expand();
     await click('.select-kit-collection li[data-value="topic"]');
     await selectTypeAndSerializerAndFillInName(
