@@ -73,11 +73,11 @@ acceptance("Admin | API tab", function (needs) {
     await fieldTypeDropdown.expand();
     await fieldTypeDropdown.selectRowByValue("basic");
     await fillIn(
-      ".wizard-api-authentication .settings .control-group:eq(1) .controls input",
+      ".wizard-api-authentication .settings .control-group:nth-child(3) .controls input",
       "some_username"
     );
     await fillIn(
-      ".wizard-api-authentication .settings .control-group:eq(2) .controls input",
+      ".wizard-api-authentication .settings .control-group:nth-child(4) .controls input",
       "some_password"
     );
     await click(".wizard-api-endpoints button");
