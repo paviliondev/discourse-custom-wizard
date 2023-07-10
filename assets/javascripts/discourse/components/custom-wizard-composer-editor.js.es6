@@ -14,7 +14,8 @@ import { uploadIcon } from "discourse/lib/uploads";
 import { dasherize } from "@ember/string";
 import showModal from "discourse/lib/show-modal";
 
-const IMAGE_MARKDOWN_REGEX = /!\[(.*?)\|(\d{1,4}x\d{1,4})(,\s*\d{1,3}%)?(.*?)\]\((upload:\/\/.*?)\)(?!(.*`))/g;
+const IMAGE_MARKDOWN_REGEX =
+  /!\[(.*?)\|(\d{1,4}x\d{1,4})(,\s*\d{1,3}%)?(.*?)\]\((upload:\/\/.*?)\)(?!(.*`))/g;
 
 export default ComposerEditor.extend({
   classNameBindings: ["fieldClass"],
@@ -116,9 +117,8 @@ export default ComposerEditor.extend({
       event.target.closest(".button-wrapper").dataset.imageIndex,
       10
     );
-    const matchingPlaceholder = this.get("composer.reply").match(
-      IMAGE_MARKDOWN_REGEX
-    );
+    const matchingPlaceholder =
+      this.get("composer.reply").match(IMAGE_MARKDOWN_REGEX);
 
     this.session.set("wizardEventFieldId", this.field.id);
     this.appEvents.trigger(

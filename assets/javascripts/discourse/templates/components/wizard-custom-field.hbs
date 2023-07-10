@@ -3,7 +3,8 @@
     action=(action "undoChanges")
     icon=undoIcon
     label=undoKey
-    class="undo-changes"}}
+    class="undo-changes"
+  }}
 {{/if}}
 
 <div class="setting">
@@ -11,10 +12,7 @@
     <label>{{i18n "admin.wizard.field.label"}}</label>
   </div>
   <div class="setting-value">
-    <Input
-      name="label"
-      @value={{this.field.label}}
-    />
+    <Input name="label" @value={{this.field.label}} />
   </div>
 </div>
 
@@ -25,10 +23,7 @@
 
   <div class="setting-value">
     <span>{{i18n "admin.wizard.field.required_label"}}</span>
-    <Input
-      @type="checkbox"
-      @checked={{this.field.required}}
-    />
+    <Input @type="checkbox" @checked={{this.field.required}} />
   </div>
 </div>
 
@@ -37,10 +32,7 @@
     <label>{{i18n "admin.wizard.field.description"}}</label>
   </div>
   <div class="setting-value">
-    <Textarea
-      name="description"
-      @value={{this.field.description}}
-    />
+    <Textarea name="description" @value={{this.field.description}} />
   </div>
 </div>
 
@@ -55,7 +47,8 @@
       onUploadDeleted=(action "imageUploadDeleted")
       type="wizard-field-image"
       class="no-repeat contain-image"
-      id=(concat "wizard-field-" field.id "-image-upload")}}
+      id=(concat "wizard-field-" field.id "-image-upload")
+    }}
   </div>
 </div>
 
@@ -71,17 +64,12 @@
       attribute="type"
       onChange=(action "changeType")
       wizard=wizard
-      options=(hash
-        none="admin.wizard.select_type"
-      )
+      options=(hash none="admin.wizard.select_type")
     }}
   </div>
 </div>
 
-{{wizard-message
-  key=messageKey
-  url=messageUrl
-  component="field"}}
+{{wizard-message key=messageKey url=messageUrl component="field"}}
 
 {{#if isTextType}}
   <div class="setting">
@@ -121,10 +109,7 @@
 
     <div class="setting-value">
       <span>{{i18n "admin.wizard.field.char_counter_placeholder"}}</span>
-      <Input
-        @type="checkbox"
-        @checked={{this.field.char_counter}}
-      />
+      <Input @type="checkbox" @checked={{this.field.char_counter}} />
     </div>
   </div>
 
@@ -166,10 +151,7 @@
     </div>
 
     <div class="setting-value">
-      <Input
-        @value={{this.field.file_types}}
-        class="medium"
-      />
+      <Input @value={{this.field.file_types}} class="medium" />
     </div>
   </div>
 {{/if}}
@@ -181,11 +163,7 @@
     </div>
 
     <div class="setting-value">
-      <Input
-        @type="number"
-        @value={{this.field.limit}}
-        class="small"
-      />
+      <Input @type="number" @value={{this.field.limit}} class="small" />
     </div>
   </div>
 {{/if}}
@@ -193,15 +171,16 @@
 {{#if isDateTime}}
   <div class="setting">
     <div class="setting-label">
-      <label>{{html-safe (i18n "admin.wizard.field.date_time_format.label")}}</label>
+      <label>{{html-safe
+          (i18n "admin.wizard.field.date_time_format.label")
+        }}</label>
     </div>
 
     <div class="setting-value">
-      <Input
-        @value={{this.field.format}}
-        class="medium"
-      />
-      <label>{{html-safe (i18n "admin.wizard.field.date_time_format.instructions")}}</label>
+      <Input @value={{this.field.format}} class="medium" />
+      <label>{{html-safe
+          (i18n "admin.wizard.field.date_time_format.instructions")
+        }}</label>
     </div>
   </div>
 {{/if}}
@@ -217,7 +196,8 @@
         inputs=field.prefill
         property="prefill"
         onUpdate=(action "mappedFieldUpdated")
-        options=prefillOptions}}
+        options=prefillOptions
+      }}
     </div>
   </div>
 {{/if}}
@@ -233,7 +213,8 @@
         inputs=field.content
         property="content"
         onUpdate=(action "mappedFieldUpdated")
-        options=contentOptions}}
+        options=contentOptions
+      }}
     </div>
   </div>
 {{/if}}
@@ -259,10 +240,7 @@
     </div>
 
     <div class="setting-value">
-      <Input
-        @type="checkbox"
-        @checked={{this.field.can_create_tag}}
-      />
+      <Input @type="checkbox" @checked={{this.field.can_create_tag}} />
     </div>
   </div>
 {{/if}}
@@ -274,9 +252,7 @@
     </div>
 
     <div class="setting-value">
-      {{wizard-mapper
-        inputs=field.condition
-        options=fieldConditionOptions}}
+      {{wizard-mapper inputs=field.condition options=fieldConditionOptions}}
     </div>
   </div>
 
@@ -286,9 +262,7 @@
     </div>
 
     <div class="setting-value">
-      {{wizard-mapper
-        inputs=field.index
-        options=fieldIndexOptions}}
+      {{wizard-mapper inputs=field.index options=fieldIndexOptions}}
     </div>
   </div>
 
@@ -303,9 +277,8 @@
           value=field.property
           content=categoryPropertyTypes
           onChange=(action (mut field.property))
-          options=(hash
-            none="admin.wizard.selector.placeholder.property"
-          )}}
+          options=(hash none="admin.wizard.selector.placeholder.property")
+        }}
       </div>
     </div>
   {{/if}}
