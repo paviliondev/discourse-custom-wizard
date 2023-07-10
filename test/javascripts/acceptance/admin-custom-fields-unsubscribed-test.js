@@ -4,7 +4,7 @@ import {
   visible,
 } from "discourse/tests/helpers/qunit-helpers";
 import { test } from "qunit";
-import { click, findAll, visit, waitUntil } from "@ember/test-helpers";
+import { click, fillIn, findAll, visit, waitUntil } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 import {
   getCustomFields,
