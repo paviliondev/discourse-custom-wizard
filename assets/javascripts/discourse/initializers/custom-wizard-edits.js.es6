@@ -62,7 +62,7 @@ export default {
         // Needed to ensure appEvents get registered when navigating between steps
         @observes("id")
         initOnStepChange() {
-          if (/ wizard - field | wizard - step /.test(this.id)) {
+          if (/wizard-field|wizard-step/.test(this.id)) {
             this._initialize();
           }
         },
