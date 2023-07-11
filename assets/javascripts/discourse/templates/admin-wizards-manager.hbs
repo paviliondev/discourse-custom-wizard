@@ -20,22 +20,26 @@
     {{d-button
       id="upload-button"
       label="admin.wizard.manager.upload"
-      action=(action "upload")}}
+      action=(action "upload")
+    }}
     {{d-button
       id="import-button"
       label="admin.wizard.manager.import"
       action=(action "import")
-      disabled=importDisabled}}
+      disabled=importDisabled
+    }}
     {{d-button
       id="export-button"
       label="admin.wizard.manager.export"
       action=(action "export")
-      disabled=exportDisabled}}
+      disabled=exportDisabled
+    }}
     {{d-button
       id="destroy-button"
       label="admin.wizard.manager.destroy"
       action=(action "destroy")
-      disabled=destoryDisabled}}
+      disabled=destoryDisabled
+    }}
   </div>
 </div>
 
@@ -46,7 +50,8 @@
   opts=messageOpts
   items=messageItems
   loading=loading
-  component="manager"}}
+  component="manager"
+}}
 
 <div class="admin-wizard-container">
   <table class="table grid">

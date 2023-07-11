@@ -3,16 +3,16 @@
     value=wizardId
     content=wizardList
     onChange=(route-action "changeWizard")
-    options=(hash
-      none="admin.wizard.select"
-    )}}
+    options=(hash none="admin.wizard.select")
+  }}
 </div>
 
 {{wizard-message
   key=messageKey
   opts=messageOpts
   url=documentationUrl
-  component="submissions"}}
+  component="submissions"
+}}
 
 <div class="admin-wizard-container">
   {{outlet}}

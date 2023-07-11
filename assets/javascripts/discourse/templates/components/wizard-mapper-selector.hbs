@@ -10,7 +10,8 @@
           {{wizard-mapper-selector-type
             activeType=activeType
             item=item
-            toggle=(action "toggleType")}}
+            toggle=(action "toggleType")
+          }}
         {{/each}}
       </div>
     {{/if}}
@@ -34,10 +35,8 @@
       value=value
       content=comboBoxContent
       onChange=(action "changeValue")
-      options=(hash
-        none=placeholderKey
-        allowAny=comboBoxAllowAny
-      )}}
+      options=(hash none=placeholderKey allowAny=comboBoxAllowAny)
+    }}
   {{/if}}
 
   {{#if showMultiSelect}}
@@ -45,14 +44,16 @@
       content=multiSelectContent
       value=value
       onChange=(action "changeValue")
-      options=multiSelectOptions}}
+      options=multiSelectOptions
+    }}
   {{/if}}
 
   {{#if showList}}
     {{wizard-value-list
       values=value
       addKey=placeholderKey
-      onChange=(action "changeValue")}}
+      onChange=(action "changeValue")
+    }}
   {{/if}}
 
   {{#if showTag}}
@@ -60,10 +61,8 @@
       tags=value
       onChange=(action "changeValue")
       everyTag=true
-      options=(hash
-        none=placeholderKey
-        filterable=true
-      )}}
+      options=(hash none=placeholderKey filterable=true)
+    }}
   {{/if}}
 
   {{#if showUser}}
@@ -72,8 +71,7 @@
       value=value
       autocomplete="discourse"
       onChange=(action "changeUserValue")
-      options=(hash
-        includeMessageableGroups="true"
-      )}}
+      options=(hash includeMessageableGroups="true")
+    }}
   {{/if}}
 </div>

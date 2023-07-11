@@ -1,6 +1,6 @@
 import { acceptance, query } from "discourse/tests/helpers/qunit-helpers";
 import { test } from "qunit";
-import { click, visit } from "@ember/test-helpers";
+import { click, currentURL, fillIn, visit } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 import {
   getBusinessAdminWizard,
@@ -73,11 +73,11 @@ acceptance("Admin | API tab", function (needs) {
     await fieldTypeDropdown.expand();
     await fieldTypeDropdown.selectRowByValue("basic");
     await fillIn(
-      ".wizard-api-authentication .settings .control-group:eq(1) .controls input",
+      ".wizard-api-authentication .settings .control-group:nth-child(3) .controls input",
       "some_username"
     );
     await fillIn(
-      ".wizard-api-authentication .settings .control-group:eq(2) .controls input",
+      ".wizard-api-authentication .settings .control-group:nth-child(4) .controls input",
       "some_password"
     );
     await click(".wizard-api-endpoints button");

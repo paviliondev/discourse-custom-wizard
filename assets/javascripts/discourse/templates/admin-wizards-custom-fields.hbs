@@ -5,7 +5,8 @@
     {{d-button
       label="admin.wizard.custom_field.add"
       icon="plus"
-      action=(action "addField")}}
+      action=(action "addField")
+    }}
   </div>
 </div>
 
@@ -14,7 +15,8 @@
   opts=messageOpts
   type=messageType
   url=documentationUrl
-  component="custom_fields"}}
+  component="custom_fields"
+}}
 
 <div class="admin-wizard-container">
   {{#if customFields}}
@@ -32,7 +34,8 @@
           {{custom-field-input
             field=field
             removeField=(action "removeField")
-            saveField=(action "saveField")}}
+            saveField=(action "saveField")
+          }}
         {{/each}}
       </tbody>
     </table>

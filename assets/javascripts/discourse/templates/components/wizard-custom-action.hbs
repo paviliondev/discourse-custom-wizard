@@ -3,7 +3,8 @@
     action=(action "undoChanges")
     icon=undoIcon
     label=undoKey
-    class="undo-changes"}}
+    class="undo-changes"
+  }}
 {{/if}}
 
 <div class="setting">
@@ -18,9 +19,7 @@
       attribute="type"
       onChange=(action "changeType")
       wizard=wizard
-      options=(hash
-        none="admin.wizard.select_type"
-      )
+      options=(hash none="admin.wizard.select_type")
     }}
   </div>
 </div>
@@ -34,14 +33,12 @@
     {{combo-box
       value=action.run_after
       content=runAfterContent
-      onChange=(action (mut action.run_after))}}
+      onChange=(action (mut action.run_after))
+    }}
   </div>
 </div>
 
-{{wizard-message
-  key=messageKey
-  url=messageUrl
-  component="action"}}
+{{wizard-message key=messageKey url=messageUrl component="action"}}
 
 {{#if basicTopicFields}}
   <div class="setting full field-mapper-setting">
@@ -58,7 +55,8 @@
           wizardFieldSelection=true
           userFieldSelection="key,value"
           context="action"
-        )}}
+        )
+      }}
     </div>
   </div>
 
@@ -76,13 +74,11 @@
         options=(hash
           none="admin.wizard.selector.placeholder.wizard_field"
           isDisabled=showPostBuilder
-        )}}
+        )
+      }}
 
       <div class="setting-gutter">
-        <Input
-          @type="checkbox"
-          @checked={{this.action.post_builder}}
-        />
+        <Input @type="checkbox" @checked={{this.action.post_builder}} />
         <span>{{i18n "admin.wizard.action.post_builder.checkbox"}}</span>
       </div>
     </div>
@@ -97,7 +93,8 @@
       <div class="setting-value editor">
         {{wizard-text-editor
           value=action.post_template
-          wizardFields=wizardFields}}
+          wizardFields=wizardFields
+        }}
       </div>
     </div>
   {{/if}}
@@ -122,7 +119,8 @@
           wizardActionSelection="output"
           outputDefaultSelection="category"
           context="action"
-        )}}
+        )
+      }}
     </div>
   </div>
 
@@ -143,7 +141,8 @@
           wizardFieldSelection=true
           userFieldSelection="key,value"
           context="action"
-        )}}
+        )
+      }}
     </div>
   </div>
 
@@ -158,10 +157,9 @@
         property="visible"
         onUpdate=(action "mappedFieldUpdated")
         options=(hash
-          wizardFieldSelection=true
-          userFieldSelection=true
-          context="action"
-        )}}
+          wizardFieldSelection=true userFieldSelection=true context="action"
+        )
+      }}
     </div>
   </div>
 
@@ -176,10 +174,8 @@
           inputs=action.add_event
           property="add_event"
           onUpdate=(action "mappedFieldUpdated")
-          options=(hash
-            wizardFieldSelection=true
-            context="action"
-          )}}
+          options=(hash wizardFieldSelection=true context="action")
+        }}
       </div>
     </div>
   {{/if}}
@@ -195,10 +191,8 @@
           inputs=action.add_location
           property="add_location"
           onUpdate=(action "mappedFieldUpdated")
-          options=(hash
-            wizardFieldSelection=true
-            context="action"
-          )}}
+          options=(hash wizardFieldSelection=true context="action")
+        }}
       </div>
     </div>
   {{/if}}
@@ -223,7 +217,8 @@
           userSelection="output"
           outputDefaultSelection="user"
           context="action"
-        )}}
+        )
+      }}
     </div>
   </div>
 {{/if}}
@@ -246,7 +241,8 @@
         wizardActionSelection="value"
         keyDefaultSelection="userField"
         context="action"
-      )}}
+      )
+    }}
   </div>
 {{/if}}
 
@@ -264,7 +260,8 @@
         options=(hash
           isDisabled=action.custom_title_enabled
           none="admin.wizard.action.send_to_api.select_an_api"
-        )}}
+        )
+      }}
     </div>
   </div>
 
@@ -281,7 +278,8 @@
         options=(hash
           isDisabled=apiEmpty
           none="admin.wizard.action.send_to_api.select_an_endpoint"
-        )}}
+        )
+      }}
     </div>
   </div>
 
@@ -296,7 +294,8 @@
         previewEnabled=false
         barEnabled=false
         wizardFields=wizardFields
-        placeholder="admin.wizard.action.send_to_api.body_placeholder"}}
+        placeholder="admin.wizard.action.send_to_api.body_placeholder"
+      }}
     </div>
   </div>
 {{/if}}
@@ -320,7 +319,8 @@
           groupSelection="value,output"
           outputDefaultSelection="group"
           context="action"
-        )}}
+        )
+      }}
     </div>
   </div>
 {{/if}}
@@ -343,7 +343,8 @@
           groupSelection="key,value"
           categorySelection="key,value"
           userSelection="key,value"
-        )}}
+        )
+      }}
     </div>
   </div>
 {{/if}}
@@ -366,13 +367,16 @@
           userFieldSelection="key,value"
           categorySelection="output"
           context="action"
-        )}}
+        )
+      }}
     </div>
   </div>
 
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
-      <label>{{i18n "admin.wizard.action.watch_categories.mute_remainder"}}</label>
+      <label>{{i18n
+          "admin.wizard.action.watch_categories.mute_remainder"
+        }}</label>
     </div>
 
     <div class="setting-value">
@@ -384,13 +388,16 @@
           context="action"
           wizardFieldSelection=true
           userFieldSelection="key,value"
-        )}}
+        )
+      }}
     </div>
   </div>
 
   <div class="setting">
     <div class="setting-label">
-      <label>{{i18n "admin.wizard.action.watch_x.notification_level.label"}}</label>
+      <label>{{i18n
+          "admin.wizard.action.watch_x.notification_level.label"
+        }}</label>
     </div>
 
     <div class="setting-value">
@@ -401,7 +408,8 @@
         options=(hash
           isDisabled=action.custom_title_enabled
           none="admin.wizard.action.watch_x.select_a_notification_level"
-        )}}
+        )
+      }}
     </div>
   </div>
 
@@ -411,10 +419,7 @@
     </div>
 
     <div class="setting-value">
-      <Input
-        @type="checkbox"
-        @checked={{this.action.wizard_user}}
-      />
+      <Input @type="checkbox" @checked={{this.action.wizard_user}} />
     </div>
   </div>
 
@@ -433,7 +438,8 @@
           wizardFieldSelection=true
           userFieldSelection="key,value"
           userSelection="output"
-        )}}
+        )
+      }}
     </div>
   </div>
 {{/if}}
@@ -456,13 +462,16 @@
           wizardActionSelection=true
           userFieldSelection="key,value"
           context="action"
-        )}}
+        )
+      }}
     </div>
   </div>
 
   <div class="setting">
     <div class="setting-label">
-      <label>{{i18n "admin.wizard.action.watch_x.notification_level.label"}}</label>
+      <label>{{i18n
+          "admin.wizard.action.watch_x.notification_level.label"
+        }}</label>
     </div>
 
     <div class="setting-value">
@@ -473,7 +482,8 @@
         options=(hash
           isDisabled=action.custom_title_enabled
           none="admin.wizard.action.watch_x.select_a_notification_level"
-        )}}
+        )
+      }}
     </div>
   </div>
 
@@ -483,10 +493,7 @@
     </div>
 
     <div class="setting-value">
-      <Input
-        @type="checkbox"
-        @checked={{this.action.wizard_user}}
-      />
+      <Input @type="checkbox" @checked={{this.action.wizard_user}} />
     </div>
   </div>
 
@@ -505,7 +512,8 @@
           wizardFieldSelection=true
           userFieldSelection="key,value"
           userSelection="output"
-        )}}
+        )
+      }}
     </div>
   </div>
 {{/if}}
@@ -526,7 +534,8 @@
           wizardFieldSelection=true
           userFieldSelection=true
           context="action"
-        )}}
+        )
+      }}
     </div>
   </div>
   <div class="setting full field-mapper-setting">
@@ -544,7 +553,8 @@
           wizardFieldSelection=true
           userFieldSelection=true
           context="action"
-        )}}
+        )
+      }}
     </div>
   </div>
   <div class="setting full field-mapper-setting">
@@ -562,7 +572,8 @@
           wizardFieldSelection=true
           userFieldSelection=true
           context="action"
-        )}}
+        )
+      }}
     </div>
   </div>
   <div class="setting full field-mapper-setting">
@@ -580,7 +591,8 @@
           wizardFieldSelection=true
           userFieldSelection=true
           context="action"
-        )}}
+        )
+      }}
     </div>
   </div>
   <div class="setting full field-mapper-setting">
@@ -599,7 +611,8 @@
           userFieldSelection=true
           userSelection="output"
           context="action"
-        )}}
+        )
+      }}
     </div>
   </div>
   <div class="setting full field-mapper-setting">
@@ -618,12 +631,15 @@
           userFieldSelection=true
           userSelection="output"
           context="action"
-        )}}
+        )
+      }}
     </div>
   </div>
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
-      <label>{{i18n "admin.wizard.action.create_group.grant_trust_level"}}</label>
+      <label>{{i18n
+          "admin.wizard.action.create_group.grant_trust_level"
+        }}</label>
     </div>
 
     <div class="setting-value">
@@ -636,12 +652,15 @@
           wizardFieldSelection=true
           userFieldSelection=true
           context="action"
-        )}}
+        )
+      }}
     </div>
   </div>
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
-      <label>{{i18n "admin.wizard.action.create_group.mentionable_level"}}</label>
+      <label>{{i18n
+          "admin.wizard.action.create_group.mentionable_level"
+        }}</label>
     </div>
 
     <div class="setting-value">
@@ -654,12 +673,15 @@
           wizardFieldSelection=true
           userFieldSelection=true
           context="action"
-        )}}
+        )
+      }}
     </div>
   </div>
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
-      <label>{{i18n "admin.wizard.action.create_group.messageable_level"}}</label>
+      <label>{{i18n
+          "admin.wizard.action.create_group.messageable_level"
+        }}</label>
     </div>
 
     <div class="setting-value">
@@ -672,12 +694,15 @@
           wizardFieldSelection=true
           userFieldSelection=true
           context="action"
-        )}}
+        )
+      }}
     </div>
   </div>
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
-      <label>{{i18n "admin.wizard.action.create_group.visibility_level"}}</label>
+      <label>{{i18n
+          "admin.wizard.action.create_group.visibility_level"
+        }}</label>
     </div>
 
     <div class="setting-value">
@@ -690,12 +715,15 @@
           wizardFieldSelection=true
           userFieldSelection=true
           context="action"
-        )}}
+        )
+      }}
     </div>
   </div>
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
-      <label>{{i18n "admin.wizard.action.create_group.members_visibility_level"}}</label>
+      <label>{{i18n
+          "admin.wizard.action.create_group.members_visibility_level"
+        }}</label>
     </div>
 
     <div class="setting-value">
@@ -708,7 +736,8 @@
           wizardFieldSelection=true
           userFieldSelection=true
           context="action"
-        )}}
+        )
+      }}
     </div>
   </div>
 {{/if}}
@@ -729,7 +758,8 @@
           wizardFieldSelection=true
           userFieldSelection="key,value"
           context="action"
-        )}}
+        )
+      }}
     </div>
   </div>
 
@@ -748,7 +778,8 @@
           wizardFieldSelection=true
           userFieldSelection="key,value"
           context="action"
-        )}}
+        )
+      }}
     </div>
   </div>
 
@@ -767,7 +798,8 @@
           wizardFieldSelection=true
           userFieldSelection="key,value"
           context="action"
-        )}}
+        )
+      }}
     </div>
   </div>
 
@@ -786,13 +818,16 @@
           wizardFieldSelection=true
           userFieldSelection="key,value"
           context="action"
-        )}}
+        )
+      }}
     </div>
   </div>
 
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
-      <label>{{i18n "admin.wizard.action.create_category.parent_category"}}</label>
+      <label>{{i18n
+          "admin.wizard.action.create_category.parent_category"
+        }}</label>
     </div>
 
     <div class="setting-value">
@@ -806,7 +841,8 @@
           userFieldSelection="key,value"
           categorySelection="output"
           context="action"
-        )}}
+        )
+      }}
     </div>
   </div>
 
@@ -828,7 +864,8 @@
           userFieldSelection=true
           groupSelection="key"
           context="action"
-        )}}
+        )
+      }}
     </div>
   </div>
 {{/if}}
@@ -852,7 +889,8 @@
           userFieldSelection="value"
           keyPlaceholder="admin.wizard.action.custom_fields.key"
           context=customFieldsContext
-        )}}
+        )
+      }}
     </div>
   </div>
 {{/if}}
@@ -874,7 +912,8 @@
           userFieldSelection=true
           groupSelection=true
           context="action"
-        )}}
+        )
+      }}
     </div>
   </div>
 {{/if}}
@@ -886,10 +925,7 @@
     </div>
 
     <div class="setting-value">
-      <Input
-        @type="checkbox"
-        @checked={{this.action.skip_redirect}}
-      />
+      <Input @type="checkbox" @checked={{this.action.skip_redirect}} />
 
       <span>
         {{i18n "admin.wizard.action.skip_redirect.description" type="topic"}}
@@ -903,13 +939,13 @@
     </div>
 
     <div class="setting-value">
-      <Input
-        @type="checkbox"
-        @checked={{this.action.suppress_notifications}}
-      />
+      <Input @type="checkbox" @checked={{this.action.suppress_notifications}} />
 
       <span>
-        {{i18n "admin.wizard.action.suppress_notifications.description" type="topic"}}
+        {{i18n
+          "admin.wizard.action.suppress_notifications.description"
+          type="topic"
+        }}
       </span>
     </div>
   </div>
