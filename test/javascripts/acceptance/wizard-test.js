@@ -58,7 +58,7 @@ acceptance("Wizard | Completed", function (needs) {
 
 acceptance("Wizard | Redirect", function (needs) {
   needs.user({
-    redirect_to_wizard: "wizard"
+    redirect_to_wizard: "wizard",
   });
   needs.pretender((server, helper) => {
     server.get("/w/wizard.json", () => {
