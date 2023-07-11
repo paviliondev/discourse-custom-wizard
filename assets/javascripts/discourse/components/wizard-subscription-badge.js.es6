@@ -25,6 +25,7 @@ export default Component.extend(Subscription, {
   },
 
   click() {
+    debugger;
     DiscourseURL.routeTo(this.subscriptionLink);
   },
 });

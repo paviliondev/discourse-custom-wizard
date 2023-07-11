@@ -2,6 +2,7 @@ import DiscourseURL from "discourse/lib/url";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import getUrl from "discourse-common/lib/get-url";
 import { observes } from "discourse-common/utils/decorators";
+import { dasherize } from "@ember/string";
 
 export default {
   name: "custom-wizard-edits",
@@ -11,14 +12,6 @@ export default {
     if (!siteSettings.custom_wizard_enabled) {
       return;
     }
-
-    const existing = DiscourseURL.routeTo;
-    DiscourseURL.routeTo = function (path, opts) {
-      if (path && path.indexOf("/w/") > -1) {
-        return (window.location = path);
-      }
-      return existing.apply(this, [path, opts]);
-    };
 
     withPluginApi("0.8.36", (api) => {
       api.onAppEvent("page:changed", (data) => {
@@ -36,7 +29,7 @@ export default {
               return data.currentRouteName.indexOf(p) > -1;
             })
           ) {
-            window.location = "/w/" + redirectToWizard.dasherize();
+            DiscourseURL.routeTo(`/w/${dasherize(redirectToWizard)}`);
           }
         }
       });
