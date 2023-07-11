@@ -5,7 +5,8 @@
     value=pair.key
     activeType=pair.key_type
     options=options
-    onUpdate=onUpdate}}
+    onUpdate=onUpdate
+  }}
 </div>
 
 {{wizard-mapper-connector
@@ -14,7 +15,8 @@
   connectorType="pair"
   inputType=inputType
   options=options
-  onUpdate=onUpdate}}
+  onUpdate=onUpdate
+}}
 
 <div class="value mapper-block">
   {{wizard-mapper-selector
@@ -24,7 +26,8 @@
     activeType=pair.value_type
     options=options
     onUpdate=onUpdate
-    connector=pair.connector}}
+    connector=pair.connector
+  }}
 </div>
 
 {{#if showJoin}}
@@ -32,5 +35,7 @@
 {{/if}}
 
 {{#if showRemove}}
-  <a role="button" {{action removePair pair}} class="remove-pair">{{d-icon "times"}}</a>
+  <a role="button" {{action removePair pair}} class="remove-pair">{{d-icon
+      "times"
+    }}</a>
 {{/if}}
