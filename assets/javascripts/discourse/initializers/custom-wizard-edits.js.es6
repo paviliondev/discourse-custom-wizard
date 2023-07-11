@@ -7,11 +7,17 @@ import { dasherize } from "@ember/string";
 export default {
   name: "custom-wizard-edits",
   initialize(container) {
+    const messageBus = container.lookup("service:message-bus");
     const siteSettings = container.lookup("service:site-settings");
 
     if (!siteSettings.custom_wizard_enabled) {
       return;
     }
+
+    messageBus.subscribe("/redirect_to_wizard", function (wizardId) {
+      const wizardUrl = window.location.origin + "/w/" + wizardId;
+      window.location.href = wizardUrl;
+    });
 
     withPluginApi("0.8.36", (api) => {
       api.onAppEvent("page:changed", (data) => {
