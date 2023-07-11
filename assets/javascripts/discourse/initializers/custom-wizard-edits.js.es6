@@ -24,18 +24,20 @@ export default {
       api.onAppEvent("page:changed", (data) => {
         const currentUser = container.lookup("service:current-user");
         const settings = container.lookup("service:site-settings");
-        const redirectToWizard = currentUser.redirect_to_wizard;
-        const excludedPaths = settings.wizard_redirect_exclude_paths
-          .split("|")
-          .concat(["loading"]);
-        if (
-          redirectToWizard &&
-          data.currentRouteName !== "customWizardStep" &&
-          !excludedPaths.find((p) => {
-            return data.currentRouteName.indexOf(p) > -1;
-          })
-        ) {
-          window.location = "/w/" + redirectToWizard.dasherize();
+        if (currentUser) {
+          const redirectToWizard = currentUser.redirect_to_wizard;
+          const excludedPaths = settings.wizard_redirect_exclude_paths
+            .split("|")
+            .concat(["loading"]);
+          if (
+            redirectToWizard &&
+            data.currentRouteName !== "customWizardStep" &&
+            !excludedPaths.find((p) => {
+              return data.currentRouteName.indexOf(p) > -1;
+            })
+          ) {
+            window.location = "/w/" + redirectToWizard.dasherize();
+          }
         }
       });
 
