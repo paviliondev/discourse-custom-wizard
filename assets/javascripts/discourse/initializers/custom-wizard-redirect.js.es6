@@ -4,6 +4,8 @@ import { dasherize } from "@ember/string";
 
 export default {
   name: "custom-wizard-redirect",
+  after: "message-bus",
+
   initialize(container) {
     const messageBus = container.lookup("service:message-bus");
     const siteSettings = container.lookup("service:site-settings");
