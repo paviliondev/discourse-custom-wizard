@@ -2,44 +2,25 @@ import DiscourseURL from "discourse/lib/url";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import getUrl from "discourse-common/lib/get-url";
 import { observes } from "discourse-common/utils/decorators";
-import { dasherize } from "@ember/string";
 
 export default {
   name: "custom-wizard-edits",
   initialize(container) {
-    const messageBus = container.lookup("service:message-bus");
     const siteSettings = container.lookup("service:site-settings");
 
     if (!siteSettings.custom_wizard_enabled) {
       return;
     }
 
-    messageBus.subscribe("/redirect_to_wizard", function (wizardId) {
-      const wizardUrl = window.location.origin + "/w/" + wizardId;
-      window.location.href = wizardUrl;
-    });
+    const existing = DiscourseURL.routeTo;
+    DiscourseURL.routeTo = function (path, opts) {
+      if (path && path.indexOf("/w/") > -1) {
+        return (window.location = path);
+      }
+      return existing.apply(this, [path, opts]);
+    };
 
     withPluginApi("0.8.36", (api) => {
-      api.onAppEvent("page:changed", (data) => {
-        const currentUser = container.lookup("service:current-user");
-        const settings = container.lookup("service:site-settings");
-        if (currentUser) {
-          const redirectToWizard = currentUser.redirect_to_wizard;
-          const excludedPaths = settings.wizard_redirect_exclude_paths
-            .split("|")
-            .concat(["loading"]);
-          if (
-            redirectToWizard &&
-            data.currentRouteName !== "customWizardStep" &&
-            !excludedPaths.find((p) => {
-              return data.currentRouteName.indexOf(p) > -1;
-            })
-          ) {
-            DiscourseURL.routeTo(`/w/${dasherize(redirectToWizard)}`);
-          }
-        }
-      });
-
       api.modifyClass("component:d-navigation", {
         pluginId: "custom-wizard",
         actions: {
