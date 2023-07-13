@@ -21,7 +21,7 @@ export default {
 
     withPluginApi("0.8.36", (api) => {
       api.onAppEvent("page:changed", (data) => {
-        const currentUser = container.lookup("service:current-user");
+        const currentUser = api.getCurrentUser();
 
         if (currentUser) {
           const redirectToWizard = currentUser.redirect_to_wizard;
@@ -30,7 +30,6 @@ export default {
             .concat(["loading"]);
           if (
             redirectToWizard &&
-            data.currentRouteName !== "customWizardStep" &&
             !excludedPaths.find((p) => {
               return data.currentRouteName.indexOf(p) > -1;
             })
