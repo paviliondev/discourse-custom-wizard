@@ -30,6 +30,7 @@ export default {
             .concat(["loading"]);
           if (
             redirectToWizard &&
+            data.currentRouteName !== "customWizardStep" &&
             !excludedPaths.find((p) => {
               return data.currentRouteName.indexOf(p) > -1;
             })
