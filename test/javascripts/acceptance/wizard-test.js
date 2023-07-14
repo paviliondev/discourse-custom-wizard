@@ -13,6 +13,8 @@ import {
   wizardNoUser,
   wizardNotPermitted,
 } from "../helpers/wizard";
+import DiscourseURL from "discourse/lib/url";
+import sinon from "sinon";
 
 acceptance("Wizard | Not logged in", function (needs) {
   needs.pretender((server, helper) => {
@@ -51,6 +53,26 @@ acceptance("Wizard | Completed", function (needs) {
   test("Wizard no access completed", async function (assert) {
     await visit("/w/wizard");
     assert.ok(exists(".wizard-no-access.completed"));
+  });
+});
+
+acceptance("Wizard | Redirect", function (needs) {
+  needs.user({
+    redirect_to_wizard: "wizard",
+  });
+  needs.pretender((server, helper) => {
+    server.get("/w/wizard.json", () => {
+      return helper.response(wizard);
+    });
+  });
+
+  test("Redirect to pending Wizard", async function (assert) {
+    sinon.stub(DiscourseURL, "routeTo");
+    await visit("/latest");
+    assert.ok(
+      DiscourseURL.routeTo.calledWith("/w/wizard"),
+      "pending wizard routing works"
+    );
   });
 });
 
