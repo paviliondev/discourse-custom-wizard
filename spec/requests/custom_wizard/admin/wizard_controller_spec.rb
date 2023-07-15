@@ -5,6 +5,7 @@ describe CustomWizard::AdminWizardController do
   fab!(:user1) { Fabricate(:user) }
   fab!(:user2) { Fabricate(:user) }
   let(:template) { get_wizard_fixture("wizard") }
+  let(:category) { Fabricate(:category, custom_fields: { create_topic_wizard: "wizard" }) }
 
   before do
     CustomWizard::Template.save(template, skip_jobs: true)
@@ -40,9 +41,11 @@ describe CustomWizard::AdminWizardController do
   end
 
   it "removes wizard templates" do
+    expect(CategoryCustomField.find_by(category_id: category.id, name: 'create_topic_wizard')).not_to eq(nil)
     delete "/admin/wizards/wizard/#{template['id']}.json"
     expect(response.status).to eq(200)
     expect(CustomWizard::Template.exists?(template['id'])).to eq(false)
+    expect(CategoryCustomField.find_by(category_id: category.id, name: 'create_topic_wizard')).to eq(nil)
   end
 
   it "saves wizard templates" do
