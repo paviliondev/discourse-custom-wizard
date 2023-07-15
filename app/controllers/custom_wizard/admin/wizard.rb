@@ -26,6 +26,8 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
 
   def remove
     if CustomWizard::Template.remove(@wizard.id)
+      related_custom_fields = CategoryCustomField.where(name: 'create_topic_wizard', value: @wizard.name)
+      related_custom_fields.destroy_all
       render json: success_json
     else
       render json: failed_json
