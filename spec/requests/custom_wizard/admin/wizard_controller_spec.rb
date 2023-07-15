@@ -40,7 +40,7 @@ describe CustomWizard::AdminWizardController do
     expect(response.parsed_body['steps'].length).to eq(3)
   end
 
-  it "removes wizard templates and make sure create_topic_wizard settings for that wizard are removed from Categories" do
+  it "removes wizard templates whilst making sure create_topic_wizard settings for that wizard are removed from Categories" do
     expect(CategoryCustomField.find_by(category_id: category.id, name: 'create_topic_wizard', value: template['name'])).not_to eq(nil)
     delete "/admin/wizards/wizard/#{template['id']}.json"
     expect(response.status).to eq(200)
