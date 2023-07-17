@@ -94,7 +94,7 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
     assert.ok(
       exists(".d-date-time-input .d-time-input span.name"),
       "a time selector is shown"
-    )
+    );
     let timeText = query(
       ".d-date-time-input .d-time-input span.name"
     ).innerText;
