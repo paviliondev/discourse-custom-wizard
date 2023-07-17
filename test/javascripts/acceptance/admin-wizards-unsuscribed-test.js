@@ -90,6 +90,16 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
     );
     const wizardLink = find("div.wizard-url a");
     assert.equal(wizardLink.length, 1, "Wizard link was created");
+    await click(".btn-after-time");
+    assert.ok(
+      exists(".d-date-time-input .d-time-input span.name"),
+      "a time selector is shown"
+    );
+    let timeText = query(
+      ".d-date-time-input .d-time-input span.name"
+    ).innerText;
+    const regex = /\d\d\:\d\d/;
+    assert.ok(regex.test(timeText));
     assert.equal(
       $.trim($("a[title='Subscribe to use these features']").text()),
       "Not Subscribed",
