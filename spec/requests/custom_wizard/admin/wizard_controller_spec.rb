@@ -5,7 +5,7 @@ describe CustomWizard::AdminWizardController do
   fab!(:user1) { Fabricate(:user) }
   fab!(:user2) { Fabricate(:user) }
   let(:template) { get_wizard_fixture("wizard") }
-  let(:category) { Fabricate(:category, custom_fields: { create_topic_wizard: template['name'].parameterize.underscore }) }
+  let(:category) { Fabricate(:category, custom_fields: { create_topic_wizard: template['name'].parameterize.underscore.downcase }) }
 
   before do
     CustomWizard::Template.save(template, skip_jobs: true)
@@ -41,11 +41,11 @@ describe CustomWizard::AdminWizardController do
   end
 
   it "removes wizard templates whilst making sure create_topic_wizard settings for that wizard are removed from Categories" do
-    expect(CategoryCustomField.find_by(category_id: category.id, name: 'create_topic_wizard', value: template['name'].parameterize.underscore)).not_to eq(nil)
+    expect(CategoryCustomField.find_by(category_id: category.id, name: 'create_topic_wizard', value: template['name'].parameterize.underscore.downcase)).not_to eq(nil)
     delete "/admin/wizards/wizard/#{template['id']}.json"
     expect(response.status).to eq(200)
     expect(CustomWizard::Template.exists?(template['id'])).to eq(false)
-    expect(CategoryCustomField.find_by(name: 'create_topic_wizard', value: template['name'].parameterize.underscore)).to eq(nil)
+    expect(CategoryCustomField.find_by(name: 'create_topic_wizard', value: template['name'].parameterize.underscore.downcase)).to eq(nil)
   end
 
   it "saves wizard templates" do

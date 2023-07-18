@@ -64,7 +64,7 @@ class CustomWizard::Template
       ensure_wizard_upload_references!(wizard_id)
       PluginStore.remove(CustomWizard::PLUGIN_NAME, wizard.id)
       clear_user_wizard_redirect(wizard_id, after_time: !!wizard.after_time)
-      related_custom_fields = CategoryCustomField.where(name: 'create_topic_wizard', value: wizard.name.parameterize.underscore)
+      related_custom_fields = CategoryCustomField.where(name: 'create_topic_wizard', value: wizard.name.parameterize.underscore.downcase)
       related_custom_fields.destroy_all
     end
 
