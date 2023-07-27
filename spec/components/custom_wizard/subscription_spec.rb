@@ -52,7 +52,7 @@ describe CustomWizard::Subscription do
 
     context "without a subscription" do
       before do
-        SubscriptionClient.stubs(:find_subscriptions).returns(nil)
+        DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(nil)
       end
 
       it "has none type" do
@@ -70,7 +70,7 @@ describe CustomWizard::Subscription do
 
     context "with subscriptions" do
       def get_subscription_result(product_ids)
-        result = SubscriptionClient::Subscriptions::Result.new
+        result = DiscourseSubscriptionClient::Subscriptions::Result.new
         result.supplier = SubscriptionClientSupplier.new(product_slugs)
         result.resource = SubscriptionClientResource.new
         result.subscriptions = product_ids.map { |product_id| SubscriptionClientSubscription.new(product_id) }
@@ -83,16 +83,16 @@ describe CustomWizard::Subscription do
       let!(:multiple_subscription_result) { get_subscription_result([community_product_id, business_product_id]) }
 
       it "handles mapped values" do
-        SubscriptionClient.stubs(:find_subscriptions).returns(standard_subscription_result)
+        DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(standard_subscription_result)
         expect(described_class.includes?(:wizard, :permitted, guests_permitted["permitted"])).to eq(true)
 
-        SubscriptionClient.stubs(:find_subscriptions).returns(community_subscription_result)
+        DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(community_subscription_result)
         expect(described_class.includes?(:wizard, :permitted, guests_permitted["permitted"])).to eq(false)
       end
 
       context "with a standard subscription" do
         before do
-          SubscriptionClient.stubs(:find_subscriptions).returns(standard_subscription_result)
+          DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(standard_subscription_result)
         end
 
         it "detects standard type" do
@@ -110,7 +110,7 @@ describe CustomWizard::Subscription do
 
       context "with a business subscription" do
         before do
-          SubscriptionClient.stubs(:find_subscriptions).returns(business_subscription_result)
+          DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(business_subscription_result)
         end
 
         it "detects business type" do
@@ -124,7 +124,7 @@ describe CustomWizard::Subscription do
 
       context "with a community subscription" do
         before do
-          SubscriptionClient.stubs(:find_subscriptions).returns(community_subscription_result)
+          DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(community_subscription_result)
         end
 
         it "detects community type" do
@@ -138,7 +138,7 @@ describe CustomWizard::Subscription do
 
       context "with multiple subscriptions" do
         before do
-          SubscriptionClient.stubs(:find_subscriptions).returns(multiple_subscription_result)
+          DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(multiple_subscription_result)
         end
 
         it "detects correct type in hierarchy" do
