@@ -1,14 +1,16 @@
-import ApplicationRoute from "discourse/routes/application";
+import DiscourseURL from "discourse/lib/url";
+import { withPluginApi } from "discourse/lib/plugin-api";
+import { dasherize } from "@ember/string";
 
 export default {
   name: "custom-wizard-redirect",
   after: "message-bus",
 
-  initialize: function (container) {
+  initialize(container) {
     const messageBus = container.lookup("service:message-bus");
     const siteSettings = container.lookup("service:site-settings");
 
-    if (!siteSettings.custom_wizard_enabled || !messageBus) {
+    if (!siteSettings.custom_wizard_enabled) {
       return;
     }
 
@@ -17,28 +19,26 @@ export default {
       window.location.href = wizardUrl;
     });
 
-    ApplicationRoute.reopen({
-      actions: {
-        willTransition(transition) {
-          const redirectToWizard = this.get("currentUser.redirect_to_wizard");
-          const excludedPaths = this.siteSettings.wizard_redirect_exclude_paths
+    withPluginApi("0.8.36", (api) => {
+      api.onAppEvent("page:changed", (data) => {
+        const currentUser = api.getCurrentUser();
+
+        if (currentUser) {
+          const redirectToWizard = currentUser.redirect_to_wizard;
+          const excludedPaths = siteSettings.wizard_redirect_exclude_paths
             .split("|")
             .concat(["loading"]);
-
           if (
             redirectToWizard &&
-            (!transition.intent.name ||
-              !excludedPaths.find((p) => {
-                return transition.intent.name.indexOf(p) > -1;
-              }))
+            data.currentRouteName !== "customWizardStep" &&
+            !excludedPaths.find((p) => {
+              return data.currentRouteName.indexOf(p) > -1;
+            })
           ) {
-            transition.abort();
-            window.location = "/w/" + redirectToWizard.dasherize();
+            DiscourseURL.routeTo(`/w/${dasherize(redirectToWizard)}`);
           }
-
-          return this._super(transition);
-        },
-      },
+        }
+      });
     });
   },
 };

@@ -5,7 +5,8 @@
   inputType=inputType
   connectorType="type"
   options=options
-  onUpdate=onUpdate}}
+  onUpdate=onUpdate
+}}
 
 {{#if hasPairs}}
   <div class="mapper-pairs mapper-block">
@@ -16,7 +17,8 @@
         inputType=inputType
         options=options
         removePair=(action "removePair")
-        onUpdate=onUpdate}}
+        onUpdate=onUpdate
+      }}
     {{/each}}
 
     {{#if canAddPair}}
@@ -35,7 +37,8 @@
       connectorType="output"
       inputType=inputType
       options=options
-      onUpdate=onUpdate}}
+      onUpdate=onUpdate
+    }}
   {{/if}}
 
   <div class="output mapper-block">
@@ -45,7 +48,8 @@
       value=input.output
       activeType=input.output_type
       options=options
-      onUpdate=onUpdate}}
+      onUpdate=onUpdate
+    }}
   </div>
 {{/if}}
 

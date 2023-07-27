@@ -2,7 +2,7 @@
 
 <div class="d-editor-container">
   {{#if showPreview}}
-    <div class="d-editor-preview-wrapper {{if forcePreview "force-preview"}}">
+    <div class="d-editor-preview-wrapper {{if forcePreview 'force-preview'}}">
       <div class="d-editor-preview">
         {{html-safe preview}}
       </div>
@@ -18,13 +18,16 @@
                 onExpand=(action b.action b)
                 class=b.className
                 content=popupMenuOptions
-                options=(hash
-                  popupTitle=b.title
-                  icon=b.icon
-                )}}
+                options=(hash popupTitle=b.title icon=b.icon)
+              }}
             {{else}}
               <div>{{d.icon}}</div>
-              <button class="wizard-btn {{b.className}}" {{action b.action b}} title={{b.title}} type="button">
+              <button
+                class="wizard-btn {{b.className}}"
+                {{action b.action b}}
+                title={{b.title}}
+                type="button"
+              >
                 {{d-icon b.icon}}
                 {{#if b.label}}
                   <span class="d-button-label">{{i18n b.label}}</span>

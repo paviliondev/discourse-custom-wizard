@@ -3,7 +3,7 @@
 </label>
 
 {{#if field.image}}
-  <div class="field-image"><img src={{field.image}}></div>
+  <div class="field-image"><img src={{field.image}} /></div>
 {{/if}}
 
 {{#if field.description}}
@@ -13,7 +13,14 @@
 {{#field-validators field=field as |validators|}}
   {{#if inputComponentName}}
     <div class="input-area">
-      {{component inputComponentName field=field step=step fieldClass=fieldClass wizard=wizard autocomplete=validators.autocomplete}}
+      {{component
+        inputComponentName
+        field=field
+        step=step
+        fieldClass=fieldClass
+        wizard=wizard
+        autocomplete=validators.autocomplete
+      }}
     </div>
   {{/if}}
 {{/field-validators}}
@@ -25,5 +32,7 @@
 {{/if}}
 
 {{#if field.errorDescription}}
-  <div class="field-error-description">{{html-safe field.errorDescription}}</div>
+  <div class="field-error-description">{{html-safe
+      field.errorDescription
+    }}</div>
 {{/if}}

@@ -16,7 +16,10 @@
 
   {{#if isComposer}}
     <div class="wizard-table-long-text">
-      <p class="wizard-table-composer-text wizard-table-long-text-content {{textState}}">
+      <p
+        class="wizard-table-composer-text wizard-table-long-text-content
+          {{textState}}"
+      >
         {{value.value}}
       </p>
       <a href {{action "expandText"}}>
@@ -28,7 +31,8 @@
   {{#if isComposerPreview}}
     {{d-icon "comment-alt"}}
     <span class="wizard-table-composer-text">
-      {{i18n "admin.wizard.submissions.composer_preview"}}: {{value.value}}
+      {{i18n "admin.wizard.submissions.composer_preview"}}:
+      {{value.value}}
     </span>
   {{/if}}
 
@@ -146,7 +150,12 @@
   {{/if}}
 
   {{#if showUsername}}
-    <a target="_blank" rel="noopener noreferrer" href={{userProfileUrl}} title={{username}}>
+    <a
+      target="_blank"
+      rel="noopener noreferrer"
+      href={{userProfileUrl}}
+      title={{username}}
+    >
       {{username}}
     </a>
   {{/if}}
