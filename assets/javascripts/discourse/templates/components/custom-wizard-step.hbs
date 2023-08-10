@@ -5,7 +5,7 @@
 
   {{#if bannerImage}}
     <div class="wizard-step-banner">
-      <img src={{bannerImage}}>
+      <img src={{bannerImage}} />
     </div>
   {{/if}}
 
@@ -26,7 +26,11 @@
     <div class="white"></div>
     <div class="black" style={{barStyle}}></div>
     <div class="screen"></div>
-    <span>{{i18n "wizard.step" current=step.displayIndex total=wizard.totalSteps}}</span>
+    <span>{{i18n
+        "wizard.step"
+        current=step.displayIndex
+        total=wizard.totalSteps
+      }}</span>
   </div>
 
   <div class="wizard-buttons">
@@ -34,22 +38,44 @@
       {{loading-spinner size="small"}}
     {{else}}
       {{#if showQuitButton}}
-        <a href {{action "quit"}} class="action-link quit" tabindex={{secondaryButtonIndex}}>{{i18n "wizard.quit"}}</a>
+        <a
+          href
+          {{action "quit"}}
+          class="action-link quit"
+          tabindex={{secondaryButtonIndex}}
+        >{{i18n "wizard.quit"}}</a>
       {{/if}}
       {{#if showBackButton}}
-        <a href {{action "backStep"}} class="action-link back" tabindex={{secondaryButtonIndex}}>{{i18n "wizard.back"}}</a>
+        <a
+          href
+          {{action "backStep"}}
+          class="action-link back"
+          tabindex={{secondaryButtonIndex}}
+        >{{i18n "wizard.back"}}</a>
       {{/if}}
     {{/if}}
 
     {{#if showNextButton}}
-      <button type="button" class="wizard-btn next primary" {{action "nextStep"}} disabled={{saving}} tabindex={{primaryButtonIndex}}>
+      <button
+        type="button"
+        class="wizard-btn next primary"
+        {{action "nextStep"}}
+        disabled={{saving}}
+        tabindex={{primaryButtonIndex}}
+      >
         {{i18n "wizard.next"}}
         {{d-icon "chevron-right"}}
       </button>
     {{/if}}
 
     {{#if showDoneButton}}
-      <button type="button" class="wizard-btn done" {{action "done"}} disabled={{saving}} tabindex={{primaryButtonIndex}}>
+      <button
+        type="button"
+        class="wizard-btn done"
+        {{action "done"}}
+        disabled={{saving}}
+        tabindex={{primaryButtonIndex}}
+      >
         {{i18n "wizard.done_custom"}}
       </button>
     {{/if}}

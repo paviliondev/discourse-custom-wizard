@@ -2,12 +2,15 @@
 class CustomWizard::SubmissionSerializer < ApplicationSerializer
   attributes :id,
              :fields,
-             :submitted_at
-
-  has_one :user, serializer: ::BasicUserSerializer, embed: :objects
+             :submitted_at,
+             :user
 
   def include_user?
-    object.user.present?
+    object.wizard.user.present?
+  end
+
+  def user
+    ::BasicUserSerializer.new(object.wizard.user, root: false).as_json
   end
 
   def fields

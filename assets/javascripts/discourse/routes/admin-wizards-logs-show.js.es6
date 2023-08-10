@@ -7,6 +7,12 @@ export default DiscourseRoute.extend({
     return CustomWizardLogs.list(params.wizardId);
   },
 
+  afterModel(model) {
+    if (model === null) {
+      return this.transitionTo("adminWizardsLogs");
+    }
+  },
+
   setupController(controller, model) {
     controller.setProperties({
       wizard: model.wizard,

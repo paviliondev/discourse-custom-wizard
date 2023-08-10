@@ -2,9 +2,9 @@
 
 describe CustomWizard::Log do
   before do
-    CustomWizard::Log.create('first-test-wizard', 'perform_first_action', 'first_test_user', 'First log message')
-    CustomWizard::Log.create('second-test-wizard', 'perform_second_action', 'second_test_user', 'Second log message')
-    CustomWizard::Log.create('third-test-wizard', 'perform_third_action', 'third_test_user', 'Third log message')
+    CustomWizard::Log.create('first-test-wizard', 'perform_first_action', 'first_test_user', 'First log message', 5.minutes.ago)
+    CustomWizard::Log.create('second-test-wizard', 'perform_second_action', 'second_test_user', 'Second log message', 3.minutes.ago)
+    CustomWizard::Log.create('third-test-wizard', 'perform_third_action', 'third_test_user', 'Third log message', 1.minutes.ago)
   end
 
   it "creates logs" do

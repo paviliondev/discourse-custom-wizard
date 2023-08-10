@@ -29,6 +29,11 @@ class CustomWizard::Field
   attr_accessor :index,
                 :step
 
+  REQUIRES_USER = %w[
+    composer
+    upload
+  ]
+
   def initialize(attrs)
     @raw = attrs || {}
     @id = attrs[:id]

@@ -2,6 +2,7 @@
 
 describe CustomWizard::Action do
   fab!(:user) { Fabricate(:user, name: "Angus", username: 'angus', email: "angus@email.com", trust_level: TrustLevel[2]) }
+  fab!(:user1) { Fabricate(:user, name: "Angus One", username: 'angus1', email: "angus_one@email.com", trust_level: TrustLevel[2]) }
   fab!(:category) { Fabricate(:category, name: 'cat1', slug: 'cat-slug') }
   fab!(:tag) { Fabricate(:tag, name: 'tag1') }
   fab!(:group) { Fabricate(:group) }
@@ -12,12 +13,14 @@ describe CustomWizard::Action do
   let(:watch_categories) { get_wizard_fixture("actions/watch_categories") }
   let(:watch_tags) { get_wizard_fixture("actions/watch_tags") }
   let(:create_group) { get_wizard_fixture("actions/create_group") }
+  let(:create_group_with_nonexistent_user) { get_wizard_fixture("actions/create_group_bad_user") }
   let(:add_to_group) { get_wizard_fixture("actions/add_to_group") }
   let(:send_message) { get_wizard_fixture("actions/send_message") }
   let(:send_message_multi) { get_wizard_fixture("actions/send_message_multi") }
   let(:api_test_endpoint) { get_wizard_fixture("endpoints/test_endpoint") }
   let(:api_test_endpoint_body) { get_wizard_fixture("endpoints/test_endpoint_body") }
   let(:api_test_no_authorization) { get_wizard_fixture("api/no_authorization") }
+  let(:guests_permitted) { get_wizard_fixture("wizard/guests_permitted") }
 
   def update_template(template)
     CustomWizard::Template.save(template, skip_jobs: true)
@@ -78,8 +81,8 @@ describe CustomWizard::Action do
       updater.update
 
       expect(updater.success?).to eq(true)
-      expect(UserHistory.where(
-        acting_user_id: user.id,
+      expect(CustomWizard::UserHistory.where(
+        actor_id: user.id,
         context: "super_mega_fun_wizard",
         subject: "step_3"
       ).exists?).to eq(true)
@@ -301,6 +304,28 @@ describe CustomWizard::Action do
       expect(topic.first.allowed_groups.map(&:name)).to include('cool_group', 'cool_group_1')
       expect(post.exists?).to eq(true)
     end
+
+    it "send_message works with guests are permitted" do
+      wizard_template["permitted"] = guests_permitted["permitted"]
+      wizard_template.delete("actions")
+      wizard_template['actions'] = [send_message]
+      update_template(wizard_template)
+
+      User.create(username: 'angus1', email: "angus1@email.com")
+
+      wizard = CustomWizard::Builder.new(wizard_template["id"], nil, CustomWizard::Wizard.generate_guest_id).build
+      wizard.create_updater(wizard.steps[0].id, {}).update
+      updater = wizard.create_updater(wizard.steps[1].id, {})
+      updater.update
+
+      topic = Topic.where(archetype: Archetype.private_message, title: "Message title")
+      post = Post.where(topic_id: topic.pluck(:id))
+
+      expect(topic.exists?).to eq(true)
+      expect(topic.first.topic_allowed_users.first.user.username).to eq('angus1')
+      expect(topic.first.topic_allowed_users.second.user.username).to eq(Discourse.system_user.username)
+      expect(post.exists?).to eq(true)
+    end
   end
 
   context "business subscription actions" do
@@ -327,7 +352,25 @@ describe CustomWizard::Action do
       wizard = CustomWizard::Builder.new(@template[:id], user).build
       wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
 
+      group_id = Group.where(name: wizard.current_submission.fields['action_9']).first.id
+      user_id =  User.find_by(username: wizard_template['actions'][4]['usernames'][0]["output"][0]).id
+
       expect(Group.where(name: wizard.current_submission.fields['action_9']).exists?).to eq(true)
+      expect(GroupUser.where(group_id: group_id, user_id: user_id).exists?).to eq(true)
+    end
+
+    it '#create_group completes successfully when user included in usernames does not exist but excludes users who do not exist and includes warning in log' do
+      wizard_template['actions'] << create_group_with_nonexistent_user
+      update_template(wizard_template)
+
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
+
+      group_id = Group.where(name: wizard.current_submission.fields['action_9']).first.id
+
+      expect(CustomWizard::Log.list_query.all.last.value.include? "some users were not found").to eq(true)
+      expect(Group.where(name: wizard.current_submission.fields['action_9']).exists?).to eq(true)
+      expect(GroupUser.where(group_id: group_id).count).to eq(1)
     end
 
     it '#add_to_group' do

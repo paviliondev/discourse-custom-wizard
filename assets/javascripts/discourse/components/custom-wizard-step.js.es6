@@ -9,6 +9,7 @@ import CustomWizard, {
   updateCachedWizard,
 } from "discourse/plugins/discourse-custom-wizard/discourse/models/custom-wizard";
 import { alias, not } from "@ember/object/computed";
+import discourseLater from "discourse-common/lib/later";
 
 const alreadyWarned = {};
 
@@ -110,29 +111,22 @@ export default Component.extend({
   },
 
   autoFocus() {
-    schedule("afterRender", () => {
-      const $invalid = $(
-        ".wizard-field.invalid:nth-of-type(1) .wizard-focusable"
-      );
-
-      if ($invalid.length) {
-        return $invalid.focus();
-      }
-
-      $(".wizard-focusable:first").focus();
+    discourseLater(() => {
+      schedule("afterRender", () => {
+        if ($(".invalid .wizard-focusable").length) {
+          this.animateInvalidFields();
+        }
+      });
     });
   },
 
   animateInvalidFields() {
     schedule("afterRender", () => {
-      let $element = $(
-        ".invalid input[type=text],.invalid textarea,.invalid input[type=checkbox],.invalid .select-kit"
-      );
-
-      if ($element.length) {
+      let $invalid = $(".invalid .wizard-focusable");
+      if ($invalid.length) {
         $([document.documentElement, document.body]).animate(
           {
-            scrollTop: $element.offset().top - 200,
+            scrollTop: $invalid.offset().top - 200,
           },
           400
         );

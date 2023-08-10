@@ -4,7 +4,7 @@ import { computed } from "@ember/object";
 
 export default Component.extend(UppyUploadMixin, {
   classNames: ["wizard-field-upload"],
-  classNameBindings: ["isImage"],
+  classNameBindings: ["isImage", "fieldClass"],
   uploading: false,
   type: computed(function () {
     return `wizard_${this.field.id}`;

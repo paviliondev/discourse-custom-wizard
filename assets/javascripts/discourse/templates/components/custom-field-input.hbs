@@ -5,9 +5,8 @@
       feature="custom_field"
       attribute="klass"
       onChange=(action (mut field.klass))
-      options=(hash
-        none="admin.wizard.custom_field.klass.select"
-      )}}
+      options=(hash none="admin.wizard.custom_field.klass.select")
+    }}
   </td>
   <td>
     {{wizard-subscription-selector
@@ -15,23 +14,22 @@
       feature="custom_field"
       attribute="type"
       onChange=(action (mut field.type))
-      options=(hash
-        none="admin.wizard.custom_field.type.select"
-      )}}
+      options=(hash none="admin.wizard.custom_field.type.select")
+    }}
   </td>
   <td class="input">
-    {{input
-      value=field.name
-      placeholder=(i18n "admin.wizard.custom_field.name.select")}}
+    <Input
+      @value={{this.field.name}}
+      placeholder={{i18n "admin.wizard.custom_field.name.select"}}
+    />
   </td>
   <td class="multi-select">
     {{multi-select
       value=field.serializers
       content=serializerContent
       onChange=(action (mut field.serializers))
-      options=(hash
-        none="admin.wizard.custom_field.serializers.select"
-      )}}
+      options=(hash none="admin.wizard.custom_field.serializers.select")
+    }}
   </td>
   <td class="actions">
     {{#if loading}}
@@ -45,16 +43,15 @@
       action=(action "destroy")
       icon="trash-alt"
       class="destroy"
-      disabled=destroyDisabled}}
+      disabled=destroyDisabled
+    }}
     {{d-button
       icon="save"
       action=(action "save")
       disabled=saveDisabled
-      class="save"}}
-    {{d-button
-      action=(action "close")
-      icon="times"
-      disabled=closeDisabled}}
+      class="save"
+    }}
+    {{d-button action=(action "close") icon="times" disabled=closeDisabled}}
   </td>
 {{else}}
   <td><label>{{field.klass}}</label></td>

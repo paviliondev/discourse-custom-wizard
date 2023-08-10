@@ -7,7 +7,7 @@ import userSearch from "discourse/lib/user-search";
 import I18n from "I18n";
 import Handlebars from "handlebars";
 import { isEmpty } from "@ember/utils";
-import TextField from "@ember/component/text-field";
+import TextField from "discourse/components/text-field";
 
 const template = function (params) {
   const options = params.options;

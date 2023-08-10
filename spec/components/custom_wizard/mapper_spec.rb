@@ -58,6 +58,11 @@ describe CustomWizard::Mapper do
       "step_1_field_3" => "Value"
     }
   }
+  let(:template_params_object) {
+    {
+      "step_1_field_1": get_wizard_fixture("field/upload")
+    }
+  }
 
   def create_template_mapper(data, user)
     CustomWizard::Mapper.new(
@@ -276,14 +281,27 @@ describe CustomWizard::Mapper do
 
     it "avatar with valid size" do
       avatar_inputs = inputs['interpolate_avatar'].dup
-      avatar_inputs[0]["output"] = "Avatar: ![avatar](u{avatar.120})"
+      avatar_inputs[0]["output"] = "Avatar: ![avatar](u{avatar.144})"
 
       expect(CustomWizard::Mapper.new(
         inputs: avatar_inputs,
         data: data,
         user: user1
-      ).perform).to eq("Avatar: ![avatar](#{user1.avatar_template_url.gsub("{size}", "120")})")
+      ).perform).to eq("Avatar: ![avatar](#{user1.avatar_template_url.gsub("{size}", "144")})")
     end
+  end
+
+  it "handles not equal pairs" do
+    expect(CustomWizard::Mapper.new(
+      inputs: inputs['not_equals_pair'],
+      data: data,
+      user: user1
+    ).perform).to eq(true)
+    expect(CustomWizard::Mapper.new(
+      inputs: inputs['not_equals_pair'],
+      data: data,
+      user: user2
+    ).perform).to eq(false)
   end
 
   it "handles greater than pairs" do
@@ -373,7 +391,7 @@ describe CustomWizard::Mapper do
       expect(result).to eq(template_params["step_1_field_1"])
     end
 
-    it "requires a subscription" do
+    it "does not require a subscription" do
       template = '{{ "w{step_1_field_1}" | size }}'
       mapper = create_template_mapper(template_params, user1)
       result = mapper.interpolate(
@@ -383,7 +401,7 @@ describe CustomWizard::Mapper do
         wizard: true,
         value: true
       )
-      expect(result).to eq("{{ \"#{template_params["step_1_field_1"]}\" | size }}")
+      expect(result).to eq("5")
     end
 
     context "with a subscription" do
@@ -446,6 +464,40 @@ describe CustomWizard::Mapper do
           template: false,
         )
         expect(result).to eq(template)
+      end
+
+      it "handles correct object variable references" do
+        template = <<-LIQUID.strip
+          {%- if "w{step_1_field_1.id}" == "step_2_field_7" -%}
+            Correct
+          {%- else -%}
+            Incorrect
+          {%-endif-%}
+        LIQUID
+        mapper = create_template_mapper(template_params_object, user1)
+        result = mapper.interpolate(
+          template.dup,
+          template: true,
+          wizard: true
+        )
+        expect(result).to eq("Correct")
+      end
+
+      it "handles incorrect object variable references" do
+        template = <<-LIQUID.strip
+          {%- if "w{step_1_field_1}" == "step_2_field_7" -%}
+            Correct
+          {%- else -%}
+            Incorrect
+          {%-endif-%}
+        LIQUID
+        mapper = create_template_mapper(template_params_object, user1)
+        result = mapper.interpolate(
+          template.dup,
+          template: true,
+          wizard: true
+        )
+        expect(result).to eq("Incorrect")
       end
 
       context "custom filter: 'first_non_empty'" do

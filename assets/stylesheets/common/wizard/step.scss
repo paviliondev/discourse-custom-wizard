@@ -17,7 +17,7 @@ body.custom-wizard .wizard-column {
     }
   }
 
-  img.emoji {
+  .emoji {
     width: 20px;
     height: 20px;
     vertical-align: middle;
@@ -29,7 +29,7 @@ body.custom-wizard .wizard-column {
 
     p {
       img {
-        @extend img.emoji;
+        @extend .emoji;
       }
     }
 

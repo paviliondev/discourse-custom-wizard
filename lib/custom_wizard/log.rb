@@ -15,13 +15,13 @@ class CustomWizard::Log
     @username = attrs['username']
   end
 
-  def self.create(wizard_id, action, username, message)
+  def self.create(wizard_id, action, username, message, date = Time.now)
     log_id = SecureRandom.hex(12)
 
     PluginStore.set('custom_wizard_log',
       log_id.to_s,
       {
-        date: Time.now,
+        date: date,
         wizard_id: wizard_id,
         action: action,
         username: username,

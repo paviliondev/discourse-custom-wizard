@@ -7,6 +7,9 @@ describe CustomWizard::TemplateValidator do
   let(:user_condition) { get_wizard_fixture("condition/user_condition") }
   let(:permitted_json) { get_wizard_fixture("wizard/permitted") }
   let(:composer_preview) { get_wizard_fixture("field/composer_preview") }
+  let(:guests_permitted) { get_wizard_fixture("wizard/guests_permitted") }
+  let(:upload_field) { get_wizard_fixture("field/upload") }
+  let(:validation_condition) { get_wizard_fixture("condition/validation_condition") }
 
   let(:valid_liquid_template) {
     <<-LIQUID.strip
@@ -146,6 +149,20 @@ describe CustomWizard::TemplateValidator do
       ).to eq(true)
     end
 
+    it "validates user-only features" do
+      template[:permitted] = guests_permitted['permitted']
+      template[:steps][0][:fields] << upload_field
+      validator = CustomWizard::TemplateValidator.new(template)
+      expect(validator.perform).to eq(false)
+      errors = validator.errors.to_a
+      expect(errors).to include(
+        I18n.t("wizard.validation.not_permitted_for_guests", object_id: "action_1")
+      )
+      expect(errors).to include(
+        I18n.t("wizard.validation.not_permitted_for_guests", object_id: "step_2_field_7")
+      )
+    end
+
     it "validates step attributes" do
       template[:steps][0][:condition] = user_condition['condition']
       expect(
@@ -162,6 +179,13 @@ describe CustomWizard::TemplateValidator do
 
     it "validates actions" do
       template[:actions] << create_category
+      expect(
+        CustomWizard::TemplateValidator.new(template).perform
+      ).to eq(true)
+    end
+
+    it "validates settings with validation conditions" do
+      template[:permitted] = validation_condition["condition"]
       expect(
         CustomWizard::TemplateValidator.new(template).perform
       ).to eq(true)

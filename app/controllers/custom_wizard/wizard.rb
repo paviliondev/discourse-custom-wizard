@@ -1,8 +1,5 @@
 # frozen_string_literal: true
-class CustomWizard::WizardController < ::ApplicationController
-  before_action :ensure_plugin_enabled
-  before_action :ensure_logged_in, only: [:skip]
-
+class CustomWizard::WizardController < ::CustomWizard::WizardClientController
   def show
     if wizard.present?
       render json: CustomWizard::WizardSerializer.new(wizard, scope: guardian, root: false).as_json, status: 200
@@ -35,19 +32,8 @@ class CustomWizard::WizardController < ::ApplicationController
 
   def wizard
     @wizard ||= begin
-      builder = CustomWizard::Builder.new(params[:wizard_id].underscore, current_user)
-      return nil unless builder.present?
-      opts = {}
-      opts[:reset] = params[:reset]
-      builder.build(opts, params)
-    end
-  end
-
-  private
-
-  def ensure_plugin_enabled
-    unless SiteSetting.custom_wizard_enabled
-      redirect_to path("/")
+      return nil unless @builder.present?
+      @builder.build({ reset: params[:reset] }, params)
     end
   end
 end
