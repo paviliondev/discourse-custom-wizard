@@ -12,12 +12,15 @@ import { alias } from "@ember/object/computed";
 import Site from "discourse/models/site";
 import { uploadIcon } from "discourse/lib/uploads";
 import { dasherize } from "@ember/string";
-import showModal from "discourse/lib/show-modal";
+import InsertHyperlink from "discourse/components/modal/insert-hyperlink";
+import { inject as service } from "@ember/service";
 
 const IMAGE_MARKDOWN_REGEX =
   /!\[(.*?)\|(\d{1,4}x\d{1,4})(,\s*\d{1,3}%)?(.*?)\]\((upload:\/\/.*?)\)(?!(.*`))/g;
 
 export default ComposerEditor.extend({
+  modal: service(),
+
   classNameBindings: ["fieldClass"],
   allowUpload: true,
   showLink: false,
@@ -197,10 +200,8 @@ export default ComposerEditor.extend({
       if (this._lastSel) {
         linkText = this._lastSel.value;
       }
-
-      showModal("insert-hyperlink").setProperties({
-        linkText,
-        toolbarEvent,
+      this.modal.show(InsertHyperlink, {
+        model: { linkText, toolbarEvent },
       });
     },
 
