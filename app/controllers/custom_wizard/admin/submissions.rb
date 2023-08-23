@@ -22,7 +22,12 @@ class CustomWizard::AdminSubmissionsController < CustomWizard::AdminController
   end
 
   def download
-    send_data submission_list.submissions.to_json,
+    content = ActiveModel::ArraySerializer.new(
+      submission_list.submissions,
+      each_serializer: CustomWizard::SubmissionSerializer
+    )
+
+    send_data content.to_json,
       filename: "#{Discourse.current_hostname}-wizard-submissions-#{@wizard.name}.json",
       content_type: "application/json",
       disposition: "attachment"
