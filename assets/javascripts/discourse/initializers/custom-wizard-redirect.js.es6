@@ -24,6 +24,7 @@ export default {
         const currentUser = api.getCurrentUser();
         console.log(data);
         debugger;
+        console.log(!data.url.includes("ignore_redirect"))
         if (currentUser) {
           const redirectToWizard = currentUser.redirect_to_wizard;
           const excludedPaths = siteSettings.wizard_redirect_exclude_paths
