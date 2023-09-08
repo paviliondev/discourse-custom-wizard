@@ -22,7 +22,6 @@ export default {
     withPluginApi("0.8.36", (api) => {
       api.onAppEvent("page:changed", (data) => {
         const currentUser = api.getCurrentUser();
-        const searchParams = new URLSearchParams(window.location.search);
 
         if (currentUser) {
           const redirectToWizard = currentUser.redirect_to_wizard;
