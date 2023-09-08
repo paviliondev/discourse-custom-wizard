@@ -22,7 +22,8 @@ export default {
     withPluginApi("0.8.36", (api) => {
       api.onAppEvent("page:changed", (data) => {
         const currentUser = api.getCurrentUser();
-
+        console.log(data);
+        debugger;
         if (currentUser) {
           const redirectToWizard = currentUser.redirect_to_wizard;
           const excludedPaths = siteSettings.wizard_redirect_exclude_paths
