@@ -4,7 +4,7 @@ import EmberObject, { set } from "@ember/object";
 import { A } from "@ember/array";
 import { all } from "rsvp";
 import { ajax } from "discourse/lib/ajax";
-import { inject as service } from '@ember/service';
+import { inject as service } from "@ember/service";
 
 export default DiscourseRoute.extend({
   router: service(),

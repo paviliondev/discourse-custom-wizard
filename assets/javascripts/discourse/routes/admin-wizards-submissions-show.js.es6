@@ -2,7 +2,7 @@ import { A } from "@ember/array";
 import CustomWizardAdmin from "../models/custom-wizard-admin";
 import DiscourseRoute from "discourse/routes/discourse";
 import { formatModel } from "../lib/wizard-submission";
-import { inject as service } from '@ember/service';
+import { inject as service } from "@ember/service";
 
 export default DiscourseRoute.extend({
   router: service(),

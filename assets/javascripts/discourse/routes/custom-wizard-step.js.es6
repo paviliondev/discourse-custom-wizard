@@ -3,7 +3,7 @@ import { getCachedWizard } from "../models/custom-wizard";
 import Route from "@ember/routing/route";
 import { scrollTop } from "discourse/mixins/scroll-top";
 import { action } from "@ember/object";
-import { inject as service } from '@ember/service';
+import { inject as service } from "@ember/service";
 
 export default Route.extend({
   router: service(),
