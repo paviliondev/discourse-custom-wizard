@@ -269,7 +269,7 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
     await click(".modal-footer button.advanced-mode-btn");
     assert.ok(
       exists(
-        ".discourse-local-dates-create-modal.modal-body .advanced-options"
+        ".discourse-local-dates-create-modal .modal-body .advanced-options"
       ),
       "Advanced mode is visible"
     );
