@@ -17,12 +17,13 @@ export default Controller.extend({
         const wizardId = this.get("wizard.id");
         window.location.href = getUrl(`/w/${wizardId}/steps/${nextStepId}`);
       } else {
-        this.router.transitionToRoute("customWizardStep", nextStepId);
+        debugger;
+        this.router.transitionTo("customWizardStep", nextStepId);
       }
     },
 
     goBack() {
-      this.router.transitionToRoute(
+      this.router.transitionTo(
         "customWizardStep",
         this.get("step.previous")
       );

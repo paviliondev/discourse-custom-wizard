@@ -251,7 +251,7 @@ export default Controller.extend({
         .catch(popupAjaxError)
         .then((result) => {
           if (result.success) {
-            this.router.transitionToRoute("adminWizardsApis").then(() => {
+            this.router.transitionTo("adminWizardsApis").then(() => {
               this.send("refreshModel");
             });
           }
