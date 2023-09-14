@@ -13,7 +13,7 @@ import {
 } from "../helpers/admin-wizard";
 import { Promise } from "rsvp";
 
-acceptance("Admin | Custom Fields Unsuscribed", function (needs) {
+acceptance("Admin | Custom Fields Unsubscribed", function (needs) {
   needs.user();
   needs.settings({
     custom_wizard_enabled: true,
