@@ -3,7 +3,7 @@
     <LoadingSpinner size="large" />
   {{else}}
     <div class="edit-directory-columns-container">
-      {{#each this.args.model.columns as |column|}}
+      {{#each @model.columns as |column|}}
         <div class="edit-directory-column">
           <div class="left-content">
             <label class="column-name">
