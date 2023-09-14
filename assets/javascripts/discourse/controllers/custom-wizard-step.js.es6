@@ -17,7 +17,6 @@ export default Controller.extend({
         const wizardId = this.get("wizard.id");
         window.location.href = getUrl(`/w/${wizardId}/steps/${nextStepId}`);
       } else {
-        debugger;
         this.router.transitionTo("customWizardStep", nextStepId);
       }
     },
