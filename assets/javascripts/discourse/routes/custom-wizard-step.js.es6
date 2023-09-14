@@ -30,7 +30,7 @@ export default Route.extend({
 
   afterModel(model) {
     if (model.completed) {
-      return this.transitionTo("wizard.index");
+      return this.router.transitionTo("wizard.index");
     }
     return model.set("wizardId", this.wizard.id);
   },
