@@ -7,7 +7,7 @@ import { selectKitContent } from "../lib/wizard";
 import { underscore } from "@ember/string";
 import Controller from "@ember/controller";
 import I18n from "I18n";
-import { inject as service } from '@ember/service';
+import { inject as service } from "@ember/service";
 
 export default Controller.extend({
   router: service(),
