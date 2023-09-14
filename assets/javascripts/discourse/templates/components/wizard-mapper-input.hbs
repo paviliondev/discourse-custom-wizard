@@ -10,7 +10,7 @@
 
 {{#if hasPairs}}
   <div class="mapper-pairs mapper-block">
-    {{#each input.pairs as |pair|}}
+    {{#each this.input.pairs as |pair|}}
       {{wizard-mapper-pair
         pair=pair
         last=pair.last
@@ -53,6 +53,6 @@
   </div>
 {{/if}}
 
-<a role="button" class="remove-input" {{action remove input}}>
+<a role="button" class="remove-input" {{action remove this.input}}>
   {{d-icon "times"}}
 </a>
