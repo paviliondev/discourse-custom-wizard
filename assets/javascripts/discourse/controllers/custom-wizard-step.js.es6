@@ -22,7 +22,10 @@ export default Controller.extend({
     },
 
     goBack() {
-      this.router.transitionToRoute("customWizardStep", this.get("step.previous"));
+      this.router.transitionToRoute(
+        "customWizardStep",
+        this.get("step.previous")
+      );
     },
 
     showMessage(message) {
