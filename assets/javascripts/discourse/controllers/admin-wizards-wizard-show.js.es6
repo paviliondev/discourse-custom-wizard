@@ -135,8 +135,6 @@ export default Controller.extend({
             this.set("wizard.after_time_scheduled", dateTime),
         },
       });
-
-      // controller.setup();
     },
 
     copyUrl() {
