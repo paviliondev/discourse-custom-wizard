@@ -1,23 +1,23 @@
 {{wizard-mapper-connector
-  connector=input.type
-  connectors=inputTypes
+  connector=this.input.type
+  connectors=this.inputTypes
   inputTypes=true
-  inputType=inputType
+  inputType=this.inputType
   connectorType="type"
-  options=options
-  onUpdate=onUpdate
+  options=this.options
+  onUpdate=this.onUpdate
 }}
 
 {{#if hasPairs}}
   <div class="mapper-pairs mapper-block">
-    {{#each input.pairs as |pair|}}
+    {{#each this.input.pairs as |pair|}}
       {{wizard-mapper-pair
         pair=pair
         last=pair.last
-        inputType=inputType
-        options=options
+        inputType=this.inputType
+        options=this.options
         removePair=(action "removePair")
-        onUpdate=onUpdate
+        onUpdate=this.onUpdate
       }}
     {{/each}}
 
@@ -32,27 +32,27 @@
 {{#if hasOutput}}
   {{#if hasPairs}}
     {{wizard-mapper-connector
-      connector=input.output_connector
-      connectors=connectors
+      connector=this.input.output_connector
+      connectors=this.connectors
       connectorType="output"
-      inputType=inputType
-      options=options
-      onUpdate=onUpdate
+      inputType=this.inputType
+      options=this.options
+      onUpdate=this.onUpdate
     }}
   {{/if}}
 
   <div class="output mapper-block">
     {{wizard-mapper-selector
       selectorType="output"
-      inputType=input.type
-      value=input.output
-      activeType=input.output_type
-      options=options
-      onUpdate=onUpdate
+      inputType=this.input.type
+      value=this.input.output
+      activeType=this.input.output_type
+      options=this.options
+      onUpdate=this.onUpdate
     }}
   </div>
 {{/if}}
 
-<a role="button" class="remove-input" {{action remove input}}>
+<a role="button" class="remove-input" {{action remove this.input}}>
   {{d-icon "times"}}
 </a>

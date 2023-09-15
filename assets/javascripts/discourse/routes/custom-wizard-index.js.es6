@@ -1,11 +1,14 @@
 import { getCachedWizard } from "../models/custom-wizard";
 import Route from "@ember/routing/route";
+import { inject as service } from "@ember/service";
 
 export default Route.extend({
+  router: service(),
+
   beforeModel() {
     const wizard = getCachedWizard();
     if (wizard && wizard.permitted && !wizard.completed && wizard.start) {
-      this.replaceWith("customWizardStep", wizard.start);
+      this.router.replaceWith("customWizardStep", wizard.start);
     }
   },
 

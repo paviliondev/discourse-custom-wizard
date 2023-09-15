@@ -1,7 +1,10 @@
 import DiscourseRoute from "discourse/routes/discourse";
 import { ajax } from "discourse/lib/ajax";
+import { inject as service } from "@ember/service";
 
 export default DiscourseRoute.extend({
+  router: service(),
+
   model() {
     return ajax("/admin/wizards");
   },
@@ -17,7 +20,7 @@ export default DiscourseRoute.extend({
 
   afterModel(model, transition) {
     if (transition.targetName === "adminWizards.index") {
-      this.transitionTo("adminWizardsWizard");
+      this.router.transitionTo("adminWizardsWizard");
     }
   },
 });

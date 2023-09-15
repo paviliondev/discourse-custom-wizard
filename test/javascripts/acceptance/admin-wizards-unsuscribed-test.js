@@ -16,7 +16,7 @@ import {
   getWizard,
 } from "../helpers/admin-wizard";
 
-acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
+acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
   needs.user();
   needs.settings({
     custom_wizard_enabled: true,
@@ -257,7 +257,7 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
       ".wizard-custom-step .wizard-text-editor .d-editor button.local-dates"
     );
     assert.ok(
-      exists(".discourse-local-dates-create-modal.modal-body"),
+      exists(".discourse-local-dates-create-modal .modal-body"),
       "Insert date-time modal visible"
     );
     assert.ok(
@@ -269,7 +269,7 @@ acceptance("Admin | Custom Wizard Unsuscribed", function (needs) {
     await click(".modal-footer button.advanced-mode-btn");
     assert.ok(
       exists(
-        ".discourse-local-dates-create-modal.modal-body .advanced-options"
+        ".discourse-local-dates-create-modal .modal-body .advanced-options"
       ),
       "Advanced mode is visible"
     );
