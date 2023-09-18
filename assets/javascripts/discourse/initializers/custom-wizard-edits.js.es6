@@ -2,6 +2,7 @@ import DiscourseURL from "discourse/lib/url";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import getUrl from "discourse-common/lib/get-url";
 import { observes } from "discourse-common/utils/decorators";
+import Category from "discourse/models/category";
 
 export default {
   name: "custom-wizard-edits",
@@ -81,6 +82,16 @@ export default {
           if (this.session.wizardEventFieldId === this.fieldId) {
             this.replaceText(oldVal, newVal, opts);
           }
+        },
+      });
+
+      api.modifyClass("component:category-chooser", {
+        categoriesByScope(options = {}) {
+          let categories = this._super(options);
+
+          return categories.filter((category) => {
+            return !category.custom_fields?.custom_wizard_hide_from_composer;
+          });
         },
       });
     });
