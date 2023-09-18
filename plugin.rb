@@ -105,6 +105,7 @@ after_initialize do
   # preloaded category custom fields
   %w[
     create_topic_wizard
+    custom_wizard_hide_from_composer
   ].each do |custom_field|
     Site.preloaded_category_custom_fields << custom_field
   end
