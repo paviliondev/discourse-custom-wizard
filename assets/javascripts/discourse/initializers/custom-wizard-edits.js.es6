@@ -2,7 +2,6 @@ import DiscourseURL from "discourse/lib/url";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import getUrl from "discourse-common/lib/get-url";
 import { observes } from "discourse-common/utils/decorators";
-import Category from "discourse/models/category";
 
 export default {
   name: "custom-wizard-edits",
