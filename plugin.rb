@@ -91,6 +91,7 @@ after_initialize do
     ../lib/custom_wizard/extensions/invites_controller.rb
     ../lib/custom_wizard/extensions/users_controller.rb
     ../lib/custom_wizard/extensions/guardian.rb
+    ../lib/custom_wizard/extensions/topic_extension.rb
     ../lib/custom_wizard/extensions/custom_field/preloader.rb
     ../lib/custom_wizard/extensions/custom_field/serializer.rb
     ../lib/custom_wizard/extensions/custom_field/extension.rb
@@ -200,6 +201,7 @@ after_initialize do
   ::InvitesController.prepend InvitesControllerCustomWizard
   ::UsersController.prepend CustomWizardUsersController
   ::Guardian.prepend CustomWizardGuardian
+  ::Topic.include CustomWizardTopicExtension
 
   full_path = "#{Rails.root}/plugins/discourse-custom-wizard/assets/stylesheets/wizard/wizard_custom.scss"
   if Stylesheet::Importer.respond_to?(:plugin_assets)
