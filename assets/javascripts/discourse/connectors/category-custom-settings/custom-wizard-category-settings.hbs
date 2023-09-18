@@ -14,12 +14,12 @@
   </div>
 </section>
 <section class="field hide-from-composer">
-    <label>
-      <Input
-        @type="checkbox"
-        @checked={{hideFromComposer}}
-        {{on "change" (action "toggleHideFromComposer")}}
-      />
-      {{i18n "admin.wizard.category_settings.custom_wizard.hide_from_composer"}}
-    </label>
+  <label>
+    <Input
+      @type="checkbox"
+      @checked={{hideFromComposer}}
+      {{on "change" (action "toggleHideFromComposer")}}
+    />
+    {{i18n "admin.wizard.category_settings.custom_wizard.hide_from_composer"}}
+  </label>
 </section>
