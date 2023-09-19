@@ -33,7 +33,6 @@ export default {
       navigate_to_first_post_after_read: false,
       custom_fields: {
         create_topic_wizard: null,
-        custom_wizard_hide_from_composer: null,
       },
       allowed_tags: [],
       allowed_tag_groups: [],
@@ -78,7 +77,6 @@ export default {
       navigate_to_first_post_after_read: false,
       custom_fields: {
         create_topic_wizard: null,
-        custom_wizard_hide_from_composer: null,
       },
       allowed_tags: [],
       allowed_tag_groups: [],
@@ -123,7 +121,6 @@ export default {
       navigate_to_first_post_after_read: false,
       custom_fields: {
         create_topic_wizard: null,
-        custom_wizard_hide_from_composer: null,
       },
       allowed_tags: [],
       allowed_tag_groups: [],
@@ -168,7 +165,6 @@ export default {
       navigate_to_first_post_after_read: false,
       custom_fields: {
         create_topic_wizard: null,
-        custom_wizard_hide_from_composer: null,
       },
       allowed_tags: [],
       allowed_tag_groups: [],
@@ -210,7 +206,6 @@ export default {
       navigate_to_first_post_after_read: false,
       custom_fields: {
         create_topic_wizard: null,
-        custom_wizard_hide_from_composer: "t",
       },
       allowed_tags: [],
       allowed_tag_groups: [],

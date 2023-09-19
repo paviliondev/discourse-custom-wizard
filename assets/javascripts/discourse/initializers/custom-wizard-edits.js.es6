@@ -89,7 +89,7 @@ export default {
           let categories = this._super(options);
 
           return categories.filter((category) => {
-            return !category.custom_fields?.custom_wizard_hide_from_composer;
+            return !category.custom_fields?.create_topic_wizard;
           });
         },
       });

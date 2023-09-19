@@ -105,7 +105,6 @@ after_initialize do
   # preloaded category custom fields
   %w[
     create_topic_wizard
-    custom_wizard_hide_from_composer
   ].each do |custom_field|
     Site.preloaded_category_custom_fields << custom_field
   end
@@ -202,7 +201,7 @@ after_initialize do
   ::InvitesController.prepend InvitesControllerCustomWizard
   ::UsersController.prepend CustomWizardUsersController
   ::Guardian.prepend CustomWizardGuardian
-  
+
   full_path = "#{Rails.root}/plugins/discourse-custom-wizard/assets/stylesheets/wizard/wizard_custom.scss"
   if Stylesheet::Importer.respond_to?(:plugin_assets)
     Stylesheet::Importer.plugin_assets['wizard_custom'] = Set[full_path]

@@ -133,7 +133,6 @@ en:
           custom_wizard:
             title: "Custom Wizard"
             create_topic_wizard: "Select a wizard to replace the new topic composer in this category."
-            hide_from_composer: "Exclude category from composer dropdown"
 
         message:
           wizard:
