@@ -56,7 +56,7 @@ en:
       subscription: "%{type} %{property} usage is not supported on your subscription"
       not_permitted_for_guests: "%{object_id} is not permitted when guests can access the wizard"
     error_messages:
-      wizard_replacing_composer: "A wizard is set to replace the composer in this category. You cannot create a topic here."
+      wizard_replacing_composer: "Category not allowed for topic creation."
 
   site_settings:
     custom_wizard_enabled: "Enable custom wizards."
