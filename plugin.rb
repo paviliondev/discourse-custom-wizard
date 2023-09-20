@@ -91,7 +91,6 @@ after_initialize do
     ../lib/custom_wizard/extensions/invites_controller.rb
     ../lib/custom_wizard/extensions/users_controller.rb
     ../lib/custom_wizard/extensions/guardian.rb
-    ../lib/custom_wizard/extensions/topic_extension.rb
     ../lib/custom_wizard/extensions/custom_field/preloader.rb
     ../lib/custom_wizard/extensions/custom_field/serializer.rb
     ../lib/custom_wizard/extensions/custom_field/extension.rb
@@ -237,4 +236,13 @@ after_initialize do
   end
 
   DiscourseEvent.trigger(:custom_wizard_ready)
+
+  on(:before_create_topic) do |topic_params, user|
+    category = topic_params.category
+    if category&.custom_fields&.[]('create_topic_wizard').present?
+      raise Discourse::InvalidParameters.new(
+              I18n.t('wizard.error_messages.wizard_replacing_composer')
+            )
+    end
+  end
 end
