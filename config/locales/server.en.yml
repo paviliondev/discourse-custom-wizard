@@ -55,6 +55,8 @@ en:
       liquid_syntax_error: "Liquid syntax error in %{attribute}: %{message}"
       subscription: "%{type} %{property} usage is not supported on your subscription"
       not_permitted_for_guests: "%{object_id} is not permitted when guests can access the wizard"
+    error_messages:
+      wizard_replacing_composer: "Category not allowed for topic creation."
 
   site_settings:
     custom_wizard_enabled: "Enable custom wizards."

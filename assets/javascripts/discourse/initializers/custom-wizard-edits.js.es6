@@ -83,6 +83,16 @@ export default {
           }
         },
       });
+
+      api.modifyClass("component:category-chooser", {
+        categoriesByScope(options = {}) {
+          let categories = this._super(options);
+
+          return categories.filter((category) => {
+            return !category.custom_fields?.create_topic_wizard;
+          });
+        },
+      });
     });
   },
 };
