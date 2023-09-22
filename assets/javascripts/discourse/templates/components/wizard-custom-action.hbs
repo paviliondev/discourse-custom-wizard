@@ -84,6 +84,28 @@
     </div>
   </div>
 
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.create_topic.tags"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=this.action.tags
+        property="tags"
+        onUpdate=(action "mappedFieldUpdated")
+        options=(hash
+          tagSelection="output"
+          outputDefaultSelection="tag"
+          listSelection="output"
+          wizardFieldSelection=true
+          userFieldSelection="key,value"
+          context="action"
+        )
+      }}
+    </div>
+  </div>
+
   {{#if this.action.post_builder}}
     <div class="setting full">
       <div class="setting-label">
@@ -124,27 +146,6 @@
     </div>
   </div>
 
-  <div class="setting full field-mapper-setting">
-    <div class="setting-label">
-      <label>{{i18n "admin.wizard.action.create_topic.tags"}}</label>
-    </div>
-
-    <div class="setting-value">
-      {{wizard-mapper
-        inputs=this.action.tags
-        property="tags"
-        onUpdate=(action "mappedFieldUpdated")
-        options=(hash
-          tagSelection="output"
-          outputDefaultSelection="tag"
-          listSelection="output"
-          wizardFieldSelection=true
-          userFieldSelection="key,value"
-          context="action"
-        )
-      }}
-    </div>
-  </div>
 
   <div class="setting full field-mapper-setting">
     <div class="setting-label">
