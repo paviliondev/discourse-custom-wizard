@@ -17,7 +17,6 @@ export default class WizardSubscriptionStatus extends Component {
   constructor() {
     super(...arguments);
     ajax("/admin/plugins/subscription-client/suppliers").then((result) => {
-      console.log(result)
       this.supplierId = result.suppliers[0].id;
       this.authorized = result.suppliers[0].authorized;
     })
@@ -39,7 +38,6 @@ export default class WizardSubscriptionStatus extends Component {
         },
       })
       .then((result) => {
-        console.log(result);
         this.supplierId = result.supplier.id;
         this.authorized = !(result.supplier.authorized_at === null);
       })
