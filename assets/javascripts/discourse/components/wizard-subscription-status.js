@@ -19,7 +19,7 @@ export default class WizardSubscriptionStatus extends Component {
     ajax("/admin/plugins/subscription-client/suppliers").then((result) => {
       this.supplierId = result.suppliers[0].id;
       this.authorized = result.suppliers[0].authorized;
-    })
+    });
   }
 
   @action
@@ -32,11 +32,11 @@ export default class WizardSubscriptionStatus extends Component {
     this.unauthorizing = true;
 
     ajax(`${this.basePath}/authorize`, {
-        type: "DELETE",
-        data: {
-          supplier_id: this.supplierId,
-        },
-      })
+      type: "DELETE",
+      data: {
+        supplier_id: this.supplierId,
+      },
+    })
       .then((result) => {
         this.supplierId = result.supplier.id;
         this.authorized = !(result.supplier.authorized_at === null);
@@ -46,5 +46,5 @@ export default class WizardSubscriptionStatus extends Component {
         window.location.reload();
       })
       .catch(popupAjaxError);
-  };
+  }
 }
