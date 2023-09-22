@@ -5,7 +5,7 @@ import { tracked } from "@glimmer/tracking";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 
-export default class WizardSubscriptionAuthorize extends Component {
+export default class WizardSubscriptionStatus extends Component {
   basePath = "/admin/plugins/subscription-client/suppliers";
 
   @service siteSettings;
@@ -44,6 +44,7 @@ export default class WizardSubscriptionAuthorize extends Component {
       })
       .finally(() => {
         this.unauthorizing = false;
+        window.location.reload();
       })
       .catch(popupAjaxError);
   };
