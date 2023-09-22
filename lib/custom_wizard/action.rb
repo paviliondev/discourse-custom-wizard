@@ -36,7 +36,7 @@ class CustomWizard::Action
     end
 
     if creates_post? && @result.success?
-      @result.handler.enqueue_jobs
+@result.handler.enqueue_jobs
     end
 
     if @result.success? && @result.output.present?
@@ -92,10 +92,10 @@ class CustomWizard::Action
   def send_message
     if action['required'].present?
       required = CustomWizard::Mapper.new(
-        inputs: action['required'],
-        data: mapper_data,
-        user: user
-      ).perform
+          inputs: action['required'],
+          data: mapper_data,
+          user: user
+        ).perform
 
       if required.blank?
         log_error("required input not present")
@@ -104,13 +104,14 @@ class CustomWizard::Action
     end
 
     params = basic_topic_params
+    params.delete(:tags) unless user_can_tag
 
     targets = CustomWizard::Mapper.new(
-      inputs: action['recipient'],
-      data: mapper_data,
-      user: user,
-      multiple: true
-    ).perform
+        inputs: action['recipient'],
+        data: mapper_data,
+        user: user,
+        multiple: true
+      ).perform
 
     if targets.blank?
       log_error("no recipients", "send_message has no recipients")
@@ -131,8 +132,8 @@ class CustomWizard::Action
 
     if params[:title].present? &&
        params[:raw].present? &&
-       (params[:target_usernames].present? ||
-        params[:target_group_names].present?)
+         (params[:target_usernames].present? ||
+             params[:target_group_names].present?)
 
       params[:archetype] = Archetype.private_message
 
@@ -168,12 +169,12 @@ class CustomWizard::Action
         if allowed_profile_field?(pair['key'])
           key = cast_profile_key(pair['key'])
           value = cast_profile_value(
-            mapper.map_field(
+              mapper.map_field(
               pair['value'],
               pair['value_type']
             ),
-            pair['key']
-          )
+              pair['key']
+            )
 
           if user_field?(pair['key'])
             params[:custom_fields] ||= {}
@@ -206,10 +207,10 @@ class CustomWizard::Action
 
   def watch_tags
     tags = CustomWizard::Mapper.new(
-      inputs: action['tags'],
-      data: mapper_data,
-      user: user
-    ).perform
+        inputs: action['tags'],
+        data: mapper_data,
+        user: user
+      ).perform
 
     tags = [*tags]
     level = action['notification_level'].to_sym
@@ -223,14 +224,14 @@ class CustomWizard::Action
 
     if action['usernames']
       mapped_users = CustomWizard::Mapper.new(
-        inputs: action['usernames'],
-        data: mapper_data,
-        user: user
-      ).perform
+          inputs: action['usernames'],
+          data: mapper_data,
+          user: user
+        ).perform
 
       if mapped_users.present?
         mapped_users = mapped_users.split(',')
-          .map { |username| User.find_by(username: username) }
+            .map { |username| User.find_by(username: username) }
         users.push(*mapped_users)
       end
     end
@@ -252,10 +253,10 @@ class CustomWizard::Action
 
   def watch_categories
     watched_categories = CustomWizard::Mapper.new(
-      inputs: action['categories'],
-      data: mapper_data,
-      user: user
-    ).perform
+        inputs: action['categories'],
+        data: mapper_data,
+        user: user
+      ).perform
 
     watched_categories = [*watched_categories].map(&:to_i)
 
@@ -267,23 +268,23 @@ class CustomWizard::Action
     end
 
     mute_remainder = CustomWizard::Mapper.new(
-      inputs: action['mute_remainder'],
-      data: mapper_data,
-      user: user
-    ).perform
+        inputs: action['mute_remainder'],
+        data: mapper_data,
+        user: user
+      ).perform
 
     users = []
 
     if action['usernames']
       mapped_users = CustomWizard::Mapper.new(
-        inputs: action['usernames'],
-        data: mapper_data,
-        user: user
-      ).perform
+          inputs: action['usernames'],
+          data: mapper_data,
+          user: user
+        ).perform
 
       if mapped_users.present?
         mapped_users = mapped_users.split(',')
-          .map { |username| User.find_by(username: username) }
+            .map { |username| User.find_by(username: username) }
         users.push(*mapped_users)
       end
     end
@@ -369,13 +370,13 @@ class CustomWizard::Action
 
   def add_to_group
     group_map = CustomWizard::Mapper.new(
-      inputs: action['group'],
-      data: mapper_data,
-      user: user,
-      opts: {
-        multiple: true
-      }
-    ).perform
+        inputs: action['group'],
+        data: mapper_data,
+        user: user,
+        opts: {
+          multiple: true
+        }
+      ).perform
 
     group_map = group_map.flatten.compact
 
@@ -385,15 +386,15 @@ class CustomWizard::Action
     end
 
     groups = group_map.reduce([]) do |result, g|
-      begin
-        result.push(Integer(g))
-      rescue ArgumentError
-        group = Group.find_by(name: g)
-        result.push(group.id) if group
-      end
+        begin
+          result.push(Integer(g))
+        rescue ArgumentError
+          group = Group.find_by(name: g)
+          result.push(group.id) if group
+        end
 
-      result
-    end
+        result
+      end
 
     result = nil
 
@@ -419,10 +420,10 @@ class CustomWizard::Action
       url = mapper.interpolate(url_input)
     else
       url = CustomWizard::Mapper.new(
-        inputs: url_input,
-        data: mapper_data,
-        user: user
-      ).perform
+          inputs: url_input,
+          data: mapper_data,
+          user: user
+        ).perform
     end
 
     if action['code']
@@ -503,10 +504,10 @@ class CustomWizard::Action
 
   def action_category
     output = CustomWizard::Mapper.new(
-      inputs: action['category'],
-      data: mapper_data,
-      user: user
-    ).perform
+        inputs: action['category'],
+        data: mapper_data,
+        user: user
+      ).perform
 
     return false unless output.present?
 
@@ -521,10 +522,10 @@ class CustomWizard::Action
 
   def action_tags
     output = CustomWizard::Mapper.new(
-      inputs: action['tags'],
-      data: mapper_data,
-      user: user,
-    ).perform
+        inputs: action['tags'],
+        data: mapper_data,
+        user: user,
+      ).perform
 
     return false unless output.present?
 
@@ -538,10 +539,10 @@ class CustomWizard::Action
   def add_custom_fields(params = {})
     if (custom_fields = action['custom_fields']).present?
       field_map = CustomWizard::Mapper.new(
-        inputs: custom_fields,
-        data: mapper_data,
-        user: user
-      ).perform
+          inputs: custom_fields,
+          data: mapper_data,
+          user: user
+        ).perform
       registered_fields = CustomWizard::CustomField.full_list
 
       field_map.each do |field|
@@ -605,10 +606,14 @@ class CustomWizard::Action
     }
 
     params[:title] = CustomWizard::Mapper.new(
-      inputs: action['title'],
-      data: mapper_data,
-      user: user
-    ).perform
+        inputs: action['title'],
+        data: mapper_data,
+        user: user
+      ).perform
+
+    if tags = action_tags
+      params[:tags] = tags
+    end
 
     params[:raw] = action['post_builder'] ?
       mapper.interpolate(
@@ -632,18 +637,14 @@ class CustomWizard::Action
       params[:category] = category
     end
 
-    if tags = action_tags
-      params[:tags] = tags
-    end
-
     if public_topic_fields.any?
       public_topic_fields.each do |field|
         unless action[field].nil? || action[field] == ""
           params[field.to_sym] = CustomWizard::Mapper.new(
-            inputs: action[field],
-            data: mapper_data,
-            user: user
-          ).perform
+              inputs: action[field],
+              data: mapper_data,
+              user: user
+            ).perform
         end
       end
     end
@@ -674,7 +675,7 @@ class CustomWizard::Action
       end
 
       if attr === "full_name" && input.blank?
-        input = action["name"]
+input = action["name"]
       end
 
       if input.present?
@@ -709,10 +710,10 @@ class CustomWizard::Action
     ).each do |attr|
       if action[attr].present?
         value = CustomWizard::Mapper.new(
-          inputs: action[attr],
-          data: mapper_data,
-          user: user
-        ).perform
+            inputs: action[attr],
+            data: mapper_data,
+            user: user
+          ).perform
 
         if value
           if attr === "parent_category_id" && value.is_a?(Array)
@@ -767,7 +768,7 @@ class CustomWizard::Action
       "#{key}_upload_url"
     else
       key
-    end
+end
   end
 
   def cast_profile_value(value, key)
@@ -792,7 +793,7 @@ class CustomWizard::Action
 
   def user_field?(field)
     field.to_s.include?(::User::USER_FIELD_PREFIX) &&
-    ::UserField.exists?(field.split('_').last.to_i)
+      ::UserField.exists?(field.split('_').last.to_i)
   end
 
   def allowed_profile_fields
@@ -836,5 +837,10 @@ class CustomWizard::Action
       username,
       @log.join('; ')
     )
+  end
+  def user_can_tag
+    allowed_groups =
+      SiteSetting.pm_tags_allowed_for_groups.split('|').map(&:to_i)
+    user.groups.pluck(:id).any? { |group| allowed_groups.include?(group) }
   end
 end
