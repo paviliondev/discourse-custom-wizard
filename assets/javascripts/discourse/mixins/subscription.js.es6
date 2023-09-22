@@ -24,15 +24,10 @@ export default Mixin.create({
   communitySubscription: readOnly("adminWizards.communitySubscription"),
   standardSubscription: readOnly("adminWizards.standardSubscription"),
   subscriptionAttributes: readOnly("adminWizards.subscriptionAttributes"),
-  subscriptionClientInstalled: readOnly(
-    "adminWizards.subscriptionClientInstalled"
-  ),
 
-  @discourseComputed("subscriptionClientInstalled")
-  subscriptionLink(subscriptionClientInstalled) {
-    return subscriptionClientInstalled
-      ? this.subscriptionClientUrl
-      : this.subscriptionLandingUrl;
+  @discourseComputed
+  subscriptionLink() {
+    return this.subscriptionLandingUrl;
   },
 
   @discourseComputed("subscriptionType")

@@ -14,7 +14,7 @@ export default class WizardSubscriptionStatus extends Component {
 
   constructor() {
     super(...arguments);
-    ajax("/admin/plugins/subscription-client/suppliers").then((result) => {
+    ajax(${basePath}).then((result) => {
       this.supplierId = result.suppliers[0].id;
       this.authorized = result.suppliers[0].authorized;
     });

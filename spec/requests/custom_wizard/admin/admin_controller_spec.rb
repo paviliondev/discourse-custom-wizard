@@ -23,7 +23,6 @@ describe CustomWizard::AdminController do
         get "/admin/wizards.json"
         expect(response.parsed_body["subscribed"]).to eq(false)
         expect(response.parsed_body["subscription_attributes"]).to eq(CustomWizard::Subscription.attributes.as_json)
-        expect(response.parsed_body["subscription_client_installed"]).to eq(true)
       end
     end
 
@@ -37,7 +36,6 @@ describe CustomWizard::AdminController do
         get "/admin/wizards.json"
         expect(response.parsed_body["subscribed"]).to eq(true)
         expect(response.parsed_body["subscription_type"]).to eq("standard")
-        expect(response.parsed_body["subscription_client_installed"]).to eq(true)
       end
     end
   end

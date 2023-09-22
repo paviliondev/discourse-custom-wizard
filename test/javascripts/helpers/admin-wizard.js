@@ -224,7 +224,6 @@ const getUnsubscribedAdminWizards = {
       all: { none: [], standard: [], business: ["*"], community: ["*"] },
     },
   },
-  subscription_client_installed: false,
 };
 const getCustomFields = {
   custom_fields: [
@@ -478,7 +477,6 @@ const getBusinessAdminWizard = {
       all: { none: [], standard: [], business: ["*"], community: ["*"] },
     },
   },
-  subscription_client_installed: false,
 };
 const getStandardAdminWizard = {
   subscribed: true,
@@ -589,7 +587,6 @@ const getStandardAdminWizard = {
       all: { none: [], standard: [], business: ["*"], community: ["*"] },
     },
   },
-  subscription_client_installed: false,
 };
 const getAdminTestingWizard = {
   id: "this_is_testing_wizard",
