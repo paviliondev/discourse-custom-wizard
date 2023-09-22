@@ -38,6 +38,7 @@ export default class WizardSubscriptionAuthorize extends Component {
         },
       })
       .then((result) => {
+        console.log(result);
         this.supplierId = result.suppliers[0].id;
         this.authorized = result.suppliers[0].authorized;
       })
