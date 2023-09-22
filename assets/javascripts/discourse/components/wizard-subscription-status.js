@@ -16,7 +16,8 @@ export default class WizardSubscriptionStatus extends Component {
 
   constructor() {
     super(...arguments);
-    ajax("/admin/plugins/subscription-client/suppliers?final_landing_path%3D%2Fadmin%2Fwizards%2Fwizard").then((result) => {
+    ajax("/admin/plugins/subscription-client/suppliers").then((result) => {
+      console.log(result)
       this.supplierId = result.suppliers[0].id;
       this.authorized = result.suppliers[0].authorized;
     })
@@ -24,7 +25,7 @@ export default class WizardSubscriptionStatus extends Component {
 
   @action
   authorize() {
-    window.location.href = `${this.basePath}/authorize?supplier_id=${this.supplierId}`;
+    window.location.href = `${this.basePath}/authorize?supplier_id=${this.supplierId}&final_landing_path=/admin/wizards/wizard`;
   }
 
   @action
@@ -39,8 +40,8 @@ export default class WizardSubscriptionStatus extends Component {
       })
       .then((result) => {
         console.log(result);
-        this.supplierId = result.suppliers[0].id;
-        this.authorized = result.suppliers[0].authorized;
+        this.supplierId = result.supplier.id;
+        this.authorized = !(result.supplier.authorized_at === null);
       })
       .finally(() => {
         this.unauthorizing = false;
