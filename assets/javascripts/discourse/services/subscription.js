@@ -7,7 +7,7 @@ const SUPPORT_MESSAGE =
 const MANAGER_CATEGORY =
   "https://discourse.pluginmanager.org/c/discourse-custom-wizard";
 
-export default class Subscription extends Service {
+export default class SubscriptionService extends Service {
     subscriptionLandingUrl = PRODUCT_PAGE;
     subscribed = this.adminWizards.subscribed;
     subscriptionType = this.adminWizards.subscriptionType;
