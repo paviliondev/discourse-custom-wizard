@@ -1,5 +1,9 @@
 import Service from '@ember/service';
 import { getOwner } from "discourse-common/lib/get-owner";
+import { tracked } from "@glimmer/tracking";
+import { ajax } from "discourse/lib/ajax";
+import { popupAjaxError } from "discourse/lib/ajax-error";
+import { equal } from "@ember/object/computed";
 
 const PRODUCT_PAGE = "https://custom-wizard.pavilion.tech";
 const SUPPORT_MESSAGE =
@@ -8,13 +12,32 @@ const MANAGER_CATEGORY =
   "https://discourse.pluginmanager.org/c/discourse-custom-wizard";
 
 export default class SubscriptionService extends Service {
+    @tracked subscribed = false;
+    @tracked subscriptionType = "";
+    @tracked businessSubscription = false;
+    @tracked communitySubscription = false;
+    @tracked standardSubscription = false;
+    @tracked subscriptionAttributes = {};
     subscriptionLandingUrl = PRODUCT_PAGE;
-    subscribed = this.adminWizards.subscribed;
-    subscriptionType = this.adminWizards.subscriptionType;
-    businessSubscription = this.adminWizards.businessSubscription;
-    communitySubscription = this.adminWizards.communitySubscription;
-    standardSubscription = this.adminWizards.standardSubscription;
-    subscriptionAttributes = this.adminWizards.subscriptionAttributes;
+
+    init() {
+      super.init(...arguments);
+      debugger;
+      this.retrieveSubscriptionStatus();
+    }
+
+    retrieveSubscriptionStatus() {
+      ajax("/admin/wizards").then(result => {
+        this.subscribed = result.subscribed;
+        this.subscriptionType = result.subscription_type;
+        this.subscriptionAttributes = result.subscription_attributes;
+        this.businessSubscription = equal(this.subscriptionType, "business");
+        this.communitySubscription = equal(this.subscriptionType, "community");
+        this.standardSubscription = equal(this.subscriptionType, "standard");
+      })
+      .catch(popupAjaxError);
+    };
+
 
     get adminWizards() {
       return getOwner(this).lookup("controller:admin-wizards");

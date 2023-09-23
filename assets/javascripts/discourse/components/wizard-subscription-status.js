@@ -7,6 +7,7 @@ import { popupAjaxError } from "discourse/lib/ajax-error";
 
 export default class WizardSubscriptionStatus extends Component {
   @service siteSettings;
+  @service subscription;
   @tracked supplierId = null;
   @tracked authorized = false;
   @tracked unauthorizing = false;
@@ -17,6 +18,9 @@ export default class WizardSubscriptionStatus extends Component {
     ajax(`${this.basePath}`).then((result) => {
       this.supplierId = result.suppliers[0].id;
       this.authorized = result.suppliers[0].authorized;
+    })
+    .finally(() => {
+      this.subscription.retrieveSubscriptionStatus();
     });
   }
 
@@ -41,7 +45,8 @@ export default class WizardSubscriptionStatus extends Component {
       })
       .finally(() => {
         this.unauthorizing = false;
-        window.location.reload();
+        this.subscription.retrieveSubscriptionStatus();
+        //window.location.reload();
       })
       .catch(popupAjaxError);
   }
