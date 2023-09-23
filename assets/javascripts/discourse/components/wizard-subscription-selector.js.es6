@@ -1,5 +1,5 @@
 import SingleSelectComponent from "select-kit/components/single-select";
-import Subscription from "../mixins/subscription";
+import { inject as service } from "@ember/service";
 import { filterValues } from "discourse/plugins/discourse-custom-wizard/discourse/lib/wizard-schema";
 import discourseComputed from "discourse-common/utils/decorators";
 import I18n from "I18n";
@@ -12,8 +12,9 @@ const nameKey = function (feature, attribute, value) {
   }
 };
 
-export default SingleSelectComponent.extend(Subscription, {
+export default SingleSelectComponent.extend({
   classNames: ["combo-box", "wizard-subscription-selector"],
+  subscription: service(),
 
   selectKitOptions: {
     autoFilterable: false,
@@ -26,13 +27,13 @@ export default SingleSelectComponent.extend(Subscription, {
   },
 
   allowedSubscriptionTypes(feature, attribute, value) {
-    let attributes = this.subscriptionAttributes[feature];
+    let attributes = this.subscription.subscriptionAttributes[feature];
     if (!attributes || !attributes[attribute]) {
       return ["none"];
     }
     let allowedTypes = [];
     Object.keys(attributes[attribute]).forEach((subscriptionType) => {
-      let values = attributes[attribute][subscriptionType];
+      let values = attributes[attribute][subscription.subscriptionType];
       if (values[0] === "*" || values.includes(value)) {
         allowedTypes.push(subscriptionType);
       }
@@ -44,7 +45,7 @@ export default SingleSelectComponent.extend(Subscription, {
   content(feature, attribute) {
     return filterValues(this.wizard, feature, attribute)
       .map((value) => {
-        let allowedSubscriptionTypes = this.allowedSubscriptionTypes(
+        let allowedSubscriptionTypes = this.subscription.allowedSubscriptionTypes(
           feature,
           attribute,
           value

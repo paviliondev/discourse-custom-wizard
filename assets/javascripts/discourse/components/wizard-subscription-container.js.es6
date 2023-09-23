@@ -1,23 +1,24 @@
 import Component from "@ember/component";
 import discourseComputed from "discourse-common/utils/decorators";
-import Subscription from "../mixins/subscription";
+import { inject as service } from "@ember/service";
 
-export default Component.extend(Subscription, {
+export default Component.extend({
   classNameBindings: [":wizard-subscription-container", "subscribed"],
+  subscription: service(),
 
-  @discourseComputed("subscribed")
+  @discourseComputed("subscription.subscribed")
   subscribedIcon(subscribed) {
     return subscribed ? "check" : "times";
   },
 
-  @discourseComputed("subscribed")
+  @discourseComputed("subscription.subscribed")
   subscribedLabel(subscribed) {
     return `admin.wizard.subscription.${
       subscribed ? "subscribed" : "not_subscribed"
     }.label`;
   },
 
-  @discourseComputed("subscribed")
+  @discourseComputed("subscription.subscribed")
   subscribedTitle(subscribed) {
     return `admin.wizard.subscription.${
       subscribed ? "subscribed" : "not_subscribed"

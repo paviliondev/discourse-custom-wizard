@@ -15,7 +15,7 @@ import {
 import Component from "@ember/component";
 import { bind, later } from "@ember/runloop";
 import I18n from "I18n";
-import Subscription from "../mixins/subscription";
+import { inject as service } from "@ember/service";
 
 const customFieldActionMap = {
   topic: ["create_topic", "send_message"],
@@ -27,8 +27,9 @@ const customFieldActionMap = {
 
 const values = ["present", "true", "false"];
 
-export default Component.extend(Subscription, {
+export default Component.extend({
   classNameBindings: [":mapper-selector", "activeType"],
+  subscription: service(),
 
   showText: computed("activeType", function () {
     return this.showInput("text");
@@ -130,7 +131,7 @@ export default Component.extend(Subscription, {
     return this.connector === "is";
   }),
 
-  @discourseComputed("site.groups", "guestGroup", "subscriptionType")
+  @discourseComputed("site.groups", "guestGroup", "subscription.subscriptionType")
   groups(groups, guestGroup, subscriptionType) {
     let result = groups;
     if (!guestGroup) {
