@@ -33,7 +33,7 @@ export default SingleSelectComponent.extend({
     }
     let allowedTypes = [];
     Object.keys(attributes[attribute]).forEach((subscriptionType) => {
-      let values = attributes[attribute][subscription.subscriptionType];
+      let values = attributes[attribute][subscriptionType];
       if (values[0] === "*" || values.includes(value)) {
         allowedTypes.push(subscriptionType);
       }
