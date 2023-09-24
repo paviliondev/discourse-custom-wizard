@@ -23,7 +23,7 @@ class CustomWizard::AdminSubmissionsController < CustomWizard::AdminController
 
   def download
     content = ActiveModel::ArraySerializer.new(
-      submission_list.submissions,
+      CustomWizard::Submission.list(@wizard).submissions,
       each_serializer: CustomWizard::SubmissionSerializer
     )
 

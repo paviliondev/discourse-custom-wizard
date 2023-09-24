@@ -7,8 +7,11 @@ import { selectKitContent } from "../lib/wizard";
 import { underscore } from "@ember/string";
 import Controller from "@ember/controller";
 import I18n from "I18n";
+import { inject as service } from "@ember/service";
 
 export default Controller.extend({
+  router: service(),
+
   queryParams: ["refresh_list"],
   loadingSubscriptions: false,
   notAuthorized: not("api.authorized"),
@@ -248,7 +251,7 @@ export default Controller.extend({
         .catch(popupAjaxError)
         .then((result) => {
           if (result.success) {
-            this.transitionToRoute("adminWizardsApis").then(() => {
+            this.router.transitionTo("adminWizardsApis").then(() => {
               this.send("refreshModel");
             });
           }

@@ -1,7 +1,9 @@
 import Controller from "@ember/controller";
 import getUrl from "discourse-common/lib/get-url";
+import { inject as service } from "@ember/service";
 
 export default Controller.extend({
+  router: service(),
   wizard: null,
   step: null,
 
@@ -15,12 +17,12 @@ export default Controller.extend({
         const wizardId = this.get("wizard.id");
         window.location.href = getUrl(`/w/${wizardId}/steps/${nextStepId}`);
       } else {
-        this.transitionToRoute("customWizardStep", nextStepId);
+        this.router.transitionTo("customWizardStep", nextStepId);
       }
     },
 
     goBack() {
-      this.transitionToRoute("customWizardStep", this.get("step.previous"));
+      this.router.transitionTo("customWizardStep", this.get("step.previous"));
     },
 
     showMessage(message) {

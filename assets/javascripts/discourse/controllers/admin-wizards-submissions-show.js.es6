@@ -2,11 +2,13 @@ import Controller from "@ember/controller";
 import { empty } from "@ember/object/computed";
 import discourseComputed from "discourse-common/utils/decorators";
 import { fmt } from "discourse/lib/computed";
-import showModal from "discourse/lib/show-modal";
+import { inject as service } from "@ember/service";
+import AdminWizardsColumnsModal from "../components/modal/admin-wizards-columns";
 import CustomWizardAdmin from "../models/custom-wizard-admin";
 import { formatModel } from "../lib/wizard-submission";
 
 export default Controller.extend({
+  modal: service(),
   downloadUrl: fmt("wizard.id", "/admin/wizards/submissions/%@/download"),
   noResults: empty("submissions"),
   page: 0,
@@ -57,7 +59,7 @@ export default Controller.extend({
     },
 
     showEditColumnsModal() {
-      return showModal("admin-wizards-columns", {
+      return this.modal.show(AdminWizardsColumnsModal, {
         model: {
           columns: this.get("fields"),
           reset: () => {

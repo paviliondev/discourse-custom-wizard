@@ -2,8 +2,11 @@ import CustomWizardAdmin from "../models/custom-wizard-admin";
 import { ajax } from "discourse/lib/ajax";
 import DiscourseRoute from "discourse/routes/discourse";
 import I18n from "I18n";
+import { inject as service } from "@ember/service";
 
 export default DiscourseRoute.extend({
+  router: service(),
+
   model(params) {
     if (params.wizardId === "create") {
       return { create: true };
@@ -14,7 +17,7 @@ export default DiscourseRoute.extend({
 
   afterModel(model) {
     if (model.none) {
-      return this.transitionTo("adminWizardsWizard");
+      return this.router.transitionTo("adminWizardsWizard");
     }
   },
 

@@ -74,6 +74,15 @@ acceptance("Wizard | Redirect", function (needs) {
       "pending wizard routing works"
     );
   });
+
+  test("Don't redirect to pending Wizard when ingore redirect param is supplied", async function (assert) {
+    sinon.stub(DiscourseURL, "routeTo");
+    await visit("/latest?ignore_redirect=1");
+    assert.notOk(
+      DiscourseURL.routeTo.calledWith("/w/wizard"),
+      "pending wizard routing blocked"
+    );
+  });
 });
 
 acceptance("Wizard | Wizard", function (needs) {

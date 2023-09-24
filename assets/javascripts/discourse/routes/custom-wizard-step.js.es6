@@ -3,14 +3,17 @@ import { getCachedWizard } from "../models/custom-wizard";
 import Route from "@ember/routing/route";
 import { scrollTop } from "discourse/mixins/scroll-top";
 import { action } from "@ember/object";
+import { inject as service } from "@ember/service";
 
 export default Route.extend({
+  router: service(),
+
   beforeModel() {
     const wizard = getCachedWizard();
     this.set("wizard", wizard);
 
     if (!wizard || !wizard.permitted || wizard.completed) {
-      this.replaceWith("customWizard");
+      this.router.replaceWith("customWizard");
     }
   },
 
@@ -27,7 +30,7 @@ export default Route.extend({
 
   afterModel(model) {
     if (model.completed) {
-      return this.transitionTo("wizard.index");
+      return this.router.transitionTo("wizard.index");
     }
     return model.set("wizardId", this.wizard.id);
   },
