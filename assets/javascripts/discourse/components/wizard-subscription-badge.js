@@ -18,7 +18,7 @@ export default class WizardSubscriptionBadge extends Component {
 
   @computed("i18nKey")
   get title() {
-    return I18n.t(`${this.i18nKey}.title`);
+    return `${this.i18nKey}.title`;
   }
 
   @computed("i18nKey")

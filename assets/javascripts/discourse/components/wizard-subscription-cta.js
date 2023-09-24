@@ -1,6 +1,5 @@
 import { inject as service } from "@ember/service";
 import { action, computed } from "@ember/object";
-import I18n from "I18n";
 import Component from "@glimmer/component";
 
 export default class WizardSubscriptionCta extends Component {
@@ -20,12 +19,12 @@ export default class WizardSubscriptionCta extends Component {
 
   @computed("i18nKey")
   get title() {
-    return I18n.t(`${this.i18nKey}.title`);
+    return `${this.i18nKey}.title`;
   }
 
   @computed("i18nKey")
   get label() {
-    return I18n.t(`${this.i18nKey}.label`);
+    return `${this.i18nKey}.label`;
   }
 
   @action
