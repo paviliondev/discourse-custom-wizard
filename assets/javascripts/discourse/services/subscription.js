@@ -22,7 +22,7 @@ export default class SubscriptionService extends Service {
 
     init() {
       super.init(...arguments);
-      debugger;
+      console.log("subscription initialisation");
       this.retrieveSubscriptionStatus();
     }
 
