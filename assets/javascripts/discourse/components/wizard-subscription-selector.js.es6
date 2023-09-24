@@ -46,7 +46,7 @@ export default SingleSelectComponent.extend({
     debugger;
     return filterValues(this.wizard, feature, attribute)
       .map((value) => {
-        let allowedSubscriptionTypes = this.subscription.allowedSubscriptionTypes(
+        let allowedSubscriptionTypes = this.get("subscription.allowedSubscriptionTypes")(
           feature,
           attribute,
           value
