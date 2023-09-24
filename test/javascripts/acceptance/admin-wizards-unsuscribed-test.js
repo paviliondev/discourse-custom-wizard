@@ -30,7 +30,7 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
     server.get("/admin/wizards/custom-fields", () => {
       return helper.response(getCustomFields);
     });
-    server.get("/admin/wizards", () => {
+    server.get("/admin/wizards/subscription", () => {
       return helper.response(getUnsubscribedAdminWizards);
     });
     server.get("/admin/wizards/api", () => {
