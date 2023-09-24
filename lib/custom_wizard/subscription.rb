@@ -105,24 +105,22 @@ class CustomWizard::Subscription
                 :product_slug
 
   def initialize
-    if CustomWizard::Subscription.client_installed?
-      result = DiscourseSubscriptionClient.find_subscriptions("discourse-custom-wizard")
+    result = DiscourseSubscriptionClient.find_subscriptions("discourse-custom-wizard")
 
-      if result&.any?
-        ids_and_slugs = result.subscriptions.map do |subscription|
-          {
-            id: subscription.product_id,
-            slug: result.products[subscription.product_id]
-          }
-        end
-
-        id_and_slug = ids_and_slugs.sort do |a, b|
-          PRODUCT_HIERARCHY.index(b[:slug]) - PRODUCT_HIERARCHY.index(a[:slug])
-        end.first
-
-        @product_id = id_and_slug[:id]
-        @product_slug = id_and_slug[:slug]
+    if result&.any?
+      ids_and_slugs = result.subscriptions.map do |subscription|
+        {
+          id: subscription.product_id,
+          slug: result.products[subscription.product_id]
+        }
       end
+
+      id_and_slug = ids_and_slugs.sort do |a, b|
+        PRODUCT_HIERARCHY.index(b[:slug]) - PRODUCT_HIERARCHY.index(a[:slug])
+      end.first
+
+      @product_id = id_and_slug[:id]
+      @product_slug = id_and_slug[:slug]
     end
 
     @product_slug ||= ENV["CUSTOM_WIZARD_PRODUCT_SLUG"]
@@ -174,10 +172,6 @@ class CustomWizard::Subscription
 
   def community?
     product_slug === "community"
-  end
-
-  def self.client_installed?
-    defined?(DiscourseSubscriptionClient) == 'constant' && DiscourseSubscriptionClient.class == Module
   end
 
   def self.subscribed?
