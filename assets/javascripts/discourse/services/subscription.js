@@ -28,6 +28,7 @@ export default class SubscriptionService extends Service {
 
     retrieveSubscriptionStatus() {
       ajax("/admin/wizards").then(result => {
+        console.log(result)
         this.subscribed = result.subscribed;
         this.subscriptionType = result.subscription_type;
         this.subscriptionAttributes = result.subscription_attributes;
@@ -37,7 +38,6 @@ export default class SubscriptionService extends Service {
       })
       .catch(popupAjaxError);
     };
-
 
     get adminWizards() {
       return getOwner(this).lookup("controller:admin-wizards");
