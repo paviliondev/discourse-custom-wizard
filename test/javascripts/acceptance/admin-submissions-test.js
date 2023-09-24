@@ -34,6 +34,9 @@ acceptance("Admin | Submissions", function (needs) {
     server.get("/admin/wizards/wizard", () => {
       return helper.response(getWizard);
     });
+    server.get("/admin/plugins/subscription-client/suppliers", () => {
+      return helper.response(getSuppliers);
+    });
   });
   test("View submissions fields tab and content", async (assert) => {
     await visit("/admin/wizards/submissions");
