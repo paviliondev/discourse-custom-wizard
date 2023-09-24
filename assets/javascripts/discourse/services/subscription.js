@@ -38,10 +38,6 @@ export default class SubscriptionService extends Service {
       .catch(popupAjaxError);
   }
 
-  get adminWizards() {
-    return getOwner(this).lookup("controller:admin-wizards");
-  }
-
   get subscriptionLink() {
     return this.subscriptionLandingUrl;
   }
