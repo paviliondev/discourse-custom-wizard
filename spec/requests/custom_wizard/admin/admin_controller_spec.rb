@@ -20,7 +20,7 @@ describe CustomWizard::AdminController do
       end
 
       it "returns the right subscription details" do
-        get "/admin/wizards.json"
+        get "/admin/wizards/subscription.json"
         expect(response.parsed_body["subscribed"]).to eq(false)
         expect(response.parsed_body["subscription_attributes"]).to eq(CustomWizard::Subscription.attributes.as_json)
       end
@@ -33,7 +33,7 @@ describe CustomWizard::AdminController do
       end
 
       it "returns the right subscription details" do
-        get "/admin/wizards.json"
+        get "/admin/wizards/subscription.json"
         expect(response.parsed_body["subscribed"]).to eq(true)
         expect(response.parsed_body["subscription_type"]).to eq("standard")
       end
