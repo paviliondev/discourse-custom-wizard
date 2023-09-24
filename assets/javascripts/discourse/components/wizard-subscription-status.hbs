@@ -1,7 +1,7 @@
 <div class="supplier-authorize">
   {{#if authorized}}
     {{conditional-loading-spinner size="small" condition=unauthorizing}}
-    <a
+    <button
       {{action "deauthorize"}}
       class="deauthorize"
       title={{i18n "admin.subscription_client.supplier.deauthorize"}}
@@ -9,7 +9,7 @@
       disabled={{unauthorizing}}
     >
       {{i18n "admin.wizard.subscription.deauthorize"}}
-    </a>
+    </button>
   {{else}}
     {{d-button
       icon="id-card"
