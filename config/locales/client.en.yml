@@ -546,7 +546,7 @@ en:
         subscription:
           title: Subscriber Features
           authorize: "Authorize Subscription"
-          deauthorize: "De-authorize Subscription"
+          deauthorize: "deauthorize Subscription"
           subscribed:
             label: Subscribed
             title: You're subscribed and can use these features
