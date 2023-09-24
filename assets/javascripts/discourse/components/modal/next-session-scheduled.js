@@ -18,13 +18,15 @@ export default class NextSessionScheduledComponent extends Component {
     return moment().isAfter(this.bufferedDateTime);
   }
 
-  @action submit() {
+  @action
+  submit() {
     const dateTime = this.bufferedDateTime;
     this.args.model.update(moment(dateTime).utc().toISOString());
     this.args.closeModal();
   }
 
-  @action dateTimeChanged(dateTime) {
+  @action
+  dateTimeChanged(dateTime) {
     this.bufferedDateTime = dateTime;
   }
 }
