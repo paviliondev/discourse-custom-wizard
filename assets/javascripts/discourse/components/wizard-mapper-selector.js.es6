@@ -131,7 +131,11 @@ export default Component.extend({
     return this.connector === "is";
   }),
 
-  @discourseComputed("site.groups", "guestGroup", "subscription.subscriptionType")
+  @discourseComputed(
+    "site.groups",
+    "guestGroup",
+    "subscription.subscriptionType"
+  )
   groups(groups, guestGroup, subscriptionType) {
     let result = groups;
     if (!guestGroup) {

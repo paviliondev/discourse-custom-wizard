@@ -1,4 +1,4 @@
-import Service from '@ember/service';
+import Service from "@ember/service";
 import { getOwner } from "discourse-common/lib/get-owner";
 import { tracked } from "@glimmer/tracking";
 import { ajax } from "discourse/lib/ajax";
@@ -12,21 +12,22 @@ const MANAGER_CATEGORY =
   "https://discourse.pluginmanager.org/c/discourse-custom-wizard";
 
 export default class SubscriptionService extends Service {
-    @tracked subscribed = false;
-    @tracked subscriptionType = "";
-    @tracked businessSubscription = false;
-    @tracked communitySubscription = false;
-    @tracked standardSubscription = false;
-    @tracked subscriptionAttributes = {};
-    subscriptionLandingUrl = PRODUCT_PAGE;
+  @tracked subscribed = false;
+  @tracked subscriptionType = "";
+  @tracked businessSubscription = false;
+  @tracked communitySubscription = false;
+  @tracked standardSubscription = false;
+  @tracked subscriptionAttributes = {};
+  subscriptionLandingUrl = PRODUCT_PAGE;
 
-    init() {
-      super.init(...arguments);
-      this.retrieveSubscriptionStatus();
-    }
+  init() {
+    super.init(...arguments);
+    this.retrieveSubscriptionStatus();
+  }
 
-    retrieveSubscriptionStatus() {
-      ajax("/admin/wizards/subscription").then(result => {
+  retrieveSubscriptionStatus() {
+    ajax("/admin/wizards/subscription")
+      .then((result) => {
         this.subscribed = result.subscribed;
         this.subscriptionType = result.subscription_type;
         this.subscriptionAttributes = result.subscription_attributes;
@@ -35,28 +36,28 @@ export default class SubscriptionService extends Service {
         this.standardSubscription = equal(this.subscriptionType, "standard");
       })
       .catch(popupAjaxError);
-    };
+  }
 
-    get adminWizards() {
-      return getOwner(this).lookup("controller:admin-wizards");
-    };
+  get adminWizards() {
+    return getOwner(this).lookup("controller:admin-wizards");
+  }
 
-    get subscriptionLink() {
-      return this.subscriptionLandingUrl;
-    };
+  get subscriptionLink() {
+    return this.subscriptionLandingUrl;
+  }
 
-    get subscriptionCtaLink() {
-        switch (this.subscriptionType) {
-            case "none":
-            return PRODUCT_PAGE;
-            case "standard":
-            return SUPPORT_MESSAGE;
-            case "business":
-            return SUPPORT_MESSAGE;
-            case "community":
-            return MANAGER_CATEGORY;
-            default:
-            return PRODUCT_PAGE;
-        }
-    };
+  get subscriptionCtaLink() {
+    switch (this.subscriptionType) {
+      case "none":
+        return PRODUCT_PAGE;
+      case "standard":
+        return SUPPORT_MESSAGE;
+      case "business":
+        return SUPPORT_MESSAGE;
+      case "community":
+        return MANAGER_CATEGORY;
+      default:
+        return PRODUCT_PAGE;
+    }
+  }
 }

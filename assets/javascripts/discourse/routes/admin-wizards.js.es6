@@ -10,7 +10,7 @@ export default DiscourseRoute.extend({
     controller.setProperties({
       subscribed: model.subscribed,
       subscriptionType: model.subscription_type,
-      subscriptionAttributes: model.subscription_attributes
+      subscriptionAttributes: model.subscription_attributes,
     });
   },
 
