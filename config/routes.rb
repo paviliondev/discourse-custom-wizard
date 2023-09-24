@@ -14,7 +14,7 @@ Discourse::Application.routes.append do
 
   scope module: 'custom_wizard', constraints: AdminConstraint.new do
     get 'admin/wizards' => 'admin#index'
-    get 'admin/subscription' => 'subscription#index'
+    get 'admin/wizards/subscription' => 'subscription#index'
 
     get 'admin/wizards/wizard' => 'admin_wizard#index'
     get 'admin/wizards/wizard/create' => 'admin#index'

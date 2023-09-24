@@ -37,6 +37,7 @@ after_initialize do
     ../lib/custom_wizard/engine.rb
     ../config/routes.rb
     ../app/controllers/custom_wizard/admin/admin.rb
+    ../app/controllers/custom_wizard/admin/subscription.rb
     ../app/controllers/custom_wizard/admin/wizard.rb
     ../app/controllers/custom_wizard/admin/submissions.rb
     ../app/controllers/custom_wizard/admin/api.rb
