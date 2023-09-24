@@ -22,13 +22,11 @@ export default class SubscriptionService extends Service {
 
     init() {
       super.init(...arguments);
-      console.log("subscription initialisation");
       this.retrieveSubscriptionStatus();
     }
 
     retrieveSubscriptionStatus() {
       ajax("/admin/wizards/subscription").then(result => {
-        console.log(result)
         this.subscribed = result.subscribed;
         this.subscriptionType = result.subscription_type;
         this.subscriptionAttributes = result.subscription_attributes;
