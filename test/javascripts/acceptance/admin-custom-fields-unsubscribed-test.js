@@ -24,7 +24,7 @@ acceptance("Admin | Custom Fields Unsubscribed", function (needs) {
     server.get("/admin/wizards/wizard", () => {
       return helper.response(getWizard);
     });
-    server.get("/admin/wizards", () => {
+    server.get("/admin/wizards/subscription", () => {
       return helper.response(getUnsubscribedAdminWizards);
     });
     server.get("/admin/wizards/custom-fields", () => {

@@ -28,7 +28,7 @@ acceptance("Admin | Submissions", function (needs) {
     server.get("/admin/wizards/submissions/another_wizard", () => {
       return helper.response(getAnotherWizardSubmission);
     });
-    server.get("/admin/wizards", () => {
+    server.get("/admin/wizards/subscription", () => {
       return helper.response(getUnsubscribedAdminWizards);
     });
     server.get("/admin/wizards/wizard", () => {

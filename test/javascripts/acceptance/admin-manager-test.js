@@ -18,7 +18,7 @@ acceptance("Admin | Manager", function (needs) {
     server.get("/admin/wizards/manager/this_is_testing_wizard", () => {
       return helper.response(getWizardTestingLog);
     });
-    server.get("/admin/wizards", () => {
+    server.get("/admin/wizards/subscription", () => {
       return helper.response(getUnsubscribedAdminWizards);
     });
     server.get("/admin/wizards/wizard", () => {

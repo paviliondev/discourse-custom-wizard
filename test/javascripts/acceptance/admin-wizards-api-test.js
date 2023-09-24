@@ -21,7 +21,7 @@ acceptance("Admin | API tab", function (needs) {
     server.get("/admin/wizards/wizard", () => {
       return helper.response(getWizard);
     });
-    server.get("/admin/wizards", () => {
+    server.get("/admin/wizards/subscription", () => {
       return helper.response(getBusinessAdminWizard);
     });
     server.get("/admin/wizards/custom-fields", () => {
