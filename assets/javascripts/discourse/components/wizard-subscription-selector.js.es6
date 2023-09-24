@@ -43,6 +43,7 @@ export default SingleSelectComponent.extend({
 
   @discourseComputed("feature", "attribute", "wizard.allowGuests")
   content(feature, attribute) {
+    debugger;
     return filterValues(this.wizard, feature, attribute)
       .map((value) => {
         let allowedSubscriptionTypes = this.subscription.allowedSubscriptionTypes(
