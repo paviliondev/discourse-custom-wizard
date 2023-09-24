@@ -1,5 +1,4 @@
 import Service from "@ember/service";
-import { getOwner } from "discourse-common/lib/get-owner";
 import { tracked } from "@glimmer/tracking";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
