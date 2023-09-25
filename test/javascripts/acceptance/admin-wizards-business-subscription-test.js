@@ -11,8 +11,8 @@ import {
   getBusinessAdminWizard,
   getCreatedWizard,
   getCustomFields,
-  getWizard,
   getSuppliers,
+  getWizard,
 } from "../helpers/admin-wizard";
 
 acceptance("Admin | Custom Wizard Business Subscription", function (needs) {

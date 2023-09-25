@@ -6,9 +6,9 @@ import {
   getBusinessAdminWizard,
   getCustomFields,
   getNewApi,
+  getSuppliers,
   getWizard,
   putNewApi,
-  getSuppliers,
 } from "../helpers/admin-wizard";
 
 acceptance("Admin | API tab", function (needs) {

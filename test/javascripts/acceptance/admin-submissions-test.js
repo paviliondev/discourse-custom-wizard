@@ -4,10 +4,10 @@ import { click, findAll, visit } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 import {
   getAnotherWizardSubmission,
+  getSuppliers,
   getUnsubscribedAdminWizards,
   getWizard,
   getWizardSubmissions,
-  getSuppliers,
 } from "../helpers/admin-wizard";
 
 acceptance("Admin | Submissions", function (needs) {

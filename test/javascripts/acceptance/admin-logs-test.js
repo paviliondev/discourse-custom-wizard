@@ -3,10 +3,10 @@ import { test } from "qunit";
 import { click, findAll, visit } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 import {
+  getSuppliers,
   getUnsubscribedAdminWizards,
   getWizard,
   getWizardTestingLog,
-  getSuppliers,
 } from "../helpers/admin-wizard";
 
 acceptance("Admin | Logs", function (needs) {

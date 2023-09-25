@@ -8,9 +8,9 @@ import { click, fillIn, findAll, visit, waitUntil } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 import {
   getCustomFields,
+  getSuppliers,
   getUnsubscribedAdminWizards,
   getWizard,
-  getSuppliers,
 } from "../helpers/admin-wizard";
 import { Promise } from "rsvp";
 
@@ -20,6 +20,7 @@ acceptance("Admin | Custom Fields Unsubscribed", function (needs) {
     custom_wizard_enabled: true,
     available_locales: JSON.stringify([{ name: "English", value: "en" }]),
   });
+
   needs.pretender((server, helper) => {
     server.get("/admin/wizards/wizard", () => {
       return helper.response(getWizard);

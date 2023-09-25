@@ -11,10 +11,10 @@ import {
   getAdminTestingWizard,
   getCreatedWizard,
   getCustomFields,
+  getSuppliers,
   getUniqueWizard,
   getUnsubscribedAdminWizards,
   getWizard,
-  getSuppliers,
 } from "../helpers/admin-wizard";
 
 acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {

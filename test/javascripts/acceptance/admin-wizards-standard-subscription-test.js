@@ -11,8 +11,8 @@ import {
   getCreatedWizard,
   getCustomFields,
   getStandardAdminWizard,
-  getWizard,
   getSuppliers,
+  getWizard,
 } from "../helpers/admin-wizard";
 
 acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {

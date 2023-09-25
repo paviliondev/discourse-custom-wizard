@@ -2,10 +2,10 @@ import { acceptance, query } from "discourse/tests/helpers/qunit-helpers";
 import { test } from "qunit";
 import { click, find, findAll, visit, waitUntil } from "@ember/test-helpers";
 import {
+  getSuppliers,
   getUnsubscribedAdminWizards,
   getWizard,
   getWizardTestingLog,
-  getSuppliers,
 } from "../helpers/admin-wizard";
 import { Promise } from "rsvp";
 
