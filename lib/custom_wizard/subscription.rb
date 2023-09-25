@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require "discourse_subscription_client"
+
 class CustomWizard::Subscription
   PRODUCT_HIERARCHY = %w[
     community
@@ -105,7 +107,7 @@ class CustomWizard::Subscription
                 :product_slug
 
   def initialize
-    result = DiscourseSubscriptionClient.find_subscriptions("discourse-custom-wizard")
+    result = ::DiscourseSubscriptionClient.find_subscriptions("discourse-custom-wizard")
 
     if result&.any?
       ids_and_slugs = result.subscriptions.map do |subscription|
