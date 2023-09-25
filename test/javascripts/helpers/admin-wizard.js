@@ -916,15 +916,15 @@ const putNewApi = {
 };
 
 const getSuppliers = {
-  "suppliers": [
+  suppliers: [
     {
-      "id": 1,
-      "name": "Pavilion",
-      "authorized": false,
-      "authorized_at": null,
-      "user": null
-    }
-  ]
+      id: 1,
+      name: "Pavilion",
+      authorized: false,
+      authorized_at: null,
+      user: null,
+    },
+  ],
 };
 
 export {
