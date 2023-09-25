@@ -6,6 +6,7 @@ import {
   getUnsubscribedAdminWizards,
   getWizard,
   getWizardTestingLog,
+  getSuppliers,
 } from "../helpers/admin-wizard";
 
 acceptance("Admin | Logs", function (needs) {
@@ -28,6 +29,9 @@ acceptance("Admin | Logs", function (needs) {
     });
     server.get("/admin/wizards/wizard", () => {
       return helper.response(getWizard);
+    });
+    server.get("/admin/plugins/subscription-client/suppliers", () => {
+      return helper.response(getSuppliers);
     });
   });
   test("viewing logs fields tab", async (assert) => {

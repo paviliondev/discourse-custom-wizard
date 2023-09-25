@@ -14,6 +14,7 @@ import {
   getUniqueWizard,
   getUnsubscribedAdminWizards,
   getWizard,
+  getSuppliers,
 } from "../helpers/admin-wizard";
 
 acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
@@ -53,6 +54,9 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
     });
     server.get("/admin/wizards/wizard/unique_wizard", () => {
       return helper.response(getUniqueWizard);
+    });
+    server.get("/admin/plugins/subscription-client/suppliers", () => {
+      return helper.response(getSuppliers);
     });
   });
 

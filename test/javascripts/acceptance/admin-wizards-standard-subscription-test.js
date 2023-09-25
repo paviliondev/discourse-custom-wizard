@@ -12,6 +12,7 @@ import {
   getCustomFields,
   getStandardAdminWizard,
   getWizard,
+  getSuppliers,
 } from "../helpers/admin-wizard";
 
 acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
@@ -48,6 +49,9 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
     });
     server.get("/admin/wizards/wizard/new_wizard_for_testing", () => {
       return helper.response(getCreatedWizard);
+    });
+    server.get("/admin/plugins/subscription-client/suppliers", () => {
+      return helper.response(getSuppliers);
     });
   });
 

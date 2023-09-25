@@ -914,15 +914,19 @@ const putNewApi = {
     log: [],
   },
 };
+
 const getSuppliers = {
   "suppliers": [
-    { "id": 1,
-    "name": "Pavilion",
-    "authorized": false,
-    "authorized_at": null,
-    "user": null }
+    {
+      "id": 1,
+      "name": "Pavilion",
+      "authorized": false,
+      "authorized_at": null,
+      "user": null
+    }
   ]
 };
+
 export {
   getWizard,
   getUnsubscribedAdminWizards,

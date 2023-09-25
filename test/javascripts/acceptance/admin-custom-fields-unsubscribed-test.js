@@ -10,6 +10,7 @@ import {
   getCustomFields,
   getUnsubscribedAdminWizards,
   getWizard,
+  getSuppliers,
 } from "../helpers/admin-wizard";
 import { Promise } from "rsvp";
 
@@ -19,7 +20,6 @@ acceptance("Admin | Custom Fields Unsubscribed", function (needs) {
     custom_wizard_enabled: true,
     available_locales: JSON.stringify([{ name: "English", value: "en" }]),
   });
-
   needs.pretender((server, helper) => {
     server.get("/admin/wizards/wizard", () => {
       return helper.response(getWizard);
@@ -35,6 +35,9 @@ acceptance("Admin | Custom Fields Unsubscribed", function (needs) {
     });
     server.delete("/admin/wizards/custom-fields/topic_custom_field", () => {
       return helper.response({ success: "OK" });
+    });
+    server.get("/admin/plugins/subscription-client/suppliers", () => {
+      return helper.response(getSuppliers);
     });
   });
 

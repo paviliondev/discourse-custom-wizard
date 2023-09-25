@@ -8,6 +8,7 @@ import {
   getNewApi,
   getWizard,
   putNewApi,
+  getSuppliers,
 } from "../helpers/admin-wizard";
 
 acceptance("Admin | API tab", function (needs) {
@@ -44,6 +45,9 @@ acceptance("Admin | API tab", function (needs) {
     });
     server.get("/admin/wizards/api/new_api", () => {
       return helper.response(getNewApi);
+    });
+    server.get("/admin/plugins/subscription-client/suppliers", () => {
+      return helper.response(getSuppliers);
     });
   });
 

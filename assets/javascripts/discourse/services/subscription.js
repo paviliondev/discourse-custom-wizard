@@ -2,7 +2,6 @@ import Service from "@ember/service";
 import { tracked } from "@glimmer/tracking";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
-import { equal } from "@ember/object/computed";
 
 const PRODUCT_PAGE = "https://custom-wizard.pavilion.tech";
 const SUPPORT_MESSAGE =
@@ -30,9 +29,9 @@ export default class SubscriptionService extends Service {
         this.subscribed = result.subscribed;
         this.subscriptionType = result.subscription_type;
         this.subscriptionAttributes = result.subscription_attributes;
-        this.businessSubscription = equal(this.subscriptionType, "business");
-        this.communitySubscription = equal(this.subscriptionType, "community");
-        this.standardSubscription = equal(this.subscriptionType, "standard");
+        this.businessSubscription = this.subscriptionType === "business";
+        this.communitySubscription = this.subscriptionType === "community";
+        this.standardSubscription = this.subscriptionType === "standard";
       })
       .catch(popupAjaxError);
   }

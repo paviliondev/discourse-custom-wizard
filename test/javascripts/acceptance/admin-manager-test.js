@@ -5,6 +5,7 @@ import {
   getUnsubscribedAdminWizards,
   getWizard,
   getWizardTestingLog,
+  getSuppliers,
 } from "../helpers/admin-wizard";
 import { Promise } from "rsvp";
 
@@ -32,6 +33,9 @@ acceptance("Admin | Manager", function (needs) {
         ],
         failures: [],
       });
+    });
+    server.get("/admin/plugins/subscription-client/suppliers", () => {
+      return helper.response(getSuppliers);
     });
   });
   async function waitForDestructionAndResetMessage() {

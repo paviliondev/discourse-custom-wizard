@@ -60,10 +60,9 @@ export default SingleSelectComponent.extend({
           name: I18n.t(nameKey(feature, attribute, value)),
           subscriptionRequired,
         };
-
         if (subscriptionRequired) {
           let subscribed = allowedSubscriptionTypes.includes(
-            this.subscriptionType
+            this.subscription.subscriptionType
           );
           let selectorKey = subscribed ? "subscribed" : "not_subscribed";
           let selectorLabel = `admin.wizard.subscription.${selectorKey}.selector`;
