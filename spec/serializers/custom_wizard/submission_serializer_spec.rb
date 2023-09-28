@@ -13,7 +13,7 @@ describe CustomWizard::SubmissionSerializer do
   }
 
   before do
-    define_client_classes
+    stub_out_subscription_classes
     CustomWizard::Template.save(template_json, skip_jobs: true)
 
     wizard = CustomWizard::Wizard.create(template_json["id"], user1)

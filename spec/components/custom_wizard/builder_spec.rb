@@ -29,7 +29,7 @@ describe CustomWizard::Builder do
   }
 
   before do
-    define_client_classes
+    stub_out_subscription_classes
     Group.refresh_automatic_group!(:trust_level_3)
     CustomWizard::Template.save(wizard_template, skip_jobs: true)
     @template = CustomWizard::Template.find('super_mega_fun_wizard')

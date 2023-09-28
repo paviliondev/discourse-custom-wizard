@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe CustomWizard::AdminController do
+describe CustomWizard::SubscriptionController do
   fab!(:admin_user) { Fabricate(:user, admin: true) }
 
   it "requires an admin" do
@@ -16,7 +16,7 @@ describe CustomWizard::AdminController do
     context "without a subscription" do
       before do
         disable_subscriptions
-        define_client_classes
+        stub_out_subscription_classes
       end
 
       it "returns the right subscription details" do
@@ -29,7 +29,7 @@ describe CustomWizard::AdminController do
     context "with a subscription" do
       before do
         enable_subscription("standard")
-        define_client_classes
+        stub_out_subscription_classes
       end
 
       it "returns the right subscription details" do

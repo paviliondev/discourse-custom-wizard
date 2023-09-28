@@ -15,7 +15,7 @@ describe CustomWizard::Subscription do
 
   context "with subscription client gem mocked out" do
     before do
-      define_client_classes
+      stub_out_subscription_classes
     end
 
     context "without a subscription" do

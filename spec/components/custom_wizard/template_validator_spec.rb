@@ -40,7 +40,7 @@ describe CustomWizard::TemplateValidator do
   end
 
   before do
-    define_client_classes
+    stub_out_subscription_classes
   end
 
   it "validates valid templates" do

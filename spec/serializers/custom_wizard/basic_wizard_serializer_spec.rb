@@ -5,7 +5,7 @@ describe CustomWizard::BasicWizardSerializer do
   let(:template) { get_wizard_fixture("wizard") }
 
   before do
-    define_client_classes
+    stub_out_subscription_classes
   end
 
   it 'should return basic wizard attributes' do

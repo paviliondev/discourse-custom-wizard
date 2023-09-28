@@ -5,7 +5,7 @@ describe CustomWizard::AdminLogsController do
   let(:template) { get_wizard_fixture("wizard") }
 
   before do
-    define_client_classes
+    stub_out_subscription_classes
     ["first", "second", "third"].each_with_index do |key, index|
       temp = template.dup
       temp["id"] = "#{key}_test_wizard"

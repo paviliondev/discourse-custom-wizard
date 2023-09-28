@@ -5,7 +5,7 @@ describe CustomWizard::AdminManagerController do
   let(:template) { get_wizard_fixture("wizard") }
 
   before do
-    define_client_classes
+    stub_out_subscription_classes
     sign_in(admin_user)
 
     template_2 = template.dup

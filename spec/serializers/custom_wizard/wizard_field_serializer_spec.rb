@@ -5,7 +5,7 @@ describe CustomWizard::FieldSerializer do
   let(:template) { get_wizard_fixture("wizard") }
 
   before do
-    define_client_classes
+    stub_out_subscription_classes
     CustomWizard::Template.save(template, skip_jobs: true)
     @wizard = CustomWizard::Builder.new("super_mega_fun_wizard", user).build
   end

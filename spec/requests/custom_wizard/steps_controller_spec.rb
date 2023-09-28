@@ -11,7 +11,7 @@ describe CustomWizard::StepsController do
   let(:guests_permitted) { get_wizard_fixture("wizard/guests_permitted") }
 
   before do
-    define_client_classes
+    stub_out_subscription_classes
     CustomWizard::Template.save(wizard_template, skip_jobs: true)
   end
 

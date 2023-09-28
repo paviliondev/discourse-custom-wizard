@@ -5,7 +5,7 @@ describe CustomWizard::CustomField do
   let(:custom_field_subscription_json) { get_wizard_fixture("custom_field/subscription_custom_fields") }
 
   before do
-    define_client_classes
+    stub_out_subscription_classes
     CustomWizard::CustomField.invalidate_cache
   end
 
