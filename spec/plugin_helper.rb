@@ -9,11 +9,13 @@ def get_wizard_fixture(path)
 end
 
 def enable_subscription(type)
+  define_client_classes
   CustomWizard::Subscription.stubs("#{type}?".to_sym).returns(true)
   CustomWizard::Subscription.any_instance.stubs("#{type}?".to_sym).returns(true)
 end
 
 def disable_subscriptions
+  define_client_classes
   %w[
     standard
     business
