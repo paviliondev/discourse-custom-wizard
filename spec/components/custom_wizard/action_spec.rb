@@ -42,6 +42,7 @@ describe CustomWizard::Action do
   }
 
   before do
+    define_client_classes
     Group.refresh_automatic_group!(:trust_level_2)
     update_template(wizard_template)
   end

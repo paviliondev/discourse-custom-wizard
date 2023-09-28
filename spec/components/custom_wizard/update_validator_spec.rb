@@ -6,6 +6,7 @@ describe CustomWizard::UpdateValidator do
   let(:url_field) { get_wizard_fixture("field/url") }
 
   before do
+    define_client_classes
     CustomWizard::Template.save(template, skip_jobs: true)
     @template = CustomWizard::Template.find('super_mega_fun_wizard')
   end

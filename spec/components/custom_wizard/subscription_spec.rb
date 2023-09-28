@@ -13,7 +13,7 @@ describe CustomWizard::Subscription do
     }
   }
 
-  context "with subscription client gem" do
+  context "with subscription client gem mocked out" do
     before do
       define_client_classes
     end

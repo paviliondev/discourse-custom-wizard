@@ -8,9 +8,8 @@ describe CustomWizard::AdminWizardController do
   let(:category) { Fabricate(:category, custom_fields: { create_topic_wizard: template['name'].parameterize(separator: "_") }) }
 
   before do
-    CustomWizard::Template.save(template, skip_jobs: true)
     enable_subscription("standard")
-
+    CustomWizard::Template.save(template, skip_jobs: true)
     template_2 = template.dup
     template_2["id"] = 'super_mega_fun_wizard_2'
     template_2["permitted"] = template_2['permitted']

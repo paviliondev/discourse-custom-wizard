@@ -39,6 +39,10 @@ describe CustomWizard::TemplateValidator do
     expect(validator.errors.first.message).to eq("Liquid syntax error in #{object_id}: #{message}")
   end
 
+  before do
+    define_client_classes
+  end
+
   it "validates valid templates" do
     expect(
       CustomWizard::TemplateValidator.new(template).perform

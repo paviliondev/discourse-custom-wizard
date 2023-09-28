@@ -7,6 +7,7 @@ describe ExtraLocalesControllerCustomWizard, type: :request do
   let(:permitted) { get_wizard_fixture("wizard/permitted") }
 
   before do
+    define_client_classes
     CustomWizard::Template.save(template, skip_jobs: true)
   end
 

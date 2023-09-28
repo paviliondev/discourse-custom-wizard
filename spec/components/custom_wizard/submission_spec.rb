@@ -7,6 +7,7 @@ describe CustomWizard::Submission do
   let(:guest_id) { CustomWizard::Wizard.generate_guest_id }
 
   before do
+    define_client_classes
     CustomWizard::Template.save(template_json, skip_jobs: true)
     @wizard = CustomWizard::Wizard.create(template_json["id"], user)
     described_class.new(@wizard, step_1_field_1: "I am user submission").save

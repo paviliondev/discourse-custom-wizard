@@ -4,6 +4,7 @@ describe CustomWizardUsersController, type: :request do
   let(:template) { get_wizard_fixture("wizard") }
 
   before do
+    define_client_classes
     @controller = UsersController.new
   end
 

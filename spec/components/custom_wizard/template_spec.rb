@@ -7,6 +7,7 @@ describe CustomWizard::Template do
   fab!(:upload) { Fabricate(:upload) }
 
   before do
+    define_client_classes
     CustomWizard::Template.save(template_json, skip_jobs: true)
   end
 
