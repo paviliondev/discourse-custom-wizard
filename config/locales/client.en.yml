@@ -546,11 +546,11 @@ en:
         subscription:
           title: Subscriber Features
           authorize:
-            label: "Authorize"
-            title: “Authorize your subscription on this site”
+            label: Authorize
+            title: Authorize your subscription on this site
           deauthorize:
-            label: "deauthorize"
-            title: “Deauthorize your subscription on this site”
+            label: deauthorize
+            title: Deauthorize your subscription on this site
           subscribed:
             label: Subscribed
             title: You're subscribed and can use these features
