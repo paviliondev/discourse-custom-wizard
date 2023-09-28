@@ -545,8 +545,12 @@ en:
 
         subscription:
           title: Subscriber Features
-          authorize: "Authorize Subscription"
-          deauthorize: "deauthorize Subscription"
+          authorize:
+            label: "Authorize"
+            title: “Authorize your subscription on this site”
+          deauthorize:
+            label: "deauthorize"
+            title: “Deauthorize your subscription on this site”
           subscribed:
             label: Subscribed
             title: You're subscribed and can use these features
