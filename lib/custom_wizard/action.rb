@@ -63,6 +63,7 @@ class CustomWizard::Action
 
   def create_topic
     params = basic_topic_params.merge(public_topic_params)
+    params[:from_wizard] = true
 
     callbacks_for(:before_create_topic).each do |acb|
       params = acb.call(params, @wizard, @action, @submission)

@@ -238,11 +238,13 @@ after_initialize do
   DiscourseEvent.trigger(:custom_wizard_ready)
 
   on(:before_create_topic) do |topic_params, user|
-    category = topic_params.category
-    if category&.custom_fields&.[]('create_topic_wizard').present?
+    next if topic_params[:archetype] == 'message'
+  
+    if topic_params[:category]&.custom_fields&.[]('create_topic_wizard').present? && !topic_params[:from_wizard]
       raise Discourse::InvalidParameters.new(
-              I18n.t('wizard.error_messages.wizard_replacing_composer')
-            )
+        I18n.t('wizard.error_messages.wizard_replacing_composer')
+      )
     end
   end
+  
 end
