@@ -240,12 +240,10 @@ after_initialize do
   on(:before_create_topic) do |topic_params, user|
     category = topic_params.category
     wizard_submission_id = topic_params.custom_fields['wizard_submission_id']
-    
     if category&.custom_fields&.[]('create_topic_wizard').present? && wizard_submission_id.blank?
       raise Discourse::InvalidParameters.new(
         I18n.t('wizard.error_messages.wizard_replacing_composer')
       )
     end
   end
-  
 end
