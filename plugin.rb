@@ -238,7 +238,6 @@ after_initialize do
   DiscourseEvent.trigger(:custom_wizard_ready)
 
   on(:before_create_topic) do |topic_params, user|
-    next if topic_params[:archetype] == 'message'
     category = topic_params.category
     wizard_submission_id = topic_params.custom_fields['wizard_submission_id']
     
