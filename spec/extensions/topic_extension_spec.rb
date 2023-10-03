@@ -15,12 +15,15 @@ describe Topic, type: :model do
           user,
           Guardian.new(user),
           valid_attrs.merge(
+            title: 'A valid and sufficiently long title for testing',
             category: category_with_wizard.id,
-            title: 'A valid title',
-            raw: 'hello this is a test topic'
+            raw: 'hello this is a test topic with category with custom fields'
           )
         )
-      end.to raise_error
+      end.to raise_error(
+        Discourse::InvalidParameters,
+        'Category not allowed for topic creation.'
+      )
     end
   end
 
@@ -32,8 +35,8 @@ describe Topic, type: :model do
           Guardian.new(user),
           valid_attrs.merge(
             category: category_without_wizard.id,
-            title: 'Another valid title',
-            raw: 'This is a valid topic'
+            title: 'Another valid and sufficiently long title for testing',
+            raw: 'This is the body of a valid topic'
           )
         )
       end.not_to raise_error
