@@ -24,7 +24,7 @@ describe CustomWizard::SubmissionSerializer do
 
   it 'should return submission attributes' do
     wizard = CustomWizard::Wizard.create(template_json["id"])
-    list = CustomWizard::Submission.list(wizard, page: 0)
+    list = CustomWizard::Submission.list(wizard, page: 0, order_by: 'id')
 
     json_array = ActiveModel::ArraySerializer.new(
       list.submissions,
