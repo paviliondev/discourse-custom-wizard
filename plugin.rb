@@ -8,6 +8,7 @@
 # subscription_url: https://coop.pavilion.tech
 
 gem 'liquid', '5.0.1', require: true
+gem 'discourse_plugin_statistics', '0.1.0.pre1', require: true
 register_asset 'stylesheets/common/admin.scss'
 register_asset 'stylesheets/common/wizard.scss'
 
@@ -73,6 +74,7 @@ after_initialize do
     ../lib/custom_wizard/api/log_entry.rb
     ../lib/custom_wizard/liquid_extensions/first_non_empty.rb
     ../lib/custom_wizard/exceptions/exceptions.rb
+    ../lib/discourse_plugin_statistics/plugin.rb
     ../app/serializers/custom_wizard/api/authorization_serializer.rb
     ../app/serializers/custom_wizard/api/basic_endpoint_serializer.rb
     ../app/serializers/custom_wizard/api/endpoint_serializer.rb
