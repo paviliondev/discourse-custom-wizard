@@ -131,6 +131,8 @@ class CustomWizard::Submission
     params[:key] = list_actor_id if list_actor_id
 
     query = PluginStoreRow.where(params)
+    query = query.order(order_by) if order_by
+
     result = OpenStruct.new(submissions: [], total: nil)
 
     query.each do |record|
