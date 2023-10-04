@@ -56,10 +56,14 @@ module DiscoursePluginStatistics
       }
 
       increment_feature_count = lambda do |type, key, value|
-        if key == 'type' && !subscription_features[type.to_sym][:type][value.to_sym].nil?
-          subscription_features[type.to_sym][:type][value.to_sym] += 1
-        elsif !subscription_features[type.to_sym][key.to_sym].nil?
-          subscription_features[type.to_sym][key.to_sym] += 1
+        if key == 'type'
+          if !subscription_features[type.to_sym][:type][value.to_sym].nil?
+            subscription_features[type.to_sym][:type][value.to_sym] += 1
+          end
+        else
+          if !subscription_features[type.to_sym][key.to_sym].nil?
+            subscription_features[type.to_sym][key.to_sym] += 1
+          end
         end
       end
 
