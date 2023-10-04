@@ -450,4 +450,29 @@ describe CustomWizard::Action do
     expect(action.result.success?).to eq(true)
     expect(Topic.find(action.result.output).custom_fields["topic_custom_field"]).to eq("t")
   end
+
+  context 'creating a topic when there are multiple actions' do
+    it 'works' do
+      wizard_template['actions'] << create_topic
+      wizard_template['actions'] << send_message
+      update_template(wizard_template)
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      wizard.create_updater(
+        wizard.steps.first.id,
+        step_1_field_1: 'Topic Title',
+        step_1_field_2: 'topic body'
+      ).update
+      wizard.create_updater(wizard.steps.second.id, {}).update
+      wizard.create_updater(wizard.steps.last.id, step_3_field_3: category.id)
+        .update
+      User.create(username: 'angus1', email: 'angus1@email.com')
+      wizard.create_updater(wizard.steps[0].id, {}).update
+      wizard.create_updater(wizard.steps[1].id, {}).update
+      topic = Topic.where(title: 'Topic Title', category_id: category.id)
+      expect(topic.exists?).to eq(true)
+      expect(
+        Post.where(topic_id: topic.pluck(:id), raw: 'topic body').exists?
+      ).to eq(true)
+    end
+  end
 end
