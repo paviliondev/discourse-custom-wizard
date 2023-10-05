@@ -8,7 +8,7 @@
 # subscription_url: https://coop.pavilion.tech
 
 gem 'liquid', '5.0.1', require: true
-gem 'discourse_plugin_statistics', '0.1.0.pre4', require: true
+gem 'discourse_plugin_statistics', '0.1.0.pre5', require: true
 register_asset 'stylesheets/common/admin.scss'
 register_asset 'stylesheets/common/wizard.scss'
 
