@@ -927,6 +927,18 @@ const getSuppliers = {
   ],
 };
 
+const getSuppliersAuthorized = {
+  suppliers: [
+    {
+      id: 1,
+      name: "Pavilion",
+      authorized: true,
+      authorized_at: null,
+      user: null,
+    },
+  ],
+};
+
 export {
   getWizard,
   getUnsubscribedAdminWizards,
@@ -942,4 +954,5 @@ export {
   getAnotherWizardSubmission,
   getUniqueWizard,
   getSuppliers,
+  getSuppliersAuthorized,
 };

@@ -76,6 +76,22 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
     assert.equal(count, 5, "There should be 5 admin tabs");
   });
 
+  test("shows unauthorized and unsubscribed", async(assert) => {
+    await visit("/admin/wizards");
+    assert.ok(
+      exists(".supplier-authorize .btn-primary"),
+      "the authorize button is shown."
+    );
+    assert.strictEqual(
+      query("button.wizard-subscription-badge span").innerText.trim(),
+      "Not Subscribed"
+    );
+    assert.strictEqual(
+      query("button.btn-pavilion-support span").innerText.trim(),
+      "Get a Subscription"
+    );
+  });
+
   test("creating a new wizard", async (assert) => {
     await visit("/admin/wizards/wizard");
     await click(".admin-wizard-controls button");

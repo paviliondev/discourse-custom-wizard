@@ -11,7 +11,7 @@ import {
   getBusinessAdminWizard,
   getCreatedWizard,
   getCustomFields,
-  getSuppliers,
+  getSuppliersAuthorized,
   getWizard,
 } from "../helpers/admin-wizard";
 
@@ -51,7 +51,7 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
       return helper.response(getCreatedWizard);
     });
     server.get("/admin/plugins/subscription-client/suppliers", () => {
-      return helper.response(getSuppliers);
+      return helper.response(getSuppliersAuthorized);
     });
   });
 
@@ -60,6 +60,22 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
     const list = find(".admin-controls li");
     const count = list.length;
     assert.equal(count, 6, "There should be 6 admin tabs");
+  });
+
+  test("shows authorized and subscribed", async(assert) => {
+    await visit("/admin/wizards");
+    assert.notOk(
+      exists(".supplier-authorize .btn-primary"),
+      "the authorize button is shown."
+    );
+    assert.strictEqual(
+      query("button.wizard-subscription-badge span").innerText.trim(),
+      "Business"
+    );
+    assert.strictEqual(
+      query("button.btn-pavilion-support span").innerText.trim(),
+      "Support"
+    );
   });
 
   test("creating a new wizard", async (assert) => {
