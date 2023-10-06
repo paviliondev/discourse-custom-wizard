@@ -76,7 +76,7 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
     assert.equal(count, 5, "There should be 5 admin tabs");
   });
 
-  test("shows unauthorized and unsubscribed", async(assert) => {
+  test("shows unauthorized and unsubscribed", async (assert) => {
     await visit("/admin/wizards");
     assert.ok(
       exists(".supplier-authorize .btn-primary"),

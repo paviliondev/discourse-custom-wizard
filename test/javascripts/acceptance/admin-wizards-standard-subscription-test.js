@@ -1,5 +1,6 @@
 import {
   acceptance,
+  exists,
   query,
   visible,
 } from "discourse/tests/helpers/qunit-helpers";
@@ -62,7 +63,7 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
     assert.equal(count, 5, "There should be 5 admin tabs");
   });
 
-  test("shows authorized and subscribed", async(assert) => {
+  test("shows authorized and subscribed", async (assert) => {
     await visit("/admin/wizards");
     assert.notOk(
       exists(".supplier-authorize .btn-primary"),
