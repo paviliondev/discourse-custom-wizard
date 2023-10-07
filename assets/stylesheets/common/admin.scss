@@ -49,6 +49,9 @@ $error: #ef1700;
 
     .btn-pavilion-support {
       margin-left: 10px;
+      &:hover {
+        color: var(--pavilion-secondary);
+      }
     }
 
     .btn-primary {
