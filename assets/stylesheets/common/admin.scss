@@ -44,14 +44,16 @@ $error: #ef1700;
 }
 
 .admin-wizards .admin-actions {
-  display: flex;
+  .supplier-authorize {
+    display: inline-flex;
 
-  .btn-pavilion-support {
-    margin-left: 10px;
-  }
+    .btn-pavilion-support {
+      margin-left: 10px;
+    }
 
-  .supplier-authorize .btn-primary {
-    margin-right: 10px;
+    .btn-primary {
+      margin-right: 10px;
+    }
   }
 }
 
