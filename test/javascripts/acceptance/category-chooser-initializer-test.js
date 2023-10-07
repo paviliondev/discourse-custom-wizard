@@ -4,7 +4,7 @@ import selectKit from "discourse/tests/helpers/select-kit-helper";
 import { test } from "qunit";
 
 acceptance("Category Chooser Initializer for regular users", function (needs) {
-  needs.user({ staff: false, admin: false, moderator: false });
+  needs.user({ admin: false, moderator: false });
   needs.settings({
     allow_uncategorized_topics: false,
   });

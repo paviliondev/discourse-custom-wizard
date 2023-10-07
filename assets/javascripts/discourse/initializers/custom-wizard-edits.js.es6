@@ -88,7 +88,7 @@ export default {
         categoriesByScope(options = {}) {
           let categories = this._super(options);
           const currentUser = this.currentUser;
-          if (!(currentUser && (currentUser.admin || currentUser.staff))) {
+          if (!currentUser?.staff) {
             categories = categories.filter((category) => {
               return !category.custom_fields?.create_topic_wizard;
             });
