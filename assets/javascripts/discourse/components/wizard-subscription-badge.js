@@ -39,23 +39,24 @@ export default class WizardSubscriptionBadge extends Component {
 
   @action
   update() {
-    this.updating = true;
-    return ajax(`${this.basePath}/subscriptions`, {
-      type: "POST",
-    })
-      .then(() => {
-        if (this.subscription.subscribed) {
-          this.updateIcon = "check";
-        } else {
-          this.updateIcon = "times";
-        }
-      })
-      .catch(popupAjaxError)
-      .finally(() => {
-        this.updating = false;
-        // setTimeout(() => {
-        //   this.updateIcon = null;
-        // }, 7000);
-      });
+    this.subscription.retrieveSubscriptionStatus();
+    // this.updating = true;
+    // return ajax(`${this.basePath}/subscriptions`, {
+    //   type: "POST",
+    // })
+    //   .then(() => {
+    //     if (this.subscription.subscribed) {
+    //       this.updateIcon = "check";
+    //     } else {
+    //       this.updateIcon = "times";
+    //     }
+    //   })
+    //   .catch(popupAjaxError)
+    //   .finally(() => {
+    //     this.updating = false;
+    //     setTimeout(() => {
+    //       this.updateIcon = null;
+    //     }, 7000);
+    //   });
   }
 }

@@ -47,7 +47,6 @@ export default class WizardSubscriptionStatus extends Component {
       .finally(() => {
         this.unauthorizing = false;
         this.subscription.retrieveSubscriptionStatus();
-        //window.location.reload();
       })
       .catch(popupAjaxError);
   }
