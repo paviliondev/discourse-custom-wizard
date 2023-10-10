@@ -171,7 +171,7 @@ en:
             not_subscribed: "You've authorized, but are not currently subscribed to a Custom Wizard plan on %{server}."
             subscription_expiring: "Your subscription is active, but will expire in the next 48 hours."
             subscription_active: "Your subscription is active."
-            subscription_inactive: "Your subscription is inactive on this forum. Read more in <a href='https://thepavilion.io/t/3652'>the documentation</a>."
+            subscription_inactive: "Your subscription is inactive on this forum. Read more in <a href='https://pavilion.tech/products/discourse-custom-wizard-plugin/documentation/'>the documentation</a>."
             unauthorized: "You're unauthorized. If you have a subscription, it will become inactive in the next 48 hours."
             unauthorize_failed: Failed to unauthorize.
           submissions:
