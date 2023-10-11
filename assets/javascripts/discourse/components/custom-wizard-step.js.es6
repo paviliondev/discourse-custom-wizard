@@ -4,7 +4,7 @@ import I18n from "I18n";
 import getUrl from "discourse-common/lib/get-url";
 import { htmlSafe } from "@ember/template";
 import { schedule } from "@ember/runloop";
-import { cookAsync } from "discourse/lib/text";
+import { cook } from "discourse/lib/text";
 import CustomWizard, {
   updateCachedWizard,
 } from "discourse/plugins/discourse-custom-wizard/discourse/models/custom-wizard";
@@ -25,10 +25,10 @@ export default Component.extend({
   didReceiveAttrs() {
     this._super(...arguments);
 
-    cookAsync(this.step.translatedTitle).then((cookedTitle) => {
+    cook(this.step.translatedTitle).then((cookedTitle) => {
       this.set("cookedTitle", cookedTitle);
     });
-    cookAsync(this.step.translatedDescription).then((cookedDescription) => {
+    cook(this.step.translatedDescription).then((cookedDescription) => {
       this.set("cookedDescription", cookedDescription);
     });
   },
