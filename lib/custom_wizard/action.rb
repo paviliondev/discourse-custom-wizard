@@ -104,6 +104,7 @@ class CustomWizard::Action
     end
 
     params = basic_topic_params
+    params.delete(:tags) unless user_can_tag
 
     targets = CustomWizard::Mapper.new(
       inputs: action['recipient'],
@@ -610,6 +611,10 @@ class CustomWizard::Action
       user: user
     ).perform
 
+    if tags = action_tags
+      params[:tags] = tags
+    end
+
     params[:raw] = action['post_builder'] ?
       mapper.interpolate(
         action['post_template'],
@@ -630,10 +635,6 @@ class CustomWizard::Action
 
     if category = action_category
       params[:category] = category
-    end
-
-    if tags = action_tags
-      params[:tags] = tags
     end
 
     if public_topic_fields.any?
@@ -836,5 +837,10 @@ class CustomWizard::Action
       username,
       @log.join('; ')
     )
+  end
+  def user_can_tag
+    allowed_groups =
+      SiteSetting.pm_tags_allowed_for_groups.split('|').map(&:to_i)
+    user.groups.pluck(:id).any? { |group| allowed_groups.include?(group) }
   end
 end

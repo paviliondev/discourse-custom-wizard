@@ -107,6 +107,7 @@ const action = {
       post: null,
       post_builder: null,
       post_template: null,
+      tags: null,
       skip_redirect: null,
       custom_fields: null,
       required: null,
