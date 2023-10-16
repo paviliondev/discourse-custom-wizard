@@ -7,7 +7,7 @@ const PRODUCT_PAGE = "https://custom-wizard.pavilion.tech";
 const SUPPORT_MESSAGE =
   "https://coop.pavilion.tech/new-message?username=support&title=Custom%20Wizard%20Support";
 const MANAGER_CATEGORY =
-  "https://discourse.pluginmanager.org/c/discourse-custom-wizard";
+  "https://pavilion.tech/products/discourse-custom-wizard-plugin/support";
 
 export default Mixin.create({
   subscriptionLandingUrl: PRODUCT_PAGE,
