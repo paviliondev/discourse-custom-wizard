@@ -4,7 +4,7 @@ import {
   default as discourseComputed,
   observes,
 } from "discourse-common/utils/decorators";
-import { getOwner } from "discourse-common/lib/get-owner";
+import { getOwner } from "@ember/application";
 import { defaultSelectionType, selectionTypes } from "../lib/wizard-mapper";
 import {
   generateName,

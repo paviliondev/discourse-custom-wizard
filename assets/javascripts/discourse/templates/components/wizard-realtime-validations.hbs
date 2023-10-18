@@ -7,7 +7,7 @@
       <li>
         <span class="setting-title">
           <h4>{{i18n (concat "admin.wizard.field.validations." type)}}</h4>
-          <Input @type="checkbox" @checked={{this.props.status}} />
+          <Input @type="checkbox" @checked={{props.status}} />
           {{i18n "admin.wizard.field.validations.enabled"}}
         </span>
         <div class="validation-container">
@@ -36,7 +36,7 @@
             <div class="setting-value">
               <Input
                 @type="number"
-                @value={{this.props.time_n_value}}
+                @value={{props.time_n_value}}
                 class="time-n-value"
               />
               {{combo-box
