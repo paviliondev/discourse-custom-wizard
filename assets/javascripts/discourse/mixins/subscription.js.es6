@@ -1,5 +1,5 @@
 import Mixin from "@ember/object/mixin";
-import { getOwner } from "discourse-common/lib/get-owner";
+import { getOwner } from "@ember/application";
 import { readOnly } from "@ember/object/computed";
 import discourseComputed from "discourse-common/utils/decorators";
 

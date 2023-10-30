@@ -1,5 +1,5 @@
 import { get, set } from "@ember/object";
-import { getOwner } from "discourse-common/lib/get-owner";
+import { getOwnerWithFallback } from "discourse-common/lib/get-owner";
 
 const wizard = {
   basic: {
@@ -279,7 +279,7 @@ export function filterValues(currentWizard, feature, attribute, values = null) {
   return values;
 }
 
-const siteSettings = getOwner(this).lookup("service:site-settings");
+const siteSettings = getOwnerWithFallback(this).lookup("service:site-settings");
 if (siteSettings.wizard_apis_enabled) {
   wizardSchema.action.types.send_to_api = {
     api: null,
