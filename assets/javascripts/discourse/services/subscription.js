@@ -37,9 +37,9 @@ export default class SubscriptionService extends Service {
   }
 
   async updateSubscriptionStatus() {
-    let result = await ajax("/admin/wizards/subscription?update_from_remote=true").catch(
-      popupAjaxError
-    );
+    let result = await ajax(
+      "/admin/wizards/subscription?update_from_remote=true"
+    ).catch(popupAjaxError);
 
     this.subscribed = result.subscribed;
     this.subscriptionType = result.subscription_type;
