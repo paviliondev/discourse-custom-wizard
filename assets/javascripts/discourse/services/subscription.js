@@ -18,9 +18,9 @@ export default class SubscriptionService extends Service {
   @tracked subscriptionAttributes = {};
   subscriptionLandingUrl = PRODUCT_PAGE;
 
-  init() {
+  async init() {
     super.init(...arguments);
-    this.retrieveSubscriptionStatus();
+    await this.retrieveSubscriptionStatus();
   }
 
   async retrieveSubscriptionStatus() {
