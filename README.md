@@ -25,3 +25,7 @@ If you're not sure how to install a plugin in Discourse, please follow the [plug
 ## Support
 
 - [Report an issue](https://pavilion.tech/products/discourse-custom-wizard-plugin/support/bug-report)
+
+## Statistics
+
+For improved service and development, this plugin collects some generalised quantitative data related to version and usage. No personal or sensitive information is gathered. Please email contact@pavilion.tech if you have any questions or concerns about our data collection.
