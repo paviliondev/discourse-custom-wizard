@@ -66,7 +66,7 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
   test("shows authorized and subscribed", async (assert) => {
     await visit("/admin/wizards");
     assert.notOk(
-      exists(".supplier-authorize .btn-primary"),
+      exists(".supplier-authorize .btn-primary:not(.update)"),
       "the authorize button not shown."
     );
     assert.strictEqual(
