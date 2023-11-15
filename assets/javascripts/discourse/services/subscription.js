@@ -24,8 +24,10 @@ export default class SubscriptionService extends Service {
   }
 
   retrieveSubscriptionStatus() {
+    debugger;
     ajax("/admin/wizards/subscription")
       .then((result) => {
+        debugger;
         this.subscribed = result.subscribed;
         this.subscriptionType = result.subscription_type;
         this.subscriptionAttributes = result.subscription_attributes;
