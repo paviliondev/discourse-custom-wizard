@@ -36,6 +36,19 @@ export default class SubscriptionService extends Service {
     this.standardSubscription = this.subscriptionType === "standard";
   }
 
+  async updateSubscriptionStatus() {
+    let result = await ajax("/admin/wizards/subscription?update_from_remote=true").catch(
+      popupAjaxError
+    );
+
+    this.subscribed = result.subscribed;
+    this.subscriptionType = result.subscription_type;
+    this.subscriptionAttributes = result.subscription_attributes;
+    this.businessSubscription = this.subscriptionType === "business";
+    this.communitySubscription = this.subscriptionType === "community";
+    this.standardSubscription = this.subscriptionType === "standard";
+  }
+
   get subscriptionLink() {
     return this.subscriptionLandingUrl;
   }

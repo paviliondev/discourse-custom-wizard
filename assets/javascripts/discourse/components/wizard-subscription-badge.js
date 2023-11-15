@@ -39,7 +39,7 @@ export default class WizardSubscriptionBadge extends Component {
   update() {
     this.updating = true;
     this.updateIcon = "check";
-    this.subscription.retrieveSubscriptionStatus().finally(() => {
+    this.subscription.updateSubscriptionStatus().finally(() => {
       this.updating = false;
       setTimeout(() => {
         this.updateIcon = null;

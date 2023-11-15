@@ -106,8 +106,11 @@ class CustomWizard::Subscription
   attr_accessor :product_id,
                 :product_slug
 
-  def initialize
-    ::DiscourseSubscriptionClient::Subscriptions.update
+  def initialize(update = false)
+    if update
+      ::DiscourseSubscriptionClient::Subscriptions.update
+    end
+
     result = ::DiscourseSubscriptionClient.find_subscriptions("discourse-custom-wizard")
 
     if result&.any?
