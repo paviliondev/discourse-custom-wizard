@@ -85,6 +85,8 @@ export default {
       });
 
       api.modifyClass("component:category-chooser", {
+        pluginId: "custom-wizard",
+
         categoriesByScope(options = {}) {
           let categories = this._super(options);
           const currentUser = this.currentUser;

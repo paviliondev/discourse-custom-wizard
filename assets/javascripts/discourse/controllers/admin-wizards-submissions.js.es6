@@ -2,7 +2,8 @@ import Controller from "@ember/controller";
 import { default as discourseComputed } from "discourse-common/utils/decorators";
 
 export default Controller.extend({
-  documentationUrl: "https://thepavilion.io/t/2818",
+  documentationUrl:
+    "https://pavilion.tech/products/discourse-custom-wizard-plugin/documentation/",
 
   @discourseComputed("wizardId")
   wizardName(wizardId) {

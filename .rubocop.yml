@@ -6,3 +6,6 @@ RSpec/ContextWording:
 
 RSpec/DescribeClass:
   Enabled: false
+
+Discourse/TimeEqMatcher:
+  Enabled: false
