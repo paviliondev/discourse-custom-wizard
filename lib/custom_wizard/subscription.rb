@@ -107,6 +107,7 @@ class CustomWizard::Subscription
                 :product_slug
 
   def initialize
+    ::DiscourseSubscriptionClient::Subscriptions.update
     result = ::DiscourseSubscriptionClient.find_subscriptions("discourse-custom-wizard")
 
     if result&.any?
