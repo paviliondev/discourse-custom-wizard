@@ -23,19 +23,15 @@ export default class SubscriptionService extends Service {
     this.retrieveSubscriptionStatus();
   }
 
-  retrieveSubscriptionStatus() {
-    debugger;
-    ajax("/admin/wizards/subscription")
-      .then((result) => {
-        debugger;
-        this.subscribed = result.subscribed;
-        this.subscriptionType = result.subscription_type;
-        this.subscriptionAttributes = result.subscription_attributes;
-        this.businessSubscription = this.subscriptionType === "business";
-        this.communitySubscription = this.subscriptionType === "community";
-        this.standardSubscription = this.subscriptionType === "standard";
-      })
-      .catch(popupAjaxError);
+  async retrieveSubscriptionStatus() {
+    let result = await ajax("/admin/wizards/subscription").catch(popupAjaxError);
+
+    this.subscribed = result.subscribed;
+    this.subscriptionType = result.subscription_type;
+    this.subscriptionAttributes = result.subscription_attributes;
+    this.businessSubscription = this.subscriptionType === "business";
+    this.communitySubscription = this.subscriptionType === "community";
+    this.standardSubscription = this.subscriptionType === "standard";
   }
 
   get subscriptionLink() {

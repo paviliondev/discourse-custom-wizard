@@ -1,7 +1,5 @@
 import { inject as service } from "@ember/service";
 import { action, computed } from "@ember/object";
-import { ajax } from "discourse/lib/ajax";
-import { popupAjaxError } from "discourse/lib/ajax-error";
 import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
 import DiscourseURL from "discourse/lib/url";
@@ -39,24 +37,13 @@ export default class WizardSubscriptionBadge extends Component {
 
   @action
   update() {
-    this.subscription.retrieveSubscriptionStatus();
-    // this.updating = true;
-    // return ajax(`${this.basePath}/subscriptions`, {
-    //   type: "POST",
-    // })
-    //   .then(() => {
-    //     if (this.subscription.subscribed) {
-    //       this.updateIcon = "check";
-    //     } else {
-    //       this.updateIcon = "times";
-    //     }
-    //   })
-    //   .catch(popupAjaxError)
-    //   .finally(() => {
-    //     this.updating = false;
-    //     setTimeout(() => {
-    //       this.updateIcon = null;
-    //     }, 7000);
-    //   });
+    this.updating = true;
+    this.updateIcon = "check";
+    this.subscription.retrieveSubscriptionStatus().finally(() => {
+      this.updating = false;
+      setTimeout(() => {
+        this.updateIcon = null;
+      }, 5000);
+    })
   }
 }
