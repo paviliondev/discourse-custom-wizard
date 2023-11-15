@@ -24,7 +24,9 @@ export default class SubscriptionService extends Service {
   }
 
   async retrieveSubscriptionStatus() {
-    let result = await ajax("/admin/wizards/subscription").catch(popupAjaxError);
+    let result = await ajax("/admin/wizards/subscription").catch(
+      popupAjaxError
+    );
 
     this.subscribed = result.subscribed;
     this.subscriptionType = result.subscription_type;

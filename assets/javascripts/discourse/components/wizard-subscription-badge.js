@@ -44,6 +44,6 @@ export default class WizardSubscriptionBadge extends Component {
       setTimeout(() => {
         this.updateIcon = null;
       }, 5000);
-    })
+    });
   }
 }
