@@ -74,7 +74,10 @@ acceptance("Field | Fields", function (needs) {
     await click(
       ".wizard-field.composer-field .wizard-field-composer  .d-editor button.link"
     );
-    assert.ok(exists(".d-modal.insert-hyperlink-modal"), "hyperlink modal visible");
+    assert.ok(
+      exists(".d-modal.insert-hyperlink-modal"),
+      "hyperlink modal visible"
+    );
 
     await fillIn(".d-modal__body.insert-link .inputs .link-url", "google.com");
     await fillIn(".d-modal__body.insert-link .inputs .link-text", "Google");
