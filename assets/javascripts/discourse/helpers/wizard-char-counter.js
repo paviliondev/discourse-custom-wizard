@@ -17,5 +17,5 @@ export default function wizardCharCounter(body, maxLength) {
     })}</div>`;
   }
 
-    return new Handlebars.SafeString(finalString);
-};
+  return new Handlebars.SafeString(finalString);
+}
