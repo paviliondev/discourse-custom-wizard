@@ -260,11 +260,11 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
     await click(
       ".wizard-custom-step .wizard-text-editor .d-editor button.link"
     );
-    assert.ok(exists(".insert-link.modal-body"), "hyperlink modal visible");
+    assert.ok(exists(".d-modal.insert-hyperlink-modal"), "hyperlink modal visible");
 
-    await fillIn(".modal-body .link-url", "google.com");
-    await fillIn(".modal-body .link-text", "Google");
-    await click(".modal-footer button.btn-primary");
+    await fillIn(".d-modal__body.insert-link .inputs .link-url", "google.com");
+    await fillIn(".d-modal__body.insert-link .inputs .link-text", "Google");
+    await click(".d-modal__footer button.btn-primary");
     let urlText = await query(
       ".wizard-custom-step .wizard-text-editor .d-editor-preview-wrapper a"
     ).innerHTML.trim();
@@ -276,24 +276,26 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
     await click(
       ".wizard-custom-step .wizard-text-editor .d-editor button.local-dates"
     );
+
     assert.ok(
-      exists(".discourse-local-dates-create-modal .modal-body"),
+      exists(".d-modal.discourse-local-dates-create-modal"),
       "Insert date-time modal visible"
     );
+
     assert.ok(
       !exists(
-        ".discourse-local-dates-create-modal.modal-body .advanced-options"
+        ".discourse-local-dates-create-modal .d-modal__body .advanced-options"
       ),
       "Advanced mode not visible"
     );
-    await click(".modal-footer button.advanced-mode-btn");
+    await click(".d-modal__footer button.advanced-mode-btn");
     assert.ok(
       exists(
-        ".discourse-local-dates-create-modal .modal-body .advanced-options"
+        ".discourse-local-dates-create-modal .d-modal__body .advanced-options"
       ),
       "Advanced mode is visible"
     );
-    await click(".modal-footer button.btn-primary");
+    await click(".d-modal__footer button.btn-primary");
     assert.ok(
       exists(
         ".wizard-custom-step .wizard-text-editor .d-editor-preview-wrapper span.discourse-local-date"

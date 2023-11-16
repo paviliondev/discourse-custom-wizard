@@ -68,7 +68,7 @@ acceptance("Field | Fields", function (needs) {
       "This is a link to "
     );
     assert.ok(
-      !exists(".insert-link.modal-body"),
+      !exists(".d-modal.insert-hyperlink-modal"),
       "no hyperlink modal by default"
     );
     await click(
