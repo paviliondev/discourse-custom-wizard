@@ -180,6 +180,11 @@ class CustomWizard::Subscription
     product_slug === "community"
   end
 
+  # TODO candidate for removal once code that depends on it externally is no longer used.
+  def self.client_installed?
+    defined?(DiscourseSubscriptionClient) == 'constant' && DiscourseSubscriptionClient.class == Module
+  end
+
   def self.subscribed?
     new.subscribed?
   end
