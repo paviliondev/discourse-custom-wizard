@@ -937,6 +937,11 @@ $error: #ef1700;
   .supplier-authorize {
     display: inline-flex;
 
+    button.update {
+      width: 40px;
+      height: 34px;
+    }
+
     .btn-pavilion-support {
       &:hover {
         color: var(--pavilion-secondary);
