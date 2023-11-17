@@ -71,10 +71,6 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
     );
     assert.strictEqual(
       query("button.wizard-subscription-badge span").innerText.trim(),
-      "Standard"
-    );
-    assert.strictEqual(
-      query("button.btn-pavilion-support span").innerText.trim(),
       "Support"
     );
   });

@@ -1,4 +1,5 @@
 <div class="supplier-authorize">
+  <WizardSubscriptionBadge />
   {{#if authorized}}
     {{conditional-loading-spinner size="small" condition=unauthorizing}}
     <DButton
@@ -18,6 +19,4 @@
       @action={{this.authorize}}
     />
   {{/if}}
-  <WizardSubscriptionBadge />
-  <WizardSubscriptionCta />
 </div>

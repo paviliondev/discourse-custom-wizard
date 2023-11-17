@@ -549,7 +549,7 @@ en:
             label: Authorize
             title: Authorize your subscription on this site
           deauthorize:
-            label: deauthorize
+            label: Deauthorize
             title: Deauthorize your subscription on this site
           update:
             title: "Update subscription status"
@@ -563,25 +563,17 @@ en:
             selector: not subscribed
           type:
             none:
-              label: Not Subscribed
+              label: Subscribe
               title: There is no Custom Wizard subscription active on this forum.
             business:
-              label: Business
+              label: Support
               title: There is a Custom Wizard Business subscription active on this forum.
             standard:
-              label: Standard
+              label: Support
               title: There is a Custom Wizard Standard subscription active on this forum.
             community:
-              label: Community
-              title: There is a Custom Wizard Community subscription active on this forum.
-          cta:
-            none:
-              label: Get a Subscription
-              title: Get a subscription for this forum.
-            subscribed:
               label: Support
-              title: Get support for your subscription.
-
+              title: There is a Custom Wizard Community subscription active on this forum.
 
   wizard_js:
     group:

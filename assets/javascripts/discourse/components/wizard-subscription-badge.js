@@ -2,7 +2,6 @@ import { inject as service } from "@ember/service";
 import { action, computed } from "@ember/object";
 import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
-import DiscourseURL from "discourse/lib/url";
 import I18n from "I18n";
 
 export default class WizardSubscriptionBadge extends Component {
@@ -32,7 +31,7 @@ export default class WizardSubscriptionBadge extends Component {
 
   @action
   click() {
-    DiscourseURL.routeTo(this.subscription.subscriptionLink);
+    window.open(this.subscription.subscriptionCtaLink, "_blank").focus();
   }
 
   @action

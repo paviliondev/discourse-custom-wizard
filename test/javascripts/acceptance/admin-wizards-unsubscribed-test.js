@@ -84,11 +84,7 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
     );
     assert.strictEqual(
       query("button.wizard-subscription-badge span").innerText.trim(),
-      "Not Subscribed"
-    );
-    assert.strictEqual(
-      query("button.btn-pavilion-support span").innerText.trim(),
-      "Get a Subscription"
+      "Subscribe"
     );
   });
 

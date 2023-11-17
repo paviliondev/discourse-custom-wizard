@@ -71,10 +71,6 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
     );
     assert.strictEqual(
       query("button.wizard-subscription-badge span").innerText.trim(),
-      "Business"
-    );
-    assert.strictEqual(
-      query("button.btn-pavilion-support span").innerText.trim(),
       "Support"
     );
   });
