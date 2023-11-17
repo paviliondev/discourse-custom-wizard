@@ -12,6 +12,7 @@ gem "discourse_subscription_client", "0.1.0.pre15", require_name: "discourse_sub
 gem 'discourse_plugin_statistics', '0.1.0.pre7', require: true
 register_asset 'stylesheets/common/admin.scss'
 register_asset 'stylesheets/common/wizard.scss'
+register_svg_icon 'pavilion-logo'
 
 enabled_site_setting :custom_wizard_enabled
 

@@ -938,7 +938,6 @@ $error: #ef1700;
     display: inline-flex;
 
     .btn-pavilion-support {
-      margin-left: 10px;
       &:hover {
         color: var(--pavilion-secondary);
       }
@@ -946,6 +945,19 @@ $error: #ef1700;
 
     .wizard-subscription-badge {
       margin-right: 5px;
+      svg {
+        margin-right: 0.45em;
+      }
+      &.none {
+        svg {
+          color: #919191;
+        }
+      }
+      &.community, &.standard, &.business {
+        svg {
+          color: #fff;
+        }
+      } 
     }
 
     .loading-container {
