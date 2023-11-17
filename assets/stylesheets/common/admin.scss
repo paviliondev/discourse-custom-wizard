@@ -953,11 +953,13 @@ $error: #ef1700;
           color: #919191;
         }
       }
-      &.community, &.standard, &.business {
+      &.community,
+      &.standard,
+      &.business {
         svg {
           color: #fff;
         }
-      } 
+      }
     }
 
     .loading-container {
