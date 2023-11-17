@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require "discourse_subscription_client"
+
 class CustomWizard::Subscription
   PRODUCT_HIERARCHY = %w[
     community
@@ -104,25 +106,27 @@ class CustomWizard::Subscription
   attr_accessor :product_id,
                 :product_slug
 
-  def initialize
-    if CustomWizard::Subscription.client_installed?
-      result = DiscourseSubscriptionClient.find_subscriptions("discourse-custom-wizard")
+  def initialize(update = false)
+    if update
+      ::DiscourseSubscriptionClient::Subscriptions.update
+    end
 
-      if result&.any?
-        ids_and_slugs = result.subscriptions.map do |subscription|
-          {
-            id: subscription.product_id,
-            slug: result.products[subscription.product_id]
-          }
-        end
+    result = ::DiscourseSubscriptionClient.find_subscriptions("discourse-custom-wizard")
 
-        id_and_slug = ids_and_slugs.sort do |a, b|
-          PRODUCT_HIERARCHY.index(b[:slug]) - PRODUCT_HIERARCHY.index(a[:slug])
-        end.first
-
-        @product_id = id_and_slug[:id]
-        @product_slug = id_and_slug[:slug]
+    if result&.any?
+      ids_and_slugs = result.subscriptions.map do |subscription|
+        {
+          id: subscription.product_id,
+          slug: result.products[subscription.product_id]
+        }
       end
+
+      id_and_slug = ids_and_slugs.sort do |a, b|
+        PRODUCT_HIERARCHY.index(b[:slug]) - PRODUCT_HIERARCHY.index(a[:slug])
+      end.first
+
+      @product_id = id_and_slug[:id]
+      @product_slug = id_and_slug[:slug]
     end
 
     @product_slug ||= ENV["CUSTOM_WIZARD_PRODUCT_SLUG"]
@@ -176,6 +180,7 @@ class CustomWizard::Subscription
     product_slug === "community"
   end
 
+  # TODO candidate for removal once code that depends on it externally is no longer used.
   def self.client_installed?
     defined?(DiscourseSubscriptionClient) == 'constant' && DiscourseSubscriptionClient.class == Module
   end

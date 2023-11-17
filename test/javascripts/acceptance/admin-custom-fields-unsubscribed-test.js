@@ -8,6 +8,7 @@ import { click, fillIn, findAll, visit, waitUntil } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 import {
   getCustomFields,
+  getSuppliers,
   getUnsubscribedAdminWizards,
   getWizard,
 } from "../helpers/admin-wizard";
@@ -24,7 +25,7 @@ acceptance("Admin | Custom Fields Unsubscribed", function (needs) {
     server.get("/admin/wizards/wizard", () => {
       return helper.response(getWizard);
     });
-    server.get("/admin/wizards", () => {
+    server.get("/admin/wizards/subscription", () => {
       return helper.response(getUnsubscribedAdminWizards);
     });
     server.get("/admin/wizards/custom-fields", () => {
@@ -35,6 +36,9 @@ acceptance("Admin | Custom Fields Unsubscribed", function (needs) {
     });
     server.delete("/admin/wizards/custom-fields/topic_custom_field", () => {
       return helper.response({ success: "OK" });
+    });
+    server.get("/admin/plugins/subscription-client/suppliers", () => {
+      return helper.response(getSuppliers);
     });
   });
 

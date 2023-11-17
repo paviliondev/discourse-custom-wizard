@@ -1,5 +1,6 @@
 import {
   acceptance,
+  exists,
   query,
   visible,
 } from "discourse/tests/helpers/qunit-helpers";
@@ -11,6 +12,7 @@ import {
   getCreatedWizard,
   getCustomFields,
   getStandardAdminWizard,
+  getSuppliersAuthorized,
   getWizard,
 } from "../helpers/admin-wizard";
 
@@ -28,7 +30,7 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
     server.get("/admin/wizards/custom-fields", () => {
       return helper.response(getCustomFields);
     });
-    server.get("/admin/wizards", () => {
+    server.get("/admin/wizards/subscription", () => {
       return helper.response(getStandardAdminWizard);
     });
     server.get("/admin/wizards/api", () => {
@@ -49,6 +51,9 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
     server.get("/admin/wizards/wizard/new_wizard_for_testing", () => {
       return helper.response(getCreatedWizard);
     });
+    server.get("/admin/plugins/subscription-client/suppliers", () => {
+      return helper.response(getSuppliersAuthorized);
+    });
   });
 
   test("Displaying all tabs except API", async (assert) => {
@@ -56,6 +61,22 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
     const list = find(".admin-controls li");
     const count = list.length;
     assert.equal(count, 5, "There should be 5 admin tabs");
+  });
+
+  test("shows authorized and subscribed", async (assert) => {
+    await visit("/admin/wizards");
+    assert.notOk(
+      exists(".supplier-authorize .btn-primary:not(.update)"),
+      "the authorize button not shown."
+    );
+    assert.strictEqual(
+      query("button.wizard-subscription-badge span").innerText.trim(),
+      "Standard"
+    );
+    assert.strictEqual(
+      query("button.btn-pavilion-support span").innerText.trim(),
+      "Support"
+    );
   });
 
   test("creating a new wizard", async (assert) => {

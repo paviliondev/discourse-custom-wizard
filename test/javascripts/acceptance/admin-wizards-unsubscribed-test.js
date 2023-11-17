@@ -11,6 +11,7 @@ import {
   getAdminTestingWizard,
   getCreatedWizard,
   getCustomFields,
+  getSuppliers,
   getUniqueWizard,
   getUnsubscribedAdminWizards,
   getWizard,
@@ -30,7 +31,7 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
     server.get("/admin/wizards/custom-fields", () => {
       return helper.response(getCustomFields);
     });
-    server.get("/admin/wizards", () => {
+    server.get("/admin/wizards/subscription", () => {
       return helper.response(getUnsubscribedAdminWizards);
     });
     server.get("/admin/wizards/api", () => {
@@ -54,6 +55,9 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
     server.get("/admin/wizards/wizard/unique_wizard", () => {
       return helper.response(getUniqueWizard);
     });
+    server.get("/admin/plugins/subscription-client/suppliers", () => {
+      return helper.response(getSuppliers);
+    });
   });
 
   async function appendText(selector, text) {
@@ -70,6 +74,22 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
     const list = find(".admin-controls li");
     const count = list.length;
     assert.equal(count, 5, "There should be 5 admin tabs");
+  });
+
+  test("shows unauthorized and unsubscribed", async (assert) => {
+    await visit("/admin/wizards");
+    assert.ok(
+      exists(".supplier-authorize .btn-primary"),
+      "the authorize button is shown."
+    );
+    assert.strictEqual(
+      query("button.wizard-subscription-badge span").innerText.trim(),
+      "Not Subscribed"
+    );
+    assert.strictEqual(
+      query("button.btn-pavilion-support span").innerText.trim(),
+      "Get a Subscription"
+    );
   });
 
   test("creating a new wizard", async (assert) => {
@@ -240,11 +260,14 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
     await click(
       ".wizard-custom-step .wizard-text-editor .d-editor button.link"
     );
-    assert.ok(exists(".insert-link.modal-body"), "hyperlink modal visible");
+    assert.ok(
+      exists(".d-modal.insert-hyperlink-modal"),
+      "hyperlink modal visible"
+    );
 
-    await fillIn(".modal-body .link-url", "google.com");
-    await fillIn(".modal-body .link-text", "Google");
-    await click(".modal-footer button.btn-primary");
+    await fillIn(".d-modal__body.insert-link .inputs .link-url", "google.com");
+    await fillIn(".d-modal__body.insert-link .inputs .link-text", "Google");
+    await click(".d-modal__footer button.btn-primary");
     let urlText = await query(
       ".wizard-custom-step .wizard-text-editor .d-editor-preview-wrapper a"
     ).innerHTML.trim();
@@ -256,24 +279,26 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
     await click(
       ".wizard-custom-step .wizard-text-editor .d-editor button.local-dates"
     );
+
     assert.ok(
-      exists(".discourse-local-dates-create-modal .modal-body"),
+      exists(".d-modal.discourse-local-dates-create-modal"),
       "Insert date-time modal visible"
     );
+
     assert.ok(
       !exists(
-        ".discourse-local-dates-create-modal.modal-body .advanced-options"
+        ".discourse-local-dates-create-modal .d-modal__body .advanced-options"
       ),
       "Advanced mode not visible"
     );
-    await click(".modal-footer button.advanced-mode-btn");
+    await click(".d-modal__footer button.advanced-mode-btn");
     assert.ok(
       exists(
-        ".discourse-local-dates-create-modal .modal-body .advanced-options"
+        ".discourse-local-dates-create-modal .d-modal__body .advanced-options"
       ),
       "Advanced mode is visible"
     );
-    await click(".modal-footer button.btn-primary");
+    await click(".d-modal__footer button.btn-primary");
     assert.ok(
       exists(
         ".wizard-custom-step .wizard-text-editor .d-editor-preview-wrapper span.discourse-local-date"

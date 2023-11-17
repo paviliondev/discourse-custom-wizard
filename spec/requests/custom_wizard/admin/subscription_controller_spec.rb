@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe CustomWizard::AdminController do
+describe CustomWizard::SubscriptionController do
   fab!(:admin_user) { Fabricate(:user, admin: true) }
 
   it "requires an admin" do
@@ -16,28 +16,26 @@ describe CustomWizard::AdminController do
     context "without a subscription" do
       before do
         disable_subscriptions
-        define_client_classes
+        stub_out_subscription_classes
       end
 
       it "returns the right subscription details" do
-        get "/admin/wizards.json"
+        get "/admin/wizards/subscription.json"
         expect(response.parsed_body["subscribed"]).to eq(false)
         expect(response.parsed_body["subscription_attributes"]).to eq(CustomWizard::Subscription.attributes.as_json)
-        expect(response.parsed_body["subscription_client_installed"]).to eq(true)
       end
     end
 
     context "with a subscription" do
       before do
         enable_subscription("standard")
-        define_client_classes
+        stub_out_subscription_classes
       end
 
       it "returns the right subscription details" do
-        get "/admin/wizards.json"
+        get "/admin/wizards/subscription.json"
         expect(response.parsed_body["subscribed"]).to eq(true)
         expect(response.parsed_body["subscription_type"]).to eq("standard")
-        expect(response.parsed_body["subscription_client_installed"]).to eq(true)
       end
     end
   end

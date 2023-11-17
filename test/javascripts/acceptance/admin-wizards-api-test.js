@@ -6,6 +6,7 @@ import {
   getBusinessAdminWizard,
   getCustomFields,
   getNewApi,
+  getSuppliers,
   getWizard,
   putNewApi,
 } from "../helpers/admin-wizard";
@@ -21,7 +22,7 @@ acceptance("Admin | API tab", function (needs) {
     server.get("/admin/wizards/wizard", () => {
       return helper.response(getWizard);
     });
-    server.get("/admin/wizards", () => {
+    server.get("/admin/wizards/subscription", () => {
       return helper.response(getBusinessAdminWizard);
     });
     server.get("/admin/wizards/custom-fields", () => {
@@ -44,6 +45,9 @@ acceptance("Admin | API tab", function (needs) {
     });
     server.get("/admin/wizards/api/new_api", () => {
       return helper.response(getNewApi);
+    });
+    server.get("/admin/plugins/subscription-client/suppliers", () => {
+      return helper.response(getSuppliers);
     });
   });
 

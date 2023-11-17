@@ -4,6 +4,7 @@ import { click, findAll, visit } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 import {
   getAnotherWizardSubmission,
+  getSuppliers,
   getUnsubscribedAdminWizards,
   getWizard,
   getWizardSubmissions,
@@ -28,11 +29,14 @@ acceptance("Admin | Submissions", function (needs) {
     server.get("/admin/wizards/submissions/another_wizard", () => {
       return helper.response(getAnotherWizardSubmission);
     });
-    server.get("/admin/wizards", () => {
+    server.get("/admin/wizards/subscription", () => {
       return helper.response(getUnsubscribedAdminWizards);
     });
     server.get("/admin/wizards/wizard", () => {
       return helper.response(getWizard);
+    });
+    server.get("/admin/plugins/subscription-client/suppliers", () => {
+      return helper.response(getSuppliers);
     });
   });
   test("View submissions fields tab and content", async (assert) => {

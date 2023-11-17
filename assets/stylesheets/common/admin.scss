@@ -43,14 +43,6 @@ $error: #ef1700;
   }
 }
 
-.admin-wizards .admin-actions {
-  display: flex;
-
-  .btn-pavilion-support {
-    margin-left: 10px;
-  }
-}
-
 .wizard-message {
   background-color: var(--primary-low);
   width: 100%;
@@ -938,5 +930,54 @@ $error: #ef1700;
     padding-top: 0.25em;
     color: var(--pavilion-primary);
     font-size: 0.75em;
+  }
+}
+
+.admin-wizards .admin-actions {
+  .supplier-authorize {
+    display: inline-flex;
+
+    button.update {
+      width: 40px;
+      height: 34px;
+    }
+
+    .btn-pavilion-support {
+      &:hover {
+        color: var(--pavilion-secondary);
+      }
+    }
+
+    .wizard-subscription-badge {
+      margin-right: 5px;
+      svg {
+        margin-right: 0.45em;
+      }
+      &.none {
+        svg {
+          color: #919191;
+        }
+      }
+      &.community,
+      &.standard,
+      &.business {
+        svg {
+          color: #fff;
+        }
+      }
+    }
+
+    .loading-container {
+      svg,
+      div {
+        vertical-align: -moz-middle-with-baseline;
+        vertical-align: -webkit-baseline-middle;
+        margin-right: 3px;
+      }
+    }
+
+    .btn-primary {
+      margin-right: 5px;
+    }
   }
 }

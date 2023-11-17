@@ -1,0 +1,19 @@
+<DButton
+  @action={{this.click}}
+  class="wizard-subscription-badge {{this.subscription.subscriptionType}}"
+  @title={{this.title}}
+>
+  {{d-icon "pavilion-logo"}}
+  <span>{{this.label}}</span>
+</DButton>
+<DButton
+  @icon={{this.updateIcon}}
+  @action={{this.update}}
+  class="btn btn-primary update"
+  @disabled={{this.updating}}
+  @title="admin.wizard.subscription.update.title"
+>
+  {{#if this.updating}}
+    {{loading-spinner size="small"}}
+  {{/if}}
+</DButton>

@@ -1,9 +1,12 @@
 import Controller from "@ember/controller";
-import { equal, or } from "@ember/object/computed";
+import { or } from "@ember/object/computed";
+import { inject as service } from "@ember/service";
 
 export default Controller.extend({
-  businessSubscription: equal("subscriptionType", "business"),
-  communitySubscription: equal("subscriptionType", "community"),
-  standardSubscription: equal("subscriptionType", "standard"),
-  showApi: or("businessSubscription", "communitySubscription"),
+  subscription: service(),
+
+  showApi: or(
+    "subscription.businessSubscription",
+    "subscription.communitySubscription"
+  ),
 });

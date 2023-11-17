@@ -8,6 +8,7 @@ describe CustomWizard::WizardSerializer do
   let(:advanced_fields) { get_wizard_fixture("field/advanced_types") }
 
   before do
+    stub_out_subscription_classes
     CustomWizard::Template.save(template, skip_jobs: true)
     @template = CustomWizard::Template.find('super_mega_fun_wizard')
   end

@@ -4,6 +4,10 @@ describe CustomWizard::BasicWizardSerializer do
   fab!(:user) { Fabricate(:user) }
   let(:template) { get_wizard_fixture("wizard") }
 
+  before do
+    stub_out_subscription_classes
+  end
+
   it 'should return basic wizard attributes' do
     CustomWizard::Template.save(template, skip_jobs: true)
     json = CustomWizard::BasicWizardSerializer.new(

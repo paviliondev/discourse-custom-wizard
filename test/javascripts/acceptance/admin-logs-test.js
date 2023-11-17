@@ -3,6 +3,7 @@ import { test } from "qunit";
 import { click, findAll, visit } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 import {
+  getSuppliers,
   getUnsubscribedAdminWizards,
   getWizard,
   getWizardTestingLog,
@@ -23,11 +24,14 @@ acceptance("Admin | Logs", function (needs) {
     server.get("/admin/wizards/logs/this_is_testing_wizard", () => {
       return helper.response(getWizardTestingLog);
     });
-    server.get("/admin/wizards", () => {
+    server.get("/admin/wizards/subscription", () => {
       return helper.response(getUnsubscribedAdminWizards);
     });
     server.get("/admin/wizards/wizard", () => {
       return helper.response(getWizard);
+    });
+    server.get("/admin/plugins/subscription-client/suppliers", () => {
+      return helper.response(getSuppliers);
     });
   });
   test("viewing logs fields tab", async (assert) => {
