@@ -167,13 +167,13 @@ en:
             destroy_complete: Destruction complete
           subscription:
             documentation: Check out the subscription documentation
-            authorize: "Authorize this forum to use your Custom Wizard subscription plan on %{server}."
-            not_subscribed: "You've authorized, but are not currently subscribed to a Custom Wizard plan on %{server}."
+            authorize: "Connect this forum to use your Custom Wizard subscription plan on %{server}."
+            not_subscribed: "You've connected, but are not currently subscribed to a Custom Wizard plan on %{server}."
             subscription_expiring: "Your subscription is active, but will expire in the next 48 hours."
             subscription_active: "Your subscription is active."
             subscription_inactive: "Your subscription is inactive on this forum. Read more in <a href='https://pavilion.tech/products/discourse-custom-wizard-plugin/documentation/'>the documentation</a>."
-            unauthorized: "You're unauthorized. If you have a subscription, it will become inactive in the next 48 hours."
-            unauthorize_failed: Failed to unauthorize.
+            unauthorized: "You're not connected. If you have a subscription, it will become inactive in the next 48 hours."
+            unauthorize_failed: Failed to disconnect.
           submissions:
             select: "Select a wizard to see its submissions"
             viewing: "You're viewing the submissions of the %{wizardName}"
@@ -546,11 +546,11 @@ en:
         subscription:
           title: Subscriber Features
           authorize:
-            label: Authorize
-            title: Authorize your subscription on this site
+            label: Connect
+            title: Connect your subscription to this site
           deauthorize:
-            label: Deauthorize
-            title: Deauthorize your subscription on this site
+            label: Disconnect
+            title: Disconnect your subscription from this site
           update:
             title: "Update subscription status"
           subscribed:
