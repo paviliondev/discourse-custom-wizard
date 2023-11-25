@@ -21,7 +21,7 @@ describe "custom field extensions" do
   context "topic" do
     it "registers topic custom fields" do
       topic
-      expect(Topic.get_custom_field_type("topic_field_1")).to eq(:boolean)
+      expect(Topic.get_custom_field_descriptor("topic_field_1").type).to eq(:boolean)
     end
 
     it "adds topic custom fields to the topic_view serializer" do
@@ -54,7 +54,7 @@ describe "custom field extensions" do
   context "post" do
     it "registers post custom fields" do
       post
-      expect(Post.get_custom_field_type("post_field_1")).to eq(:integer)
+      expect(Post.get_custom_field_descriptor("post_field_1").type).to eq(:integer)
     end
 
     it "adds post custom fields to the post serializer" do
@@ -84,7 +84,7 @@ describe "custom field extensions" do
     context "category" do
       it "registers" do
         category
-        expect(Category.get_custom_field_type("category_field_1")).to eq(:json)
+        expect(Category.get_custom_field_descriptor("category_field_1").type).to eq(:json)
       end
 
       it "adds custom fields to the basic category serializer" do
@@ -104,7 +104,7 @@ describe "custom field extensions" do
     context "group" do
       it "registers" do
         group
-        expect(Group.get_custom_field_type("group_field_1")).to eq(:string)
+        expect(Group.get_custom_field_descriptor("group_field_1").type).to eq(:string)
       end
 
       it "adds custom fields to the basic group serializer" do

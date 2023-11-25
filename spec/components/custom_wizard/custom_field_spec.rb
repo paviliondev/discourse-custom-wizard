@@ -260,11 +260,11 @@ describe CustomWizard::CustomField do
       expect(CustomWizard::CustomField.list_by(:serializers, ['post']).length).to eq(0)
     end
 
-    it "lists custom field records added by other plugins " do
+    it "custom field records added by other plugins " do
       expect(CustomWizard::CustomField.external_list.length).to be > 2
     end
 
-    it "lists all custom field records" do
+    it "all custom field records" do
       expect(CustomWizard::CustomField.full_list.length).to be > 2
     end
   end
