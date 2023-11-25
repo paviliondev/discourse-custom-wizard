@@ -9,3 +9,6 @@ RSpec/DescribeClass:
 
 Discourse/TimeEqMatcher:
   Enabled: false
+
+Discourse/NoAddReferenceOrAliasesActiveRecordMigration:
+  Enabled: false

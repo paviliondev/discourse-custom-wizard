@@ -42,7 +42,6 @@ describe CustomWizard::Action do
   }
 
   before do
-    stub_out_subscription_classes
     Group.refresh_automatic_group!(:trust_level_2)
     update_template(wizard_template)
   end

@@ -16,7 +16,6 @@ describe CustomWizard::SubscriptionController do
     context "without a subscription" do
       before do
         disable_subscriptions
-        stub_out_subscription_classes
       end
 
       it "returns the right subscription details" do
@@ -29,7 +28,6 @@ describe CustomWizard::SubscriptionController do
     context "with a subscription" do
       before do
         enable_subscription("standard")
-        stub_out_subscription_classes
       end
 
       it "returns the right subscription details" do
