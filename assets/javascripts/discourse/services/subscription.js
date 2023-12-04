@@ -7,7 +7,7 @@ const PRODUCT_PAGE = "https://custom-wizard.pavilion.tech";
 const SUPPORT_MESSAGE =
   "https://coop.pavilion.tech/new-message?username=support&title=Custom%20Wizard%20Support";
 const MANAGER_CATEGORY =
-  "https://discourse.pluginmanager.org/c/discourse-custom-wizard";
+  "https://coop.pavilion.tech/c/support/discourse-custom-wizard";
 
 export default class SubscriptionService extends Service {
   @tracked subscribed = false;
@@ -16,7 +16,6 @@ export default class SubscriptionService extends Service {
   @tracked communitySubscription = false;
   @tracked standardSubscription = false;
   @tracked subscriptionAttributes = {};
-  subscriptionLandingUrl = PRODUCT_PAGE;
 
   async init() {
     super.init(...arguments);
@@ -47,10 +46,6 @@ export default class SubscriptionService extends Service {
     this.businessSubscription = this.subscriptionType === "business";
     this.communitySubscription = this.subscriptionType === "community";
     this.standardSubscription = this.subscriptionType === "standard";
-  }
-
-  get subscriptionLink() {
-    return this.subscriptionLandingUrl;
   }
 
   get subscriptionCtaLink() {
