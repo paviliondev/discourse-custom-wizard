@@ -254,10 +254,13 @@ describe CustomWizard::Action do
     end
 
     it '#send_message' do
+      Jobs.run_immediately!
+
+      target_user = Fabricate(:user)
+
+      send_message['recipient'][0]['output'][0] = target_user.username
       wizard_template['actions'] << send_message
       update_template(wizard_template)
-
-      User.create(username: 'angus1', email: "angus1@email.com")
 
       wizard = CustomWizard::Builder.new(@template[:id], user).build
       wizard.create_updater(wizard.steps[0].id, {}).update
@@ -274,18 +277,29 @@ describe CustomWizard::Action do
       )
 
       expect(topic.exists?).to eq(true)
-      expect(topic.first.topic_allowed_users.first.user.username).to eq('angus1')
+      expect(topic.first.topic_allowed_users.first.user.username).to eq(target_user.username)
       expect(post.exists?).to eq(true)
+      expect(target_user.reload.notifications.count).to eq(1)
     end
 
     it '#send_message allows using multiple targets' do
+      Jobs.run_immediately!
+
+      user1 = Fabricate(:user)
+      user2 = Fabricate(:user)
+      group1 = Fabricate(:group)
+      group2 = Fabricate(:group)
+
+      send_message_multi['recipient'][0]['output'] = [
+        user1.username,
+        user2.username,
+        group1.name,
+        group2.name
+      ]
       wizard_template['actions'] << send_message_multi
       update_template(wizard_template)
+      update_template(wizard_template)
 
-      User.create(username: 'angus1', email: "angus1@email.com")
-      User.create(username: 'faiz', email: "faiz@email.com")
-      Group.create(name: "cool_group")
-      Group.create(name: 'cool_group_1')
       wizard = CustomWizard::Builder.new(@template[:id], user).build
       wizard.create_updater(wizard.steps[0].id, {}).update
       wizard.create_updater(wizard.steps[1].id, {}).update
@@ -301,9 +315,11 @@ describe CustomWizard::Action do
       )
 
       expect(topic.exists?).to eq(true)
-      expect(topic.first.all_allowed_users.map(&:username)).to include('angus1', 'faiz')
-      expect(topic.first.allowed_groups.map(&:name)).to include('cool_group', 'cool_group_1')
+      expect(topic.first.all_allowed_users.map(&:username)).to include(user1.username, user2.username)
+      expect(topic.first.allowed_groups.map(&:name)).to include(group1.name, group2.name)
       expect(post.exists?).to eq(true)
+      expect(user1.reload.notifications.count).to eq(1)
+      expect(user2.reload.notifications.count).to eq(1)
     end
 
     it "send_message works with guests are permitted" do
