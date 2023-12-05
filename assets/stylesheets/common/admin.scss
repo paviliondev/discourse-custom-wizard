@@ -848,10 +848,9 @@ $error: #ef1700;
   }
 }
 
-.wizard-subscription-badge {
+.btn.wizard-subscription-badge {
   display: inline-flex;
   align-items: center;
-  max-height: 34px;
   box-sizing: border-box;
   position: relative;
   cursor: pointer;
@@ -925,7 +924,6 @@ $error: #ef1700;
 
     button.update {
       width: 40px;
-      height: 34px;
     }
 
     .wizard-subscription-badge {
