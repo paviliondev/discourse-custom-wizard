@@ -1,5 +1,5 @@
 plugins:
-  custom_wizard_enabled: 
+  custom_wizard_enabled:
     default: true
     client: true
   wizard_redirect_exclude_paths:
@@ -15,6 +15,6 @@ plugins:
     refresh: true
     type: list
     list_type: compact
-  wizard_apis_enabled:
+  wizard_important_notices_on_dashboard:
     client: true
-    default: false
+    default: true

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
-class CustomWizard::StepsController < ::ApplicationController
-  before_action :ensure_logged_in
+class CustomWizard::StepsController < ::CustomWizard::WizardClientController
   before_action :ensure_can_update
 
   def update
@@ -22,7 +21,7 @@ class CustomWizard::StepsController < ::ApplicationController
 
     if updater.success?
       wizard_id = update_params[:wizard_id]
-      builder = CustomWizard::Builder.new(wizard_id, current_user)
+      builder = CustomWizard::Builder.new(wizard_id, current_user, guest_id)
       @wizard = builder.build(force: true)
 
       current_step = @wizard.find_step(update[:step_id])
@@ -85,7 +84,6 @@ class CustomWizard::StepsController < ::ApplicationController
   private
 
   def ensure_can_update
-    @builder = CustomWizard::Builder.new(update_params[:wizard_id], current_user)
     raise Discourse::InvalidParameters.new(:wizard_id) if @builder.template.nil?
     raise Discourse::InvalidAccess.new if !@builder.wizard || !@builder.wizard.can_access?
 

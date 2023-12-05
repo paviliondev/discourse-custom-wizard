@@ -2,6 +2,72 @@ fr:
   js:
     wizard:
       complete_custom: "Bienvenu·e sur %{site_name} ! Commençons avec <a href='%{wizard_url}' data-auto-route='true'>l'assistant %{wizard_name}</a> ✨"
+      completed: "You have completed this wizard."
+      not_permitted: "You are not permitted to access this wizard."
+      none: "There is no wizard here."
+      return_to_site: "Retour vers {{siteName}}"
+      requires_login: "You need to be logged in to access this wizard."
+      reset: "Reset this wizard."
+      step_not_permitted: "You're not permitted to view this step."
+      incomplete_submission:
+        title: "Continue editing your draft submission from %{date}?"
+        resume: "Continuer"
+        restart: "Recommencer"
+      x_characters:
+        one: "%{count} Character"
+        other: "%{count} Characters"
+      quit: "Maybe Later"
+      done_custom: "Terminé"
+      back: "Précédent"
+      next: "Suivant"
+      step: "%{current} of %{total}"
+      upload: "Upload"
+      uploading: "Uploading..."
+      upload_error: "Sorry, there was an error uploading that file. Please try again."
+    wizard_composer:
+      show_preview: "Preview Post"
+      hide_preview: "Edit Post"
+      quote_post_title: "Quote whole post"
+      bold_label: "B"
+      bold_title: "Strong"
+      bold_text: "strong text"
+      italic_label: "I"
+      italic_title: "Emphasis"
+      italic_text: "emphasized text"
+      link_title: "Hyperlink"
+      link_description: "enter link description here"
+      link_dialog_title: "Insert Hyperlink"
+      link_optional_text: "optional title"
+      link_url_placeholder: "http://example.com"
+      quote_title: "Blockquote"
+      quote_text: "Blockquote"
+      blockquote_text: "Blockquote"
+      code_title: "Preformatted text"
+      code_text: "indent preformatted text by 4 spaces"
+      paste_code_text: "type or paste code here"
+      upload_title: "Upload"
+      upload_description: "enter upload description here"
+      olist_title: "Numbered List"
+      ulist_title: "Bulleted List"
+      list_item: "List item"
+      toggle_direction: "Toggle Direction"
+      help: "Markdown Editing Help"
+      collapse: "minimize the composer panel"
+      abandon: "close composer and discard draft"
+      modal_ok: "OK"
+      modal_cancel: "Annuler"
+      cant_send_pm: "Sorry, you can't send a message to %{username}."
+      yourself_confirm:
+        title: "Did you forget to add recipients?"
+        body: "Right now this message is only being sent to yourself!"
+    realtime_validations:
+      similar_topics:
+        insufficient_characters: "Type a minimum 5 characters to start looking for similar topics"
+        insufficient_characters_categories: "Type a minimum 5 characters to start looking for similar topics in %{catLinks}"
+        results: "Your topic is similar to..."
+        no_results: "No similar topics."
+        loading: "Looking for similar topics..."
+        show: "show"
   admin_js:
     admin:
       wizard:
@@ -45,7 +111,7 @@ fr:
         key: "Clé"
         value: "Valeur"
         profile: "profile"
-        translation: "Translation"
+        translation: "Traduction"
         translation_placeholder: "key"
         type: "Type"
         none: "Faire une sélection"
@@ -53,10 +119,10 @@ fr:
         param_key: 'param'
         group: "Group"
         permitted: "Permitted"
-        advanced: "Advanced"
+        advanced: "Avancés"
         undo: "Undo"
         clear: "Clear"
-        select_type: "Select a type"
+        select_type: "Sélectionnez un type"
         condition: "Condition"
         index: "Index"
         category_settings:
@@ -93,7 +159,7 @@ fr:
             server_error: "Error: {{message}}"
             importing: Importing wizards...
             destroying: Destroying wizards...
-            import_complete: Import complete
+            import_complete: Importation terminée
             destroy_complete: Destruction complete
         editor:
           show: "Show"
@@ -123,7 +189,7 @@ fr:
             group: "group"
             list: "list"
             custom_field: "custom field"
-            value: "value"
+            value: "valeur"
           placeholder:
             text: "Enter text"
             property: "Select property"
@@ -151,7 +217,7 @@ fr:
           banner: "Bannière"
           description: "Description"
           required_data:
-            label: "Required"
+            label: "Requis"
             not_permitted_message: "Message shown when required data not present"
           permitted_params:
             label: "Params"
@@ -176,9 +242,10 @@ fr:
           file_types: "File Types"
           preview_template: "Template"
           limit: "Limit"
-          property: "Property"
+          property: "Propriété"
           prefill: "Prefill"
           content: "Content"
+          tag_groups: "Tag Groups"
           date_time_format:
             label: "Format"
             instructions: "<a href='https://momentjs.com/docs/#/displaying/format/' target='_blank'>Moment.js format</a>"
@@ -192,9 +259,9 @@ fr:
             categories: "Categories"
             max_topic_age: "Max Topic Age"
             time_units:
-              days: "Days"
-              weeks: "Weeks"
-              months: "Months"
+              days: "Jours"
+              weeks: "Semaines"
+              months: "Mois"
               years: "Years"
           type:
             text: "Text"
@@ -212,11 +279,11 @@ fr:
             group: Group
             user_selector: User Selector
             date: Date
-            time: Time
-            date_time: Date & Time
+            time: Heure
+            date_time: Date & Heure
         connector:
-          and: "and"
-          or: "or"
+          and: "et"
+          or: "ou"
           then: "then"
           set: "set"
           equal: '='
@@ -299,7 +366,7 @@ fr:
             label: "Create Category"
             name: Name
             slug: Slug
-            color: Color
+            color: Couleur
             text_color: Text color
             parent_category: Parent Category
             permissions: Permissions
@@ -307,10 +374,10 @@ fr:
             label: Create Group
             name: Name
             full_name: Full Name
-            title: Title
+            title: Titre
             bio_raw: About
             owner_usernames: Owners
-            usernames: Members
+            usernames: Membres
             grant_trust_level: Automatic Trust Level
             mentionable_level: Mentionable Level
             messageable_level: Messageable Level
@@ -351,7 +418,7 @@ fr:
         submissions:
           nav_label: "Submissions"
           title: "{{name}} Submissions"
-          download: "Download"
+          download: "Télécharger"
         api:
           label: "API"
           nav_label: 'APIs'
@@ -405,8 +472,8 @@ fr:
         manager:
           nav_label: Manager
           title: Manage Wizards
-          export: Export
-          import: Import
+          export: Exporter
+          import: Importer
           imported: imported
           upload: Select wizards.json
           destroy: Destroy
@@ -454,78 +521,7 @@ fr:
         neighbourhood: "Merci de saisir un quartier."
         city: "Merci de saisir le nom d'une commune."
         street: "Please enter a Number and Street."
-        postalcode: "Please enter a Postal Code (Zip)."
+        postalcode: "Veuillez saisir un code postal (Zip)."
         countrycode: "Merci de choisir un pays."
         coordinates: "Please complete the set of coordinates."
         geo_location: "Chercher et sélectionner un résultat."
-    select_kit:
-      default_header_text: Select...
-      no_content: No matches found
-      filter_placeholder: Chercher...
-      filter_placeholder_with_any: Search or create...
-      create: "Create: '{{content}}'"
-      max_content_reached:
-        one: "You can only select {{count}} item."
-        other: "You can only select {{count}} items."
-      min_content_not_reached:
-        one: "Select at least {{count}} item."
-        other: "Select at least {{count}} items."
-    wizard:
-      completed: "Vous en avez terminé avec cet assistant."
-      not_permitted: "Vous devez obtenir un niveau de confiance à {{level}} ou plus pour accéder à cet assistant."
-      none: "Il n'y a pas d'assistant ici."
-      return_to_site: "Retourner à {{siteName}}"
-      requires_login: "You need to be logged in to access this wizard."
-      reset: "Reset this wizard."
-      step_not_permitted: "You're not permitted to view this step."
-      incomplete_submission:
-        title: "Continue editing your draft submission from %{date}?"
-        resume: "Continue"
-        restart: "Start over"
-      x_characters:
-        one: "%{count} Character"
-        other: "%{count} Characters"
-    wizard_composer:
-      show_preview: "Prévisualiser le message"
-      hide_preview: "Modifier le message"
-      quote_post_title: "Citer l'ensemble du message"
-      bold_label: "B"
-      bold_title: "Gras"
-      bold_text: "texte gras"
-      italic_label: "I"
-      italic_title: "Italique"
-      italic_text: "texte en italique"
-      link_title: "Hyperlien"
-      link_description: "saisir la description du lien ici"
-      link_dialog_title: "Insérer un hyperlien"
-      link_optional_text: "titre optionnel"
-      link_url_placeholder: "http://example.com"
-      quote_title: "Citation"
-      quote_text: "blockquote"
-      blockquote_text: "insérer un bloc de citation"
-      code_title: "Texte préformaté"
-      code_text: "indenter le texte préformaté de 4 espaces"
-      paste_code_text: "taper ou coller du code ici"
-      upload_title: "Joindre un fichier"
-      upload_description: "saisir la description du téléchargement ici"
-      olist_title: "Liste numérotée"
-      ulist_title: "Liste de points"
-      list_item: "Élément de la liste"
-      toggle_direction: "Changer de direction"
-      help: "Aide à l'édition en Markdown"
-      collapse: "réduire le panneau d'édition"
-      abandon: "fermer l'éditeur et abandonner le brouillon"
-      modal_ok: "OK"
-      modal_cancel: "Annuler"
-      cant_send_pm: "Pardon, vous ne pouvez envoyer de message à %{username}."
-      yourself_confirm:
-        title: "Avez-vous oublié d'ajouter des destinataires ?"
-        body: "Pour l'instant ce message n'est envoyé qu'à vous !"
-    realtime_validations:
-      similar_topics:
-        insufficient_characters: "Type a minimum 5 characters to start looking for similar topics"
-        insufficient_characters_categories: "Type a minimum 5 characters to start looking for similar topics in %{catLinks}"
-        results: "Your topic is similar to..."
-        no_results: "No similar topics."
-        loading: "Looking for similar topics..."
-        show: "show"

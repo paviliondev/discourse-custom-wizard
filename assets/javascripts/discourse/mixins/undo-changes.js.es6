@@ -4,6 +4,8 @@ import { get, set } from "@ember/object";
 import Mixin from "@ember/object/mixin";
 import { deepEqual } from "discourse-common/lib/object";
 
+const observedCache = [];
+
 export default Mixin.create({
   didInsertElement() {
     this._super(...arguments);
@@ -32,7 +34,13 @@ export default Mixin.create({
     };
 
     listProperties(componentType, opts).forEach((property) => {
-      obj.removeObserver(property, this, this.toggleUndo);
+      if (observedCache.includes(property)) {
+        obj.removeObserver(property, this, this.toggleUndo);
+        let index = observedCache.indexOf(property);
+        if (index !== -1) {
+          observedCache.splice(index, 1);
+        }
+      }
     });
   },
 
@@ -45,6 +53,9 @@ export default Mixin.create({
     };
 
     listProperties(componentType, opts).forEach((property) => {
+      if (observedCache.indexOf(property) === -1) {
+        observedCache.push(property);
+      }
       obj.addObserver(property, this, this.toggleUndo);
     });
   },

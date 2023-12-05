@@ -2,12 +2,11 @@
 
 describe CustomWizard::CustomFieldSerializer do
   fab!(:user) { Fabricate(:user) }
+  let(:custom_field_json) { get_wizard_fixture("custom_field/custom_fields") }
 
-  let(:custom_field_json) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/custom_field/custom_fields.json"
-    ).read)
-  }
+  before do
+    stub_out_subscription_classes
+  end
 
   it 'should return custom field attributes' do
     custom_field_json['custom_fields'].each do |field_json|

@@ -3,20 +3,17 @@
     value=wizardListVal
     content=wizardList
     onChange=(route-action "changeWizard")
-    options=(hash
-      none="admin.wizard.select"
-    )}}
+    options=(hash none="admin.wizard.select")
+  }}
 
   {{d-button
-    action="createWizard"
+    action=(route-action "createWizard")
     label="admin.wizard.create"
-    icon="plus"}}
+    icon="plus"
+  }}
 </div>
 
-{{wizard-message
-  key=messageKey
-  url=messageUrl
-  component="wizard"}}
+{{wizard-message key=messageKey url=messageUrl component="wizard"}}
 
 <div class="admin-wizard-container settings">
   {{outlet}}

@@ -4,7 +4,7 @@ import {
   default as discourseComputed,
   observes,
 } from "discourse-common/utils/decorators";
-import { getOwner } from "discourse-common/lib/get-owner";
+import { getOwner } from "@ember/application";
 import { defaultSelectionType, selectionTypes } from "../lib/wizard-mapper";
 import {
   generateName,
@@ -15,6 +15,7 @@ import {
 import Component from "@ember/component";
 import { bind, later } from "@ember/runloop";
 import I18n from "I18n";
+import { inject as service } from "@ember/service";
 
 const customFieldActionMap = {
   topic: ["create_topic", "send_message"],
@@ -28,6 +29,7 @@ const values = ["present", "true", "false"];
 
 export default Component.extend({
   classNameBindings: [":mapper-selector", "activeType"],
+  subscription: service(),
 
   showText: computed("activeType", function () {
     return this.showInput("text");
@@ -116,6 +118,9 @@ export default Component.extend({
   groupEnabled: computed("options.groupSelection", "inputType", function () {
     return this.optionEnabled("groupSelection");
   }),
+  guestGroup: computed("options.guestGroup", "inputType", function () {
+    return this.optionEnabled("guestGroup");
+  }),
   userEnabled: computed("options.userSelection", "inputType", function () {
     return this.optionEnabled("userSelection");
   }),
@@ -126,7 +131,33 @@ export default Component.extend({
     return this.connector === "is";
   }),
 
-  groups: alias("site.groups"),
+  @discourseComputed(
+    "site.groups",
+    "guestGroup",
+    "subscription.subscriptionType"
+  )
+  groups(groups, guestGroup, subscriptionType) {
+    let result = groups;
+    if (!guestGroup) {
+      return result;
+    }
+
+    if (["standard", "business"].includes(subscriptionType)) {
+      let guestIndex;
+      result.forEach((r, index) => {
+        if (r.id === 0) {
+          r.name = I18n.t("admin.wizard.selector.label.users");
+          guestIndex = index;
+        }
+      });
+      result.splice(guestIndex, 0, {
+        id: -1,
+        name: I18n.t("admin.wizard.selector.label.guests"),
+      });
+    }
+
+    return result;
+  },
   categories: alias("site.categories"),
   showComboBox: or(
     "showWizardField",
@@ -377,7 +408,7 @@ export default Component.extend({
       this.changeValue(event.target.value);
     },
 
-    changeUserValue(previousValue, value) {
+    changeUserValue(value) {
       this.changeValue(value);
     },
   },

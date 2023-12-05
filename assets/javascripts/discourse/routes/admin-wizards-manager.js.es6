@@ -1,9 +1,9 @@
-import CustomWizard from "../models/custom-wizard";
+import CustomWizardAdmin from "../models/custom-wizard-admin";
 import DiscourseRoute from "discourse/routes/discourse";
 
 export default DiscourseRoute.extend({
   model() {
-    return CustomWizard.all();
+    return CustomWizardAdmin.all();
   },
 
   setupController(controller, model) {

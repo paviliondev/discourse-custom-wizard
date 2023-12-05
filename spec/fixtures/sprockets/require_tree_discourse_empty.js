@@ -1,1 +1,1 @@
-//= require_tree_discourse 
+//= require_tree_discourse

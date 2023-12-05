@@ -35,6 +35,7 @@ function inputTypesContent(options = {}) {
 const connectors = {
   pair: [
     "equal",
+    "not_equal",
     "greater",
     "less",
     "greater_or_equal",

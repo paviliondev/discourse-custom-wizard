@@ -1,0 +1,11 @@
+<Input
+  @type={{this.inputType}}
+  @value={{readonly this.value}}
+  class="date-picker"
+  placeholder={{this.placeholder}}
+  tabindex={{this.tabindex}}
+  {{on "input" (action "onChangeDate")}}
+  autocomplete="off"
+/>
+
+<div class="picker-container"></div>

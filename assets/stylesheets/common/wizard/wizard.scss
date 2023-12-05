@@ -1,0 +1,167 @@
+body.custom-wizard {
+  background: var(--secondary);
+  color: var(--primary);
+  font-size: 1.1em;
+
+  .wizard-column {
+    position: relative;
+    z-index: 11;
+    background-color: var(--secondary);
+    box-shadow: 0 5px 10px rgba(var(--primary-rgb), 0.15);
+    box-sizing: border-box;
+    margin: 1.5em auto;
+    padding: 0;
+    max-width: 820px;
+    min-width: 280px;
+    width: 100%;
+    border: 1px solid var(--primary-low-mid);
+    border-radius: 5px;
+    margin: 0 auto 2.5em auto;
+
+    .wizard-field .input-area {
+      margin: 0.5em 0;
+    }
+
+    .wizard-column-contents {
+      padding: 1.2em;
+
+      h1 {
+        margin: 0;
+      }
+    }
+
+    .wizard-footer {
+      border-top: 1px solid var(--primary-low-mid);
+      background-color: var(--secondary);
+      padding: 0.5em;
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+
+    .wizard-progress {
+      border: 1px solid var(--tertiary-high);
+      width: 200px;
+      height: 1.4em;
+
+      div {
+        position: absolute;
+        height: 1.4em;
+      }
+
+      .white {
+        background: var(--secondary);
+        width: 200px;
+        z-index: 11;
+      }
+
+      .black {
+        background: var(--primary);
+        transition: width 0.3s;
+        z-index: 12;
+      }
+
+      span {
+        position: absolute;
+        font-size: var(--font-0);
+        mix-blend-mode: difference;
+        color: var(--secondary-or-primary);
+        z-index: 13;
+        left: 1.5em;
+        line-height: 1.4em;
+      }
+
+      .screen {
+        background-color: var(--tertiary-high);
+        mix-blend-mode: screen;
+        width: 200px;
+        z-index: 14;
+      }
+    }
+  }
+
+  .wizard-buttons > a,
+  .wizard-buttons > button,
+  .spinner {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .spinner.small {
+    margin-right: 10px;
+  }
+
+  .wizard-column .wizard-btn {
+    color: var(--primary);
+    background: var(--primary-low);
+    cursor: pointer;
+
+    &.primary,
+    &.next {
+      color: var(--secondary);
+      background: var(--tertiary);
+    }
+  }
+
+  .wizard-step-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    .wizard-btn.next {
+      min-width: 70px;
+
+      .d-icon-chevron-right {
+        margin-left: 0.25em;
+        font-size: 0.8em;
+      }
+    }
+
+    button.wizard-btn:last-child {
+      margin-right: 0;
+    }
+
+    button.wizard-btn.done,
+    button.wizard-btn.finish {
+      color: var(--secondary);
+      background-color: var(--success);
+
+      &:hover,
+      &:focus {
+        background-color: var(--success-hover);
+      }
+
+      &:active {
+        background-color: var(--success-medium);
+      }
+
+      &:disabled {
+        background-color: var(--success-low);
+      }
+    }
+  }
+
+  .wizard-column .action-link {
+    color: var(--tertiary);
+  }
+
+  .no-access-gutter {
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+/* IE11 hacks */
+
+@media all and (-ms-high-contrast: none) {
+  body.custom-wizard {
+    div.wizard-step-contents {
+      display: block;
+    }
+
+    div.wizard-progress {
+      visibility: hidden;
+    }
+  }
+}

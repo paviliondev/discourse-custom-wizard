@@ -1,0 +1,34 @@
+<DModal @closeModal={{@closeModal}} @title={{this.title}}>
+  {{#if loading}}
+    <LoadingSpinner size="large" />
+  {{else}}
+    <div class="edit-directory-columns-container">
+      {{#each @model.columns as |column|}}
+        <div class="edit-directory-column">
+          <div class="left-content">
+            <label class="column-name">
+              <Input @type="checkbox" @checked={{column.enabled}} />
+              {{directory-table-header-title
+                field=column.label
+                translated=true
+              }}
+            </label>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  {{/if}}
+  <div class="modal-footer">
+    <DButton
+      class="btn-primary"
+      @label="directory.edit_columns.save"
+      @action={{action "save"}}
+    />
+
+    <DButton
+      class="btn-secondary reset-to-default"
+      @label="directory.edit_columns.reset_to_default"
+      @action={{action "resetToDefault"}}
+    />
+  </div>
+</DModal>

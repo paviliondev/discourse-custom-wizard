@@ -88,6 +88,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
         :title,
         :key,
         :banner,
+        :banner_upload_id,
         :raw_description,
         :required_data_message,
         :force_final,
@@ -99,6 +100,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
           :index,
           :label,
           :image,
+          :image_upload_id,
           :description,
           :required,
           :key,
@@ -112,6 +114,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
           :property,
           :preview_template,
           :placeholder,
+          :can_create_tag,
           prefill: mapped_params,
           content: mapped_params,
           condition: mapped_params,
@@ -161,7 +164,9 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
         mentionable_level: mapped_params,
         messageable_level: mapped_params,
         visibility_level: mapped_params,
-        members_visibility_level: mapped_params
+        members_visibility_level: mapped_params,
+        add_event: mapped_params,
+        add_location: mapped_params
       ]
     )
   end

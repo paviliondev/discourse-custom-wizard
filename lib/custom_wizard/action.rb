@@ -6,6 +6,14 @@ class CustomWizard::Action
                 :guardian,
                 :result
 
+  REQUIRES_USER = %w[
+    create_topic
+    update_profile
+    open_composer
+    watch_categories
+    add_to_group
+  ]
+
   def initialize(opts)
     @wizard = opts[:wizard]
     @action = opts[:action]
@@ -17,6 +25,12 @@ class CustomWizard::Action
   end
 
   def perform
+    if REQUIRES_USER.include?(action['id']) && !@user
+      log_error("action requires user", "id: #{action['id']};")
+      @result.success = false
+      return @result
+    end
+
     ActiveRecord::Base.transaction do
       self.send(action['type'].to_sym)
     end
@@ -43,8 +57,16 @@ class CustomWizard::Action
     @mapper ||= CustomWizard::Mapper.new(user: user, data: mapper_data)
   end
 
+  def callbacks_for(action)
+    self.class.callbacks[action] || []
+  end
+
   def create_topic
     params = basic_topic_params.merge(public_topic_params)
+
+    callbacks_for(:before_create_topic).each do |acb|
+      params = acb.call(params, @wizard, @action, @submission)
+    end
 
     if params[:title].present? && params[:raw].present?
       creator = PostCreator.new(user, params)
@@ -68,7 +90,6 @@ class CustomWizard::Action
   end
 
   def send_message
-
     if action['required'].present?
       required = CustomWizard::Mapper.new(
         inputs: action['required'],
@@ -115,13 +136,14 @@ class CustomWizard::Action
 
       params[:archetype] = Archetype.private_message
 
-      creator = PostCreator.new(user, params)
+      poster = user || Discourse.system_user
+      creator = PostCreator.new(poster, params)
       post = creator.create
 
       if creator.errors.present?
         messages = creator.errors.full_messages.join(" ")
         log_error("failed to create message", messages)
-      elsif action['skip_redirect'].blank?
+      elsif user && action['skip_redirect'].blank?
         @submission.redirect_on_complete = post.topic.url
       end
 
@@ -179,6 +201,52 @@ class CustomWizard::Action
       end
     else
       log_error("invalid profile fields params", "params: #{params.inspect}")
+    end
+  end
+
+  def watch_tags
+    tags = CustomWizard::Mapper.new(
+      inputs: action['tags'],
+      data: mapper_data,
+      user: user
+    ).perform
+
+    tags = [*tags]
+    level = action['notification_level'].to_sym
+
+    if level.blank?
+      log_error("Notifcation Level was not set. Exiting watch tags action")
+      return
+    end
+
+    users = []
+
+    if action['usernames']
+      mapped_users = CustomWizard::Mapper.new(
+        inputs: action['usernames'],
+        data: mapper_data,
+        user: user
+      ).perform
+
+      if mapped_users.present?
+        mapped_users = mapped_users.split(',')
+          .map { |username| User.find_by(username: username) }
+        users.push(*mapped_users)
+      end
+    end
+
+    if ActiveRecord::Type::Boolean.new.cast(action['wizard_user'])
+      users.push(user)
+    end
+
+    users.each do |user|
+      result = TagUser.batch_set(user, level, tags)
+
+      if result
+        log_success("#{user.username} notifications for #{tags} set to #{level}")
+      else
+        log_error("failed to set #{user.username} notifications for #{tags} to #{level}")
+      end
     end
   end
 
@@ -388,11 +456,16 @@ class CustomWizard::Action
 
       if new_group_params[:usernames].present?
         user_ids = get_user_ids(new_group_params[:usernames])
+        if user_ids.count < new_group_params[:usernames].count
+          log_error("Warning, group creation: some users were not found!")
+        end
         user_ids -= owner_ids if owner_ids
         user_ids.each { |user_id| group.group_users.build(user_id: user_id) }
       end
 
-      log_success("Group created", group.name)
+      if group.save
+        log_success("Group created", group.name)
+      end
 
       result.output = group.name
     else
@@ -415,6 +488,15 @@ class CustomWizard::Action
     else
       log_error("Category creation failed", category.errors.messages)
     end
+  end
+
+  def self.callbacks
+    @callbacks ||= {}
+  end
+
+  def self.register_callback(action, &block)
+    callbacks[action] ||= []
+    callbacks[action] << block
   end
 
   private
@@ -481,8 +563,8 @@ class CustomWizard::Action
 
         registered = registered_fields.select { |f| f.name == name }.first
         if registered.present?
-          klass = registered.klass
-          type = registered.type
+          klass = registered.klass.to_sym
+          type = registered.type.to_sym
         end
 
         next if type === :json && json_attr.blank?
@@ -746,14 +828,13 @@ class CustomWizard::Action
   end
 
   def save_log
-    log = "wizard: #{@wizard.id}; action: #{action['type']}; user: #{user.username}"
+    username = user ? user.username : @wizard.actor_id
 
-    if @log.any?
-      @log.each do |item|
-        log += "; #{item.to_s}"
-      end
-    end
-
-    CustomWizard::Log.create(log)
+    CustomWizard::Log.create(
+      @wizard.id,
+      action['type'],
+      username,
+      @log.join('; ')
+    )
   end
 end

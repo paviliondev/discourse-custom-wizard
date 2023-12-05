@@ -4,14 +4,18 @@ import CustomWizardApi from "../models/custom-wizard-api";
 import { default as discourseComputed } from "discourse-common/utils/decorators";
 import { and, equal, not } from "@ember/object/computed";
 import { selectKitContent } from "../lib/wizard";
+import { underscore } from "@ember/string";
 import Controller from "@ember/controller";
 import I18n from "I18n";
+import { inject as service } from "@ember/service";
 
 export default Controller.extend({
+  router: service(),
+
   queryParams: ["refresh_list"],
   loadingSubscriptions: false,
   notAuthorized: not("api.authorized"),
-  endpointMethods: selectKitContent(["GET", "PUT", "POST", "PATCH", "DELETE"]),
+  endpointMethods: selectKitContent(["PUT", "POST", "PATCH", "DELETE"]),
   showRemove: not("isNew"),
   showRedirectUri: and("threeLeggedOauth", "api.name"),
   responseIcon: null,
@@ -20,29 +24,8 @@ export default Controller.extend({
     "application/x-www-form-urlencoded",
   ]),
   successCodes: selectKitContent([
-    100,
-    101,
-    102,
-    200,
-    201,
-    202,
-    203,
-    204,
-    205,
-    206,
-    207,
-    208,
-    226,
-    300,
-    301,
-    302,
-    303,
-    303,
-    304,
-    305,
-    306,
-    307,
-    308,
+    100, 101, 102, 200, 201, 202, 203, 204, 205, 206, 207, 208, 226, 300, 301,
+    302, 303, 303, 304, 305, 306, 307, 308,
   ]),
 
   @discourseComputed(
@@ -88,6 +71,11 @@ export default Controller.extend({
   twoLeggedOauth: equal("api.authType", "oauth_2"),
   threeLeggedOauth: equal("api.authType", "oauth_3"),
 
+  @discourseComputed("api.isNew")
+  nameClass(isNew) {
+    return isNew ? "new" : "saved";
+  },
+
   actions: {
     addParam() {
       this.get("api.authParams").pushObject({});
@@ -113,7 +101,7 @@ export default Controller.extend({
 
       if (authType === "oauth_2") {
         this.set("authorizing", true);
-        ajax(`/admin/wizards/apis/${name.underscore()}/authorize`)
+        ajax(`/admin/wizards/apis/${underscore(name)}/authorize`)
           .catch(popupAjaxError)
           .then((result) => {
             if (result.success) {
@@ -149,7 +137,6 @@ export default Controller.extend({
       const api = this.get("api");
       const name = api.name;
       const authType = api.authType;
-      let refreshList = false; // eslint-disable-line
       let error;
 
       if (!name || !authType) {
@@ -162,11 +149,6 @@ export default Controller.extend({
 
       if (api.title) {
         data["title"] = api.title;
-      }
-
-      const originalTitle = this.get("api.originalTitle");
-      if (api.get("isNew") || (originalTitle && api.title !== originalTitle)) {
-        refreshList = true;
       }
 
       if (api.get("isNew")) {
@@ -188,11 +170,11 @@ export default Controller.extend({
           if (!api[rp]) {
             let key = rp.replace("auth", "");
             error = `${I18n.t(
-              `admin.wizard.api.auth.${key.underscore()}`
+              `admin.wizard.api.auth.${underscore(key)}`
             )} is required for ${authType}`;
             break;
           }
-          data[rp.underscore()] = api[rp];
+          data[underscore(rp)] = api[rp];
         }
       }
 
@@ -222,7 +204,7 @@ export default Controller.extend({
 
       this.set("updating", true);
 
-      ajax(`/admin/wizards/api/${name.underscore()}`, {
+      ajax(`/admin/wizards/api/${underscore(name)}`, {
         type: "PUT",
         data,
       })
@@ -245,7 +227,7 @@ export default Controller.extend({
 
       this.set("updating", true);
 
-      ajax(`/admin/wizards/api/${name.underscore()}`, {
+      ajax(`/admin/wizards/api/${underscore(name)}`, {
         type: "DELETE",
       })
         .catch(popupAjaxError)
@@ -263,13 +245,13 @@ export default Controller.extend({
         return;
       }
 
-      ajax(`/admin/wizards/api/${name.underscore()}/logs`, {
+      ajax(`/admin/wizards/api/${underscore(name)}/logs`, {
         type: "DELETE",
       })
         .catch(popupAjaxError)
         .then((result) => {
           if (result.success) {
-            this.transitionToRoute("adminWizardsApis").then(() => {
+            this.router.transitionTo("adminWizardsApis").then(() => {
               this.send("refreshModel");
             });
           }

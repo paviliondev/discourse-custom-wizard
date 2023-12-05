@@ -2,10 +2,10 @@
 class CustomWizard::Builder
   attr_accessor :wizard, :updater, :template
 
-  def initialize(wizard_id, user = nil)
+  def initialize(wizard_id, user = nil, guest_id = nil)
     @template = CustomWizard::Template.create(wizard_id)
     return nil if @template.nil?
-    @wizard = CustomWizard::Wizard.new(template.data, user)
+    @wizard = CustomWizard::Wizard.new(template.data, user, guest_id)
   end
 
   def self.sorted_handlers
@@ -19,13 +19,6 @@ class CustomWizard::Builder
   def self.add_step_handler(priority = 0, wizard_id, &block)
     sorted_handlers << { priority: priority, wizard_id: wizard_id, block: block }
     @sorted_handlers.sort_by! { |h| -h[:priority] }
-  end
-
-  def mapper
-    CustomWizard::Mapper.new(
-      user: @wizard.user,
-      data: @wizard.current_submission&.fields_and_meta
-    )
   end
 
   def build(build_opts = {}, params = {})
@@ -79,6 +72,32 @@ class CustomWizard::Builder
     @wizard
   end
 
+  def check_condition(template)
+    if template['condition'].present?
+      result = CustomWizard::Mapper.new(
+        inputs: template['condition'],
+        user: @wizard.user,
+        data: @wizard.current_submission&.fields_and_meta,
+        opts: {
+          multiple: true
+        }
+      ).perform
+
+      result.any?
+    else
+      true
+    end
+  end
+
+  private
+
+  def mapper
+    CustomWizard::Mapper.new(
+      user: @wizard.user,
+      data: @wizard.current_submission&.fields_and_meta
+    )
+  end
+
   def append_field(step, step_template, field_template, build_opts)
     params = {
       id: field_template['id'],
@@ -116,20 +135,12 @@ class CustomWizard::Builder
       params[:limit] = field_template['limit']
     end
 
+    if field_template['type'] === 'tag'
+      params[:can_create_tag] = standardise_boolean(field_template['can_create_tag'])
+    end
+
     if field_template['type'] === 'category'
       params[:property] = field_template['property']
-    end
-
-    if field_template['type'] === 'category' || (
-          field_template['validations'] &&
-          field_template['validations']['similar_topics'] &&
-          field_template['validations']['similar_topics']['categories'].present?
-        )
-      @wizard.needs_categories = true
-    end
-
-    if field_template['type'] === 'group'
-      @wizard.needs_groups = true
     end
 
     if (content_inputs = field_template['content']).present?
@@ -171,7 +182,7 @@ class CustomWizard::Builder
     if field_template['description'].present?
       params[:description] = mapper.interpolate(
         field_template['description'],
-        user: true,
+        user: @wizard.user,
         value: true,
         wizard: true,
         template: true
@@ -181,7 +192,7 @@ class CustomWizard::Builder
     if field_template['preview_template'].present?
       preview_template = mapper.interpolate(
         field_template['preview_template'],
-        user: true,
+        user: @wizard.user,
         value: true,
         wizard: true,
         template: true
@@ -193,7 +204,7 @@ class CustomWizard::Builder
     if field_template['placeholder'].present?
       params[:placeholder] = mapper.interpolate(
         field_template['placeholder'],
-        user: true,
+        user: @wizard.user,
         value: true,
         wizard: true,
         template: true
@@ -210,23 +221,6 @@ class CustomWizard::Builder
         user: @wizard.user,
         data: @wizard.current_submission&.fields_and_meta
       ).perform
-    end
-  end
-
-  def check_condition(template)
-    if template['condition'].present?
-      result = CustomWizard::Mapper.new(
-        inputs: template['condition'],
-        user: @wizard.user,
-        data: @wizard.current_submission&.fields_and_meta,
-        opts: {
-          multiple: true
-        }
-      ).perform
-
-      result.any?
-    else
-      true
     end
   end
 
@@ -254,7 +248,7 @@ class CustomWizard::Builder
     if step_template['description']
       step.description = mapper.interpolate(
         step_template['description'],
-        user: true,
+        user: @wizard.user,
         value: true,
         wizard: true,
         template: true

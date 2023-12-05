@@ -8,7 +8,12 @@
       {{/if}}
     {{/if}}
 
-    {{d-button label="admin.wizard.api.save" action=(action "save") class="btn-primary" disabled=saveDisabled}}
+    {{d-button
+      label="admin.wizard.api.save"
+      action=(action "save")
+      class="btn-primary"
+      disabled=saveDisabled
+    }}
 
     {{#if showRemove}}
       {{d-button action=(action "remove") label="admin.wizard.api.remove"}}
@@ -21,26 +26,32 @@
     {{/if}}
   </div>
 
-  <div class="wizard-header">
+  <div class="wizard-header large">
     {{#if api.isNew}}
       {{i18n "admin.wizard.api.new"}}
     {{else}}
-      {{api.title}}
+      <span>{{api.title}}</span>
     {{/if}}
   </div>
 
   <div class="metadata">
     <div class="title">
       <label>{{i18n "admin.wizard.api.title"}}</label>
-      {{input value=api.title placeholder=(i18n "admin.wizard.api.title_placeholder")}}
+      <Input
+        @value={{this.api.title}}
+        placeholder={{i18n "admin.wizard.api.title_placeholder"}}
+      />
     </div>
 
-    <div class="name">
+    <div class="name {{nameClass}}">
       <label>{{i18n "admin.wizard.api.name"}}</label>
       {{#if api.isNew}}
-        {{input value=api.name placeholder=(i18n "admin.wizard.api.name_placeholder")}}
+        <Input
+          @value={{this.api.name}}
+          placeholder={{i18n "admin.wizard.api.name_placeholder"}}
+        />
       {{else}}
-        {{api.name}}
+        <span>{{api.name}}</span>
       {{/if}}
     </div>
   </div>
@@ -56,14 +67,16 @@
           <span>{{authErrorMessage}}</span>
         {{/if}}
       {{/if}}
-      {{d-button label="admin.wizard.api.auth.btn"
-                 action=(action "authorize")
-                 disabled=authDisabled
-                 class="btn-primary"}}
+      {{d-button
+        label="admin.wizard.api.auth.btn"
+        action=(action "authorize")
+        disabled=authDisabled
+        class="btn-primary"
+      }}
     {{/if}}
   </div>
 
-  <div class="wizard-header">
+  <div class="wizard-header medium">
     {{i18n "admin.wizard.api.auth.label"}}
   </div>
 </div>
@@ -71,7 +84,7 @@
 <div class="wizard-api-authentication">
   <div class="settings">
 
-    <div class="wizard-header medium">
+    <div class="wizard-header small">
       {{i18n "admin.wizard.api.auth.settings"}}
     </div>
 
@@ -93,9 +106,8 @@
           value=api.authType
           content=authorizationTypes
           onChange=(action (mut api.authType))
-          options=(hash
-            none="admin.wizard.api.auth.type_none"
-          )}}
+          options=(hash none="admin.wizard.api.auth.type_none")
+        }}
       </div>
     </div>
 
@@ -104,7 +116,7 @@
         <div class="control-group">
           <label>{{i18n "admin.wizard.api.auth.url"}}</label>
           <div class="controls">
-            {{input value=api.authUrl}}
+            <Input @value={{this.api.authUrl}} />
           </div>
         </div>
       {{/if}}
@@ -112,21 +124,21 @@
       <div class="control-group">
         <label>{{i18n "admin.wizard.api.auth.token_url"}}</label>
         <div class="controls">
-          {{input value=api.tokenUrl}}
+          <Input @value={{this.api.tokenUrl}} />
         </div>
       </div>
 
       <div class="control-group">
         <label>{{i18n "admin.wizard.api.auth.client_id"}}</label>
         <div class="controls">
-          {{input value=api.clientId}}
+          <Input @value={{this.api.clientId}} />
         </div>
       </div>
 
       <div class="control-group">
         <label>{{i18n "admin.wizard.api.auth.client_secret"}}</label>
         <div class="controls">
-          {{input value=api.clientSecret}}
+          <Input @value={{this.api.clientSecret}} />
         </div>
       </div>
 
@@ -135,12 +147,26 @@
         <div class="controls">
           {{#each api.authParams as |param|}}
             <div class="param">
-              {{input value=param.key placeholder=(i18n "admin.wizard.key")}}
-              {{input value=param.value placeholder=(i18n "admin.wizard.value")}}
-              {{d-button action=(action "removeParam") actionParam=param icon="times"}}
+              <Input
+                @value={{this.param.key}}
+                placeholder={{i18n "admin.wizard.key"}}
+              />
+              <Input
+                @value={{this.param.value}}
+                placeholder={{i18n "admin.wizard.value"}}
+              />
+              {{d-button
+                action=(action "removeParam")
+                actionParam=param
+                icon="times"
+              }}
             </div>
           {{/each}}
-          {{d-button label="admin.wizard.api.auth.params.new" icon="plus" action=(action "addParam")}}
+          {{d-button
+            label="admin.wizard.api.auth.params.new"
+            icon="plus"
+            action=(action "addParam")
+          }}
         </div>
       </div>
     {{/if}}
@@ -149,14 +175,14 @@
       <div class="control-group">
         <label>{{i18n "admin.wizard.api.auth.username"}}</label>
         <div class="controls">
-          {{input value=api.username}}
+          <Input @value={{this.api.username}} />
         </div>
       </div>
 
       <div class="control-group">
         <label>{{i18n "admin.wizard.api.auth.password"}}</label>
         <div class="controls">
-          {{input value=api.password}}
+          <Input @value={{this.api.password}} />
         </div>
       </div>
     {{/if}}
@@ -174,7 +200,7 @@
         {{/if}}
       </div>
 
-      <div class="wizard-header medium">
+      <div class="wizard-header small">
         {{i18n "admin.wizard.api.status.label"}}
       </div>
 
@@ -220,12 +246,16 @@
   {{/if}}
 </div>
 
-<div class="wizard-header">
+<div class="wizard-header medium">
   {{i18n "admin.wizard.api.endpoint.label"}}
 </div>
 
 <div class="wizard-api-endpoints">
-  {{d-button action=(action "addEndpoint") label="admin.wizard.api.endpoint.add" icon="plus"}}
+  {{d-button
+    action=(action "addEndpoint")
+    label="admin.wizard.api.endpoint.add"
+    icon="plus"
+  }}
 
   {{#if api.endpoints}}
     <div class="endpoint-list">
@@ -235,38 +265,43 @@
             <div class="endpoint">
               <div class="endpoint-">
                 <div class="top">
-                  {{input value=endpoint.name
-                          placeholder=(i18n "admin.wizard.api.endpoint.name")}}
-                  {{input value=endpoint.url
-                          placeholder=(i18n "admin.wizard.api.endpoint.url")
-                          class="endpoint-url"}}
-                  {{d-button action=(action "removeEndpoint")
-                             actionParam=endpoint
-                             icon="times"
-                             class="remove-endpoint"}}
+                  <Input
+                    @value={{endpoint.name}}
+                    placeholder={{i18n "admin.wizard.api.endpoint.name"}}
+                  />
+                  <Input
+                    @value={{endpoint.url}}
+                    placeholder={{i18n "admin.wizard.api.endpoint.url"}}
+                    class="endpoint-url"
+                  />
+                  {{d-button
+                    action=(action "removeEndpoint")
+                    actionParam=endpoint
+                    icon="times"
+                    class="remove-endpoint"
+                  }}
                 </div>
                 <div class="bottom">
                   {{combo-box
                     content=endpointMethods
                     value=endpoint.method
                     onChange=(action (mut endpoint.method))
-                    options=(hash
-                      none="admin.wizard.api.endpoint.method"
-                    )}}
+                    options=(hash none="admin.wizard.api.endpoint.method")
+                  }}
                   {{combo-box
                     content=contentTypes
                     value=endpoint.content_type
                     onChange=(action (mut endpoint.content_type))
-                    options=(hash
-                      none="admin.wizard.api.endpoint.content_type"
-                    )}}
+                    options=(hash none="admin.wizard.api.endpoint.content_type")
+                  }}
                   {{multi-select
                     value=endpoint.success_codes
                     content=successCodes
                     onChange=(action (mut endpoint.success_codes))
                     options=(hash
                       none="admin.wizard.api.endpoint.success_codes"
-                    )}}
+                    )
+                  }}
                 </div>
               </div>
             </div>
@@ -277,11 +312,16 @@
   {{/if}}
 </div>
 
-<div class="wizard-header">
+<div class="wizard-header medium">
   {{i18n "admin.wizard.api.log.label"}}
-  {{d-button action=(action "clearLogs")
-             icon="trash-alt"
-             class="clear-logs"}}
+
+  <div class="controls">
+    {{d-button
+      action=(action "clearLogs")
+      class="clear-logs"
+      label="admin.wizard.api.log.clear"
+    }}
+  </div>
 </div>
 
 <div class="wizard-api-log">
@@ -300,7 +340,10 @@
             <td>{{logentry.time}}</td>
             <td class="user-image">
               <div class="user-image-inner">
-                <a href={{logentry.userpath}} data-user-card={{logentry.username}}>{{avatar logentry imageSize="large"}}</a>
+                <a
+                  href={{logentry.userpath}}
+                  data-user-card={{logentry.username}}
+                >{{avatar logentry imageSize="medium"}}</a>
               </div>
             </td>
             <td>{{logentry.status}}</td>

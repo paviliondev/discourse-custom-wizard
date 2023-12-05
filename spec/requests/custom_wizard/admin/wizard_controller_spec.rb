@@ -4,16 +4,12 @@ describe CustomWizard::AdminWizardController do
   fab!(:admin_user) { Fabricate(:user, admin: true) }
   fab!(:user1) { Fabricate(:user) }
   fab!(:user2) { Fabricate(:user) }
-
-  let(:template) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/wizard.json"
-    ).read)
-  }
+  let(:template) { get_wizard_fixture("wizard") }
+  let(:category) { Fabricate(:category, custom_fields: { create_topic_wizard: template['name'].parameterize(separator: "_") }) }
 
   before do
+    enable_subscription("standard")
     CustomWizard::Template.save(template, skip_jobs: true)
-
     template_2 = template.dup
     template_2["id"] = 'super_mega_fun_wizard_2'
     template_2["permitted"] = template_2['permitted']
@@ -43,10 +39,12 @@ describe CustomWizard::AdminWizardController do
     expect(response.parsed_body['steps'].length).to eq(3)
   end
 
-  it "removes wizard templates" do
+  it "removes wizard templates whilst making sure create_topic_wizard settings for that wizard are removed from Categories" do
+    expect(CategoryCustomField.find_by(category_id: category.id, name: 'create_topic_wizard', value: template['name'].parameterize(separator: "_"))).not_to eq(nil)
     delete "/admin/wizards/wizard/#{template['id']}.json"
     expect(response.status).to eq(200)
     expect(CustomWizard::Template.exists?(template['id'])).to eq(false)
+    expect(CategoryCustomField.find_by(name: 'create_topic_wizard', value: template['name'].parameterize(separator: "_"))).to eq(nil)
   end
 
   it "saves wizard templates" do

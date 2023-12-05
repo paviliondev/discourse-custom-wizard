@@ -89,6 +89,14 @@
       "output": "Time: v{time}"
     }
   ],
+  "interpolate_avatar": [
+    {
+      "type": "assignment",
+      "output_type": "text",
+      "output_connector": "set",
+      "output": "Avatar: ![avatar](u{avatar})"
+    }
+  ],
   "validation": [
     {
       "type": "validation",
@@ -183,6 +191,21 @@
           "value": "angus@email.com",
           "value_type": "text",
           "connector": "equal"
+        }
+      ]
+    }
+  ],
+  "not_equals_pair": [
+    {
+      "type": "validation",
+      "pairs": [
+        {
+          "index": 0,
+          "key": "trust_level",
+          "key_type": "user_field",
+          "value": "1",
+          "value_type": "text",
+          "connector": "not_equal"
         }
       ]
     }

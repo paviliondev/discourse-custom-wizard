@@ -1,8 +1,24 @@
 {{#if submissions}}
   <div class="wizard-header large">
-    <label>{{i18n "admin.wizard.submissions.title" name=wizard.name}}</label>
+    <label>
+      {{i18n "admin.wizard.submissions.title" name=wizard.name}}
+    </label>
 
-    <a class="btn btn-default download-link" href={{downloadUrl}} target="_blank" rel="noopener noreferrer">
+    <div class="controls">
+      {{d-button
+        icon="sliders-h"
+        label="admin.wizard.edit_columns"
+        action=(action "showEditColumnsModal")
+        class="btn-default open-edit-columns-btn download-link"
+      }}
+    </div>
+
+    <a
+      class="btn btn-default download-link"
+      href={{downloadUrl}}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       {{d-icon "download"}}
       <span class="d-button-label">
         {{i18n "admin.wizard.submissions.download"}}
@@ -10,24 +26,36 @@
     </a>
   </div>
 
-  <div class="wizard-submissions">
-    <table>
-      <thead>
-        <tr>
-          {{#each fields as |f|}}
-            <th>{{f}}</th>
-          {{/each}}
-        </tr>
-      </thead>
-      <tbody>
-        {{#each submissions as |s|}}
-          <tr>
-            {{#each-in s as |k v|}}
-              <td>{{v}}</td>
-            {{/each-in}}
-          </tr>
-        {{/each}}
-      </tbody>
-    </table>
+  <div class="wizard-table">
+    {{#load-more selector=".wizard-table tr" action=(action "loadMore")}}
+      {{#if noResults}}
+        <p>{{i18n "search.no_results"}}</p>
+      {{else}}
+        <table>
+          <thead>
+            <tr>
+              {{#each fields as |field|}}
+                {{#if field.enabled}}
+                  <th>
+                    {{field.label}}
+                  </th>
+                {{/if}}
+              {{/each}}
+            </tr>
+          </thead>
+          <tbody>
+            {{#each displaySubmissions as |submission|}}
+              <tr>
+                {{#each-in submission as |field value|}}
+                  <td>{{wizard-table-field field=field value=value}}</td>
+                {{/each-in}}
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      {{/if}}
+
+      {{conditional-loading-spinner condition=loadingMore}}
+    {{/load-more}}
   </div>
 {{/if}}

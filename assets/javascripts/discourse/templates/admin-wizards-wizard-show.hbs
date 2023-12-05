@@ -1,18 +1,31 @@
 {{#if wizard}}
   <div class="wizard-header large">
-    {{input
+    <Input
+      @value={{this.wizard.name}}
       name="name"
-      value=wizard.name
-      placeholderKey="admin.wizard.name_placeholder"}}
+      placeholder={{i18n "admin.wizard.name_placeholder"}}
+    />
 
     <div class="wizard-url">
       {{#if wizard.name}}
         {{#if copiedUrl}}
-          {{d-button class="btn-hover pull-right" icon="copy" label="ip_lookup.copied"}}
+          {{d-button
+            class="btn-hover pull-right"
+            icon="copy"
+            label="ip_lookup.copied"
+          }}
         {{else}}
-          {{d-button action=(action "copyUrl") class="pull-right no-text" icon="copy"}}
+          {{d-button
+            action=(action "copyUrl")
+            class="pull-right no-text"
+            icon="copy"
+          }}
         {{/if}}
-        <a href={{wizardUrl}} target="_blank" rel="noopener noreferrer">{{wizardUrl}}</a>
+        <a
+          href={{wizardUrl}}
+          target="_blank"
+          rel="noopener noreferrer"
+        >{{wizardUrl}}</a>
       {{/if}}
     </div>
   </div>
@@ -23,11 +36,12 @@
         <label>{{i18n "admin.wizard.background"}}</label>
       </div>
       <div class="setting-value">
-        {{input
+        <Input
+          @value={{this.wizard.background}}
           name="background"
-          value=wizard.background
-          placeholderKey="admin.wizard.background_placeholder"
-          class="small"}}
+          placeholder={{i18n "admin.wizard.background_placeholder"}}
+          class="small"
+        />
       </div>
     </div>
 
@@ -41,9 +55,8 @@
           valueProperty="id"
           value=wizard.theme_id
           onChange=(action (mut wizard.theme_id))
-          options=(hash
-            none="admin.wizard.no_theme"
-          )}}
+          options=(hash none="admin.wizard.no_theme")
+        }}
       </div>
     </div>
   </div>
@@ -55,21 +68,11 @@
   <div class="wizard-settings">
     <div class="setting">
       <div class="setting-label">
-        <label>{{i18n "admin.wizard.required"}}</label>
+        <label>{{i18n "admin.wizard.save_submissions"}}</label>
       </div>
       <div class="setting-value">
-        {{input type="checkbox" checked=wizard.required}}
-        <span>{{i18n "admin.wizard.required_label"}}</span>
-      </div>
-    </div>
-
-    <div class="setting">
-      <div class="setting-label">
-        <label>{{i18n "admin.wizard.after_signup"}}</label>
-      </div>
-      <div class="setting-value">
-        {{input type="checkbox" checked=wizard.after_signup}}
-        <span>{{i18n "admin.wizard.after_signup_label"}}</span>
+        <Input @type="checkbox" @checked={{this.wizard.save_submissions}} />
+        <span>{{i18n "admin.wizard.save_submissions_label"}}</span>
       </div>
     </div>
 
@@ -78,8 +81,18 @@
         <label>{{i18n "admin.wizard.multiple_submissions"}}</label>
       </div>
       <div class="setting-value">
-        {{input type="checkbox" checked=wizard.multiple_submissions}}
+        <Input @type="checkbox" @checked={{this.wizard.multiple_submissions}} />
         <span>{{i18n "admin.wizard.multiple_submissions_label"}}</span>
+      </div>
+    </div>
+
+    <div class="setting">
+      <div class="setting-label">
+        <label>{{i18n "admin.wizard.after_signup"}}</label>
+      </div>
+      <div class="setting-value">
+        <Input @type="checkbox" @checked={{this.wizard.after_signup}} />
+        <span>{{i18n "admin.wizard.after_signup_label"}}</span>
       </div>
     </div>
 
@@ -88,7 +101,7 @@
         <label>{{i18n "admin.wizard.prompt_completion"}}</label>
       </div>
       <div class="setting-value">
-        {{input type="checkbox" checked=wizard.prompt_completion}}
+        <Input @type="checkbox" @checked={{this.wizard.prompt_completion}} />
         <span>{{i18n "admin.wizard.prompt_completion_label"}}</span>
       </div>
     </div>
@@ -98,77 +111,61 @@
         <label>{{i18n "admin.wizard.after_time"}}</label>
       </div>
       <div class="setting-value">
-        {{input type="checkbox" checked=wizard.after_time}}
+        <Input @type="checkbox" @checked={{this.wizard.after_time}} />
         <span>{{i18n "admin.wizard.after_time_label"}}</span>
         {{d-button
-          action="setNextSessionScheduled"
+          action=(action "setNextSessionScheduled")
           translatedLabel=nextSessionScheduledLabel
           class="btn-after-time"
-          icon="far-calendar"}}
+          icon="far-calendar"
+        }}
       </div>
     </div>
 
-    <div class="setting full field-mapper-setting">
-      <div class="setting-label">
-        <label>{{i18n "admin.wizard.permitted"}}</label>
-      </div>
-      <div class="setting-value">
-        {{wizard-mapper
-          inputs=wizard.permitted
-          options=(hash
-            context="wizard"
-            inputTypes="assignment,validation"
-            groupSelection="output"
-            userFieldSelection="key"
-            textSelection="value"
-            inputConnector="and"
-          )}}
-      </div>
-    </div>
-
-    {{wizard-advanced-toggle showAdvanced=wizard.showAdvanced}}
-
-    {{#if wizard.showAdvanced}}
-      <div class="advanced-settings">
-
-        <div class="setting">
-          <div class="setting-label">
-            <label>{{i18n "admin.wizard.save_submissions"}}</label>
-          </div>
-          <div class="setting-value">
-            {{input type="checkbox" checked=wizard.save_submissions}}
-            <span>{{i18n "admin.wizard.save_submissions_label"}}</span>
-          </div>
+    {{#wizard-subscription-container}}
+      <div class="setting">
+        <div class="setting-label">
+          <label>{{i18n "admin.wizard.required"}}</label>
         </div>
-
-        <div class="setting">
-          <div class="setting-label">
-            <label>{{i18n "admin.wizard.restart_on_revisit"}}</label>
-          </div>
-          <div class="setting-value">
-            {{input type="checkbox" checked=wizard.restart_on_revisit}}
-            <span>{{i18n "admin.wizard.restart_on_revisit_label"}}</span>
-          </div>
+        <div class="setting-value">
+          <Input @type="checkbox" @checked={{this.wizard.required}} />
+          <span>{{i18n "admin.wizard.required_label"}}</span>
         </div>
-
-        <div class="setting">
-          <div class="setting-label">
-            <label>{{i18n "admin.wizard.resume_on_revisit"}}</label>
-          </div>
-          <div class="setting-value">
-            {{input type="checkbox" checked=wizard.resume_on_revisit}}
-            <span>{{i18n "admin.wizard.resume_on_revisit_label"}}</span>
-          </div>
-        </div>
-
       </div>
-    {{/if}}
+
+      <div class="setting">
+        <div class="setting-label">
+          <label>{{i18n "admin.wizard.restart_on_revisit"}}</label>
+        </div>
+        <div class="setting-value">
+          <Input @type="checkbox" @checked={{this.wizard.restart_on_revisit}} />
+          <span>{{i18n "admin.wizard.restart_on_revisit_label"}}</span>
+        </div>
+      </div>
+
+      <div class="setting full field-mapper-setting">
+        <div class="setting-label">
+          <label>{{i18n "admin.wizard.permitted"}}</label>
+        </div>
+        <div class="setting-value">
+          {{wizard-mapper
+            inputs=wizard.permitted
+            options=(hash
+              context="wizard"
+              inputTypes="assignment,validation"
+              groupSelection="output"
+              guestGroup=true
+              userFieldSelection="key"
+              textSelection="value"
+              inputConnector="and"
+            )
+          }}
+        </div>
+      </div>
+    {{/wizard-subscription-container}}
   </div>
 
-  {{wizard-links
-    itemType="step"
-    current=currentStep
-    items=wizard.steps}}
+  {{wizard-links itemType="step" current=currentStep items=wizard.steps}}
 
   {{#if currentStep}}
     {{wizard-custom-step
@@ -176,27 +173,37 @@
       wizard=wizard
       currentField=currentField
       wizardFields=wizardFields
-      fieldTypes=fieldTypes}}
+      fieldTypes=filteredFieldTypes
+      subscribed=subscribed
+    }}
   {{/if}}
 
   {{wizard-links
     itemType="action"
     current=currentAction
     items=wizard.actions
-    generateLabels=true}}
+    generateLabels=true
+  }}
 
-  {{#each wizard.actions as |action|}}
+  {{#each wizard.actions as |wizardAction|}}
     {{wizard-custom-action
-      action=action
+      action=wizardAction
       currentActionId=currentAction.id
       wizard=wizard
       apis=apis
       removeAction="removeAction"
-      wizardFields=wizardFields}}
+      wizardFields=wizardFields
+      fieldTypes=filteredFieldTypes
+    }}
   {{/each}}
 
   <div class="admin-wizard-buttons">
-    <button {{action "save"}} disabled={{disableSave}} class="btn btn-primary" type="button">
+    <button
+      {{action "save"}}
+      disabled={{disableSave}}
+      class="btn btn-primary"
+      type="button"
+    >
       {{i18n "admin.wizard.save"}}
     </button>
 

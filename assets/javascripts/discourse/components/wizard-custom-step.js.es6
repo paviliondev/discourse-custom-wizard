@@ -24,11 +24,17 @@ export default Component.extend({
 
   actions: {
     bannerUploadDone(upload) {
-      this.set("step.banner", upload.url);
+      this.setProperties({
+        "step.banner": upload.url,
+        "step.banner_upload_id": upload.id,
+      });
     },
 
     bannerUploadDeleted() {
-      this.set("step.banner", null);
+      this.setProperties({
+        "step.banner": null,
+        "step.banner_upload_id": null,
+      });
     },
   },
 });

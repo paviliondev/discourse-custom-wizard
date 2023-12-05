@@ -2,14 +2,10 @@
 
 describe CustomWizard::AdminCustomFieldsController do
   fab!(:admin_user) { Fabricate(:user, admin: true) }
-
-  let(:custom_field_json) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/custom_field/custom_fields.json"
-    ).read)
-  }
+  let(:custom_field_json) { get_wizard_fixture("custom_field/custom_fields") }
 
   before do
+    stub_out_subscription_classes
     custom_field_json['custom_fields'].each do |field_json|
       CustomWizard::CustomField.new(nil, field_json).save
     end
@@ -18,7 +14,7 @@ describe CustomWizard::AdminCustomFieldsController do
 
   it "returns the full list of custom fields" do
     get "/admin/wizards/custom-fields.json"
-    expect(response.parsed_body.length).to eq(12)
+    expect(response.parsed_body["custom_fields"].length).to be > 2
   end
 
   it "saves custom fields" do

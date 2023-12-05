@@ -17,6 +17,7 @@ class ::CustomWizard::CustomField
     category: ["basic_category"],
     post: ["post"]
   }
+
   TYPES ||= ["string", "boolean", "integer", "json"]
   LIST_CACHE_KEY ||= 'custom_field_list'
 
@@ -37,6 +38,8 @@ class ::CustomWizard::CustomField
         send("#{attr}=", value)
       end
     end
+
+    @subscription = CustomWizard::Subscription.new
   end
 
   def save
@@ -81,6 +84,10 @@ class ::CustomWizard::CustomField
         next
       end
 
+      if attr == 'klass' && !@subscription.includes?(:custom_field, :klass, value)
+        add_error(I18n.t("wizard.custom_field.error.subscription_type", type: value))
+      end
+
       if attr == 'serializers' && (unsupported = value - CLASSES[klass.to_sym]).length > 0
         add_error(I18n.t("#{i18n_key}.unsupported_serializers",
           class: klass,
@@ -90,6 +97,10 @@ class ::CustomWizard::CustomField
 
       if attr == 'type' && TYPES.exclude?(value)
         add_error(I18n.t("#{i18n_key}.unsupported_type", type: value))
+      end
+
+      if attr == 'type' && !@subscription.includes?(:custom_field, :type, value)
+        add_error(I18n.t("wizard.custom_field.error.subscription_type", type: value))
       end
 
       if attr == 'name'
@@ -129,7 +140,7 @@ class ::CustomWizard::CustomField
   end
 
   def self.cached_list
-    ::CustomWizard::Cache.wrap(LIST_CACHE_KEY) do
+    @custom_wizard_cached_fields ||= ::CustomWizard::Cache.wrap(LIST_CACHE_KEY) do
       PluginStoreRow.where(plugin_name: NAMESPACE).map do |record|
         create_from_store(record).as_json.with_indifferent_access
       end
@@ -205,6 +216,7 @@ class ::CustomWizard::CustomField
   end
 
   def self.invalidate_cache
+    @custom_wizard_cached_fields = nil
     CustomWizard::Cache.new(LIST_CACHE_KEY).delete
     Discourse.clear_readonly!
     Discourse.request_refresh!
@@ -222,16 +234,16 @@ class ::CustomWizard::CustomField
     external = []
 
     CLASSES.keys.each do |klass|
-      field_types = klass.to_s.classify.constantize.custom_field_types
+      meta_data = klass.to_s.classify.constantize.send('custom_field_meta_data')
 
-      if field_types.present?
-        field_types.each do |name, type|
+      if meta_data.present?
+        meta_data.each do |name, data|
           unless list.any? { |field| field.name === name }
             field = new(
               'external',
               name: name,
               klass: klass,
-              type: type
+              type: data.type
             )
             external.push(field)
           end

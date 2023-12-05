@@ -10,7 +10,8 @@
           {{wizard-mapper-selector-type
             activeType=activeType
             item=item
-            toggle=(action "toggleType")}}
+            toggle=(action "toggleType")
+          }}
         {{/each}}
       </div>
     {{/if}}
@@ -21,11 +22,12 @@
 
 <div class="input">
   {{#if showText}}
-    {{input
-      type="text"
-      value=value
-      placeholder=(i18n placeholderKey)
-      change=(action "changeInputValue")}}
+    <Input
+      @type="text"
+      @value={{this.value}}
+      placeholder={{i18n placeholderKey}}
+      {{on "change" (action "changeInputValue")}}
+    />
   {{/if}}
 
   {{#if showComboBox}}
@@ -33,10 +35,8 @@
       value=value
       content=comboBoxContent
       onChange=(action "changeValue")
-      options=(hash
-        none=placeholderKey
-        allowAny=comboBoxAllowAny
-      )}}
+      options=(hash none=placeholderKey allowAny=comboBoxAllowAny)
+    }}
   {{/if}}
 
   {{#if showMultiSelect}}
@@ -44,14 +44,16 @@
       content=multiSelectContent
       value=value
       onChange=(action "changeValue")
-      options=multiSelectOptions}}
+      options=multiSelectOptions
+    }}
   {{/if}}
 
   {{#if showList}}
     {{wizard-value-list
       values=value
       addKey=placeholderKey
-      onChange=(action "changeValue")}}
+      onChange=(action "changeValue")
+    }}
   {{/if}}
 
   {{#if showTag}}
@@ -59,18 +61,17 @@
       tags=value
       onChange=(action "changeValue")
       everyTag=true
-      options=(hash
-        none=placeholderKey
-        filterable=true
-      )}}
+      options=(hash none=placeholderKey filterable=true)
+    }}
   {{/if}}
 
   {{#if showUser}}
-    {{user-selector
-      includeMessageableGroups="true"
+    {{email-group-user-chooser
       placeholderKey=placeholderKey
-      usernames=value
+      value=value
       autocomplete="discourse"
-      onChangeCallback=(action "changeUserValue")}}
+      onChange=(action "changeUserValue")
+      options=(hash includeMessageableGroups="true")
+    }}
   {{/if}}
 </div>

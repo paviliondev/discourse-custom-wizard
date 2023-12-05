@@ -1,9 +1,12 @@
 import DiscourseRoute from "discourse/routes/discourse";
+import { inject as service } from "@ember/service";
 
 export default DiscourseRoute.extend({
-  beforeModel(transition) {
+  router: service(),
+
+  afterModel(model, transition) {
     if (transition.targetName === "adminWizards.index") {
-      this.transitionTo("adminWizardsWizard");
+      this.router.transitionTo("adminWizardsWizard");
     }
   },
 });

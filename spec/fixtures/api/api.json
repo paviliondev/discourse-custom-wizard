@@ -1,0 +1,7 @@
+{
+  "name": "my_api",
+  "title": "My API",
+  "auth_type": "none",
+  "endpoints": "[{\"name\":\"my_endpoint\",\"url\":\"https://endpoint.com\",\"method\":\"POST\",\"content_type\":\"application/json\",\"success_codes\":[200]}]",
+  "new": "true"
+}

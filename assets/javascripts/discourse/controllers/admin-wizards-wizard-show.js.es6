@@ -3,15 +3,18 @@ import {
   observes,
 } from "discourse-common/utils/decorators";
 import { notEmpty } from "@ember/object/computed";
-import showModal from "discourse/lib/show-modal";
+import { inject as service } from "@ember/service";
+import NextSessionScheduledModal from "../components/modal/next-session-scheduled";
 import { generateId, wizardFieldList } from "../lib/wizard";
 import { dasherize } from "@ember/string";
 import { later, scheduleOnce } from "@ember/runloop";
 import Controller from "@ember/controller";
 import copyText from "discourse/lib/copy-text";
 import I18n from "I18n";
+import { filterValues } from "discourse/plugins/discourse-custom-wizard/discourse/lib/wizard-schema";
 
 export default Controller.extend({
+  modal: service(),
   hasName: notEmpty("wizard.name"),
 
   @observes("currentStep")
@@ -36,7 +39,8 @@ export default Controller.extend({
 
   @discourseComputed("wizard.id")
   wizardUrl(wizardId) {
-    return window.location.origin + "/w/" + dasherize(wizardId);
+    let baseUrl = window.location.href.split("/admin");
+    return baseUrl[0] + "/w/" + dasherize(wizardId);
   },
 
   @discourseComputed("wizard.after_time_scheduled")
@@ -58,6 +62,19 @@ export default Controller.extend({
     }
     return wizardFieldList(steps);
   },
+
+  @discourseComputed("fieldTypes", "wizard.allowGuests")
+  filteredFieldTypes(fieldTypes) {
+    const fieldTypeIds = fieldTypes.map((f) => f.id);
+    const allowedTypeIds = filterValues(
+      this.wizard,
+      "field",
+      "type",
+      fieldTypeIds
+    );
+    return fieldTypes.filter((f) => allowedTypeIds.includes(f.id));
+  },
+
   getErrorMessage(result) {
     if (result.backend_validation_error) {
       return result.backend_validation_error;
@@ -92,7 +109,11 @@ export default Controller.extend({
       wizard
         .save(opts)
         .then((result) => {
-          this.send("afterSave", result.wizard_id);
+          if (result.wizard_id) {
+            this.send("afterSave", result.wizard_id);
+          } else if (result.errors) {
+            this.set("error", result.errors.join(", "));
+          }
         })
         .catch((result) => {
           this.set("error", this.getErrorMessage(result));
@@ -107,19 +128,13 @@ export default Controller.extend({
     },
 
     setNextSessionScheduled() {
-      let controller = showModal("next-session-scheduled", {
+      this.modal.show(NextSessionScheduledModal, {
         model: {
           dateTime: this.wizard.after_time_scheduled,
           update: (dateTime) =>
             this.set("wizard.after_time_scheduled", dateTime),
         },
       });
-
-      controller.setup();
-    },
-
-    toggleAdvanced() {
-      this.toggleProperty("wizard.showAdvanced");
     },
 
     copyUrl() {

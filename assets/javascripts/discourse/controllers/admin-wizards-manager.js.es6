@@ -7,7 +7,8 @@ import I18n from "I18n";
 import { underscore } from "@ember/string";
 
 export default Controller.extend({
-  messageUrl: "https://thepavilion.io/t/3652",
+  messageUrl:
+    "https://pavilion.tech/products/discourse-custom-wizard-plugin/documentation/wizard-manager",
   messageKey: "info",
   messageIcon: "info-circle",
   messageClass: "info",
@@ -68,7 +69,7 @@ export default Controller.extend({
       file: null,
       filename: null,
     });
-    $("#file-upload").val("");
+    document.getElementById("custom-wizard-file-upload").value = "";
   },
 
   @observes("importing", "destroying")
@@ -83,7 +84,7 @@ export default Controller.extend({
 
   actions: {
     upload() {
-      $("#file-upload").click();
+      document.getElementById("custom-wizard-file-upload").click();
     },
 
     clearFile() {
@@ -102,7 +103,7 @@ export default Controller.extend({
       if (maxFileSize < file.size) {
         this.setMessage("error", "file_size_error");
         this.set("file", null);
-        $("#file-upload").val("");
+        document.getElementById("custom-wizard-file-upload").value = "";
       } else {
         this.setProperties({
           file,

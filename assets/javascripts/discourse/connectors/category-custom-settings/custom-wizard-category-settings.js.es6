@@ -1,9 +1,9 @@
-import CustomWizard from "../../models/custom-wizard";
+import CustomWizardAdmin from "../../models/custom-wizard-admin";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 
 export default {
   setupComponent(attrs, component) {
-    CustomWizard.all()
+    CustomWizardAdmin.all()
       .then((result) => {
         component.set("wizardList", result);
       })

@@ -1,5 +1,5 @@
 import { default as discourseComputed } from "discourse-common/utils/decorators";
-import { alias, equal, or } from "@ember/object/computed";
+import { equal, or } from "@ember/object/computed";
 import { computed } from "@ember/object";
 import { selectKitContent } from "../lib/wizard";
 import UndoChanges from "../mixins/undo-changes";
@@ -27,8 +27,8 @@ export default Component.extend(UndoChanges, {
   isTextType: or("isText", "isTextarea", "isComposer"),
   isComposerPreview: equal("field.type", "composer_preview"),
   categoryPropertyTypes: selectKitContent(["id", "slug"]),
-  showAdvanced: alias("field.type"),
-  messageUrl: "https://thepavilion.io/t/2809",
+  messageUrl:
+    "https://pavilion.tech/products/discourse-custom-wizard-plugin/documentation/field-settings",
 
   @discourseComputed("field.type")
   validations(type) {
@@ -144,11 +144,17 @@ export default Component.extend(UndoChanges, {
 
   actions: {
     imageUploadDone(upload) {
-      this.set("field.image", upload.url);
+      this.setProperties({
+        "field.image": upload.url,
+        "field.image_upload_id": upload.id,
+      });
     },
 
     imageUploadDeleted() {
-      this.set("field.image", null);
+      this.setProperties({
+        "field.image": null,
+        "field.image_upload_id": null,
+      });
     },
   },
 });

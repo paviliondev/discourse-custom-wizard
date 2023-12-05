@@ -30,6 +30,7 @@ class CustomWizard::Mapper
 
   OPERATORS = {
     equal: '==',
+    not_equal: "!=",
     greater: '>',
     less: '<',
     greater_or_equal: '>=',
@@ -44,7 +45,7 @@ class CustomWizard::Mapper
 
   def initialize(params)
     @inputs = params[:inputs] || {}
-    @data = params[:data] || {}
+    @data = params[:data] ? params[:data].with_indifferent_access : {}
     @user = params[:user]
     @opts = params[:opts] || {}
   end
@@ -203,6 +204,8 @@ class CustomWizard::Mapper
   end
 
   def map_user_field(value)
+    return nil unless user
+
     if value.include?(User::USER_FIELD_PREFIX)
       user.custom_fields[value]
     elsif PROFILE_FIELDS.include?(value)
@@ -211,6 +214,8 @@ class CustomWizard::Mapper
       user.send(value)
     elsif USER_OPTION_FIELDS.include?(value)
       user.user_option.send(value)
+    elsif value.include?('avatar')
+      get_avatar_url(value)
     else
       nil
     end
@@ -227,7 +232,7 @@ class CustomWizard::Mapper
   def interpolate(string, opts = { user: true, wizard: true, value: true, template: false })
     return string if string.blank? || string.frozen?
 
-    if opts[:user]
+    if opts[:user] && @user.present?
       string.gsub!(/u\{(.*?)\}/) { |match| map_user_field($1) || '' }
     end
 
@@ -251,7 +256,7 @@ class CustomWizard::Mapper
       end
     end
 
-    if opts[:template]
+    if opts[:template] #&& CustomWizard::Subscription.subscribed?
       template = Liquid::Template.parse(string)
       string = template.render(data)
     end
@@ -263,10 +268,30 @@ class CustomWizard::Mapper
     return nil if data.nil?
     k = keys.shift
     result = data[k]
-    keys.empty? ? result : self.recurse(result, keys)
+
+    if keys.empty?
+      result.is_a?(Hash) ? "" : result
+    else
+      self.recurse(result, keys)
+    end
   end
 
   def bool(value)
     ActiveRecord::Type::Boolean.new.cast(value)
+  end
+
+  def get_avatar_url(value)
+    parts = value.split('.')
+    valid_sizes = Discourse.avatar_sizes.to_a
+
+    if value === 'avatar' || parts.size === 1 || valid_sizes.exclude?(parts.last.to_i)
+      user.small_avatar_url
+    else
+      user.avatar_template_url.gsub("{size}", parts.last)
+    end
+  end
+
+  def self.mapped_value?(value)
+    value.is_a?(Array) && value.all? { |v| v.is_a?(Hash) && v.key?("type") }
   end
 end

@@ -2,51 +2,51 @@ pt:
   admin:
     wizard:
       submission:
-        no_user: "deleted (user_id: %{user_id})"
+        no_user: "excluído (user_id: %{user_id})"
   wizard:
-    custom_title: "Wizard"
+    custom_title: "Assistente"
     custom_field:
       error:
-        required_attribute: "'%{attr}' is a required attribute"
-        unsupported_class: "'%{class}' is not a supported class"
-        unsupported_serializers: "'%{serializers}' are not supported serializers for '%{class}'"
-        unsupported_type: "%{type} is not a supported custom field type"
-        name_invalid: "'%{name}' is not a valid custom field name"
-        name_too_short: "'%{name}' is too short for a custom field name (min length is #{min_length})"
-        name_already_taken: "'%{name}' is already taken as a custom field name"
-        save_default: "Failed to save custom field '%{name}'"
+        required_attribute: "'%{attr}' é um atributo obrigatório"
+        unsupported_class: "'%{class}' não é uma classe suportada"
+        unsupported_serializers: "'%{serializers}' não é suportado serializadores para '%{class}'"
+        unsupported_type: "%{type} não é um tipo de campo personalizado suportado"
+        name_invalid: "'%{name}' não é um nome de campo personalizado válido"
+        name_too_short: "'%{name}' é muito curto para um nome de campo personalizado (comprimento mínimo é #{min_length})"
+        name_already_taken: "'%{name}' já está tomado como um nome de campo personalizado"
+        save_default: "Falha ao salvar o campo personalizado '%{name}'"
     field:
-      too_short: "%{label} must be at least %{min} characters"
-      too_long: "%{label} must not be more than %{max} characters"
-      required: "%{label} is required."
-      not_url: "%{label} must be a valid url"
-      invalid_file: "%{label} must be a %{types}"
-      invalid_date: "Invalid date"
-      invalid_time: "Invalid time"
-    none: "We couldn't find a wizard at that address."
-    no_skip: "Wizard can't be skipped"
+      too_short: "%{label} deve ter pelo menos %{min} caracteres"
+      too_long: "%{label} deve ter pelo menos %{max} caracteres"
+      required: "%{label} é obrigatório."
+      not_url: "%{label} deve ser uma url válida"
+      invalid_file: "%{label} deve ser um %{types}"
+      invalid_date: "Data inválida"
+      invalid_time: "Tempo inválido"
+    none: "Nós não conseguimos encontrar um assistente nesse endereço."
+    no_skip: "Assistente não pode ser ignorado"
     export:
       error:
-        select_one: "Please select at least one valid wizard"
-        invalid_wizards: "No valid wizards selected"
+        select_one: "Por favor, selecione pelo menos um assistente válido"
+        invalid_wizards: "Nenhum assistente válido selecionado"
     import:
       error:
-        no_file: "No file selected"
-        file_large: "File too large"
-        invalid_json: "File is not a valid json file"
+        no_file: "Nenhum arquivo selecionado"
+        file_large: "Arquivo muito grande"
+        invalid_json: "O arquivo não é um arquivo json válido"
     destroy:
       error:
-        no_template: No template found
-        default: Error destroying wizard
+        no_template: Nenhum modelo encontrado
+        default: Erro ao destruir assistente
     validation:
-      required: "%{property} is required"
-      conflict: "Wizard with id '%{wizard_id}' already exists"
-      after_signup: "You can only have one 'after signup' wizard at a time. %{wizard_id} has 'after signup' enabled."
-      after_signup_after_time: "You can't use 'after time' and 'after signup' on the same wizard."
-      after_time: "After time setting is invalid."
-      liquid_syntax_error: "Liquid syntax error in %{attribute}: %{message}"
+      required: "%{property} é obrigatório"
+      conflict: "Assistente com id '%{wizard_id}' já existe"
+      after_signup: "Você só pode ter um assistente 'após a inscrição' por vez. %{wizard_id} tem 'após a inscrição' habilitado."
+      after_signup_after_time: "Você não pode usar 'após tempo' e 'após a inscrição' no mesmo assistente."
+      after_time: "Após a configuração do tempo é inválido."
+      liquid_syntax_error: "Erro de sintaxe Liquid em %{attribute}: %{message}"
   site_settings:
-    custom_wizard_enabled: "Enable custom wizards."
-    wizard_redirect_exclude_paths: "Routes excluded from wizard redirects."
-    wizard_recognised_image_upload_formats: "File types which will result in upload displaying an image preview"
-    wizard_apis_enabled: "Enable API features (experimental)."
+    custom_wizard_enabled: "Ativar assistentes personalizados."
+    wizard_redirect_exclude_paths: "Rotas excluídas dos redirecionamentos do assistente."
+    wizard_recognised_image_upload_formats: "Tipos de arquivo que resultarão no upload exibindo uma visualização da imagem"
+    wizard_apis_enabled: "Habilitar recursos API (experimental)."
