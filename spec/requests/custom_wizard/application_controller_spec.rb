@@ -5,7 +5,6 @@ describe ApplicationController do
   let(:wizard_template) { get_wizard_fixture("wizard") }
 
   before do
-    stub_out_subscription_classes
     CustomWizard::Template.save(wizard_template, skip_jobs: true)
     @template = CustomWizard::Template.find('super_mega_fun_wizard')
   end

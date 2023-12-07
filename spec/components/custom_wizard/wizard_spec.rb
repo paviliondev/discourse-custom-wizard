@@ -10,7 +10,6 @@ describe CustomWizard::Wizard do
   let(:step_json) { get_wizard_fixture("step/step") }
 
   before do
-    stub_out_subscription_classes
     Group.refresh_automatic_group!(:trust_level_3)
     @permitted_template = template_json.dup
     @permitted_template["permitted"] = permitted_json["permitted"]

@@ -7,7 +7,6 @@ describe ExtraLocalesControllerCustomWizard, type: :request do
   let(:permitted) { get_wizard_fixture("wizard/permitted") }
 
   before do
-    stub_out_subscription_classes
     CustomWizard::Template.save(template, skip_jobs: true)
   end
 

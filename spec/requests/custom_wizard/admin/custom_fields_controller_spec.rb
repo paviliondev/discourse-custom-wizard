@@ -5,7 +5,6 @@ describe CustomWizard::AdminCustomFieldsController do
   let(:custom_field_json) { get_wizard_fixture("custom_field/custom_fields") }
 
   before do
-    stub_out_subscription_classes
     custom_field_json['custom_fields'].each do |field_json|
       CustomWizard::CustomField.new(nil, field_json).save
     end

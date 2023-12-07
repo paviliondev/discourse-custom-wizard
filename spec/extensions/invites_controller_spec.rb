@@ -6,7 +6,6 @@ describe InvitesControllerCustomWizard, type: :request do
   let(:template) { get_wizard_fixture("wizard") }
 
   before do
-    stub_out_subscription_classes
     @controller = InvitesController.new
   end
 

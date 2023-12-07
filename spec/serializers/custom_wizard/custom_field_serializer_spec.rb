@@ -4,10 +4,6 @@ describe CustomWizard::CustomFieldSerializer do
   fab!(:user) { Fabricate(:user) }
   let(:custom_field_json) { get_wizard_fixture("custom_field/custom_fields") }
 
-  before do
-    stub_out_subscription_classes
-  end
-
   it 'should return custom field attributes' do
     custom_field_json['custom_fields'].each do |field_json|
       CustomWizard::CustomField.new(nil, field_json).save

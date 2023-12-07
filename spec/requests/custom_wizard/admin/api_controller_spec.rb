@@ -5,7 +5,6 @@ describe CustomWizard::AdminApiController do
   let(:api_json) { get_wizard_fixture("api/api") }
 
   before do
-    stub_out_subscription_classes
     sign_in(admin_user)
   end
 

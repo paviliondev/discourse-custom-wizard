@@ -14,10 +14,6 @@ describe CustomWizard::Subscription do
   }
 
   context "with subscription client gem mocked out" do
-    before do
-      stub_out_subscription_classes
-    end
-
     context "without a subscription" do
       before do
         DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(nil)
@@ -40,9 +36,9 @@ describe CustomWizard::Subscription do
 
       def get_subscription_result(product_ids)
         result = DiscourseSubscriptionClient::Subscriptions::Result.new
-        result.supplier = SubscriptionClientSupplier.new(product_slugs)
+        result.supplier = SubscriptionClientSupplier.new(products: product_slugs)
         result.resource = SubscriptionClientResource.new
-        result.subscriptions = product_ids.map { |product_id| ::SubscriptionClientSubscription.new(product_id) }
+        result.subscriptions = product_ids.map { |product_id| ::SubscriptionClientSubscription.new(product_id: product_id) }
         result.products = product_slugs
         result
       end
