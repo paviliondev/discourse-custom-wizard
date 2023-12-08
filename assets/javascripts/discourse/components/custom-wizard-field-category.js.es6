@@ -3,6 +3,8 @@ import Category from "discourse/models/category";
 import Component from "@ember/component";
 
 export default Component.extend({
+  categories: [],
+
   didInsertElement() {
     const property = this.field.property || "id";
     const value = this.field.value;

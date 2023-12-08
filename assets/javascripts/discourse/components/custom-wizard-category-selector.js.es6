@@ -5,7 +5,7 @@ import { makeArray } from "discourse-common/lib/helpers";
 export default CategorySelector.extend({
   classNames: ["category-selector", "wizard-category-selector"],
   content: computed(
-    "categories.[]",
+    "categoryIds.[]",
     "blacklist.[]",
     "whitelist.[]",
     function () {
