@@ -111,8 +111,6 @@ de:
         key: "Schlüssel"
         value: "Wert"
         profile: "Profil"
-        translation: "Übersetzung"
-        translation_placeholder: "Schlüssel"
         type: "Typ"
         none: "Wähle aus"
         submission_key: 'Einreichungsschlüssel'
@@ -125,6 +123,9 @@ de:
         select_type: "Wähle einen Typ"
         condition: "Bedingung"
         index: "Index"
+        edit_columns: "Edit Columns"
+        expand_text: "Read More"
+        collapse_text: "Show Less"
         category_settings:
           custom_wizard:
             title: "Benutzerdefinierter Assistent"
@@ -156,11 +157,30 @@ de:
             no_file: Bitte wähle eine zu importierende Datei aus
             file_size_error: Die Dateigröße muss 512kb oder kleiner sein
             file_format_error: Die Datei muss eine .json Datei sein
-            server_error: "Fehler: {{message}}"
             importing: Assistenten werden importiert...
             destroying: Zerstöre Assistenten...
             import_complete: Import abgeschlossen
             destroy_complete: Zerstörung abgeschlossen
+          subscription:
+            documentation: Check out the subscription documentation
+            authorize: "Connect this forum to use your Custom Wizard subscription plan on %{server}."
+            not_subscribed: "You've connected, but are not currently subscribed to a Custom Wizard plan on %{server}."
+            subscription_expiring: "Your subscription is active, but will expire in the next 48 hours."
+            subscription_active: "Your subscription is active."
+            subscription_inactive: "Your subscription is inactive on this forum. Read more in <a href='https://pavilion.tech/products/discourse-custom-wizard-plugin/documentation/'>the documentation</a>."
+            unauthorized: "You're not connected. If you have a subscription, it will become inactive in the next 48 hours."
+            unauthorize_failed: Failed to disconnect.
+          submissions:
+            select: "Select a wizard to see its submissions"
+            viewing: "You're viewing the submissions of the %{wizardName}"
+            documentation: "Check out the submissions documentation"
+          logs:
+            select: "Select a wizard to see its logs"
+            viewing: "View recent logs for wizards on the forum"
+            documentation: "Check out the logs documentation"
+          notices:
+            info: "Plugin status and subscription notices"
+            documentation: Check out the notices documentation
         editor:
           show: "Zeigen"
           hide: "Verstecken"
@@ -190,6 +210,8 @@ de:
             list: "Liste"
             custom_field: "benutzerdefiniertes Feld"
             value: "Wert"
+            users: "users"
+            guests: "users and guests"
           placeholder:
             text: "Text eingeben"
             property: "Eigenschaft auswählen"
@@ -246,6 +268,7 @@ de:
           prefill: "Vorausfüllen"
           content: "Inhalt"
           tag_groups: "Tag-Gruppen"
+          can_create_tag: "Can Create Tag"
           date_time_format:
             label: "Format"
             instructions: "<a href='https://momentjs.com/docs/#/displaying/format/' target='_blank'>Moment.js format</a>"
@@ -281,12 +304,14 @@ de:
             date: Datum
             time: Uhrzeit
             date_time: Datum & Uhrzeit
+            event: Event (Events Plugin)
         connector:
           and: "und"
           or: "oder"
           then: "dann"
           set: "setzen"
           equal: '='
+          not_equal: '!='
           greater: '>'
           less: '<'
           greater_or_equal: '>='
@@ -321,6 +346,8 @@ de:
             category: "Kategorie"
             tags: "Tags"
             visible: "Sichtbar"
+            add_event: "Add Event (Events Plugin)"
+            add_location: "Add Location (Locations Plugin)"
           open_composer:
             label: "Editor öffnen"
           update_profile:
@@ -331,16 +358,20 @@ de:
             label: "Kategorien beobachten"
             categories: "Kategorien"
             mute_remainder: "Verbleibende Stummschalten"
+          watch_tags:
+            label: "Watch Tags"
+            tags: "Tags"
+          watch_x:
             notification_level:
-              label: "Benachrichtigungsebene"
+              label: "Notification Level"
               regular: "Normal"
-              watching: "Beobachten"
-              tracking: "Nachverfolgen"
-              watching_first_post: "Ersten Beitrag anschauen"
-              muted: "Stumm"
-            select_a_notification_level: "Ebene auswählen"
-            wizard_user: "Assistenten Benutzer"
-            usernames: "Benutzer"
+              watching: "Watching"
+              tracking: "Tracking"
+              watching_first_post: "Watching First Post"
+              muted: "Muted"
+            select_a_notification_level: "Select level"
+            wizard_user: "Wizard User"
+            usernames: "Users"
           post_builder:
             checkbox: "Beitrags-Ersteller"
             label: "Ersteller"
@@ -419,6 +450,9 @@ de:
           nav_label: "Einreichungen"
           title: "{{name}} Einreichungen"
           download: "Herunterladen"
+          group_id: "Group ID"
+          category_id: "Category ID"
+          composer_preview: "Composer Preview"
         api:
           label: "API"
           nav_label: 'APIs'
@@ -467,8 +501,14 @@ de:
             success_codes: "Erfolgscodes auswählen"
           log:
             label: "Protokolle"
+            clear: clear
         log:
           nav_label: "Protokolle"
+          title: "{{name}} Logs"
+          date: Date
+          action: Action
+          user: User
+          message: Message
         manager:
           nav_label: Manager
           title: Assistenten verwalten
@@ -478,6 +518,37 @@ de:
           upload: Wähle wizards.json aus
           destroy: Zerstören
           destroyed: zerstört
+        subscription:
+          title: Subscriber Features
+          authorize:
+            label: Connect
+            title: Connect your subscription to this site
+          deauthorize:
+            label: Disconnect
+            title: Disconnect your subscription from this site
+          update:
+            title: "Update subscription status"
+          subscribed:
+            label: Subscribed
+            title: You're subscribed and can use these features
+            selector: subscribed
+          not_subscribed:
+            label: Not Subscribed
+            title: Subscribe to use these features
+            selector: not subscribed
+          type:
+            none:
+              label: Subscribe
+              title: There is no Custom Wizard subscription active on this forum.
+            business:
+              label: Support
+              title: There is a Custom Wizard Business subscription active on this forum.
+            standard:
+              label: Support
+              title: There is a Custom Wizard Standard subscription active on this forum.
+            community:
+              label: Support
+              title: There is a Custom Wizard Community subscription active on this forum.
   wizard_js:
     group:
       select: "Wähle eine Gruppe"
