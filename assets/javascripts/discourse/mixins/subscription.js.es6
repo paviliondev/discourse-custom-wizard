@@ -3,7 +3,7 @@ import { getOwner } from "@ember/application";
 import { readOnly } from "@ember/object/computed";
 import discourseComputed from "discourse-common/utils/decorators";
 
-const PRODUCT_PAGE = "https://custom-wizard.pavilion.tech";
+const PRODUCT_PAGE = "https://custom-wizard.pavilion.tech/pricing";
 const SUPPORT_MESSAGE =
   "https://coop.pavilion.tech/new-message?username=support&title=Custom%20Wizard%20Support";
 const MANAGER_CATEGORY =
