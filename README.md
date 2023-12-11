@@ -10,17 +10,12 @@ The Custom Wizard Plugin lets you make forms for your Discourse forum. Better us
 
 If you're not sure how to install a plugin in Discourse, please follow the [plugin installation guide](https://meta.discourse.org/t/install-a-plugin/19157) or contact your Discourse hosting provider.
 
+##  Subscriptions
+You can install the plugin right away and use the basic features. If you need more, we offer [several subscription options](https://custom-wizard.pavilion.tech/pricing), including a community subscription for smaller non-profit and charitable sites. 
+
 ## Documentation
 
-[Read the full documentation here](https://pavilion.tech/products/discourse-custom-wizard-plugin/documentation/), or go directly to the relevant section
-
-- [Wizard Administration](https://coop.pavilion.tech/t/1602)
-- [Wizard Settings](https://coop.pavilion.tech/t/1614)
-- [Step Settings](https://pavilion.tech/products/discourse-custom-wizard-plugin/documentation/step-settings)
-- [Field Settings](https://pavilion.tech/products/discourse-custom-wizard-plugin/documentation/field-settings)
-- [Conditional Settings](https://pavilion.tech/products/discourse-custom-wizard-plugin/documentation/conditional-settings)
-- [Field Interpolation](https://pavilion.tech/products/discourse-custom-wizard-plugin/documentation/field-interpolation)
-- [Handling Dates and Times](https://coop.pavilion.tech/t/1708)
+- [Read the full documentation here](https://coop.pavilion.tech/docs?ascending=true&category=82&order=title)
 
 ## Support
 
