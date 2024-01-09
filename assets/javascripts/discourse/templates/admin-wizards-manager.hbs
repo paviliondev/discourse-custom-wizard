@@ -66,7 +66,9 @@
       {{#each wizards as |wizard|}}
         <tr data-wizard-id={{dasherize wizard.id}}>
           <td>
-            {{#link-to "adminWizardsWizardShow" (dasherize wizard.id)}}
+            {{#link-to
+              route="adminWizardsWizardShow" model=(dasherize wizard.id)
+            }}
               {{wizard.name}}
             {{/link-to}}
           </td>
