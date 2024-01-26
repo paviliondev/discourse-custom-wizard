@@ -144,9 +144,9 @@
   {{/if}}
 
   {{#if isUser}}
-    {{#link-to route="user" model=value.username}}
+    <LinkTo @route="user" @model={{value.username}}>
       {{avatar value imageSize="tiny"}}
-    {{/link-to}}
+    </LinkTo>
   {{/if}}
 
   {{#if showUsername}}

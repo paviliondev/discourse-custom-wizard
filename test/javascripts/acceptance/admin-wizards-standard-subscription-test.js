@@ -2,10 +2,11 @@ import {
   acceptance,
   exists,
   query,
+  queryAll,
   visible,
 } from "discourse/tests/helpers/qunit-helpers";
 import { test } from "qunit";
-import { click, currentURL, fillIn, findAll, visit } from "@ember/test-helpers";
+import { click, currentURL, fillIn, visit } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 import {
   getAdminTestingWizard,
@@ -58,7 +59,7 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
 
   test("Displaying all tabs except API", async (assert) => {
     await visit("/admin/wizards");
-    const list = find(".admin-controls li");
+    const list = queryAll(".admin-controls li");
     const count = list.length;
     assert.equal(count, 5, "There should be 5 admin tabs");
   });
@@ -92,14 +93,15 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
       wizardTitle,
       "The title input is inserted"
     );
-    const wizardLink = find("div.wizard-url a");
+    const wizardLink = queryAll("div.wizard-url a");
     assert.equal(wizardLink.length, 1, "Wizard link was created");
     assert.equal(
-      find(".wizard-subscription-container a:contains('Subscribed')").length,
+      queryAll(".wizard-subscription-container a:contains('Subscribed')")
+        .length,
       1,
       "Wizard subscription features are accesible"
     );
-    const subsFeature = find(
+    const subsFeature = queryAll(
       ".wizard-subscription-container .subscription-settings .setting-value input"
     );
     await click(
@@ -109,7 +111,7 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
     // ("Step 2: Creating a step section")
     await click(".step .link-list button");
     const stepOneText = "step_1 (step_1)";
-    const stepOneBtn = find(`.step button:contains(${stepOneText})`);
+    const stepOneBtn = queryAll(`.step button:contains(${stepOneText})`);
     assert.equal(stepOneBtn.length, 1, "Creating a step");
     const stepTitle = "step title";
     await fillIn(".wizard-custom-step input[name='title']", stepTitle);
@@ -121,7 +123,8 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
       "The step button changes according to title"
     );
     assert.equal(
-      find(".wizard-subscription-container a:contains('Subscribed')").length,
+      queryAll(".wizard-subscription-container a:contains('Subscribed')")
+        .length,
       2,
       "Steps subscription features are accesible"
     );
@@ -132,7 +135,7 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
       "clear button is not rendered"
     );
     const fieldOneText = "step_1_field_1 (step_1_field_1)";
-    const fieldOneBtn = find(`.field button:contains(${fieldOneText})`);
+    const fieldOneBtn = queryAll(`.field button:contains(${fieldOneText})`);
     assert.equal(fieldOneBtn.length, 1, "Creating a field");
     const fieldTitle = "field title";
     await fillIn(".wizard-custom-field input[name='label']", fieldTitle);
@@ -167,14 +170,15 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
       "Text tipe for field correctly selected"
     );
     assert.equal(
-      find(".wizard-subscription-container a:contains('Subscribed')").length,
+      queryAll(".wizard-subscription-container a:contains('Subscribed')")
+        .length,
       3,
       "Field subscription features are accesible"
     );
     // ("Step 4: Creating a action section")
     await click(".action .link-list button");
     const actionOneText = "action_1 (action_1)";
-    const actionOneBtn = find(`.action button:contains(${actionOneText})`);
+    const actionOneBtn = queryAll(`.action button:contains(${actionOneText})`);
     assert.equal(actionOneBtn.length, 1, "Creating an action");
     assert.ok(
       query(
@@ -186,10 +190,10 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
       ".wizard-custom-action .setting-value .select-kit"
     );
     await actionTypeDropdown.expand();
-    const listEnabled = findAll(
+    const listEnabled = queryAll(
       ".wizard-custom-action .setting .setting-value ul li:not(.disabled)"
     );
-    const listDisabled = findAll(
+    const listDisabled = queryAll(
       ".wizard-custom-action .setting .setting-value ul li.disabled"
     );
     assert.ok(
@@ -207,7 +211,7 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
       ),
       "Create type action correctly selected"
     );
-    let listTopicSettings = findAll(
+    let listTopicSettings = queryAll(
       ".admin-wizard-container .wizard-custom-action .setting"
     );
     assert.ok(
@@ -216,7 +220,7 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
     );
     await actionTypeDropdown.expand();
     await actionTypeDropdown.selectRowByValue("send_message");
-    listTopicSettings = findAll(
+    listTopicSettings = queryAll(
       ".admin-wizard-container .wizard-custom-action .setting"
     );
     assert.ok(
@@ -225,7 +229,7 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
     );
     await actionTypeDropdown.expand();
     await actionTypeDropdown.selectRowByValue("watch_categories");
-    listTopicSettings = findAll(
+    listTopicSettings = queryAll(
       ".admin-wizard-container .wizard-custom-action .setting"
     );
     assert.ok(
@@ -234,7 +238,7 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
     );
     await actionTypeDropdown.expand();
     await actionTypeDropdown.selectRowByValue("add_to_group");
-    listTopicSettings = findAll(
+    listTopicSettings = queryAll(
       ".admin-wizard-container .wizard-custom-action .setting"
     );
     assert.ok(
