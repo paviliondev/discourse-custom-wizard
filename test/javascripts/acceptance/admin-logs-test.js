@@ -1,6 +1,10 @@
-import { acceptance, query } from "discourse/tests/helpers/qunit-helpers";
+import {
+  acceptance,
+  query,
+  queryAll,
+} from "discourse/tests/helpers/qunit-helpers";
 import { test } from "qunit";
-import { click, findAll, visit } from "@ember/test-helpers";
+import { click, visit } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 import {
   getSuppliers,
@@ -55,19 +59,19 @@ acceptance("Admin | Logs", function (needs) {
       ),
       "it displays logs for a selected wizard"
     );
-    assert.ok(find("table"));
-    assert.ok(findAll("table tbody tr").length === 2, "Displays logs list");
+    assert.ok(queryAll("table"));
+    assert.ok(queryAll("table tbody tr").length === 2, "Displays logs list");
 
     await click(".refresh.btn");
-    assert.ok(find("table"));
+    assert.ok(queryAll("table"));
     assert.ok(
-      findAll("table tbody tr").length === 2,
+      queryAll("table tbody tr").length === 2,
       "Refresh button works correctly"
     );
 
     await wizards.expand();
     await click('[data-name="Select a wizard"]');
-    const wizardContainerDiv = find(".admin-wizard-container");
+    const wizardContainerDiv = queryAll(".admin-wizard-container");
     assert.ok(wizardContainerDiv.children().length === 0, "the div is empty");
   });
 });

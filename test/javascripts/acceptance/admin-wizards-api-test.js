@@ -1,4 +1,8 @@
-import { acceptance, query } from "discourse/tests/helpers/qunit-helpers";
+import {
+  acceptance,
+  query,
+  queryAll,
+} from "discourse/tests/helpers/qunit-helpers";
 import { test } from "qunit";
 import { click, currentURL, fillIn, visit } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
@@ -53,7 +57,7 @@ acceptance("Admin | API tab", function (needs) {
 
   test("Visit API tab and fill data", async function (assert) {
     await visit("/admin/wizards/api");
-    const list = find(".admin-controls li");
+    const list = queryAll(".admin-controls li");
     const count = list.length;
     assert.equal(count, 6, "There should be 6 admin tabs");
 

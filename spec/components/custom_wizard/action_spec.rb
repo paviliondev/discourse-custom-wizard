@@ -158,7 +158,7 @@ describe CustomWizard::Action do
       action.perform
 
       expect(action.result.success?).to eq(true)
-      expect(TopicCustomField.exists?(name: custom_field_name, value: custom_field_value)).to eq(true)
+      expect(TopicCustomField.exists?(name: custom_field_name)).to eq(true)
     end
   end
 

@@ -2,10 +2,11 @@ import {
   acceptance,
   exists,
   query,
+  queryAll,
   visible,
 } from "discourse/tests/helpers/qunit-helpers";
 import { test } from "qunit";
-import { click, currentURL, fillIn, findAll, visit } from "@ember/test-helpers";
+import { click, currentURL, fillIn, visit } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 import {
   getAdminTestingWizard,
@@ -71,7 +72,7 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
 
   test("Displaying all tabs except API", async (assert) => {
     await visit("/admin/wizards");
-    const list = find(".admin-controls li");
+    const list = queryAll(".admin-controls li");
     const count = list.length;
     assert.equal(count, 5, "There should be 5 admin tabs");
   });
@@ -104,7 +105,7 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
       wizardTitle,
       "The title input is inserted"
     );
-    const wizardLink = find("div.wizard-url a");
+    const wizardLink = queryAll("div.wizard-url a");
     assert.equal(wizardLink.length, 1, "Wizard link was created");
     await click(".btn-after-time");
     assert.ok(
@@ -122,13 +123,13 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
       "Show messsage and link of user not subscribed"
     );
     assert.equal(
-      find(".wizard-subscription-container").length,
+      queryAll(".wizard-subscription-container").length,
       1,
       "Wizard subscription features are not accesible"
     );
     await click(".step .link-list button");
     const stepOneText = "step_1 (step_1)";
-    const stepOneBtn = find(`.step button:contains(${stepOneText})`);
+    const stepOneBtn = queryAll(`.step button:contains(${stepOneText})`);
     assert.equal(stepOneBtn.length, 1, "Creating a step");
     const stepTitle = "step title";
     await fillIn(".wizard-custom-step input[name='title']", stepTitle);
@@ -140,7 +141,7 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
       "The step button changes according to title"
     );
     assert.equal(
-      find(".wizard-subscription-container").length,
+      queryAll(".wizard-subscription-container").length,
       2,
       "Steps subscription features are not accesible"
     );
@@ -209,7 +210,7 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
       ".wizard-custom-step .wizard-text-editor textarea",
       `\n\n* List item\n* List item`
     );
-    let listItems = findAll(
+    let listItems = queryAll(
       ".wizard-custom-step .wizard-text-editor .d-editor-preview-wrapper ul li"
     );
     assert.strictEqual(
@@ -231,7 +232,7 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
       ".wizard-custom-step .wizard-text-editor textarea",
       `\n\n1. List item\n1. List item`
     );
-    let orderedListItems = findAll(
+    let orderedListItems = queryAll(
       ".wizard-custom-step .wizard-text-editor .d-editor-preview-wrapper ol li"
     );
     assert.strictEqual(
@@ -308,7 +309,7 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
       "clear button is not rendered"
     );
     const fieldOneText = "step_1_field_1 (step_1_field_1)";
-    const fieldOneBtn = find(`.field button:contains(${fieldOneText})`);
+    const fieldOneBtn = queryAll(`.field button:contains(${fieldOneText})`);
     assert.equal(fieldOneBtn.length, 1, "Creating a field");
     const fieldTitle = "field title";
     await fillIn(".wizard-custom-field input[name='label']", fieldTitle);
@@ -352,13 +353,13 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
       "Text tipe for field correctly selected"
     );
     assert.equal(
-      find(".wizard-subscription-container").length,
+      queryAll(".wizard-subscription-container").length,
       3,
       "Field subscription features are not accesible"
     );
     await click(".action .link-list button");
     const actionOneText = "action_1 (action_1)";
-    const actionOneBtn = find(`.action button:contains(${actionOneText})`);
+    const actionOneBtn = queryAll(`.action button:contains(${actionOneText})`);
     assert.equal(actionOneBtn.length, 1, "Creating an action");
     assert.ok(
       query(
@@ -370,10 +371,10 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
       ".wizard-custom-action .setting-value .select-kit"
     );
     await actionTypeDropdown.expand();
-    const listEnabled = findAll(
+    const listEnabled = queryAll(
       ".wizard-custom-action .setting .setting-value ul li:not(.disabled)"
     );
-    const listDisabled = findAll(
+    const listDisabled = queryAll(
       ".wizard-custom-action .setting .setting-value ul li.disabled"
     );
     assert.ok(
@@ -391,7 +392,7 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
       ),
       "Create type action correctly selected"
     );
-    let listTopicSettings = findAll(
+    let listTopicSettings = queryAll(
       ".admin-wizard-container .wizard-custom-action .setting"
     );
     assert.ok(
@@ -400,7 +401,7 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
     );
     await actionTypeDropdown.expand();
     await actionTypeDropdown.selectRowByValue("open_composer");
-    listTopicSettings = findAll(
+    listTopicSettings = queryAll(
       ".admin-wizard-container .wizard-custom-action .setting"
     );
     assert.ok(
@@ -409,7 +410,7 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
     );
     await actionTypeDropdown.expand();
     await actionTypeDropdown.selectRowByValue("update_profile");
-    listTopicSettings = findAll(
+    listTopicSettings = queryAll(
       ".admin-wizard-container .wizard-custom-action .setting"
     );
     assert.ok(
@@ -418,7 +419,7 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
     );
     await actionTypeDropdown.expand();
     await actionTypeDropdown.selectRowByValue("route_to");
-    listTopicSettings = findAll(
+    listTopicSettings = queryAll(
       ".admin-wizard-container .wizard-custom-action .setting"
     );
     assert.ok(
@@ -427,7 +428,7 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
     );
     await actionTypeDropdown.expand();
     await click('[data-name="Select a type"]');
-    listTopicSettings = findAll(
+    listTopicSettings = queryAll(
       ".admin-wizard-container .wizard-custom-action .setting"
     );
     assert.ok(
