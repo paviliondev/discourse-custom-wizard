@@ -1,10 +1,11 @@
 import {
   acceptance,
   query,
+  queryAll,
   visible,
 } from "discourse/tests/helpers/qunit-helpers";
 import { test } from "qunit";
-import { click, fillIn, findAll, visit, waitUntil } from "@ember/test-helpers";
+import { click, fillIn, visit, waitUntil } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 import {
   getCustomFields,
@@ -93,9 +94,9 @@ acceptance("Admin | Custom Fields Unsubscribed", function (needs) {
 
   test("Navigate to custom fields tab", async (assert) => {
     await visit("/admin/wizards/custom-fields");
-    assert.ok(find("table"));
+    assert.ok(query("table"));
     assert.ok(
-      findAll("table tbody tr").length === 4,
+      queryAll("table tbody tr").length === 4,
       "Display loaded custom fields"
     );
     assert.ok(
@@ -124,10 +125,10 @@ acceptance("Admin | Custom Fields Unsubscribed", function (needs) {
       '.admin-wizard-container details:has(summary[name="Filter by: Select a class"])'
     );
     await dropdown1.expand();
-    let enabledOptions1 = findAll(
+    let enabledOptions1 = queryAll(
       '.admin-wizard-container details:has(summary[name="Filter by: Select a class"]) ul li:not(.disabled)'
     );
-    let disabledOptions1 = findAll(
+    let disabledOptions1 = queryAll(
       '.admin-wizard-container details:has(summary[name="Filter by: Select a class"]) ul li.disabled'
     );
     assert.equal(
@@ -144,10 +145,10 @@ acceptance("Admin | Custom Fields Unsubscribed", function (needs) {
       '.admin-wizard-container details:has(summary[name="Filter by: Select a type"])'
     );
     await dropdown2.expand();
-    let enabledOptions2 = findAll(
+    let enabledOptions2 = queryAll(
       '.admin-wizard-container details:has(summary[name="Filter by: Select a type"]) ul li:not(.disabled)'
     );
-    let disabledOptions2 = findAll(
+    let disabledOptions2 = queryAll(
       '.admin-wizard-container details:has(summary[name="Filter by: Select a type"]) ul li.disabled'
     );
     assert.equal(
@@ -174,7 +175,7 @@ acceptance("Admin | Custom Fields Unsubscribed", function (needs) {
       ".admin-wizard-container details.multi-select"
     );
     await serializerDropdown.expand();
-    let enabledOptions1 = findAll(
+    let enabledOptions1 = queryAll(
       ".admin-wizard-container details.multi-select ul li"
     );
     assert.equal(
@@ -189,7 +190,7 @@ acceptance("Admin | Custom Fields Unsubscribed", function (needs) {
     await dropdown2.expand();
     await click('.select-kit-collection li[data-value="post"]');
     await serializerDropdown.expand();
-    let enabledOptions2 = findAll(
+    let enabledOptions2 = queryAll(
       ".admin-wizard-container details.multi-select ul li"
     );
     assert.equal(
@@ -202,7 +203,7 @@ acceptance("Admin | Custom Fields Unsubscribed", function (needs) {
   test("Create Topic and Post custom fields", async (assert) => {
     await visit("/admin/wizards/custom-fields");
     assert.ok(
-      findAll("table tbody tr").length === 4,
+      queryAll("table tbody tr").length === 4,
       "Display loaded custom fields"
     );
     await click(".admin-wizard-controls .btn-icon-text");
@@ -267,7 +268,7 @@ acceptance("Admin | Custom Fields Unsubscribed", function (needs) {
       "Post custom field name is displayed"
     );
     assert.ok(
-      findAll("table tbody tr").length === 6,
+      queryAll("table tbody tr").length === 6,
       "Display added custom fields"
     );
   });
@@ -330,7 +331,7 @@ acceptance("Admin | Custom Fields Unsubscribed", function (needs) {
   test("Delete Topic custom field", async (assert) => {
     await visit("/admin/wizards/custom-fields");
     assert.ok(
-      findAll("table tbody tr").length === 4,
+      queryAll("table tbody tr").length === 4,
       "Display loaded custom fields"
     );
     await click(".admin-wizard-controls .btn-icon-text");
@@ -349,13 +350,13 @@ acceptance("Admin | Custom Fields Unsubscribed", function (needs) {
     await click(".actions .save");
     await waitForSaveMessage();
     assert.ok(
-      findAll("table tbody tr").length === 5,
+      queryAll("table tbody tr").length === 5,
       "Display added custom fields"
     );
     await click(".admin-wizard-container tbody tr:first-child button");
     await click(".actions .destroy");
     assert.ok(
-      findAll("table tbody tr").length === 4,
+      queryAll("table tbody tr").length === 4,
       "Display custom fields without deleted fields"
     );
   });
