@@ -9,7 +9,8 @@
         label="refresh"
         icon="sync"
         action=(action "refresh")
-        class="refresh"}}
+        class="refresh"
+      }}
     </div>
   </div>
 
@@ -31,7 +32,10 @@
             {{#each logs as |log|}}
               <tr>
                 {{#each-in log as |field value|}}
-                  <td class="small">{{wizard-table-field field=field value=value}}</td>
+                  <td class="small">{{wizard-table-field
+                      field=field
+                      value=value
+                    }}</td>
                 {{/each-in}}
               </tr>
             {{/each}}

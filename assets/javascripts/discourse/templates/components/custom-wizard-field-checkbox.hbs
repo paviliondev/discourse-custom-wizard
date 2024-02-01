@@ -1,1 +1,7 @@
-{{input type="checkbox" id=field.id checked=field.value tabindex=field.tabindex}}
+<Input
+  id={{this.field.id}}
+  @type="checkbox"
+  @checked={{this.field.value}}
+  tabindex={{this.field.tabindex}}
+  class={{this.fieldClass}}
+/>

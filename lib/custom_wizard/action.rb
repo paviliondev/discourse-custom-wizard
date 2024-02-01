@@ -6,6 +6,14 @@ class CustomWizard::Action
                 :guardian,
                 :result
 
+  REQUIRES_USER = %w[
+    create_topic
+    update_profile
+    open_composer
+    watch_categories
+    add_to_group
+  ]
+
   def initialize(opts)
     @wizard = opts[:wizard]
     @action = opts[:action]
@@ -17,6 +25,12 @@ class CustomWizard::Action
   end
 
   def perform
+    if REQUIRES_USER.include?(action['id']) && !@user
+      log_error("action requires user", "id: #{action['id']};")
+      @result.success = false
+      return @result
+    end
+
     ActiveRecord::Base.transaction do
       self.send(action['type'].to_sym)
     end
@@ -76,7 +90,6 @@ class CustomWizard::Action
   end
 
   def send_message
-
     if action['required'].present?
       required = CustomWizard::Mapper.new(
         inputs: action['required'],
@@ -123,13 +136,14 @@ class CustomWizard::Action
 
       params[:archetype] = Archetype.private_message
 
-      creator = PostCreator.new(user, params)
+      poster = user || Discourse.system_user
+      creator = PostCreator.new(poster, params)
       post = creator.create
 
       if creator.errors.present?
         messages = creator.errors.full_messages.join(" ")
         log_error("failed to create message", messages)
-      elsif action['skip_redirect'].blank?
+      elsif user && action['skip_redirect'].blank?
         @submission.redirect_on_complete = post.topic.url
       end
 
@@ -442,11 +456,16 @@ class CustomWizard::Action
 
       if new_group_params[:usernames].present?
         user_ids = get_user_ids(new_group_params[:usernames])
+        if user_ids.count < new_group_params[:usernames].count
+          log_error("Warning, group creation: some users were not found!")
+        end
         user_ids -= owner_ids if owner_ids
         user_ids.each { |user_id| group.group_users.build(user_id: user_id) }
       end
 
-      log_success("Group created", group.name)
+      if group.save
+        log_success("Group created", group.name)
+      end
 
       result.output = group.name
     else
@@ -809,10 +828,12 @@ class CustomWizard::Action
   end
 
   def save_log
+    username = user ? user.username : @wizard.actor_id
+
     CustomWizard::Log.create(
       @wizard.id,
       action['type'],
-      user.username,
+      username,
       @log.join('; ')
     )
   end

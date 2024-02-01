@@ -6,7 +6,7 @@ export default {
   submission_last_updated_at: "2022-03-15T21:11:01+01:00",
   theme_id: 2,
   required: false,
-  permitted: true,
+  permitted: false,
   uncategorized_category_id: 1,
   categories: [],
   subscribed: false,

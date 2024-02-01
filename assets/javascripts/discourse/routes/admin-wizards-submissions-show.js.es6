@@ -8,6 +8,12 @@ export default DiscourseRoute.extend({
     return CustomWizardAdmin.submissions(params.wizardId);
   },
 
+  afterModel(model) {
+    if (model === null) {
+      return this.transitionTo("adminWizardsSubmissions");
+    }
+  },
+
   setupController(controller, model) {
     const { fields, submissions } = formatModel(model);
 

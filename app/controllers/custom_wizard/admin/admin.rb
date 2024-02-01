@@ -8,7 +8,7 @@ class CustomWizard::AdminController < ::Admin::AdminController
       subscribed: subcription.subscribed?,
       subscription_type: subcription.type,
       subscription_attributes: CustomWizard::Subscription.attributes,
-      subscription_client_installed: subcription.client_installed?
+      subscription_client_installed: CustomWizard::Subscription.client_installed?
     )
   end
 

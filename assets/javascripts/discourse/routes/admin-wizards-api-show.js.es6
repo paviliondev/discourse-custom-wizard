@@ -10,6 +10,12 @@ export default DiscourseRoute.extend({
     }
   },
 
+  afterModel(model) {
+    if (model === null) {
+      return this.transitionTo("adminWizardsApi");
+    }
+  },
+
   setupController(controller, model) {
     controller.set("api", model);
   },

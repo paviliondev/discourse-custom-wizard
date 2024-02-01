@@ -1,6 +1,7 @@
 import { findCustomWizard, updateCachedWizard } from "../models/custom-wizard";
 import I18n from "I18n";
 import DiscourseRoute from "discourse/routes/discourse";
+import bootbox from "bootbox";
 
 export default DiscourseRoute.extend({
   titleToken() {

@@ -195,6 +195,21 @@
       ]
     }
   ],
+  "not_equals_pair": [
+    {
+      "type": "validation",
+      "pairs": [
+        {
+          "index": 0,
+          "key": "trust_level",
+          "key_type": "user_field",
+          "value": "1",
+          "value_type": "text",
+          "connector": "not_equal"
+        }
+      ]
+    }
+  ],
   "greater_than_pair": [
     {
       "type": "validation",

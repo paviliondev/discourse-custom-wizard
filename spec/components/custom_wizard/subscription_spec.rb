@@ -1,28 +1,24 @@
 # frozen_string_literal: true
 
 describe CustomWizard::Subscription do
-  def undefine_client_classes
-    Object.send(:remove_const, :SubscriptionClient) if Object.constants.include?(:SubscriptionClient)
-    Object.send(:remove_const, :SubscriptionClientSubscription) if Object.constants.include?(:SubscriptionClientSubscription)
-  end
-
-  def define_client_classes
-    load File.expand_path("#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/subscription_client.rb", __FILE__)
-  end
-
-  def stub_client_methods
-    [:active, :where, :order, :first].each do |method|
-      SubscriptionClientSubscription.stubs(method)
-        .returns(SubscriptionClientSubscription)
-    end
-    SubscriptionClientSubscription.stubs(:product_id).returns(SecureRandom.hex(8))
-  end
+  let(:guests_permitted) { get_wizard_fixture("wizard/guests_permitted") }
+  let!(:business_product_id) { SecureRandom.hex(8) }
+  let!(:standard_product_id) { SecureRandom.hex(8) }
+  let!(:community_product_id) { SecureRandom.hex(8) }
+  let!(:product_slugs) {
+    {
+      "#{business_product_id}" => "business",
+      "#{standard_product_id}" => "standard",
+      "#{community_product_id}" => "community"
+    }
+  }
 
   after do
     undefine_client_classes
   end
 
   it "detects the subscription client" do
+    undefine_client_classes
     expect(described_class.client_installed?).to eq(false)
   end
 
@@ -40,7 +36,7 @@ describe CustomWizard::Subscription do
       expect(described_class.includes?(:wizard, :after_signup, true)).to eq(true)
     end
 
-    it "ubscriber features are not included" do
+    it "subscriber features are not included" do
       expect(described_class.includes?(:wizard, :permitted, {})).to eq(false)
     end
   end
@@ -48,7 +44,6 @@ describe CustomWizard::Subscription do
   context "with subscription client" do
     before do
       define_client_classes
-      stub_client_methods
     end
 
     it "detects the subscription client" do
@@ -56,6 +51,10 @@ describe CustomWizard::Subscription do
     end
 
     context "without a subscription" do
+      before do
+        DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(nil)
+      end
+
       it "has none type" do
         expect(described_class.type).to eq(:none)
       end
@@ -69,49 +68,106 @@ describe CustomWizard::Subscription do
       end
     end
 
-    context "with standard subscription" do
-      before do
-        SubscriptionClientSubscription.stubs(:product_id).returns(CustomWizard::Subscription::STANDARD_PRODUCT_ID)
+    context "with subscriptions" do
+      def get_subscription_result(product_ids)
+        result = DiscourseSubscriptionClient::Subscriptions::Result.new
+        result.supplier = SubscriptionClientSupplier.new(product_slugs)
+        result.resource = SubscriptionClientResource.new
+        result.subscriptions = product_ids.map { |product_id| SubscriptionClientSubscription.new(product_id) }
+        result.products = product_slugs
+        result
+      end
+      let!(:business_subscription_result) { get_subscription_result([business_product_id]) }
+      let!(:standard_subscription_result) { get_subscription_result([standard_product_id]) }
+      let!(:community_subscription_result) { get_subscription_result([community_product_id]) }
+      let!(:multiple_subscription_result) { get_subscription_result([community_product_id, business_product_id]) }
+
+      it "handles mapped values" do
+        DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(standard_subscription_result)
+        expect(described_class.includes?(:wizard, :permitted, guests_permitted["permitted"])).to eq(true)
+
+        DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(community_subscription_result)
+        expect(described_class.includes?(:wizard, :permitted, guests_permitted["permitted"])).to eq(false)
       end
 
-      it "detects standard type" do
-        expect(described_class.type).to eq(:standard)
+      context "with a standard subscription" do
+        before do
+          DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(standard_subscription_result)
+        end
+
+        it "detects standard type" do
+          expect(described_class.type).to eq(:standard)
+        end
+
+        it "standard features are included" do
+          expect(described_class.includes?(:wizard, :type, 'send_message')).to eq(true)
+        end
+
+        it "business features are not included" do
+          expect(described_class.includes?(:action, :type, 'create_category')).to eq(false)
+        end
       end
 
-      it "standard features are included" do
-        expect(described_class.includes?(:wizard, :type, 'send_message')).to eq(true)
+      context "with a business subscription" do
+        before do
+          DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(business_subscription_result)
+        end
+
+        it "detects business type" do
+          expect(described_class.type).to eq(:business)
+        end
+
+        it "business features are included" do
+          expect(described_class.includes?(:action, :type, 'create_category')).to eq(true)
+        end
       end
 
-      it "business features are not included" do
-        expect(described_class.includes?(:action, :type, 'create_category')).to eq(false)
+      context "with a community subscription" do
+        before do
+          DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(community_subscription_result)
+        end
+
+        it "detects community type" do
+          expect(described_class.type).to eq(:community)
+        end
+
+        it "community features are included" do
+          expect(described_class.includes?(:action, :type, 'create_category')).to eq(true)
+        end
+      end
+
+      context "with multiple subscriptions" do
+        before do
+          DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(multiple_subscription_result)
+        end
+
+        it "detects correct type in hierarchy" do
+          expect(described_class.type).to eq(:business)
+        end
       end
     end
+  end
 
-    context "with business subscription" do
+  context "with environment variable" do
+    before do
+      ENV["CUSTOM_WIZARD_PRODUCT_SLUG"] = "standard"
+    end
+
+    after do
+      ENV["CUSTOM_WIZARD_PRODUCT_SLUG"] = nil
+    end
+
+    it "enables the relevant subscription" do
+      expect(described_class.type).to eq(:standard)
+    end
+
+    context "with a subscription" do
       before do
-        SubscriptionClientSubscription.stubs(:product_id).returns(CustomWizard::Subscription::BUSINESS_PRODUCT_ID)
+        enable_subscription("business")
       end
 
-      it "detects business type" do
+      it "respects the subscription" do
         expect(described_class.type).to eq(:business)
-      end
-
-      it "business features are included" do
-        expect(described_class.includes?(:action, :type, 'create_category')).to eq(true)
-      end
-    end
-
-    context "with community subscription" do
-      before do
-        SubscriptionClientSubscription.stubs(:product_id).returns(CustomWizard::Subscription::COMMUNITY_PRODUCT_ID)
-      end
-
-      it "detects community type" do
-        expect(described_class.type).to eq(:community)
-      end
-
-      it "community features are included" do
-        expect(described_class.includes?(:action, :type, 'create_category')).to eq(true)
       end
     end
   end

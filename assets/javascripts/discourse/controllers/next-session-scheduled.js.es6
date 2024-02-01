@@ -5,7 +5,10 @@ export default Controller.extend({
   title: "admin.wizard.after_time_modal.title",
 
   setup() {
-    this.set("bufferedDateTime", moment(this.model.dateTime));
+    this.set(
+      "bufferedDateTime",
+      this.model.dateTime ? moment(this.model.dateTime) : moment(Date.now())
+    );
   },
 
   @discourseComputed("bufferedDateTime")

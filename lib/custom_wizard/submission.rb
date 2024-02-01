@@ -7,8 +7,6 @@ class CustomWizard::Submission
   META ||= %w(updated_at submitted_at route_to redirect_on_complete redirect_to)
 
   attr_reader :id,
-              :user,
-              :user_id,
               :wizard
 
   attr_accessor :fields,
@@ -18,15 +16,8 @@ class CustomWizard::Submission
     class_eval { attr_accessor attr }
   end
 
-  def initialize(wizard, data = {}, user_id = nil)
+  def initialize(wizard, data = {})
     @wizard = wizard
-    @user_id = user_id
-
-    if user_id
-      @user = User.find_by(id: user_id)
-    else
-      @user = wizard.user
-    end
 
     data = (data || {}).with_indifferent_access
     @id = data['id'] || SecureRandom.hex(12)
@@ -44,13 +35,13 @@ class CustomWizard::Submission
     return nil unless wizard.save_submissions
     validate
 
-    submission_list = self.class.list(wizard, user_id: user.id)
+    submission_list = self.class.list(wizard)
     submissions = submission_list.submissions.select { |submission| submission.id != self.id }
     self.updated_at = Time.now.iso8601
     submissions.push(self)
 
     submission_data = submissions.map { |submission| data_to_save(submission)  }
-    PluginStore.set("#{wizard.id}_#{KEY}", user.id, submission_data)
+    PluginStore.set("#{wizard.id}_#{KEY}", wizard.actor_id, submission_data)
   end
 
   def validate
@@ -93,25 +84,25 @@ class CustomWizard::Submission
     data
   end
 
-  def self.get(wizard, user_id)
-    data = PluginStore.get("#{wizard.id}_#{KEY}", user_id).last
-    new(wizard, data, user_id)
+  def submitted?
+    !!submitted_at
+  end
+
+  def self.get(wizard)
+    data = PluginStore.get("#{wizard.id}_#{KEY}", wizard.actor_id).last
+    new(wizard, data)
   end
 
   def remove
     if present?
-      user_id = @user.id
-      wizard_id = @wizard.id
-      submission_id = @id
-      data = PluginStore.get("#{wizard_id}_#{KEY}", user_id)
-      data.delete_if { |sub| sub["id"] == submission_id }
-      PluginStore.set("#{wizard_id}_#{KEY}", user_id, data)
+      data = PluginStore.get("#{@wizard.id}_#{KEY}", wizard.actor_id)
+      data.delete_if { |sub| sub["id"] == @id }
+      PluginStore.set("#{@wizard.id}_#{KEY}", wizard.actor_id, data)
     end
   end
 
   def self.cleanup_incomplete_submissions(wizard)
-    user_id = wizard.user.id
-    all_submissions = list(wizard, user_id: user_id)
+    all_submissions = list(wizard)
     sorted_submissions = all_submissions.submissions.sort_by do |submission|
       zero_epoch_time = DateTime.strptime("0", '%s')
       [
@@ -129,20 +120,27 @@ class CustomWizard::Submission
     end
 
     valid_data = valid_submissions.map { |submission| submission.data_to_save(submission) }
-    PluginStore.set("#{wizard.id}_#{KEY}", user_id, valid_data)
+    PluginStore.set("#{wizard.id}_#{KEY}", wizard.actor_id, valid_data)
   end
 
-  def self.list(wizard, user_id: nil, order_by: nil, page: nil)
+  def self.list(wizard, order_by: nil, page: nil)
+    list_actor_id = wizard.actor_id
+    list_user = wizard.user if wizard.user.present?
+
     params = { plugin_name: "#{wizard.id}_#{KEY}" }
-    params[:key] = user_id if user_id.present?
+    params[:key] = list_actor_id if list_actor_id
 
     query = PluginStoreRow.where(params)
     result = OpenStruct.new(submissions: [], total: nil)
 
     query.each do |record|
       if (submission_data = ::JSON.parse(record.value)).any?
+        submission_user = list_user || User.find_by(id: record.key.to_i)
+
         submission_data.each do |data|
-          result.submissions.push(new(wizard, data, record.key))
+          _wizard = wizard.clone
+          _wizard.user = submission_user if submission_user.present?
+          result.submissions.push(new(_wizard, data))
         end
       end
     end

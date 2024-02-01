@@ -140,7 +140,7 @@ class ::CustomWizard::CustomField
   end
 
   def self.cached_list
-    ::CustomWizard::Cache.wrap(LIST_CACHE_KEY) do
+    @custom_wizard_cached_fields ||= ::CustomWizard::Cache.wrap(LIST_CACHE_KEY) do
       PluginStoreRow.where(plugin_name: NAMESPACE).map do |record|
         create_from_store(record).as_json.with_indifferent_access
       end
@@ -216,6 +216,7 @@ class ::CustomWizard::CustomField
   end
 
   def self.invalidate_cache
+    @custom_wizard_cached_fields = nil
     CustomWizard::Cache.new(LIST_CACHE_KEY).delete
     Discourse.clear_readonly!
     Discourse.request_refresh!
