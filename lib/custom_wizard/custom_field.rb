@@ -234,16 +234,16 @@ class ::CustomWizard::CustomField
     external = []
 
     CLASSES.keys.each do |klass|
-      field_types = klass.to_s.classify.constantize.custom_field_types
+      meta_data = klass.to_s.classify.constantize.send('custom_field_meta_data')
 
-      if field_types.present?
-        field_types.each do |name, type|
+      if meta_data.present?
+        meta_data.each do |name, data|
           unless list.any? { |field| field.name === name }
             field = new(
               'external',
               name: name,
               klass: klass,
-              type: type
+              type: data.type
             )
             external.push(field)
           end

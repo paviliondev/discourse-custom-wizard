@@ -41,7 +41,8 @@ export default Component.extend(UndoChanges, {
     };
   }),
 
-  messageUrl: "https://discourse.pluginmanager.org/t/action-settings",
+  messageUrl:
+    "https://pavilion.tech/products/discourse-custom-wizard-plugin/documentation/action-settings",
 
   @discourseComputed("action.type")
   messageKey(type) {

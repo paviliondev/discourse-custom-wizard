@@ -4,8 +4,11 @@ import EmberObject, { set } from "@ember/object";
 import { A } from "@ember/array";
 import { all } from "rsvp";
 import { ajax } from "discourse/lib/ajax";
+import { inject as service } from "@ember/service";
 
 export default DiscourseRoute.extend({
+  router: service(),
+
   model() {
     return ajax("/admin/wizards/wizard");
   },
@@ -80,14 +83,14 @@ export default DiscourseRoute.extend({
       this.controllerFor("adminWizardsWizard").set("wizardId", wizardId);
 
       if (wizardId) {
-        this.transitionTo("adminWizardsWizardShow", wizardId);
+        this.router.transitionTo("adminWizardsWizardShow", wizardId);
       } else {
-        this.transitionTo("adminWizardsWizard");
+        this.router.transitionTo("adminWizardsWizard");
       }
     },
 
     afterDestroy() {
-      this.transitionTo("adminWizardsWizard").then(() => this.refresh());
+      this.router.transitionTo("adminWizardsWizard").then(() => this.refresh());
     },
 
     afterSave(wizardId) {
@@ -96,7 +99,7 @@ export default DiscourseRoute.extend({
 
     createWizard() {
       this.controllerFor("adminWizardsWizard").set("wizardId", "create");
-      this.transitionTo("adminWizardsWizardShow", "create");
+      this.router.transitionTo("adminWizardsWizardShow", "create");
     },
   },
 });

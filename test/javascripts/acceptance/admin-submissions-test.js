@@ -1,9 +1,14 @@
-import { acceptance, query } from "discourse/tests/helpers/qunit-helpers";
+import {
+  acceptance,
+  query,
+  queryAll,
+} from "discourse/tests/helpers/qunit-helpers";
 import { test } from "qunit";
-import { click, findAll, visit } from "@ember/test-helpers";
+import { click, visit } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 import {
   getAnotherWizardSubmission,
+  getSuppliers,
   getUnsubscribedAdminWizards,
   getWizard,
   getWizardSubmissions,
@@ -28,11 +33,14 @@ acceptance("Admin | Submissions", function (needs) {
     server.get("/admin/wizards/submissions/another_wizard", () => {
       return helper.response(getAnotherWizardSubmission);
     });
-    server.get("/admin/wizards", () => {
+    server.get("/admin/wizards/subscription", () => {
       return helper.response(getUnsubscribedAdminWizards);
     });
     server.get("/admin/wizards/wizard", () => {
       return helper.response(getWizard);
+    });
+    server.get("/admin/plugins/subscription-client/suppliers", () => {
+      return helper.response(getSuppliers);
     });
   });
   test("View submissions fields tab and content", async (assert) => {
@@ -57,7 +65,7 @@ acceptance("Admin | Submissions", function (needs) {
       "it displays submissions for a selected wizard"
     );
     const submissions = getWizardSubmissions.submissions; // Get submissions data from your JSON file
-    const rows = findAll("table tbody tr");
+    const rows = queryAll("table tbody tr");
 
     for (let i = 0; i < submissions.length; i++) {
       const dateCell = rows[i].querySelector("td:nth-child(1)");
@@ -84,14 +92,14 @@ acceptance("Admin | Submissions", function (needs) {
       );
     }
     assert.ok(
-      findAll("table tbody tr").length >= 1,
+      queryAll("table tbody tr").length >= 1,
       "Displays submissions list"
     );
 
     await wizards.expand();
     await click('[data-name="Select a wizard"]');
-    const wizardContainerDiv = find(".admin-wizard-container");
-    assert.ok(wizardContainerDiv.children().length === 0, "the div is empty");
+    const wizardContainerDiv = query(".admin-wizard-container");
+    assert.ok(wizardContainerDiv.children.length === 0, "the div is empty");
   });
   test("View submissions tab for another wizard with more steps", async (assert) => {
     await visit("/admin/wizards/submissions");
@@ -108,7 +116,7 @@ acceptance("Admin | Submissions", function (needs) {
     );
 
     const submissions = getAnotherWizardSubmission.submissions; // Get submissions data from your JSON file
-    const rows = findAll("table tbody tr");
+    const rows = queryAll("table tbody tr");
 
     for (let i = 0; i < submissions.length; i++) {
       const dateCell = rows[i].querySelector("td:nth-child(1)");
@@ -143,7 +151,7 @@ acceptance("Admin | Submissions", function (needs) {
     }
 
     assert.ok(
-      findAll("table tbody tr").length >= 1,
+      queryAll("table tbody tr").length >= 1,
       "Displays submissions list for another wizard"
     );
   });
@@ -154,9 +162,9 @@ acceptance("Admin | Submissions", function (needs) {
     await wizards.selectRowByValue("this_is_testing_wizard");
 
     await click(".open-edit-columns-btn");
-    assert.dom(".modal-inner-container").exists("Modal is displayed");
+    assert.dom(".d-modal__body").exists("Modal is displayed");
 
-    const userCheckbox = find(
+    const userCheckbox = queryAll(
       ".edit-directory-columns-container .edit-directory-column:nth-child(2) .left-content .column-name input"
     );
     assert.ok(userCheckbox, "User checkbox is present");
@@ -173,7 +181,7 @@ acceptance("Admin | Submissions", function (needs) {
       .doesNotIncludeText("User", "User column is not displayed");
 
     await click(".open-edit-columns-btn");
-    const submittedAtCheckbox = find(
+    const submittedAtCheckbox = queryAll(
       ".edit-directory-columns-container .edit-directory-column:nth-child(1) .left-content .column-name input"
     );
     assert.ok(submittedAtCheckbox, "Submitted At checkbox is present");
@@ -211,7 +219,7 @@ acceptance("Admin | Submissions", function (needs) {
     await wizards.expand();
     await wizards.selectRowByValue("this_is_testing_wizard");
 
-    const downloadLinks = findAll(".download-link");
+    const downloadLinks = queryAll(".download-link");
     assert.ok(downloadLinks.length > 1, "Download links are present");
 
     const downloadLink = downloadLinks[1];

@@ -1,15 +1,19 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Forms for Discourse. Better onboarding, structured posting, data enrichment, automated actions and much more.
-# version: 2.4.19
+# version: 2.6.0
 # authors: Angus McLeod, Faizaan Gagan, Robert Barrow, Keegan George, Kaitlin Maddever, Juan Marcos Gutierrez Ramos
 # url: https://github.com/paviliondev/discourse-custom-wizard
 # contact_emails: development@pavilion.tech
 # subscription_url: https://coop.pavilion.tech
+# meta_topic_id: 73345
 
 gem 'liquid', '5.0.1', require: true
+gem "discourse_subscription_client", "0.1.1", require_name: "discourse_subscription_client"
+gem 'discourse_plugin_statistics', '0.1.0.pre7', require: true
 register_asset 'stylesheets/common/admin.scss'
 register_asset 'stylesheets/common/wizard.scss'
+register_svg_icon 'pavilion-logo'
 
 enabled_site_setting :custom_wizard_enabled
 
@@ -35,6 +39,7 @@ after_initialize do
     ../lib/custom_wizard/engine.rb
     ../config/routes.rb
     ../app/controllers/custom_wizard/admin/admin.rb
+    ../app/controllers/custom_wizard/admin/subscription.rb
     ../app/controllers/custom_wizard/admin/wizard.rb
     ../app/controllers/custom_wizard/admin/submissions.rb
     ../app/controllers/custom_wizard/admin/api.rb
@@ -73,6 +78,7 @@ after_initialize do
     ../lib/custom_wizard/api/log_entry.rb
     ../lib/custom_wizard/liquid_extensions/first_non_empty.rb
     ../lib/custom_wizard/exceptions/exceptions.rb
+    ../lib/discourse_plugin_statistics/plugin.rb
     ../app/serializers/custom_wizard/api/authorization_serializer.rb
     ../app/serializers/custom_wizard/api/basic_endpoint_serializer.rb
     ../app/serializers/custom_wizard/api/endpoint_serializer.rb
@@ -236,4 +242,14 @@ after_initialize do
   end
 
   DiscourseEvent.trigger(:custom_wizard_ready)
+
+  on(:before_create_topic) do |topic_params, user|
+    category = topic_params.category
+    wizard_submission_id = topic_params.custom_fields&.[]('wizard_submission_id')
+    if category&.custom_fields&.[]('create_topic_wizard').present? && wizard_submission_id.blank?
+      raise Discourse::InvalidParameters.new(
+        I18n.t('wizard.error_messages.wizard_replacing_composer')
+      )
+    end
+  end
 end

@@ -1,6 +1,8 @@
 import {
   acceptance,
+  exists,
   query,
+  queryAll,
   visible,
 } from "discourse/tests/helpers/qunit-helpers";
 import { test } from "qunit";
@@ -11,6 +13,7 @@ import {
   getBusinessAdminWizard,
   getCreatedWizard,
   getCustomFields,
+  getSuppliersAuthorized,
   getWizard,
 } from "../helpers/admin-wizard";
 
@@ -28,7 +31,7 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
     server.get("/admin/wizards/custom-fields", () => {
       return helper.response(getCustomFields);
     });
-    server.get("/admin/wizards", () => {
+    server.get("/admin/wizards/subscription", () => {
       return helper.response(getBusinessAdminWizard);
     });
     server.get("/admin/wizards/api", () => {
@@ -49,13 +52,28 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
     server.get("/admin/wizards/wizard/new_wizard_for_testing", () => {
       return helper.response(getCreatedWizard);
     });
+    server.get("/admin/plugins/subscription-client/suppliers", () => {
+      return helper.response(getSuppliersAuthorized);
+    });
   });
 
   test("Displaying all tabs including API", async (assert) => {
     await visit("/admin/wizards");
-    const list = find(".admin-controls li");
+    const list = queryAll(".admin-controls li");
     const count = list.length;
     assert.equal(count, 6, "There should be 6 admin tabs");
+  });
+
+  test("shows authorized and subscribed", async (assert) => {
+    await visit("/admin/wizards");
+    assert.notOk(
+      exists(".supplier-authorize .btn-primary:not(.update)"),
+      "the authorize button is shown."
+    );
+    assert.strictEqual(
+      query("button.wizard-subscription-badge span").innerText.trim(),
+      "Support"
+    );
   });
 
   test("creating a new wizard", async (assert) => {
@@ -75,10 +93,11 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
       wizardTitle,
       "The title input is inserted"
     );
-    const wizardLink = find("div.wizard-url a");
+    const wizardLink = queryAll("div.wizard-url a");
     assert.equal(wizardLink.length, 1, "Wizard link was created");
     assert.equal(
-      find(".wizard-subscription-container a:contains('Subscribed')").length,
+      queryAll(".wizard-subscription-container a:contains('Subscribed')")
+        .length,
       1,
       "Wizard subscription features are accesible"
     );
@@ -86,7 +105,7 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
       '.wizard-subscription-container .subscription-settings .setting-value input[type="checkbox"]'
     );
     assert.ok(
-      find(
+      queryAll(
         '.wizard-subscription-container .subscription-settings .setting-value input[type="checkbox"]'
       ).is(":checked"),
       "subscription feature available"
@@ -95,7 +114,7 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
     // Step 2: Creating a step section
     await click(".step .link-list button");
     const stepOneText = "step_1 (step_1)";
-    const stepOneBtn = find(`.step button:contains(${stepOneText})`);
+    const stepOneBtn = queryAll(`.step button:contains(${stepOneText})`);
     assert.equal(stepOneBtn.length, 1, "Creating a step");
     const stepTitle = "step title";
     await fillIn(".wizard-custom-step input[name='title']", stepTitle);
@@ -107,7 +126,8 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
       "The step button changes according to title"
     );
     assert.equal(
-      find(".wizard-subscription-container a:contains('Subscribed')").length,
+      queryAll(".wizard-subscription-container a:contains('Subscribed')")
+        .length,
       2,
       "Steps subscription features are accesible"
     );
@@ -119,7 +139,7 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
       "clear button is not rendered"
     );
     const fieldOneText = "step_1_field_1 (step_1_field_1)";
-    const fieldOneBtn = find(`.field button:contains(${fieldOneText})`);
+    const fieldOneBtn = queryAll(`.field button:contains(${fieldOneText})`);
     assert.equal(fieldOneBtn.length, 1, "Creating a field");
     const fieldTitle = "field title";
     await fillIn(".wizard-custom-field input[name='label']", fieldTitle);
@@ -154,7 +174,8 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
       "Text tipe for field correctly selected"
     );
     assert.equal(
-      find(".wizard-subscription-container a:contains('Subscribed')").length,
+      queryAll(".wizard-subscription-container a:contains('Subscribed')")
+        .length,
       3,
       "Field subscription features are accesible"
     );
@@ -163,7 +184,7 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
     await click(".action .link-list button");
 
     const actionOneText = "action_1 (action_1)";
-    const actionOneBtn = find(`.action button:contains(${actionOneText})`);
+    const actionOneBtn = queryAll(`.action button:contains(${actionOneText})`);
     assert.equal(actionOneBtn.length, 1, "Creating an action");
     assert.ok(
       query(

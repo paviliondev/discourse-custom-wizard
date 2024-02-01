@@ -68,17 +68,20 @@ acceptance("Field | Fields", function (needs) {
       "This is a link to "
     );
     assert.ok(
-      !exists(".insert-link.modal-body"),
+      !exists(".d-modal.insert-hyperlink-modal"),
       "no hyperlink modal by default"
     );
     await click(
       ".wizard-field.composer-field .wizard-field-composer  .d-editor button.link"
     );
-    assert.ok(exists(".insert-link.modal-body"), "hyperlink modal visible");
+    assert.ok(
+      exists(".d-modal.insert-hyperlink-modal"),
+      "hyperlink modal visible"
+    );
 
-    await fillIn(".modal-body .link-url", "google.com");
-    await fillIn(".modal-body .link-text", "Google");
-    await click(".modal-footer button.btn-primary");
+    await fillIn(".d-modal__body.insert-link .inputs .link-url", "google.com");
+    await fillIn(".d-modal__body.insert-link .inputs .link-text", "Google");
+    await click(".d-modal__footer button.btn-primary");
 
     assert.strictEqual(
       query(".wizard-field.composer-field .wizard-field-composer textarea")
@@ -102,9 +105,9 @@ acceptance("Field | Fields", function (needs) {
     await click(
       ".wizard-field.composer-field .wizard-field-composer .d-editor button.link"
     );
-    await fillIn(".modal-body .link-url", "google.com");
-    await fillIn(".modal-body .link-text", "Google");
-    await click(".modal-footer button.btn-danger");
+    await fillIn(".d-modal__body.insert-link .inputs .link-url", "google.com");
+    await fillIn(".d-modal__body.insert-link .inputs .link-text", "Google");
+    await click(".d-modal__footer button.btn-danger");
 
     assert.strictEqual(
       query(".wizard-field.composer-field .wizard-field-composer textarea")
@@ -204,7 +207,11 @@ acceptance("Field | Fields", function (needs) {
     await visit("/w/wizard");
     assert.ok(visible(".wizard-field.category-field .multi-select-header"));
     await click(".wizard-field.category-field .select-kit-header");
-    assert.ok(exists(".wizard-field.category-field .select-kit-collection li"));
+    assert.ok(
+      exists(
+        ".wizard-field.category-field .select-kit-collection .select-kit-row"
+      )
+    );
   });
 
   test("Group", async function (assert) {

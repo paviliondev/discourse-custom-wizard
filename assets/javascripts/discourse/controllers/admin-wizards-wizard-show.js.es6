@@ -3,7 +3,8 @@ import {
   observes,
 } from "discourse-common/utils/decorators";
 import { notEmpty } from "@ember/object/computed";
-import showModal from "discourse/lib/show-modal";
+import { inject as service } from "@ember/service";
+import NextSessionScheduledModal from "../components/modal/next-session-scheduled";
 import { generateId, wizardFieldList } from "../lib/wizard";
 import { dasherize } from "@ember/string";
 import { later, scheduleOnce } from "@ember/runloop";
@@ -13,6 +14,7 @@ import I18n from "I18n";
 import { filterValues } from "discourse/plugins/discourse-custom-wizard/discourse/lib/wizard-schema";
 
 export default Controller.extend({
+  modal: service(),
   hasName: notEmpty("wizard.name"),
 
   @observes("currentStep")
@@ -126,15 +128,13 @@ export default Controller.extend({
     },
 
     setNextSessionScheduled() {
-      let controller = showModal("next-session-scheduled", {
+      this.modal.show(NextSessionScheduledModal, {
         model: {
           dateTime: this.wizard.after_time_scheduled,
           update: (dateTime) =>
             this.set("wizard.after_time_scheduled", dateTime),
         },
       });
-
-      controller.setup();
     },
 
     copyUrl() {

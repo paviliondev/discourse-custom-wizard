@@ -1,7 +1,10 @@
 import DiscourseRoute from "discourse/routes/discourse";
 import CustomWizardApi from "../models/custom-wizard-api";
+import { inject as service } from "@ember/service";
 
 export default DiscourseRoute.extend({
+  router: service(),
+
   model() {
     return CustomWizardApi.list();
   },
@@ -25,11 +28,11 @@ export default DiscourseRoute.extend({
   actions: {
     changeApi(apiName) {
       this.controllerFor("adminWizardsApi").set("apiName", apiName);
-      this.transitionTo("adminWizardsApiShow", apiName);
+      this.router.transitionTo("adminWizardsApiShow", apiName);
     },
 
     afterDestroy() {
-      this.transitionTo("adminWizardsApi").then(() => this.refresh());
+      this.router.transitionTo("adminWizardsApi").then(() => this.refresh());
     },
 
     afterSave(apiName) {
@@ -38,7 +41,7 @@ export default DiscourseRoute.extend({
 
     createApi() {
       this.controllerFor("adminWizardsApi").set("apiName", "create");
-      this.transitionTo("adminWizardsApiShow", "create");
+      this.router.transitionTo("adminWizardsApiShow", "create");
     },
   },
 });

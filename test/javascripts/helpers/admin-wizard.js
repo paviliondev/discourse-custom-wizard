@@ -224,7 +224,6 @@ const getUnsubscribedAdminWizards = {
       all: { none: [], standard: [], business: ["*"], community: ["*"] },
     },
   },
-  subscription_client_installed: false,
 };
 const getCustomFields = {
   custom_fields: [
@@ -478,7 +477,6 @@ const getBusinessAdminWizard = {
       all: { none: [], standard: [], business: ["*"], community: ["*"] },
     },
   },
-  subscription_client_installed: false,
 };
 const getStandardAdminWizard = {
   subscribed: true,
@@ -589,7 +587,6 @@ const getStandardAdminWizard = {
       all: { none: [], standard: [], business: ["*"], community: ["*"] },
     },
   },
-  subscription_client_installed: false,
 };
 const getAdminTestingWizard = {
   id: "this_is_testing_wizard",
@@ -917,6 +914,31 @@ const putNewApi = {
     log: [],
   },
 };
+
+const getSuppliers = {
+  suppliers: [
+    {
+      id: 1,
+      name: "Pavilion",
+      authorized: false,
+      authorized_at: null,
+      user: null,
+    },
+  ],
+};
+
+const getSuppliersAuthorized = {
+  suppliers: [
+    {
+      id: 1,
+      name: "Pavilion",
+      authorized: true,
+      authorized_at: null,
+      user: null,
+    },
+  ],
+};
+
 export {
   getWizard,
   getUnsubscribedAdminWizards,
@@ -931,4 +953,6 @@ export {
   putNewApi,
   getAnotherWizardSubmission,
   getUniqueWizard,
+  getSuppliers,
+  getSuppliersAuthorized,
 };

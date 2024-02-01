@@ -13,43 +13,7 @@ describe CustomWizard::Subscription do
     }
   }
 
-  after do
-    undefine_client_classes
-  end
-
-  it "detects the subscription client" do
-    undefine_client_classes
-    expect(described_class.client_installed?).to eq(false)
-  end
-
-  context "without a subscription client" do
-    it "is not subscribed" do
-      expect(described_class.subscribed?).to eq(false)
-    end
-
-    it "has none type" do
-      subscription = described_class.new
-      expect(subscription.type).to eq(:none)
-    end
-
-    it "non subscriber features are included" do
-      expect(described_class.includes?(:wizard, :after_signup, true)).to eq(true)
-    end
-
-    it "subscriber features are not included" do
-      expect(described_class.includes?(:wizard, :permitted, {})).to eq(false)
-    end
-  end
-
-  context "with subscription client" do
-    before do
-      define_client_classes
-    end
-
-    it "detects the subscription client" do
-      expect(described_class.client_installed?).to eq(true)
-    end
-
+  context "with subscription client gem mocked out" do
     context "without a subscription" do
       before do
         DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(nil)
@@ -69,11 +33,12 @@ describe CustomWizard::Subscription do
     end
 
     context "with subscriptions" do
+
       def get_subscription_result(product_ids)
         result = DiscourseSubscriptionClient::Subscriptions::Result.new
-        result.supplier = SubscriptionClientSupplier.new(product_slugs)
+        result.supplier = SubscriptionClientSupplier.new(products: product_slugs)
         result.resource = SubscriptionClientResource.new
-        result.subscriptions = product_ids.map { |product_id| SubscriptionClientSubscription.new(product_id) }
+        result.subscriptions = product_ids.map { |product_id| ::SubscriptionClientSubscription.new(product_id: product_id) }
         result.products = product_slugs
         result
       end

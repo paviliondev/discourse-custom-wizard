@@ -5,7 +5,7 @@ module DiscourseSubscriptionClient
   end
 end
 
-class SubscriptionClientSupplier
+SubscriptionClientSupplier = Class.new Object do
   attr_reader :product_slugs
 
   def initialize(product_slugs)
@@ -13,10 +13,10 @@ class SubscriptionClientSupplier
   end
 end
 
-class SubscriptionClientResource
+SubscriptionClientResource = Class.new Object do
 end
 
-class SubscriptionClientSubscription
+SubscriptionClientSubscription = Class.new Object do
   attr_reader :product_id
 
   def initialize(product_id)

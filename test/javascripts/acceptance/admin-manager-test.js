@@ -2,6 +2,7 @@ import { acceptance, query } from "discourse/tests/helpers/qunit-helpers";
 import { test } from "qunit";
 import { click, find, findAll, visit, waitUntil } from "@ember/test-helpers";
 import {
+  getSuppliers,
   getUnsubscribedAdminWizards,
   getWizard,
   getWizardTestingLog,
@@ -18,7 +19,7 @@ acceptance("Admin | Manager", function (needs) {
     server.get("/admin/wizards/manager/this_is_testing_wizard", () => {
       return helper.response(getWizardTestingLog);
     });
-    server.get("/admin/wizards", () => {
+    server.get("/admin/wizards/subscription", () => {
       return helper.response(getUnsubscribedAdminWizards);
     });
     server.get("/admin/wizards/wizard", () => {
@@ -32,6 +33,9 @@ acceptance("Admin | Manager", function (needs) {
         ],
         failures: [],
       });
+    });
+    server.get("/admin/plugins/subscription-client/suppliers", () => {
+      return helper.response(getSuppliers);
     });
   });
   async function waitForDestructionAndResetMessage() {

@@ -83,6 +83,21 @@ export default {
           }
         },
       });
+
+      api.modifyClass("component:category-chooser", {
+        pluginId: "custom-wizard",
+
+        categoriesByScope(options = {}) {
+          let categories = this._super(options);
+          const currentUser = this.currentUser;
+          if (!currentUser?.staff) {
+            categories = categories.filter((category) => {
+              return !category.custom_fields?.create_topic_wizard;
+            });
+          }
+          return categories;
+        },
+      });
     });
   },
 };

@@ -1,5 +1,5 @@
 import SingleSelectComponent from "select-kit/components/single-select";
-import Subscription from "../mixins/subscription";
+import { inject as service } from "@ember/service";
 import { filterValues } from "discourse/plugins/discourse-custom-wizard/discourse/lib/wizard-schema";
 import discourseComputed from "discourse-common/utils/decorators";
 import I18n from "I18n";
@@ -12,8 +12,9 @@ const nameKey = function (feature, attribute, value) {
   }
 };
 
-export default SingleSelectComponent.extend(Subscription, {
+export default SingleSelectComponent.extend({
   classNames: ["combo-box", "wizard-subscription-selector"],
+  subscription: service(),
 
   selectKitOptions: {
     autoFilterable: false,
@@ -26,7 +27,7 @@ export default SingleSelectComponent.extend(Subscription, {
   },
 
   allowedSubscriptionTypes(feature, attribute, value) {
-    let attributes = this.subscriptionAttributes[feature];
+    let attributes = this.subscription.subscriptionAttributes[feature];
     if (!attributes || !attributes[attribute]) {
       return ["none"];
     }
@@ -59,10 +60,9 @@ export default SingleSelectComponent.extend(Subscription, {
           name: I18n.t(nameKey(feature, attribute, value)),
           subscriptionRequired,
         };
-
         if (subscriptionRequired) {
           let subscribed = allowedSubscriptionTypes.includes(
-            this.subscriptionType
+            this.subscription.subscriptionType
           );
           let selectorKey = subscribed ? "subscribed" : "not_subscribed";
           let selectorLabel = `admin.wizard.subscription.${selectorKey}.selector`;

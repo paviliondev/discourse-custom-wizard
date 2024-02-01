@@ -1,4 +1,8 @@
-import { acceptance, query } from "discourse/tests/helpers/qunit-helpers";
+import {
+  acceptance,
+  query,
+  queryAll,
+} from "discourse/tests/helpers/qunit-helpers";
 import { test } from "qunit";
 import { click, currentURL, fillIn, visit } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
@@ -6,6 +10,7 @@ import {
   getBusinessAdminWizard,
   getCustomFields,
   getNewApi,
+  getSuppliers,
   getWizard,
   putNewApi,
 } from "../helpers/admin-wizard";
@@ -21,7 +26,7 @@ acceptance("Admin | API tab", function (needs) {
     server.get("/admin/wizards/wizard", () => {
       return helper.response(getWizard);
     });
-    server.get("/admin/wizards", () => {
+    server.get("/admin/wizards/subscription", () => {
       return helper.response(getBusinessAdminWizard);
     });
     server.get("/admin/wizards/custom-fields", () => {
@@ -45,11 +50,14 @@ acceptance("Admin | API tab", function (needs) {
     server.get("/admin/wizards/api/new_api", () => {
       return helper.response(getNewApi);
     });
+    server.get("/admin/plugins/subscription-client/suppliers", () => {
+      return helper.response(getSuppliers);
+    });
   });
 
   test("Visit API tab and fill data", async function (assert) {
     await visit("/admin/wizards/api");
-    const list = find(".admin-controls li");
+    const list = queryAll(".admin-controls li");
     const count = list.length;
     assert.equal(count, 6, "There should be 6 admin tabs");
 

@@ -1,7 +1,7 @@
 import Component from "@ember/component";
 import { dasherize } from "@ember/string";
 import discourseComputed from "discourse-common/utils/decorators";
-import { cookAsync } from "discourse/lib/text";
+import { cook } from "discourse/lib/text";
 
 export default Component.extend({
   classNameBindings: [
@@ -14,7 +14,7 @@ export default Component.extend({
   didReceiveAttrs() {
     this._super(...arguments);
 
-    cookAsync(this.field.translatedDescription).then((cookedDescription) => {
+    cook(this.field.translatedDescription).then((cookedDescription) => {
       this.set("cookedDescription", cookedDescription);
     });
   },
