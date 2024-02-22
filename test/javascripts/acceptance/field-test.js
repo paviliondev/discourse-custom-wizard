@@ -207,7 +207,11 @@ acceptance("Field | Fields", function (needs) {
     await visit("/w/wizard");
     assert.ok(visible(".wizard-field.category-field .multi-select-header"));
     await click(".wizard-field.category-field .select-kit-header");
-    assert.ok(exists(".wizard-field.category-field .select-kit-collection li"));
+    assert.ok(
+      exists(
+        ".wizard-field.category-field .select-kit-collection .select-kit-row"
+      )
+    );
   });
 
   test("Group", async function (assert) {

@@ -3,6 +3,16 @@ body.custom-wizard {
   color: var(--primary);
   font-size: 1.1em;
 
+  .sidebar-wrapper {
+    display: none;
+  }
+
+  #main-outlet-wrapper {
+    grid-template-areas: "sidebar content";
+    grid-template-columns: 0 minmax(0, 1fr);
+    gap: 0;
+  }
+
   .wizard-column {
     position: relative;
     z-index: 11;

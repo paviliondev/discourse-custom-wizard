@@ -6,6 +6,7 @@
 # url: https://github.com/paviliondev/discourse-custom-wizard
 # contact_emails: development@pavilion.tech
 # subscription_url: https://coop.pavilion.tech
+# meta_topic_id: 73345
 
 gem 'liquid', '5.0.1', require: true
 gem "discourse_subscription_client", "0.1.1", require_name: "discourse_subscription_client"

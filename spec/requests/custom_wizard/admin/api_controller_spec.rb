@@ -9,6 +9,7 @@ describe CustomWizard::AdminApiController do
   end
 
   it "does not save if user does not have relevant subscription" do
+    disable_subscriptions
     put "/admin/wizards/api/:name.json", params: api_json.to_h
     expect(response.status).to eq(400)
   end
