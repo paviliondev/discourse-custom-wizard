@@ -5,6 +5,7 @@ import discourseComputed from "discourse-common/utils/decorators";
 import getUrl from "discourse-common/lib/get-url";
 import CustomWizardField from "./custom-wizard-field";
 import CustomWizardStep from "./custom-wizard-step";
+import DiscourseURL from "discourse/lib/url";
 
 const CustomWizard = EmberObject.extend({
   @discourseComputed("steps.length")
@@ -34,7 +35,7 @@ CustomWizard.reopenClass({
   restart(wizardId) {
     ajax({ url: `/w/${wizardId}/skip`, type: "PUT" })
       .then(() => {
-        window.location.href = `/w/${wizardId}`;
+        DiscourseURL.redirectTo(getUrl(`/w/${wizardId}`));
       })
       .catch(popupAjaxError);
   },
@@ -44,7 +45,7 @@ CustomWizard.reopenClass({
     if (result.redirect_on_complete) {
       url = result.redirect_on_complete;
     }
-    window.location.href = getUrl(url);
+    DiscourseURL.redirectTo(getUrl(url));
   },
 
   build(wizardJson) {

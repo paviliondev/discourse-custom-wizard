@@ -23,6 +23,10 @@ wizard.resume_on_revisit = false;
 wizard.submission_last_updated_at = "2022-03-11T20:00:18+01:00";
 wizard.subscribed = false;
 
+const wizardResumeOnRevisit = cloneJSON(wizard);
+wizardResumeOnRevisit.start = "step_2";
+wizardResumeOnRevisit.resume_on_revisit = true;
+
 const stepNotPermitted = cloneJSON(wizard);
 stepNotPermitted.steps[0].permitted = false;
 
@@ -44,6 +48,7 @@ export {
   wizardNotPermitted,
   wizardCompleted,
   wizardGuest,
+  wizardResumeOnRevisit,
   stepNotPermitted,
   allFieldsWizard,
   wizard,
