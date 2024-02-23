@@ -35,19 +35,12 @@ export default EmberObject.extend(ValidState, {
 
   validate() {
     let allValid = true;
-    const result = { warnings: [] };
 
     this.fields.forEach((field) => {
       allValid = allValid && field.check();
-      const warning = field.get("warning");
-      if (warning) {
-        result.warnings.push(warning);
-      }
     });
 
     this.setValid(allValid);
-
-    return result;
   },
 
   fieldError(id, description) {

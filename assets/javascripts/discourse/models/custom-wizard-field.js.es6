@@ -25,7 +25,6 @@ export default EmberObject.extend(ValidState, {
   type: null,
   value: null,
   required: null,
-  warning: null,
 
   @discourseComputed("wizardId", "stepId", "id")
   i18nKey(wizardId, stepId, id) {
