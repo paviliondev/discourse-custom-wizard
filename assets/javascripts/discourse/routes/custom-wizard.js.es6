@@ -1,9 +1,11 @@
 import { findCustomWizard, updateCachedWizard } from "../models/custom-wizard";
 import I18n from "I18n";
 import DiscourseRoute from "discourse/routes/discourse";
-import bootbox from "bootbox";
+import { inject as service } from "@ember/service";
 
 export default DiscourseRoute.extend({
+  dialog: service(),
+
   titleToken() {
     const wizard = this.modelFor("custom-wizard");
     return wizard ? wizard.name || wizard.id : I18n.t("wizard.custom_title");
@@ -30,7 +32,7 @@ export default DiscourseRoute.extend({
       {
         label: I18n.t("wizard.incomplete_submission.restart"),
         class: "btn btn-default",
-        callback: () => {
+        action: () => {
           wizardModel.restart();
         },
       },
@@ -40,11 +42,7 @@ export default DiscourseRoute.extend({
       },
     ];
 
-    const options = {
-      onEscape: false,
-    };
-
-    bootbox.dialog(title, buttons, options);
+    this.dialog.dialog({ title, buttons, type: "confirm" });
   },
 
   afterModel(model) {

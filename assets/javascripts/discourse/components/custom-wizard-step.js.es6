@@ -1,6 +1,5 @@
 import discourseComputed, { observes } from "discourse-common/utils/decorators";
 import Component from "@ember/component";
-import I18n from "I18n";
 import getUrl from "discourse-common/lib/get-url";
 import { htmlSafe } from "@ember/template";
 import { schedule } from "@ember/runloop";
@@ -10,8 +9,6 @@ import CustomWizard, {
 } from "discourse/plugins/discourse-custom-wizard/discourse/models/custom-wizard";
 import { alias, not } from "@ember/object/computed";
 import discourseLater from "discourse-common/lib/later";
-
-const alreadyWarned = {};
 
 export default Component.extend({
   classNameBindings: [":wizard-step", "step.id"],
@@ -197,27 +194,9 @@ export default Component.extend({
         return;
       }
 
-      const step = this.step;
-      const result = step.validate();
+      this.step.validate();
 
-      if (result.warnings.length) {
-        const unwarned = result.warnings.filter((w) => !alreadyWarned[w]);
-        if (unwarned.length) {
-          unwarned.forEach((w) => (alreadyWarned[w] = true));
-          return window.bootbox.confirm(
-            unwarned.map((w) => I18n.t(`wizard.${w}`)).join("\n"),
-            I18n.t("no_value"),
-            I18n.t("yes_value"),
-            (confirmed) => {
-              if (confirmed) {
-                this.advance();
-              }
-            }
-          );
-        }
-      }
-
-      if (step.get("valid")) {
+      if (this.step.get("valid")) {
         this.advance();
       } else {
         this.autoFocus();
