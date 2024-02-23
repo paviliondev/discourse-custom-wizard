@@ -42,7 +42,7 @@ export default DiscourseRoute.extend({
       },
     ];
 
-    this.dialog.dialog({ title, buttons, type: 'confirm' });
+    this.dialog.dialog({ title, buttons, type: "confirm" });
   },
 
   afterModel(model) {

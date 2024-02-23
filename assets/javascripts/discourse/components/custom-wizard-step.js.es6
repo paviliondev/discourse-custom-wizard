@@ -1,6 +1,5 @@
 import discourseComputed, { observes } from "discourse-common/utils/decorators";
 import Component from "@ember/component";
-import I18n from "I18n";
 import getUrl from "discourse-common/lib/get-url";
 import { htmlSafe } from "@ember/template";
 import { schedule } from "@ember/runloop";
@@ -10,8 +9,6 @@ import CustomWizard, {
 } from "discourse/plugins/discourse-custom-wizard/discourse/models/custom-wizard";
 import { alias, not } from "@ember/object/computed";
 import discourseLater from "discourse-common/lib/later";
-
-const alreadyWarned = {};
 
 export default Component.extend({
   classNameBindings: [":wizard-step", "step.id"],
@@ -199,7 +196,7 @@ export default Component.extend({
 
       this.step.validate();
 
-      if (step.get("valid")) {
+      if (this.step.get("valid")) {
         this.advance();
       } else {
         this.autoFocus();
