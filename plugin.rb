@@ -9,7 +9,7 @@
 # meta_topic_id: 73345
 
 gem 'liquid', '5.0.1', require: true
-gem "discourse_subscription_client", "0.1.1", require_name: "discourse_subscription_client"
+gem "discourse_subscription_client", "0.1.2", require_name: "discourse_subscription_client"
 gem 'discourse_plugin_statistics', '0.1.0.pre7', require: true
 register_asset 'stylesheets/common/admin.scss'
 register_asset 'stylesheets/common/wizard.scss'
