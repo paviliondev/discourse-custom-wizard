@@ -212,11 +212,23 @@ describe CustomWizard::Action do
     end
   end
 
-  it 're-routes a user' do
-    wizard = CustomWizard::Builder.new(@template[:id], user).build
-    updater = wizard.create_updater(wizard.steps.last.id, {})
-    updater.update
-    expect(updater.result[:redirect_on_next]).to eq("https://google.com")
+  context "route to action" do
+    it 're-routes a user' do
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      updater = wizard.create_updater(wizard.steps.last.id, {})
+      updater.update
+      expect(updater.result[:redirect_on_next]).to eq("https://google.com")
+    end
+
+    it "works if the code field has a blank string" do
+      wizard_template[:actions].last[:code] = " "
+      update_template(wizard_template)
+
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      updater = wizard.create_updater(wizard.steps.last.id, {})
+      updater.update
+      expect(updater.result[:redirect_on_next]).to eq("https://google.com")
+    end
   end
 
   context "standard subscription actions" do

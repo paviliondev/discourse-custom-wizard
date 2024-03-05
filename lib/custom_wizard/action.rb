@@ -425,7 +425,7 @@ class CustomWizard::Action
       ).perform
     end
 
-    if action['code']
+    if action['code'].present?
       @submission.fields[action['code']] = SecureRandom.hex(8)
       url += "&#{action['code']}=#{@submission.fields[action['code']]}"
     end
