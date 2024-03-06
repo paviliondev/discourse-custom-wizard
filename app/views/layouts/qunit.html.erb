@@ -15,7 +15,7 @@
     <%= preload_script "wizard-qunit" %>
     <%= csrf_meta_tags %>
 
-    <script src="<%= ExtraLocalesController.url("wizard") %>"></script>
+    <script src="<%= ExtraLocalesController.url("wizard") %>" nonce="<%= try(:csp_nonce_placeholder) %>"></script>
 
     <%= tag.meta id: 'data-discourse-setup', data: client_side_setup_data %>
     <meta name="discourse_theme_id" content="">
