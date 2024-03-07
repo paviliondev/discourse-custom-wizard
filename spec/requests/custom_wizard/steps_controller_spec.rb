@@ -7,6 +7,7 @@ describe CustomWizard::StepsController do
   let(:wizard_field_condition_template) { get_wizard_fixture("condition/wizard_field_condition") }
   let(:user_condition_template) { get_wizard_fixture("condition/user_condition") }
   let(:permitted_json) { get_wizard_fixture("wizard/permitted") }
+  let(:permitted_admin_json) { get_wizard_fixture("wizard/permitted_admin") }
   let(:route_to_template) { get_wizard_fixture("actions/route_to") }
   let(:guests_permitted) { get_wizard_fixture("wizard/guests_permitted") }
 
@@ -138,7 +139,7 @@ describe CustomWizard::StepsController do
       it "when the user cant access the wizard" do
         enable_subscription("standard")
         new_template = wizard_template.dup
-        new_template["permitted"] = permitted_json["permitted"]
+        new_template["permitted"] = permitted_admin_json["permitted"]
         CustomWizard::Template.save(new_template, skip_jobs: true)
 
         put '/w/super-mega-fun-wizard/steps/step_1.json'
