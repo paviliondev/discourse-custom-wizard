@@ -98,6 +98,13 @@ export default {
           return categories;
         },
       });
+
+      api.addAdminSidebarSectionLink("plugins", {
+        name: "admin_wizards",
+        label: "admin.wizard.nav_label",
+        route: "adminWizardsWizard",
+        icon: "hat-wizard",
+      });
     });
   },
 };
