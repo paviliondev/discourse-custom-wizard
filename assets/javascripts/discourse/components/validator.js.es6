@@ -1,6 +1,6 @@
 import Component from "@ember/component";
 import { equal } from "@ember/object/computed";
-import { ajax, getToken } from "discourse/lib/ajax";
+import { ajax } from "discourse/lib/ajax";
 
 export default Component.extend({
   classNames: ["validator"],
@@ -20,7 +20,6 @@ export default Component.extend({
         return ajax("/realtime-validations", {
           data: {
             type: this.get("type"),
-            authenticity_token: getToken(),
             ...params,
           },
         });

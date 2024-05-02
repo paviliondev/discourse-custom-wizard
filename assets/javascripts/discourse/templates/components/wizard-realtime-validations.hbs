@@ -18,13 +18,14 @@
                 }}</label>
             </div>
             <div class="setting-value">
-              {{category-selector
-                categories=(get
-                  this (concat "validationBuffer." type ".categories")
-                )
-                onChange=(action "updateValidationCategories" type props)
+              <CategorySelector
+                @categories={{get
+                  this
+                  (concat "validationBuffer." type ".categories")
+                }}
+                @onChange={{action "updateValidationCategories" type props}}
                 class="wizard"
-              }}
+              />
             </div>
           </div>
           <div class="validation-section">

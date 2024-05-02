@@ -35,13 +35,12 @@ export default Component.extend({
     }
 
     const validationBuffer = cloneJSON(this.get("field.validations"));
-    let bufferCategories;
-    if (
-      validationBuffer.similar_topics &&
-      (bufferCategories = validationBuffer.similar_topics.categories)
-    ) {
-      const categories = Category.findByIds(bufferCategories);
-      validationBuffer.similar_topics.categories = categories;
+    let bufferCategories = validationBuffer.similar_topics?.categories || [];
+    if (bufferCategories) {
+      validationBuffer.similar_topics.categories =
+        Category.findByIds(bufferCategories);
+    } else {
+      validationBuffer.similar_topics.categories = [];
     }
     this.set("validationBuffer", validationBuffer);
   },

@@ -27,7 +27,7 @@ class CustomWizard::RealtimeValidation::SimilarTopics
 
     result = CustomWizard::RealtimeValidation::Result.new(:similar_topic)
 
-    if title.length < SiteSetting.min_title_similar_length || !Topic.count_exceeds_minimum?
+    if title.length < SiteSetting.min_title_similar_length
       return result
     end
 
