@@ -4,22 +4,26 @@ import {
 } from "discourse-common/utils/decorators";
 import EmberObject from "@ember/object";
 import Component from "@ember/component";
+import { inject as service } from "@ember/service";
 
 export default Component.extend({
   showPreview: false,
+  composer: service(),
   classNameBindings: [
     ":wizard-field-composer",
     "showPreview:show-preview:hide-preview",
   ],
 
   didInsertElement() {
-    this.set(
-      "composer",
-      EmberObject.create({
-        loading: false,
-        reply: this.get("field.value") || "",
-      })
-    );
+    debugger;
+    this.set("composer.reply", this.get("field.value") || "");
+    // this.set(
+    //   "composer",
+    //   EmberObject.create({
+    //     loading: false,
+    //     reply: this.get("field.value") || "",
+    //   })
+    // );
   },
 
   @observes("composer.reply")

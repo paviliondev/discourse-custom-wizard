@@ -9,8 +9,10 @@ import CustomWizard, {
 } from "discourse/plugins/discourse-custom-wizard/discourse/models/custom-wizard";
 import { alias, not } from "@ember/object/computed";
 import discourseLater from "discourse-common/lib/later";
+import { inject as service } from "@ember/service";
 
 export default Component.extend({
+  composer: service(),
   classNameBindings: [":wizard-step", "step.id"],
   saving: null,
 
@@ -182,7 +184,7 @@ export default Component.extend({
     },
 
     backStep() {
-      if (this.saving) {
+      if (this.saving || this.composer.isProcessingUpload) {
         return;
       }
 
@@ -190,7 +192,10 @@ export default Component.extend({
     },
 
     nextStep() {
-      if (this.saving) {
+      console.log(this.composer.isProcessingUpload);
+      debugger;
+
+      if (this.saving  || this.composer.isProcessingUpload) {
         return;
       }
 
