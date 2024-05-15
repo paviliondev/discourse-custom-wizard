@@ -192,8 +192,7 @@ export default Component.extend({
     },
 
     nextStep() {
-      console.log(this.composer.isProcessingUpload);
-      debugger;
+      console.log("is there an upload process going on? " + this.composer.isProcessingUpload);
 
       if (this.saving  || this.composer.isProcessingUpload) {
         return;

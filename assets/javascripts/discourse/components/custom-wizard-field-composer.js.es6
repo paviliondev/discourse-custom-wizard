@@ -15,15 +15,7 @@ export default Component.extend({
   ],
 
   didInsertElement() {
-    debugger;
     this.set("composer.reply", this.get("field.value") || "");
-    // this.set(
-    //   "composer",
-    //   EmberObject.create({
-    //     loading: false,
-    //     reply: this.get("field.value") || "",
-    //   })
-    // );
   },
 
   @observes("composer.reply")
