@@ -18,6 +18,9 @@ import { inject as service } from "@ember/service";
 const IMAGE_MARKDOWN_REGEX =
   /!\[(.*?)\|(\d{1,4}x\d{1,4})(,\s*\d{1,3}%)?(.*?)\]\((upload:\/\/.*?)\)(?!(.*`))/g;
 
+
+export const wizardComposerEdtiorEventPrefix = "wizard-editor";
+
 export default ComposerEditor.extend({
   modal: service(),
 
@@ -33,7 +36,7 @@ export default ComposerEditor.extend({
   draftStatus: "null",
   replyPlaceholder: alias("field.translatedPlaceholder"),
   wizardEventFieldId: null,
-  composerEventPrefix: "wizard-editor",
+  composerEventPrefix: wizardComposerEdtiorEventPrefix,
 
   @on("didInsertElement")
   _composerEditorInit() {

@@ -7,8 +7,21 @@ import { cook } from "discourse/lib/text";
 import CustomWizard, {
   updateCachedWizard,
 } from "discourse/plugins/discourse-custom-wizard/discourse/models/custom-wizard";
-import { alias, not } from "@ember/object/computed";
+import { alias, not, or } from "@ember/object/computed";
 import discourseLater from "discourse-common/lib/later";
+import { wizardComposerEdtiorEventPrefix } from "./custom-wizard-composer-editor";
+
+const uploadStartedEventKeys = [
+  "upload-started"
+];
+const uploadEndedEventKeys = [
+  "upload-success",
+  "upload-error",
+  "upload-cancelled",
+  "uploads-cancelled",
+  "uploads-aborted",
+  "all-uploads-complete"
+];
 
 export default Component.extend({
   classNameBindings: [":wizard-step", "step.id"],
@@ -28,6 +41,17 @@ export default Component.extend({
     cook(this.step.translatedDescription).then((cookedDescription) => {
       this.set("cookedDescription", cookedDescription);
     });
+
+    uploadStartedEventKeys.forEach(key => {
+      this.appEvents.on(`${wizardComposerEdtiorEventPrefix}:${key}`, () => {
+        this.set("uploading", true);
+      });
+    });
+    uploadEndedEventKeys.forEach(key => {
+      this.appEvents.on(`${wizardComposerEdtiorEventPrefix}:${key}`, () => {
+        this.set("uploading", false);
+      });
+    });
   },
 
   didInsertElement() {
@@ -40,6 +64,7 @@ export default Component.extend({
 
   showNextButton: not("step.final"),
   showDoneButton: alias("step.final"),
+  btnsDisabled: or("saving", "uploading"),
 
   @discourseComputed(
     "step.index",
