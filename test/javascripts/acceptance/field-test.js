@@ -1,8 +1,10 @@
-import { click, fillIn, triggerKeyEvent, visit } from "@ember/test-helpers";
+import { getOwner } from "@ember/application";
+import { click, fillIn, settled, triggerKeyEvent, visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import {
   acceptance,
   count,
+  createFile,
   exists,
   query,
   visible,
@@ -11,6 +13,8 @@ import { allFieldsWizard } from "../helpers/wizard";
 import tagsJson from "../fixtures/tags";
 import usersJson from "../fixtures/users";
 
+const wizardComposerEdtiorEventPrefix = "wizard-editor";
+
 acceptance("Field | Fields", function (needs) {
   needs.pretender((server, helper) => {
     server.get("/w/wizard.json", () => helper.response(allFieldsWizard));
@@ -18,6 +22,26 @@ acceptance("Field | Fields", function (needs) {
       helper.response({ results: tagsJson["tags"] })
     );
     server.get("/u/search/users", () => helper.response(usersJson));
+
+    server.post("/uploads.json", () => {
+      return helper.response({
+            extension: "jpeg",
+            filesize: 126177,
+            height: 800,
+            human_filesize: "123 KB",
+            id: 202,
+            original_filename: "avatar.PNG.jpg",
+            retain_hours: null,
+            short_path: "/uploads/short-url/yoj8pf9DdIeHRRULyw7i57GAYdz.jpeg",
+            short_url: "upload://yoj8pf9DdIeHRRULyw7i57GAYdz.jpeg",
+            thumbnail_height: 320,
+            thumbnail_width: 690,
+            url: "/images/discourse-logo-sketch-small.png",
+            width: 1920,
+          });
+      },
+      500 // this delay is important to slow down the uploads a bit so we can let elements of the interface update
+    );
   });
 
   test("Text", async function (assert) {
@@ -54,6 +78,27 @@ acceptance("Field | Fields", function (needs) {
       "Input in composer"
     );
   });
+
+  test("Composer - Upload Disables Next Button", async function (assert) {
+    await visit("/w/wizard");
+    const appEvents = getOwner(this).lookup("service:app-events");
+    const done = assert.async();
+
+    appEvents.on(`${wizardComposerEdtiorEventPrefix}:all-uploads-complete`, async () => {
+      await settled();
+      assert.ok(!exists(".wizard-btn.next.primary:disabled"));
+      done();
+    });
+
+    appEvents.on(`${wizardComposerEdtiorEventPrefix}:upload-started`, async () => {
+      await settled()
+      assert.ok(exists(".wizard-btn.next.primary:disabled"));
+    });
+
+    const image = createFile("avatar.png");
+    appEvents.trigger(`${wizardComposerEdtiorEventPrefix}:add-files`, image);
+  });
+
   test("Composer - Hyperlink", async function (assert) {
     await visit("/w/wizard");
     assert.ok(
