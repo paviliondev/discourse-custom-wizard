@@ -11,16 +11,14 @@ import { alias, not, or } from "@ember/object/computed";
 import discourseLater from "discourse-common/lib/later";
 import { wizardComposerEdtiorEventPrefix } from "./custom-wizard-composer-editor";
 
-const uploadStartedEventKeys = [
-  "upload-started"
-];
+const uploadStartedEventKeys = ["upload-started"];
 const uploadEndedEventKeys = [
   "upload-success",
   "upload-error",
   "upload-cancelled",
   "uploads-cancelled",
   "uploads-aborted",
-  "all-uploads-complete"
+  "all-uploads-complete",
 ];
 
 export default Component.extend({
@@ -42,12 +40,12 @@ export default Component.extend({
       this.set("cookedDescription", cookedDescription);
     });
 
-    uploadStartedEventKeys.forEach(key => {
+    uploadStartedEventKeys.forEach((key) => {
       this.appEvents.on(`${wizardComposerEdtiorEventPrefix}:${key}`, () => {
         this.set("uploading", true);
       });
     });
-    uploadEndedEventKeys.forEach(key => {
+    uploadEndedEventKeys.forEach((key) => {
       this.appEvents.on(`${wizardComposerEdtiorEventPrefix}:${key}`, () => {
         this.set("uploading", false);
       });
