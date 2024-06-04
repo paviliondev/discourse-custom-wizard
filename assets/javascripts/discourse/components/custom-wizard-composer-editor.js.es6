@@ -39,25 +39,11 @@ export default ComposerEditor.extend({
 
   @on("didInsertElement")
   _composerEditorInit() {
-    const $input = $(this.element.querySelector(".d-editor-input"));
+    this._super(...arguments);
 
-    if (this.siteSettings.enable_mentions) {
-      $input.autocomplete({
-        template: findRawTemplate("user-selector-autocomplete"),
-        dataSource: (term) => this._userSearchTerm.call(this, term),
-        key: "@",
-        transformComplete: (v) => v.username || v.name,
-        afterComplete: (value) => {
-          this.composer.set("reply", value);
-          scheduleOnce("afterRender", () => $input.blur().focus());
-        },
-        triggerRule: (textarea) =>
-          !inCodeBlock(textarea.value, caretPosition(textarea)),
-      });
-    }
+    if (this.siteSettings.mentionables_enabled) {
+      const $input = $(this.element.querySelector(".d-editor-input"));
 
-    const siteSettings = this.siteSettings;
-    if (siteSettings.mentionables_enabled) {
       Site.currentProp("mentionable_items", this.wizard.mentionable_items);
       const { SEPARATOR } = requirejs(
         "discourse/plugins/discourse-mentionables/discourse/lib/discourse-markdown/mentionable-items"
@@ -75,14 +61,13 @@ export default ComposerEditor.extend({
         },
         transformComplete: (item) => item.model.slug,
         dataSource: (term) =>
-          term.match(/\s/) ? null : searchMentionableItem(term, siteSettings),
+          term.match(/\s/)
+            ? null
+            : searchMentionableItem(term, this.siteSettings),
         triggerRule: (textarea) =>
           !inCodeBlock(textarea.value, caretPosition(textarea)),
       });
     }
-
-    $input.on("scroll", this._throttledSyncEditorAndPreviewScroll);
-    this._bindUploadTarget();
 
     const field = this.field;
     this.editorInputClass = `.${dasherize(field.type)}-${dasherize(
