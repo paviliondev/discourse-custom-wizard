@@ -160,6 +160,10 @@ body.custom-wizard {
     display: flex;
     justify-content: flex-end;
   }
+
+  .powered-by-discourse {
+    display: none;
+  }
 }
 
 /* IE11 hacks */

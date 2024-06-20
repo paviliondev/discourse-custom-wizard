@@ -60,7 +60,7 @@
         type="button"
         class="wizard-btn next primary"
         {{action "nextStep"}}
-        disabled={{saving}}
+        disabled={{btnsDisabled}}
         tabindex={{primaryButtonIndex}}
       >
         {{i18n "wizard.next"}}
@@ -73,7 +73,7 @@
         type="button"
         class="wizard-btn done"
         {{action "done"}}
-        disabled={{saving}}
+        disabled={{btnsDisabled}}
         tabindex={{primaryButtonIndex}}
       >
         {{i18n "wizard.done_custom"}}
