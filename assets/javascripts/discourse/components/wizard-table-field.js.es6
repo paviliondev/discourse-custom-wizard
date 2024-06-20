@@ -18,6 +18,7 @@ export default Component.extend({
   isDropdown: equal("value.type", "dropdown"),
   isTag: equal("value.type", "tag"),
   isCategory: equal("value.type", "category"),
+  isTopic: equal("value.type", "topic"),
   isGroup: equal("value.type", "group"),
   isUserSelector: equal("value.type", "user_selector"),
   isSubmittedAt: equal("field", "submitted_at"),

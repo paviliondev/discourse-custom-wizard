@@ -33,6 +33,7 @@ module DiscoursePluginStatistics
             upload: 0,
             tag: 0,
             category: 0,
+            topic: 0,
             group: 0,
             user_selector: 0,
           },

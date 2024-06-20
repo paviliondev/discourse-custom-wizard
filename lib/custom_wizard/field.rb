@@ -129,6 +129,11 @@ class CustomWizard::Field
         prefill: nil,
         content: nil
       },
+      topic: {
+        limit: 1,
+        prefill: nil,
+        content: nil
+      },
       group: {
         prefill: nil,
         content: nil

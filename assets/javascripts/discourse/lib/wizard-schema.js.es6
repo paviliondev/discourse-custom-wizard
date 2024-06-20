@@ -227,6 +227,7 @@ const filters = {
         "dropdown",
         "tag",
         "category",
+        "topic",
         "group",
         "user_selector",
       ],
