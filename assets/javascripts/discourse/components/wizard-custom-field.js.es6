@@ -22,7 +22,14 @@ export default Component.extend(UndoChanges, {
   isTextarea: equal("field.type", "textarea"),
   isUrl: equal("field.type", "url"),
   isComposer: equal("field.type", "composer"),
-  showPrefill: or("isText", "isCategory", "isTag", "isGroup", "isDropdown", "isTopic"),
+  showPrefill: or(
+    "isText",
+    "isCategory",
+    "isTag",
+    "isGroup",
+    "isDropdown",
+    "isTopic"
+  ),
   showContent: or("isCategory", "isTag", "isGroup", "isDropdown", "isTopic"),
   showLimit: or("isCategory", "isTag", "isTopic"),
   isTextType: or("isText", "isTextarea", "isComposer"),

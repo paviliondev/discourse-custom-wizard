@@ -186,4 +186,10 @@ body.custom-wizard {
   .wizard-topic-selector {
     width: 500px;
   }
+
+  .wizard-topic-selector .topic-row {
+    .topic-title {
+      margin-right: 10px;
+    }
+  }
 }

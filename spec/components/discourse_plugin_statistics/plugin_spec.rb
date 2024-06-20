@@ -57,6 +57,7 @@ describe DiscoursePluginStatistics::Plugin do
             tag: 0,
             category: 0,
             group: 0,
+            topic: 0,
             user_selector: 0,
           },
           realtime_validations: 0

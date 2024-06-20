@@ -63,6 +63,11 @@ describe CustomWizard::Mapper do
       "step_1_field_1": get_wizard_fixture("field/upload")
     }
   }
+  let(:template_params_object_array) {
+    {
+      "step_1_field_1" => [{ text: "Hello" }, { text: "World" }]
+    }
+  }
 
   def create_template_mapper(data, user)
     CustomWizard::Mapper.new(
@@ -498,6 +503,21 @@ describe CustomWizard::Mapper do
           wizard: true
         )
         expect(result).to eq("Incorrect")
+      end
+
+      it "iterates over an interpolated list of objects" do
+        template = <<-LIQUID.strip
+          {% for object in step_1_field_1 %}{{object.text}} {% endfor %}
+          LIQUID
+          mapper = create_template_mapper(template_params_object_array, user1)
+          result = mapper.interpolate(
+            template.dup,
+            template: true,
+            user: true,
+            wizard: true,
+            value: true
+          )
+          expect(result).to eq("Hello World ")
       end
 
       context "custom filter: 'first_non_empty'" do
