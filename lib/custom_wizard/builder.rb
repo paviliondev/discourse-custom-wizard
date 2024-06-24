@@ -143,6 +143,10 @@ class CustomWizard::Builder
       params[:property] = field_template['property']
     end
 
+    if field_template['type'] === 'topic'
+      params[:category] = field_template['category']
+    end
+
     if (content_inputs = field_template['content']).present?
       content = CustomWizard::Mapper.new(
         inputs: content_inputs,

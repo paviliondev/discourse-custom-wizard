@@ -245,6 +245,25 @@
   </div>
 {{/if}}
 
+{{#if isTopic}}
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.field.category.label"}}</label>
+    </div>
+
+    <div class="setting-value">
+      <CategoryChooser
+        @value={{this.field.category}}
+        @onChangeCategory={{action "changeCategory"}}
+        @options={{hash
+          none="admin.wizard.field.category.none"
+          autoInsertNoneItem=true
+        }}
+      />
+    </div>
+  </div>
+{{/if}}
+
 {{#wizard-subscription-container}}
   <div class="setting full field-mapper-setting">
     <div class="setting-label">

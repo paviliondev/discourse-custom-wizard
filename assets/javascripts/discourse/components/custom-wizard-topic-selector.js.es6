@@ -42,6 +42,13 @@ export default MultiSelectComponent.extend({
     searchParams.restrictToArchetype = "regular";
     searchParams.searchForId = true;
 
+    if (this.category) {
+      searchParams.searchContext = {
+        type: "category",
+        id: this.category,
+      };
+    }
+
     return searchForTerm(filter, searchParams).then((results) => {
       if (results?.posts?.length > 0) {
         return results.posts.mapBy("topic");

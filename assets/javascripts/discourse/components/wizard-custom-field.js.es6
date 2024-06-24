@@ -164,5 +164,9 @@ export default Component.extend(UndoChanges, {
         "field.image_upload_id": null,
       });
     },
+
+    changeCategory(category) {
+      this.set("field.category", category?.id);
+    },
   },
 });

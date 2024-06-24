@@ -22,6 +22,7 @@ class CustomWizard::Field
               :property,
               :content,
               :tag_groups,
+              :category,
               :can_create_tag,
               :preview_template,
               :placeholder
@@ -53,6 +54,7 @@ class CustomWizard::Field
     @property = attrs[:property]
     @content = attrs[:content]
     @tag_groups = attrs[:tag_groups]
+    @category = attrs[:category]
     @can_create_tag = attrs[:can_create_tag]
     @preview_template = attrs[:preview_template]
     @placeholder = attrs[:placeholder]
@@ -132,7 +134,8 @@ class CustomWizard::Field
       topic: {
         limit: 1,
         prefill: nil,
-        content: nil
+        content: nil,
+        category: nil
       },
       group: {
         prefill: nil,
