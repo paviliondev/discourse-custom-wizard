@@ -188,7 +188,8 @@ body.custom-wizard {
   }
 
   .wizard-topic-selector .topic-row {
-    .topic-title {
+    .topic-title,
+    .topic-categories > span:not(:last-of-type) {
       margin-right: 10px;
     }
   }
