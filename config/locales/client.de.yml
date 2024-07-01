@@ -205,6 +205,7 @@ de:
             user_field_options: "Benutzerfeld-Optionen"
             user: "Benutzer"
             category: "Kategorie"
+            topic: "topic"
             tag: "Tag"
             group: "Gruppe"
             list: "Liste"
@@ -221,6 +222,7 @@ de:
             user_field_options: "Feld auswählen"
             user: "Benutzer auswählen"
             category: "Kategorie auswählen"
+            topic: "Select a topic"
             tag: "Tag auswählen"
             group: "Gruppe auswählen"
             list: "Element eingeben"
@@ -269,6 +271,9 @@ de:
           content: "Inhalt"
           tag_groups: "Tag-Gruppen"
           can_create_tag: "Can Create Tag"
+          category:
+            label: "Category"
+            none: "Limit to a category..."
           date_time_format:
             label: "Format"
             instructions: "<a href='https://momentjs.com/docs/#/displaying/format/' target='_blank'>Moment.js format</a>"
@@ -299,6 +304,7 @@ de:
             dropdown: Dropdown
             tag: Tag
             category: Kategorie
+            topic: Topic
             group: Gruppe
             user_selector: Benutzer-Auswahl
             date: Datum
@@ -452,6 +458,7 @@ de:
           download: "Herunterladen"
           group_id: "Group ID"
           category_id: "Category ID"
+          topic_id: "Topic ID"
           composer_preview: "Composer Preview"
         api:
           label: "API"
