@@ -182,7 +182,15 @@ body.custom-wizard {
     }
   }
 
-  .wizard-category-selector {
+  .wizard-category-selector,
+  .wizard-topic-selector {
     width: 500px;
+  }
+
+  .wizard-topic-selector .topic-row {
+    .topic-title,
+    .topic-categories > span:not(:last-of-type) {
+      margin-right: 10px;
+    }
   }
 }

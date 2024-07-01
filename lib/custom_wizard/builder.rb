@@ -131,7 +131,7 @@ class CustomWizard::Builder
       params[:format] = field_template['format']
     end
 
-    if field_template['type'] === 'category' || field_template['type'] === 'tag'
+    if %w[category tag topic].include?(field_template['type'])
       params[:limit] = field_template['limit']
     end
 
@@ -141,6 +141,10 @@ class CustomWizard::Builder
 
     if field_template['type'] === 'category'
       params[:property] = field_template['property']
+    end
+
+    if field_template['type'] === 'topic'
+      params[:category] = field_template['category']
     end
 
     if (content_inputs = field_template['content']).present?

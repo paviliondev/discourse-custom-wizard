@@ -273,6 +273,15 @@ acceptance("Field | Fields", function (needs) {
     );
   });
 
+  test("Topic", async function (assert) {
+    await visit("/w/wizard");
+    assert.ok(visible(".wizard-field.topic-field .multi-select-header"));
+    await click(".wizard-field.topic-field .select-kit-header");
+    assert.ok(
+      exists(".wizard-field.topic-field .topic-selector .select-kit-filter")
+    );
+  });
+
   test("Group", async function (assert) {
     await visit("/w/wizard");
     assert.ok(visible(".wizard-field.group-field .single-select-header"));

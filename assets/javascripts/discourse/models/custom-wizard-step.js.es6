@@ -63,7 +63,8 @@ export default EmberObject.extend(ValidState, {
     return ajax({
       url: `/w/${wizardId}/steps/${this.get("id")}`,
       type: "PUT",
-      data: { fields },
+      contentType: "application/json",
+      data: JSON.stringify({ fields }),
     }).catch((response) => {
       if (response.jqXHR) {
         response = response.jqXHR;

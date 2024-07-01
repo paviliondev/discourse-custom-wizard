@@ -15,15 +15,23 @@ export default Component.extend(UndoChanges, {
   isDropdown: equal("field.type", "dropdown"),
   isUpload: equal("field.type", "upload"),
   isCategory: equal("field.type", "category"),
+  isTopic: equal("field.type", "topic"),
   isGroup: equal("field.type", "group"),
   isTag: equal("field.type", "tag"),
   isText: equal("field.type", "text"),
   isTextarea: equal("field.type", "textarea"),
   isUrl: equal("field.type", "url"),
   isComposer: equal("field.type", "composer"),
-  showPrefill: or("isText", "isCategory", "isTag", "isGroup", "isDropdown"),
-  showContent: or("isCategory", "isTag", "isGroup", "isDropdown"),
-  showLimit: or("isCategory", "isTag"),
+  showPrefill: or(
+    "isText",
+    "isCategory",
+    "isTag",
+    "isGroup",
+    "isDropdown",
+    "isTopic"
+  ),
+  showContent: or("isCategory", "isTag", "isGroup", "isDropdown", "isTopic"),
+  showLimit: or("isCategory", "isTag", "isTopic"),
   isTextType: or("isText", "isTextarea", "isComposer"),
   isComposerPreview: equal("field.type", "composer_preview"),
   categoryPropertyTypes: selectKitContent(["id", "slug"]),
@@ -155,6 +163,10 @@ export default Component.extend(UndoChanges, {
         "field.image": null,
         "field.image_upload_id": null,
       });
+    },
+
+    changeCategory(category) {
+      this.set("field.category", category?.id);
     },
   },
 });

@@ -14,6 +14,7 @@ const StandardFieldValidation = [
   "text_only",
   "composer",
   "category",
+  "topic",
   "group",
   "date",
   "time",

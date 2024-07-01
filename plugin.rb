@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Forms for Discourse. Better onboarding, structured posting, data enrichment, automated actions and much more.
-# version: 2.6.11
+# version: 2.7.0
 # authors: Angus McLeod, Faizaan Gagan, Robert Barrow, Keegan George, Kaitlin Maddever, Juan Marcos Gutierrez Ramos
 # url: https://github.com/paviliondev/discourse-custom-wizard
 # contact_emails: development@pavilion.tech
 # subscription_url: https://coop.pavilion.tech
 # meta_topic_id: 73345
 
-gem 'liquid', '5.0.1', require: true
+gem 'liquid', '5.5.0', require: true
 gem "discourse_subscription_client", "0.1.2", require_name: "discourse_subscription_client"
 gem 'discourse_plugin_statistics', '0.1.0.pre7', require: true
 register_asset 'stylesheets/common/admin.scss'

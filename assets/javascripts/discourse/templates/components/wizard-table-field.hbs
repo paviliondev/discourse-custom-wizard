@@ -122,6 +122,22 @@
     </a>
   {{/if}}
 
+  {{#if isTopic}}
+    <strong>
+      {{i18n "admin.wizard.submissions.topic_id"}}:
+    </strong>
+    {{#each value.value as |topic|}}
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href={{topic.url}}
+        title={{topic.fancy_title}}
+      >
+        {{topic.id}}
+      </a>
+    {{/each}}
+  {{/if}}
+
   {{#if isGroup}}
     <strong>
       {{i18n "admin.wizard.submissions.group_id"}}:

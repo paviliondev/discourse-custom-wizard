@@ -18,6 +18,7 @@ class CustomWizard::FieldSerializer < ::ApplicationSerializer
              :content,
              :tag_groups,
              :can_create_tag,
+             :category,
              :validations,
              :max_length,
              :char_counter,
