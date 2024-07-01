@@ -205,6 +205,7 @@ bg:
             user_field_options: "user field options"
             user: "user"
             category: "category"
+            topic: "topic"
             tag: "tag"
             group: "group"
             list: "list"
@@ -221,6 +222,7 @@ bg:
             user_field_options: "Select field"
             user: "Select user"
             category: "Select category"
+            topic: "Select a topic"
             tag: "Select tag"
             group: "Select group"
             list: "Enter item"
@@ -269,6 +271,9 @@ bg:
           content: "Content"
           tag_groups: "Tag Groups"
           can_create_tag: "Can Create Tag"
+          category:
+            label: "Category"
+            none: "Limit to a category..."
           date_time_format:
             label: "Format"
             instructions: "<a href='https://momentjs.com/docs/#/displaying/format/' target='_blank'>Moment.js format</a>"
@@ -299,6 +304,7 @@ bg:
             dropdown: Dropdown
             tag: Tag
             category: Category
+            topic: Topic
             group: Group
             user_selector: User Selector
             date: Date
@@ -452,6 +458,7 @@ bg:
           download: "Download"
           group_id: "Group ID"
           category_id: "Category ID"
+          topic_id: "Topic ID"
           composer_preview: "Composer Preview"
         api:
           label: "API"
