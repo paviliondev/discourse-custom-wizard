@@ -230,7 +230,9 @@ describe CustomWizard::Wizard do
     before do
       enable_subscription("standard")
       @wizard.restart_on_revisit = true
-      CustomWizard::Template.save(@wizard.as_json)
+      CustomWizard::Template.save(
+        CustomWizard::WizardSerializer.new(@wizard, root: false).as_json
+      )
     end
 
     it "returns to step 1 if option to clear submissions on each visit is set" do

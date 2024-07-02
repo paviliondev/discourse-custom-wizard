@@ -173,7 +173,7 @@ describe CustomWizard::Action do
     steps = wizard.steps
     wizard.create_updater(steps[0].id, {}).update
     wizard.create_updater(steps[1].id,
-      step_2_field_7: upload.as_json
+      step_2_field_7: upload.as_json(only: [:id, :url, :user_id])
     ).update
     expect(user.profile_background_upload.id).to eq(upload.id)
   end
