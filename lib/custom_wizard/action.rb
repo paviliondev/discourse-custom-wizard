@@ -119,20 +119,22 @@ class CustomWizard::Action
 
     params[:target_group_names] = []
     params[:target_usernames] = []
+    params[:target_emails] = []
     [*targets].each do |target|
       if Group.find_by(name: target)
         params[:target_group_names] << target
       elsif User.find_by_username(target)
         params[:target_usernames] << target
-      else
-        #
+      elsif target.match(/@/) # Compare discourse/discourse/app/controllers/posts_controller.rb#L922-L923
+        params[:target_emails] << target
       end
     end
 
     if params[:title].present? &&
        params[:raw].present? &&
        (params[:target_usernames].present? ||
-        params[:target_group_names].present?)
+        params[:target_group_names].present? ||
+        params[:target_emails].present?)
 
       params[:archetype] = Archetype.private_message
 

@@ -333,7 +333,7 @@ describe CustomWizard::Action do
       expect(user2.reload.notifications.count).to eq(1)
     end
 
-    it "send_message works with guests are permitted" do
+    it "send_message works when guests are permitted" do
       wizard_template["permitted"] = guests_permitted["permitted"]
       wizard_template.delete("actions")
       wizard_template['actions'] = [send_message]
@@ -351,6 +351,41 @@ describe CustomWizard::Action do
 
       expect(topic.exists?).to eq(true)
       expect(topic.first.topic_allowed_users.first.user.username).to eq('angus1')
+      expect(topic.first.topic_allowed_users.second.user.username).to eq(Discourse.system_user.username)
+      expect(post.exists?).to eq(true)
+    end
+
+    it "send_message works when guests are permitted and the target is an email address" do
+      Jobs.run_immediately!
+
+      wizard_template["permitted"] = guests_permitted["permitted"]
+      wizard_template.delete("actions")
+
+      send_message["recipient"] = [
+        {
+          "type": "assignment",
+          "output": "step_1_field_1",
+          "output_type": "wizard_field",
+          "output_connector": "set"
+        }
+      ]
+
+      wizard_template['actions'] = [send_message]
+      update_template(wizard_template)
+
+      NotificationEmailer.expects(:process_notification).once
+
+      wizard = CustomWizard::Builder.new(wizard_template["id"], nil, CustomWizard::Wizard.generate_guest_id).build
+      wizard.create_updater(wizard.steps[0].id, step_1_field_1: "guest@email.com").update
+      updater = wizard.create_updater(wizard.steps[1].id, {})
+      updater.update
+
+      topic = Topic.where(archetype: Archetype.private_message, title: "Message title")
+      post = Post.where(topic_id: topic.pluck(:id))
+
+      expect(topic.exists?).to eq(true)
+      expect(topic.first.topic_allowed_users.first.user.staged).to eq(true)
+      expect(topic.first.topic_allowed_users.first.user.primary_email.email).to eq('guest@email.com')
       expect(topic.first.topic_allowed_users.second.user.username).to eq(Discourse.system_user.username)
       expect(post.exists?).to eq(true)
     end
