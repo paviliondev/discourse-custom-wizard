@@ -1,11 +1,17 @@
 <div>{{text}}</div>
 <div class="no-access-gutter">
-  <button
-    class="wizard-btn primary return-to-site"
+  <a
+    class="return-to-site"
     {{action "skip"}}
-    type="button"
   >
     {{i18n "wizard.return_to_site" siteName=siteName}}
-    {{d-icon "sign-out-alt"}}
-  </button>
+  </a>
+  {{#if showLoginButton}}
+    <DButton
+      class="btn-primary btn-small login-button"
+      @action={{action "showLogin"}}
+      @label="log_in"
+      @icon="user"
+    />
+  {{/if}}
 </div>
