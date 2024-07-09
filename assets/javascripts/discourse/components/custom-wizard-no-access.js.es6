@@ -36,6 +36,6 @@ export default Component.extend({
     showLogin() {
       cookie("destination_url", getURL(`/w/${this.get("wizardId")}`));
       getOwner(this).lookup("route:application").send("showLogin");
-    }
+    },
   },
 });

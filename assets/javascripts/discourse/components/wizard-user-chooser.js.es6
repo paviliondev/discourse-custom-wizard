@@ -1,4 +1,5 @@
 import UserChooserComponent from "select-kit/components/user-chooser";
+import I18n from "I18n";
 
 export const WIZARD_USER = "wizard-user";
 
@@ -14,7 +15,10 @@ export default UserChooserComponent.extend({
   },
 
   modifyNoSelection() {
-    return this.defaultItem(WIZARD_USER, I18n.t("admin.wizard.action.poster.wizard_user"));
+    return this.defaultItem(
+      WIZARD_USER,
+      I18n.t("admin.wizard.action.poster.wizard_user")
+    );
   },
 
   selectKitOptions: {
@@ -28,7 +32,6 @@ export default UserChooserComponent.extend({
       return;
     }
     return superPromise.then((results) => {
-      console.log(results)
       if (!results || results.length === 0) {
         return;
       }

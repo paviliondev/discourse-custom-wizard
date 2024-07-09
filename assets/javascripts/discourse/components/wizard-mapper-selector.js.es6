@@ -121,9 +121,13 @@ export default Component.extend({
   guestGroup: computed("options.guestGroup", "inputType", function () {
     return this.optionEnabled("guestGroup");
   }),
-  includeMessageableGroups: computed("options.includeMessageableGroups", "inputType", function () {
-    return this.optionEnabled("includeMessageableGroups");
-  }),
+  includeMessageableGroups: computed(
+    "options.includeMessageableGroups",
+    "inputType",
+    function () {
+      return this.optionEnabled("includeMessageableGroups");
+    }
+  ),
   userEnabled: computed("options.userSelection", "inputType", function () {
     return this.optionEnabled("userSelection");
   }),
@@ -358,10 +362,10 @@ export default Component.extend({
   @discourseComputed("includeMessageableGroups", "options.userLimit")
   userOptions(includeMessageableGroups, userLimit) {
     const opts = {
-      includeMessageableGroups
-    }
+      includeMessageableGroups,
+    };
     if (userLimit) {
-      opts.maximum = userLimit
+      opts.maximum = userLimit;
     }
     return opts;
   },
