@@ -221,7 +221,7 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
       ".admin-wizard-container .wizard-custom-action .setting"
     );
     assert.ok(
-      listTopicSettings.length === 10,
+      listTopicSettings.length === 12,
       "Display all settings of create topic"
     );
     await actionTypeDropdown.expand();
