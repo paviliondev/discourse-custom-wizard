@@ -7,12 +7,13 @@ class CustomWizard::Action
                 :result
 
   REQUIRES_USER = %w[
-    create_topic
     update_profile
     open_composer
     watch_categories
     add_to_group
   ]
+
+  WIZARD_USER = 'wizard-user'
 
   def initialize(opts)
     @wizard = opts[:wizard]
@@ -69,7 +70,7 @@ class CustomWizard::Action
     end
 
     if params[:title].present? && params[:raw].present?
-      creator = PostCreator.new(user, params)
+      creator = PostCreator.new(topic_poster, params)
       post = creator.create
 
       if creator.errors.present?
@@ -138,8 +139,7 @@ class CustomWizard::Action
 
       params[:archetype] = Archetype.private_message
 
-      poster = user || Discourse.system_user
-      creator = PostCreator.new(poster, params)
+      creator = PostCreator.new(topic_poster, params)
       post = creator.create
 
       if creator.errors.present?
@@ -651,6 +651,45 @@ class CustomWizard::Action
     end
 
     params
+  end
+
+  def topic_poster
+    @topic_poster ||= begin
+      poster_id = CustomWizard::Mapper.new(
+        inputs: action['poster'],
+        data: mapper_data,
+        user: user,
+      ).perform
+      poster_id = [*poster_id].first if poster_id.present?
+
+      if poster_id.blank? || poster_id === WIZARD_USER
+        poster = user || guest_user
+      else
+        poster = User.find_by_username(poster_id)
+      end
+
+      poster || Discourse.system_user
+    end
+  end
+
+  def guest_user
+    @guest_user ||= begin
+      return nil unless action['guest_email']
+
+      email = CustomWizard::Mapper.new(
+        inputs: action['guest_email'],
+        data: mapper_data,
+      ).perform
+
+      if email&.match(/@/)
+        User.create!(
+          email: email,
+          username: UserNameSuggester.suggest(email),
+          name: User.suggest_name(email),
+          staged: true,
+        )
+      end
+    end
   end
 
   def new_group_params

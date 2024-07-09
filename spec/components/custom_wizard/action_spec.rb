@@ -46,7 +46,7 @@ describe CustomWizard::Action do
     update_template(wizard_template)
   end
 
-  context 'creating a topic' do
+  describe '#create_topic' do
     it "works" do
       wizard = CustomWizard::Builder.new(@template[:id], user).build
       wizard.create_updater(
@@ -160,6 +160,43 @@ describe CustomWizard::Action do
       expect(action.result.success?).to eq(true)
       expect(TopicCustomField.exists?(name: custom_field_name)).to eq(true)
     end
+
+    it "allows poster to be set" do
+      wizard_template[:actions][0]["poster"] = [
+        {
+          "type": "assignment",
+          "output_type": "user",
+          "output_connector": "set",
+          "output": [
+            "angus1"
+          ]
+        }
+      ]
+      update_template(wizard_template)
+
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      wizard.create_updater(
+        wizard.steps.first.id,
+        step_1_field_1: "Topic Title",
+        step_1_field_2: "topic body"
+      ).update
+      wizard.create_updater(wizard.steps.second.id, {}).update
+      wizard.create_updater(wizard.steps.last.id,
+        step_3_field_3: category.id
+      ).update
+
+      topic = Topic.where(
+        title: "Topic Title",
+        category_id: category.id
+      )
+      expect(topic.exists?).to eq(true)
+      post = Post.find_by(
+        topic_id: topic.pluck(:id),
+        raw: "topic body"
+      )
+      expect(post.present?).to eq(true)
+      expect(post.user.username).to eq('angus1')
+    end
   end
 
   it 'updates a profile' do
@@ -234,6 +271,7 @@ describe CustomWizard::Action do
   context "standard subscription actions" do
     before do
       enable_subscription("standard")
+      Jobs.run_immediately!
     end
 
     it 'watches tags' do
@@ -333,61 +371,117 @@ describe CustomWizard::Action do
       expect(user2.reload.notifications.count).to eq(1)
     end
 
-    it "send_message works when guests are permitted" do
-      wizard_template["permitted"] = guests_permitted["permitted"]
-      wizard_template.delete("actions")
-      wizard_template['actions'] = [send_message]
-      update_template(wizard_template)
+    context "with a guest" do
+      describe "#create_topic" do
+        it "creates a staged guest poster if guest_email is set" do
+          Jobs.run_immediately!
 
-      User.create(username: 'angus1', email: "angus1@email.com")
+          wizard_template["permitted"] = guests_permitted["permitted"]
+          wizard_template[:steps][0][:fields] << {
+            "id": "step_1_field_5",
+            "label": "Guest Email",
+            "type": "text",
+            "min_length": "3",
+          }.as_json
+          create_topic["run_after"] = "step_3"
+          create_topic["guest_email"] = [
+            {
+              "type": "assignment",
+              "output": "step_1_field_5",
+              "output_type": "wizard_field",
+              "output_connector": "set"
+            }
+          ]
+          create_topic["category"] = [
+            {
+              "type": "assignment",
+              "output": "step_3_field_3",
+              "output_type": "wizard_field",
+              "output_connector": "set"
+            }
+          ]
+          wizard_template.delete("actions")
+          wizard_template[:actions] = [create_topic]
 
-      wizard = CustomWizard::Builder.new(wizard_template["id"], nil, CustomWizard::Wizard.generate_guest_id).build
-      wizard.create_updater(wizard.steps[0].id, {}).update
-      updater = wizard.create_updater(wizard.steps[1].id, {})
-      updater.update
+          update_template(wizard_template)
 
-      topic = Topic.where(archetype: Archetype.private_message, title: "Message title")
-      post = Post.where(topic_id: topic.pluck(:id))
+          wizard = CustomWizard::Builder.new(
+            @template[:id],
+            nil,
+            CustomWizard::Wizard.generate_guest_id
+          ).build
+          wizard.create_updater(
+            wizard.steps.first.id,
+            step_1_field_5: "guest@email.com"
+          ).update
+          wizard.create_updater(wizard.steps.second.id, {}).update
+          wizard.create_updater(wizard.steps.last.id,
+            step_3_field_3: category.id
+          ).update
 
-      expect(topic.exists?).to eq(true)
-      expect(topic.first.topic_allowed_users.first.user.username).to eq('angus1')
-      expect(topic.first.topic_allowed_users.second.user.username).to eq(Discourse.system_user.username)
-      expect(post.exists?).to eq(true)
-    end
+          topic = Topic.where(category_id: category.id).first
+          expect(topic.present?).to eq(true)
+          expect(topic.posts.first.user.staged).to eq(true)
+          expect(topic.posts.first.user.primary_email.email).to eq('guest@email.com')
+        end
+      end
 
-    it "send_message works when guests are permitted and the target is an email address" do
-      Jobs.run_immediately!
+      describe "#send_message" do
+        it "works" do
+          wizard_template["permitted"] = guests_permitted["permitted"]
+          wizard_template.delete("actions")
+          wizard_template['actions'] = [send_message]
+          update_template(wizard_template)
 
-      wizard_template["permitted"] = guests_permitted["permitted"]
-      wizard_template.delete("actions")
+          wizard = CustomWizard::Builder.new(wizard_template["id"], nil, CustomWizard::Wizard.generate_guest_id).build
+          wizard.create_updater(wizard.steps[0].id, {}).update
+          updater = wizard.create_updater(wizard.steps[1].id, {})
+          updater.update
 
-      send_message["recipient"] = [
-        {
-          "type": "assignment",
-          "output": "step_1_field_1",
-          "output_type": "wizard_field",
-          "output_connector": "set"
-        }
-      ]
+          topic = Topic.where(archetype: Archetype.private_message, title: "Message title")
+          post = Post.where(topic_id: topic.pluck(:id))
 
-      wizard_template['actions'] = [send_message]
-      update_template(wizard_template)
+          expect(topic.exists?).to eq(true)
+          expect(topic.first.topic_allowed_users.first.user.username).to eq(user1.username)
+          expect(topic.first.topic_allowed_users.second.user.username).to eq(Discourse.system_user.username)
+          expect(post.exists?).to eq(true)
+        end
 
-      NotificationEmailer.expects(:process_notification).once
+        it "works when the target is an email address" do
+          Jobs.run_immediately!
 
-      wizard = CustomWizard::Builder.new(wizard_template["id"], nil, CustomWizard::Wizard.generate_guest_id).build
-      wizard.create_updater(wizard.steps[0].id, step_1_field_1: "guest@email.com").update
-      updater = wizard.create_updater(wizard.steps[1].id, {})
-      updater.update
+          wizard_template["permitted"] = guests_permitted["permitted"]
+          wizard_template.delete("actions")
 
-      topic = Topic.where(archetype: Archetype.private_message, title: "Message title")
-      post = Post.where(topic_id: topic.pluck(:id))
+          send_message["recipient"] = [
+            {
+              "type": "assignment",
+              "output": "step_1_field_1",
+              "output_type": "wizard_field",
+              "output_connector": "set"
+            }
+          ]
 
-      expect(topic.exists?).to eq(true)
-      expect(topic.first.topic_allowed_users.first.user.staged).to eq(true)
-      expect(topic.first.topic_allowed_users.first.user.primary_email.email).to eq('guest@email.com')
-      expect(topic.first.topic_allowed_users.second.user.username).to eq(Discourse.system_user.username)
-      expect(post.exists?).to eq(true)
+          wizard_template['actions'] = [send_message]
+          update_template(wizard_template)
+
+          NotificationEmailer.expects(:process_notification).once
+
+          wizard = CustomWizard::Builder.new(wizard_template["id"], nil, CustomWizard::Wizard.generate_guest_id).build
+          wizard.create_updater(wizard.steps[0].id, step_1_field_1: "guest@email.com").update
+          updater = wizard.create_updater(wizard.steps[1].id, {})
+          updater.update
+
+          topic = Topic.where(archetype: Archetype.private_message, title: "Message title")
+          post = Post.where(topic_id: topic.pluck(:id))
+
+          expect(topic.exists?).to eq(true)
+          expect(topic.first.topic_allowed_users.first.user.staged).to eq(true)
+          expect(topic.first.topic_allowed_users.first.user.primary_email.email).to eq('guest@email.com')
+          expect(topic.first.topic_allowed_users.second.user.username).to eq(Discourse.system_user.username)
+          expect(post.exists?).to eq(true)
+        end
+      end
     end
   end
 
@@ -528,7 +622,6 @@ describe CustomWizard::Action do
       wizard.create_updater(wizard.steps.second.id, {}).update
       wizard.create_updater(wizard.steps.last.id, step_3_field_3: category.id)
         .update
-      User.create(username: 'angus1', email: 'angus1@email.com')
       wizard.create_updater(wizard.steps[0].id, {}).update
       wizard.create_updater(wizard.steps[1].id, {}).update
       topic = Topic.where(title: 'Topic Title', category_id: category.id)

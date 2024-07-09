@@ -31,7 +31,6 @@ class CustomWizard::Field
                 :step
 
   REQUIRES_USER = %w[
-    composer
     upload
   ]
 

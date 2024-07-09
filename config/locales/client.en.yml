@@ -344,6 +344,12 @@ en:
           include: "Include Fields"
           title: "Title"
           post: "Post"
+          poster:
+            label: "Poster"
+            wizard_user: "Wizard user"
+          guest_email:
+            label: "Guest email"
+            placeholder: "Field for guest email"
           topic_attr: "Topic Attribute"
           interpolate_fields: "Insert wizard fields using the field_id in w{}. Insert user fields using field key in u{}."
 

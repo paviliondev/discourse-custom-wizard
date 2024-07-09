@@ -98,6 +98,48 @@
       </div>
     </div>
   {{/if}}
+
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.poster.label"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=this.action.poster
+        property="poster"
+        onUpdate=(action "mappedFieldUpdated")
+        options=(hash
+          textSelection='key,value'
+          wizardFieldSelection=true
+          userSelection="output"
+          outputDefaultSelection="user"
+          userLimit="1"
+          context="action"
+        )
+      }}
+    </div>
+  </div>
+
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.action.guest_email.label"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=this.action.guest_email
+        property="guest_email"
+        onUpdate=(action "mappedFieldUpdated")
+        options=(hash
+          textSelection="key,value"
+          wizardFieldSelection=true
+          outputPlaceholder="admin.wizard.action.guest_email.placeholder"
+          context="action"
+        )
+      }}
+    </div>
+  </div>
 {{/if}}
 
 {{#if publicTopicFields}}
@@ -217,6 +259,7 @@
           userSelection="output"
           outputDefaultSelection="user"
           context="action"
+          includeMessageableGroups="true"
         )
       }}
     </div>

@@ -145,6 +145,8 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
         custom_fields: mapped_params,
         visible: mapped_params,
         required: mapped_params,
+        poster: mapped_params,
+        guest_email: mapped_params,
         recipient: mapped_params,
         categories: mapped_params,
         mute_remainder: mapped_params,

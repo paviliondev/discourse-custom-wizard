@@ -5,6 +5,7 @@ import { computed } from "@ember/object";
 import UndoChanges from "../mixins/undo-changes";
 import Component from "@ember/component";
 import I18n from "I18n";
+import { WIZARD_USER } from "./wizard-user-chooser";
 
 export default Component.extend(UndoChanges, {
   componentType: "action",
