@@ -5,7 +5,7 @@ de:
       completed: "Du hast diesen Assistenten abgeschlossen."
       not_permitted: "Du bist nicht berechtigt, auf diesen Assistenten zuzugreifen."
       none: "Es gibt hier keinen Assistenten."
-      return_to_site: "Zurück zu {{siteName}}"
+      return_to_site: "Return to {{siteName}}."
       requires_login: "Du musst eingeloggt sein, um auf diesen Assistenten zuzugreifen."
       reset: "Diesen Assistenten zurücksetzen."
       step_not_permitted: "Du bist nicht berechtigt, diesen Schritt anzusehen."
@@ -330,6 +330,12 @@ de:
           include: "Felder einschließen"
           title: "Titel"
           post: "Beitrag"
+          poster:
+            label: "Poster"
+            wizard_user: "Wizard user"
+          guest_email:
+            label: "Guest email"
+            placeholder: "Field for guest email"
           topic_attr: "Themen-Attribut"
           interpolate_fields: "Füge Assistentenfelder mit der field_id in w{} ein. Füge Benutzerfelder mit dem Feldschlüssel in u{} ein."
           run_after:
