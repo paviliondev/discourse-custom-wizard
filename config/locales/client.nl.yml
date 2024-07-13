@@ -5,7 +5,7 @@ nl:
       completed: "U heeft deze wizard voltooid."
       not_permitted: "U heeft geen toegang tot deze wizard."
       none: "Er is hier geen wizard."
-      return_to_site: "Terugkeren naar {{siteName}}"
+      return_to_site: "Return to {{siteName}}."
       requires_login: "U moet ingelogd zijn om toegang te krijgen tot deze wizard."
       reset: "Reset deze wizard."
       step_not_permitted: "U hebt geen toestemming om deze stap te bekijken."
@@ -330,6 +330,12 @@ nl:
           include: "Include Fields"
           title: "Title"
           post: "Post"
+          poster:
+            label: "Poster"
+            wizard_user: "Wizard user"
+          guest_email:
+            label: "Guest email"
+            placeholder: "Field for guest email"
           topic_attr: "Topic Attribute"
           interpolate_fields: "Insert wizard fields using the field_id in w{}. Insert user fields using field key in u{}."
           run_after:
