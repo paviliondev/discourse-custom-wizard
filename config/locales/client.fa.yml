@@ -5,7 +5,7 @@ fa:
       completed: "You have completed this wizard."
       not_permitted: "You are not permitted to access this wizard."
       none: "There is no wizard here."
-      return_to_site: "Return to {{siteName}}"
+      return_to_site: "Return to {{siteName}}."
       requires_login: "You need to be logged in to access this wizard."
       reset: "Reset this wizard."
       step_not_permitted: "You're not permitted to view this step."
@@ -330,6 +330,12 @@ fa:
           include: "Include Fields"
           title: "Title"
           post: "Post"
+          poster:
+            label: "Poster"
+            wizard_user: "Wizard user"
+          guest_email:
+            label: "Guest email"
+            placeholder: "Field for guest email"
           topic_attr: "Topic Attribute"
           interpolate_fields: "Insert wizard fields using the field_id in w{}. Insert user fields using field key in u{}."
           run_after:
