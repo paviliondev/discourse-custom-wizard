@@ -66,12 +66,12 @@
   {{/if}}
 
   {{#if showUser}}
-    {{email-group-user-chooser
+    {{wizard-user-chooser
       placeholderKey=placeholderKey
       value=value
       autocomplete="discourse"
       onChange=(action "changeUserValue")
-      options=(hash includeMessageableGroups="true")
+      options=userOptions
     }}
   {{/if}}
 </div>

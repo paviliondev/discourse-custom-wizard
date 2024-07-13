@@ -158,7 +158,12 @@ body.custom-wizard {
   .no-access-gutter {
     margin-top: 10px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+
+    .return-to-site {
+      display: flex;
+      align-items: center;
+    }
   }
 
   .powered-by-discourse {

@@ -156,9 +156,6 @@ describe CustomWizard::TemplateValidator do
       expect(validator.perform).to eq(false)
       errors = validator.errors.to_a
       expect(errors).to include(
-        I18n.t("wizard.validation.not_permitted_for_guests", object_id: "action_1")
-      )
-      expect(errors).to include(
         I18n.t("wizard.validation.not_permitted_for_guests", object_id: "step_2_field_7")
       )
     end

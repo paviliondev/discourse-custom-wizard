@@ -215,7 +215,7 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
       ".admin-wizard-container .wizard-custom-action .setting"
     );
     assert.ok(
-      listTopicSettings.length === 10,
+      listTopicSettings.length === 12,
       "Display all settings of create topic"
     );
     await actionTypeDropdown.expand();
@@ -224,7 +224,7 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
       ".admin-wizard-container .wizard-custom-action .setting"
     );
     assert.ok(
-      listTopicSettings.length === 9,
+      listTopicSettings.length === 11,
       "Display all settings of send message"
     );
     await actionTypeDropdown.expand();

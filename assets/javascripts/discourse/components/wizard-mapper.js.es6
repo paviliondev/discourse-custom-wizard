@@ -33,6 +33,8 @@ export default Component.extend({
       outputConnector: options.outputConnector || null,
       context: options.context || null,
       guestGroup: options.guestGroup || false,
+      includeMessageableGroups: options.includeMessageableGroups || false,
+      userLimit: options.userLimit || null,
     };
 
     let inputTypes = ["key", "value", "output"];
