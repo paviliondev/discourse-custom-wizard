@@ -169,7 +169,10 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
         visibility_level: mapped_params,
         members_visibility_level: mapped_params,
         add_event: mapped_params,
-        add_location: mapped_params
+        add_location: mapped_params,
+        public_exit: mapped_params,
+        public_admission: mapped_params,
+        primary_group: mapped_params
       ]
     )
   end

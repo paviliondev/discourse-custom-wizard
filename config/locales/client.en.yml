@@ -441,6 +441,9 @@ en:
             messageable_level: Messageable Level
             visibility_level: Visibility Level
             members_visibility_level: Members Visibility Level
+            public_exit: Allow Group exit
+            public_admission: Allow Group joining
+            primary_group: Primary Group
 
         custom_field:
           nav_label: "Custom Fields"
