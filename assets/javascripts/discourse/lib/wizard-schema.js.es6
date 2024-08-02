@@ -211,7 +211,7 @@ const action = {
     "members_visibility_level",
     "add_event",
     "add_location",
-    "guest_email"
+    "guest_email",
   ],
   required: ["id", "type"],
   dependent: {},
