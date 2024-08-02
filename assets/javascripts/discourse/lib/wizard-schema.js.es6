@@ -211,6 +211,7 @@ const action = {
     "members_visibility_level",
     "add_event",
     "add_location",
+    "guest_email"
   ],
   required: ["id", "type"],
   dependent: {},
@@ -239,7 +240,7 @@ const filters = {
       ],
     },
     action: {
-      type: ["route_to", "send_message"],
+      type: ["route_to", "send_message", "create_topic"],
     },
   },
 };
