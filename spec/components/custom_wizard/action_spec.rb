@@ -5,7 +5,7 @@ describe CustomWizard::Action do
   fab!(:user1) { Fabricate(:user, name: "Angus One", username: 'angus1', email: "angus_one@email.com", trust_level: TrustLevel[2]) }
   fab!(:category) { Fabricate(:category, name: 'cat1', slug: 'cat-slug') }
   fab!(:tag) { Fabricate(:tag, name: 'tag1') }
-  fab!(:group) { Fabricate(:group) }
+  fab!(:group)
 
   let(:wizard_template) { get_wizard_fixture("wizard") }
   let(:open_composer) { get_wizard_fixture("actions/open_composer") }
@@ -373,7 +373,7 @@ describe CustomWizard::Action do
 
     context "with a guest" do
       describe "#create_topic" do
-        it "creates a staged guest poster if guest_email is set" do
+        before do
           Jobs.run_immediately!
 
           wizard_template["permitted"] = guests_permitted["permitted"]
@@ -404,7 +404,9 @@ describe CustomWizard::Action do
           wizard_template[:actions] = [create_topic]
 
           update_template(wizard_template)
+        end
 
+        it "creates a staged guest poster if guest_email is set" do
           wizard = CustomWizard::Builder.new(
             @template[:id],
             nil,
@@ -422,6 +424,29 @@ describe CustomWizard::Action do
           topic = Topic.where(category_id: category.id).first
           expect(topic.present?).to eq(true)
           expect(topic.posts.first.user.staged).to eq(true)
+          expect(topic.posts.first.user.primary_email.email).to eq('guest@email.com')
+        end
+
+        it "returns an existing user with the same email" do
+          existing = Fabricate(:user, email: 'guest@email.com')
+
+          wizard = CustomWizard::Builder.new(
+            @template[:id],
+            nil,
+            CustomWizard::Wizard.generate_guest_id
+          ).build
+          wizard.create_updater(
+            wizard.steps.first.id,
+            step_1_field_5: "guest@email.com"
+          ).update
+          wizard.create_updater(wizard.steps.second.id, {}).update
+          wizard.create_updater(wizard.steps.last.id,
+            step_3_field_3: category.id
+          ).update
+
+          topic = Topic.where(category_id: category.id).first
+          expect(topic.present?).to eq(true)
+          expect(topic.posts.first.user.staged).to eq(false)
           expect(topic.posts.first.user.primary_email.email).to eq('guest@email.com')
         end
       end

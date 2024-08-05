@@ -381,7 +381,7 @@ class CustomWizard::Action
 
     group_map = group_map.flatten.compact
 
-    unless group_map.present?
+    if group_map.blank?
       log_error("invalid group map")
       return
     end
@@ -415,7 +415,7 @@ class CustomWizard::Action
   end
 
   def route_to
-    return unless (url_input = action['url']).present?
+    return if (url_input = action['url']).blank?
 
     if url_input.is_a?(String)
       url = mapper.interpolate(url_input)
@@ -510,7 +510,7 @@ class CustomWizard::Action
       user: user
     ).perform
 
-    return false unless output.present?
+    return false if output.blank?
 
     if output.is_a?(Array)
       output.first
@@ -528,7 +528,7 @@ class CustomWizard::Action
       user: user,
     ).perform
 
-    return false unless output.present?
+    return false if output.blank?
 
     if output.is_a?(Array)
       output.flatten
@@ -682,12 +682,16 @@ class CustomWizard::Action
       ).perform
 
       if email&.match(/@/)
-        User.create!(
-          email: email,
-          username: UserNameSuggester.suggest(email),
-          name: User.suggest_name(email),
-          staged: true,
-        )
+        if user = User.find_by_email(email)
+          user
+        else
+          User.create!(
+            email: email,
+            username: UserNameSuggester.suggest(email),
+            name: User.suggest_name(email),
+            staged: true,
+          )
+        end
       end
     end
   end
