@@ -3,6 +3,7 @@
 describe ApplicationController do
   fab!(:user) { Fabricate(:user, username: 'angus', email: "angus@email.com", trust_level: TrustLevel[3]) }
   let(:wizard_template) { get_wizard_fixture("wizard") }
+  let(:permitted_json) { get_wizard_fixture("wizard/permitted") }
 
   before do
     CustomWizard::Template.save(wizard_template, skip_jobs: true)
@@ -22,7 +23,7 @@ describe ApplicationController do
 
       it "does not redirect if wizard if no after setting is enabled" do
         get "/"
-        expect(response.status).to eq(200)
+        expect(response).to_not redirect_to("/w/super-mega-fun-wizard")
       end
 
       context "after signup enabled" do
@@ -34,7 +35,7 @@ describe ApplicationController do
         it "does not redirect if wizard does not exist" do
           CustomWizard::Template.remove(@template[:id])
           get "/"
-          expect(response.status).to eq(200)
+          expect(response).to_not redirect_to("/w/super-mega-fun-wizard")
         end
 
         it "redirects if user is required to complete a wizard" do
@@ -50,7 +51,7 @@ describe ApplicationController do
           CustomWizard::Template.save(@template)
 
           get "/"
-          expect(response.status).to eq(200)
+          expect(response).to_not redirect_to("/w/super-mega-fun-wizard")
         end
 
         it "saves original destination of user" do
@@ -62,6 +63,7 @@ describe ApplicationController do
         end
       end
 
+      include ActiveSupport::Testing::TimeHelpers
       context "after time enabled" do
         before do
           @template["after_time"] = true
@@ -69,16 +71,58 @@ describe ApplicationController do
           CustomWizard::Template.save(@template)
         end
 
-        it "does not redirect if time hasn't passed" do
-          get "/"
-          expect(response.status).to eq(200)
+        context "when time hasn't passed" do
+          it "does not redirect" do
+            get "/"
+            expect(response).to_not redirect_to("/w/super-mega-fun-wizard")
+          end
         end
 
-        it "redirects if time has passed" do
-          @template["after_time_scheduled"] = (Time.now - 1.hours).iso8601
-          CustomWizard::Template.save(@template)
-          get "/"
-          expect(response.status).to eq(200)
+        context "when time has passed" do
+          it "redirects if time has passed" do
+            travel_to Time.now + 4.hours
+            get "/"
+            expect(response).to redirect_to("/w/super-mega-fun-wizard")
+          end
+
+          context "when permitted is set" do
+            before do
+              enable_subscription("business")
+              @template["permitted"] = permitted_json["permitted"]
+              CustomWizard::Template.save(@template.as_json)
+            end
+
+            context "when user is in permitted group" do
+              it "redirects user" do
+                travel_to Time.now + 4.hours
+                get "/"
+                expect(response).to redirect_to("/w/super-mega-fun-wizard")
+              end
+            end
+
+            context "when user is not in permitted group" do
+              before do
+                Group.find(13).remove(user)
+              end
+
+              it "does not redirect user" do
+                travel_to Time.now + 4.hours
+                user.trust_level = TrustLevel[2]
+                user.save!
+                get "/"
+                expect(response).to_not redirect_to("/w/super-mega-fun-wizard")
+              end
+
+              it "does not redirect if user is an admin" do
+                travel_to Time.now + 4.hours
+                user.trust_level = TrustLevel[2]
+                user.admin = true
+                user.save!
+                get "/"
+                expect(response).to_not redirect_to("/w/super-mega-fun-wizard")
+              end
+            end
+          end
         end
       end
     end
@@ -86,7 +130,7 @@ describe ApplicationController do
     context "who is not required to complete wizard" do
       it "does nothing" do
         get "/"
-        expect(response.status).to eq(200)
+        expect(response).to_not redirect_to("/w/super-mega-fun-wizard")
       end
     end
   end
@@ -94,7 +138,7 @@ describe ApplicationController do
   context "with guest" do
     it "does nothing" do
       get "/"
-      expect(response.status).to eq(200)
+      expect(response).to_not redirect_to("/w/super-mega-fun-wizard")
     end
   end
 end

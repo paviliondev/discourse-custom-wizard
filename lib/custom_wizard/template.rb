@@ -116,7 +116,7 @@ class CustomWizard::Template
     ::CustomWizard::Cache.wrap(AFTER_TIME_CACHE_KEY) do
       list(
         setting: 'after_time',
-        query_str: "AND (value::json ->> 'after_time_scheduled')::timestamp < CURRENT_TIMESTAMP"
+        query_str: "AND (value::json ->> 'after_time_scheduled')::timestamp < '#{Time.now}'::timestamp"
       ).map { |t| t['id'] }
     end
   end

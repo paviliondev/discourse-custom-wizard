@@ -211,9 +211,9 @@ class CustomWizard::Wizard
     (step_ids - completed).empty?
   end
 
-  def permitted?
+  def permitted?(always_allow_admin: true)
     return nil unless actor_id
-    return true if user && (user.admin? || permitted.blank?)
+    return true if user && ((always_allow_admin && user.admin?) || permitted.blank?)
     return false if !user && permitted.blank?
 
     mapper = CustomWizard::Mapper.new(
