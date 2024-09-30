@@ -15,6 +15,7 @@ ru:
         name_too_short: "'%{name}' is too short for a custom field name (min length is #{min_length})"
         name_already_taken: "'%{name}' is already taken as a custom field name"
         save_default: "Failed to save custom field '%{name}'"
+        subscription_type: "%{type} custom fields require a subscription"
     field:
       too_short: "%{label} must be at least %{min} characters"
       too_long: "%{label} must not be more than %{max} characters"
@@ -45,8 +46,13 @@ ru:
       after_signup_after_time: "You can't use 'after time' and 'after signup' on the same wizard."
       after_time: "After time setting is invalid."
       liquid_syntax_error: "Liquid syntax error in %{attribute}: %{message}"
+      subscription: "%{type} %{property} usage is not supported on your subscription"
+      not_permitted_for_guests: "%{object_id} is not permitted when guests can access the wizard"
+    error_messages:
+      wizard_replacing_composer: "Category not allowed for topic creation."
   site_settings:
     custom_wizard_enabled: "Enable custom wizards."
     wizard_redirect_exclude_paths: "Routes excluded from wizard redirects."
     wizard_recognised_image_upload_formats: "File types which will result in upload displaying an image preview"
     wizard_apis_enabled: "Enable API features (experimental)."
+    wizard_critical_notices_on_dashboard: "Show critical notices about the custom wizard plugin on the admin dashboard."
