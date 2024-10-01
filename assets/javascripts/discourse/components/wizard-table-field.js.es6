@@ -48,11 +48,10 @@ export default Component.extend({
   checkboxValue(value) {
     const isCheckbox = this.get("isCheckbox");
     if (isCheckbox) {
-      if (value.value.includes("true")) {
-        return true;
-      } else if (value.value.includes("false")) {
-        return false;
-      }
+      return (
+        value.value === true ||
+        (Array.isArray(value.value) && value.value.includes("true"))
+      );
     }
   },
 
