@@ -401,7 +401,7 @@ class CustomWizard::Action
 
     if groups.present?
       groups.each do |group_id|
-        group = Group.find(group_id) if group_id
+        group = Group.find_by(id: group_id) if group_id
         result = group.add(user) if group
       end
     end
