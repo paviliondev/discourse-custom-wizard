@@ -384,7 +384,7 @@ class CustomWizard::Wizard
   def self.set_user_redirect(wizard_id, user)
     wizard = self.create(wizard_id, user)
 
-    if wizard.permitted?
+    if wizard.permitted?(always_allow_admin: false)
       user.custom_fields['redirect_to_wizard'] = wizard_id
       user.save_custom_fields(true)
     else
