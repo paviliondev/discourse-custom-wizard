@@ -14,6 +14,7 @@ import { uploadIcon } from "discourse/lib/uploads";
 import { dasherize } from "@ember/string";
 import InsertHyperlink from "discourse/components/modal/insert-hyperlink";
 import { inject as service } from "@ember/service";
+import { action } from "@ember/object";
 
 const IMAGE_MARKDOWN_REGEX =
   /!\[(.*?)\|(\d{1,4}x\d{1,4})(,\s*\d{1,3}%)?(.*?)\]\((upload:\/\/.*?)\)(?!(.*`))/g;
@@ -119,82 +120,85 @@ export default ComposerEditor.extend({
     );
   },
 
-  actions: {
-    extraButtons(toolbar) {
-      const component = this;
+  @action
+  extraButtons(toolbar) {
+    const component = this;
 
-      if (this.allowUpload && this.uploadIcon) {
-        toolbar.addButton({
-          id: "upload",
-          group: "insertions",
-          icon: this.uploadIcon,
-          title: "upload",
-          sendAction: (event) => component.send("showUploadModal", event),
-        });
-      }
+    if (this.allowUpload && this.uploadIcon) {
+      toolbar.addButton({
+        id: "upload",
+        group: "insertions",
+        icon: this.uploadIcon,
+        title: "upload",
+        sendAction: (event) => component.send("showUploadModal", event),
+      });
+    }
+
+    toolbar.addButton({
+      id: "link",
+      icon: "link",
+      group: "insertions",
+      shortcut: "K",
+      trimLeading: true,
+      unshift: true,
+      sendAction: (event) => component.send("showLinkModal", event),
+    });
+
+    if (this.siteSettings.mentionables_enabled) {
+      const { SEPARATOR } = requirejs(
+        "discourse/plugins/discourse-mentionables/discourse/lib/discourse-markdown/mentionable-items"
+      );
 
       toolbar.addButton({
-        id: "link",
-        group: "insertions",
-        shortcut: "K",
-        trimLeading: true,
-        unshift: true,
-        sendAction: (event) => component.send("showLinkModal", event),
+        id: "insert-mentionable",
+        group: "extras",
+        icon: this.siteSettings.mentionables_composer_button_icon,
+        title: "mentionables.composer.insert.title",
+        perform: () => {
+          this.appEvents.trigger("wizard-editor:insert-text", {
+            fieldId: this.field.id,
+            text: SEPARATOR,
+          });
+          const $textarea = $(
+            document.querySelector(
+              `.composer-field.${this.field.id} textarea.d-editor-input`
+            )
+          );
+          $textarea.trigger("keyup.autocomplete");
+        },
       });
+    }
+  },
 
-      if (this.siteSettings.mentionables_enabled) {
-        const { SEPARATOR } = requirejs(
-          "discourse/plugins/discourse-mentionables/discourse/lib/discourse-markdown/mentionable-items"
-        );
+  @action
+  previewUpdated(preview) {
+    highlightSyntax(preview, this.siteSettings, this.session);
 
-        toolbar.addButton({
-          id: "insert-mentionable",
-          group: "extras",
-          icon: this.siteSettings.mentionables_composer_button_icon,
-          title: "mentionables.composer.insert.title",
-          perform: () => {
-            this.appEvents.trigger("wizard-editor:insert-text", {
-              fieldId: this.field.id,
-              text: SEPARATOR,
-            });
-            const $textarea = $(
-              document.querySelector(
-                `.composer-field.${this.field.id} textarea.d-editor-input`
-              )
-            );
-            $textarea.trigger("keyup.autocomplete");
-          },
-        });
-      }
-    },
+    if (this.siteSettings.mentionables_enabled) {
+      const { linkSeenMentionableItems } = requirejs(
+        "discourse/plugins/discourse-mentionables/discourse/lib/mentionable-items-preview-styling"
+      );
+      linkSeenMentionableItems(preview, this.siteSettings);
+    }
+    this._super(...arguments);
+  },
 
-    previewUpdated(preview) {
-      highlightSyntax(preview, this.siteSettings, this.session);
+  @action
+  showLinkModal(toolbarEvent) {
+    let linkText = "";
+    this._lastSel = toolbarEvent.selected;
 
-      if (this.siteSettings.mentionables_enabled) {
-        const { linkSeenMentionableItems } = requirejs(
-          "discourse/plugins/discourse-mentionables/discourse/lib/mentionable-items-preview-styling"
-        );
-        linkSeenMentionableItems(preview, this.siteSettings);
-      }
-      this._super(...arguments);
-    },
+    if (this._lastSel) {
+      linkText = this._lastSel.value;
+    }
+    this.modal.show(InsertHyperlink, {
+      model: { linkText, toolbarEvent },
+    });
+  },
 
-    showLinkModal(toolbarEvent) {
-      let linkText = "";
-      this._lastSel = toolbarEvent.selected;
-
-      if (this._lastSel) {
-        linkText = this._lastSel.value;
-      }
-      this.modal.show(InsertHyperlink, {
-        model: { linkText, toolbarEvent },
-      });
-    },
-
-    showUploadModal() {
-      this.session.set("wizardEventFieldId", this.field.id);
-      document.getElementById(this.fileUploadElementId).click();
-    },
+  @action
+  showUploadModal() {
+    this.session.set("wizardEventFieldId", this.field.id);
+    document.getElementById(this.fileUploadElementId).click();
   },
 });
