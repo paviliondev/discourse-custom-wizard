@@ -2,8 +2,8 @@ import {
   default as computed,
   observes,
 } from "discourse-common/utils/decorators";
-import EmberObject from "@ember/object";
 import Component from "@ember/component";
+import EmberObject, { action } from "@ember/object";
 
 export default Component.extend({
   showPreview: false,
@@ -34,15 +34,23 @@ export default Component.extend({
       : "wizard_composer.show_preview";
   },
 
-  actions: {
-    togglePreview() {
-      this.toggleProperty("showPreview");
-    },
+  @action
+  importQuote() {},
 
-    groupsMentioned() {},
-    afterRefresh() {},
-    cannotSeeMention() {},
-    importQuote() {},
-    showUploadSelector() {},
+  @action
+  groupsMentioned() {},
+
+  @action
+  afterRefresh() {},
+
+  @action
+  cannotSeeMention() {},
+
+  @action
+  showUploadSelector() {},
+
+  @action
+  togglePreview() {
+    this.toggleProperty("showPreview");
   },
 });

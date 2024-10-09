@@ -1,14 +1,14 @@
-{{custom-wizard-composer-editor
-  field=field
-  composer=composer
-  wizard=wizard
-  fieldClass=fieldClass
-  groupsMentioned=(action "groupsMentioned")
-  cannotSeeMention=(action "cannotSeeMention")
-  importQuote=(action "importQuote")
-  togglePreview=(action "togglePreview")
-  afterRefresh=(action "afterRefresh")
-}}
+<CustomWizardComposerEditor
+  @field={{field}}
+  @composer={{composer}}
+  @wizard={{wizard}}
+  @fieldClass={{fieldClass}}
+  @groupsMentioned={{this.groupsMentioned}}
+  @cannotSeeMention={{this.cannotSeeMention}}
+  @importQuote={{this.importQuote}}
+  @togglePreview={{this.togglePreview}}
+  @afterRefresh={{this.afterRefresh}}
+/>
 
 <div class="bottom-bar">
   <button

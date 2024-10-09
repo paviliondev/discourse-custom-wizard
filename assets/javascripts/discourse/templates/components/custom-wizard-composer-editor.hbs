@@ -1,21 +1,21 @@
-{{d-editor
-  tabindex=field.tabindex
-  value=composer.reply
-  placeholderOverride=replyPlaceholder
-  previewUpdated=(action "previewUpdated")
-  markdownOptions=markdownOptions
-  extraButtons=(action "extraButtons")
-  importQuote=(action "importQuote")
-  showUploadModal=(action "showUploadModal")
-  togglePreview=(action "togglePreview")
-  validation=validation
-  loading=composer.loading
-  showLink=showLink
-  wizardComposer=true
-  fieldId=field.id
-  disabled=disableTextarea
-  outletArgs=(hash composer=composer editorType="composer")
-}}
+<DEditor
+  @tabindex={{field.tabindex}}
+  @value={{composer.reply}}
+  @placeholderOverride={{replyPlaceholder}}
+  @previewUpdated={{this.previewUpdated}}
+  @markdownOptions={{markdownOptions}}
+  @extraButtons={{this.extraButtons}}
+  @importQuote={{this.importQuote}}
+  @showUploadModal={{this.showUploadModal}}
+  @togglePreview={{this.togglePreview}}
+  @validation={{validation}}
+  @loading={{composer.loading}}
+  @showLink={{showLink}}
+  @wizardComposer={{true}}
+  @fieldId={{field.id}}
+  @disabled={{disableTextarea}}
+  @outletArgs={{hash composer=composer editorType="composer"}}
+/>
 
 <input
   type="file"
