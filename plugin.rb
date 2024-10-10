@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Forms for Discourse. Better onboarding, structured posting, data enrichment, automated actions and much more.
-# version: 2.8.7
+# version: 2.8.8
 # authors: Angus McLeod, Faizaan Gagan, Robert Barrow, Keegan George, Kaitlin Maddever, Juan Marcos Gutierrez Ramos
 # url: https://github.com/paviliondev/discourse-custom-wizard
 # contact_emails: development@pavilion.tech
@@ -181,7 +181,7 @@ after_initialize do
         end
 
         wizard = CustomWizard::Wizard.create(wizard_id, current_user)
-        redirect_to "/w/#{wizard_id.dasherize}" if wizard.permitted?(always_allow_admin: false)
+        redirect_to "/w/#{wizard_id.dasherize}" if wizard.can_access?(always_allow_admin: false)
       end
     end
   end

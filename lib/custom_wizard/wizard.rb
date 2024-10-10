@@ -203,7 +203,7 @@ class CustomWizard::Wizard
       context: id
     )
 
-    if after_time
+    if after_time && multiple_submissions
       history = history.where("updated_at > ?", after_time_scheduled)
     end
 
@@ -244,8 +244,12 @@ class CustomWizard::Wizard
     end
   end
 
-  def can_access?
-    permitted? && (user&.admin? || (multiple_submissions || !completed?))
+  def can_submit?
+    multiple_submissions || !completed?
+  end
+
+  def can_access?(always_allow_admin: true)
+    permitted?(always_allow_admin: always_allow_admin) && can_submit?
   end
 
   def reset
@@ -321,7 +325,7 @@ class CustomWizard::Wizard
   end
 
   def remove_user_redirect
-    return unless user.present?
+    return if user.blank?
 
     if id == user.redirect_to_wizard
       user.custom_fields.delete('redirect_to_wizard')
@@ -384,7 +388,7 @@ class CustomWizard::Wizard
   def self.set_user_redirect(wizard_id, user)
     wizard = self.create(wizard_id, user)
 
-    if wizard.permitted?(always_allow_admin: false)
+    if wizard.can_access?(always_allow_admin: false)
       user.custom_fields['redirect_to_wizard'] = wizard_id
       user.save_custom_fields(true)
     else

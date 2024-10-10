@@ -32,6 +32,7 @@ export default {
             redirectToWizard &&
             !data.url.includes("ignore_redirect") &&
             data.currentRouteName !== "customWizardStep" &&
+            data.currentRouteName !== "customWizard.index" &&
             !excludedPaths.find((p) => {
               return data.currentRouteName.indexOf(p) > -1;
             })

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe CustomWizard::Wizard do
-  fab!(:user) { Fabricate(:user) }
+  fab!(:user)
   fab!(:trusted_user) { Fabricate(:user, trust_level: TrustLevel[3]) }
   fab!(:admin_user) { Fabricate(:user, admin: true) }
   let(:template_json) { get_wizard_fixture("wizard") }
@@ -125,18 +125,37 @@ describe CustomWizard::Wizard do
     expect(@wizard.completed?).to eq(true)
   end
 
-  it "is not completed if steps submitted before after time" do
-    append_steps
+  context "without mutliple submissions" do
+    it "is completed if steps submitted before after time" do
+      append_steps
 
-    progress_step("step_1")
-    progress_step("step_2")
-    progress_step("step_3")
+      progress_step("step_1")
+      progress_step("step_2")
+      progress_step("step_3")
 
-    template_json['after_time'] = true
-    template_json['after_time_scheduled'] = Time.now + 3.hours
+      template_json['after_time'] = true
+      template_json['after_time_scheduled'] = Time.now + 3.hours
 
-    wizard = CustomWizard::Wizard.new(template_json, user)
-    expect(wizard.completed?).to eq(false)
+      wizard = CustomWizard::Wizard.new(template_json, user)
+      expect(wizard.completed?).to eq(true)
+    end
+  end
+
+  context "with multiple submissions" do
+    it "is completed if steps submitted before after time" do
+      append_steps
+
+      progress_step("step_1")
+      progress_step("step_2")
+      progress_step("step_3")
+
+      template_json['after_time'] = true
+      template_json['multiple_submissions'] = true
+      template_json['after_time_scheduled'] = Time.now + 3.hours
+
+      wizard = CustomWizard::Wizard.new(template_json, user)
+      expect(wizard.completed?).to eq(false)
+    end
   end
 
   context "with subscription" do

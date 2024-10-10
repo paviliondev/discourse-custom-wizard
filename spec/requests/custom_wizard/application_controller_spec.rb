@@ -123,6 +123,25 @@ describe ApplicationController do
               end
             end
           end
+
+          context "when user has completed the wizard" do
+            before do
+              @template[:steps].each do |step|
+                CustomWizard::UserHistory.create!(
+                  action: CustomWizard::UserHistory.actions[:step],
+                  actor_id: user.id,
+                  context: @template[:id],
+                  subject: step[:id]
+                )
+              end
+            end
+
+            it "does not redirect" do
+              travel_to Time.now + 4.hours
+              get "/"
+              expect(response).not_to redirect_to("/w/super-mega-fun-wizard")
+            end
+          end
         end
       end
     end

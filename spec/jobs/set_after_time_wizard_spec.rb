@@ -50,4 +50,31 @@ describe Jobs::SetAfterTimeWizard do
       ).to eq(1)
     end
   end
+
+  context "when user has completed the wizard" do
+    before do
+      @after_time_template[:steps].each do |step|
+        CustomWizard::UserHistory.create!(
+          action: CustomWizard::UserHistory.actions[:step],
+          actor_id: user1.id,
+          context: @after_time_template[:id],
+          subject: step[:id]
+        )
+      end
+    end
+
+    it "does not redirect to user" do
+      messages = MessageBus.track_publish("/redirect_to_wizard") do
+        described_class.new.execute(wizard_id: 'super_mega_fun_wizard')
+      end
+      expect(messages.first.data).to eq("super_mega_fun_wizard")
+      expect(messages.first.user_ids).to match_array([user2.id, user3.id])
+      expect(
+        UserCustomField.where(
+          name: 'redirect_to_wizard',
+          value: 'super_mega_fun_wizard'
+        ).length
+      ).to eq(2)
+    end
+  end
 end
