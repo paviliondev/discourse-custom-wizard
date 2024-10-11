@@ -1,8 +1,8 @@
 <CustomWizardComposerEditor
-  @field={{field}}
-  @composer={{composer}}
-  @wizard={{wizard}}
-  @fieldClass={{fieldClass}}
+  @field={{this.field}}
+  @composer={{this.composer}}
+  @wizard={{this.wizard}}
+  @fieldClass={{this.fieldClass}}
   @groupsMentioned={{this.groupsMentioned}}
   @cannotSeeMention={{this.cannotSeeMention}}
   @importQuote={{this.importQuote}}
@@ -11,15 +11,13 @@
 />
 
 <div class="bottom-bar">
-  <button
+  <DButton
+    @action={{this.togglePreview}}
     class="wizard-btn toggle-preview"
-    {{action "togglePreview"}}
-    type="button"
-  >
-    <span class="d-button-label">{{i18n togglePreviewLabel}}</span>
-  </button>
+    @label={{togglePreviewLabel}}
+  />
 
-  {{#if field.char_counter}}
-    {{wizard-char-counter field.value field.max_length}}
+  {{#if this.field.char_counter}}
+    {{wizard-char-counter this.field.value field.max_length}}
   {{/if}}
 </div>
