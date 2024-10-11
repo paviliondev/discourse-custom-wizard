@@ -36,11 +36,12 @@ export default ComposerEditor.extend({
   draftStatus: "null",
   replyPlaceholder: alias("field.translatedPlaceholder"),
   wizardEventFieldId: null,
-  composerEventPrefix: wizardComposerEdtiorEventPrefix,
 
   @on("didInsertElement")
   _composerEditorInit() {
     this._super(...arguments);
+
+    this.composerEventPrefix = wizardComposerEdtiorEventPrefix;
 
     if (this.siteSettings.mentionables_enabled) {
       const $input = $(this.element.querySelector(".d-editor-input"));
