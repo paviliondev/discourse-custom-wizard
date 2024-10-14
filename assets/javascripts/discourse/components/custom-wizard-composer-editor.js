@@ -94,4 +94,13 @@ export default class CustomWizardComposerEditor extends ComposerEditor {
     this.session.set("wizardEventFieldId", this.field.id);
     document.getElementById(this.fileUploadElementId).click();
   }
+
+  _uploadDropTargetOptions() {
+    return {
+      target: this.element,
+      onDrop: () => {
+        this.session.set("wizardEventFieldId", this.field.id);
+      },
+    };
+  }
 }
