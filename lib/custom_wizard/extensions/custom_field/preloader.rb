@@ -3,11 +3,7 @@ module CustomWizardCustomFieldPreloader
   def preload_custom_fields(objects, fields)
     if objects.present? && cw_fields_enabled?
       @cw_klass = objects.first.class.name.underscore
-      if cw_fields.any?
-        cw_fields.each do |field|
-          fields << field[:name]
-        end
-      end
+      cw_fields.each { |field| fields << field[:name] } if cw_fields.any?
     end
     super(objects, fields)
   end

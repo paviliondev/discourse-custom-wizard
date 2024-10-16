@@ -6,9 +6,7 @@ describe ExtraLocalesControllerCustomWizard, type: :request do
   let(:template) { get_wizard_fixture("wizard") }
   let(:permitted) { get_wizard_fixture("wizard/permitted") }
 
-  before do
-    CustomWizard::Template.save(template, skip_jobs: true)
-  end
+  before { CustomWizard::Template.save(template, skip_jobs: true) }
 
   before do
     js_hash = ExtraLocalesController.bundle_js_hash("wizard")
@@ -22,14 +20,14 @@ describe ExtraLocalesControllerCustomWizard, type: :request do
   it "returns wizard locales when requested by user in wizard" do
     sign_in(new_user)
 
-    get @locale_url, headers: { 'REFERER' => "/w/super-mega-fun-wizard" }
+    get @locale_url, headers: { "REFERER" => "/w/super-mega-fun-wizard" }
     expect(response.status).to eq(200)
   end
 
   it "returns wizard locales when requested by user in a wizard step" do
     sign_in(new_user)
 
-    get @locale_url, headers: { 'REFERER' => "/w/super-mega-fun-wizard/steps/step_1" }
+    get @locale_url, headers: { "REFERER" => "/w/super-mega-fun-wizard/steps/step_1" }
     expect(response.status).to eq(200)
   end
 
@@ -38,7 +36,7 @@ describe ExtraLocalesControllerCustomWizard, type: :request do
     CustomWizard::Template.save(template.as_json)
 
     sign_in(new_user)
-    get @locale_url, headers: { 'REFERER' => "/w/super-mega-fun-wizard" }
+    get @locale_url, headers: { "REFERER" => "/w/super-mega-fun-wizard" }
     expect(response.status).to eq(200)
   end
 

@@ -1,17 +1,19 @@
 # frozen_string_literal: true
 
 describe "custom field extensions" do
-  fab!(:topic) { Fabricate(:topic) }
-  fab!(:post) { Fabricate(:post) }
-  fab!(:category) { Fabricate(:category) }
-  fab!(:group) { Fabricate(:group) }
-  fab!(:user) { Fabricate(:user) }
+  fab!(:topic)
+  fab!(:post)
+  fab!(:category)
+  fab!(:group)
+  fab!(:user)
 
   let(:custom_field_json) { get_wizard_fixture("custom_field/custom_fields") }
-  let(:subscription_custom_field_json) { get_wizard_fixture("custom_field/subscription_custom_fields") }
+  let(:subscription_custom_field_json) do
+    get_wizard_fixture("custom_field/subscription_custom_fields")
+  end
 
   before do
-    custom_field_json['custom_fields'].each do |field_json|
+    custom_field_json["custom_fields"].each do |field_json|
       custom_field = CustomWizard::CustomField.new(nil, field_json)
       custom_field.save
     end
@@ -27,11 +29,12 @@ describe "custom field extensions" do
       topic.custom_fields["topic_field_1"] = true
       topic.save_custom_fields(true)
 
-      serializer = TopicViewSerializer.new(
-        TopicView.new(topic.id, user),
-        scope: Guardian.new(user),
-        root: false
-      ).as_json
+      serializer =
+        TopicViewSerializer.new(
+          TopicView.new(topic.id, user),
+          scope: Guardian.new(user),
+          root: false,
+        ).as_json
 
       expect(serializer[:topic_field_1]).to eq(true)
     end
@@ -40,11 +43,8 @@ describe "custom field extensions" do
       topic.custom_fields["topic_field_1"] = true
       topic.save_custom_fields(true)
 
-      serializer = TopicListItemSerializer.new(
-        topic,
-        scope: Guardian.new(user),
-        root: false
-      ).as_json
+      serializer =
+        TopicListItemSerializer.new(topic, scope: Guardian.new(user), root: false).as_json
 
       expect(serializer[:topic_field_1]).to eq(true)
     end
@@ -60,11 +60,7 @@ describe "custom field extensions" do
       post.custom_fields["post_field_1"] = 7
       post.save_custom_fields(true)
 
-      serializer = PostSerializer.new(
-        post,
-        scope: Guardian.new(user),
-        root: false
-      ).as_json
+      serializer = PostSerializer.new(post, scope: Guardian.new(user), root: false).as_json
 
       expect(serializer[:post_field_1]).to eq(7)
     end
@@ -74,7 +70,7 @@ describe "custom field extensions" do
     before do
       enable_subscription("business")
 
-      subscription_custom_field_json['custom_fields'].each do |field_json|
+      subscription_custom_field_json["custom_fields"].each do |field_json|
         custom_field = CustomWizard::CustomField.new(nil, field_json)
         custom_field.save
       end
@@ -90,11 +86,8 @@ describe "custom field extensions" do
         category.custom_fields["category_field_1"] = { a: 1, b: 2 }.to_json
         category.save_custom_fields(true)
 
-        serializer = BasicCategorySerializer.new(
-          category,
-          scope: Guardian.new(user),
-          root: false
-        ).as_json
+        serializer =
+          BasicCategorySerializer.new(category, scope: Guardian.new(user), root: false).as_json
 
         expect(serializer[:category_field_1]).to eq({ a: 1, b: 2 }.to_json)
       end
@@ -110,11 +103,7 @@ describe "custom field extensions" do
         group.custom_fields["group_field_1"] = "Hello"
         group.save_custom_fields(true)
 
-        serializer = BasicGroupSerializer.new(
-          group,
-          scope: Guardian.new(user),
-          root: false
-        ).as_json
+        serializer = BasicGroupSerializer.new(group, scope: Guardian.new(user), root: false).as_json
 
         expect(serializer[:group_field_1]).to eq("Hello")
       end

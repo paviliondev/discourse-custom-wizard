@@ -31,10 +31,11 @@ module CustomWizardCustomFieldSerializer
   end
 
   def get_cw_class
-    self.class.ancestors.map do |klass|
-      klass.to_s.underscore.gsub("_serializer", "")
-    end.select do |klass|
-      CustomWizard::CustomField.serializers.include?(klass)
-    end.first
+    self
+      .class
+      .ancestors
+      .map { |klass| klass.to_s.underscore.gsub("_serializer", "") }
+      .select { |klass| CustomWizard::CustomField.serializers.include?(klass) }
+      .first
   end
 end

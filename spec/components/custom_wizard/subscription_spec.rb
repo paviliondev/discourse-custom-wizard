@@ -5,19 +5,17 @@ describe CustomWizard::Subscription do
   let!(:business_product_id) { SecureRandom.hex(8) }
   let!(:standard_product_id) { SecureRandom.hex(8) }
   let!(:community_product_id) { SecureRandom.hex(8) }
-  let!(:product_slugs) {
+  let!(:product_slugs) do
     {
       "#{business_product_id}" => "business",
       "#{standard_product_id}" => "standard",
-      "#{community_product_id}" => "community"
+      "#{community_product_id}" => "community",
     }
-  }
+  end
 
   context "with subscription client gem mocked out" do
     context "without a subscription" do
-      before do
-        DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(nil)
-      end
+      before { DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(nil) }
 
       it "has none type" do
         expect(described_class.type).to eq(:none)
@@ -33,31 +31,43 @@ describe CustomWizard::Subscription do
     end
 
     context "with subscriptions" do
-
       def get_subscription_result(product_ids)
         result = DiscourseSubscriptionClient::Subscriptions::Result.new
         result.supplier = SubscriptionClientSupplier.new(products: product_slugs)
         result.resource = SubscriptionClientResource.new
-        result.subscriptions = product_ids.map { |product_id| ::SubscriptionClientSubscription.new(product_id: product_id) }
+        result.subscriptions =
+          product_ids.map do |product_id|
+            ::SubscriptionClientSubscription.new(product_id: product_id)
+          end
         result.products = product_slugs
         result
       end
       let!(:business_subscription_result) { get_subscription_result([business_product_id]) }
       let!(:standard_subscription_result) { get_subscription_result([standard_product_id]) }
       let!(:community_subscription_result) { get_subscription_result([community_product_id]) }
-      let!(:multiple_subscription_result) { get_subscription_result([community_product_id, business_product_id]) }
+      let!(:multiple_subscription_result) do
+        get_subscription_result([community_product_id, business_product_id])
+      end
 
       it "handles mapped values" do
         DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(standard_subscription_result)
-        expect(described_class.includes?(:wizard, :permitted, guests_permitted["permitted"])).to eq(true)
+        expect(described_class.includes?(:wizard, :permitted, guests_permitted["permitted"])).to eq(
+          true,
+        )
 
-        DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(community_subscription_result)
-        expect(described_class.includes?(:wizard, :permitted, guests_permitted["permitted"])).to eq(false)
+        DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(
+          community_subscription_result,
+        )
+        expect(described_class.includes?(:wizard, :permitted, guests_permitted["permitted"])).to eq(
+          false,
+        )
       end
 
       context "with a standard subscription" do
         before do
-          DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(standard_subscription_result)
+          DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(
+            standard_subscription_result,
+          )
         end
 
         it "detects standard type" do
@@ -65,17 +75,19 @@ describe CustomWizard::Subscription do
         end
 
         it "standard features are included" do
-          expect(described_class.includes?(:wizard, :type, 'send_message')).to eq(true)
+          expect(described_class.includes?(:wizard, :type, "send_message")).to eq(true)
         end
 
         it "business features are not included" do
-          expect(described_class.includes?(:action, :type, 'create_category')).to eq(false)
+          expect(described_class.includes?(:action, :type, "create_category")).to eq(false)
         end
       end
 
       context "with a business subscription" do
         before do
-          DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(business_subscription_result)
+          DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(
+            business_subscription_result,
+          )
         end
 
         it "detects business type" do
@@ -83,13 +95,15 @@ describe CustomWizard::Subscription do
         end
 
         it "business features are included" do
-          expect(described_class.includes?(:action, :type, 'create_category')).to eq(true)
+          expect(described_class.includes?(:action, :type, "create_category")).to eq(true)
         end
       end
 
       context "with a community subscription" do
         before do
-          DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(community_subscription_result)
+          DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(
+            community_subscription_result,
+          )
         end
 
         it "detects community type" do
@@ -97,13 +111,15 @@ describe CustomWizard::Subscription do
         end
 
         it "community features are included" do
-          expect(described_class.includes?(:action, :type, 'create_category')).to eq(true)
+          expect(described_class.includes?(:action, :type, "create_category")).to eq(true)
         end
       end
 
       context "with multiple subscriptions" do
         before do
-          DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(multiple_subscription_result)
+          DiscourseSubscriptionClient.stubs(:find_subscriptions).returns(
+            multiple_subscription_result,
+          )
         end
 
         it "detects correct type in hierarchy" do
@@ -114,22 +130,16 @@ describe CustomWizard::Subscription do
   end
 
   context "with environment variable" do
-    before do
-      ENV["CUSTOM_WIZARD_PRODUCT_SLUG"] = "standard"
-    end
+    before { ENV["CUSTOM_WIZARD_PRODUCT_SLUG"] = "standard" }
 
-    after do
-      ENV["CUSTOM_WIZARD_PRODUCT_SLUG"] = nil
-    end
+    after { ENV["CUSTOM_WIZARD_PRODUCT_SLUG"] = nil }
 
     it "enables the relevant subscription" do
       expect(described_class.type).to eq(:standard)
     end
 
     context "with a subscription" do
-      before do
-        enable_subscription("business")
-      end
+      before { enable_subscription("business") }
 
       it "respects the subscription" do
         expect(described_class.type).to eq(:business)

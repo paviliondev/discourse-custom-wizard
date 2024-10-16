@@ -8,30 +8,28 @@ class CustomWizard::Log
   PAGE_LIMIT = 100
 
   def initialize(attrs)
-    @date = attrs['date']
-    @action = attrs['action']
-    @message = attrs['message']
-    @wizard_id = attrs['wizard_id']
-    @username = attrs['username']
+    @date = attrs["date"]
+    @action = attrs["action"]
+    @message = attrs["message"]
+    @wizard_id = attrs["wizard_id"]
+    @username = attrs["username"]
   end
 
   def self.create(wizard_id, action, username, message, date = Time.now)
     log_id = SecureRandom.hex(12)
 
-    PluginStore.set('custom_wizard_log',
+    PluginStore.set(
+      "custom_wizard_log",
       log_id.to_s,
-      {
-        date: date,
-        wizard_id: wizard_id,
-        action: action,
-        username: username,
-        message: message
-      }
+      { date: date, wizard_id: wizard_id, action: action, username: username, message: message },
     )
   end
 
   def self.list_query(wizard_id = nil)
-    query = PluginStoreRow.where("plugin_name = 'custom_wizard_log' AND (value::json->'date') IS NOT NULL")
+    query =
+      PluginStoreRow.where(
+        "plugin_name = 'custom_wizard_log' AND (value::json->'date') IS NOT NULL",
+      )
     query = query.where("(value::json->>'wizard_id') = ?", wizard_id) if wizard_id
     query.order("value::json->>'date' DESC")
   end
@@ -43,9 +41,7 @@ class CustomWizard::Log
 
     result = OpenStruct.new(logs: [], total: nil)
     result.total = logs.size
-    result.logs = logs.limit(limit)
-      .offset(page * limit)
-      .map { |r| self.new(JSON.parse(r.value)) }
+    result.logs = logs.limit(limit).offset(page * limit).map { |r| self.new(JSON.parse(r.value)) }
 
     result
   end

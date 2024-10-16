@@ -14,18 +14,14 @@ class CustomWizard::StepUpdater
   end
 
   def update
-    if SiteSetting.custom_wizard_enabled &&
-       @step.present? &&
-       @step.updater.present? &&
-       success?
-
+    if SiteSetting.custom_wizard_enabled && @step.present? && @step.updater.present? && success?
       @step.updater.call(self)
 
       CustomWizard::UserHistory.create(
         action: CustomWizard::UserHistory.actions[:step],
         actor_id: @wizard.actor_id,
         context: @wizard.id,
-        subject: @step.id
+        subject: @step.id,
       )
     else
       false

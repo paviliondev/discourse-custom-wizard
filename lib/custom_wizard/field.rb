@@ -27,12 +27,9 @@ class CustomWizard::Field
               :preview_template,
               :placeholder
 
-  attr_accessor :index,
-                :step
+  attr_accessor :index, :step
 
-  REQUIRES_USER = %w[
-    upload
-  ]
+  REQUIRES_USER = %w[upload]
 
   def initialize(attrs)
     @raw = attrs || {}
@@ -64,9 +61,7 @@ class CustomWizard::Field
   end
 
   def default_value
-    if @type == 'checkbox'
-      false
-    end
+    false if @type == "checkbox"
   end
 
   def self.types
@@ -77,82 +72,90 @@ class CustomWizard::Field
         prefill: nil,
         char_counter: nil,
         validations: nil,
-        placeholder: nil
+        placeholder: nil,
       },
       textarea: {
         min_length: nil,
         max_length: nil,
         prefill: nil,
         char_counter: nil,
-        placeholder: nil
+        placeholder: nil,
       },
       composer: {
         min_length: nil,
         max_length: nil,
         char_counter: nil,
-        placeholder: nil
+        placeholder: nil,
       },
-      text_only: {},
+      text_only: {
+      },
       composer_preview: {
         preview_template: nil,
       },
       date: {
-        format: "YYYY-MM-DD"
+        format: "YYYY-MM-DD",
       },
       time: {
-        format: "HH:mm"
+        format: "HH:mm",
       },
       date_time: {
-        format: ""
+        format: "",
       },
-      number: {},
-      checkbox: {},
+      number: {
+      },
+      checkbox: {
+      },
       url: {
-        min_length: nil
+        min_length: nil,
       },
       upload: {
-        file_types: '.jpg,.jpeg,.png'
+        file_types: ".jpg,.jpeg,.png",
       },
       dropdown: {
         prefill: nil,
-        content: nil
+        content: nil,
       },
       tag: {
         limit: nil,
         prefill: nil,
         content: nil,
         tag_groups: nil,
-        can_create_tag: false
+        can_create_tag: false,
       },
       category: {
         limit: 1,
-        property: 'id',
+        property: "id",
         prefill: nil,
-        content: nil
+        content: nil,
       },
       topic: {
         limit: 1,
         prefill: nil,
         content: nil,
-        category: nil
+        category: nil,
       },
       group: {
         prefill: nil,
-        content: nil
+        content: nil,
       },
-      user_selector: {}
+      user_selector: {
+      },
     }
   end
 
   def self.require_assets
-    Rails.logger.warn("Custom Wizard field regisration no longer requires asset registration. Support will be removed in v2.1.0.")
+    Rails.logger.warn(
+      "Custom Wizard field regisration no longer requires asset registration. Support will be removed in v2.1.0.",
+    )
 
     @require_assets ||= {}
   end
 
   def self.register(type, plugin = nil, opts = {}, legacy_opts = {})
     if opts.is_a?(Array)
-      Rails.logger.warn("Custom Wizard field regisration no longer requires asset registration. Support will be removed in v2.1.0.")
+      Rails.logger.warn(
+        "Custom Wizard field regisration no longer requires asset registration. Support will be removed in v2.1.0.",
+      )
 
       require_assets[plugin] = opts
       opts = legacy_opts

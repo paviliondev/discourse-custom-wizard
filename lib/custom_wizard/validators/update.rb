@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'addressable/uri'
+require "addressable/uri"
 
 class ::CustomWizard::UpdateValidator
   attr_reader :updater
@@ -9,13 +9,11 @@ class ::CustomWizard::UpdateValidator
   end
 
   def perform
-    updater.step.fields.each do |field|
-      validate_field(field)
-    end
+    updater.step.fields.each { |field| validate_field(field) }
   end
 
   def validate_field(field)
-    return if field.type == 'text_only'
+    return if field.type == "text_only"
 
     field_id = field.id.to_s
     value = @updater.submission[field_id]
@@ -29,43 +27,48 @@ class ::CustomWizard::UpdateValidator
     format = field.format
 
     if required && !value
-      @updater.errors.add(field_id, I18n.t('wizard.field.required', label: label))
+      @updater.errors.add(field_id, I18n.t("wizard.field.required", label: label))
     end
 
     if value.is_a?(String) && (stripped_length = value.strip.length) > 0
       if min_length.present? && stripped_length < min_length.to_i
-        @updater.errors.add(field_id, I18n.t('wizard.field.too_short', label: label, min: min_length.to_i))
+        @updater.errors.add(
+          field_id,
+          I18n.t("wizard.field.too_short", label: label, min: min_length.to_i),
+        )
       end
 
       if max_length.present? && stripped_length > max_length.to_i
-        @updater.errors.add(field_id, I18n.t('wizard.field.too_long', label: label, max: max_length.to_i))
+        @updater.errors.add(
+          field_id,
+          I18n.t("wizard.field.too_long", label: label, max: max_length.to_i),
+        )
       end
     end
 
     if is_url_type(field) && value.present? && !check_if_url(value)
-      @updater.errors.add(field_id, I18n.t('wizard.field.not_url', label: label))
+      @updater.errors.add(field_id, I18n.t("wizard.field.not_url", label: label))
     end
 
-    if type === 'checkbox'
-      @updater.submission[field_id] = standardise_boolean(value)
+    @updater.submission[field_id] = standardise_boolean(value) if type === "checkbox"
+
+    if type === "upload" && value.present? && !validate_file_type(value, file_types)
+      @updater.errors.add(
+        field_id,
+        I18n.t("wizard.field.invalid_file", label: label, types: file_types),
+      )
     end
 
-    if type === 'upload' && value.present? && !validate_file_type(value, file_types)
-      @updater.errors.add(field_id, I18n.t('wizard.field.invalid_file', label: label, types: file_types))
+    if %w[date date_time].include?(type) && value.present? && !validate_date(value, format)
+      @updater.errors.add(field_id, I18n.t("wizard.field.invalid_date"))
     end
 
-    if ['date', 'date_time'].include?(type) && value.present? && !validate_date(value, format)
-      @updater.errors.add(field_id, I18n.t('wizard.field.invalid_date'))
-    end
-
-    if type === 'time' && value.present? && !validate_time(value)
-      @updater.errors.add(field_id, I18n.t('wizard.field.invalid_time'))
+    if type === "time" && value.present? && !validate_time(value)
+      @updater.errors.add(field_id, I18n.t("wizard.field.invalid_time"))
     end
 
     self.class.field_validators.each do |validator|
-      if type === validator[:type]
-        validator[:block].call(field, value, @updater)
-      end
+      validator[:block].call(field, value, @updater) if type === validator[:type]
     end
   end
 
@@ -85,9 +88,10 @@ class ::CustomWizard::UpdateValidator
   private
 
   def validate_file_type(value, file_types)
-    file_types.split(',')
-      .map { |t| t.gsub('.', '') }
-      .include?(File.extname(value['original_filename'])[1..-1])
+    file_types
+      .split(",")
+      .map { |t| t.gsub(".", "") }
+      .include?(File.extname(value["original_filename"])[1..-1])
   end
 
   def validate_date(value, format)
@@ -104,14 +108,14 @@ class ::CustomWizard::UpdateValidator
   end
 
   def is_text_type(field)
-    ['text', 'textarea', 'composer'].include? field.type
+    %w[text textarea composer].include? field.type
   end
 
   def is_url_type(field)
-    ['url'].include? field.type
+    ["url"].include? field.type
   end
 
-  SCHEMES ||= %w(http https)
+  SCHEMES ||= %w[http https]
 
   def check_if_url(url)
     parsed = Addressable::URI.parse(url) or return false

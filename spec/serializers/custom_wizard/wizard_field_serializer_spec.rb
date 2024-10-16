@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe CustomWizard::FieldSerializer do
-  fab!(:user) { Fabricate(:user) }
+  fab!(:user)
   let(:template) { get_wizard_fixture("wizard") }
 
   before do
@@ -10,11 +10,12 @@ describe CustomWizard::FieldSerializer do
   end
 
   it "should return basic field attributes" do
-    json_array = ActiveModel::ArraySerializer.new(
-      @wizard.steps.first.fields,
-      each_serializer: CustomWizard::FieldSerializer,
-      scope: Guardian.new(user)
-    ).as_json
+    json_array =
+      ActiveModel::ArraySerializer.new(
+        @wizard.steps.first.fields,
+        each_serializer: CustomWizard::FieldSerializer,
+        scope: Guardian.new(user),
+      ).as_json
 
     expect(json_array.size).to eq(@wizard.steps.first.fields.size)
     expect(json_array[0][:label]).to eq("<p>Text</p>")
@@ -23,11 +24,12 @@ describe CustomWizard::FieldSerializer do
   end
 
   it "should return optional field attributes" do
-    json_array = ActiveModel::ArraySerializer.new(
-      @wizard.steps.second.fields,
-      each_serializer: CustomWizard::FieldSerializer,
-      scope: Guardian.new(user)
-    ).as_json
+    json_array =
+      ActiveModel::ArraySerializer.new(
+        @wizard.steps.second.fields,
+        each_serializer: CustomWizard::FieldSerializer,
+        scope: Guardian.new(user),
+      ).as_json
     expect(json_array[0][:format]).to eq("YYYY-MM-DD")
   end
 end

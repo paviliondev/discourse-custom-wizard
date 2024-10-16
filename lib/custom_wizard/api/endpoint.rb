@@ -2,34 +2,24 @@
 class CustomWizard::Api::Endpoint
   include ActiveModel::SerializerSupport
 
-  attr_accessor :id,
-                :name,
-                :api_name,
-                :method,
-                :url,
-                :content_type,
-                :success_codes
+  attr_accessor :id, :name, :api_name, :method, :url, :content_type, :success_codes
 
   def initialize(api_name, data = {})
     @api_name = api_name
 
-    data.each do |k, v|
-      self.send "#{k}=", v if self.respond_to?(k)
-    end
+    data.each { |k, v| self.send "#{k}=", v if self.respond_to?(k) }
   end
 
   def self.set(api_name, new_data)
-    if new_data['id']
-      data = self.get(api_name, new_data['id'], data_only: true)
-      endpoint_id = new_data['id']
+    if new_data["id"]
+      data = self.get(api_name, new_data["id"], data_only: true)
+      endpoint_id = new_data["id"]
     else
       data = {}
       endpoint_id = SecureRandom.hex(3)
     end
 
-    new_data.each do |k, v|
-      data[k.to_sym] = v
-    end
+    new_data.each { |k, v| data[k.to_sym] = v }
 
     PluginStore.set("custom_wizard_api_#{api_name}", "endpoint_#{endpoint_id}", data)
 
@@ -52,15 +42,18 @@ class CustomWizard::Api::Endpoint
   end
 
   def self.remove(api_name)
-    PluginStoreRow.where("plugin_name = 'custom_wizard_api_#{api_name}' AND key LIKE 'endpoint_%'").destroy_all
+    PluginStoreRow.where(
+      "plugin_name = 'custom_wizard_api_#{api_name}' AND key LIKE 'endpoint_%'",
+    ).destroy_all
   end
 
   def self.list(api_name)
-    PluginStoreRow.where("plugin_name LIKE 'custom_wizard_api_#{api_name}' AND key LIKE 'endpoint_%'")
+    PluginStoreRow
+      .where("plugin_name LIKE 'custom_wizard_api_#{api_name}' AND key LIKE 'endpoint_%'")
       .map do |record|
-        api_name = record['plugin_name'].sub("custom_wizard_api_", "")
-        data = ::JSON.parse(record['value'])
-        data[:id] = record['key'].split('_').last
+        api_name = record["plugin_name"].sub("custom_wizard_api_", "")
+        data = ::JSON.parse(record["value"])
+        data[:id] = record["key"].split("_").last
         self.new(api_name, data)
       end
   end
@@ -97,12 +90,12 @@ class CustomWizard::Api::Endpoint
         result = response.body
       end
 
-      CustomWizard::Api::LogEntry.set(api_name, log_params(user, 'SUCCESS', endpoint.url))
+      CustomWizard::Api::LogEntry.set(api_name, log_params(user, "SUCCESS", endpoint.url))
 
       result
     else
       message = "API request failed"
-      CustomWizard::Api::LogEntry.set(api_name, log_params(user, 'FAIL', endpoint.url, message))
+      CustomWizard::Api::LogEntry.set(api_name, log_params(user, "FAIL", endpoint.url, message))
       { error: message }
     end
   end

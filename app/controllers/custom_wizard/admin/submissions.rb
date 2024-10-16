@@ -4,33 +4,36 @@ class CustomWizard::AdminSubmissionsController < CustomWizard::AdminController
   before_action :find_wizard, except: [:index]
 
   def index
-    render json: ActiveModel::ArraySerializer.new(
-      CustomWizard::Wizard.list(current_user),
-      each_serializer: CustomWizard::BasicWizardSerializer
-    )
+    render json:
+             ActiveModel::ArraySerializer.new(
+               CustomWizard::Wizard.list(current_user),
+               each_serializer: CustomWizard::BasicWizardSerializer,
+             )
   end
 
   def show
     render_json_dump(
       wizard: CustomWizard::BasicWizardSerializer.new(@wizard, root: false),
-      submissions: ActiveModel::ArraySerializer.new(
-        submission_list.submissions,
-        each_serializer: CustomWizard::SubmissionSerializer
-      ),
-      total: submission_list.total
+      submissions:
+        ActiveModel::ArraySerializer.new(
+          submission_list.submissions,
+          each_serializer: CustomWizard::SubmissionSerializer,
+        ),
+      total: submission_list.total,
     )
   end
 
   def download
-    content = ActiveModel::ArraySerializer.new(
-      CustomWizard::Submission.list(@wizard).submissions,
-      each_serializer: CustomWizard::SubmissionSerializer
-    )
+    content =
+      ActiveModel::ArraySerializer.new(
+        CustomWizard::Submission.list(@wizard).submissions,
+        each_serializer: CustomWizard::SubmissionSerializer,
+      )
 
     send_data content.to_json,
-      filename: "#{Discourse.current_hostname}-wizard-submissions-#{@wizard.name}.json",
-      content_type: "application/json",
-      disposition: "attachment"
+              filename: "#{Discourse.current_hostname}-wizard-submissions-#{@wizard.name}.json",
+              content_type: "application/json",
+              disposition: "attachment"
   end
 
   protected

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CustomWizard::FieldSerializer < ::ApplicationSerializer
-
   attributes :id,
              :index,
              :type,
@@ -109,7 +108,9 @@ class CustomWizard::FieldSerializer < ::ApplicationSerializer
     object.validations&.each do |type, props|
       next unless props["status"]
       validations[props["position"]] ||= {}
-      validations[props["position"]][type] = props.merge CustomWizard::RealtimeValidation.types[type.to_sym]
+      validations[props["position"]][type] = props.merge CustomWizard::RealtimeValidation.types[
+                    type.to_sym
+                  ]
     end
 
     validations

@@ -1,10 +1,26 @@
 # frozen_string_literal: true
 
 describe CustomWizard::Action do
-  fab!(:user) { Fabricate(:user, name: "Angus", username: 'angus', email: "angus@email.com", trust_level: TrustLevel[2]) }
-  fab!(:user1) { Fabricate(:user, name: "Angus One", username: 'angus1', email: "angus_one@email.com", trust_level: TrustLevel[2]) }
-  fab!(:category) { Fabricate(:category, name: 'cat1', slug: 'cat-slug') }
-  fab!(:tag) { Fabricate(:tag, name: 'tag1') }
+  fab!(:user) do
+    Fabricate(
+      :user,
+      name: "Angus",
+      username: "angus",
+      email: "angus@email.com",
+      trust_level: TrustLevel[2],
+    )
+  end
+  fab!(:user1) do
+    Fabricate(
+      :user,
+      name: "Angus One",
+      username: "angus1",
+      email: "angus_one@email.com",
+      trust_level: TrustLevel[2],
+    )
+  end
+  fab!(:category) { Fabricate(:category, name: "cat1", slug: "cat-slug") }
+  fab!(:tag) { Fabricate(:tag, name: "tag1") }
   fab!(:group)
 
   let(:wizard_template) { get_wizard_fixture("wizard") }
@@ -24,137 +40,129 @@ describe CustomWizard::Action do
 
   def update_template(template)
     CustomWizard::Template.save(template, skip_jobs: true)
-    @template = CustomWizard::Template.find('super_mega_fun_wizard')
+    @template = CustomWizard::Template.find("super_mega_fun_wizard")
   end
 
-  let(:create_topic) {
+  let(:create_topic) do
     JSON.parse(
       File.open(
-        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/actions/create_topic.json"
-      ).read
+        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/actions/create_topic.json",
+      ).read,
     )
-  }
+  end
 
-  let(:custom_field_json) {
-    JSON.parse(File.open(
-      "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/custom_field/custom_fields.json"
-    ).read)
-  }
+  let(:custom_field_json) do
+    JSON.parse(
+      File.open(
+        "#{Rails.root}/plugins/discourse-custom-wizard/spec/fixtures/custom_field/custom_fields.json",
+      ).read,
+    )
+  end
 
   before do
     Group.refresh_automatic_group!(:trust_level_2)
     update_template(wizard_template)
   end
 
-  describe '#create_topic' do
+  describe "#create_topic" do
     it "works" do
       wizard = CustomWizard::Builder.new(@template[:id], user).build
       wizard.create_updater(
         wizard.steps.first.id,
         step_1_field_1: "Topic Title",
-        step_1_field_2: "topic body"
+        step_1_field_2: "topic body",
       ).update
       wizard.create_updater(wizard.steps.second.id, {}).update
-      wizard.create_updater(wizard.steps.last.id,
-        step_3_field_3: category.id
-      ).update
+      wizard.create_updater(wizard.steps.last.id, step_3_field_3: category.id).update
 
-      topic = Topic.where(
-        title: "Topic Title",
-        category_id: category.id
-      )
+      topic = Topic.where(title: "Topic Title", category_id: category.id)
       expect(topic.exists?).to eq(true)
-      expect(Post.where(
-        topic_id: topic.pluck(:id),
-        raw: "topic body"
-      ).exists?).to eq(true)
+      expect(Post.where(topic_id: topic.pluck(:id), raw: "topic body").exists?).to eq(true)
     end
 
     it "fails silently without basic topic inputs" do
       wizard = CustomWizard::Builder.new(@template[:id], user).build
-      wizard.create_updater(
-        wizard.steps.first.id,
-        step_1_field_2: "topic body"
-      ).update
+      wizard.create_updater(wizard.steps.first.id, step_1_field_2: "topic body").update
       wizard.create_updater(wizard.steps.second.id, {}).update
       updater = wizard.create_updater(wizard.steps.last.id, {})
       updater.update
 
       expect(updater.success?).to eq(true)
-      expect(CustomWizard::UserHistory.where(
-        actor_id: user.id,
-        context: "super_mega_fun_wizard",
-        subject: "step_3"
-      ).exists?).to eq(true)
-      expect(Post.where(
-        raw: "topic body"
-      ).exists?).to eq(false)
+      expect(
+        CustomWizard::UserHistory.where(
+          actor_id: user.id,
+          context: "super_mega_fun_wizard",
+          subject: "step_3",
+        ).exists?,
+      ).to eq(true)
+      expect(Post.where(raw: "topic body").exists?).to eq(false)
     end
 
     it "adds custom fields" do
       wizard = CustomWizard::Builder.new(@template[:id], user).build
-      wizard.create_updater(wizard.steps.first.id,
+      wizard.create_updater(
+        wizard.steps.first.id,
         step_1_field_1: "Topic Title",
-        step_1_field_2: "topic body"
+        step_1_field_2: "topic body",
       ).update
       wizard.create_updater(wizard.steps.second.id, {}).update
-      wizard.create_updater(wizard.steps.last.id,
-        step_3_field_3: category.id
-      ).update
+      wizard.create_updater(wizard.steps.last.id, step_3_field_3: category.id).update
 
-      topic = Topic.where(
-        title: "Topic Title",
-        category_id: category.id
-      ).first
-      topic_custom_field = TopicCustomField.where(
-        name: "topic_field",
-        value: "Topic custom field value",
-        topic_id: topic.id
-      )
-      topic_json_custom_field = TopicCustomField.where("
+      topic = Topic.where(title: "Topic Title", category_id: category.id).first
+      topic_custom_field =
+        TopicCustomField.where(
+          name: "topic_field",
+          value: "Topic custom field value",
+          topic_id: topic.id,
+        )
+      topic_json_custom_field =
+        TopicCustomField.where(
+          "
         name = 'topic_json_field' AND
         (value::json->>'key_1') = 'Key 1 value' AND
         (value::json->>'key_2') = 'Key 2 value' AND
-        topic_id = #{topic.id}"
-      )
-      post_custom_field = PostCustomField.where(
-        name: "post_field",
-        value: "Post custom field value",
-        post_id: topic.first_post.id
-      )
+        topic_id = #{topic.id}",
+        )
+      post_custom_field =
+        PostCustomField.where(
+          name: "post_field",
+          value: "Post custom field value",
+          post_id: topic.first_post.id,
+        )
       expect(topic_custom_field.exists?).to eq(true)
       expect(topic_json_custom_field.exists?).to eq(true)
       expect(post_custom_field.exists?).to eq(true)
     end
 
     it "adds registered custom fields" do
-      custom_field = custom_field_json['custom_fields'][0]
+      custom_field = custom_field_json["custom_fields"][0]
       custom_field_name = custom_field["name"]
       custom_field_value = "Custom value"
 
       CustomWizard::CustomField.new(nil, custom_field).save
       create_topic["custom_fields"] = [
         {
-          "type": "association",
-          "pairs": [
+          type: "association",
+          pairs: [
             {
-              "index": 0,
-              "key": custom_field_name,
-              "key_type": "custom_field",
-              "value": custom_field_value,
-              "value_type": "text",
-              "connector": "association"
-            }
-          ]
-        }
+              index: 0,
+              key: custom_field_name,
+              key_type: "custom_field",
+              value: custom_field_value,
+              value_type: "text",
+              connector: "association",
+            },
+          ],
+        },
       ]
 
       wizard = CustomWizard::Wizard.new(@template, user)
-      action = CustomWizard::Action.new(
-        wizard: wizard,
-        action: create_topic.with_indifferent_access,
-        submission: wizard.current_submission
-      )
+      action =
+        CustomWizard::Action.new(
+          wizard: wizard,
+          action: create_topic.with_indifferent_access,
+          submission: wizard.current_submission,
+        )
       action.perform
 
       expect(action.result.success?).to eq(true)
@@ -163,14 +171,7 @@ describe CustomWizard::Action do
 
     it "allows poster to be set" do
       wizard_template[:actions][0]["poster"] = [
-        {
-          "type": "assignment",
-          "output_type": "user",
-          "output_connector": "set",
-          "output": [
-            "angus1"
-          ]
-        }
+        { type: "assignment", output_type: "user", output_connector: "set", output: ["angus1"] },
       ]
       update_template(wizard_template)
 
@@ -178,45 +179,39 @@ describe CustomWizard::Action do
       wizard.create_updater(
         wizard.steps.first.id,
         step_1_field_1: "Topic Title",
-        step_1_field_2: "topic body"
+        step_1_field_2: "topic body",
       ).update
       wizard.create_updater(wizard.steps.second.id, {}).update
-      wizard.create_updater(wizard.steps.last.id,
-        step_3_field_3: category.id
-      ).update
+      wizard.create_updater(wizard.steps.last.id, step_3_field_3: category.id).update
 
-      topic = Topic.where(
-        title: "Topic Title",
-        category_id: category.id
-      )
+      topic = Topic.where(title: "Topic Title", category_id: category.id)
       expect(topic.exists?).to eq(true)
-      post = Post.find_by(
-        topic_id: topic.pluck(:id),
-        raw: "topic body"
-      )
+      post = Post.find_by(topic_id: topic.pluck(:id), raw: "topic body")
       expect(post.present?).to eq(true)
-      expect(post.user.username).to eq('angus1')
+      expect(post.user.username).to eq("angus1")
     end
   end
 
-  it 'updates a profile' do
+  it "updates a profile" do
     wizard = CustomWizard::Builder.new(@template[:id], user).build
-    upload = Upload.create!(
-      url: '/images/image.png',
-      original_filename: 'image.png',
-      filesize: 100,
-      user_id: -1,
-    )
+    upload =
+      Upload.create!(
+        url: "/images/image.png",
+        original_filename: "image.png",
+        filesize: 100,
+        user_id: -1,
+      )
     steps = wizard.steps
     wizard.create_updater(steps[0].id, {}).update
-    wizard.create_updater(steps[1].id,
-      step_2_field_7: upload.as_json(only: [:id, :url, :user_id])
+    wizard.create_updater(
+      steps[1].id,
+      step_2_field_7: upload.as_json(only: %i[id url user_id]),
     ).update
     expect(user.profile_background_upload.id).to eq(upload.id)
   end
 
   context "open composer" do
-    it 'works' do
+    it "works" do
       wizard = CustomWizard::Builder.new(@template[:id], user).build
       wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
 
@@ -224,33 +219,34 @@ describe CustomWizard::Action do
       updater.update
 
       expect(updater.result[:redirect_on_next]).to eq(
-        "/new-topic?title=Title%20of%20the%20composer%20topic&body=I%20am%20interpolating%20some%20user%20fields%20Angus%20angus%20angus%40email.com&tags=tag1"
+        "/new-topic?title=Title%20of%20the%20composer%20topic&body=I%20am%20interpolating%20some%20user%20fields%20Angus%20angus%20angus%40email.com&tags=tag1",
       )
     end
 
-    it 'encodes special characters in the title and body' do
-      open_composer['title'][0]['output'] = "Title that's special $".dup
-      open_composer['post_template'] = "Body & more body & more body".dup
+    it "encodes special characters in the title and body" do
+      open_composer["title"][0]["output"] = "Title that's special $".dup
+      open_composer["post_template"] = "Body & more body & more body".dup
 
       wizard = CustomWizard::Wizard.new(@template, user)
-      action = CustomWizard::Action.new(
-        wizard: wizard,
-        action: open_composer,
-        submission: wizard.current_submission
-      )
+      action =
+        CustomWizard::Action.new(
+          wizard: wizard,
+          action: open_composer,
+          submission: wizard.current_submission,
+        )
       action.perform
 
       expect(action.result.success?).to eq(true)
 
       decoded_output = CGI.parse(URI.parse(action.result.output).query)
 
-      expect(decoded_output['title'][0]).to eq("Title that's special $")
-      expect(decoded_output['body'][0]).to eq("Body & more body & more body")
+      expect(decoded_output["title"][0]).to eq("Title that's special $")
+      expect(decoded_output["body"][0]).to eq("Body & more body & more body")
     end
   end
 
   context "route to action" do
-    it 're-routes a user' do
+    it "re-routes a user" do
       wizard = CustomWizard::Builder.new(@template[:id], user).build
       updater = wizard.create_updater(wizard.steps.last.id, {})
       updater.update
@@ -274,7 +270,7 @@ describe CustomWizard::Action do
       Jobs.run_immediately!
     end
 
-    it 'watches tags' do
+    it "watches tags" do
       watch_tags[:tags][0][:output] = tag.name
       wizard_template[:actions] << watch_tags
       update_template(wizard_template)
@@ -282,13 +278,10 @@ describe CustomWizard::Action do
       wizard = CustomWizard::Builder.new(@template[:id], user).build
       wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
 
-      expect(TagUser.where(
-        tag_id: tag.id,
-        user_id: user.id
-      ).first.notification_level).to eq(2)
+      expect(TagUser.where(tag_id: tag.id, user_id: user.id).first.notification_level).to eq(2)
     end
 
-    it 'watches categories' do
+    it "watches categories" do
       watch_categories[:categories][0][:output] = category.id
       wizard_template[:actions] << watch_categories
       update_template(wizard_template)
@@ -296,34 +289,27 @@ describe CustomWizard::Action do
       wizard = CustomWizard::Builder.new(@template[:id], user).build
       wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
 
-      expect(CategoryUser.where(
-        category_id: category.id,
-        user_id: user.id
-      ).first.notification_level).to eq(2)
+      expect(
+        CategoryUser.where(category_id: category.id, user_id: user.id).first.notification_level,
+      ).to eq(2)
     end
 
-    it '#send_message' do
+    it "#send_message" do
       Jobs.run_immediately!
 
       target_user = Fabricate(:user)
 
-      send_message['recipient'][0]['output'][0] = target_user.username
-      wizard_template['actions'] << send_message
+      send_message["recipient"][0]["output"][0] = target_user.username
+      wizard_template["actions"] << send_message
       update_template(wizard_template)
 
       wizard = CustomWizard::Builder.new(@template[:id], user).build
       wizard.create_updater(wizard.steps[0].id, {}).update
       wizard.create_updater(wizard.steps[1].id, {}).update
 
-      topic = Topic.where(
-        archetype: Archetype.private_message,
-        title: "Message title"
-      )
+      topic = Topic.where(archetype: Archetype.private_message, title: "Message title")
 
-      post = Post.where(
-        topic_id: topic.pluck(:id),
-        raw: "I will interpolate some wizard fields"
-      )
+      post = Post.where(topic_id: topic.pluck(:id), raw: "I will interpolate some wizard fields")
 
       expect(topic.exists?).to eq(true)
       expect(topic.first.topic_allowed_users.first.user.username).to eq(target_user.username)
@@ -331,7 +317,7 @@ describe CustomWizard::Action do
       expect(target_user.reload.notifications.count).to eq(1)
     end
 
-    it '#send_message allows using multiple targets' do
+    it "#send_message allows using multiple targets" do
       Jobs.run_immediately!
 
       user1 = Fabricate(:user)
@@ -339,13 +325,13 @@ describe CustomWizard::Action do
       group1 = Fabricate(:group)
       group2 = Fabricate(:group)
 
-      send_message_multi['recipient'][0]['output'] = [
+      send_message_multi["recipient"][0]["output"] = [
         user1.username,
         user2.username,
         group1.name,
-        group2.name
+        group2.name,
       ]
-      wizard_template['actions'] << send_message_multi
+      wizard_template["actions"] << send_message_multi
       update_template(wizard_template)
       update_template(wizard_template)
 
@@ -353,18 +339,15 @@ describe CustomWizard::Action do
       wizard.create_updater(wizard.steps[0].id, {}).update
       wizard.create_updater(wizard.steps[1].id, {}).update
 
-      topic = Topic.where(
-        archetype: Archetype.private_message,
-        title: "Multiple Recipients title"
-      )
+      topic = Topic.where(archetype: Archetype.private_message, title: "Multiple Recipients title")
 
-      post = Post.where(
-        topic_id: topic.pluck(:id),
-        raw: "I will interpolate some wizard fields"
-      )
+      post = Post.where(topic_id: topic.pluck(:id), raw: "I will interpolate some wizard fields")
 
       expect(topic.exists?).to eq(true)
-      expect(topic.first.all_allowed_users.map(&:username)).to include(user1.username, user2.username)
+      expect(topic.first.all_allowed_users.map(&:username)).to include(
+        user1.username,
+        user2.username,
+      )
       expect(topic.first.allowed_groups.map(&:name)).to include(group1.name, group2.name)
       expect(post.exists?).to eq(true)
       expect(user1.reload.notifications.count).to eq(1)
@@ -378,27 +361,27 @@ describe CustomWizard::Action do
 
           wizard_template["permitted"] = guests_permitted["permitted"]
           wizard_template[:steps][0][:fields] << {
-            "id": "step_1_field_5",
-            "label": "Guest Email",
-            "type": "text",
-            "min_length": "3",
+            id: "step_1_field_5",
+            label: "Guest Email",
+            type: "text",
+            min_length: "3",
           }.as_json
           create_topic["run_after"] = "step_3"
           create_topic["guest_email"] = [
             {
-              "type": "assignment",
-              "output": "step_1_field_5",
-              "output_type": "wizard_field",
-              "output_connector": "set"
-            }
+              type: "assignment",
+              output: "step_1_field_5",
+              output_type: "wizard_field",
+              output_connector: "set",
+            },
           ]
           create_topic["category"] = [
             {
-              "type": "assignment",
-              "output": "step_3_field_3",
-              "output_type": "wizard_field",
-              "output_connector": "set"
-            }
+              type: "assignment",
+              output: "step_3_field_3",
+              output_type: "wizard_field",
+              output_connector: "set",
+            },
           ]
           wizard_template.delete("actions")
           wizard_template[:actions] = [create_topic]
@@ -407,47 +390,39 @@ describe CustomWizard::Action do
         end
 
         it "creates a staged guest poster if guest_email is set" do
-          wizard = CustomWizard::Builder.new(
-            @template[:id],
-            nil,
-            CustomWizard::Wizard.generate_guest_id
-          ).build
-          wizard.create_updater(
-            wizard.steps.first.id,
-            step_1_field_5: "guest@email.com"
-          ).update
+          wizard =
+            CustomWizard::Builder.new(
+              @template[:id],
+              nil,
+              CustomWizard::Wizard.generate_guest_id,
+            ).build
+          wizard.create_updater(wizard.steps.first.id, step_1_field_5: "guest@email.com").update
           wizard.create_updater(wizard.steps.second.id, {}).update
-          wizard.create_updater(wizard.steps.last.id,
-            step_3_field_3: category.id
-          ).update
+          wizard.create_updater(wizard.steps.last.id, step_3_field_3: category.id).update
 
           topic = Topic.where(category_id: category.id).first
           expect(topic.present?).to eq(true)
           expect(topic.posts.first.user.staged).to eq(true)
-          expect(topic.posts.first.user.primary_email.email).to eq('guest@email.com')
+          expect(topic.posts.first.user.primary_email.email).to eq("guest@email.com")
         end
 
         it "returns an existing user with the same email" do
-          existing = Fabricate(:user, email: 'guest@email.com')
+          existing = Fabricate(:user, email: "guest@email.com")
 
-          wizard = CustomWizard::Builder.new(
-            @template[:id],
-            nil,
-            CustomWizard::Wizard.generate_guest_id
-          ).build
-          wizard.create_updater(
-            wizard.steps.first.id,
-            step_1_field_5: "guest@email.com"
-          ).update
+          wizard =
+            CustomWizard::Builder.new(
+              @template[:id],
+              nil,
+              CustomWizard::Wizard.generate_guest_id,
+            ).build
+          wizard.create_updater(wizard.steps.first.id, step_1_field_5: "guest@email.com").update
           wizard.create_updater(wizard.steps.second.id, {}).update
-          wizard.create_updater(wizard.steps.last.id,
-            step_3_field_3: category.id
-          ).update
+          wizard.create_updater(wizard.steps.last.id, step_3_field_3: category.id).update
 
           topic = Topic.where(category_id: category.id).first
           expect(topic.present?).to eq(true)
           expect(topic.posts.first.user.staged).to eq(false)
-          expect(topic.posts.first.user.primary_email.email).to eq('guest@email.com')
+          expect(topic.posts.first.user.primary_email.email).to eq("guest@email.com")
         end
       end
 
@@ -455,10 +430,15 @@ describe CustomWizard::Action do
         it "works" do
           wizard_template["permitted"] = guests_permitted["permitted"]
           wizard_template.delete("actions")
-          wizard_template['actions'] = [send_message]
+          wizard_template["actions"] = [send_message]
           update_template(wizard_template)
 
-          wizard = CustomWizard::Builder.new(wizard_template["id"], nil, CustomWizard::Wizard.generate_guest_id).build
+          wizard =
+            CustomWizard::Builder.new(
+              wizard_template["id"],
+              nil,
+              CustomWizard::Wizard.generate_guest_id,
+            ).build
           wizard.create_updater(wizard.steps[0].id, {}).update
           updater = wizard.create_updater(wizard.steps[1].id, {})
           updater.update
@@ -468,7 +448,9 @@ describe CustomWizard::Action do
 
           expect(topic.exists?).to eq(true)
           expect(topic.first.topic_allowed_users.first.user.username).to eq(user1.username)
-          expect(topic.first.topic_allowed_users.second.user.username).to eq(Discourse.system_user.username)
+          expect(topic.first.topic_allowed_users.second.user.username).to eq(
+            Discourse.system_user.username,
+          )
           expect(post.exists?).to eq(true)
         end
 
@@ -480,19 +462,24 @@ describe CustomWizard::Action do
 
           send_message["recipient"] = [
             {
-              "type": "assignment",
-              "output": "step_1_field_1",
-              "output_type": "wizard_field",
-              "output_connector": "set"
-            }
+              type: "assignment",
+              output: "step_1_field_1",
+              output_type: "wizard_field",
+              output_connector: "set",
+            },
           ]
 
-          wizard_template['actions'] = [send_message]
+          wizard_template["actions"] = [send_message]
           update_template(wizard_template)
 
           NotificationEmailer.expects(:process_notification).once
 
-          wizard = CustomWizard::Builder.new(wizard_template["id"], nil, CustomWizard::Wizard.generate_guest_id).build
+          wizard =
+            CustomWizard::Builder.new(
+              wizard_template["id"],
+              nil,
+              CustomWizard::Wizard.generate_guest_id,
+            ).build
           wizard.create_updater(wizard.steps[0].id, step_1_field_1: "guest@email.com").update
           updater = wizard.create_updater(wizard.steps[1].id, {})
           updater.update
@@ -502,8 +489,12 @@ describe CustomWizard::Action do
 
           expect(topic.exists?).to eq(true)
           expect(topic.first.topic_allowed_users.first.user.staged).to eq(true)
-          expect(topic.first.topic_allowed_users.first.user.primary_email.email).to eq('guest@email.com')
-          expect(topic.first.topic_allowed_users.second.user.username).to eq(Discourse.system_user.username)
+          expect(topic.first.topic_allowed_users.first.user.primary_email.email).to eq(
+            "guest@email.com",
+          )
+          expect(topic.first.topic_allowed_users.second.user.username).to eq(
+            Discourse.system_user.username,
+          )
           expect(post.exists?).to eq(true)
         end
       end
@@ -511,149 +502,146 @@ describe CustomWizard::Action do
   end
 
   context "business subscription actions" do
-    before do
-      enable_subscription("business")
-    end
+    before { enable_subscription("business") }
 
-    it '#create_category' do
-      wizard_template['actions'] << create_category
-      wizard_template['actions'] << create_group
+    it "#create_category" do
+      wizard_template["actions"] << create_category
+      wizard_template["actions"] << create_group
       update_template(wizard_template)
 
       wizard = CustomWizard::Builder.new(@template[:id], user).build
       wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
       wizard.create_updater(wizard.steps[1].id, {}).update
 
-      expect(Category.where(id: wizard.current_submission.fields['action_8']).exists?).to eq(true)
+      expect(Category.where(id: wizard.current_submission.fields["action_8"]).exists?).to eq(true)
     end
 
-    it '#create_group' do
-      wizard_template['actions'] << create_group
+    it "#create_group" do
+      wizard_template["actions"] << create_group
       update_template(wizard_template)
 
       wizard = CustomWizard::Builder.new(@template[:id], user).build
       wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
 
-      group_id = Group.where(name: wizard.current_submission.fields['action_9']).first.id
-      user_id =  User.find_by(username: wizard_template['actions'][4]['usernames'][0]["output"][0]).id
+      group_id = Group.where(name: wizard.current_submission.fields["action_9"]).first.id
+      user_id =
+        User.find_by(username: wizard_template["actions"][4]["usernames"][0]["output"][0]).id
 
-      expect(Group.where(name: wizard.current_submission.fields['action_9']).exists?).to eq(true)
+      expect(Group.where(name: wizard.current_submission.fields["action_9"]).exists?).to eq(true)
       expect(GroupUser.where(group_id: group_id, user_id: user_id).exists?).to eq(true)
     end
 
-    it '#create_group completes successfully when user included in usernames does not exist but excludes users who do not exist and includes warning in log' do
-      wizard_template['actions'] << create_group_with_nonexistent_user
+    it "#create_group completes successfully when user included in usernames does not exist but excludes users who do not exist and includes warning in log" do
+      wizard_template["actions"] << create_group_with_nonexistent_user
       update_template(wizard_template)
 
       wizard = CustomWizard::Builder.new(@template[:id], user).build
       wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
 
-      group_id = Group.where(name: wizard.current_submission.fields['action_9']).first.id
+      group_id = Group.where(name: wizard.current_submission.fields["action_9"]).first.id
 
-      expect(CustomWizard::Log.list_query.all.last.value.include? "some users were not found").to eq(true)
-      expect(Group.where(name: wizard.current_submission.fields['action_9']).exists?).to eq(true)
+      expect(
+        CustomWizard::Log.list_query.all.last.value.include? "some users were not found"
+      ).to eq(true)
+      expect(Group.where(name: wizard.current_submission.fields["action_9"]).exists?).to eq(true)
       expect(GroupUser.where(group_id: group_id).count).to eq(1)
     end
 
-    it '#add_to_group' do
-      wizard_template['actions'] << create_group
-      wizard_template['actions'] << add_to_group
+    it "#add_to_group" do
+      wizard_template["actions"] << create_group
+      wizard_template["actions"] << add_to_group
       update_template(wizard_template)
 
       wizard = CustomWizard::Builder.new(@template[:id], user).build
       step_id = wizard.steps[0].id
       updater = wizard.create_updater(step_id, step_1_field_1: "Text input").update
-      group = Group.find_by(name: wizard.current_submission.fields['action_9'])
+      group = Group.find_by(name: wizard.current_submission.fields["action_9"])
 
-      expect(group.users.first.username).to eq('angus')
+      expect(group.users.first.username).to eq("angus")
     end
 
-    it '#send_to_api successful' do
-      stub_request(:put, "https://myexternalapi.com/update").
-        with(
+    it "#send_to_api successful" do
+      stub_request(:put, "https://myexternalapi.com/update").with(
         body: "some_body",
         headers: {
-          'Host' => 'myexternalapi.com'
-        }).
-        to_return(status: 200, body: "success", headers: {})
+          "Host" => "myexternalapi.com",
+        },
+      ).to_return(status: 200, body: "success", headers: {})
 
       new_api = CustomWizard::Api.new("my_api")
       CustomWizard::Api.set("my_api", title: "Mocked external api")
       CustomWizard::Api::Authorization.set("my_api", api_test_no_authorization)
       CustomWizard::Api::Endpoint.new("my_api")
-      CustomWizard::Api::Endpoint.set("my_api",  api_test_endpoint)
+      CustomWizard::Api::Endpoint.set("my_api", api_test_endpoint)
       endpoint_id = CustomWizard::Api::Endpoint.list("my_api").first.id
 
       result = CustomWizard::Api::Endpoint.request("my_api", endpoint_id, "some_body")
       log_entry = CustomWizard::Api::LogEntry.list("my_api").first
 
-      expect(result).to eq('success')
-      expect(log_entry.status).to eq('SUCCESS')
+      expect(result).to eq("success")
+      expect(log_entry.status).to eq("SUCCESS")
     end
 
-    it '#send_to_api failure' do
-      stub_request(:put, "https://myexternalapi.com/update").
-        with(
+    it "#send_to_api failure" do
+      stub_request(:put, "https://myexternalapi.com/update").with(
         body: "some_body",
         headers: {
-          'Host' => 'myexternalapi.com'
-        }).
-        to_return(status: 500, body: "failure", headers: {})
+          "Host" => "myexternalapi.com",
+        },
+      ).to_return(status: 500, body: "failure", headers: {})
 
       new_api = CustomWizard::Api.new("my_api")
       CustomWizard::Api.set("my_api", title: "Mocked external api")
       CustomWizard::Api::Authorization.set("my_api", api_test_no_authorization)
       CustomWizard::Api::Endpoint.new("my_api")
-      CustomWizard::Api::Endpoint.set("my_api",  api_test_endpoint)
+      CustomWizard::Api::Endpoint.set("my_api", api_test_endpoint)
       endpoint_id = CustomWizard::Api::Endpoint.list("my_api").first.id
 
       result = CustomWizard::Api::Endpoint.request("my_api", endpoint_id, "some_body")
       log_entry = CustomWizard::Api::LogEntry.list("my_api").first
 
       expect(result).to eq({ error: "API request failed" })
-      expect(log_entry.status).to eq('FAIL')
+      expect(log_entry.status).to eq("FAIL")
     end
   end
 
-  it 'registers callbacks' do
+  it "registers callbacks" do
     described_class.register_callback(:before_create_topic) do |params, wizard, action, submission|
       params[:topic_opts][:custom_fields]["topic_custom_field"] = true
       params
     end
 
     wizard = CustomWizard::Builder.new(@template[:id], user).build
-    action = CustomWizard::Action.new(
-      wizard: wizard,
-      action: create_topic.with_indifferent_access,
-      submission: wizard.current_submission
-    )
+    action =
+      CustomWizard::Action.new(
+        wizard: wizard,
+        action: create_topic.with_indifferent_access,
+        submission: wizard.current_submission,
+      )
     action.perform
 
     expect(action.result.success?).to eq(true)
     expect(Topic.find(action.result.output).custom_fields["topic_custom_field"]).to eq("t")
   end
 
-  context 'creating a topic when there are multiple actions' do
-    it 'works' do
-      wizard_template['actions'] << create_topic
-      wizard_template['actions'] << send_message
+  context "creating a topic when there are multiple actions" do
+    it "works" do
+      wizard_template["actions"] << create_topic
+      wizard_template["actions"] << send_message
       update_template(wizard_template)
       wizard = CustomWizard::Builder.new(@template[:id], user).build
       wizard.create_updater(
         wizard.steps.first.id,
-        step_1_field_1: 'Topic Title',
-        step_1_field_2: 'topic body'
+        step_1_field_1: "Topic Title",
+        step_1_field_2: "topic body",
       ).update
       wizard.create_updater(wizard.steps.second.id, {}).update
-      wizard.create_updater(wizard.steps.last.id, step_3_field_3: category.id)
-        .update
+      wizard.create_updater(wizard.steps.last.id, step_3_field_3: category.id).update
       wizard.create_updater(wizard.steps[0].id, {}).update
       wizard.create_updater(wizard.steps[1].id, {}).update
-      topic = Topic.where(title: 'Topic Title', category_id: category.id)
+      topic = Topic.where(title: "Topic Title", category_id: category.id)
       expect(topic.exists?).to eq(true)
-      expect(
-        Post.where(topic_id: topic.pluck(:id), raw: 'topic body').exists?
-      ).to eq(true)
+      expect(Post.where(topic_id: topic.pluck(:id), raw: "topic body").exists?).to eq(true)
     end
   end
 end

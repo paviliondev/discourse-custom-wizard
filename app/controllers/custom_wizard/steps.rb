@@ -8,9 +8,7 @@ class CustomWizard::StepsController < ::CustomWizard::WizardClientController
     update[:fields] = {}
     if params[:fields]
       field_ids = @builder.wizard.field_ids
-      params[:fields].each do |k, v|
-        update[:fields][k] = v if field_ids.include? k
-      end
+      params[:fields].each { |k, v| update[:fields][k] = v if field_ids.include? k }
     end
 
     @builder.build
@@ -34,16 +32,15 @@ class CustomWizard::StepsController < ::CustomWizard::WizardClientController
 
       if current_step.final?
         builder.template.actions.each do |action_template|
-          if action_template['run_after'] === 'wizard_completion'
-            action_result = CustomWizard::Action.new(
-              action: action_template,
-              wizard: @wizard,
-              submission: current_submission
-            ).perform
+          if action_template["run_after"] === "wizard_completion"
+            action_result =
+              CustomWizard::Action.new(
+                action: action_template,
+                wizard: @wizard,
+                submission: current_submission,
+              ).perform
 
-            if action_result.success?
-              current_submission = action_result.submission
-            end
+            current_submission = action_result.submission if action_result.success?
           end
         end
 
@@ -68,14 +65,14 @@ class CustomWizard::StepsController < ::CustomWizard::WizardClientController
       result[:wizard] = ::CustomWizard::WizardSerializer.new(
         @wizard,
         scope: Guardian.new(current_user),
-        root: false
+        root: false,
       ).as_json
 
       render json: result
     else
       errors = []
       updater.errors.messages.each do |field, msg|
-        errors << { field: field, description: msg.join(',') }
+        errors << { field: field, description: msg.join(",") }
       end
       render json: { errors: errors }, status: 422
     end
@@ -87,26 +84,25 @@ class CustomWizard::StepsController < ::CustomWizard::WizardClientController
     raise Discourse::InvalidParameters.new(:wizard_id) if @builder.template.nil?
     raise Discourse::InvalidAccess.new if !@builder.wizard || !@builder.wizard.can_access?
 
-    @step_template = @builder.template.steps.select do |s|
-      s['id'] == update_params[:step_id]
-    end.first
+    @step_template = @builder.template.steps.select { |s| s["id"] == update_params[:step_id] }.first
     raise Discourse::InvalidParameters.new(:step_id) if !@step_template
     raise Discourse::InvalidAccess.new if !@builder.check_condition(@step_template)
   end
 
   def update_params
-    @update_params || begin
-      params.require(:step_id)
-      params.require(:wizard_id)
-      params.permit(:wizard_id, :step_id).transform_values { |v| v.underscore }
-    end
+    @update_params ||
+      begin
+        params.require(:step_id)
+        params.require(:wizard_id)
+        params.permit(:wizard_id, :step_id).transform_values { |v| v.underscore }
+      end
   end
 
   def get_redirect
     return @result[:redirect_on_next] if @result[:redirect_on_next].present?
 
     submission = @wizard.current_submission
-    return nil unless submission.present?
+    return nil if submission.blank?
     ## route_to set by actions, redirect_on_complete set by actions, redirect_to set at wizard entry
     submission.route_to || submission.redirect_on_complete || submission.redirect_to
   end

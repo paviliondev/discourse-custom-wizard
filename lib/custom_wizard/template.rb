@@ -6,15 +6,12 @@ class CustomWizard::Template
   AFTER_SIGNUP_CACHE_KEY ||= "after_signup_wizard_ids"
   AFTER_TIME_CACHE_KEY ||= "after_time_wizard_ids"
 
-  attr_reader :data,
-              :opts,
-              :steps,
-              :actions
+  attr_reader :data, :opts, :steps, :actions
 
   def initialize(data)
     @data = data
-    @steps = data['steps'] || []
-    @actions = data['actions'] || []
+    @steps = data["steps"] || []
+    @actions = data["actions"] || []
   end
 
   def save(opts = {})
@@ -64,7 +61,11 @@ class CustomWizard::Template
       ensure_wizard_upload_references!(wizard_id)
       PluginStore.remove(CustomWizard::PLUGIN_NAME, wizard.id)
       clear_user_wizard_redirect(wizard_id, after_time: !!wizard.after_time)
-      related_custom_fields = CategoryCustomField.where(name: 'create_topic_wizard', value: wizard.name.parameterize(separator: "_"))
+      related_custom_fields =
+        CategoryCustomField.where(
+          name: "create_topic_wizard",
+          value: wizard.name.parameterize(separator: "_"),
+        )
       related_custom_fields.destroy_all
     end
 
@@ -74,7 +75,7 @@ class CustomWizard::Template
   end
 
   def self.exists?(wizard_id)
-    PluginStoreRow.exists?(plugin_name: 'custom_wizard', key: wizard_id)
+    PluginStoreRow.exists?(plugin_name: "custom_wizard", key: wizard_id)
   end
 
   def self.list(setting: nil, query_str: nil, order: :id)
@@ -82,15 +83,13 @@ class CustomWizard::Template
     query += " AND (value::json ->> '#{setting}')::boolean IS TRUE" if setting
     query += " #{query_str}" if query_str
 
-    PluginStoreRow.where(query).order(order)
+    PluginStoreRow
+      .where(query)
+      .order(order)
       .reduce([]) do |result, record|
         attrs = JSON.parse(record.value)
 
-        if attrs.present? &&
-          attrs.is_a?(Hash) &&
-          attrs['id'].present? &&
-          attrs['name'].present?
-
+        if attrs.present? && attrs.is_a?(Hash) && attrs["id"].present? && attrs["name"].present?
           result.push(attrs)
         end
 
@@ -99,25 +98,24 @@ class CustomWizard::Template
   end
 
   def self.clear_user_wizard_redirect(wizard_id, after_time: false)
-    UserCustomField.where(name: 'redirect_to_wizard', value: wizard_id).destroy_all
+    UserCustomField.where(name: "redirect_to_wizard", value: wizard_id).destroy_all
 
-    if after_time
-      Jobs.cancel_scheduled_job(:set_after_time_wizard, wizard_id: wizard_id)
-    end
+    Jobs.cancel_scheduled_job(:set_after_time_wizard, wizard_id: wizard_id) if after_time
   end
 
   def self.after_signup_ids
     ::CustomWizard::Cache.wrap(AFTER_SIGNUP_CACHE_KEY) do
-      list(setting: 'after_signup').map { |t| t['id'] }
+      list(setting: "after_signup").map { |t| t["id"] }
     end
   end
 
   def self.after_time_ids
     ::CustomWizard::Cache.wrap(AFTER_TIME_CACHE_KEY) do
       list(
-        setting: 'after_time',
-        query_str: "AND (value::json ->> 'after_time_scheduled')::timestamp < '#{Time.now}'::timestamp"
-      ).map { |t| t['id'] }
+        setting: "after_time",
+        query_str:
+          "AND (value::json ->> 'after_time_scheduled')::timestamp < '#{Time.now}'::timestamp",
+      ).map { |t| t["id"] }
     end
   end
 
@@ -137,7 +135,7 @@ class CustomWizard::Template
       UploadReference.ensure_exist!(
         upload_ids: wizard_upload_ids,
         target_type: "PluginStoreRow",
-        target_id: wizard_record.id
+        target_id: wizard_record.id,
       )
     end
   end
@@ -151,15 +149,11 @@ class CustomWizard::Template
 
   def prepare_data
     @data[:steps].each do |step|
-      if step[:raw_description]
-        step[:description] = step[:raw_description]
-      end
+      step[:description] = step[:raw_description] if step[:raw_description]
 
       remove_non_mapped_index(step)
 
-      step[:fields].each do |field|
-        remove_non_mapped_index(field)
-      end
+      step[:fields].each { |field| remove_non_mapped_index(field) }
     end
   end
 
@@ -191,9 +185,7 @@ class CustomWizard::Template
   end
 
   def remove_non_mapped_index(object)
-    if !object[:index].is_a?(Array)
-      object.delete(:index)
-    end
+    object.delete(:index) if !object[:index].is_a?(Array)
   end
 
   def ensure_wizard_upload_references!

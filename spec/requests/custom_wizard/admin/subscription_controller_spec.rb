@@ -9,26 +9,22 @@ describe CustomWizard::SubscriptionController do
   end
 
   context "with an admin" do
-    before do
-      sign_in(admin_user)
-    end
+    before { sign_in(admin_user) }
 
     context "without a subscription" do
-      before do
-        disable_subscriptions
-      end
+      before { disable_subscriptions }
 
       it "returns the right subscription details" do
         get "/admin/wizards/subscription.json"
         expect(response.parsed_body["subscribed"]).to eq(false)
-        expect(response.parsed_body["subscription_attributes"]).to eq(CustomWizard::Subscription.attributes.as_json)
+        expect(response.parsed_body["subscription_attributes"]).to eq(
+          CustomWizard::Subscription.attributes.as_json,
+        )
       end
     end
 
     context "with a subscription" do
-      before do
-        enable_subscription("standard")
-      end
+      before { enable_subscription("standard") }
 
       it "returns the right subscription details" do
         get "/admin/wizards/subscription.json"

@@ -16,23 +16,19 @@ class CustomWizard::Api::LogEntry
   def initialize(api_name, data = {})
     @api_name = api_name
 
-    data.each do |k, v|
-      self.send "#{k}=", v if self.respond_to?(k)
-    end
+    data.each { |k, v| self.send "#{k}=", v if self.respond_to?(k) }
   end
 
   def self.set(api_name, new_data)
-    if new_data['log_id']
-      data = self.get(api_name, new_data['log_id'], data_only: true)
-      log_id = new_data['log_id']
+    if new_data["log_id"]
+      data = self.get(api_name, new_data["log_id"], data_only: true)
+      log_id = new_data["log_id"]
     else
       data = {}
       log_id = SecureRandom.hex(8)
     end
 
-    new_data.each do |k, v|
-      data[k.to_sym] = v
-    end
+    new_data.each { |k, v| data[k.to_sym] = v }
 
     PluginStore.set("custom_wizard_api_#{api_name}", "log_#{log_id}", data)
 
@@ -55,16 +51,19 @@ class CustomWizard::Api::LogEntry
   end
 
   def self.remove(api_name)
-    PluginStoreRow.where("plugin_name = 'custom_wizard_api_#{api_name}' AND key LIKE 'log_%'").destroy_all
+    PluginStoreRow.where(
+      "plugin_name = 'custom_wizard_api_#{api_name}' AND key LIKE 'log_%'",
+    ).destroy_all
   end
 
   def self.list(api_name)
-    PluginStoreRow.where("plugin_name LIKE 'custom_wizard_api_#{api_name}' AND key LIKE 'log_%'")
+    PluginStoreRow
+      .where("plugin_name LIKE 'custom_wizard_api_#{api_name}' AND key LIKE 'log_%'")
       .map do |record|
-        api_name = record['plugin_name'].sub("custom_wizard_api_", "")
-        data = ::JSON.parse(record['value'])
-        data[:log_id] = record['key'].split('_').last
-        this_user = User.find_by(id: data['user_id'])
+        api_name = record["plugin_name"].sub("custom_wizard_api_", "")
+        data = ::JSON.parse(record["value"])
+        data[:log_id] = record["key"].split("_").last
+        this_user = User.find_by(id: data["user_id"])
         if this_user.nil?
           data[:user_id] = nil
           data[:username] = ""
@@ -76,14 +75,17 @@ class CustomWizard::Api::LogEntry
           data[:username] = this_user.username || ""
           data[:userpath] = "/u/#{this_user.username_lower}/activity"
           data[:name] = this_user.name || ""
-          data[:avatar_template] = "/user_avatar/default/#{this_user.username_lower}/97/#{this_user.uploaded_avatar_id}.png"
+          data[
+            :avatar_template
+          ] = "/user_avatar/default/#{this_user.username_lower}/97/#{this_user.uploaded_avatar_id}.png"
         end
         self.new(api_name, data)
       end
   end
 
   def self.clear(api_name)
-    PluginStoreRow.where("plugin_name = 'custom_wizard_api_#{api_name}' AND key LIKE 'log_%'").destroy_all
+    PluginStoreRow.where(
+      "plugin_name = 'custom_wizard_api_#{api_name}' AND key LIKE 'log_%'",
+    ).destroy_all
   end
-
 end

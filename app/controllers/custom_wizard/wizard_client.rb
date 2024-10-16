@@ -6,9 +6,7 @@ class CustomWizard::WizardClientController < ::ApplicationController
   private
 
   def ensure_plugin_enabled
-    unless SiteSetting.custom_wizard_enabled
-      redirect_to path("/")
-    end
+    redirect_to path("/") unless SiteSetting.custom_wizard_enabled
   end
 
   def guest_id

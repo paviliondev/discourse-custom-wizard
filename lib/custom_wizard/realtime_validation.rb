@@ -8,7 +8,7 @@ class CustomWizard::RealtimeValidation
       types: [:text],
       component: "similar-topics-validator",
       backend: true,
-      required_params: []
-    }
+      required_params: [],
+    },
   }
 end

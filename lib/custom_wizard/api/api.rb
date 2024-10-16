@@ -2,14 +2,11 @@
 class CustomWizard::Api
   include ActiveModel::SerializerSupport
 
-  attr_accessor :name,
-                :title
+  attr_accessor :name, :title
 
   def initialize(name, data = {})
     @name = name
-    data.each do |k, v|
-      self.send "#{k}=", v if self.respond_to?(k)
-    end
+    data.each { |k, v| self.send "#{k}=", v if self.respond_to?(k) }
   end
 
   def self.set(name, data)
@@ -27,9 +24,10 @@ class CustomWizard::Api
   end
 
   def self.list
-    PluginStoreRow.where("plugin_name LIKE 'custom_wizard_api_%' AND key = 'metadata'")
+    PluginStoreRow
+      .where("plugin_name LIKE 'custom_wizard_api_%' AND key = 'metadata'")
       .map do |record|
-        self.new(record['plugin_name'].sub("custom_wizard_api_", ""), ::JSON.parse(record['value']))
+        self.new(record["plugin_name"].sub("custom_wizard_api_", ""), ::JSON.parse(record["value"]))
       end
   end
 end

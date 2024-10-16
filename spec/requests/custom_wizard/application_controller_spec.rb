@@ -1,23 +1,23 @@
 # frozen_string_literal: true
 
 describe ApplicationController do
-  fab!(:user) { Fabricate(:user, username: 'angus', email: "angus@email.com", trust_level: TrustLevel[3]) }
+  fab!(:user) do
+    Fabricate(:user, username: "angus", email: "angus@email.com", trust_level: TrustLevel[3])
+  end
   let(:wizard_template) { get_wizard_fixture("wizard") }
   let(:permitted_json) { get_wizard_fixture("wizard/permitted") }
 
   before do
     CustomWizard::Template.save(wizard_template, skip_jobs: true)
-    @template = CustomWizard::Template.find('super_mega_fun_wizard')
+    @template = CustomWizard::Template.find("super_mega_fun_wizard")
   end
 
   context "with signed in user" do
-    before do
-      sign_in(user)
-    end
+    before { sign_in(user) }
 
     context "who is required to complete wizard" do
       before do
-        user.custom_fields['redirect_to_wizard'] = 'super_mega_fun_wizard'
+        user.custom_fields["redirect_to_wizard"] = "super_mega_fun_wizard"
         user.save_custom_fields(true)
       end
 
@@ -55,10 +55,9 @@ describe ApplicationController do
         end
 
         it "saves original destination of user" do
-          get '/', headers: { 'REFERER' => "/t/2" }
+          get "/", headers: { "REFERER" => "/t/2" }
           expect(
-            CustomWizard::Wizard.create(@template['id'], user).submissions
-              .first.redirect_to
+            CustomWizard::Wizard.create(@template["id"], user).submissions.first.redirect_to,
           ).to eq("/t/2")
         end
       end
@@ -101,9 +100,7 @@ describe ApplicationController do
             end
 
             context "when user is not in permitted group" do
-              before do
-                Group.find(13).remove(user)
-              end
+              before { Group.find(13).remove(user) }
 
               it "does not redirect user" do
                 travel_to Time.now + 4.hours
@@ -131,7 +128,7 @@ describe ApplicationController do
                   action: CustomWizard::UserHistory.actions[:step],
                   actor_id: user.id,
                   context: @template[:id],
-                  subject: step[:id]
+                  subject: step[:id],
                 )
               end
             end

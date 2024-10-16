@@ -48,12 +48,7 @@ class CustomWizard::TemplateValidator
   end
 
   def self.required
-    {
-      wizard: ['id', 'name', 'steps'],
-      step: ['id'],
-      field: ['id', 'type'],
-      action: ['id', 'type']
-    }
+    { wizard: %w[id name steps], step: ["id"], field: %w[id type], action: %w[id type] }
   end
 
   private
@@ -71,7 +66,8 @@ class CustomWizard::TemplateValidator
       value = object[property]
 
       if !@subscription.includes?(type, property.to_sym, value)
-        errors.add :base, I18n.t("wizard.validation.subscription", type: type.to_s, property: property)
+        errors.add :base,
+                   I18n.t("wizard.validation.subscription", type: type.to_s, property: property)
       end
     end
   end
@@ -83,9 +79,9 @@ class CustomWizard::TemplateValidator
   end
 
   def validate_guests(object, type)
-    guests_permitted = @data[:permitted] && @data[:permitted].any? do |m|
-      m["output"]&.include?(CustomWizard::Wizard::GUEST_GROUP_ID)
-    end
+    guests_permitted =
+      @data[:permitted] &&
+        @data[:permitted].any? { |m| m["output"]&.include?(CustomWizard::Wizard::GUEST_GROUP_ID) }
     return unless guests_permitted
 
     if type === :action && CustomWizard::Action::REQUIRES_USER.include?(object[:type])
@@ -100,11 +96,14 @@ class CustomWizard::TemplateValidator
   def validate_after_signup
     return unless ActiveRecord::Type::Boolean.new.cast(@data[:after_signup])
 
-    other_after_signup = CustomWizard::Template.list(setting: 'after_signup')
-      .select { |template| template['id'] != @data[:id] }
+    other_after_signup =
+      CustomWizard::Template
+        .list(setting: "after_signup")
+        .select { |template| template["id"] != @data[:id] }
 
     if other_after_signup.any?
-      errors.add :base, I18n.t("wizard.validation.after_signup", wizard_id: other_after_signup.first['id'])
+      errors.add :base,
+                 I18n.t("wizard.validation.after_signup", wizard_id: other_after_signup.first["id"])
     end
   end
 
@@ -132,21 +131,17 @@ class CustomWizard::TemplateValidator
   end
 
   def validate_liquid_template(object, type)
-    %w[
-      description
-      raw_description
-      placeholder
-      preview_template
-      post_template
-    ].each do |field|
+    %w[description raw_description placeholder preview_template post_template].each do |field|
       if template = object[field]
         result = is_liquid_template_valid?(template)
 
         unless "valid" == result
-          error = I18n.t("wizard.validation.liquid_syntax_error",
-            attribute: "#{object[:id]}.#{field}",
-            message: result
-          )
+          error =
+            I18n.t(
+              "wizard.validation.liquid_syntax_error",
+              attribute: "#{object[:id]}.#{field}",
+              message: result,
+            )
           errors.add :base, error
         end
       end
@@ -156,7 +151,7 @@ class CustomWizard::TemplateValidator
   def is_liquid_template_valid?(template)
     begin
       Liquid::Template.parse(template)
-      'valid'
+      "valid"
     rescue Liquid::SyntaxError => error
       error.message
     end

@@ -15,26 +15,18 @@ class CustomWizard::UserHistory
   end
 
   def self.actions
-    @actions ||=
-      Enum.new(
-        step: UserHistory.actions[:custom_wizard_step]
-      )
+    @actions ||= Enum.new(step: UserHistory.actions[:custom_wizard_step])
   end
 
   def self.where_opts(actor_id, action, context, subject)
-    opts = {
-      context: context
-    }
+    opts = { context: context }
     opts[:action] = action if action
     opts[:subject] = subject if subject
     add_actor(opts, actor_id)
   end
 
   def self.create_opts(actor_id, action, context, subject)
-    opts = {
-      action: action,
-      context: context
-    }
+    opts = { action: action, context: context }
     opts[:subject] = subject if subject
     add_actor(opts, actor_id)
   end

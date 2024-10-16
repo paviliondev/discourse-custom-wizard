@@ -30,7 +30,7 @@ class CustomWizard::Builder
     @template.steps.each do |step_template|
       next if !check_condition(step_template)
 
-      @wizard.append_step(step_template['id']) do |step|
+      @wizard.append_step(step_template["id"]) do |step|
         step = check_if_permitted(step, step_template)
         next if !step.permitted
 
@@ -73,15 +73,16 @@ class CustomWizard::Builder
   end
 
   def check_condition(template)
-    if template['condition'].present?
-      result = CustomWizard::Mapper.new(
-        inputs: template['condition'],
-        user: @wizard.user,
-        data: @wizard.current_submission&.fields_and_meta,
-        opts: {
-          multiple: true
-        }
-      ).perform
+    if template["condition"].present?
+      result =
+        CustomWizard::Mapper.new(
+          inputs: template["condition"],
+          user: @wizard.user,
+          data: @wizard.current_submission&.fields_and_meta,
+          opts: {
+            multiple: true,
+          },
+        ).perform
 
       result.any?
     else
@@ -92,126 +93,121 @@ class CustomWizard::Builder
   private
 
   def mapper
-    CustomWizard::Mapper.new(
-      user: @wizard.user,
-      data: @wizard.current_submission&.fields_and_meta
-    )
+    CustomWizard::Mapper.new(user: @wizard.user, data: @wizard.current_submission&.fields_and_meta)
   end
 
   def append_field(step, step_template, field_template, build_opts)
     params = {
-      id: field_template['id'],
-      type: field_template['type'],
-      required: field_template['required']
+      id: field_template["id"],
+      type: field_template["type"],
+      required: field_template["required"],
     }
 
-    %w(label description image key validations min_length max_length char_counter tag_groups).each do |key|
-      params[key.to_sym] = field_template[key] if field_template[key]
-    end
+    %w[
+      label
+      description
+      image
+      key
+      validations
+      min_length
+      max_length
+      char_counter
+      tag_groups
+    ].each { |key| params[key.to_sym] = field_template[key] if field_template[key] }
 
     params[:value] = prefill_field(field_template, step_template)
 
     if !build_opts[:reset] && (submission = @wizard.current_submission).present?
-      params[:value] = submission.fields[field_template['id']] if submission.fields[field_template['id']]
+      params[:value] = submission.fields[field_template["id"]] if submission.fields[
+        field_template["id"]
+      ]
     end
 
-    if field_template['type'] === 'group' && params[:value].present?
+    if field_template["type"] === "group" && params[:value].present?
       params[:value] = params[:value].first
     end
 
-    if field_template['type'] === 'checkbox'
-      params[:value] = standardise_boolean(params[:value])
+    params[:value] = standardise_boolean(params[:value]) if field_template["type"] === "checkbox"
+
+    params[:file_types] = field_template["file_types"] if field_template["type"] === "upload"
+
+    if %w[date time date_time].include?(field_template["type"])
+      params[:format] = field_template["format"]
     end
 
-    if field_template['type'] === 'upload'
-      params[:file_types] = field_template['file_types']
+    if %w[category tag topic].include?(field_template["type"])
+      params[:limit] = field_template["limit"]
     end
 
-    if ['date', 'time', 'date_time'].include?(field_template['type'])
-      params[:format] = field_template['format']
+    if field_template["type"] === "tag"
+      params[:can_create_tag] = standardise_boolean(field_template["can_create_tag"])
     end
 
-    if %w[category tag topic].include?(field_template['type'])
-      params[:limit] = field_template['limit']
-    end
+    params[:property] = field_template["property"] if field_template["type"] === "category"
 
-    if field_template['type'] === 'tag'
-      params[:can_create_tag] = standardise_boolean(field_template['can_create_tag'])
-    end
+    params[:category] = field_template["category"] if field_template["type"] === "topic"
 
-    if field_template['type'] === 'category'
-      params[:property] = field_template['property']
-    end
+    if (content_inputs = field_template["content"]).present?
+      content =
+        CustomWizard::Mapper.new(
+          inputs: content_inputs,
+          user: @wizard.user,
+          data: @wizard.current_submission&.fields_and_meta,
+          opts: {
+            with_type: true,
+          },
+        ).perform
 
-    if field_template['type'] === 'topic'
-      params[:category] = field_template['category']
-    end
-
-    if (content_inputs = field_template['content']).present?
-      content = CustomWizard::Mapper.new(
-        inputs: content_inputs,
-        user: @wizard.user,
-        data: @wizard.current_submission&.fields_and_meta,
-        opts: {
-          with_type: true
-        }
-      ).perform
-
-      if content.present? &&
-         content[:result].present?
-
-        if content[:type] == 'association'
-          content[:result] = content[:result].map do |item|
-            {
-              id: item[:key],
-              name: item[:value]
-            }
-          end
+      if content.present? && content[:result].present?
+        if content[:type] == "association"
+          content[:result] = content[:result].map { |item| { id: item[:key], name: item[:value] } }
         end
 
         params[:content] = content[:result]
       end
     end
 
-    if field_template['index'].present?
-      index = CustomWizard::Mapper.new(
-        inputs: field_template['index'],
-        user: @wizard.user,
-        data: @wizard.current_submission&.fields_and_meta
-      ).perform
+    if field_template["index"].present?
+      index =
+        CustomWizard::Mapper.new(
+          inputs: field_template["index"],
+          user: @wizard.user,
+          data: @wizard.current_submission&.fields_and_meta,
+        ).perform
 
       params[:index] = index.to_i unless index.nil?
     end
 
-    if field_template['description'].present?
+    if field_template["description"].present?
       params[:description] = mapper.interpolate(
-        field_template['description'],
+        field_template["description"],
         user: @wizard.user,
         value: true,
         wizard: true,
-        template: true
+        template: true,
       )
     end
 
-    if field_template['preview_template'].present?
-      preview_template = mapper.interpolate(
-        field_template['preview_template'],
-        user: @wizard.user,
-        value: true,
-        wizard: true,
-        template: true
-      )
+    if field_template["preview_template"].present?
+      preview_template =
+        mapper.interpolate(
+          field_template["preview_template"],
+          user: @wizard.user,
+          value: true,
+          wizard: true,
+          template: true,
+        )
 
       params[:preview_template] = PrettyText.cook(preview_template)
     end
 
-    if field_template['placeholder'].present?
+    if field_template["placeholder"].present?
       params[:placeholder] = mapper.interpolate(
-        field_template['placeholder'],
+        field_template["placeholder"],
         user: @wizard.user,
         value: true,
         wizard: true,
-        template: true
+        template: true,
       )
     end
 
@@ -219,11 +215,11 @@ class CustomWizard::Builder
   end
 
   def prefill_field(field_template, step_template)
-    if (prefill = field_template['prefill']).present?
+    if (prefill = field_template["prefill"]).present?
       CustomWizard::Mapper.new(
         inputs: prefill,
         user: @wizard.user,
-        data: @wizard.current_submission&.fields_and_meta
+        data: @wizard.current_submission&.fields_and_meta,
       ).perform
     end
   end
@@ -231,13 +227,11 @@ class CustomWizard::Builder
   def check_if_permitted(step, step_template)
     step.permitted = true
 
-    if step_template['required_data']
-      step = ensure_required_data(step, step_template)
-    end
+    step = ensure_required_data(step, step_template) if step_template["required_data"]
 
     if !step.permitted
-      if step_template['required_data_message']
-        step.permitted_message = step_template['required_data_message']
+      if step_template["required_data_message"]
+        step.permitted_message = step_template["required_data_message"]
       end
     end
 
@@ -245,18 +239,19 @@ class CustomWizard::Builder
   end
 
   def add_step_attributes(step, step_template)
-    %w(index title banner key force_final).each do |attr|
+    %w[index title banner key force_final].each do |attr|
       step.send("#{attr}=", step_template[attr]) if step_template[attr]
     end
 
-    if step_template['description']
-      step.description = mapper.interpolate(
-        step_template['description'],
-        user: @wizard.user,
-        value: true,
-        wizard: true,
-        template: true
-      )
+    if step_template["description"]
+      step.description =
+        mapper.interpolate(
+          step_template["description"],
+          user: @wizard.user,
+          value: true,
+          wizard: true,
+          template: true,
+        )
       step.description = PrettyText.cook(step.description)
     end
 
@@ -264,8 +259,8 @@ class CustomWizard::Builder
   end
 
   def append_step_fields(step, step_template, build_opts)
-    if step_template['fields'] && step_template['fields'].length
-      step_template['fields'].each do |field_template|
+    if step_template["fields"] && step_template["fields"].length
+      step_template["fields"].each do |field_template|
         next if !check_condition(field_template)
         append_field(step, step_template, field_template, build_opts)
       end
@@ -280,18 +275,18 @@ class CustomWizard::Builder
   end
 
   def save_permitted_params(step_template, params)
-    return unless step_template['permitted_params'].present?
+    return if step_template["permitted_params"].blank?
 
-    permitted_params = step_template['permitted_params']
+    permitted_params = step_template["permitted_params"]
     permitted_data = {}
     submission_key = nil
     params_key = nil
     submission = @wizard.current_submission
 
     permitted_params.each do |pp|
-      pair = pp['pairs'].first
-      params_key = pair['key'].to_sym
-      submission_key = pair['value'].to_sym
+      pair = pp["pairs"].first
+      params_key = pair["key"].to_sym
+      submission_key = pair["value"].to_sym
 
       if submission_key && params_key && params[params_key].present?
         submission.permitted_param_keys << submission_key.to_s
@@ -303,19 +298,15 @@ class CustomWizard::Builder
   end
 
   def ensure_required_data(step, step_template)
-    step_template['required_data'].each do |required|
-      pairs = required['pairs'].select do |pair|
-        pair['key'].present? && pair['value'].present?
-      end
+    step_template["required_data"].each do |required|
+      pairs = required["pairs"].select { |pair| pair["key"].present? && pair["value"].present? }
 
       if pairs.any? && !@wizard.current_submission.present?
         step.permitted = false
         break
       end
 
-      pairs.each do |pair|
-        pair['key'] = @wizard.current_submission.fields[pair['key']]
-      end
+      pairs.each { |pair| pair["key"] = @wizard.current_submission.fields[pair["key"]] }
 
       if !mapper.validate_pairs(pairs)
         step.permitted = false
@@ -328,25 +319,22 @@ class CustomWizard::Builder
 
   def apply_step_handlers
     CustomWizard::Builder.step_handlers.each do |handler|
-      if handler[:wizard_id] == @wizard.id
-        handler[:block].call(self)
-      end
+      handler[:block].call(self) if handler[:wizard_id] == @wizard.id
     end
   end
 
   def run_step_actions
     if @template.actions.present?
       @template.actions.each do |action_template|
-        if action_template['run_after'] === updater.step.id
-          result = CustomWizard::Action.new(
-            action: action_template,
-            wizard: @wizard,
-            submission: @submission
-          ).perform
+        if action_template["run_after"] === updater.step.id
+          result =
+            CustomWizard::Action.new(
+              action: action_template,
+              wizard: @wizard,
+              submission: @submission,
+            ).perform
 
-          if result.success?
-            @submission = result.submission
-          end
+          @submission = result.submission if result.success?
         end
       end
     end

@@ -4,31 +4,25 @@ class CustomWizard::Submission
 
   PAGE_LIMIT = 50
   KEY ||= "submissions"
-  META ||= %w(updated_at submitted_at route_to redirect_on_complete redirect_to)
+  META ||= %w[updated_at submitted_at route_to redirect_on_complete redirect_to]
 
-  attr_reader :id,
-              :wizard
+  attr_reader :id, :wizard
 
-  attr_accessor :fields,
-                :permitted_param_keys
+  attr_accessor :fields, :permitted_param_keys
 
-  META.each do |attr|
-    class_eval { attr_accessor attr }
-  end
+  META.each { |attr| class_eval { attr_accessor attr } }
 
   def initialize(wizard, data = {})
     @wizard = wizard
 
     data = (data || {}).with_indifferent_access
-    @id = data['id'] || SecureRandom.hex(12)
-    non_field_keys = META + ['id']
+    @id = data["id"] || SecureRandom.hex(12)
+    non_field_keys = META + ["id"]
     @fields = data.except(*non_field_keys) || {}
 
-    META.each do |attr|
-      send("#{attr}=", data[attr]) if data[attr]
-    end
+    META.each { |attr| send("#{attr}=", data[attr]) if data[attr] }
 
-    @permitted_param_keys = data['permitted_param_keys'] || []
+    @permitted_param_keys = data["permitted_param_keys"] || []
   end
 
   def save
@@ -40,7 +34,7 @@ class CustomWizard::Submission
     self.updated_at = Time.now.iso8601
     submissions.push(self)
 
-    submission_data = submissions.map { |submission| data_to_save(submission)  }
+    submission_data = submissions.map { |submission| data_to_save(submission) }
     PluginStore.set("#{wizard.id}_#{KEY}", wizard.actor_id, submission_data)
   end
 
@@ -49,9 +43,8 @@ class CustomWizard::Submission
   end
 
   def validate_field_key(key)
-    wizard.field_ids.include?(key) ||
-    wizard.action_ids.include?(key) ||
-    permitted_param_keys.include?(key)
+    wizard.field_ids.include?(key) || wizard.action_ids.include?(key) ||
+      permitted_param_keys.include?(key)
   end
 
   def fields_and_meta
@@ -71,9 +64,7 @@ class CustomWizard::Submission
   end
 
   def data_to_save(submission)
-    data = {
-      id: submission.id
-    }
+    data = { id: submission.id }
 
     data.merge!(submission.fields_and_meta)
 
@@ -103,21 +94,26 @@ class CustomWizard::Submission
 
   def self.cleanup_incomplete_submissions(wizard)
     all_submissions = list(wizard)
-    sorted_submissions = all_submissions.submissions.sort_by do |submission|
-      zero_epoch_time = DateTime.strptime("0", '%s')
-      [
-        submission.submitted_at ? Time.iso8601(submission.submitted_at) : zero_epoch_time,
-        submission.updated_at ? Time.iso8601(submission.updated_at) : zero_epoch_time
-      ]
-    end.reverse
+    sorted_submissions =
+      all_submissions
+        .submissions
+        .sort_by do |submission|
+          zero_epoch_time = DateTime.strptime("0", "%s")
+          [
+            submission.submitted_at ? Time.iso8601(submission.submitted_at) : zero_epoch_time,
+            submission.updated_at ? Time.iso8601(submission.updated_at) : zero_epoch_time,
+          ]
+        end
+        .reverse
 
     has_incomplete = false
-    valid_submissions = sorted_submissions.select do |submission|
-      to_be_included = submission.submitted_at || !has_incomplete
-      has_incomplete = true if !submission.submitted_at
+    valid_submissions =
+      sorted_submissions.select do |submission|
+        to_be_included = submission.submitted_at || !has_incomplete
+        has_incomplete = true if !submission.submitted_at
 
-      to_be_included
-    end
+        to_be_included
+      end
 
     valid_data = valid_submissions.map { |submission| submission.data_to_save(submission) }
     PluginStore.set("#{wizard.id}_#{KEY}", wizard.actor_id, valid_data)

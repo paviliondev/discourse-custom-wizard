@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
 describe ::CustomWizard::RealtimeValidation::SimilarTopics do
-  let(:post) {  create_post(title: "matching similar topic") }
-  let(:topic) {  post.topic }
+  let(:post) { create_post(title: "matching similar topic") }
+  let(:topic) { post.topic }
 
   let(:category) { Fabricate(:category) }
-  let(:cat_post) {  create_post(title: "matching similar topic slightly different", category: category) }
-  let(:cat_topic) {  cat_post.topic }
+  let(:cat_post) do
+    create_post(title: "matching similar topic slightly different", category: category)
+  end
+  let(:cat_topic) { cat_post.topic }
   let(:user) { cat_post.user }
 
   before do

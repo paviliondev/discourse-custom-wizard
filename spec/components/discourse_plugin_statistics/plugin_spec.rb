@@ -5,12 +5,12 @@ describe DiscoursePluginStatistics::Plugin do
 
   describe "#discourse_custom_wizard" do
     before do
-      enable_subscription('standard')
+      enable_subscription("standard")
 
       CustomWizard::Template.save(template_json, skip_jobs: true)
 
       template_json_2 = template_json.dup
-      template_json_2["id"] = 'super_mega_fun_wizard_2'
+      template_json_2["id"] = "super_mega_fun_wizard_2"
       CustomWizard::Template.save(template_json_2, skip_jobs: true)
 
       @data = DiscoursePluginStatistics::Plugin.discourse_custom_wizard
@@ -21,7 +21,7 @@ describe DiscoursePluginStatistics::Plugin do
     end
 
     it "includes the subscription type" do
-      expect(@data[:subscription_type]).to eq('standard')
+      expect(@data[:subscription_type]).to eq("standard")
     end
 
     it "includes a count of features being used across all wizards" do
@@ -36,7 +36,7 @@ describe DiscoursePluginStatistics::Plugin do
         step: {
           required_data: 0,
           permitted_params: 0,
-          force_final: 0
+          force_final: 0,
         },
         field: {
           condition: 0,
@@ -60,7 +60,7 @@ describe DiscoursePluginStatistics::Plugin do
             topic: 0,
             user_selector: 0,
           },
-          realtime_validations: 0
+          realtime_validations: 0,
         },
         action: {
           type: {
@@ -75,8 +75,8 @@ describe DiscoursePluginStatistics::Plugin do
             add_to_group: 0,
             create_group: 0,
             create_category: 0,
-          }
-        }
+          },
+        },
       )
     end
   end

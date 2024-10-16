@@ -3,8 +3,7 @@
 class CustomWizard::Step
   include ActiveModel::SerializerSupport
 
-  attr_reader :id,
-              :updater
+  attr_reader :id, :updater
 
   attr_accessor :index,
                 :title,

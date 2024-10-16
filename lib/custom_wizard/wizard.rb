@@ -1,8 +1,8 @@
 # frozen_string_literal: true
-require_dependency 'wizard/step'
-require_dependency 'wizard/field'
-require_dependency 'wizard/step_updater'
-require_dependency 'wizard/builder'
+require_dependency "wizard/step"
+require_dependency "wizard/field"
+require_dependency "wizard/step_updater"
+require_dependency "wizard/builder"
 
 class CustomWizard::Wizard
   include ActiveModel::SerializerSupport
@@ -33,7 +33,7 @@ class CustomWizard::Wizard
                 :submissions,
                 :template
 
-  attr_reader   :all_step_ids
+  attr_reader :all_step_ids
 
   GUEST_ID_PREFIX ||= "guest"
   GUEST_GROUP_ID = -1
@@ -47,44 +47,40 @@ class CustomWizard::Wizard
 
     attrs = attrs.with_indifferent_access
 
-    @id = attrs['id']
-    @name = attrs['name']
-    @background = attrs['background']
-    @save_submissions = cast_bool(attrs['save_submissions'])
-    @multiple_submissions = cast_bool(attrs['multiple_submissions'])
-    @prompt_completion = cast_bool(attrs['prompt_completion'])
-    @restart_on_revisit = cast_bool(attrs['restart_on_revisit'])
-    @resume_on_revisit = cast_bool(attrs['resume_on_revisit'])
-    @after_signup = cast_bool(attrs['after_signup'])
-    @after_time = cast_bool(attrs['after_time'])
-    @after_time_scheduled = attrs['after_time_scheduled']
-    @required = cast_bool(attrs['required'])
-    @permitted = attrs['permitted'] || nil
-    @theme_id = attrs['theme_id']
+    @id = attrs["id"]
+    @name = attrs["name"]
+    @background = attrs["background"]
+    @save_submissions = cast_bool(attrs["save_submissions"])
+    @multiple_submissions = cast_bool(attrs["multiple_submissions"])
+    @prompt_completion = cast_bool(attrs["prompt_completion"])
+    @restart_on_revisit = cast_bool(attrs["restart_on_revisit"])
+    @resume_on_revisit = cast_bool(attrs["resume_on_revisit"])
+    @after_signup = cast_bool(attrs["after_signup"])
+    @after_time = cast_bool(attrs["after_time"])
+    @after_time_scheduled = attrs["after_time_scheduled"]
+    @required = cast_bool(attrs["required"])
+    @permitted = attrs["permitted"] || nil
+    @theme_id = attrs["theme_id"]
 
-    if attrs['theme'].present?
-      theme = ::Theme.find_by(name: attrs['theme'])
+    if attrs["theme"].present?
+      theme = ::Theme.find_by(name: attrs["theme"])
       @theme_id = theme.id if theme
     end
 
     @first_step = nil
     @steps = []
 
-    if attrs['steps'].present?
-      @step_ids = @all_step_ids = attrs['steps'].map { |s| s['id'] }
+    if attrs["steps"].present?
+      @step_ids = @all_step_ids = attrs["steps"].map { |s| s["id"] }
 
       @field_ids = []
-      attrs['steps'].each do |step|
-        if step['fields'].present?
-          step['fields'].each do |field|
-            @field_ids << field['id']
-          end
-        end
+      attrs["steps"].each do |step|
+        step["fields"].each { |field| @field_ids << field["id"] } if step["fields"].present?
       end
     end
 
-    @actions = attrs['actions'] || []
-    @action_ids = @actions.map { |a| a['id'] }
+    @actions = attrs["actions"] || []
+    @action_ids = @actions.map { |a| a["id"] }
     @template = attrs
   end
 
@@ -137,13 +133,9 @@ class CustomWizard::Wizard
 
       step.index = index
 
-      if index === (steps.length - 1)
-        step.conditional_final_step = true
-      end
+      step.conditional_final_step = true if index === (steps.length - 1)
 
-      if index === (all_step_ids.length - 1)
-        step.last_step = true
-      end
+      step.last_step = true if index === (all_step_ids.length - 1)
 
       if !@restart_on_revisit && step.previous && step.previous.id === last_completed_step_id
         @start = step.id
@@ -154,12 +146,16 @@ class CustomWizard::Wizard
   def last_completed_step_id
     return nil unless actor_id && unfinished?
 
-    last_completed_step = CustomWizard::UserHistory.where(
-      actor_id: actor_id,
-      action: CustomWizard::UserHistory.actions[:step],
-      context: id,
-      subject: all_step_ids
-    ).order("created_at").last
+    last_completed_step =
+      CustomWizard::UserHistory
+        .where(
+          actor_id: actor_id,
+          action: CustomWizard::UserHistory.actions[:step],
+          context: id,
+          subject: all_step_ids,
+        )
+        .order("created_at")
+        .last
 
     last_completed_step&.subject
   end
@@ -178,11 +174,12 @@ class CustomWizard::Wizard
     return nil unless actor_id
     return false if last_submission&.submitted?
 
-    most_recent = CustomWizard::UserHistory.where(
-      actor_id: actor_id,
-      action: CustomWizard::UserHistory.actions[:step],
-      context: id,
-    ).distinct.order('updated_at DESC').first
+    most_recent =
+      CustomWizard::UserHistory
+        .where(actor_id: actor_id, action: CustomWizard::UserHistory.actions[:step], context: id)
+        .distinct
+        .order("updated_at DESC")
+        .first
 
     if most_recent && most_recent.subject == "reset"
       false
@@ -197,11 +194,12 @@ class CustomWizard::Wizard
     return nil unless actor_id
     return true if last_submission&.submitted?
 
-    history = CustomWizard::UserHistory.where(
-      actor_id: actor_id,
-      action: CustomWizard::UserHistory.actions[:step],
-      context: id
-    )
+    history =
+      CustomWizard::UserHistory.where(
+        actor_id: actor_id,
+        action: CustomWizard::UserHistory.actions[:step],
+        context: id,
+      )
 
     if after_time && multiple_submissions
       history = history.where("updated_at > ?", after_time_scheduled)
@@ -216,26 +214,27 @@ class CustomWizard::Wizard
     return true if user && ((always_allow_admin && user.admin?) || permitted.blank?)
     return false if !user && permitted.blank?
 
-    mapper = CustomWizard::Mapper.new(
-      inputs: permitted,
-      user: user,
-      opts: {
-        with_type: true,
-        multiple: true
-      }
-    ).perform
+    mapper =
+      CustomWizard::Mapper.new(
+        inputs: permitted,
+        user: user,
+        opts: {
+          with_type: true,
+          multiple: true,
+        },
+      ).perform
 
     return true if mapper.blank?
 
     mapper.all? do |m|
       if !user
-        m[:type] === 'assignment' && [*m[:result]].include?(GUEST_GROUP_ID)
+        m[:type] === "assignment" && [*m[:result]].include?(GUEST_GROUP_ID)
       else
-        if m[:type] === 'assignment'
+        if m[:type] === "assignment"
           [*m[:result]].include?(GUEST_GROUP_ID) ||
-          [*m[:result]].include?(Group::AUTO_GROUPS[:everyone]) ||
-          GroupUser.exists?(group_id: m[:result], user_id: user.id)
-        elsif m[:type] === 'validation'
+            [*m[:result]].include?(Group::AUTO_GROUPS[:everyone]) ||
+            GroupUser.exists?(group_id: m[:result], user_id: user.id)
+        elsif m[:type] === "validation"
           m[:result]
         else
           true
@@ -259,7 +258,7 @@ class CustomWizard::Wizard
       action: CustomWizard::UserHistory.actions[:step],
       actor_id: actor_id,
       context: id,
-      subject: "reset"
+      subject: "reset",
     )
   end
 
@@ -275,11 +274,9 @@ class CustomWizard::Wizard
     @action_ids = []
 
     @actions.each do |action|
-      if action['run_after'].blank? ||
-         action['run_after'] === 'wizard_completion' ||
-         step_ids.include?(action['run_after'])
-
-        @action_ids << action['id']
+      if action["run_after"].blank? || action["run_after"] === "wizard_completion" ||
+           step_ids.include?(action["run_after"])
+        @action_ids << action["id"]
       end
     end
   end
@@ -293,14 +290,15 @@ class CustomWizard::Wizard
   end
 
   def current_submission
-    @current_submission ||= begin
-      if submissions.present?
-        unsubmitted = submissions.select { |submission| !submission.submitted_at }
-        unsubmitted.present? ? unsubmitted.first : CustomWizard::Submission.new(self)
-      else
-        CustomWizard::Submission.new(self)
+    @current_submission ||=
+      begin
+        if submissions.present?
+          unsubmitted = submissions.select { |submission| !submission.submitted_at }
+          unsubmitted.present? ? unsubmitted.first : CustomWizard::Submission.new(self)
+        else
+          CustomWizard::Submission.new(self)
+        end
       end
-    end
   end
 
   def cleanup_on_complete!
@@ -317,9 +315,7 @@ class CustomWizard::Wizard
   def cleanup_on_skip!
     remove_user_redirect
 
-    if current_submission.present?
-      current_submission.remove
-    end
+    current_submission.remove if current_submission.present?
 
     reset
   end
@@ -328,7 +324,7 @@ class CustomWizard::Wizard
     return if user.blank?
 
     if id == user.redirect_to_wizard
-      user.custom_fields.delete('redirect_to_wizard')
+      user.custom_fields.delete("redirect_to_wizard")
       user.save_custom_fields(true)
     end
   end
@@ -344,42 +340,33 @@ class CustomWizard::Wizard
   def self.list(user, template_opts = {}, not_completed = false)
     return [] unless user
 
-    CustomWizard::Template.list(**template_opts).reduce([]) do |result, template|
-      wizard = new(template, user)
-      result.push(wizard) if wizard.permitted? && (
-        !not_completed || !wizard.completed?
-      )
-      result
-    end
+    CustomWizard::Template
+      .list(**template_opts)
+      .reduce([]) do |result, template|
+        wizard = new(template, user)
+        result.push(wizard) if wizard.permitted? && (!not_completed || !wizard.completed?)
+        result
+      end
   end
 
   def self.after_signup(user)
-    wizards = list(
-      user,
-      {
-        setting: 'after_signup',
-        order: "(value::json ->> 'permitted') IS NOT NULL DESC"
-      }
-    )
+    wizards =
+      list(
+        user,
+        { setting: "after_signup", order: "(value::json ->> 'permitted') IS NOT NULL DESC" },
+      )
     wizards.any? ? wizards.first : false
   end
 
   def self.prompt_completion(user)
-    wizards = list(
-      user,
-      {
-        setting: 'prompt_completion',
-        order: "(value::json ->> 'permitted') IS NOT NULL DESC"
-      },
-      true
-    )
+    wizards =
+      list(
+        user,
+        { setting: "prompt_completion", order: "(value::json ->> 'permitted') IS NOT NULL DESC" },
+        true,
+      )
     if wizards.any?
-      wizards.map do |w|
-        {
-          id: w.id,
-          name: w.name
-        }
-      end
+      wizards.map { |w| { id: w.id, name: w.name } }
     else
       false
     end
@@ -389,7 +376,7 @@ class CustomWizard::Wizard
     wizard = self.create(wizard_id, user)
 
     if wizard.can_access?(always_allow_admin: false)
-      user.custom_fields['redirect_to_wizard'] = wizard_id
+      user.custom_fields["redirect_to_wizard"] = wizard_id
       user.save_custom_fields(true)
     else
       false

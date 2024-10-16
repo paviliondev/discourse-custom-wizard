@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CustomWizard::WizardSerializer < CustomWizard::BasicWizardSerializer
-
   attributes :start,
              :background,
              :submission_last_updated_at,
@@ -20,8 +19,8 @@ class CustomWizard::WizardSerializer < CustomWizard::BasicWizardSerializer
 
   def include_completed?
     object.completed? &&
-    (!object.respond_to?(:multiple_submissions) || !object.multiple_submissions) &&
-    !scope.is_admin?
+      (!object.respond_to?(:multiple_submissions) || !object.multiple_submissions) &&
+      !scope.is_admin?
   end
 
   def permitted

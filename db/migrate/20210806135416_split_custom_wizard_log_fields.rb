@@ -5,7 +5,7 @@ class SplitCustomWizardLogFields < ActiveRecord::Migration[6.1]
     action: "action",
     user: "username",
     date: "date",
-    message: "message"
+    message: "message",
   }
 
   def change
@@ -23,22 +23,21 @@ class SplitCustomWizardLogFields < ActiveRecord::Migration[6.1]
               next
             end
 
-            if log_json.key?('message') && log_json['message'].is_a?(String)
-
+            if log_json.key?("message") && log_json["message"].is_a?(String)
               attr_strs = []
 
               # assumes no whitespace in the values
-              attr_strs << log_json['message'].slice!(/(wizard: \S*; )/, 1)
-              attr_strs << log_json['message'].slice!(/(action: \S*; )/, 1)
-              attr_strs << log_json['message'].slice!(/(user: \S*; )/, 1)
+              attr_strs << log_json["message"].slice!(/(wizard: \S*; )/, 1)
+              attr_strs << log_json["message"].slice!(/(action: \S*; )/, 1)
+              attr_strs << log_json["message"].slice!(/(user: \S*; )/, 1)
 
               attr_strs.each do |attr_str|
                 if attr_str.is_a? String
-                  attr_str.gsub!(/[;]/ , "")
-                  key, value = attr_str.split(': ')
+                  attr_str.gsub!(/[;]/, "")
+                  key, value = attr_str.split(": ")
                   value.strip! if value
                   key = KEY_MAP[key.to_sym] ? KEY_MAP[key.to_sym] : key
-                  log_json[key] = value ? value : ''
+                  log_json[key] = value ? value : ""
                 end
               end
 
@@ -61,22 +60,25 @@ class SplitCustomWizardLogFields < ActiveRecord::Migration[6.1]
             end
 
             # concatenate wizard/action/user to start of message
-            prefixes = log_json.extract!('wizard_id', 'action', 'username')
+            prefixes = log_json.extract!("wizard_id", "action", "username")
             message_prefix = ""
 
             if prefixes.present?
-              message_prefix = prefixes.map do |k, v|
-                key = KEY_MAP.key(k) ? KEY_MAP.key(k) : k
-                "#{key.to_s}: #{v};"
-              end.join(' ')
+              message_prefix =
+                prefixes
+                  .map do |k, v|
+                    key = KEY_MAP.key(k) ? KEY_MAP.key(k) : k
+                    "#{key}: #{v};"
+                  end
+                  .join(" ")
             end
 
-            if log_json.key?('message')
-              message = log_json['message']
+            if log_json.key?("message")
+              message = log_json["message"]
               message = "#{message_prefix} #{message}" if message_prefix.present?
-              log_json['message'] = message
+              log_json["message"] = message
             else
-              log_json['message'] = message_prefix
+              log_json["message"] = message_prefix
             end
 
             row.value = log_json.to_json

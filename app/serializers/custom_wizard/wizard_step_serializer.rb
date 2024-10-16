@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CustomWizard::StepSerializer < ::ApplicationSerializer
-
   attributes :id,
              :index,
              :next,

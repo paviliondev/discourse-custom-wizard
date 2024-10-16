@@ -27,9 +27,7 @@ class CustomWizard::RealtimeValidation::SimilarTopics
 
     result = CustomWizard::RealtimeValidation::Result.new(:similar_topic)
 
-    if title.length < SiteSetting.min_title_similar_length
-      return result
-    end
+    return result if title.length < SiteSetting.min_title_similar_length
 
     topics = Topic.similar_to(title, raw, user).to_a
     topics.select! { |t| categories.include?(t.category.id.to_s) } if categories.present?

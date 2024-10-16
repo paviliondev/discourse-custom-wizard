@@ -6,20 +6,20 @@ class ::CustomWizard::CustomField
 
   attr_reader :id
 
-  ATTRS ||= ["name", "klass", "type", "serializers"]
-  REQUIRED ||= ["name", "klass", "type"]
+  ATTRS ||= %w[name klass type serializers]
+  REQUIRED ||= %w[name klass type]
   NAMESPACE ||= "custom_wizard_custom_fields"
   NAME_MIN_LENGTH ||= 3
 
   CLASSES ||= {
-    topic: ["topic_view", "topic_list_item"],
+    topic: %w[topic_view topic_list_item],
     group: ["basic_group"],
     category: ["basic_category"],
-    post: ["post"]
+    post: ["post"],
   }
 
-  TYPES ||= ["string", "boolean", "integer", "json"]
-  LIST_CACHE_KEY ||= 'custom_field_list'
+  TYPES ||= %w[string boolean integer json]
+  LIST_CACHE_KEY ||= "custom_field_list"
 
   def self.serializers
     CLASSES.values.flatten.uniq
@@ -34,9 +34,7 @@ class ::CustomWizard::CustomField
 
       value = data[attr]
 
-      if value.present?
-        send("#{attr}=", value)
-      end
+      send("#{attr}=", value) if value.present?
     end
 
     @subscription = CustomWizard::Subscription.new
@@ -49,9 +47,7 @@ class ::CustomWizard::CustomField
       data = {}
       key = name
 
-      (ATTRS - ['name']).each do |attr|
-        data[attr] = send(attr)
-      end
+      (ATTRS - ["name"]).each { |attr| data[attr] = send(attr) }
 
       if self.class.save_to_store(id, key, data)
         self.class.invalidate_cache
@@ -74,39 +70,38 @@ class ::CustomWizard::CustomField
         break
       end
 
-      if attr == 'serializers' && !value.is_a?(Array)
-        next
-      end
+      next if attr == "serializers" && !value.is_a?(Array)
 
-      if (attr == 'klass' && CLASSES.keys.exclude?(value.to_sym)) ||
-         (attr == 'serializers' && CLASSES[klass.to_sym].blank?)
+      if (attr == "klass" && CLASSES.keys.exclude?(value.to_sym)) ||
+           (attr == "serializers" && CLASSES[klass.to_sym].blank?)
         add_error(I18n.t("#{i18n_key}.unsupported_class", class: value))
         next
       end
 
-      if attr == 'klass' && !@subscription.includes?(:custom_field, :klass, value)
+      if attr == "klass" && !@subscription.includes?(:custom_field, :klass, value)
         add_error(I18n.t("wizard.custom_field.error.subscription_type", type: value))
       end
 
-      if attr == 'serializers' && (unsupported = value - CLASSES[klass.to_sym]).length > 0
-        add_error(I18n.t("#{i18n_key}.unsupported_serializers",
-          class: klass,
-          serializers: unsupported.join(", ")
-        ))
+      if attr == "serializers" && (unsupported = value - CLASSES[klass.to_sym]).length > 0
+        add_error(
+          I18n.t(
+            "#{i18n_key}.unsupported_serializers",
+            class: klass,
+            serializers: unsupported.join(", "),
+          ),
+        )
       end
 
-      if attr == 'type' && TYPES.exclude?(value)
+      if attr == "type" && TYPES.exclude?(value)
         add_error(I18n.t("#{i18n_key}.unsupported_type", type: value))
       end
 
-      if attr == 'type' && !@subscription.includes?(:custom_field, :type, value)
+      if attr == "type" && !@subscription.includes?(:custom_field, :type, value)
         add_error(I18n.t("wizard.custom_field.error.subscription_type", type: value))
       end
 
-      if attr == 'name'
-        unless value.is_a?(String)
-          add_error(I18n.t("#{i18n_key}.name_invalid", name: value))
-        end
+      if attr == "name"
+        add_error(I18n.t("#{i18n_key}.name_invalid", name: value)) unless value.is_a?(String)
 
         if value.length < NAME_MIN_LENGTH
           add_error(I18n.t("#{i18n_key}.name_too_short", name: value, min_length: NAME_MIN_LENGTH))
@@ -117,8 +112,8 @@ class ::CustomWizard::CustomField
         end
 
         begin
-          @name = value.parameterize(separator: '_')
-        rescue
+          @name = value.parameterize(separator: "_")
+        rescue StandardError
           add_error(I18n.t("#{i18n_key}.name_invalid", name: value))
         end
       end
@@ -134,17 +129,16 @@ class ::CustomWizard::CustomField
   end
 
   def self.list
-    PluginStoreRow.where(plugin_name: NAMESPACE).map do |record|
-      create_from_store(record)
-    end
+    PluginStoreRow.where(plugin_name: NAMESPACE).map { |record| create_from_store(record) }
   end
 
   def self.cached_list
-    @custom_wizard_cached_fields ||= ::CustomWizard::Cache.wrap(LIST_CACHE_KEY) do
-      PluginStoreRow.where(plugin_name: NAMESPACE).map do |record|
-        create_from_store(record).as_json.with_indifferent_access
+    @custom_wizard_cached_fields ||=
+      ::CustomWizard::Cache.wrap(LIST_CACHE_KEY) do
+        PluginStoreRow
+          .where(plugin_name: NAMESPACE)
+          .map { |record| create_from_store(record).as_json.with_indifferent_access }
       end
-    end
   end
 
   def self.list_by(attr, value, cached: true)
@@ -234,17 +228,12 @@ class ::CustomWizard::CustomField
     external = []
 
     CLASSES.keys.each do |klass|
-      meta_data = klass.to_s.classify.constantize.send('custom_field_meta_data')
+      meta_data = klass.to_s.classify.constantize.send("custom_field_meta_data")
 
       if meta_data.present?
         meta_data.each do |name, data|
           unless list.any? { |field| field.name === name }
-            field = new(
-              'external',
-              name: name,
-              klass: klass,
-              type: data.type
-            )
+            field = new("external", name: name, klass: klass, type: data.type)
             external.push(field)
           end
         end

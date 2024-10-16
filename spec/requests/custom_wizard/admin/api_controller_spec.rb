@@ -4,9 +4,7 @@ describe CustomWizard::AdminApiController do
   fab!(:admin_user) { Fabricate(:user, admin: true) }
   let(:api_json) { get_wizard_fixture("api/api") }
 
-  before do
-    sign_in(admin_user)
-  end
+  before { sign_in(admin_user) }
 
   it "does not save if user does not have relevant subscription" do
     disable_subscriptions

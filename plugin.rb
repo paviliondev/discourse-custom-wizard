@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Forms for Discourse. Better onboarding, structured posting, data enrichment, automated actions and much more.
-# version: 2.8.11
+# version: 2.8.12
 # authors: Angus McLeod, Faizaan Gagan, Robert Barrow, Keegan George, Kaitlin Maddever, Juan Marcos Gutierrez Ramos
 # url: https://github.com/paviliondev/discourse-custom-wizard
 # contact_emails: development@pavilion.tech
 # subscription_url: https://coop.pavilion.tech
 # meta_topic_id: 73345
 
-gem 'liquid', '5.5.0', require: true
+gem "liquid", "5.5.0", require: true
 gem "discourse_subscription_client", "0.1.6", require_name: "discourse_subscription_client"
-gem 'discourse_plugin_statistics', '0.1.0.pre7', require: true
-register_asset 'stylesheets/common/admin.scss'
-register_asset 'stylesheets/common/wizard.scss'
-register_svg_icon 'pavilion-logo'
+gem "discourse_plugin_statistics", "0.1.0.pre7", require: true
+register_asset "stylesheets/common/admin.scss"
+register_asset "stylesheets/common/wizard.scss"
+register_svg_icon "pavilion-logo"
 register_svg_icon "hat-wizard"
 
 enabled_site_setting :custom_wizard_enabled
@@ -102,24 +102,18 @@ after_initialize do
     ../lib/custom_wizard/extensions/custom_field/serializer.rb
     ../lib/custom_wizard/extensions/custom_field/extension.rb
     ../lib/custom_wizard/extensions/discourse_tagging.rb
-  ].each do |path|
-    load File.expand_path(path, __FILE__)
-  end
+  ].each { |path| load File.expand_path(path, __FILE__) }
 
   Liquid::Template.error_mode = :strict
 
   # preloaded category custom fields
-  %w[
-    create_topic_wizard
-  ].each do |custom_field|
+  %w[create_topic_wizard].each do |custom_field|
     Site.preloaded_category_custom_fields << custom_field
   end
 
   Liquid::Template.register_filter(::CustomWizard::LiquidFilter::FirstNonEmpty)
 
-  add_to_class(:topic, :wizard_submission_id) do
-    custom_fields['wizard_submission_id']
-  end
+  add_to_class(:topic, :wizard_submission_id) { custom_fields["wizard_submission_id"] }
 
   add_class_method(:wizard, :user_requires_completion?) do |user|
     wizard_result = self.new(user).requires_completion?
@@ -127,10 +121,7 @@ after_initialize do
 
     custom_redirect = false
 
-    if user &&
-       user.first_seen_at.blank? &&
-       wizard = CustomWizard::Wizard.after_signup(user)
-
+    if user && user.first_seen_at.blank? && wizard = CustomWizard::Wizard.after_signup(user)
       if !wizard.completed?
         custom_redirect = true
         CustomWizard::Wizard.set_user_redirect(wizard.id, user)
@@ -141,8 +132,8 @@ after_initialize do
   end
 
   add_to_class(:user, :redirect_to_wizard) do
-    if custom_fields['redirect_to_wizard'].present?
-      custom_fields['redirect_to_wizard']
+    if custom_fields["redirect_to_wizard"].present?
+      custom_fields["redirect_to_wizard"]
     else
       nil
     end
@@ -156,9 +147,7 @@ after_initialize do
     end
   end
 
-  add_to_serializer(:current_user, :redirect_to_wizard) do
-    object.redirect_to_wizard
-  end
+  add_to_serializer(:current_user, :redirect_to_wizard) { object.redirect_to_wizard }
 
   on(:user_approved) do |user|
     if wizard = CustomWizard::Wizard.after_signup(user)
@@ -167,16 +156,16 @@ after_initialize do
   end
 
   add_to_class(:application_controller, :redirect_to_wizard_if_required) do
-    @excluded_routes ||= SiteSetting.wizard_redirect_exclude_paths.split('|') + ['/w/']
+    @excluded_routes ||= SiteSetting.wizard_redirect_exclude_paths.split("|") + ["/w/"]
     url = request.referer || request.original_url
     excluded_route = @excluded_routes.any? { |str| /#{str}/ =~ url }
-    not_api = request.format === 'text/html'
+    not_api = request.format === "text/html"
 
     if not_api && !excluded_route
       wizard_id = current_user.redirect_to_wizard
 
       if CustomWizard::Template.can_redirect_users?(wizard_id)
-        if url !~ /\/w\// && url !~ /\/invites\//
+        if url !~ %r{/w/} && url !~ %r{/invites/}
           CustomWizard::Wizard.set_wizard_redirect(current_user, wizard_id, url)
         end
 
@@ -209,9 +198,10 @@ after_initialize do
   ::UsersController.prepend CustomWizardUsersController
   ::Guardian.prepend CustomWizardGuardian
 
-  full_path = "#{Rails.root}/plugins/discourse-custom-wizard/assets/stylesheets/wizard/wizard_custom.scss"
+  full_path =
+    "#{Rails.root}/plugins/discourse-custom-wizard/assets/stylesheets/wizard/wizard_custom.scss"
   if Stylesheet::Importer.respond_to?(:plugin_assets)
-    Stylesheet::Importer.plugin_assets['wizard_custom'] = Set[full_path]
+    Stylesheet::Importer.plugin_assets["wizard_custom"] = Set[full_path]
   else
     # legacy method, Discourse 2.7.0.beta5 and below
     DiscoursePluginRegistry.register_asset(full_path, {}, "wizard_custom")
@@ -225,9 +215,11 @@ after_initialize do
 
     add_model_callback(klass, :after_initialize) do
       if CustomWizard::CustomField.enabled?
-        CustomWizard::CustomField.list_by(:klass, klass.to_s).each do |field|
-          class_constant.register_custom_field_type(field[:name], field[:type].to_sym)
-        end
+        CustomWizard::CustomField
+          .list_by(:klass, klass.to_s)
+          .each do |field|
+            class_constant.register_custom_field_type(field[:name], field[:type].to_sym)
+          end
       end
     end
 
@@ -247,11 +239,11 @@ after_initialize do
 
   on(:before_create_topic) do |topic_params, user|
     category = topic_params.category
-    wizard_submission_id = topic_params.custom_fields&.[]('wizard_submission_id')
-    if category&.custom_fields&.[]('create_topic_wizard').present? && wizard_submission_id.blank?
+    wizard_submission_id = topic_params.custom_fields&.[]("wizard_submission_id")
+    if category&.custom_fields&.[]("create_topic_wizard").present? && wizard_submission_id.blank?
       raise Discourse::InvalidParameters.new(
-        I18n.t('wizard.error_messages.wizard_replacing_composer')
-      )
+              I18n.t("wizard.error_messages.wizard_replacing_composer"),
+            )
     end
   end
 end

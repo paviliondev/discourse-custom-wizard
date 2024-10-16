@@ -13,7 +13,7 @@ module DiscoursePluginStatistics
         step: {
           required_data: 0,
           permitted_params: 0,
-          force_final: 0
+          force_final: 0,
         },
         field: {
           condition: 0,
@@ -37,7 +37,7 @@ module DiscoursePluginStatistics
             group: 0,
             user_selector: 0,
           },
-          realtime_validations: 0
+          realtime_validations: 0,
         },
         action: {
           type: {
@@ -52,47 +52,40 @@ module DiscoursePluginStatistics
             add_to_group: 0,
             create_group: 0,
             create_category: 0,
-          }
-        }
+          },
+        },
       }
 
-      increment_feature_count = lambda do |type, key, value|
-        if key == 'type'
-          if !subscription_features[type.to_sym][:type][value.to_sym].nil?
-            subscription_features[type.to_sym][:type][value.to_sym] += 1
-          end
-        else
-          if !subscription_features[type.to_sym][key.to_sym].nil?
-            subscription_features[type.to_sym][key.to_sym] += 1
-          end
-        end
-      end
-
-      CustomWizard::Template.list.each do |template|
-        template.each do |key, value|
-          increment_feature_count.call(:wizard, key, value)
-        end
-        template['steps'].each do |step|
-          step.each do |key, value|
-            increment_feature_count.call(:step, key, value)
-          end
-          step['fields'].each do |field|
-            field.each do |key, value|
-              increment_feature_count.call(:field, key, value)
+      increment_feature_count =
+        lambda do |type, key, value|
+          if key == "type"
+            if !subscription_features[type.to_sym][:type][value.to_sym].nil?
+              subscription_features[type.to_sym][:type][value.to_sym] += 1
+            end
+          else
+            if !subscription_features[type.to_sym][key.to_sym].nil?
+              subscription_features[type.to_sym][key.to_sym] += 1
             end
           end
         end
-        template['actions'].each do |action|
-          action.each do |key, value|
-            increment_feature_count.call(:action, key, value)
+
+      CustomWizard::Template.list.each do |template|
+        template.each { |key, value| increment_feature_count.call(:wizard, key, value) }
+        template["steps"].each do |step|
+          step.each { |key, value| increment_feature_count.call(:step, key, value) }
+          step["fields"].each do |field|
+            field.each { |key, value| increment_feature_count.call(:field, key, value) }
           end
+        end
+        template["actions"].each do |action|
+          action.each { |key, value| increment_feature_count.call(:action, key, value) }
         end
       end
 
       {
         total_wizards: CustomWizard::Template.list.size,
         subscription_type: CustomWizard::Subscription.type.to_s,
-        subscription_features: subscription_features
+        subscription_features: subscription_features,
       }
     end
   end

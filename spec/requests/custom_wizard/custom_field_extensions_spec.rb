@@ -7,10 +7,12 @@ describe "custom field extensions" do
   let!(:user) { Fabricate(:user) }
   let!(:group) { Fabricate(:group, users: [user]) }
   let(:custom_field_json) { get_wizard_fixture("custom_field/custom_fields") }
-  let(:subscription_custom_field_json) { get_wizard_fixture("custom_field/subscription_custom_fields") }
+  let(:subscription_custom_field_json) do
+    get_wizard_fixture("custom_field/subscription_custom_fields")
+  end
 
   before do
-    custom_field_json['custom_fields'].each do |field_json|
+    custom_field_json["custom_fields"].each do |field_json|
       custom_field = CustomWizard::CustomField.new(nil, field_json)
       custom_field.save
     end
@@ -33,13 +35,13 @@ describe "custom field extensions" do
     get "/posts/#{post.id}.json"
 
     expect(response.status).to eq(200)
-    expect(response.parsed_body['post_field_1']).to eq(7)
+    expect(response.parsed_body["post_field_1"]).to eq(7)
   end
 
   context "with a subscription" do
     before do
       enable_subscription("business")
-      subscription_custom_field_json['custom_fields'].each do |field_json|
+      subscription_custom_field_json["custom_fields"].each do |field_json|
         custom_field = CustomWizard::CustomField.new(nil, field_json)
         custom_field.save
       end
@@ -63,7 +65,7 @@ describe "custom field extensions" do
       get "/groups/#{group.name}.json"
 
       expect(response.status).to eq(200)
-      expect(response.parsed_body['group']['group_field_1']).to eq("Group cf entry")
+      expect(response.parsed_body["group"]["group_field_1"]).to eq("Group cf entry")
     end
 
     context "preloaded" do
@@ -76,7 +78,8 @@ describe "custom field extensions" do
         get "/site.json"
         expect(response.status).to eq(200)
 
-        site_category = response.parsed_body['categories'].select { |c| c['id'] == category.id }.first
+        site_category =
+          response.parsed_body["categories"].select { |c| c["id"] == category.id }.first
         expect(site_category["category_field_1"]).to eq({ a: 1, b: 2 }.as_json)
       end
 
@@ -90,8 +93,8 @@ describe "custom field extensions" do
         get "/groups.json"
         expect(response.status).to eq(200)
 
-        group = response.parsed_body['groups'].select { |g| g['id'] == group.id }.first
-        expect(group['group_field_1']).to eq("Group cf entry")
+        group = response.parsed_body["groups"].select { |g| g["id"] == group.id }.first
+        expect(group["group_field_1"]).to eq("Group cf entry")
       end
     end
   end

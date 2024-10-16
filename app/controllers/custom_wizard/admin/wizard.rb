@@ -1,16 +1,17 @@
 # frozen_string_literal: true
 class CustomWizard::AdminWizardController < CustomWizard::AdminController
-  before_action :find_wizard, only: [:show, :remove]
+  before_action :find_wizard, only: %i[show remove]
 
   def index
     render_json_dump(
-      wizard_list: ActiveModel::ArraySerializer.new(
-        CustomWizard::Wizard.list(current_user),
-        each_serializer: CustomWizard::BasicWizardSerializer
-      ),
+      wizard_list:
+        ActiveModel::ArraySerializer.new(
+          CustomWizard::Wizard.list(current_user),
+          each_serializer: CustomWizard::BasicWizardSerializer,
+        ),
       field_types: CustomWizard::Field.types,
       realtime_validations: CustomWizard::RealtimeValidation.types,
-      custom_fields: custom_field_list
+      custom_fields: custom_field_list,
     )
   end
 
@@ -37,7 +38,10 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
     wizard_id = template.save(create: params[:create])
 
     if template.errors.any?
-      render json: failed_json.merge(backend_validation_error: template.errors.full_messages.join("\n\n"))
+      render json:
+               failed_json.merge(
+                 backend_validation_error: template.errors.full_messages.join("\n\n"),
+               )
     else
       render json: success_json.merge(wizard_id: wizard_id)
     end
@@ -52,16 +56,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
       :output,
       :output_type,
       :output_connector,
-      pairs: [
-        :index,
-        :key,
-        :key_type,
-        :value,
-        :value_type,
-        :connector,
-        value: [],
-        key: [],
-      ],
+      pairs: [:index, :key, :key_type, :value, :value_type, :connector, value: [], key: []],
       output: [],
     ]
   end
@@ -120,9 +115,10 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
           content: mapped_params,
           condition: mapped_params,
           index: mapped_params,
-          validations: {},
+          validations: {
+          },
           tag_groups: [],
-        ]
+        ],
       ],
       actions: [
         :id,
@@ -169,8 +165,8 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
         visibility_level: mapped_params,
         members_visibility_level: mapped_params,
         add_event: mapped_params,
-        add_location: mapped_params
-      ]
+        add_location: mapped_params,
+      ],
     )
   end
 end

@@ -4,9 +4,7 @@ describe CustomWizard::Step do
   let(:step_hash) { get_wizard_fixture("step/step") }
   let(:field_hash) { get_wizard_fixture("field/field") }
 
-  before do
-    @step = CustomWizard::Step.new(step_hash[:id])
-  end
+  before { @step = CustomWizard::Step.new(step_hash[:id]) }
 
   it "adds fields" do
     @step.add_field(field_hash)

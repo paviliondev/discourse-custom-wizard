@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe CustomWizard::TemplateValidator do
-  fab!(:user) { Fabricate(:user) }
+  fab!(:user)
   let(:template) { get_wizard_fixture("wizard") }
   let(:create_category) { get_wizard_fixture("actions/create_category") }
   let(:user_condition) { get_wizard_fixture("condition/user_condition") }
@@ -11,26 +11,20 @@ describe CustomWizard::TemplateValidator do
   let(:upload_field) { get_wizard_fixture("field/upload") }
   let(:validation_condition) { get_wizard_fixture("condition/validation_condition") }
 
-  let(:valid_liquid_template) {
-    <<-LIQUID.strip
+  let(:valid_liquid_template) { <<-LIQUID.strip }
         {%- assign hello = "Topic Form 1" %}
     LIQUID
-  }
 
-  let(:invalid_liquid_template) {
-    <<-LIQUID.strip
+  let(:invalid_liquid_template) { <<-LIQUID.strip }
         {%- assign hello = "Topic Form 1" %
       LIQUID
-  }
 
-  let(:liquid_syntax_error) {
+  let(:liquid_syntax_error) do
     "Liquid syntax error: Tag '{%' was not properly terminated with regexp: /\\%\\}/"
-  }
+  end
 
   def expect_validation_success
-    expect(
-      CustomWizard::TemplateValidator.new(template).perform
-    ).to eq(true)
+    expect(CustomWizard::TemplateValidator.new(template).perform).to eq(true)
   end
 
   def expect_validation_failure(object_id, message)
@@ -40,23 +34,17 @@ describe CustomWizard::TemplateValidator do
   end
 
   it "validates valid templates" do
-    expect(
-      CustomWizard::TemplateValidator.new(template).perform
-    ).to eq(true)
+    expect(CustomWizard::TemplateValidator.new(template).perform).to eq(true)
   end
 
   it "invalidates templates without required attributes" do
     template.delete(:id)
-    expect(
-      CustomWizard::TemplateValidator.new(template).perform
-    ).to eq(false)
+    expect(CustomWizard::TemplateValidator.new(template).perform).to eq(false)
   end
 
   it "invalidates templates with duplicate ids if creating a new template" do
     CustomWizard::Template.save(template)
-    expect(
-      CustomWizard::TemplateValidator.new(template, create: true).perform
-    ).to eq(false)
+    expect(CustomWizard::TemplateValidator.new(template, create: true).perform).to eq(false)
   end
 
   it "only allows one after signup wizard at a time" do
@@ -70,7 +58,7 @@ describe CustomWizard::TemplateValidator do
     validator = CustomWizard::TemplateValidator.new(template)
     expect(validator.perform).to eq(false)
     expect(validator.errors.first.type).to eq(
-      I18n.t("wizard.validation.after_signup", wizard_id: wizard_id)
+      I18n.t("wizard.validation.after_signup", wizard_id: wizard_id),
     )
   end
 
@@ -86,138 +74,106 @@ describe CustomWizard::TemplateValidator do
 
     validator = CustomWizard::TemplateValidator.new(template)
     expect(validator.perform).to eq(false)
-    expect(validator.errors.first.type).to eq(
-      I18n.t("wizard.validation.after_signup_after_time")
-    )
+    expect(validator.errors.first.type).to eq(I18n.t("wizard.validation.after_signup_after_time"))
   end
 
   it "validates after time settings" do
     template[:after_time] = true
     template[:after_time_scheduled] = (Time.now + 3.hours).iso8601
-    expect(
-      CustomWizard::TemplateValidator.new(template).perform
-    ).to eq(true)
+    expect(CustomWizard::TemplateValidator.new(template).perform).to eq(true)
   end
 
   it "invalidates invalid after time settings" do
     template[:after_time] = true
     template[:after_time_scheduled] = "not a time"
-    expect(
-      CustomWizard::TemplateValidator.new(template).perform
-    ).to eq(false)
+    expect(CustomWizard::TemplateValidator.new(template).perform).to eq(false)
   end
 
   context "without subscription" do
     it "invalidates subscription wizard attributes" do
-      template[:permitted] = permitted_json['permitted']
-      expect(
-        CustomWizard::TemplateValidator.new(template).perform
-      ).to eq(false)
+      template[:permitted] = permitted_json["permitted"]
+      expect(CustomWizard::TemplateValidator.new(template).perform).to eq(false)
     end
 
     it "invalidates subscription step attributes" do
-      template[:steps][0][:condition] = user_condition['condition']
-      expect(
-        CustomWizard::TemplateValidator.new(template).perform
-      ).to eq(false)
+      template[:steps][0][:condition] = user_condition["condition"]
+      expect(CustomWizard::TemplateValidator.new(template).perform).to eq(false)
     end
 
     it "invalidates subscription field attributes" do
-      template[:steps][0][:fields][0][:condition] = user_condition['condition']
-      expect(
-        CustomWizard::TemplateValidator.new(template).perform
-      ).to eq(false)
+      template[:steps][0][:fields][0][:condition] = user_condition["condition"]
+      expect(CustomWizard::TemplateValidator.new(template).perform).to eq(false)
     end
 
     it "invalidates subscription actions" do
       template[:actions] << create_category
-      expect(
-        CustomWizard::TemplateValidator.new(template).perform
-      ).to eq(false)
+      expect(CustomWizard::TemplateValidator.new(template).perform).to eq(false)
     end
   end
 
   context "with subscription" do
-    before do
-      enable_subscription("business")
-    end
+    before { enable_subscription("business") }
 
     it "validates wizard attributes" do
-      template[:permitted] = permitted_json['permitted']
-      expect(
-        CustomWizard::TemplateValidator.new(template).perform
-      ).to eq(true)
+      template[:permitted] = permitted_json["permitted"]
+      expect(CustomWizard::TemplateValidator.new(template).perform).to eq(true)
     end
 
     it "validates user-only features" do
-      template[:permitted] = guests_permitted['permitted']
+      template[:permitted] = guests_permitted["permitted"]
       template[:steps][0][:fields] << upload_field
       validator = CustomWizard::TemplateValidator.new(template)
       expect(validator.perform).to eq(false)
       errors = validator.errors.to_a
       expect(errors).to include(
-        I18n.t("wizard.validation.not_permitted_for_guests", object_id: "step_2_field_7")
+        I18n.t("wizard.validation.not_permitted_for_guests", object_id: "step_2_field_7"),
       )
     end
 
     it "validates step attributes" do
-      template[:steps][0][:condition] = user_condition['condition']
-      expect(
-        CustomWizard::TemplateValidator.new(template).perform
-      ).to eq(true)
+      template[:steps][0][:condition] = user_condition["condition"]
+      expect(CustomWizard::TemplateValidator.new(template).perform).to eq(true)
     end
 
     it "validates field attributes" do
-      template[:steps][0][:fields][0][:condition] = user_condition['condition']
-      expect(
-        CustomWizard::TemplateValidator.new(template).perform
-      ).to eq(true)
+      template[:steps][0][:fields][0][:condition] = user_condition["condition"]
+      expect(CustomWizard::TemplateValidator.new(template).perform).to eq(true)
     end
 
     it "validates actions" do
       template[:actions] << create_category
-      expect(
-        CustomWizard::TemplateValidator.new(template).perform
-      ).to eq(true)
+      expect(CustomWizard::TemplateValidator.new(template).perform).to eq(true)
     end
 
     it "validates settings with validation conditions" do
       template[:permitted] = validation_condition["condition"]
-      expect(
-        CustomWizard::TemplateValidator.new(template).perform
-      ).to eq(true)
+      expect(CustomWizard::TemplateValidator.new(template).perform).to eq(true)
     end
   end
 
   context "steps" do
     CustomWizard::TemplateValidator.required[:step].each do |attribute|
-      it "invalidates if \"#{attribute.to_s}\" is not present" do
+      it "invalidates if \"#{attribute}\" is not present" do
         template[:steps][0][attribute] = nil
-        expect(
-          CustomWizard::TemplateValidator.new(template).perform
-        ).to eq(false)
+        expect(CustomWizard::TemplateValidator.new(template).perform).to eq(false)
       end
     end
   end
 
   context "fields" do
     CustomWizard::TemplateValidator.required[:field].each do |attribute|
-      it "invalidates if \"#{attribute.to_s}\" is not present" do
+      it "invalidates if \"#{attribute}\" is not present" do
         template[:steps][0][:fields][0][attribute] = nil
-        expect(
-          CustomWizard::TemplateValidator.new(template).perform
-        ).to eq(false)
+        expect(CustomWizard::TemplateValidator.new(template).perform).to eq(false)
       end
     end
   end
 
   context "actions" do
     CustomWizard::TemplateValidator.required[:action].each do |attribute|
-      it "invalidates if \"#{attribute.to_s}\" is not present" do
+      it "invalidates if \"#{attribute}\" is not present" do
         template[:actions][0][attribute] = nil
-        expect(
-          CustomWizard::TemplateValidator.new(template).perform
-        ).to eq(false)
+        expect(CustomWizard::TemplateValidator.new(template).perform).to eq(false)
       end
     end
   end

@@ -2,45 +2,29 @@
 class CustomWizard::Mapper
   attr_accessor :inputs, :data, :user
 
-  USER_FIELDS = [
-    'name',
-    'username',
-    'date_of_birth',
-    'title',
-    'locale',
-    'trust_level',
-    'email'
-  ]
+  USER_FIELDS = %w[name username date_of_birth title locale trust_level email]
 
-  USER_OPTION_FIELDS = [
-    'email_level',
-    'email_messages_level',
-    'email_digests'
-  ]
+  USER_OPTION_FIELDS = %w[email_level email_messages_level email_digests]
 
-  PROFILE_FIELDS = [
-    'location',
-    'website',
-    'bio_raw'
-  ]
+  PROFILE_FIELDS = %w[location website bio_raw]
 
   def self.user_fields
     USER_FIELDS + USER_OPTION_FIELDS + PROFILE_FIELDS
   end
 
   OPERATORS = {
-    equal: '==',
+    equal: "==",
     not_equal: "!=",
-    greater: '>',
-    less: '<',
-    greater_or_equal: '>=',
-    less_or_equal: '<=',
-    regex: '=~',
+    greater: ">",
+    less: "<",
+    greater_or_equal: ">=",
+    less_or_equal: "<=",
+    regex: "=~",
     is: {
       present: "present?",
       true: "==",
-      false: "=="
-    }
+      false: "==",
+    },
   }
 
   def initialize(params)
@@ -55,12 +39,12 @@ class CustomWizard::Mapper
     perform_result = multiple ? [] : nil
 
     inputs.each do |input|
-      input_type = input['type']
-      pairs = input['pairs']
+      input_type = input["type"]
+      pairs = input["pairs"]
 
-      if (input_type === 'conditional' && validate_pairs(pairs)) || input_type === 'assignment'
-        output = input['output']
-        output_type = input['output_type']
+      if (input_type === "conditional" && validate_pairs(pairs)) || input_type === "assignment"
+        output = input["output"]
+        output_type = input["output_type"]
 
         result = build_result(map_field(output, output_type), input_type)
 
@@ -72,7 +56,7 @@ class CustomWizard::Mapper
         end
       end
 
-      if input_type === 'validation'
+      if input_type === "validation"
         result = build_result(validate_pairs(pairs), input_type)
 
         if multiple
@@ -83,7 +67,7 @@ class CustomWizard::Mapper
         end
       end
 
-      if input_type === 'association'
+      if input_type === "association"
         result = build_result(map_pairs(pairs), input_type)
 
         if multiple
@@ -100,10 +84,7 @@ class CustomWizard::Mapper
 
   def build_result(result, type)
     if @opts[:with_type]
-      {
-        type: type,
-        result: result
-      }
+      { type: type, result: result }
     else
       result
     end
@@ -111,10 +92,10 @@ class CustomWizard::Mapper
 
   def validate_pairs(pairs)
     pairs.all? do |pair|
-      connector = pair['connector']
+      connector = pair["connector"]
       operator = map_operator(connector)
-      key = map_field(pair['key'], pair['key_type'])
-      value = cast_value(map_field(pair['value'], pair['value_type']), key, connector)
+      key = map_field(pair["key"], pair["key_type"])
+      value = cast_value(map_field(pair["value"], pair["value_type"]), key, connector)
       begin
         validation_result(key, value, operator)
       rescue NoMethodError
@@ -124,7 +105,7 @@ class CustomWizard::Mapper
   end
 
   def cast_value(value, key, connector)
-    if connector == 'regex'
+    if connector == "regex"
       Regexp.new(value)
     else
       if key.is_a?(String)
@@ -143,7 +124,7 @@ class CustomWizard::Mapper
     if operator.is_a?(Hash) && (operator = operator[value.to_sym]).present?
       if value == "present"
         result = key.public_send(operator)
-      elsif ["true", "false"].include?(value)
+      elsif %w[true false].include?(value)
         result = bool(key).public_send(operator, bool(value))
       end
     elsif [key, value, operator].all? { |i| !i.nil? }
@@ -152,7 +133,7 @@ class CustomWizard::Mapper
       result = false
     end
 
-    if operator == '=~'
+    if operator == "=~"
       result.nil? ? false : true
     else
       result
@@ -163,22 +144,17 @@ class CustomWizard::Mapper
     result = []
 
     pairs.each do |pair|
-      key = map_field(pair['key'], pair['key_type'])
-      value = map_field(pair['value'], pair['value_type'])
+      key = map_field(pair["key"], pair["key_type"])
+      value = map_field(pair["value"], pair["value_type"])
 
-      if key && value
-        result.push(
-          key: key,
-          value: value
-        )
-      end
+      result.push(key: key, value: value) if key && value
     end
 
     result
   end
 
   def map_operator(connector)
-    OPERATORS[connector.to_sym] || '=='
+    OPERATORS[connector.to_sym] || "=="
   end
 
   def map_field(value, type)
@@ -214,7 +190,7 @@ class CustomWizard::Mapper
       user.send(value)
     elsif USER_OPTION_FIELDS.include?(value)
       user.user_option.send(value)
-    elsif value.include?('avatar')
+    elsif value.include?("avatar")
       get_avatar_url(value)
     else
       nil
@@ -223,7 +199,7 @@ class CustomWizard::Mapper
 
   def map_user_field_options(value)
     if value.include?(User::USER_FIELD_PREFIX)
-      if field = UserField.find_by(id: value.split('_').last)
+      if field = UserField.find_by(id: value.split("_").last)
         field.user_field_options.map(&:value)
       end
     end
@@ -232,22 +208,18 @@ class CustomWizard::Mapper
   def interpolate(string, opts = { user: true, wizard: true, value: true, template: false })
     return string if string.blank? || string.frozen?
 
-    if opts[:user] && @user.present?
-      string.gsub!(/u\{(.*?)\}/) { |match| map_user_field($1) || '' }
-    end
+    string.gsub!(/u\{(.*?)\}/) { |match| map_user_field($1) || "" } if opts[:user] && @user.present?
 
-    if opts[:wizard]
-      string.gsub!(/w\{(.*?)\}/) { |match| recurse(data, [*$1.split('.')]) || '' }
-    end
+    string.gsub!(/w\{(.*?)\}/) { |match| recurse(data, [*$1.split(".")]) || "" } if opts[:wizard]
 
     if opts[:value]
       string.gsub!(/v\{(.*?)\}/) do |match|
-        attrs = $1.split(':')
+        attrs = $1.split(":")
         key = attrs.first
         format = attrs.last if attrs.length > 1
-        result = ''
+        result = ""
 
-        if key == 'time'
+        if key == "time"
           time_format = format.present? ? format : "%B %-d, %Y"
           result = Time.now.strftime(time_format)
         end
@@ -281,10 +253,10 @@ class CustomWizard::Mapper
   end
 
   def get_avatar_url(value)
-    parts = value.split('.')
+    parts = value.split(".")
     valid_sizes = Discourse.avatar_sizes.to_a
 
-    if value === 'avatar' || parts.size === 1 || valid_sizes.exclude?(parts.last.to_i)
+    if value === "avatar" || parts.size === 1 || valid_sizes.exclude?(parts.last.to_i)
       user.small_avatar_url
     else
       user.avatar_template_url.gsub("{size}", parts.last)

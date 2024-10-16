@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe CustomWizard::Submission do
-  fab!(:user) { Fabricate(:user) }
+  fab!(:user)
   fab!(:user2) { Fabricate(:user) }
   let(:template_json) { get_wizard_fixture("wizard") }
   let(:guest_id) { CustomWizard::Wizard.generate_guest_id }
@@ -13,9 +13,7 @@ describe CustomWizard::Submission do
   end
 
   it "saves a user's submission" do
-    expect(
-      described_class.get(@wizard).fields["step_1_field_1"]
-    ).to eq("I am user submission")
+    expect(described_class.get(@wizard).fields["step_1_field_1"]).to eq("I am user submission")
   end
 
   it "saves a guest's submission" do
@@ -23,9 +21,7 @@ describe CustomWizard::Submission do
     @wizard = CustomWizard::Wizard.create(template_json["id"], nil, guest_id)
     described_class.new(@wizard, step_1_field_1: "I am guest submission").save
 
-    expect(
-      described_class.get(@wizard).fields["step_1_field_1"]
-    ).to eq("I am guest submission")
+    expect(described_class.get(@wizard).fields["step_1_field_1"]).to eq("I am guest submission")
   end
 
   describe "#list" do
@@ -41,7 +37,11 @@ describe CustomWizard::Submission do
       @count = CustomWizard::Submission::PAGE_LIMIT + 20
 
       @count.times do |index|
-        described_class.new(@wizard, step_1_field_1: "I am user submission #{index + 1}", submitted_at: Time.now + (index + 1).minutes).save
+        described_class.new(
+          @wizard,
+          step_1_field_1: "I am user submission #{index + 1}",
+          submitted_at: Time.now + (index + 1).minutes,
+        ).save
       end
       described_class.new(@wizard2, step_1_field_1: "I am another user's submission").save
       described_class.new(@wizard3, step_1_field_1: "I am a user submission on another wizard").save
@@ -59,11 +59,15 @@ describe CustomWizard::Submission do
 
     it "paginates submission lists" do
       @wizard.user = nil
-      expect(described_class.list(@wizard, page: 1).submissions.size).to eq((@count + 2) - CustomWizard::Submission::PAGE_LIMIT)
+      expect(described_class.list(@wizard, page: 1).submissions.size).to eq(
+        (@count + 2) - CustomWizard::Submission::PAGE_LIMIT,
+      )
     end
 
     it "orders submissions by submitted_at" do
-      expect(described_class.list(@wizard).submissions.first.submitted_at.to_datetime.change(usec: 0)).to eq((Time.now + @count.minutes).change(usec: 0))
+      expect(
+        described_class.list(@wizard).submissions.first.submitted_at.to_datetime.change(usec: 0),
+      ).to eq((Time.now + @count.minutes).change(usec: 0))
     end
   end
 
@@ -83,9 +87,7 @@ describe CustomWizard::Submission do
       described_class.new(@wizard, step_1_field_1: "I am the second submission").save
       described_class.new(@wizard, step_1_field_1: "I am the third submission").save
       sub_data = PluginStore.get("#{@wizard.id}_submissions", @wizard.user.id)
-      sub_data.each do |sub|
-        sub['updated_at'] = nil
-      end
+      sub_data.each { |sub| sub["updated_at"] = nil }
       PluginStore.set("#{@wizard.id}_submissions", @wizard.user.id, sub_data)
       builder = CustomWizard::Builder.new(@wizard.id, @wizard.user)
       builder.build
@@ -101,7 +103,7 @@ describe CustomWizard::Submission do
       freeze_time Time.now + 2
       described_class.new(@wizard, step_1_field_1: "I am the third submission").save
       sub_data = PluginStore.get("#{@wizard.id}_submissions", @wizard.user.id)
-      sub_data[0]['updated_at'] = nil
+      sub_data[0]["updated_at"] = nil
       PluginStore.set("#{@wizard.id}_submissions", @wizard.user.id, sub_data)
 
       builder = CustomWizard::Builder.new(@wizard.id, @wizard.user)
