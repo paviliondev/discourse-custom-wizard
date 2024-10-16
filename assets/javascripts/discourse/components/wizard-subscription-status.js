@@ -15,10 +15,12 @@ export default class WizardSubscriptionStatus extends Component {
 
   constructor() {
     super(...arguments);
-    ajax(`${this.basePath}`)
+    ajax(`${this.basePath}?resource=discourse-custom-wizard`)
       .then((result) => {
-        this.supplierId = result.suppliers[0].id;
-        this.authorized = result.suppliers[0].authorized;
+        if (result.suppliers && result.suppliers.length) {
+          this.supplierId = result.suppliers[0].id;
+          this.authorized = result.suppliers[0].authorized;
+        }
       })
       .finally(() => {
         this.subscription.retrieveSubscriptionStatus();
@@ -41,8 +43,10 @@ export default class WizardSubscriptionStatus extends Component {
       },
     })
       .then((result) => {
-        this.supplierId = result.supplier.id;
-        this.authorized = !(result.supplier.authorized_at === null);
+        if (result.success) {
+          this.supplierId = result.supplier_id;
+          this.authorized = false;
+        }
       })
       .finally(() => {
         this.unauthorizing = false;
