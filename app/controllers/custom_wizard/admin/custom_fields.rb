@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class CustomWizard::AdminCustomFieldsController < CustomWizard::AdminController
+  requires_plugin "discourse-custom-wizard"
+
   def index
     render_json_dump(custom_fields: custom_field_list)
   end

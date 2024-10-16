@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class CustomWizard::StepsController < ::CustomWizard::WizardClientController
   before_action :ensure_can_update
+  requires_plugin "discourse-custom-wizard"
 
   def update
     update = update_params.to_h

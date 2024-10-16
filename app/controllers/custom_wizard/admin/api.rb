@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class CustomWizard::AdminApiController < CustomWizard::AdminController
   skip_before_action :check_xhr, only: [:redirect]
+  requires_plugin "discourse-custom-wizard"
 
   def list
     serializer =

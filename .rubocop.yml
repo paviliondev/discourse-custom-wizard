@@ -17,3 +17,9 @@ Discourse/TimeEqMatcher:
 
 Discourse/NoAddReferenceOrAliasesActiveRecordMigration:
   Enabled: false
+
+Lint/BooleanSymbol:
+  Enabled: false
+
+Discourse/Plugins/NoMonkeyPatching:
+  Enabled: false

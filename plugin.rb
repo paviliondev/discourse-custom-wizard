@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Forms for Discourse. Better onboarding, structured posting, data enrichment, automated actions and much more.
-# version: 2.8.12
+# version: 2.8.13
 # authors: Angus McLeod, Faizaan Gagan, Robert Barrow, Keegan George, Kaitlin Maddever, Juan Marcos Gutierrez Ramos
 # url: https://github.com/paviliondev/discourse-custom-wizard
 # contact_emails: development@pavilion.tech
@@ -36,73 +36,71 @@ if respond_to?(:register_svg_icon)
 end
 
 after_initialize do
-  %w[
-    ../lib/custom_wizard/engine.rb
-    ../config/routes.rb
-    ../app/controllers/custom_wizard/admin/admin.rb
-    ../app/controllers/custom_wizard/admin/subscription.rb
-    ../app/controllers/custom_wizard/admin/wizard.rb
-    ../app/controllers/custom_wizard/admin/submissions.rb
-    ../app/controllers/custom_wizard/admin/api.rb
-    ../app/controllers/custom_wizard/admin/logs.rb
-    ../app/controllers/custom_wizard/admin/manager.rb
-    ../app/controllers/custom_wizard/admin/custom_fields.rb
-    ../app/controllers/custom_wizard/wizard_client.rb
-    ../app/controllers/custom_wizard/wizard.rb
-    ../app/controllers/custom_wizard/steps.rb
-    ../app/controllers/custom_wizard/realtime_validations.rb
-    ../app/jobs/regular/refresh_api_access_token.rb
-    ../app/jobs/regular/set_after_time_wizard.rb
-    ../lib/custom_wizard/validators/template.rb
-    ../lib/custom_wizard/validators/update.rb
-    ../lib/custom_wizard/action_result.rb
-    ../lib/custom_wizard/action.rb
-    ../lib/custom_wizard/builder.rb
-    ../lib/custom_wizard/cache.rb
-    ../lib/custom_wizard/custom_field.rb
-    ../lib/custom_wizard/field.rb
-    ../lib/custom_wizard/realtime_validation.rb
-    ../lib/custom_wizard/realtime_validations/result.rb
-    ../lib/custom_wizard/realtime_validations/similar_topics.rb
-    ../lib/custom_wizard/mapper.rb
-    ../lib/custom_wizard/log.rb
-    ../lib/custom_wizard/step_updater.rb
-    ../lib/custom_wizard/step.rb
-    ../lib/custom_wizard/submission.rb
-    ../lib/custom_wizard/subscription.rb
-    ../lib/custom_wizard/template.rb
-    ../lib/custom_wizard/wizard.rb
-    ../lib/custom_wizard/user_history.rb
-    ../lib/custom_wizard/api/api.rb
-    ../lib/custom_wizard/api/authorization.rb
-    ../lib/custom_wizard/api/endpoint.rb
-    ../lib/custom_wizard/api/log_entry.rb
-    ../lib/custom_wizard/liquid_extensions/first_non_empty.rb
-    ../lib/custom_wizard/exceptions/exceptions.rb
-    ../lib/discourse_plugin_statistics/plugin.rb
-    ../app/serializers/custom_wizard/api/authorization_serializer.rb
-    ../app/serializers/custom_wizard/api/basic_endpoint_serializer.rb
-    ../app/serializers/custom_wizard/api/endpoint_serializer.rb
-    ../app/serializers/custom_wizard/api/log_serializer.rb
-    ../app/serializers/custom_wizard/api_serializer.rb
-    ../app/serializers/custom_wizard/basic_api_serializer.rb
-    ../app/serializers/custom_wizard/basic_wizard_serializer.rb
-    ../app/serializers/custom_wizard/custom_field_serializer.rb
-    ../app/serializers/custom_wizard/wizard_field_serializer.rb
-    ../app/serializers/custom_wizard/wizard_step_serializer.rb
-    ../app/serializers/custom_wizard/wizard_serializer.rb
-    ../app/serializers/custom_wizard/log_serializer.rb
-    ../app/serializers/custom_wizard/submission_serializer.rb
-    ../app/serializers/custom_wizard/realtime_validation/similar_topics_serializer.rb
-    ../lib/custom_wizard/extensions/extra_locales_controller.rb
-    ../lib/custom_wizard/extensions/invites_controller.rb
-    ../lib/custom_wizard/extensions/users_controller.rb
-    ../lib/custom_wizard/extensions/guardian.rb
-    ../lib/custom_wizard/extensions/custom_field/preloader.rb
-    ../lib/custom_wizard/extensions/custom_field/serializer.rb
-    ../lib/custom_wizard/extensions/custom_field/extension.rb
-    ../lib/custom_wizard/extensions/discourse_tagging.rb
-  ].each { |path| load File.expand_path(path, __FILE__) }
+  require_relative "lib/custom_wizard/engine.rb"
+  require_relative "config/routes.rb"
+  require_relative "app/controllers/custom_wizard/admin/admin.rb"
+  require_relative "app/controllers/custom_wizard/admin/subscription.rb"
+  require_relative "app/controllers/custom_wizard/admin/wizard.rb"
+  require_relative "app/controllers/custom_wizard/admin/submissions.rb"
+  require_relative "app/controllers/custom_wizard/admin/api.rb"
+  require_relative "app/controllers/custom_wizard/admin/logs.rb"
+  require_relative "app/controllers/custom_wizard/admin/manager.rb"
+  require_relative "app/controllers/custom_wizard/admin/custom_fields.rb"
+  require_relative "app/controllers/custom_wizard/wizard_client.rb"
+  require_relative "app/controllers/custom_wizard/wizard.rb"
+  require_relative "app/controllers/custom_wizard/steps.rb"
+  require_relative "app/controllers/custom_wizard/realtime_validations.rb"
+  require_relative "app/jobs/regular/refresh_api_access_token.rb"
+  require_relative "app/jobs/regular/set_after_time_wizard.rb"
+  require_relative "lib/custom_wizard/validators/template.rb"
+  require_relative "lib/custom_wizard/validators/update.rb"
+  require_relative "lib/custom_wizard/action_result.rb"
+  require_relative "lib/custom_wizard/action.rb"
+  require_relative "lib/custom_wizard/builder.rb"
+  require_relative "lib/custom_wizard/cache.rb"
+  require_relative "lib/custom_wizard/custom_field.rb"
+  require_relative "lib/custom_wizard/field.rb"
+  require_relative "lib/custom_wizard/realtime_validation.rb"
+  require_relative "lib/custom_wizard/realtime_validations/result.rb"
+  require_relative "lib/custom_wizard/realtime_validations/similar_topics.rb"
+  require_relative "lib/custom_wizard/mapper.rb"
+  require_relative "lib/custom_wizard/log.rb"
+  require_relative "lib/custom_wizard/step_updater.rb"
+  require_relative "lib/custom_wizard/step.rb"
+  require_relative "lib/custom_wizard/submission.rb"
+  require_relative "lib/custom_wizard/subscription.rb"
+  require_relative "lib/custom_wizard/template.rb"
+  require_relative "lib/custom_wizard/wizard.rb"
+  require_relative "lib/custom_wizard/user_history.rb"
+  require_relative "lib/custom_wizard/api/api.rb"
+  require_relative "lib/custom_wizard/api/authorization.rb"
+  require_relative "lib/custom_wizard/api/endpoint.rb"
+  require_relative "lib/custom_wizard/api/log_entry.rb"
+  require_relative "lib/custom_wizard/liquid_extensions/first_non_empty.rb"
+  require_relative "lib/custom_wizard/exceptions/exceptions.rb"
+  require_relative "lib/discourse_plugin_statistics/plugin.rb"
+  require_relative "app/serializers/custom_wizard/api/authorization_serializer.rb"
+  require_relative "app/serializers/custom_wizard/api/basic_endpoint_serializer.rb"
+  require_relative "app/serializers/custom_wizard/api/endpoint_serializer.rb"
+  require_relative "app/serializers/custom_wizard/api/log_serializer.rb"
+  require_relative "app/serializers/custom_wizard/api_serializer.rb"
+  require_relative "app/serializers/custom_wizard/basic_api_serializer.rb"
+  require_relative "app/serializers/custom_wizard/basic_wizard_serializer.rb"
+  require_relative "app/serializers/custom_wizard/custom_field_serializer.rb"
+  require_relative "app/serializers/custom_wizard/wizard_field_serializer.rb"
+  require_relative "app/serializers/custom_wizard/wizard_step_serializer.rb"
+  require_relative "app/serializers/custom_wizard/wizard_serializer.rb"
+  require_relative "app/serializers/custom_wizard/log_serializer.rb"
+  require_relative "app/serializers/custom_wizard/submission_serializer.rb"
+  require_relative "app/serializers/custom_wizard/realtime_validation/similar_topics_serializer.rb"
+  require_relative "lib/custom_wizard/extensions/extra_locales_controller.rb"
+  require_relative "lib/custom_wizard/extensions/invites_controller.rb"
+  require_relative "lib/custom_wizard/extensions/users_controller.rb"
+  require_relative "lib/custom_wizard/extensions/guardian.rb"
+  require_relative "lib/custom_wizard/extensions/custom_field/preloader.rb"
+  require_relative "lib/custom_wizard/extensions/custom_field/serializer.rb"
+  require_relative "lib/custom_wizard/extensions/custom_field/extension.rb"
+  require_relative "lib/custom_wizard/extensions/discourse_tagging.rb"
 
   Liquid::Template.error_mode = :strict
 

@@ -30,10 +30,10 @@ class CustomWizard::Wizard
                 :action_ids,
                 :user,
                 :guest_id,
-                :submissions,
                 :template
 
   attr_reader :all_step_ids
+  attr_writer :submissions
 
   GUEST_ID_PREFIX ||= "guest"
   GUEST_GROUP_ID = -1

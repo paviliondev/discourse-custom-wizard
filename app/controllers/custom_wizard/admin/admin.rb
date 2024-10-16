@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class CustomWizard::AdminController < ::Admin::AdminController
   before_action :ensure_admin
+  requires_plugin "discourse-custom-wizard"
 
   private
 

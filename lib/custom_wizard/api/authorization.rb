@@ -5,7 +5,6 @@ class CustomWizard::Api::Authorization
   include ActiveModel::SerializerSupport
 
   attr_accessor :api_name,
-                :authorized,
                 :auth_type,
                 :auth_url,
                 :token_url,

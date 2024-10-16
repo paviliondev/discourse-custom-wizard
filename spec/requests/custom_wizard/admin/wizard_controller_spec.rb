@@ -19,7 +19,6 @@ describe CustomWizard::AdminWizardController do
     CustomWizard::Template.save(template, skip_jobs: true)
     template_2 = template.dup
     template_2["id"] = "super_mega_fun_wizard_2"
-    template_2["permitted"] = template_2["permitted"]
     CustomWizard::Template.save(template_2, skip_jobs: true)
 
     template_3 = template.dup

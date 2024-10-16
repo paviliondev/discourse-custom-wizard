@@ -2,6 +2,7 @@
 class CustomWizard::AdminSubmissionsController < CustomWizard::AdminController
   skip_before_action :preload_json, :check_xhr, only: [:download]
   before_action :find_wizard, except: [:index]
+  requires_plugin "discourse-custom-wizard"
 
   def index
     render json:

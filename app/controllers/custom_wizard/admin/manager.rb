@@ -2,6 +2,7 @@
 class CustomWizard::AdminManagerController < CustomWizard::AdminController
   skip_before_action :check_xhr, only: [:export]
   before_action :get_wizard_ids, except: [:import]
+  requires_plugin "discourse-custom-wizard"
 
   def export
     templates = []

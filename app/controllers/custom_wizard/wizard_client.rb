@@ -2,6 +2,7 @@
 class CustomWizard::WizardClientController < ::ApplicationController
   before_action :ensure_plugin_enabled
   before_action :set_builder
+  requires_plugin "discourse-custom-wizard"
 
   private
 

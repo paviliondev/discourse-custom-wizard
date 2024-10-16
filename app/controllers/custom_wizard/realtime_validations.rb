@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class CustomWizard::RealtimeValidationsController < ::ApplicationController
+  requires_plugin "discourse-custom-wizard"
+
   def validate
     klass_str = "CustomWizard::RealtimeValidation::#{validation_params[:type].camelize}"
     result = klass_str.constantize.new(current_user).perform(validation_params)

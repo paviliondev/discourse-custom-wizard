@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class CustomWizard::WizardController < ::CustomWizard::WizardClientController
+  requires_plugin "discourse-custom-wizard"
+
   def show
     if wizard.present?
       render json: CustomWizard::WizardSerializer.new(wizard, scope: guardian, root: false).as_json,

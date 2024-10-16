@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class CustomWizard::AdminLogsController < CustomWizard::AdminController
   before_action :find_wizard, except: [:index]
+  requires_plugin "discourse-custom-wizard"
 
   def index
     render json:

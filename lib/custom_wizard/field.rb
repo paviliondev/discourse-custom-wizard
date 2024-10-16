@@ -8,7 +8,6 @@ class CustomWizard::Field
               :type,
               :required,
               :value,
-              :label,
               :description,
               :image,
               :image_upload_id,

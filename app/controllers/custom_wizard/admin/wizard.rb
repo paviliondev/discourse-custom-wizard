@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class CustomWizard::AdminWizardController < CustomWizard::AdminController
   before_action :find_wizard, only: %i[show remove]
+  requires_plugin "discourse-custom-wizard"
 
   def index
     render_json_dump(

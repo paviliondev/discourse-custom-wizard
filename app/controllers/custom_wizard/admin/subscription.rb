@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class CustomWizard::SubscriptionController < ::Admin::AdminController
   before_action :ensure_admin
+  requires_plugin "discourse-custom-wizard"
 
   def index
     if params[:update_from_remote]
