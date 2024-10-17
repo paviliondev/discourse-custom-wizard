@@ -94,6 +94,9 @@ fr:
           time: "Heure"
           done: "Établir l'heure"
           clear: "Effacer"
+        after_time_groups:
+          label: Time Groups
+          description: Groups directed to wizard after start time.
         required: "Requis"
         required_label: "Les utilisatrices doivent compléter l'assistant."
         prompt_completion: "Invitation"
@@ -562,6 +565,12 @@ fr:
             community:
               label: Support
               title: There is a Custom Wizard Community subscription active on this forum.
+        user:
+          label: Wizards
+          redirect:
+            label: Redirect
+            remove_label: Remove
+            remove_title: Remove wizard redirect
   wizard_js:
     group:
       select: "Select a group"
