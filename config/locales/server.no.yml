@@ -45,6 +45,7 @@
       after_signup: "You can only have one 'after signup' wizard at a time. %{wizard_id} has 'after signup' enabled."
       after_signup_after_time: "You can't use 'after time' and 'after signup' on the same wizard."
       after_time: "After time setting is invalid."
+      after_time_group: "After time group does not exist: %{group_name}"
       liquid_syntax_error: "Liquid syntax error in %{attribute}: %{message}"
       subscription: "%{type} %{property} usage is not supported on your subscription"
       not_permitted_for_guests: "%{object_id} is not permitted when guests can access the wizard"
