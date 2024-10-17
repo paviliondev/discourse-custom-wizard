@@ -154,6 +154,9 @@ describe CustomWizard::Template do
       expect_not_enqueued_with(job: :set_after_time_wizard) do
         CustomWizard::Template.save(@after_time_template)
       end
+      expect(
+        UserCustomField.exists?(name: "redirect_to_wizard", value: @after_time_template[:id]),
+      ).to eq(false)
     end
   end
 end

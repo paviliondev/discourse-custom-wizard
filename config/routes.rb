@@ -46,4 +46,6 @@ Discourse::Application.routes.append do
     post "admin/wizards/manager/import" => "admin_manager#import"
     delete "admin/wizards/manager/destroy" => "admin_manager#destroy"
   end
+
+  put "/admin/users/:id/wizards/clear_redirect" => "custom_wizard/user#clear_redirect"
 end

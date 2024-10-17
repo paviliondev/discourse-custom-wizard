@@ -176,10 +176,10 @@ class CustomWizard::Template
       end
 
       if enqueue_wizard_at
-        Jobs.cancel_scheduled_job(:set_after_time_wizard, wizard_id: wizard_id)
+        self.class.clear_user_wizard_redirect(wizard_id, after_time: true)
         Jobs.enqueue_at(enqueue_wizard_at, :set_after_time_wizard, wizard_id: wizard_id)
       elsif old_data && old_data[:after_time]
-        clear_user_wizard_redirect(wizard_id, after_time: true)
+        self.class.clear_user_wizard_redirect(wizard_id, after_time: true)
       end
     end
   end

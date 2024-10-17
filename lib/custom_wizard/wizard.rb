@@ -15,6 +15,7 @@ class CustomWizard::Wizard
                 :multiple_submissions,
                 :after_time,
                 :after_time_scheduled,
+                :after_time_group_names,
                 :after_signup,
                 :required,
                 :prompt_completion,
@@ -58,6 +59,7 @@ class CustomWizard::Wizard
     @after_signup = cast_bool(attrs["after_signup"])
     @after_time = cast_bool(attrs["after_time"])
     @after_time_scheduled = attrs["after_time_scheduled"]
+    @after_time_group_names = attrs["after_time_groups"]
     @required = cast_bool(attrs["required"])
     @permitted = attrs["permitted"] || nil
     @theme_id = attrs["theme_id"]
@@ -251,6 +253,10 @@ class CustomWizard::Wizard
     permitted?(always_allow_admin: always_allow_admin) && can_submit?
   end
 
+  def should_redirect?
+    can_access?(always_allow_admin: false) && after_time_target?
+  end
+
   def reset
     return nil unless actor_id
 
@@ -329,6 +335,16 @@ class CustomWizard::Wizard
     end
   end
 
+  def after_time_groups
+    @after_time_groups ||= Group.where(name: after_time_group_names)
+  end
+
+  def after_time_target?
+    return true if after_time_group_names.blank? || !after_time_groups.exists?
+    return true if after_time_groups.joins(:users).where(users: { username: user.username }).exists?
+    false
+  end
+
   def self.create(wizard_id, user = nil, guest_id = nil)
     if template = CustomWizard::Template.find(wizard_id)
       new(template.to_h, user, guest_id)
@@ -370,6 +386,11 @@ class CustomWizard::Wizard
     else
       false
     end
+  end
+
+  def self.set_after_time_redirect(wizard_id, user)
+    wizard = self.create(wizard_id, user)
+    set_user_redirect(wizard_id, user) if wizard.after_time_target?
   end
 
   def self.set_user_redirect(wizard_id, user)

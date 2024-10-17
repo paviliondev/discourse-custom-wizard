@@ -25,6 +25,12 @@ class CustomWizard::Subscription
           business: ["*"],
           community: ["*"],
         },
+        after_time_groups: {
+          none: [],
+          standard: [],
+          business: ["*"],
+          community: [],
+        },
       },
       step: {
         condition: {

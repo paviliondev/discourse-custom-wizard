@@ -78,6 +78,7 @@ class CustomWizard::AdminWizardController < CustomWizard::AdminController
       :resume_on_revisit,
       :theme_id,
       permitted: mapped_params,
+      after_time_groups: [],
       steps: [
         :id,
         :index,

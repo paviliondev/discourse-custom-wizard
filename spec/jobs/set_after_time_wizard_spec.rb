@@ -47,6 +47,29 @@ describe Jobs::SetAfterTimeWizard do
     end
   end
 
+  context "when after_time_groups is set" do
+    fab!(:group1) { Fabricate(:group) }
+    fab!(:group_user) { Fabricate(:group_user, group: group1, user: user2) }
+
+    before do
+      enable_subscription("business")
+      @after_time_template["after_time_groups"] = [group1.name]
+      CustomWizard::Template.save(@after_time_template.as_json)
+    end
+
+    it "only redirects users in the group" do
+      messages =
+        MessageBus.track_publish("/redirect_to_wizard") do
+          described_class.new.execute(wizard_id: "super_mega_fun_wizard")
+        end
+      expect(messages.first.data).to eq("super_mega_fun_wizard")
+      expect(messages.first.user_ids).to match_array([user2.id])
+      expect(
+        UserCustomField.where(name: "redirect_to_wizard", value: "super_mega_fun_wizard").length,
+      ).to eq(1)
+    end
+  end
+
   context "when user has completed the wizard" do
     before do
       @after_time_template[:steps].each do |step|

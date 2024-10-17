@@ -373,9 +373,14 @@ $error: #ef1700;
       }
 
       .input .select-kit,
-      > .select-kit {
+      > .select-kit:not(.group-chooser) {
         max-width: 250px !important;
         min-width: 250px !important;
+      }
+
+      .group-chooser {
+        max-width: 400px !important;
+        min-width: 400px !important;
       }
 
       &.force-final {

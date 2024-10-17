@@ -78,8 +78,16 @@ describe ApplicationController do
         end
 
         context "when time has passed" do
-          it "redirects if time has passed" do
+          def run_job!
             travel_to Time.now + 4.hours
+            MessageBus.expects(:publish).at_least_once
+            Jobs::SetAfterTimeWizard.new.execute(
+              Jobs::SetAfterTimeWizard.jobs.first["args"].first.symbolize_keys,
+            )
+          end
+
+          it "redirects if time has passed" do
+            run_job!
             get "/"
             expect(response).to redirect_to("/w/super-mega-fun-wizard")
           end
@@ -93,7 +101,7 @@ describe ApplicationController do
 
             context "when user is in permitted group" do
               it "redirects user" do
-                travel_to Time.now + 4.hours
+                run_job!
                 get "/"
                 expect(response).to redirect_to("/w/super-mega-fun-wizard")
               end
@@ -103,7 +111,7 @@ describe ApplicationController do
               before { Group.find(13).remove(user) }
 
               it "does not redirect user" do
-                travel_to Time.now + 4.hours
+                run_job!
                 user.trust_level = TrustLevel[2]
                 user.save!
                 get "/"
@@ -111,7 +119,7 @@ describe ApplicationController do
               end
 
               it "does not redirect if user is an admin" do
-                travel_to Time.now + 4.hours
+                run_job!
                 user.trust_level = TrustLevel[2]
                 user.admin = true
                 user.save!
@@ -134,9 +142,47 @@ describe ApplicationController do
             end
 
             it "does not redirect" do
-              travel_to Time.now + 4.hours
+              run_job!
               get "/"
               expect(response).not_to redirect_to("/w/super-mega-fun-wizard")
+            end
+          end
+
+          context "when after_time_groups is set" do
+            fab!(:group)
+
+            before do
+              enable_subscription("business")
+              @template["after_time_groups"] = [group.name]
+              CustomWizard::Template.save(@template.as_json)
+            end
+
+            context "when user is in group" do
+              before { group.add(user) }
+
+              it "redirects user" do
+                run_job!
+                get "/"
+                expect(response).to redirect_to("/w/super-mega-fun-wizard")
+              end
+            end
+
+            context "when user is not in group" do
+              before { group.remove(user) }
+
+              it "does not redirect user" do
+                run_job!
+                get "/"
+                expect(response).to_not redirect_to("/w/super-mega-fun-wizard")
+              end
+
+              it "does not redirect if user is an admin" do
+                run_job!
+                user.admin = true
+                user.save!
+                get "/"
+                expect(response).to_not redirect_to("/w/super-mega-fun-wizard")
+              end
             end
           end
         end

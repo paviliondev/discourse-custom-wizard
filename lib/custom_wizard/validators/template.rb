@@ -128,6 +128,15 @@ class CustomWizard::TemplateValidator
     if invalid_time || active_time.blank? || active_time < Time.now.utc
       errors.add :base, I18n.t("wizard.validation.after_time")
     end
+
+    group_names = @data[:after_time_groups]
+    if group_names.present?
+      group_names.each do |group_name|
+        unless Group.exists?(name: group_name)
+          errors.add :base, I18n.t("wizard.validation.after_time_group", group_name: group_name)
+        end
+      end
+    end
   end
 
   def validate_liquid_template(object, type)
