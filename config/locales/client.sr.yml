@@ -95,6 +95,9 @@ sr-Cyrl:
           time: "Time"
           done: "Set Time"
           clear: "Clear"
+        after_time_groups:
+          label: Time Groups
+          description: Groups directed to wizard after start time.
         required: "Required"
         required_label: "Users cannot skip the wizard."
         prompt_completion: "Prompt"
@@ -563,6 +566,12 @@ sr-Cyrl:
             community:
               label: Support
               title: There is a Custom Wizard Community subscription active on this forum.
+        user:
+          label: Wizards
+          redirect:
+            label: Redirect
+            remove_label: Remove
+            remove_title: Remove wizard redirect
   wizard_js:
     group:
       select: "Select a group"
