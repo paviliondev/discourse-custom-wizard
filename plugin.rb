@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Forms for Discourse. Better onboarding, structured posting, data enrichment, automated actions and much more.
-# version: 2.8.13
+# version: 2.9.0
 # authors: Angus McLeod, Faizaan Gagan, Robert Barrow, Keegan George, Kaitlin Maddever, Juan Marcos Gutierrez Ramos
 # url: https://github.com/paviliondev/discourse-custom-wizard
 # contact_emails: development@pavilion.tech
@@ -46,6 +46,7 @@ after_initialize do
   require_relative "app/controllers/custom_wizard/admin/logs.rb"
   require_relative "app/controllers/custom_wizard/admin/manager.rb"
   require_relative "app/controllers/custom_wizard/admin/custom_fields.rb"
+  require_relative "app/controllers/custom_wizard/admin/user.rb"
   require_relative "app/controllers/custom_wizard/wizard_client.rb"
   require_relative "app/controllers/custom_wizard/wizard.rb"
   require_relative "app/controllers/custom_wizard/steps.rb"
@@ -146,6 +147,7 @@ after_initialize do
   end
 
   add_to_serializer(:current_user, :redirect_to_wizard) { object.redirect_to_wizard }
+  add_to_serializer(:admin_user_list, :redirect_to_wizard) { object.redirect_to_wizard }
 
   on(:user_approved) do |user|
     if wizard = CustomWizard::Wizard.after_signup(user)
@@ -168,7 +170,7 @@ after_initialize do
         end
 
         wizard = CustomWizard::Wizard.create(wizard_id, current_user)
-        redirect_to "/w/#{wizard_id.dasherize}" if wizard.can_access?(always_allow_admin: false)
+        redirect_to "/w/#{wizard_id.dasherize}" if wizard.should_redirect?
       end
     end
   end

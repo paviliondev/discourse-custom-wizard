@@ -12,9 +12,11 @@ import Controller from "@ember/controller";
 import copyText from "discourse/lib/copy-text";
 import I18n from "I18n";
 import { filterValues } from "discourse/plugins/discourse-custom-wizard/discourse/lib/wizard-schema";
+import { action } from "@ember/object";
 
 export default Controller.extend({
   modal: service(),
+  site: service(),
   hasName: notEmpty("wizard.name"),
 
   @observes("currentStep")
@@ -89,6 +91,24 @@ export default Controller.extend({
     }
 
     return I18n.t(`admin.wizard.error.${errorType}`, errorParams);
+  },
+
+  setAfterTimeGroupIds() {
+    const groups = this.site.groups.filter((g) =>
+      this.wizard.after_time_groups.includes(g.name)
+    );
+    this.setProperties({
+      afterTimeGroupIds: groups.map((g) => g.id),
+    });
+  },
+
+  @action
+  setAfterTimeGroups(groupIds) {
+    const groups = this.site.groups.filter((g) => groupIds.includes(g.id));
+    this.setProperties({
+      afterTimeGroupIds: groups.map((g) => g.id),
+      "wizard.after_time_groups": groups.map((g) => g.name),
+    });
   },
 
   actions: {

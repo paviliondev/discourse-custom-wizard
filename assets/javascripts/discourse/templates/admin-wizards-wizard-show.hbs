@@ -162,6 +162,22 @@
           }}
         </div>
       </div>
+
+      <div class="setting full">
+        <div class="setting-label">
+          <label>{{i18n "admin.wizard.after_time_groups.label"}}</label>
+        </div>
+        <div class="setting-value">
+          <GroupChooser
+            @content={{this.site.groups}}
+            @value={{this.afterTimeGroupIds}}
+            @onChange={{this.setAfterTimeGroups}}
+          />
+          <div class="setting-gutter">
+            {{i18n "admin.wizard.after_time_groups.description"}}
+          </div>
+        </div>
+      </div>
     {{/wizard-subscription-container}}
   </div>
 

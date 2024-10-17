@@ -17,11 +17,13 @@ const wizard = {
     resume_on_revisit: null,
     theme_id: null,
     permitted: null,
+    after_time_groups: null,
   },
   mapped: ["permitted"],
   required: ["id"],
   dependent: {
     after_time: "after_time_scheduled",
+    after_time: "after_time_groups",
   },
   objectArrays: {
     step: {

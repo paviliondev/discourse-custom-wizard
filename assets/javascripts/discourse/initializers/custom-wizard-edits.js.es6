@@ -2,6 +2,8 @@ import DiscourseURL from "discourse/lib/url";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import getUrl from "discourse-common/lib/get-url";
 import { observes } from "discourse-common/utils/decorators";
+import { popupAjaxError } from "discourse/lib/ajax-error";
+import { ajax } from "discourse/lib/ajax";
 
 export default {
   name: "custom-wizard-edits",
@@ -105,6 +107,24 @@ export default {
         route: "adminWizardsWizard",
         icon: "hat-wizard",
       });
+
+      if (api.getCurrentUser()?.admin) {
+        api.modifyClass("model:admin-user", {
+          pluginId: "custom-wizard",
+
+          clearWizardRedirect(user) {
+            return ajax(`/admin/users/${user.id}/wizards/clear_redirect`, {
+              type: "PUT",
+            })
+              .then(() => {
+                user.setProperties({
+                  redirect_to_wizard: null,
+                });
+              })
+              .catch(popupAjaxError);
+          },
+        });
+      }
     });
   },
 };

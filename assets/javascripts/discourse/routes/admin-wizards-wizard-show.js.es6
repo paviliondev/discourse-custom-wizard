@@ -47,5 +47,6 @@ export default DiscourseRoute.extend({
     };
 
     controller.setProperties(props);
+    controller.setAfterTimeGroupIds();
   },
 });
