@@ -95,7 +95,7 @@ export default Controller.extend({
 
   setAfterTimeGroupIds() {
     const groups = this.site.groups.filter((g) =>
-      this.wizard.after_time_groups.includes(g.name)
+      this.wizard.after_time_groups?.includes(g.name)
     );
     this.setProperties({
       afterTimeGroupIds: groups.map((g) => g.id),
