@@ -75,13 +75,13 @@ export default {
             this.session.wizardEventFieldId === this.fieldId &&
             this.element
           ) {
-            this.insertText(text, options);
+            this.textManipulation.insertText(text, options);
           }
         },
 
         _wizardReplaceText(oldVal, newVal, opts = {}) {
           if (this.session.wizardEventFieldId === this.fieldId) {
-            this.replaceText(oldVal, newVal, opts);
+            this.textManipulation.replaceText(oldVal, newVal, opts);
           }
         },
       });

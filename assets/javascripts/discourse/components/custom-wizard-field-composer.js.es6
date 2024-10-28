@@ -12,7 +12,8 @@ export default Component.extend({
     "showPreview:show-preview:hide-preview",
   ],
 
-  didInsertElement() {
+  init() {
+    this._super(...arguments);
     this.set(
       "composer",
       EmberObject.create({

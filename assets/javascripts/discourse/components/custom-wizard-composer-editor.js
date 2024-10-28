@@ -26,10 +26,13 @@ export default class CustomWizardComposerEditor extends ComposerEditor {
 
   init() {
     super.init(...arguments);
-    this.fileUploadElementId = `file-uploader-${dasherize(this.field.id)}`;
-    this.editorInputClass = `.${dasherize(this.field.type)}-${dasherize(
+    this.uppyComposerUpload.fileUploadElementId = `file-uploader-${dasherize(
       this.field.id
-    )} .d-editor-input`;
+    )}`;
+    this.uppyComposerUpload.editorInputClass = `.${dasherize(
+      this.field.type
+    )}-${dasherize(this.field.id)} .d-editor-input`;
+    this.uppyComposerUpload.composerModel = this.composer;
   }
 
   @discourseComputed
@@ -92,7 +95,9 @@ export default class CustomWizardComposerEditor extends ComposerEditor {
   @action
   showUploadModal() {
     this.session.set("wizardEventFieldId", this.field.id);
-    document.getElementById(this.fileUploadElementId).click();
+    document
+      .getElementById(this.uppyComposerUpload.fileUploadElementId)
+      .click();
   }
 
   _uploadDropTargetOptions() {
