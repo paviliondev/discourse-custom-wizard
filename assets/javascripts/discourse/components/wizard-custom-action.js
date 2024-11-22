@@ -1,10 +1,10 @@
-import { default as discourseComputed } from "discourse-common/utils/decorators";
-import { empty, equal, or } from "@ember/object/computed";
-import { notificationLevels, selectKitContent } from "../lib/wizard";
-import { computed } from "@ember/object";
-import UndoChanges from "../mixins/undo-changes";
 import Component from "@ember/component";
+import { computed } from "@ember/object";
+import { empty, equal, or } from "@ember/object/computed";
+import { default as discourseComputed } from "discourse-common/utils/decorators";
 import I18n from "I18n";
+import { notificationLevels, selectKitContent } from "../lib/wizard";
+import UndoChanges from "../mixins/undo-changes";
 
 export default Component.extend(UndoChanges, {
   componentType: "action",

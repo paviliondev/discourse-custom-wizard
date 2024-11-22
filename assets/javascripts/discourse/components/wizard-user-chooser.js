@@ -1,5 +1,5 @@
-import UserChooserComponent from "select-kit/components/user-chooser";
 import I18n from "I18n";
+import UserChooserComponent from "select-kit/components/user-chooser";
 
 export const WIZARD_USER = "wizard-user";
 

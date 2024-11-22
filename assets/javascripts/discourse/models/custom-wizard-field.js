@@ -1,7 +1,7 @@
 import EmberObject from "@ember/object";
-import ValidState from "discourse/plugins/discourse-custom-wizard/discourse/mixins/valid-state";
 import discourseComputed from "discourse-common/utils/decorators";
 import { translationOrText } from "discourse/plugins/discourse-custom-wizard/discourse/lib/wizard";
+import ValidState from "discourse/plugins/discourse-custom-wizard/discourse/mixins/valid-state";
 
 const StandardFieldValidation = [
   "text",

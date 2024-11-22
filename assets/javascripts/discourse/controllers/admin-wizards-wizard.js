@@ -1,6 +1,6 @@
 import Controller from "@ember/controller";
-import { default as discourseComputed } from "discourse-common/utils/decorators";
 import { equal } from "@ember/object/computed";
+import { default as discourseComputed } from "discourse-common/utils/decorators";
 
 export default Controller.extend({
   creating: equal("wizardId", "create"),

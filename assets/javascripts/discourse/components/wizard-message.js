@@ -1,6 +1,6 @@
-import { default as discourseComputed } from "discourse-common/utils/decorators";
-import { not, notEmpty } from "@ember/object/computed";
 import Component from "@ember/component";
+import { not, notEmpty } from "@ember/object/computed";
+import { default as discourseComputed } from "discourse-common/utils/decorators";
 import I18n from "I18n";
 
 const icons = {

@@ -1,6 +1,6 @@
-import DiscourseURL from "discourse/lib/url";
-import { withPluginApi } from "discourse/lib/plugin-api";
 import { dasherize } from "@ember/string";
+import { withPluginApi } from "discourse/lib/plugin-api";
+import DiscourseURL from "discourse/lib/url";
 
 export default {
   name: "custom-wizard-redirect",

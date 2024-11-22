@@ -1,8 +1,8 @@
-import SingleSelectComponent from "select-kit/components/single-select";
-import { inject as service } from "@ember/service";
-import { filterValues } from "discourse/plugins/discourse-custom-wizard/discourse/lib/wizard-schema";
+import { service } from "@ember/service";
 import discourseComputed from "discourse-common/utils/decorators";
 import I18n from "I18n";
+import SingleSelectComponent from "select-kit/components/single-select";
+import { filterValues } from "discourse/plugins/discourse-custom-wizard/discourse/lib/wizard-schema";
 
 const nameKey = function (feature, attribute, value) {
   if (feature === "action") {

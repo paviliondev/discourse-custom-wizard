@@ -1,7 +1,7 @@
-import CustomWizardLogs from "../models/custom-wizard-logs";
-import DiscourseRoute from "discourse/routes/discourse";
 import { A } from "@ember/array";
-import { inject as service } from "@ember/service";
+import { service } from "@ember/service";
+import DiscourseRoute from "discourse/routes/discourse";
+import CustomWizardLogs from "../models/custom-wizard-logs";
 
 export default DiscourseRoute.extend({
   router: service(),

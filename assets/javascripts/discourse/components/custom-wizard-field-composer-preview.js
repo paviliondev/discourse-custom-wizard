@@ -1,9 +1,10 @@
 import Component from "@ember/component";
-import { loadOneboxes } from "discourse/lib/load-oneboxes";
 import { schedule } from "@ember/runloop";
-import discourseDebounce from "discourse-common/lib/debounce";
+import $ from "jquery";
 import { resolveAllShortUrls } from "pretty-text/upload-short-url";
 import { ajax } from "discourse/lib/ajax";
+import { loadOneboxes } from "discourse/lib/load-oneboxes";
+import discourseDebounce from "discourse-common/lib/debounce";
 import { on } from "discourse-common/utils/decorators";
 
 export default Component.extend({

@@ -1,6 +1,6 @@
 import EmberObject from "@ember/object";
-import wizardSchema from "./wizard-schema";
 import I18n from "I18n";
+import wizardSchema from "./wizard-schema";
 
 function selectKitContent(content) {
   return content.map((i) => ({ id: i, name: i }));

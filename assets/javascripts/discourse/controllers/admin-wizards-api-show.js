@@ -1,13 +1,13 @@
+import Controller from "@ember/controller";
+import { and, equal, not } from "@ember/object/computed";
+import { service } from "@ember/service";
+import { underscore } from "@ember/string";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
-import CustomWizardApi from "../models/custom-wizard-api";
 import { default as discourseComputed } from "discourse-common/utils/decorators";
-import { and, equal, not } from "@ember/object/computed";
-import { selectKitContent } from "../lib/wizard";
-import { underscore } from "@ember/string";
-import Controller from "@ember/controller";
 import I18n from "I18n";
-import { inject as service } from "@ember/service";
+import { selectKitContent } from "../lib/wizard";
+import CustomWizardApi from "../models/custom-wizard-api";
 
 export default Controller.extend({
   router: service(),

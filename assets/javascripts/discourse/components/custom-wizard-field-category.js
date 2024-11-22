@@ -1,11 +1,12 @@
-import { observes } from "discourse-common/utils/decorators";
-import Category from "discourse/models/category";
 import Component from "@ember/component";
+import Category from "discourse/models/category";
+import { observes } from "discourse-common/utils/decorators";
 
 export default Component.extend({
   categories: [],
 
   didInsertElement() {
+    this._super(...arguments);
     const property = this.field.property || "id";
     const value = this.field.value;
 

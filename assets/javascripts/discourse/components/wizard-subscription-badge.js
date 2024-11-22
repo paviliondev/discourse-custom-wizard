@@ -1,7 +1,7 @@
-import { inject as service } from "@ember/service";
-import { action, computed } from "@ember/object";
 import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
+import { action, computed } from "@ember/object";
+import { service } from "@ember/service";
 import I18n from "I18n";
 
 export default class WizardSubscriptionBadge extends Component {

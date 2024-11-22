@@ -1,9 +1,9 @@
+import Component from "@ember/component";
+import EmberObject, { action } from "@ember/object";
 import {
   default as computed,
   observes,
 } from "discourse-common/utils/decorators";
-import Component from "@ember/component";
-import EmberObject, { action } from "@ember/object";
 
 export default Component.extend({
   showPreview: false,

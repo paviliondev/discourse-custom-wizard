@@ -1,11 +1,11 @@
 import Controller from "@ember/controller";
 import { empty } from "@ember/object/computed";
-import discourseComputed from "discourse-common/utils/decorators";
+import { service } from "@ember/service";
 import { fmt } from "discourse/lib/computed";
-import { inject as service } from "@ember/service";
+import discourseComputed from "discourse-common/utils/decorators";
 import AdminWizardsColumnsModal from "../components/modal/admin-wizards-columns";
-import CustomWizardAdmin from "../models/custom-wizard-admin";
 import { formatModel } from "../lib/wizard-submission";
+import CustomWizardAdmin from "../models/custom-wizard-admin";
 
 export default Controller.extend({
   modal: service(),

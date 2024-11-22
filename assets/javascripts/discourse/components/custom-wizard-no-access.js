@@ -1,10 +1,10 @@
-import CustomWizard from "../models/custom-wizard";
-import discourseComputed from "discourse-common/utils/decorators";
+import { getOwner } from "@ember/application";
 import Component from "@ember/component";
 import { dasherize } from "@ember/string";
-import getURL from "discourse-common/lib/get-url";
 import cookie from "discourse/lib/cookie";
-import { getOwner } from "@ember/application";
+import getURL from "discourse-common/lib/get-url";
+import discourseComputed from "discourse-common/utils/decorators";
+import CustomWizard from "../models/custom-wizard";
 
 export default Component.extend({
   classNameBindings: [":wizard-no-access", "reasonClass"],

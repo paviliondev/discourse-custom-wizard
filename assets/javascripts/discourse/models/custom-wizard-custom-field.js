@@ -1,7 +1,7 @@
-import { ajax } from "discourse/lib/ajax";
-import { popupAjaxError } from "discourse/lib/ajax-error";
 import EmberObject from "@ember/object";
 import { isEmpty } from "@ember/utils";
+import { ajax } from "discourse/lib/ajax";
+import { popupAjaxError } from "discourse/lib/ajax-error";
 
 const CustomWizardCustomField = EmberObject.extend({
   isNew: isEmpty("id"),

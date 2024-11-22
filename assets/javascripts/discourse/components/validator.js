@@ -28,10 +28,12 @@ export default Component.extend({
   },
 
   didInsertElement() {
+    this._super(...arguments);
     this.appEvents.on("custom-wizard:validate", this, this.checkIsValid);
   },
 
   willDestroyElement() {
+    this._super(...arguments);
     this.appEvents.off("custom-wizard:validate", this, this.checkIsValid);
   },
 

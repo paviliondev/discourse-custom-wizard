@@ -1,6 +1,6 @@
-import ComboBox from "select-kit/components/combo-box";
 import { computed } from "@ember/object";
 import { makeArray } from "discourse-common/lib/helpers";
+import ComboBox from "select-kit/components/combo-box";
 
 export default ComboBox.extend({
   content: computed("groups.[]", "field.content.[]", function () {

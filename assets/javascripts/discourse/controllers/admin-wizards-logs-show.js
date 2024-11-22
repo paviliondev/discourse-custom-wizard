@@ -1,7 +1,7 @@
-import discourseComputed from "discourse-common/utils/decorators";
-import { notEmpty } from "@ember/object/computed";
-import CustomWizardLogs from "../models/custom-wizard-logs";
 import Controller from "@ember/controller";
+import { notEmpty } from "@ember/object/computed";
+import discourseComputed from "discourse-common/utils/decorators";
+import CustomWizardLogs from "../models/custom-wizard-logs";
 
 export default Controller.extend({
   refreshing: false,

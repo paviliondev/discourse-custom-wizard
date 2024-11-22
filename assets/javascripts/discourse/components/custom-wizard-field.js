@@ -1,7 +1,7 @@
 import Component from "@ember/component";
 import { dasherize } from "@ember/string";
-import discourseComputed from "discourse-common/utils/decorators";
 import { cook } from "discourse/lib/text";
+import discourseComputed from "discourse-common/utils/decorators";
 
 export default Component.extend({
   classNameBindings: [

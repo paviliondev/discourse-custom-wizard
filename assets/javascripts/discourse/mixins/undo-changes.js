@@ -1,8 +1,8 @@
-import { listProperties } from "../lib/wizard";
-import { default as wizardSchema } from "../lib/wizard-schema";
 import { get, set } from "@ember/object";
 import Mixin from "@ember/object/mixin";
 import { deepEqual } from "discourse-common/lib/object";
+import { listProperties } from "../lib/wizard";
+import { default as wizardSchema } from "../lib/wizard-schema";
 
 const observedCache = [];
 

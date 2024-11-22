@@ -1,6 +1,6 @@
-import { getCachedWizard } from "../models/custom-wizard";
 import Route from "@ember/routing/route";
-import { inject as service } from "@ember/service";
+import { service } from "@ember/service";
+import { getCachedWizard } from "../models/custom-wizard";
 
 export default Route.extend({
   router: service(),

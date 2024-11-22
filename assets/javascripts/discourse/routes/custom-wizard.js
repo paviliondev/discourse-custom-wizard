@@ -1,7 +1,7 @@
-import { findCustomWizard, updateCachedWizard } from "../models/custom-wizard";
-import I18n from "I18n";
+import { service } from "@ember/service";
 import DiscourseRoute from "discourse/routes/discourse";
-import { inject as service } from "@ember/service";
+import I18n from "I18n";
+import { findCustomWizard, updateCachedWizard } from "../models/custom-wizard";
 
 export default DiscourseRoute.extend({
   dialog: service(),

@@ -1,12 +1,13 @@
+import { A } from "@ember/array";
+import EmberObject from "@ember/object";
+import { dasherize } from "@ember/string";
 import { ajax } from "discourse/lib/ajax";
 import { default as discourseComputed } from "discourse-common/utils/decorators";
-import EmberObject from "@ember/object";
-import { A } from "@ember/array";
 
 const CustomWizardApi = EmberObject.extend({
   @discourseComputed("name")
   redirectUri(name) {
-    let nameParam = name.toString().dasherize();
+    let nameParam = dasherize(name);
     const baseUrl =
       location.protocol +
       "//" +

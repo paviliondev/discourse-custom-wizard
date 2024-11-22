@@ -1,21 +1,22 @@
-import { alias, gt, or } from "@ember/object/computed";
+import { getOwner } from "@ember/application";
+import Component from "@ember/component";
 import { computed } from "@ember/object";
+import { alias, gt, or } from "@ember/object/computed";
+import { bind, later } from "@ember/runloop";
+import { service } from "@ember/service";
+import $ from "jquery";
 import {
   default as discourseComputed,
   observes,
 } from "discourse-common/utils/decorators";
-import { getOwner } from "@ember/application";
-import { defaultSelectionType, selectionTypes } from "../lib/wizard-mapper";
+import I18n from "I18n";
 import {
   generateName,
   sentenceCase,
   snakeCase,
   userProperties,
 } from "../lib/wizard";
-import Component from "@ember/component";
-import { bind, later } from "@ember/runloop";
-import I18n from "I18n";
-import { inject as service } from "@ember/service";
+import { defaultSelectionType, selectionTypes } from "../lib/wizard-mapper";
 
 const customFieldActionMap = {
   topic: ["create_topic", "send_message"],
@@ -134,9 +135,7 @@ export default Component.extend({
   listEnabled: computed("options.listSelection", "inputType", function () {
     return this.optionEnabled("listSelection");
   }),
-  valueEnabled: computed("connector", function () {
-    return this.connector === "is";
-  }),
+  valueEnabled: computed.equal("connector", "is"),
 
   @discourseComputed(
     "site.groups",
@@ -179,6 +178,7 @@ export default Component.extend({
   showTypes: false,
 
   didInsertElement() {
+    this._super(...arguments);
     if (
       !this.activeType ||
       (this.activeType && !this[`${this.activeType}Enabled`])
@@ -190,6 +190,7 @@ export default Component.extend({
   },
 
   willDestroyElement() {
+    this._super(...arguments);
     $(document).off("click", bind(this, this.documentClick));
   },
 

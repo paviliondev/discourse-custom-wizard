@@ -7,9 +7,9 @@ import {
   query,
   visible,
 } from "discourse/tests/helpers/qunit-helpers";
-import { allFieldsWizard } from "../helpers/wizard";
 import tagsJson from "../fixtures/tags";
 import usersJson from "../fixtures/users";
+import { allFieldsWizard } from "../helpers/wizard";
 
 acceptance("Field | Fields", function (needs) {
   needs.pretender((server, helper) => {

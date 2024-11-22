@@ -1,7 +1,7 @@
-import MultiSelectComponent from "select-kit/components/multi-select";
 import { isEmpty } from "@ember/utils";
 import { searchForTerm } from "discourse/lib/search";
 import { makeArray } from "discourse-common/lib/helpers";
+import MultiSelectComponent from "select-kit/components/multi-select";
 
 export default MultiSelectComponent.extend({
   classNames: ["topic-selector", "wizard-topic-selector"],

@@ -1,10 +1,11 @@
-import Controller from "@ember/controller";
-import { observes } from "discourse-common/utils/decorators";
-import { empty } from "@ember/object/computed";
-import CustomWizardManager from "../models/custom-wizard-manager";
 import { A } from "@ember/array";
-import I18n from "I18n";
+import Controller from "@ember/controller";
+import { empty } from "@ember/object/computed";
 import { underscore } from "@ember/string";
+import $ from "jquery";
+import { observes } from "discourse-common/utils/decorators";
+import I18n from "I18n";
+import CustomWizardManager from "../models/custom-wizard-manager";
 
 export default Controller.extend({
   messageUrl:

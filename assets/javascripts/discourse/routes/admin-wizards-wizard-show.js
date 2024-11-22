@@ -1,8 +1,8 @@
-import CustomWizardAdmin from "../models/custom-wizard-admin";
+import { service } from "@ember/service";
 import { ajax } from "discourse/lib/ajax";
 import DiscourseRoute from "discourse/routes/discourse";
 import I18n from "I18n";
-import { inject as service } from "@ember/service";
+import CustomWizardAdmin from "../models/custom-wizard-admin";
 
 export default DiscourseRoute.extend({
   router: service(),

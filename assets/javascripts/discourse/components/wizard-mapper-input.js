@@ -1,5 +1,8 @@
+import { A } from "@ember/array";
+import Component from "@ember/component";
 import { computed, set } from "@ember/object";
 import { alias, equal, not, or } from "@ember/object/computed";
+import { observes } from "discourse-common/utils/decorators";
 import {
   connectorContent,
   defaultConnector,
@@ -7,9 +10,6 @@ import {
   inputTypesContent,
   newPair,
 } from "../lib/wizard-mapper";
-import Component from "@ember/component";
-import { observes } from "discourse-common/utils/decorators";
-import { A } from "@ember/array";
 
 export default Component.extend({
   classNameBindings: [":mapper-input", "inputType"],

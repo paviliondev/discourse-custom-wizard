@@ -1,13 +1,13 @@
+import { A } from "@ember/array";
+import Component from "@ember/component";
+import EmberObject from "@ember/object";
+import { notEmpty } from "@ember/object/computed";
 import discourseComputed from "discourse-common/utils/decorators";
 import { generateName } from "../lib/wizard";
 import {
-  setWizardDefaults,
   default as wizardSchema,
+  setWizardDefaults,
 } from "../lib/wizard-schema";
-import { notEmpty } from "@ember/object/computed";
-import EmberObject from "@ember/object";
-import Component from "@ember/component";
-import { A } from "@ember/array";
 
 export default Component.extend({
   classNameBindings: [":wizard-links", "itemType"],

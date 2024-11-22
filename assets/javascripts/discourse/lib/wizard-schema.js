@@ -23,7 +23,6 @@ const wizard = {
   required: ["id"],
   dependent: {
     after_time: "after_time_scheduled",
-    after_time: "after_time_groups",
   },
   objectArrays: {
     step: {

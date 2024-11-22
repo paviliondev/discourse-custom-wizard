@@ -1,12 +1,12 @@
-import WizardFieldValidator from "discourse/plugins/discourse-custom-wizard/discourse/components/validator";
-import { deepMerge } from "discourse-common/lib/object";
-import discourseComputed, { observes } from "discourse-common/utils/decorators";
-import { cancel, later } from "@ember/runloop";
 import { A } from "@ember/array";
 import EmberObject, { computed } from "@ember/object";
 import { and, equal, notEmpty } from "@ember/object/computed";
-import { categoryBadgeHTML } from "discourse/helpers/category-link";
+import { cancel, later } from "@ember/runloop";
 import { dasherize } from "@ember/string";
+import { categoryBadgeHTML } from "discourse/helpers/category-link";
+import { deepMerge } from "discourse-common/lib/object";
+import discourseComputed, { observes } from "discourse-common/utils/decorators";
+import WizardFieldValidator from "discourse/plugins/discourse-custom-wizard/discourse/components/validator";
 
 export default WizardFieldValidator.extend({
   classNames: ["similar-topics-validator"],

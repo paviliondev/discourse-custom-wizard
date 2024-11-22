@@ -1,6 +1,6 @@
+import EmberObject from "@ember/object";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
-import EmberObject from "@ember/object";
 import getURL from "discourse-common/lib/get-url";
 
 const CustomWizardManager = EmberObject.extend();

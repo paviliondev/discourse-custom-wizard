@@ -1,9 +1,9 @@
+import { action } from "@ember/object";
+import Route from "@ember/routing/route";
+import { service } from "@ember/service";
+import { scrollTop } from "discourse/mixins/scroll-top";
 import I18n from "I18n";
 import { getCachedWizard } from "../models/custom-wizard";
-import Route from "@ember/routing/route";
-import { scrollTop } from "discourse/mixins/scroll-top";
-import { action } from "@ember/object";
-import { inject as service } from "@ember/service";
 
 export default Route.extend({
   router: service(),

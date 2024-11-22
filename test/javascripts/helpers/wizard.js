@@ -1,9 +1,9 @@
-import wizardJson from "../fixtures/wizard";
-import userJson from "../fixtures/user";
+import { cloneJSON } from "discourse-common/lib/object";
 import categoriesJson from "../fixtures/categories";
 import groupsJson from "../fixtures/groups";
 import updateJson from "../fixtures/update";
-import { cloneJSON } from "discourse-common/lib/object";
+import userJson from "../fixtures/user";
+import wizardJson from "../fixtures/wizard";
 
 const wizardNoUser = cloneJSON(wizardJson);
 const wizardGuest = cloneJSON(wizardJson);

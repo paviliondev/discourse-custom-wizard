@@ -1,5 +1,5 @@
-import CustomWizardAdmin from "../../models/custom-wizard-admin";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import CustomWizardAdmin from "../../models/custom-wizard-admin";
 
 export default {
   setupComponent(attrs, component) {

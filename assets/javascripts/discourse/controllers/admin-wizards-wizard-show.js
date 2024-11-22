@@ -1,18 +1,19 @@
+import Controller from "@ember/controller";
+import { action } from "@ember/object";
+import { notEmpty } from "@ember/object/computed";
+import { later, scheduleOnce } from "@ember/runloop";
+import { service } from "@ember/service";
+import { dasherize } from "@ember/string";
+import $ from "jquery";
+import copyText from "discourse/lib/copy-text";
 import {
   default as discourseComputed,
   observes,
 } from "discourse-common/utils/decorators";
-import { notEmpty } from "@ember/object/computed";
-import { inject as service } from "@ember/service";
-import NextSessionScheduledModal from "../components/modal/next-session-scheduled";
-import { generateId, wizardFieldList } from "../lib/wizard";
-import { dasherize } from "@ember/string";
-import { later, scheduleOnce } from "@ember/runloop";
-import Controller from "@ember/controller";
-import copyText from "discourse/lib/copy-text";
 import I18n from "I18n";
 import { filterValues } from "discourse/plugins/discourse-custom-wizard/discourse/lib/wizard-schema";
-import { action } from "@ember/object";
+import NextSessionScheduledModal from "../components/modal/next-session-scheduled";
+import { generateId, wizardFieldList } from "../lib/wizard";
 
 export default Controller.extend({
   modal: service(),
@@ -28,7 +29,11 @@ export default Controller.extend({
       this.set("currentField", fields && fields.length ? fields[0] : null);
     }
 
-    scheduleOnce("afterRender", () => $("body").addClass("admin-wizard"));
+    scheduleOnce("afterRender", this, this._addBodyClass);
+  },
+
+  _addBodyClass() {
+    $("body").addClass("admin-wizard");
   },
 
   @observes("wizard.name")

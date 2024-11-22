@@ -1,6 +1,6 @@
 import Component from "@ember/component";
-import discourseComputed, { observes } from "discourse-common/utils/decorators";
 import { alias, equal, or } from "@ember/object/computed";
+import discourseComputed, { observes } from "discourse-common/utils/decorators";
 import I18n from "I18n";
 
 export default Component.extend({
@@ -17,6 +17,7 @@ export default Component.extend({
   isExternal: equal("field.id", "external"),
 
   didInsertElement() {
+    this._super(...arguments);
     this.set("originalField", JSON.parse(JSON.stringify(this.field)));
   },
 

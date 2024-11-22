@@ -1,5 +1,5 @@
-import EmberObject from "@ember/object";
 import { A } from "@ember/array";
+import EmberObject from "@ember/object";
 import I18n from "I18n";
 
 // Inputs

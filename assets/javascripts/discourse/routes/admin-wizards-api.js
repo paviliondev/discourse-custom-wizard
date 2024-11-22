@@ -1,6 +1,6 @@
+import { service } from "@ember/service";
 import DiscourseRoute from "discourse/routes/discourse";
 import CustomWizardApi from "../models/custom-wizard-api";
-import { inject as service } from "@ember/service";
 
 export default DiscourseRoute.extend({
   router: service(),

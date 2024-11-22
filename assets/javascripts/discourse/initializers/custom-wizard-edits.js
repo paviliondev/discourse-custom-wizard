@@ -1,8 +1,8 @@
-import DiscourseURL from "discourse/lib/url";
-import { withPluginApi } from "discourse/lib/plugin-api";
-import getUrl from "discourse-common/lib/get-url";
-import { popupAjaxError } from "discourse/lib/ajax-error";
 import { ajax } from "discourse/lib/ajax";
+import { popupAjaxError } from "discourse/lib/ajax-error";
+import { withPluginApi } from "discourse/lib/plugin-api";
+import DiscourseURL from "discourse/lib/url";
+import getUrl from "discourse-common/lib/get-url";
 import CustomWizardTextareaEditor from "../components/custom-wizard-textarea-editor";
 
 export default {

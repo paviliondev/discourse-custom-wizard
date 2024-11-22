@@ -1,9 +1,9 @@
 import EmberObject from "@ember/object";
-import ValidState from "discourse/plugins/discourse-custom-wizard/discourse/mixins/valid-state";
+import { later } from "@ember/runloop";
 import { ajax } from "discourse/lib/ajax";
 import discourseComputed from "discourse-common/utils/decorators";
-import { later } from "@ember/runloop";
 import { translationOrText } from "discourse/plugins/discourse-custom-wizard/discourse/lib/wizard";
+import ValidState from "discourse/plugins/discourse-custom-wizard/discourse/mixins/valid-state";
 
 export default EmberObject.extend(ValidState, {
   id: null,

@@ -1,14 +1,15 @@
-import discourseComputed, { observes } from "discourse-common/utils/decorators";
 import Component from "@ember/component";
-import getUrl from "discourse-common/lib/get-url";
-import { htmlSafe } from "@ember/template";
+import { alias, not, or } from "@ember/object/computed";
 import { schedule } from "@ember/runloop";
+import { htmlSafe } from "@ember/template";
+import $ from "jquery";
 import { cook } from "discourse/lib/text";
+import getUrl from "discourse-common/lib/get-url";
+import discourseLater from "discourse-common/lib/later";
+import discourseComputed, { observes } from "discourse-common/utils/decorators";
 import CustomWizard, {
   updateCachedWizard,
 } from "discourse/plugins/discourse-custom-wizard/discourse/models/custom-wizard";
-import { alias, not, or } from "@ember/object/computed";
-import discourseLater from "discourse-common/lib/later";
 import { wizardComposerEdtiorEventPrefix } from "./custom-wizard-composer-editor";
 
 const uploadStartedEventKeys = ["upload-started"];
@@ -181,7 +182,7 @@ export default Component.extend({
     },
 
     showMessage(message) {
-      this.sendAction(message);
+      this.showMessage(message);
     },
 
     stylingDropdownChanged(id, value) {

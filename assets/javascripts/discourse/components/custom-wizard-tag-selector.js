@@ -1,5 +1,5 @@
-import TagChooser from "select-kit/components/tag-chooser";
 import { makeArray } from "discourse-common/lib/helpers";
+import TagChooser from "select-kit/components/tag-chooser";
 
 export default TagChooser.extend({
   _transformJson(context, json) {

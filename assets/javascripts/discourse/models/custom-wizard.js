@@ -1,11 +1,11 @@
 import EmberObject from "@ember/object";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
-import discourseComputed from "discourse-common/utils/decorators";
+import DiscourseURL from "discourse/lib/url";
 import getUrl from "discourse-common/lib/get-url";
+import discourseComputed from "discourse-common/utils/decorators";
 import CustomWizardField from "./custom-wizard-field";
 import CustomWizardStep from "./custom-wizard-step";
-import DiscourseURL from "discourse/lib/url";
 
 const CustomWizard = EmberObject.extend({
   @discourseComputed("steps.length")

@@ -1,11 +1,11 @@
 import EmberObject from "@ember/object";
-import { buildProperties, mapped, present } from "../lib/wizard-json";
-import { listProperties, snakeCase } from "../lib/wizard";
-import wizardSchema from "../lib/wizard-schema";
 import { Promise } from "rsvp";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import discourseComputed from "discourse-common/utils/decorators";
+import { listProperties, snakeCase } from "../lib/wizard";
+import { buildProperties, mapped, present } from "../lib/wizard-json";
+import wizardSchema from "../lib/wizard-schema";
 
 const GUEST_GROUP_ID = -1;
 
@@ -132,7 +132,7 @@ const CustomWizardAdmin = EmberObject.extend({
     if (property === "api_body") {
       try {
         value = JSON.parse(value);
-      } catch (e) {
+      } catch {
         result.error = {
           type: "invalid",
           params: { type, property },

@@ -1,10 +1,10 @@
-import UppyUpload from "discourse/lib/uppy/uppy-upload";
 import Component from "@ember/component";
+import { action } from "@ember/object";
 import { getOwner } from "@ember/owner";
 import { service } from "@ember/service";
+import UppyUpload from "discourse/lib/uppy/uppy-upload";
 import discourseComputed from "discourse-common/utils/decorators";
 import I18n from "discourse-i18n";
-import { action } from "@ember/object";
 
 export default class CustomWizardFieldUpload extends Component {
   @service siteSettings;

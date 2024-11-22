@@ -1,6 +1,6 @@
-import Mixin from "@ember/object/mixin";
 import { getOwner } from "@ember/application";
 import { readOnly } from "@ember/object/computed";
+import Mixin from "@ember/object/mixin";
 import discourseComputed from "discourse-common/utils/decorators";
 
 const PRODUCT_PAGE = "https://custom-wizard.pavilion.tech/pricing";

@@ -1,10 +1,10 @@
-import DiscourseRoute from "discourse/routes/discourse";
-import { buildFieldTypes, buildFieldValidations } from "../lib/wizard-schema";
-import EmberObject, { set } from "@ember/object";
 import { A } from "@ember/array";
+import EmberObject, { set } from "@ember/object";
+import { service } from "@ember/service";
 import { all } from "rsvp";
 import { ajax } from "discourse/lib/ajax";
-import { inject as service } from "@ember/service";
+import DiscourseRoute from "discourse/routes/discourse";
+import { buildFieldTypes, buildFieldValidations } from "../lib/wizard-schema";
 
 export default DiscourseRoute.extend({
   router: service(),

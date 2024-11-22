@@ -1,5 +1,6 @@
 import Component from "@ember/component";
 import { bind } from "@ember/runloop";
+import $ from "jquery";
 import { observes } from "discourse-common/utils/decorators";
 
 export default Component.extend({
@@ -7,10 +8,12 @@ export default Component.extend({
   showTopics: true,
 
   didInsertElement() {
+    this._super(...arguments);
     $(document).on("click", bind(this, this.documentClick));
   },
 
   willDestroyElement() {
+    this._super(...arguments);
     $(document).off("click", bind(this, this.documentClick));
   },
 

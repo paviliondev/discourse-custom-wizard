@@ -1,7 +1,7 @@
-import { connectorContent } from "../lib/wizard-mapper";
-import { alias, gt } from "@ember/object/computed";
-import { computed } from "@ember/object";
 import Component from "@ember/component";
+import { computed } from "@ember/object";
+import { alias, gt } from "@ember/object/computed";
+import { connectorContent } from "../lib/wizard-mapper";
 
 export default Component.extend({
   classNameBindings: [":mapper-pair", "hasConnector::no-connector"],

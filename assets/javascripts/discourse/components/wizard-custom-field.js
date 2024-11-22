@@ -1,10 +1,10 @@
-import { default as discourseComputed } from "discourse-common/utils/decorators";
-import { equal, or } from "@ember/object/computed";
-import { computed } from "@ember/object";
-import { selectKitContent } from "../lib/wizard";
-import UndoChanges from "../mixins/undo-changes";
 import Component from "@ember/component";
+import { computed } from "@ember/object";
+import { equal, or } from "@ember/object/computed";
+import { default as discourseComputed } from "discourse-common/utils/decorators";
+import { selectKitContent } from "../lib/wizard";
 import wizardSchema from "../lib/wizard-schema";
+import UndoChanges from "../mixins/undo-changes";
 
 export default Component.extend(UndoChanges, {
   componentType: "field",

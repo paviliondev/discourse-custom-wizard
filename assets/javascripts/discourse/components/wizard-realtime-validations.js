@@ -1,7 +1,7 @@
 import Component from "@ember/component";
 import EmberObject from "@ember/object";
-import { cloneJSON } from "discourse-common/lib/object";
 import Category from "discourse/models/category";
+import { cloneJSON } from "discourse-common/lib/object";
 import discourseComputed from "discourse-common/utils/decorators";
 import I18n from "I18n";
 

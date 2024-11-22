@@ -1,9 +1,9 @@
 import Component from "@ember/component";
-import { gt } from "@ember/object/computed";
 import { computed } from "@ember/object";
-import { defaultConnector } from "../lib/wizard-mapper";
+import { gt } from "@ember/object/computed";
 import { later } from "@ember/runloop";
 import I18n from "I18n";
+import { defaultConnector } from "../lib/wizard-mapper";
 
 export default Component.extend({
   classNameBindings: [
@@ -19,6 +19,7 @@ export default Component.extend({
   }),
 
   didReceiveAttrs() {
+    this._super();
     if (!this.connector) {
       later(() => {
         this.set(

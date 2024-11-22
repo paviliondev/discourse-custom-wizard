@@ -1,13 +1,14 @@
-import { newInput, selectionTypes } from "../lib/wizard-mapper";
-import discourseComputed from "discourse-common/utils/decorators";
-import { later } from "@ember/runloop";
-import Component from "@ember/component";
 import { A } from "@ember/array";
+import Component from "@ember/component";
+import { later } from "@ember/runloop";
+import discourseComputed from "discourse-common/utils/decorators";
+import { newInput, selectionTypes } from "../lib/wizard-mapper";
 
 export default Component.extend({
   classNames: "wizard-mapper",
 
   didReceiveAttrs() {
+    this._super();
     if (this.inputs && this.inputs.constructor !== Array) {
       later(() => this.set("inputs", null));
     }

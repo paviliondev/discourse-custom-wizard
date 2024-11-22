@@ -1,9 +1,10 @@
-import discourseComputed from "discourse-common/utils/decorators";
-import { notEmpty } from "@ember/object/computed";
-import { userProperties } from "../lib/wizard";
-import { scheduleOnce } from "@ember/runloop";
 import Component from "@ember/component";
+import { notEmpty } from "@ember/object/computed";
+import { scheduleOnce } from "@ember/runloop";
+import $ from "jquery";
+import discourseComputed from "discourse-common/utils/decorators";
 import I18n from "I18n";
+import { userProperties } from "../lib/wizard";
 
 const excludedUserProperties = ["profile_background", "card_background"];
 
@@ -19,10 +20,12 @@ export default Component.extend({
     this._super(...arguments);
 
     if (!this.barEnabled) {
-      scheduleOnce("afterRender", () => {
-        $(this.element).find(".d-editor-button-bar").addClass("hidden");
-      });
+      scheduleOnce("afterRender", this, this._hideButtonBar);
     }
+  },
+
+  _hideButtonBar() {
+    $(this.element).find(".d-editor-button-bar").addClass("hidden");
   },
 
   @discourseComputed("forcePreview")

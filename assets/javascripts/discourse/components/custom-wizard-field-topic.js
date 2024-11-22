@@ -4,6 +4,7 @@ export default Component.extend({
   topics: [],
 
   didInsertElement() {
+    this._super(...arguments);
     const value = this.field.value;
 
     if (value) {
