@@ -51,7 +51,11 @@
       disabled=this.saveDisabled
       class="save"
     }}
-    {{d-button action=(action "close") icon="times" disabled=this.closeDisabled}}
+    {{d-button
+      action=(action "close")
+      icon="times"
+      disabled=this.closeDisabled
+    }}
   </td>
 {{else}}
   <td><label>{{this.field.klass}}</label></td>

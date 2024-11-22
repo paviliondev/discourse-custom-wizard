@@ -31,19 +31,16 @@ export default Controller.extend({
           }
         }
 
-        setTimeout(
-          () => {
-            if (this.isDestroyed) {
-              return;
-            }
-            this.setProperties({
-              messageKey: "create",
-              messageType: null,
-              messageOpts: null,
-            });
-          },
-          10000
-        );
+        setTimeout(() => {
+          if (this.isDestroyed) {
+            return;
+          }
+          this.setProperties({
+            messageKey: "create",
+            messageType: null,
+            messageOpts: null,
+          });
+        }, 10000);
 
         return result;
       });

@@ -13,7 +13,6 @@ import {
   getUnsubscribedAdminWizards,
   getWizard,
 } from "../helpers/admin-wizard";
-import { Promise } from "rsvp";
 
 acceptance("Admin | Custom Fields Unsubscribed", function (needs) {
   needs.user();

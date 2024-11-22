@@ -181,7 +181,11 @@
     {{/wizard-subscription-container}}
   </div>
 
-  {{wizard-links itemType="step" current=this.currentStep items=this.wizard.steps}}
+  {{wizard-links
+    itemType="step"
+    current=this.currentStep
+    items=this.wizard.steps
+  }}
 
   {{#if this.currentStep}}
     {{wizard-custom-step

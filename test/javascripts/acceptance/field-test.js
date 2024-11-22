@@ -1,16 +1,8 @@
-import { getOwner } from "@ember/application";
-import {
-  click,
-  fillIn,
-  settled,
-  triggerKeyEvent,
-  visit,
-} from "@ember/test-helpers";
+import { click, fillIn, triggerKeyEvent, visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import {
   acceptance,
   count,
-  createFile,
   exists,
   query,
   visible,
@@ -18,8 +10,6 @@ import {
 import { allFieldsWizard } from "../helpers/wizard";
 import tagsJson from "../fixtures/tags";
 import usersJson from "../fixtures/users";
-
-const wizardComposerEdtiorEventPrefix = "wizard-editor";
 
 acceptance("Field | Fields", function (needs) {
   needs.pretender((server, helper) => {

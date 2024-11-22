@@ -28,7 +28,7 @@ export default Controller.extend({
     setTimeout(() => {
       if (this.isDestroyed) {
         return;
-      };
+      }
       this.setProperties({
         messageKey: "info",
         messageOpts: null,

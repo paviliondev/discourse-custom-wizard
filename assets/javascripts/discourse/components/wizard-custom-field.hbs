@@ -271,7 +271,10 @@
     </div>
 
     <div class="setting-value">
-      {{wizard-mapper inputs=this.field.condition options=this.fieldConditionOptions}}
+      {{wizard-mapper
+        inputs=this.field.condition
+        options=this.fieldConditionOptions
+      }}
     </div>
   </div>
 
@@ -303,6 +306,9 @@
   {{/if}}
 
   {{#if this.validations}}
-    {{wizard-realtime-validations field=this.field validations=this.validations}}
+    {{wizard-realtime-validations
+      field=this.field
+      validations=this.validations
+    }}
   {{/if}}
 {{/wizard-subscription-container}}

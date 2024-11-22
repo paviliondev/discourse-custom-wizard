@@ -1,12 +1,22 @@
-{{d-editor value=this.value forcePreview=this.forcePreview placeholder=this.placeholder}}
+{{d-editor
+  value=this.value
+  forcePreview=this.forcePreview
+  placeholder=this.placeholder
+}}
 
 <div class="wizard-editor-gutter">
   {{#if this.previewEnabled}}
-    {{d-button action=(action "togglePreview") translatedLabel=this.previewLabel}}
+    {{d-button
+      action=(action "togglePreview")
+      translatedLabel=this.previewLabel
+    }}
   {{/if}}
 
   {{#if this.fieldsEnabled}}
-    {{d-button action=(action "togglePopover") translatedLabel=this.popoverLabel}}
+    {{d-button
+      action=(action "togglePopover")
+      translatedLabel=this.popoverLabel
+    }}
 
     {{#if this.showPopover}}
       <div class="wizard-editor-gutter-popover">

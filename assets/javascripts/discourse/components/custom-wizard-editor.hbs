@@ -2,7 +2,9 @@
 
 <div class="d-editor-container">
   {{#if this.showPreview}}
-    <div class="d-editor-preview-wrapper {{if this.forcePreview 'force-preview'}}">
+    <div
+      class="d-editor-preview-wrapper {{if this.forcePreview 'force-preview'}}"
+    >
       <div class="d-editor-preview">
         {{html-safe this.preview}}
       </div>

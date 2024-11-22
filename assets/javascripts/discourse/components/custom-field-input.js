@@ -122,7 +122,7 @@ export default Component.extend({
         setTimeout(() => {
           if (this.isDestroyed) {
             return;
-          };
+          }
           this.set("saveIcon", null);
         }, 10000);
       });
