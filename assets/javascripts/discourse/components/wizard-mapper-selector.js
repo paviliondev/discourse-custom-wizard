@@ -1,7 +1,7 @@
 import { getOwner } from "@ember/application";
 import Component from "@ember/component";
 import { computed } from "@ember/object";
-import { alias, gt, or } from "@ember/object/computed";
+import { alias, gt, or, equal } from "@ember/object/computed";
 import { bind, later } from "@ember/runloop";
 import { service } from "@ember/service";
 import $ from "jquery";
@@ -135,7 +135,7 @@ export default Component.extend({
   listEnabled: computed("options.listSelection", "inputType", function () {
     return this.optionEnabled("listSelection");
   }),
-  valueEnabled: computed.equal("connector", "is"),
+  valueEnabled: equal("connector", "is"),
 
   @discourseComputed(
     "site.groups",
