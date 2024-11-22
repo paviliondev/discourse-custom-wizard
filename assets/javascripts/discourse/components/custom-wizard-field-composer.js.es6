@@ -19,6 +19,7 @@ export default Component.extend({
       EmberObject.create({
         loading: false,
         reply: this.get("field.value") || "",
+        afterRefresh: () => {},
       })
     );
   },

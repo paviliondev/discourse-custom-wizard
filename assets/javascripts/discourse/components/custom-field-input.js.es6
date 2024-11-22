@@ -119,7 +119,12 @@ export default Component.extend({
         } else {
           this.set("saveIcon", "times");
         }
-        setTimeout(() => this.set("saveIcon", null), 10000);
+        setTimeout(() => {
+          if (this.isDestroyed) {
+            return;
+          };
+          this.set("saveIcon", null);
+        }, 10000);
       });
     },
   },

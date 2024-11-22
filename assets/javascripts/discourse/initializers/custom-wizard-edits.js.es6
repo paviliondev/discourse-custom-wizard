@@ -4,6 +4,7 @@ import getUrl from "discourse-common/lib/get-url";
 import { observes } from "discourse-common/utils/decorators";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import { ajax } from "discourse/lib/ajax";
+import CustomWizardTextareaEditor from "../components/custom-wizard-textarea-editor";
 
 export default {
   name: "custom-wizard-edits",
@@ -39,19 +40,13 @@ export default {
         },
       });
 
-      api.modifyClass("component:uppy-image-uploader", {
-        pluginId: "custom-wizard",
-        // Needed to ensure appEvents get registered when navigating between steps
-        @observes("id")
-        initOnStepChange() {
-          if (/wizard-field|wizard-step/.test(this.id)) {
-            this._initialize();
-          }
-        },
-      });
-
       api.modifyClass("component:d-editor", {
         pluginId: "custom-wizard",
+
+        init() {
+          this._super(...arguments);
+          this.editorComponent = CustomWizardTextareaEditor;
+        },
 
         didInsertElement() {
           this._super(...arguments);
