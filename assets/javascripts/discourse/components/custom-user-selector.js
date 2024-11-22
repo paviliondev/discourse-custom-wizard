@@ -1,13 +1,14 @@
+import { isEmpty } from "@ember/utils";
+import Handlebars from "handlebars";
+import $ from "jquery";
+import TextField from "discourse/components/text-field";
+import { renderAvatar } from "discourse/helpers/user-avatar";
+import userSearch from "discourse/lib/user-search";
 import {
   default as computed,
   observes,
 } from "discourse-common/utils/decorators";
-import { renderAvatar } from "discourse/helpers/user-avatar";
-import userSearch from "discourse/lib/user-search";
 import I18n from "I18n";
-import Handlebars from "handlebars";
-import { isEmpty } from "@ember/utils";
-import TextField from "discourse/components/text-field";
 
 const template = function (params) {
   const options = params.options;
