@@ -1,0 +1,22 @@
+{{#each this.inputs as |input|}}
+  {{#if input.connector}}
+    {{wizard-mapper-connector
+      connector=input.connector
+      connectorType="input"
+      onUpdate=(action "inputUpdated")
+    }}
+  {{/if}}
+
+  {{wizard-mapper-input
+    input=input
+    options=this.inputOptions
+    remove=(action "remove")
+    onUpdate=(action "inputUpdated")
+  }}
+{{/each}}
+
+{{#if this.canAdd}}
+  <span class="add-mapper-input">
+    {{d-button action=(action "add") label="admin.wizard.add" icon="plus"}}
+  </span>
+{{/if}}

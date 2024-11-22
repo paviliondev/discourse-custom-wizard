@@ -11,26 +11,26 @@
 </div>
 
 {{wizard-message
-  key=messageKey
-  opts=messageOpts
-  type=messageType
-  url=documentationUrl
+  key=this.messageKey
+  opts=this.messageOpts
+  type=this.messageType
+  url=this.documentationUrl
   component="custom_fields"
 }}
 
 <div class="admin-wizard-container">
-  {{#if customFields}}
+  {{#if this.customFields}}
     <table>
       <thead>
         <tr>
-          {{#each fieldKeys as |key|}}
+          {{#each this.fieldKeys as |key|}}
             <th>{{i18n (concat "admin.wizard.custom_field." key ".label")}}</th>
           {{/each}}
           <th></th>
         </tr>
       </thead>
       <tbody>
-        {{#each customFields as |field|}}
+        {{#each this.customFields as |field|}}
           {{custom-field-input
             field=field
             removeField=(action "removeField")

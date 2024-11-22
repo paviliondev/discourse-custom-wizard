@@ -1,16 +1,16 @@
 <div class="admin-wizard-select admin-wizard-controls">
   {{combo-box
-    value=wizardId
-    content=wizardList
+    value=this.wizardId
+    content=this.wizardList
     onChange=(route-action "changeWizard")
     options=(hash none="admin.wizard.select")
   }}
 </div>
 
 {{wizard-message
-  key=messageKey
-  opts=messageOpts
-  url=documentationUrl
+  key=this.messageKey
+  opts=this.messageOpts
+  url=this.documentationUrl
   component="submissions"
 }}
 

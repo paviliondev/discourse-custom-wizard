@@ -1,11 +1,11 @@
+import { click, fillIn, visit } from "@ember/test-helpers";
+import { test } from "qunit";
 import {
   acceptance,
   query,
   queryAll,
   visible,
 } from "discourse/tests/helpers/qunit-helpers";
-import { test } from "qunit";
-import { click, fillIn, visit, waitUntil } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 import {
   getCustomFields,
@@ -13,7 +13,6 @@ import {
   getUnsubscribedAdminWizards,
   getWizard,
 } from "../helpers/admin-wizard";
-import { Promise } from "rsvp";
 
 acceptance("Admin | Custom Fields Unsubscribed", function (needs) {
   needs.user();
@@ -71,25 +70,6 @@ acceptance("Admin | Custom Fields Unsubscribed", function (needs) {
       ".admin-wizard-container input",
       name.toLowerCase().replace(/ /g, "_")
     );
-  }
-
-  async function waitForSaveMessage() {
-    // Wait for the "Saved custom field" message to appear
-    await waitUntil(
-      () =>
-        document.querySelector(".message-content")?.innerText ===
-        "Saved custom field",
-      { timeout: 5000 }
-    );
-
-    // Wait for the message to change back to the original text
-    await waitUntil(
-      () =>
-        document.querySelector(".message-content")?.innerText ===
-        "View, create, edit and destroy custom fields",
-      { timeout: 15000 }
-    );
-    await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 
   test("Navigate to custom fields tab", async (assert) => {
@@ -222,8 +202,6 @@ acceptance("Admin | Custom Fields Unsubscribed", function (needs) {
     );
 
     await click(".actions .save");
-    // Wait for the "Saved custom field" message to appear
-    await waitForSaveMessage();
     assert.ok(
       query(
         ".admin-wizard-container tbody tr:first-child td:nth-child(1) label"
@@ -253,8 +231,6 @@ acceptance("Admin | Custom Fields Unsubscribed", function (needs) {
     );
 
     await click(".actions .save");
-    // Wait for the "Saved custom field" message to appear
-    await waitForSaveMessage();
     assert.ok(
       query(
         ".admin-wizard-container tbody tr:first-child td:nth-child(1) label"
@@ -287,7 +263,6 @@ acceptance("Admin | Custom Fields Unsubscribed", function (needs) {
       "Filter by: Select a type"
     );
     await click(".actions .save");
-    await waitForSaveMessage();
     await click(".admin-wizard-container tbody tr:first-child button");
     await selectTypeAndSerializerAndFillInName(
       "Boolean",
@@ -296,7 +271,6 @@ acceptance("Admin | Custom Fields Unsubscribed", function (needs) {
       "Filter by: String"
     );
     await click(".admin-wizard-container tbody tr:first-child .save");
-    await waitForSaveMessage();
     assert.ok(
       query(
         ".admin-wizard-container tbody tr:first-child td:nth-child(1) label"
@@ -348,7 +322,6 @@ acceptance("Admin | Custom Fields Unsubscribed", function (needs) {
       "Filter by: Select a type"
     );
     await click(".actions .save");
-    await waitForSaveMessage();
     assert.ok(
       queryAll("table tbody tr").length === 5,
       "Display added custom fields"

@@ -1,6 +1,6 @@
 import Component from "@glimmer/component";
 import { computed } from "@ember/object";
-import { inject as service } from "@ember/service";
+import { service } from "@ember/service";
 
 export default class WizardSubscriptionContainer extends Component {
   @service subscription;

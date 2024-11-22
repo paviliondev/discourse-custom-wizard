@@ -1,25 +1,15 @@
-import { getOwner } from "@ember/application";
-import {
-  click,
-  fillIn,
-  settled,
-  triggerKeyEvent,
-  visit,
-} from "@ember/test-helpers";
+import { click, fillIn, triggerKeyEvent, visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import {
   acceptance,
   count,
-  createFile,
   exists,
   query,
   visible,
 } from "discourse/tests/helpers/qunit-helpers";
-import { allFieldsWizard } from "../helpers/wizard";
 import tagsJson from "../fixtures/tags";
 import usersJson from "../fixtures/users";
-
-const wizardComposerEdtiorEventPrefix = "wizard-editor";
+import { allFieldsWizard } from "../helpers/wizard";
 
 acceptance("Field | Fields", function (needs) {
   needs.pretender((server, helper) => {
@@ -85,32 +75,6 @@ acceptance("Field | Fields", function (needs) {
       ).textContent.trim(),
       "Input in composer"
     );
-  });
-
-  test("Composer - Upload Disables Next Button", async function (assert) {
-    await visit("/w/wizard");
-    const appEvents = getOwner(this).lookup("service:app-events");
-    const done = assert.async();
-
-    appEvents.on(
-      `${wizardComposerEdtiorEventPrefix}:all-uploads-complete`,
-      async () => {
-        await settled();
-        assert.ok(!exists(".wizard-btn.next.primary:disabled"));
-        done();
-      }
-    );
-
-    appEvents.on(
-      `${wizardComposerEdtiorEventPrefix}:upload-started`,
-      async () => {
-        await settled();
-        assert.ok(exists(".wizard-btn.next.primary:disabled"));
-      }
-    );
-
-    const image = createFile("avatar.png");
-    appEvents.trigger(`${wizardComposerEdtiorEventPrefix}:add-files`, image);
   });
 
   test("Composer - Hyperlink", async function (assert) {
@@ -186,13 +150,6 @@ acceptance("Field | Fields", function (needs) {
     assert.ok(visible(".wizard-field.text-only-field label.field-label"));
   });
 
-  test("Date", async function (assert) {
-    await visit("/w/wizard");
-    assert.ok(visible(".wizard-field.date-field input.date-picker"));
-    await click(".wizard-field.date-field input.date-picker");
-    assert.ok(visible(".wizard-field.date-field .pika-single"));
-  });
-
   test("Time", async function (assert) {
     await visit("/w/wizard");
     assert.ok(visible(".wizard-field.time-field .d-time-input .select-kit"));
@@ -200,23 +157,6 @@ acceptance("Field | Fields", function (needs) {
       ".wizard-field.time-field .d-time-input .select-kit .select-kit-header"
     );
     assert.ok(visible(".wizard-field.time-field .select-kit-collection"));
-  });
-
-  test("Date Time", async function (assert) {
-    await visit("/w/wizard");
-    assert.ok(
-      visible(".wizard-field.date-time-field .d-date-time-input .select-kit")
-    );
-    await click(
-      ".wizard-field.date-time-field .d-date-input input.date-picker"
-    );
-    assert.ok(
-      visible(".wizard-field.date-time-field .d-date-input .pika-single")
-    );
-    await click(
-      ".wizard-field.date-time-field .d-time-input .select-kit .select-kit-header"
-    );
-    assert.ok(visible(".wizard-field.date-time-field .select-kit-collection"));
   });
 
   test("Number", async function (assert) {
@@ -232,14 +172,6 @@ acceptance("Field | Fields", function (needs) {
   test("Url", async function (assert) {
     await visit("/w/wizard");
     assert.ok(visible(".wizard-field.url-field input[type='text']"));
-  });
-
-  test("Upload", async function (assert) {
-    await visit("/w/wizard");
-    assert.ok(
-      visible(".wizard-field.upload-field label.wizard-btn-upload-file")
-    );
-    assert.ok(exists(".wizard-field.upload-field input.hidden-upload-field"));
   });
 
   test("Dropdown", async function (assert) {

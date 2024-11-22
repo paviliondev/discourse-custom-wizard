@@ -1,5 +1,5 @@
-import I18n from "I18n";
 import Handlebars from "handlebars";
+import I18n from "I18n";
 
 export default function wizardCharCounter(body, maxLength) {
   let bodyLength = body ? body.length : 0;

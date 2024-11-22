@@ -1,0 +1,43 @@
+<div class="key mapper-block">
+  {{wizard-mapper-selector
+    selectorType="key"
+    inputType=this.inputType
+    value=this.pair.key
+    activeType=this.pair.key_type
+    options=this.options
+    onUpdate=this.onUpdate
+  }}
+</div>
+
+{{wizard-mapper-connector
+  connector=this.pair.connector
+  connectors=this.connectors
+  connectorType="pair"
+  inputType=this.inputType
+  options=this.options
+  onUpdate=this.onUpdate
+}}
+
+<div class="value mapper-block">
+  {{wizard-mapper-selector
+    selectorType="value"
+    inputType=this.inputType
+    value=this.pair.value
+    activeType=this.pair.value_type
+    options=this.options
+    onUpdate=this.onUpdate
+    connector=this.pair.connector
+  }}
+</div>
+
+{{#if this.showJoin}}
+  <span class="join-pair">&</span>
+{{/if}}
+
+{{#if this.showRemove}}
+  <a
+    role="button"
+    {{action this.removePair this.pair}}
+    class="remove-pair"
+  >{{d-icon "times"}}</a>
+{{/if}}

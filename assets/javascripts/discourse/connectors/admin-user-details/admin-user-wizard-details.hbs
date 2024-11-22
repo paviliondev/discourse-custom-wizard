@@ -4,21 +4,21 @@
   <div class="display-row">
     <div class="field">{{i18n "admin.wizard.user.redirect.label"}}</div>
     <div class="value">
-      {{#if model.redirect_to_wizard}}
+      {{#if @model.redirect_to_wizard}}
         <LinkTo
           @route="adminWizardsWizardShow"
-          @model={{dasherize model.redirect_to_wizard}}
+          @model={{dasherize @model.redirect_to_wizard}}
         >
-          {{model.redirect_to_wizard}}
+          {{@model.redirect_to_wizard}}
         </LinkTo>
       {{else}}
         &mdash;
       {{/if}}
     </div>
     <div class="controls">
-      {{#if model.redirect_to_wizard}}
+      {{#if @model.redirect_to_wizard}}
         <DButton
-          @action={{fn model.clearWizardRedirect model}}
+          @action={{fn @model.clearWizardRedirect @model}}
           @label="admin.wizard.user.redirect.remove_label"
           @title="admin.wizard.user.redirect.remove_title"
         />

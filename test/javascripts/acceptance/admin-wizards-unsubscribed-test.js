@@ -1,3 +1,6 @@
+import { click, currentURL, fillIn, visit } from "@ember/test-helpers";
+import $ from "jquery";
+import { test } from "qunit";
 import {
   acceptance,
   exists,
@@ -5,8 +8,6 @@ import {
   queryAll,
   visible,
 } from "discourse/tests/helpers/qunit-helpers";
-import { test } from "qunit";
-import { click, currentURL, fillIn, visit } from "@ember/test-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
 import {
   getAdminTestingWizard,

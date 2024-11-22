@@ -1,7 +1,7 @@
-{{#if submissions}}
+{{#if this.submissions}}
   <div class="wizard-header large">
     <label>
-      {{i18n "admin.wizard.submissions.title" name=wizard.name}}
+      {{i18n "admin.wizard.submissions.title" name=this.wizard.name}}
     </label>
 
     <div class="controls">
@@ -15,7 +15,7 @@
 
     <a
       class="btn btn-default download-link"
-      href={{downloadUrl}}
+      href={{this.downloadUrl}}
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -28,13 +28,13 @@
 
   <div class="wizard-table">
     {{#load-more selector=".wizard-table tr" action=(action "loadMore")}}
-      {{#if noResults}}
+      {{#if this.noResults}}
         <p>{{i18n "search.no_results"}}</p>
       {{else}}
         <table>
           <thead>
             <tr>
-              {{#each fields as |field|}}
+              {{#each this.fields as |field|}}
                 {{#if field.enabled}}
                   <th>
                     {{field.label}}
@@ -44,7 +44,7 @@
             </tr>
           </thead>
           <tbody>
-            {{#each displaySubmissions as |submission|}}
+            {{#each this.displaySubmissions as |submission|}}
               <tr>
                 {{#each-in submission as |field value|}}
                   <td>{{wizard-table-field field=field value=value}}</td>
@@ -55,7 +55,7 @@
         </table>
       {{/if}}
 
-      {{conditional-loading-spinner condition=loadingMore}}
+      {{conditional-loading-spinner condition=this.loadingMore}}
     {{/load-more}}
   </div>
 {{/if}}

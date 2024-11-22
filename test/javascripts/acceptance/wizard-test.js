@@ -1,23 +1,24 @@
 import { click, visit } from "@ember/test-helpers";
+import $ from "jquery";
 import { test } from "qunit";
+import sinon from "sinon";
+import DiscourseURL from "discourse/lib/url";
+import pretender, { response } from "discourse/tests/helpers/create-pretender";
 import {
   acceptance,
   count,
   exists,
   query,
 } from "discourse/tests/helpers/qunit-helpers";
+import I18n from "I18n";
 import {
   wizard,
   wizardCompleted,
   wizardGuest,
-  wizardNoUser,
   wizardNotPermitted,
+  wizardNoUser,
   wizardResumeOnRevisit,
 } from "../helpers/wizard";
-import DiscourseURL from "discourse/lib/url";
-import sinon from "sinon";
-import pretender, { response } from "discourse/tests/helpers/create-pretender";
-import I18n from "I18n";
 
 acceptance("Wizard | Not logged in", function (needs) {
   needs.pretender((server, helper) => {

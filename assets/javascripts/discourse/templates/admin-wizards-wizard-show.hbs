@@ -1,4 +1,4 @@
-{{#if wizard}}
+{{#if this.wizard}}
   <div class="wizard-header large">
     <Input
       @value={{this.wizard.name}}
@@ -7,8 +7,8 @@
     />
 
     <div class="wizard-url">
-      {{#if wizard.name}}
-        {{#if copiedUrl}}
+      {{#if this.wizard.name}}
+        {{#if this.copiedUrl}}
           {{d-button
             class="btn-hover pull-right"
             icon="copy"
@@ -22,10 +22,10 @@
           }}
         {{/if}}
         <a
-          href={{wizardUrl}}
+          href={{this.wizardUrl}}
           target="_blank"
           rel="noopener noreferrer"
-        >{{wizardUrl}}</a>
+        >{{this.wizardUrl}}</a>
       {{/if}}
     </div>
   </div>
@@ -51,10 +51,10 @@
       </div>
       <div class="setting-value">
         {{combo-box
-          content=themes
+          content=this.themes
           valueProperty="id"
-          value=wizard.theme_id
-          onChange=(action (mut wizard.theme_id))
+          value=this.wizard.theme_id
+          onChange=(action (mut this.wizard.theme_id))
           options=(hash none="admin.wizard.no_theme")
         }}
       </div>
@@ -115,7 +115,7 @@
         <span>{{i18n "admin.wizard.after_time_label"}}</span>
         {{d-button
           action=(action "setNextSessionScheduled")
-          translatedLabel=nextSessionScheduledLabel
+          translatedLabel=this.nextSessionScheduledLabel
           class="btn-after-time"
           icon="far-calendar"
         }}
@@ -149,7 +149,7 @@
         </div>
         <div class="setting-value">
           {{wizard-mapper
-            inputs=wizard.permitted
+            inputs=this.wizard.permitted
             options=(hash
               context="wizard"
               inputTypes="assignment,validation"
@@ -181,58 +181,62 @@
     {{/wizard-subscription-container}}
   </div>
 
-  {{wizard-links itemType="step" current=currentStep items=wizard.steps}}
+  {{wizard-links
+    itemType="step"
+    current=this.currentStep
+    items=this.wizard.steps
+  }}
 
-  {{#if currentStep}}
+  {{#if this.currentStep}}
     {{wizard-custom-step
-      step=currentStep
-      wizard=wizard
-      currentField=currentField
-      wizardFields=wizardFields
-      fieldTypes=filteredFieldTypes
-      subscribed=subscribed
+      step=this.currentStep
+      wizard=this.wizard
+      currentField=this.currentField
+      wizardFields=this.wizardFields
+      fieldTypes=this.filteredFieldTypes
+      subscribed=this.subscribed
     }}
   {{/if}}
 
   {{wizard-links
     itemType="action"
-    current=currentAction
-    items=wizard.actions
+    current=this.currentAction
+    items=this.wizard.actions
     generateLabels=true
   }}
 
-  {{#each wizard.actions as |wizardAction|}}
+  {{#each this.wizard.actions as |wizardAction|}}
     {{wizard-custom-action
       action=wizardAction
-      currentActionId=currentAction.id
-      wizard=wizard
-      apis=apis
+      currentActionId=this.currentAction.id
+      wizard=this.wizard
+      apis=this.apis
       removeAction="removeAction"
-      wizardFields=wizardFields
-      fieldTypes=filteredFieldTypes
+      wizardFields=this.wizardFields
+      fieldTypes=this.filteredFieldTypes
     }}
   {{/each}}
 
   <div class="admin-wizard-buttons">
     <button
       {{action "save"}}
-      disabled={{disableSave}}
+      disabled={{this.disableSave}}
       class="btn btn-primary"
       type="button"
     >
       {{i18n "admin.wizard.save"}}
     </button>
 
-    {{#unless creating}}
+    {{#unless this.creating}}
       <button {{action "remove"}} class="btn btn-danger remove" type="button">
         {{d-icon "far-trash-alt"}}{{i18n "admin.wizard.remove"}}
       </button>
     {{/unless}}
 
-    {{conditional-loading-spinner condition=saving size="small"}}
+    {{conditional-loading-spinner condition=this.saving size="small"}}
 
-    {{#if error}}
-      <span class="error">{{d-icon "times"}}{{error}}</span>
+    {{#if this.error}}
+      <span class="error">{{d-icon "times"}}{{this.error}}</span>
     {{/if}}
   </div>
 {{/if}}

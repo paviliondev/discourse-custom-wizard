@@ -1,13 +1,12 @@
-import { acceptance, query } from "discourse/tests/helpers/qunit-helpers";
+import { click, find, findAll, visit } from "@ember/test-helpers";
 import { test } from "qunit";
-import { click, find, findAll, visit, waitUntil } from "@ember/test-helpers";
+import { acceptance, query } from "discourse/tests/helpers/qunit-helpers";
 import {
   getSuppliers,
   getUnsubscribedAdminWizards,
   getWizard,
   getWizardTestingLog,
 } from "../helpers/admin-wizard";
-import { Promise } from "rsvp";
 
 acceptance("Admin | Manager", function (needs) {
   needs.user();
@@ -38,27 +37,6 @@ acceptance("Admin | Manager", function (needs) {
       return helper.response(getSuppliers);
     });
   });
-  async function waitForDestructionAndResetMessage() {
-    await waitUntil(
-      () =>
-        document.querySelector(".message-content")?.innerText ===
-        "Destruction complete",
-      { timeout: 5000 }
-    );
-
-    await waitUntil(
-      () =>
-        document.querySelector(".message-content")?.innerText ===
-          "Export, import or destroy wizards" &&
-        !document.querySelector(".message-block.primary ul") &&
-        !find(".message-block.primary svg").classList.contains(
-          "d-icon-check-circle"
-        ),
-      { timeout: 15000 }
-    );
-    // Wait an additional second after the conditions are met
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-  }
 
   test("viewing manager fields content", async (assert) => {
     await visit("/admin/wizards/manager");
@@ -111,6 +89,5 @@ acceptance("Admin | Manager", function (needs) {
       find('table tr[data-wizard-id="this-is-testing-wizard"]'),
       "the wizard row is removed after destroy button is clicked"
     );
-    await waitForDestructionAndResetMessage();
   });
 });

@@ -1,7 +1,7 @@
 import { click, visit } from "@ember/test-helpers";
+import { test } from "qunit";
 import { acceptance } from "discourse/tests/helpers/qunit-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
-import { test } from "qunit";
 
 acceptance("Category Chooser Initializer for regular users", function (needs) {
   needs.user({ admin: false, moderator: false });

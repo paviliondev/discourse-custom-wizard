@@ -2,12 +2,12 @@
   <h3>{{i18n "admin.wizard.manager.title"}}</h3>
 
   <div class="buttons">
-    {{#if filename}}
+    {{#if this.filename}}
       <div class="filename">
         <a role="button" {{action "clearFile"}}>
           {{d-icon "times"}}
         </a>
-        <span>{{filename}}</span>
+        <span>{{this.filename}}</span>
       </div>
     {{/if}}
 
@@ -26,30 +26,30 @@
       id="import-button"
       label="admin.wizard.manager.import"
       action=(action "import")
-      disabled=importDisabled
+      disabled=this.importDisabled
     }}
     {{d-button
       id="export-button"
       label="admin.wizard.manager.export"
       action=(action "export")
-      disabled=exportDisabled
+      disabled=this.exportDisabled
     }}
     {{d-button
       id="destroy-button"
       label="admin.wizard.manager.destroy"
       action=(action "destroy")
-      disabled=destoryDisabled
+      disabled=this.destoryDisabled
     }}
   </div>
 </div>
 
 {{wizard-message
-  key=messageKey
-  url=messageUrl
-  type=messageType
-  opts=messageOpts
-  items=messageItems
-  loading=loading
+  key=this.messageKey
+  url=this.messageUrl
+  type=this.messageType
+  opts=this.messageOpts
+  items=this.messageItems
+  loading=this.loading
   component="manager"
 }}
 
@@ -63,7 +63,7 @@
       </tr>
     </thead>
     <tbody>
-      {{#each wizards as |wizard|}}
+      {{#each this.wizards as |wizard|}}
         <tr data-wizard-id={{dasherize wizard.id}}>
           <td>
             <LinkTo

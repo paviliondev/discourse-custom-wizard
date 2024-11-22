@@ -1,0 +1,186 @@
+{{#if this.hasValue}}
+  {{#if this.isText}}
+    {{this.value.value}}
+  {{/if}}
+
+  {{#if this.isLongtext}}
+    <div class="wizard-table-long-text">
+      <p class="wizard-table-long-text-content {{this.textState}}">
+        {{this.value.value}}
+      </p>
+      <a href {{action "expandText"}}>
+        {{this.toggleText}}
+      </a>
+    </div>
+  {{/if}}
+
+  {{#if this.isComposer}}
+    <div class="wizard-table-long-text">
+      <p
+        class="wizard-table-composer-text wizard-table-long-text-content
+          {{this.textState}}"
+      >
+        {{this.value.value}}
+      </p>
+      <a href {{action "expandText"}}>
+        {{this.toggleText}}
+      </a>
+    </div>
+  {{/if}}
+
+  {{#if this.isComposerPreview}}
+    {{d-icon "comment-alt"}}
+    <span class="wizard-table-composer-text">
+      {{i18n "admin.wizard.submissions.composer_preview"}}:
+      {{this.value.value}}
+    </span>
+  {{/if}}
+
+  {{#if this.isTextOnly}}
+    {{this.value.value}}
+  {{/if}}
+
+  {{#if this.isDate}}
+    <span class="wizard-table-icon-item">
+      {{d-icon "calendar"}}{{this.value.value}}
+    </span>
+  {{/if}}
+
+  {{#if this.isTime}}
+    <span class="wizard-table-icon-item">
+      {{d-icon "clock"}}{{this.value.value}}
+    </span>
+  {{/if}}
+
+  {{#if this.isDateTime}}
+    <span class="wizard-table-icon-item" title={{this.value.value}}>
+      {{d-icon "calendar"}}{{format-date this.value.value format="medium"}}
+    </span>
+  {{/if}}
+
+  {{#if this.isNumber}}
+    {{this.value.value}}
+  {{/if}}
+
+  {{#if this.isCheckbox}}
+    {{#if this.checkboxValue}}
+      <span class="wizard-table-icon-item checkbox-true">
+        {{d-icon "check"}}{{this.value.value}}
+      </span>
+    {{else}}
+      <span class="wizard-table-icon-item checkbox-false">
+        {{d-icon "times"}}{{this.value.value}}
+      </span>
+    {{/if}}
+  {{/if}}
+
+  {{#if this.isUrl}}
+    <span class="wizard-table-icon-item url">
+      {{d-icon "link"}}
+      <a target="_blank" rel="noopener noreferrer" href={{this.value.value}}>
+        {{this.value.value}}
+      </a>
+    </span>
+  {{/if}}
+
+  {{#if this.isUpload}}
+    <a
+      target="_blank"
+      rel="noopener noreferrer"
+      class="attachment"
+      href={{this.file.url}}
+      download
+    >
+      {{this.file.original_filename}}
+    </a>
+  {{/if}}
+
+  {{#if this.isDropdown}}
+    <span class="wizard-table-icon-item">
+      {{d-icon "check-square"}}
+      {{this.value.value}}
+    </span>
+  {{/if}}
+
+  {{#if this.isTag}}
+    {{#each this.value.value as |tag|}}
+      {{discourse-tag tag}}
+    {{/each}}
+  {{/if}}
+
+  {{#if this.isCategory}}
+    <strong>
+      {{i18n "admin.wizard.submissions.category_id"}}:
+    </strong>
+    <a
+      target="_blank"
+      rel="noopener noreferrer"
+      href={{this.categoryUrl}}
+      title={{this.value.value}}
+    >
+      {{this.value.value}}
+    </a>
+  {{/if}}
+
+  {{#if this.isTopic}}
+    <strong>
+      {{i18n "admin.wizard.submissions.topic_id"}}:
+    </strong>
+    {{#each this.value.value as |topic|}}
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href={{topic.url}}
+        title={{topic.fancy_title}}
+      >
+        {{topic.id}}
+      </a>
+    {{/each}}
+  {{/if}}
+
+  {{#if this.isGroup}}
+    <strong>
+      {{i18n "admin.wizard.submissions.group_id"}}:
+    </strong>
+    {{this.value.value}}
+  {{/if}}
+
+  {{#if this.isUserSelector}}
+    {{#each this.submittedUsers as |user|}}
+      {{d-icon "user"}}
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href={{user.url}}
+        title={{user.username}}
+      >
+        {{user.username}}
+      </a>
+    {{/each}}
+  {{/if}}
+
+  {{#if this.isUser}}
+    <LinkTo @route="user" @model={{this.value.username}}>
+      {{avatar this.value imageSize="tiny"}}
+    </LinkTo>
+  {{/if}}
+
+  {{#if this.showUsername}}
+    <a
+      target="_blank"
+      rel="noopener noreferrer"
+      href={{this.userProfileUrl}}
+      title={{this.username}}
+    >
+      {{this.username}}
+    </a>
+  {{/if}}
+
+  {{#if this.isSubmittedAt}}
+    <span class="date" title={{this.value}}>
+      {{raw-date this.value}}
+    </span>
+  {{/if}}
+{{else}}
+  &mdash;
+{{/if}}

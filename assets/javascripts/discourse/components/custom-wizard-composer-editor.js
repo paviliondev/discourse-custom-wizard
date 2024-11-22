@@ -1,11 +1,11 @@
-import ComposerEditor from "discourse/components/composer-editor";
-import discourseComputed, { bind } from "discourse-common/utils/decorators";
-import { alias } from "@ember/object/computed";
-import { uploadIcon } from "discourse/lib/uploads";
-import { dasherize } from "@ember/string";
-import InsertHyperlink from "discourse/components/modal/insert-hyperlink";
-import { inject as service } from "@ember/service";
 import { action } from "@ember/object";
+import { alias } from "@ember/object/computed";
+import { service } from "@ember/service";
+import { dasherize } from "@ember/string";
+import ComposerEditor from "discourse/components/composer-editor";
+import InsertHyperlink from "discourse/components/modal/insert-hyperlink";
+import { uploadIcon } from "discourse/lib/uploads";
+import discourseComputed, { bind } from "discourse-common/utils/decorators";
 
 export const wizardComposerEdtiorEventPrefix = "wizard-editor";
 
@@ -33,6 +33,9 @@ export default class CustomWizardComposerEditor extends ComposerEditor {
       this.field.type
     )}-${dasherize(this.field.id)} .d-editor-input`;
     this.uppyComposerUpload.composerModel = this.composer;
+    if (!this.currentUser) {
+      this.currentUser = {};
+    }
   }
 
   @discourseComputed

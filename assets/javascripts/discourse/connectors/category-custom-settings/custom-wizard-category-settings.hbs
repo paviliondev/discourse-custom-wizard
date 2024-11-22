@@ -6,8 +6,8 @@
   </label>
   <div class="controls">
     {{combo-box
-      value=wizardListVal
-      content=wizardList
+      value=this.wizardListVal
+      content=this.wizardList
       onChange=(action "changeWizard")
       options=(hash none="admin.wizard.select")
     }}

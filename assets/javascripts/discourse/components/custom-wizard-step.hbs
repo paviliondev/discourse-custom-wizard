@@ -1,0 +1,84 @@
+<div class="wizard-step-contents">
+  {{#if this.step.title}}
+    <h1 class="wizard-step-title">{{this.cookedTitle}}</h1>
+  {{/if}}
+
+  {{#if this.bannerImage}}
+    <div class="wizard-step-banner">
+      <img src={{this.bannerImage}} />
+    </div>
+  {{/if}}
+
+  {{#if this.step.description}}
+    <div class="wizard-step-description">{{this.cookedDescription}}</div>
+  {{/if}}
+
+  {{#custom-wizard-step-form step=this.step}}
+    {{#each this.step.fields as |field|}}
+      {{custom-wizard-field field=field step=this.step wizard=this.wizard}}
+    {{/each}}
+  {{/custom-wizard-step-form}}
+</div>
+
+<div class="wizard-step-footer">
+
+  <div class="wizard-progress">
+    <div class="white"></div>
+    <div class="black" style={{this.barStyle}}></div>
+    <div class="screen"></div>
+    <span>{{i18n
+        "wizard.step"
+        current=this.step.displayIndex
+        total=this.wizard.totalSteps
+      }}</span>
+  </div>
+
+  <div class="wizard-buttons">
+    {{#if this.saving}}
+      {{loading-spinner size="small"}}
+    {{else}}
+      {{#if this.showQuitButton}}
+        <a
+          href
+          {{action "quit"}}
+          class="action-link quit"
+          tabindex={{this.secondaryButtonIndex}}
+        >{{i18n "wizard.quit"}}</a>
+      {{/if}}
+      {{#if this.showBackButton}}
+        <a
+          href
+          {{action "backStep"}}
+          class="action-link back"
+          tabindex={{this.secondaryButtonIndex}}
+        >{{i18n "wizard.back"}}</a>
+      {{/if}}
+    {{/if}}
+
+    {{#if this.showNextButton}}
+      <button
+        type="button"
+        class="wizard-btn next primary"
+        {{action "nextStep"}}
+        disabled={{this.btnsDisabled}}
+        tabindex={{this.primaryButtonIndex}}
+      >
+        {{i18n "wizard.next"}}
+        {{d-icon "chevron-right"}}
+      </button>
+    {{/if}}
+
+    {{#if this.showDoneButton}}
+      <button
+        type="button"
+        class="wizard-btn done"
+        {{action "done"}}
+        disabled={{this.btnsDisabled}}
+        tabindex={{this.primaryButtonIndex}}
+      >
+        {{i18n "wizard.done_custom"}}
+      </button>
+    {{/if}}
+  </div>
+
+</div>
