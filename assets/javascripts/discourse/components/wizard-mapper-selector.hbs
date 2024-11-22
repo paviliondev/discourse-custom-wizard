@@ -1,0 +1,77 @@
+<div class="type-selector">
+  {{#if this.hasTypes}}
+    <a role="button" {{action "toggleTypes"}} class="active">
+      {{this.activeTypeLabel}}
+    </a>
+
+    {{#if this.showTypes}}
+      <div class="selector-types">
+        {{#each this.selectorTypes as |item|}}
+          {{wizard-mapper-selector-type
+            activeType=this.activeType
+            item=item
+            toggle=(action "toggleType")
+          }}
+        {{/each}}
+      </div>
+    {{/if}}
+  {{else}}
+    <span>{{this.activeTypeLabel}}</span>
+  {{/if}}
+</div>
+
+<div class="input">
+  {{#if this.showText}}
+    <Input
+      @type="text"
+      @value={{this.value}}
+      placeholder={{i18n this.placeholderKey}}
+      {{on "change" (action "changeInputValue")}}
+    />
+  {{/if}}
+
+  {{#if this.showComboBox}}
+    {{combo-box
+      value=this.value
+      content=this.comboBoxContent
+      onChange=(action "changeValue")
+      options=(hash none=this.placeholderKey allowAny=this.comboBoxAllowAny)
+    }}
+  {{/if}}
+
+  {{#if this.showMultiSelect}}
+    {{multi-select
+      content=this.multiSelectContent
+      value=this.value
+      onChange=(action "changeValue")
+      options=this.multiSelectOptions
+    }}
+  {{/if}}
+
+  {{#if this.showList}}
+    {{wizard-value-list
+      values=this.value
+      addKey=this.placeholderKey
+      onChange=(action "changeValue")
+    }}
+  {{/if}}
+
+  {{#if this.showTag}}
+    {{tag-chooser
+      tags=this.value
+      onChange=(action "changeValue")
+      everyTag=true
+      options=(hash none=this.placeholderKey filterable=true)
+    }}
+  {{/if}}
+
+  {{#if this.showUser}}
+    {{wizard-user-chooser
+      placeholderKey=this.placeholderKey
+      value=this.value
+      autocomplete="discourse"
+      onChange=(action "changeUserValue")
+      options=this.userOptions
+    }}
+  {{/if}}
+</div>

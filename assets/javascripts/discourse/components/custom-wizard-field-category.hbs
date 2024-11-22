@@ -1,0 +1,8 @@
+{{custom-wizard-category-selector
+  categories=this.categories
+  class=this.fieldClass
+  whitelist=this.field.content
+  onChange=(action (mut this.categories))
+  tabindex=this.field.tabindex
+  options=(hash maximum=this.field.limit)
+}}

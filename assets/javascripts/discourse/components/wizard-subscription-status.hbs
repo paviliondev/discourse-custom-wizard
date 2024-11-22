@@ -1,11 +1,11 @@
 <div class="supplier-authorize">
   <WizardSubscriptionBadge />
-  {{#if authorized}}
-    {{conditional-loading-spinner size="small" condition=unauthorizing}}
+  {{#if this.authorized}}
+    <ConditionalLoadingSpinner @condition={{this.unauthorizing}} @size="small" />
     <DButton
       class="deauthorize"
       @title="admin.wizard.subscription.deauthorize.title"
-      @disabled={{unauthorizing}}
+      @disabled={{this.unauthorizing}}
       @action={{this.deauthorize}}
     >
       {{i18n "admin.wizard.subscription.deauthorize.label"}}

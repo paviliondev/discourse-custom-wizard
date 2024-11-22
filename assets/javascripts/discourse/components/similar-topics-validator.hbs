@@ -1,0 +1,13 @@
+<label class={{this.currentStateClass}}>
+  {{#if this.currentState}}
+    {{#if this.insufficientCharactersCategories}}
+      {{html-safe (i18n this.currentStateKey catLinks=this.catLinks)}}
+    {{else}}
+      {{i18n this.currentStateKey}}
+    {{/if}}
+  {{/if}}
+</label>
+
+{{#if this.showSimilarTopics}}
+  {{custom-wizard-similar-topics topics=this.similarTopics}}
+{{/if}}

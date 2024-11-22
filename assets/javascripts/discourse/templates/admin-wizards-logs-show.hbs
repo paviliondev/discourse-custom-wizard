@@ -1,7 +1,7 @@
-{{#if logs}}
+{{#if this.logs}}
   <div class="wizard-header large">
     <label>
-      {{i18n "admin.wizard.log.title" name=wizard.name}}
+      {{i18n "admin.wizard.log.title" name=this.wizard.name}}
     </label>
 
     <div class="controls">
@@ -16,7 +16,7 @@
 
   <div class="wizard-table">
     {{#load-more selector=".wizard-table tr" action=(action "loadMore")}}
-      {{#if noResults}}
+      {{#if this.noResults}}
         <p>{{i18n "search.no_results"}}</p>
       {{else}}
         <table>
@@ -29,7 +29,7 @@
             </tr>
           </thead>
           <tbody>
-            {{#each logs as |log|}}
+            {{#each this.logs as |log|}}
               <tr>
                 {{#each-in log as |field value|}}
                   <td class="small">{{wizard-table-field
@@ -43,7 +43,7 @@
         </table>
       {{/if}}
 
-      {{conditional-loading-spinner condition=refreshing}}
+      {{conditional-loading-spinner condition=this.refreshing}}
     {{/load-more}}
   </div>
 {{/if}}

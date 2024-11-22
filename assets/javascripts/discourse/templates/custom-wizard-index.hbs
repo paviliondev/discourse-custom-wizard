@@ -1,7 +1,7 @@
-{{#if noAccess}}
-  {{custom-wizard-no-access
-    text=(i18n noAccessI18nKey)
-    wizardId=wizardId
-    reason=noAccessReason
-  }}
+{{#if this.noAccess}}
+  <CustomWizardNoAccess
+    @text={{i18n this.noAccessI18nKey}}
+    @wizardId=this.wizardId
+    @reason={{this.noAccessReason}}
+  />
 {{/if}}

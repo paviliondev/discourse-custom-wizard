@@ -1,10 +1,10 @@
 <div class="wizard-api-header page">
   <div class="buttons">
-    {{#if updating}}
+    {{#if this.updating}}
       {{loading-spinner size="small"}}
     {{else}}
-      {{#if responseIcon}}
-        {{d-icon responseIcon}}
+      {{#if this.responseIcon}}
+        {{d-icon this.responseIcon}}
       {{/if}}
     {{/if}}
 
@@ -12,25 +12,25 @@
       label="admin.wizard.api.save"
       action=(action "save")
       class="btn-primary"
-      disabled=saveDisabled
+      disabled=this.saveDisabled
     }}
 
-    {{#if showRemove}}
+    {{#if this.showRemove}}
       {{d-button action=(action "remove") label="admin.wizard.api.remove"}}
     {{/if}}
 
-    {{#if error}}
+    {{#if this.error}}
       <div class="error">
-        {{error}}
+        {{this.error}}
       </div>
     {{/if}}
   </div>
 
   <div class="wizard-header large">
-    {{#if api.isNew}}
+    {{#if this.api.isNew}}
       {{i18n "admin.wizard.api.new"}}
     {{else}}
-      <span>{{api.title}}</span>
+      <span>{{this.api.title}}</span>
     {{/if}}
   </div>
 
@@ -43,15 +43,15 @@
       />
     </div>
 
-    <div class="name {{nameClass}}">
+    <div class="name {{this.nameClass}}">
       <label>{{i18n "admin.wizard.api.name"}}</label>
-      {{#if api.isNew}}
+      {{#if this.api.isNew}}
         <Input
           @value={{this.api.name}}
           placeholder={{i18n "admin.wizard.api.name_placeholder"}}
         />
       {{else}}
-        <span>{{api.name}}</span>
+        <span>{{this.api.name}}</span>
       {{/if}}
     </div>
   </div>
@@ -59,18 +59,18 @@
 
 <div class="wizard-api-header">
   <div class="buttons">
-    {{#if isOauth}}
-      {{#if authorizing}}
+    {{#if this.isOauth}}
+      {{#if this.authorizing}}
         {{loading-spinner size="small"}}
       {{else}}
-        {{#if authErrorMessage}}
-          <span>{{authErrorMessage}}</span>
+        {{#if this.authErrorMessage}}
+          <span>{{this.authErrorMessage}}</span>
         {{/if}}
       {{/if}}
       {{d-button
         label="admin.wizard.api.auth.btn"
         action=(action "authorize")
-        disabled=authDisabled
+        disabled=this.authDisabled
         class="btn-primary"
       }}
     {{/if}}
@@ -88,12 +88,12 @@
       {{i18n "admin.wizard.api.auth.settings"}}
     </div>
 
-    {{#if showRedirectUri}}
+    {{#if this.showRedirectUri}}
       <div class="control-group redirect-uri">
         <div class="control-label">
           <label>{{i18n "admin.wizard.api.auth.redirect_uri"}}</label>
           <div class="controls">
-            {{api.redirectUri}}
+            {{this.api.redirectUri}}
           </div>
         </div>
       </div>
@@ -103,16 +103,16 @@
       <label>{{i18n "admin.wizard.api.auth.type"}}</label>
       <div class="controls">
         {{combo-box
-          value=api.authType
-          content=authorizationTypes
-          onChange=(action (mut api.authType))
+          value=this.api.authType
+          content=this.authorizationTypes
+          onChange=(action (mut this.api.authType))
           options=(hash none="admin.wizard.api.auth.type_none")
         }}
       </div>
     </div>
 
-    {{#if isOauth}}
-      {{#if threeLeggedOauth}}
+    {{#if this.isOauth}}
+      {{#if this.threeLeggedOauth}}
         <div class="control-group">
           <label>{{i18n "admin.wizard.api.auth.url"}}</label>
           <div class="controls">
@@ -145,14 +145,14 @@
       <div class="control-group">
         <label>{{i18n "admin.wizard.api.auth.params.label"}}</label>
         <div class="controls">
-          {{#each api.authParams as |param|}}
+          {{#each this.api.authParams as |param|}}
             <div class="param">
               <Input
-                @value={{this.param.key}}
+                @value={{param.key}}
                 placeholder={{i18n "admin.wizard.key"}}
               />
               <Input
-                @value={{this.param.value}}
+                @value={{param.value}}
                 placeholder={{i18n "admin.wizard.value"}}
               />
               {{d-button
@@ -171,7 +171,7 @@
       </div>
     {{/if}}
 
-    {{#if isBasicAuth}}
+    {{#if this.isBasicAuth}}
       <div class="control-group">
         <label>{{i18n "admin.wizard.api.auth.username"}}</label>
         <div class="controls">
@@ -188,10 +188,10 @@
     {{/if}}
   </div>
 
-  {{#if isOauth}}
+  {{#if this.isOauth}}
     <div class="status">
       <div class="authorization">
-        {{#if api.authorized}}
+        {{#if this.api.authorized}}
           <span class="authorization-indicator authorized"></span>
           <span>{{i18n "admin.wizard.api.status.authorized"}}</span>
         {{else}}
@@ -204,11 +204,11 @@
         {{i18n "admin.wizard.api.status.label"}}
       </div>
 
-      {{#if threeLeggedOauth}}
+      {{#if this.threeLeggedOauth}}
         <div class="control-group">
           <label>{{i18n "admin.wizard.api.status.code"}}</label>
           <div class="controls">
-            {{api.code}}
+            {{this.api.code}}
           </div>
         </div>
       {{/if}}
@@ -216,15 +216,15 @@
       <div class="control-group">
         <label>{{i18n "admin.wizard.api.status.access_token"}}</label>
         <div class="controls">
-          {{api.accessToken}}
+          {{this.api.accessToken}}
         </div>
       </div>
 
-      {{#if threeLeggedOauth}}
+      {{#if this.threeLeggedOauth}}
         <div class="control-group">
           <label>{{i18n "admin.wizard.api.status.refresh_token"}}</label>
           <div class="controls">
-            {{api.refreshToken}}
+            {{this.api.refreshToken}}
           </div>
         </div>
       {{/if}}
@@ -232,14 +232,14 @@
       <div class="control-group">
         <label>{{i18n "admin.wizard.api.status.expires_at"}}</label>
         <div class="controls">
-          {{api.tokenExpiresAt}}
+          {{this.api.tokenExpiresAt}}
         </div>
       </div>
 
       <div class="control-group">
         <label>{{i18n "admin.wizard.api.status.refresh_at"}}</label>
         <div class="controls">
-          {{api.tokenRefreshAt}}
+          {{this.api.tokenRefreshAt}}
         </div>
       </div>
     </div>
@@ -257,10 +257,10 @@
     icon="plus"
   }}
 
-  {{#if api.endpoints}}
+  {{#if this.api.endpoints}}
     <div class="endpoint-list">
       <ul>
-        {{#each api.endpoints as |endpoint|}}
+        {{#each this.api.endpoints as |endpoint|}}
           <li>
             <div class="endpoint">
               <div class="endpoint-">
@@ -283,20 +283,20 @@
                 </div>
                 <div class="bottom">
                   {{combo-box
-                    content=endpointMethods
+                    content=this.endpointMethods
                     value=endpoint.method
                     onChange=(action (mut endpoint.method))
                     options=(hash none="admin.wizard.api.endpoint.method")
                   }}
                   {{combo-box
-                    content=contentTypes
+                    content=this.contentTypes
                     value=endpoint.content_type
                     onChange=(action (mut endpoint.content_type))
                     options=(hash none="admin.wizard.api.endpoint.content_type")
                   }}
                   {{multi-select
                     value=endpoint.success_codes
-                    content=successCodes
+                    content=this.successCodes
                     onChange=(action (mut endpoint.success_codes))
                     options=(hash
                       none="admin.wizard.api.endpoint.success_codes"
@@ -335,7 +335,7 @@
         <th>Error</th>
       </thead>
       <tbody>
-        {{#each api.log as |logentry|}}
+        {{#each this.api.log as |logentry|}}
           <tr>
             <td>{{logentry.time}}</td>
             <td class="user-image">

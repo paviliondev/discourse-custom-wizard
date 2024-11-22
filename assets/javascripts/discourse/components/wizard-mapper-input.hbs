@@ -1,0 +1,58 @@
+{{wizard-mapper-connector
+  connector=this.input.type
+  connectors=this.inputTypes
+  inputTypes=true
+  inputType=this.inputType
+  connectorType="type"
+  options=this.options
+  onUpdate=this.onUpdate
+}}
+
+{{#if this.hasPairs}}
+  <div class="mapper-pairs mapper-block">
+    {{#each this.input.pairs as |pair|}}
+      {{wizard-mapper-pair
+        pair=pair
+        last=pair.last
+        inputType=this.inputType
+        options=this.options
+        removePair=(action "removePair")
+        onUpdate=this.onUpdate
+      }}
+    {{/each}}
+
+    {{#if this.canAddPair}}
+      <a role="button" {{action "addPair"}} class="add-pair">
+        {{d-icon "plus"}}
+      </a>
+    {{/if}}
+  </div>
+{{/if}}
+
+{{#if this.hasOutput}}
+  {{#if this.hasPairs}}
+    {{wizard-mapper-connector
+      connector=this.input.output_connector
+      connectors=this.connectors
+      connectorType="output"
+      inputType=this.inputType
+      options=this.options
+      onUpdate=this.onUpdate
+    }}
+  {{/if}}
+
+  <div class="output mapper-block">
+    {{wizard-mapper-selector
+      selectorType="output"
+      inputType=this.input.type
+      value=this.input.output
+      activeType=this.input.output_type
+      options=this.options
+      onUpdate=this.onUpdate
+    }}
+  </div>
+{{/if}}
+
+<a role="button" class="remove-input" {{action this.remove this.input}}>
+  {{d-icon "times"}}
+</a>

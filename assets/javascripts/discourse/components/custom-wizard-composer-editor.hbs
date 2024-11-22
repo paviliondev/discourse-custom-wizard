@@ -1,0 +1,28 @@
+<div class={{this.fieldClass}}>
+  <DEditor
+    @tabindex={{this.field.tabindex}}
+    @value={{this.composer.reply}}
+    @placeholderOverride={{this.replyPlaceholder}}
+    @previewUpdated={{this.previewUpdated}}
+    @markdownOptions={{this.markdownOptions}}
+    @extraButtons={{this.extraButtons}}
+    @importQuote={{this.importQuote}}
+    @showUploadModal={{this.showUploadModal}}
+    @togglePreview={{this.togglePreview}}
+    @validation={{this.validation}}
+    @loading={{this.composer.loading}}
+    @showLink={{this.showLink}}
+    @wizardComposer={{true}}
+    @fieldId={{this.field.id}}
+    @disabled={{this.disableTextarea}}
+    @outletArgs={{hash composer=this.composer editorType="composer"}}
+  />
+
+  <input
+    type="file"
+    id={{this.uppyComposerUpload.fileUploadElementId}}
+    class="wizard-composer-upload"
+    accept={{this.allowedFileTypes}}
+    multiple
+  />
+</div>

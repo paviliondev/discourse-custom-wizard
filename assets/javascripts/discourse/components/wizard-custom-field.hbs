@@ -1,0 +1,308 @@
+{{#if this.showUndo}}
+  {{d-button
+    action=(action "undoChanges")
+    icon=this.undoIcon
+    label=this.undoKey
+    class="undo-changes"
+  }}
+{{/if}}
+
+<div class="setting">
+  <div class="setting-label">
+    <label>{{i18n "admin.wizard.field.label"}}</label>
+  </div>
+  <div class="setting-value">
+    <Input name="label" @value={{this.field.label}} />
+  </div>
+</div>
+
+<div class="setting">
+  <div class="setting-label">
+    <label>{{i18n "admin.wizard.field.required"}}</label>
+  </div>
+
+  <div class="setting-value">
+    <span>{{i18n "admin.wizard.field.required_label"}}</span>
+    <Input @type="checkbox" @checked={{this.field.required}} />
+  </div>
+</div>
+
+<div class="setting">
+  <div class="setting-label">
+    <label>{{i18n "admin.wizard.field.description"}}</label>
+  </div>
+  <div class="setting-value">
+    <Textarea name="description" @value={{this.field.description}} />
+  </div>
+</div>
+
+<div class="setting">
+  <div class="setting-label">
+    <label>{{i18n "admin.wizard.field.image"}}</label>
+  </div>
+  <div class="setting-value">
+    {{uppy-image-uploader
+      imageUrl=this.field.image
+      onUploadDone=(action "imageUploadDone")
+      onUploadDeleted=(action "imageUploadDeleted")
+      type="wizard-field-image"
+      class="no-repeat contain-image"
+      id=(concat "wizard-field-" this.field.id "-image-upload")
+    }}
+  </div>
+</div>
+
+<div class="setting">
+  <div class="setting-label">
+    <label>{{i18n "admin.wizard.type"}}</label>
+  </div>
+
+  <div class="setting-value">
+    {{wizard-subscription-selector
+      value=this.field.type
+      feature="field"
+      attribute="type"
+      onChange=(action "changeType")
+      wizard=this.wizard
+      options=(hash none="admin.wizard.select_type")
+    }}
+  </div>
+</div>
+
+{{wizard-message key=this.messageKey url=this.messageUrl component="field"}}
+
+{{#if this.isTextType}}
+  <div class="setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.field.min_length"}}</label>
+    </div>
+
+    <div class="setting-value">
+      <Input
+        @type="number"
+        name="min_length"
+        @value={{this.field.min_length}}
+        class="small"
+      />
+    </div>
+  </div>
+
+  <div class="setting full">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.field.max_length"}}</label>
+    </div>
+
+    <div class="setting-value">
+      <Input
+        @type="number"
+        name="max_length"
+        @value={{this.field.max_length}}
+        class="small"
+      />
+    </div>
+  </div>
+
+  <div class="setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.field.char_counter"}}</label>
+    </div>
+
+    <div class="setting-value">
+      <span>{{i18n "admin.wizard.field.char_counter_placeholder"}}</span>
+      <Input @type="checkbox" @checked={{this.field.char_counter}} />
+    </div>
+  </div>
+
+  <div class="setting full">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.field.field_placeholder"}}</label>
+    </div>
+
+    <div class="setting-value">
+      <Textarea
+        name="field_placeholder"
+        class="medium"
+        @value={{this.field.placeholder}}
+      />
+    </div>
+  </div>
+{{/if}}
+
+{{#if this.isComposerPreview}}
+  <div class="setting full">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.field.preview_template"}}</label>
+    </div>
+
+    <div class="setting-value">
+      <Textarea
+        name="preview-template"
+        class="preview-template"
+        @value={{this.field.preview_template}}
+      />
+    </div>
+  </div>
+{{/if}}
+
+{{#if this.isUpload}}
+  <div class="setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.field.file_types"}}</label>
+    </div>
+
+    <div class="setting-value">
+      <Input @value={{this.field.file_types}} class="medium" />
+    </div>
+  </div>
+{{/if}}
+
+{{#if this.showLimit}}
+  <div class="setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.field.limit"}}</label>
+    </div>
+
+    <div class="setting-value">
+      <Input @type="number" @value={{this.field.limit}} class="small" />
+    </div>
+  </div>
+{{/if}}
+
+{{#if this.isDateTime}}
+  <div class="setting">
+    <div class="setting-label">
+      <label>{{html-safe
+          (i18n "admin.wizard.field.date_time_format.label")
+        }}</label>
+    </div>
+
+    <div class="setting-value">
+      <Input @value={{this.field.format}} class="medium" />
+      <label>{{html-safe
+          (i18n "admin.wizard.field.date_time_format.instructions")
+        }}</label>
+    </div>
+  </div>
+{{/if}}
+
+{{#if this.showPrefill}}
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.field.prefill"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=this.field.prefill
+        property="prefill"
+        onUpdate=(action "mappedFieldUpdated")
+        options=this.prefillOptions
+      }}
+    </div>
+  </div>
+{{/if}}
+
+{{#if this.showContent}}
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.field.content"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{wizard-mapper
+        inputs=this.field.content
+        property="content"
+        onUpdate=(action "mappedFieldUpdated")
+        options=this.contentOptions
+      }}
+    </div>
+  </div>
+{{/if}}
+
+{{#if this.isTag}}
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.field.tag_groups"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{tag-group-chooser
+        id=(concat this.field.id "-tag-groups")
+        tagGroups=this.field.tag_groups
+        onChange=(action (mut this.field.tag_groups))
+      }}
+    </div>
+  </div>
+
+  <div class="setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.field.can_create_tag"}}</label>
+    </div>
+
+    <div class="setting-value">
+      <Input @type="checkbox" @checked={{this.field.can_create_tag}} />
+    </div>
+  </div>
+{{/if}}
+
+{{#if this.isTopic}}
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.field.category.label"}}</label>
+    </div>
+
+    <div class="setting-value">
+      <CategoryChooser
+        @value={{this.field.category}}
+        @onChangeCategory={{action "changeCategory"}}
+        @options={{hash
+          none="admin.wizard.field.category.none"
+          autoInsertNoneItem=true
+        }}
+      />
+    </div>
+  </div>
+{{/if}}
+
+{{#wizard-subscription-container}}
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.condition"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{wizard-mapper inputs=this.field.condition options=this.fieldConditionOptions}}
+    </div>
+  </div>
+
+  <div class="setting full field-mapper-setting">
+    <div class="setting-label">
+      <label>{{i18n "admin.wizard.index"}}</label>
+    </div>
+
+    <div class="setting-value">
+      {{wizard-mapper inputs=this.field.index options=this.fieldIndexOptions}}
+    </div>
+  </div>
+
+  {{#if this.isCategory}}
+    <div class="setting">
+      <div class="setting-label">
+        <label>{{i18n "admin.wizard.field.property"}}</label>
+      </div>
+
+      <div class="setting-value">
+        {{combo-box
+          value=this.field.property
+          content=this.categoryPropertyTypes
+          onChange=(action (mut this.field.property))
+          options=(hash none="admin.wizard.selector.placeholder.property")
+        }}
+      </div>
+    </div>
+  {{/if}}
+
+  {{#if this.validations}}
+    {{wizard-realtime-validations field=this.field validations=this.validations}}
+  {{/if}}
+{{/wizard-subscription-container}}

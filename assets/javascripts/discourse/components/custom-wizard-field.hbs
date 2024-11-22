@@ -1,0 +1,38 @@
+<label for={{this.field.id}} class="field-label">
+  {{html-safe this.field.translatedLabel}}
+</label>
+
+{{#if this.field.image}}
+  <div class="field-image"><img src={{this.field.image}} /></div>
+{{/if}}
+
+{{#if this.field.description}}
+  <div class="field-description">{{this.cookedDescription}}</div>
+{{/if}}
+
+{{#field-validators field=this.field as |validators|}}
+  {{#if this.inputComponentName}}
+    <div class="input-area">
+      {{component
+        this.inputComponentName
+        field=this.field
+        step=this.step
+        fieldClass=this.fieldClass
+        wizard=this.wizard
+        autocomplete=validators.autocomplete
+      }}
+    </div>
+  {{/if}}
+{{/field-validators}}
+
+{{#if this.field.char_counter}}
+  {{#if this.textType}}
+    {{wizard-char-counter this.field.value this.field.max_length}}
+  {{/if}}
+{{/if}}
+
+{{#if this.field.errorDescription}}
+  <div class="field-error-description">{{html-safe
+      this.field.errorDescription
+    }}</div>
+{{/if}}

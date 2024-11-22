@@ -1,0 +1,26 @@
+<div class="message-block primary">
+  {{#if this.showIcon}}
+    {{d-icon this.icon}}
+  {{/if}}
+  <span class="message-content">{{html-safe this.message}}</span>
+  {{#if this.hasItems}}
+    <ul>
+      {{#each this.items as |item|}}
+        <li>
+          <span>{{d-icon item.icon}}</span>
+          <span>{{html-safe item.html}}</span>
+        </li>
+      {{/each}}
+    </ul>
+  {{/if}}
+</div>
+
+{{#if this.showDocumentation}}
+  <div class="message-block">
+    {{d-icon "question-circle"}}
+
+    <a href={{this.url}} target="_blank" rel="noopener noreferrer">
+      {{this.documentation}}
+    </a>
+  </div>
+{{/if}}

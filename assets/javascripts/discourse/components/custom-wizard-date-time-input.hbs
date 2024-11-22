@@ -1,0 +1,30 @@
+{{#unless this.timeFirst}}
+  {{custom-wizard-date-input
+    date=this.date
+    relativeDate=this.relativeDate
+    onChange=(action "onChangeDate")
+    tabindex=this.dateTabindex
+  }}
+{{/unless}}
+
+{{#if this.showTime}}
+  {{custom-wizard-time-input
+    date=this.date
+    relativeDate=this.relativeDate
+    onChange=(action "onChangeTime")
+    tabindex=this.timeTabindex
+  }}
+{{/if}}
+
+{{#if this.timeFirst}}
+  {{custom-wizard-date-input
+    date=this.date
+    relativeDate=this.relativeDate
+    onChange=(action "onChangeDate")
+    tabindex=this.dateTabindex
+  }}
+{{/if}}
+
+{{#if this.clearable}}
+  {{d-button class="clear-date-time" icon="times" action=(action "onClear")}}
+{{/if}}

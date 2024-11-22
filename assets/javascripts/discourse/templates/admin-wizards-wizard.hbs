@@ -1,19 +1,22 @@
 <div class="admin-wizard-controls">
-  {{combo-box
-    value=wizardListVal
-    content=wizardList
-    onChange=(route-action "changeWizard")
-    options=(hash none="admin.wizard.select")
-  }}
-
-  {{d-button
-    action=(route-action "createWizard")
-    label="admin.wizard.create"
-    icon="plus"
-  }}
+  <ComboBox
+    @value={{this.wizardListVal}}
+    @content={{this.wizardList}}
+    @onChange={{route-action "changeWizard"}}
+    @options={{hash none="admin.wizard.select"}}
+  />
+  <DButton
+    @action={{route-action "createWizard"}}
+    @label="admin.wizard.create"
+    @icon="plus"
+  />
 </div>
 
-{{wizard-message key=messageKey url=messageUrl component="wizard"}}
+<WizardMessage
+  @key={{this.messageKey}}
+  @url={{this.messageUrl}}
+  @component="wizard"
+/>
 
 <div class="admin-wizard-container settings">
   {{outlet}}

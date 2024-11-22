@@ -1,7 +1,7 @@
-{{#if currentUser.admin}}
+{{#if this.currentUser.admin}}
   {{nav-item route="adminWizards" label="admin.wizard.nav_label"}}
 
-  {{#if wizardErrorNotice}}
+  {{#if this.wizardErrorNotice}}
     {{d-icon "exclaimation-circle"}}
   {{/if}}
 {{/if}}

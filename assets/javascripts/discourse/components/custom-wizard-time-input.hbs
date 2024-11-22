@@ -1,0 +1,13 @@
+{{combo-box
+  value=this.time
+  content=this.timeOptions
+  tabindex=this.tabindex
+  onChange=(action "onChangeTime")
+  options=(hash
+    translatedNone="--:--"
+    allowAny=true
+    filterable=false
+    autoInsertNoneItem=false
+    translatedFilterPlaceholder="--:--"
+  )
+}}

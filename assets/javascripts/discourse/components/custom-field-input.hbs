@@ -1,0 +1,80 @@
+{{#if this.showInputs}}
+  <td>
+    {{wizard-subscription-selector
+      value=this.field.klass
+      feature="custom_field"
+      attribute="klass"
+      onChange=(action (mut this.field.klass))
+      options=(hash none="admin.wizard.custom_field.klass.select")
+    }}
+  </td>
+  <td>
+    {{wizard-subscription-selector
+      value=this.field.type
+      feature="custom_field"
+      attribute="type"
+      onChange=(action (mut this.field.type))
+      options=(hash none="admin.wizard.custom_field.type.select")
+    }}
+  </td>
+  <td class="input">
+    <Input
+      @value={{this.field.name}}
+      placeholder={{i18n "admin.wizard.custom_field.name.select"}}
+    />
+  </td>
+  <td class="multi-select">
+    {{multi-select
+      value=this.field.serializers
+      content=this.serializerContent
+      onChange=(action (mut this.field.serializers))
+      options=(hash none="admin.wizard.custom_field.serializers.select")
+    }}
+  </td>
+  <td class="actions">
+    {{#if this.loading}}
+      {{loading-spinner size="small"}}
+    {{else}}
+      {{#if this.saveIcon}}
+        {{d-icon this.saveIcon}}
+      {{/if}}
+    {{/if}}
+    {{d-button
+      action=(action "destroy")
+      icon="trash-alt"
+      class="destroy"
+      disabled=this.destroyDisabled
+    }}
+    {{d-button
+      icon="save"
+      action=(action "save")
+      disabled=this.saveDisabled
+      class="save"
+    }}
+    {{d-button action=(action "close") icon="times" disabled=this.closeDisabled}}
+  </td>
+{{else}}
+  <td><label>{{this.field.klass}}</label></td>
+  <td><label>{{this.field.type}}</label></td>
+  <td class="input"><label>{{this.field.name}}</label></td>
+  <td class="multi-select">
+    {{#if this.isExternal}}
+      &mdash;
+    {{else}}
+      {{#each this.field.serializers as |serializer|}}
+        <label>{{serializer}}</label>
+      {{/each}}
+    {{/if}}
+  </td>
+  {{#if this.isExternal}}
+    <td class="external">
+      <label title={{i18n "admin.wizard.custom_field.external.title"}}>
+        {{i18n "admin.wizard.custom_field.external.label"}}
+      </label>
+    </td>
+  {{else}}
+    <td class="actions">
+      {{d-button action=(action "edit") icon="pencil-alt"}}
+    </td>
+  {{/if}}
+{{/if}}

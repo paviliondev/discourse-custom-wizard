@@ -1,0 +1,34 @@
+{{d-editor value=this.value forcePreview=this.forcePreview placeholder=this.placeholder}}
+
+<div class="wizard-editor-gutter">
+  {{#if this.previewEnabled}}
+    {{d-button action=(action "togglePreview") translatedLabel=this.previewLabel}}
+  {{/if}}
+
+  {{#if this.fieldsEnabled}}
+    {{d-button action=(action "togglePopover") translatedLabel=this.popoverLabel}}
+
+    {{#if this.showPopover}}
+      <div class="wizard-editor-gutter-popover">
+        <label>
+          {{i18n "admin.wizard.action.post_builder.user_properties"}}
+          {{this.userPropertyList}}
+        </label>
+
+        {{#if this.hasWizardFields}}
+          <label>
+            {{i18n "admin.wizard.action.post_builder.wizard_fields"}}
+            {{this.wizardFieldList}}
+          </label>
+        {{/if}}
+
+        {{#if this.hasWizardActions}}
+          <label>
+            {{i18n "admin.wizard.action.post_builder.wizard_actions"}}
+            {{this.wizardActionList}}
+          </label>
+        {{/if}}
+      </div>
+    {{/if}}
+  {{/if}}
+</div>
