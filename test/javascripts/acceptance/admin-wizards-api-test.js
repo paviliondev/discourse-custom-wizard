@@ -41,7 +41,7 @@ acceptance("Admin | API tab", function (needs) {
         },
       ]);
     });
-    server.get("/admin/customize/user_fields", () => {
+    server.get("/admin/config/user_fields", () => {
       return helper.response({ user_fields: [] });
     });
     server.put("/admin/wizards/api/new_api", () => {

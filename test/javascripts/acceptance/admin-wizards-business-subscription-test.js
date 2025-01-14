@@ -38,7 +38,7 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
     server.get("/admin/wizards/api", () => {
       return helper.response([]);
     });
-    server.get("/admin/customize/user_fields", () => {
+    server.get("/admin/config/user_fields", () => {
       return helper.response({ user_fields: [] });
     });
     server.get("/admin/wizards/wizard/this_is_testing_wizard", () => {
