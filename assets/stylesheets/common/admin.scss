@@ -1,7 +1,6 @@
 @import "admin/mapper";
 @import "admin/manager";
 @import "admin/api";
-@import "common/components/buttons";
 @import "admin/variables";
 
 $expired: #339b18;
@@ -685,14 +684,6 @@ $error: #ef1700;
         margin-left: 10px;
       }
     }
-  }
-
-  .btn.save:enabled {
-    @extend .btn-primary;
-  }
-
-  .btn.destroy {
-    @extend .btn-danger;
   }
 
   h3 {
