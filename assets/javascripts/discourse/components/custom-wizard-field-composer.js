@@ -18,15 +18,18 @@ export default Component.extend({
       "composer",
       EmberObject.create({
         loading: false,
-        reply: this.get("field.value") || "",
+        model: {
+          reply: this.get("field.value") || "",
+        },
         afterRefresh: () => {},
+        allowUpload: true
       })
     );
   },
 
-  @observes("composer.reply")
+  @observes("composer.model.reply")
   setField() {
-    this.set("field.value", this.get("composer.reply"));
+    this.set("field.value", this.get("composer.model.reply"));
   },
 
   @computed("showPreview")

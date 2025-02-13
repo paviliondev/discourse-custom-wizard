@@ -32,10 +32,16 @@ export default class CustomWizardComposerEditor extends ComposerEditor {
     this.uppyComposerUpload.editorInputClass = `.${dasherize(
       this.field.type
     )}-${dasherize(this.field.id)} .d-editor-input`;
-    this.uppyComposerUpload.composerModel = this.composer;
+    this.uppyComposerUpload.composerModel = this.composer.model;
     if (!this.currentUser) {
       this.currentUser = {};
     }
+  }
+
+  @bind
+  setupEditor(textManipulation) {
+    textManipulation.placeholder.composer = this.composer;
+    super.setupEditor(textManipulation);
   }
 
   @discourseComputed
