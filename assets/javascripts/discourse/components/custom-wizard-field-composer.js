@@ -22,7 +22,7 @@ export default Component.extend({
           reply: this.get("field.value") || "",
         },
         afterRefresh: () => {},
-        allowUpload: true
+        allowUpload: true,
       })
     );
   },
