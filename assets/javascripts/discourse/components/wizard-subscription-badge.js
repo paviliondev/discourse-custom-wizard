@@ -7,7 +7,7 @@ import I18n from "I18n";
 export default class WizardSubscriptionBadge extends Component {
   @service subscription;
   @tracked updating = false;
-  @tracked updateIcon = "sync";
+  @tracked updateIcon = "arrows-rotate";
   basePath = "/admin/plugins/subscription-client";
 
   @computed("subscription.subscriptionType")
@@ -39,7 +39,7 @@ export default class WizardSubscriptionBadge extends Component {
     this.updating = true;
     this.updateIcon = null;
     this.subscription.updateSubscriptionStatus().finally(() => {
-      this.updateIcon = "sync";
+      this.updateIcon = "arrows-rotate";
       this.updating = false;
     });
   }

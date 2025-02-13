@@ -15,7 +15,7 @@ export default Mixin.create({
 
     this.setProperties({
       originalObject: JSON.parse(JSON.stringify(obj)),
-      undoIcon: obj.isNew ? "times" : "undo",
+      undoIcon: obj.isNew ? "xmark" : "undo",
       undoKey: `admin.wizard.${obj.isNew ? "clear" : "undo"}`,
     });
   },

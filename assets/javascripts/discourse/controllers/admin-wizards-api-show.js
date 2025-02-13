@@ -213,7 +213,7 @@ export default Controller.extend({
           if (result.success) {
             this.send("afterSave", result.api.name);
           } else {
-            this.set("responseIcon", "times");
+            this.set("responseIcon", "xmark");
           }
         })
         .finally(() => this.set("updating", false));

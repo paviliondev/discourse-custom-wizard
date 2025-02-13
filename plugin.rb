@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Forms for Discourse. Better onboarding, structured posting, data enrichment, automated actions and much more.
-# version: 2.10.1
+# version: 2.11.0
 # authors: Angus McLeod, Faizaan Gagan, Robert Barrow, Keegan George, Kaitlin Maddever, Juan Marcos Gutierrez Ramos
 # url: https://github.com/paviliondev/discourse-custom-wizard
 # contact_emails: development@pavilion.tech
@@ -22,14 +22,10 @@ if respond_to?(:register_svg_icon)
   register_svg_icon "far-calendar"
   register_svg_icon "chevron-right"
   register_svg_icon "chevron-left"
-  register_svg_icon "save"
-  register_svg_icon "sliders-h"
   register_svg_icon "calendar"
   register_svg_icon "check"
-  register_svg_icon "times"
   register_svg_icon "clock"
   register_svg_icon "link"
-  register_svg_icon "comment-alt"
   register_svg_icon "far-life-ring"
   register_svg_icon "arrow-right"
   register_svg_icon "bolt"

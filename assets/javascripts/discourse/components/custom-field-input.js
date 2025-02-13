@@ -118,7 +118,7 @@ export default Component.extend({
         if (result.success) {
           this.set("field.edit", false);
         } else {
-          this.set("saveIcon", "times");
+          this.set("saveIcon", "xmark");
         }
         setTimeout(() => {
           if (this.isDestroyed) {

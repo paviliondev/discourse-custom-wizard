@@ -11,7 +11,7 @@ export default Controller.extend({
   messageUrl:
     "https://pavilion.tech/products/discourse-custom-wizard-plugin/documentation/wizard-manager",
   messageKey: "info",
-  messageIcon: "info-circle",
+  messageIcon: "circle-info",
   messageClass: "info",
   importDisabled: empty("file"),
   exportWizards: A(),
@@ -45,7 +45,7 @@ export default Controller.extend({
       "admin.wizard.manager.imported"
     )}</span>`;
     return {
-      icon: "check-circle",
+      icon: "circle-check",
       html,
     };
   },
@@ -56,14 +56,14 @@ export default Controller.extend({
       "admin.wizard.manager.destroyed"
     )}</span>`;
     return {
-      icon: "check-circle",
+      icon: "circle-check",
       html,
     };
   },
 
   buildFailureItem(failure) {
     return {
-      icon: "times-circle",
+      icon: "circle-xmark",
       html: `${failure.id}: ${failure.messages}`,
     };
   },

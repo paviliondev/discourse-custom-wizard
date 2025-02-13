@@ -29,7 +29,7 @@
   {{/if}}
 
   {{#if this.isComposerPreview}}
-    {{d-icon "comment-alt"}}
+    {{d-icon "message"}}
     <span class="wizard-table-composer-text">
       {{i18n "admin.wizard.submissions.composer_preview"}}:
       {{this.value.value}}
@@ -69,7 +69,7 @@
       </span>
     {{else}}
       <span class="wizard-table-icon-item checkbox-false">
-        {{d-icon "times"}}{{this.value.value}}
+        {{d-icon "xmark"}}{{this.value.value}}
       </span>
     {{/if}}
   {{/if}}
