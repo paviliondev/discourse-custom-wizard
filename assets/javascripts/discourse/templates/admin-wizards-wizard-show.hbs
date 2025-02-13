@@ -229,14 +229,14 @@
 
     {{#unless this.creating}}
       <button {{action "remove"}} class="btn btn-danger remove" type="button">
-        {{d-icon "far-trash-alt"}}{{i18n "admin.wizard.remove"}}
+        {{d-icon "far-trash-can"}}{{i18n "admin.wizard.remove"}}
       </button>
     {{/unless}}
 
     {{conditional-loading-spinner condition=this.saving size="small"}}
 
     {{#if this.error}}
-      <span class="error">{{d-icon "times"}}{{this.error}}</span>
+      <span class="error">{{d-icon "xmark"}}{{this.error}}</span>
     {{/if}}
   </div>
 {{/if}}

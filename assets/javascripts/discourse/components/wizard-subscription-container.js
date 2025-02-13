@@ -7,7 +7,7 @@ export default class WizardSubscriptionContainer extends Component {
 
   @computed("subscription.subscribed")
   get subscribedIcon() {
-    return this.subscription.subscribed ? "check" : "times";
+    return this.subscription.subscribed ? "check" : "xmark";
   }
 
   @computed("subscription.subscribed")

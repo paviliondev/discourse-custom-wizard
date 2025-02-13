@@ -4,10 +4,10 @@ import { default as discourseComputed } from "discourse-common/utils/decorators"
 import I18n from "I18n";
 
 const icons = {
-  error: "times-circle",
-  success: "check-circle",
+  error: "circle-xmark",
+  success: "circle-check",
   warn: "exclamation-circle",
-  info: "info-circle",
+  info: "circle-info",
 };
 
 export default Component.extend({
@@ -18,7 +18,7 @@ export default Component.extend({
 
   @discourseComputed("type")
   icon(type) {
-    return icons[type] || "info-circle";
+    return icons[type] || "circle-info";
   },
 
   @discourseComputed("key", "component", "opts")
