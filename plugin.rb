@@ -26,7 +26,6 @@ if respond_to?(:register_svg_icon)
   register_svg_icon "check"
   register_svg_icon "clock"
   register_svg_icon "link"
-  register_svg_icon "comment-alt"
   register_svg_icon "far-life-ring"
   register_svg_icon "arrow-right"
   register_svg_icon "bolt"
