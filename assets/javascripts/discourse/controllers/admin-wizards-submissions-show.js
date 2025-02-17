@@ -35,14 +35,12 @@ export default Controller.extend({
   @discourseComputed("submissions.[]", "fields.@each.enabled")
   displaySubmissions(submissions, fields) {
     let result = [];
+    let enabledFields = fields.filter((f) => f.enabled);
 
     submissions.forEach((submission) => {
       let sub = {};
-
-      Object.keys(submission).forEach((fieldId) => {
-        if (fields.some((f) => f.id === fieldId && f.enabled)) {
-          sub[fieldId] = submission[fieldId];
-        }
+      enabledFields.forEach((field) => {
+        sub[field.id] = submission[field.id];
       });
       result.push(sub);
     });
