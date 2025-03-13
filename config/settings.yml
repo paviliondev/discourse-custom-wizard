@@ -18,3 +18,6 @@ plugins:
   wizard_important_notices_on_dashboard:
     client: true
     default: true
+  wizard_subscription_product_key:
+    hidden: true
+    default: ''

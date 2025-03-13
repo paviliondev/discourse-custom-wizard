@@ -146,4 +146,22 @@ describe CustomWizard::Subscription do
       end
     end
   end
+
+  context "with a site setting" do
+    before { SiteSetting.wizard_subscription_product_key = "standard" }
+
+    after { SiteSetting.wizard_subscription_product_key = nil }
+
+    it "enables the relevant subscription" do
+      expect(described_class.type).to eq(:standard)
+    end
+
+    context "with a subscription" do
+      before { enable_subscription("business") }
+
+      it "respects the subscription" do
+        expect(described_class.type).to eq(:business)
+      end
+    end
+  end
 end

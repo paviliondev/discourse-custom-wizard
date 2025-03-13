@@ -136,7 +136,14 @@ class CustomWizard::Subscription
       @product_slug = id_and_slug[:slug]
     end
 
-    @product_slug ||= ENV["CUSTOM_WIZARD_PRODUCT_SLUG"]
+    @product_slug ||=
+      (
+        if ENV["CUSTOM_WIZARD_PRODUCT_SLUG"].present?
+          ENV["CUSTOM_WIZARD_PRODUCT_SLUG"]
+        else
+          SiteSetting.wizard_subscription_product_key
+        end
+      )
   end
 
   def includes?(feature, attribute, value = nil)
