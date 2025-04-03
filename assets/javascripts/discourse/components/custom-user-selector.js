@@ -1,14 +1,11 @@
 import { isEmpty } from "@ember/utils";
-import Handlebars from "handlebars";
 import $ from "jquery";
 import TextField from "discourse/components/text-field";
 import { renderAvatar } from "discourse/helpers/user-avatar";
+import { default as computed, observes } from "discourse/lib/decorators";
 import userSearch from "discourse/lib/user-search";
-import {
-  default as computed,
-  observes,
-} from "discourse-common/utils/decorators";
-import I18n from "I18n";
+import { escapeExpression } from "discourse/lib/utilities";
+import { i18n } from "discourse-i18n";
 
 const template = function (params) {
   const options = params.options;
@@ -17,11 +14,11 @@ const template = function (params) {
   if (options.users) {
     html += "<ul>";
     options.users.forEach((u) => {
-      html += `<li><a href title="${u.name}">`;
+      html += `<li><a href title="${escapeExpression(u.name)}">`;
       html += renderAvatar(u, { imageSize: "tiny" });
-      html += `<span class='username'>${u.username}</span>`;
+      html += `<span class='username'>${escapeExpression(u.username)}</span>`;
       if (u.name) {
-        html += `<span class='name'>${u.name}</span>`;
+        html += `<span class='name'>${escapeExpression(u.name)}</span>`;
       }
       html += `</a></li>`;
     });
@@ -30,7 +27,7 @@ const template = function (params) {
 
   html += "</div>";
 
-  return new Handlebars.SafeString(html).string;
+  return html;
 };
 
 export default TextField.extend({
@@ -42,7 +39,7 @@ export default TextField.extend({
 
   @computed("placeholderKey")
   placeholder(placeholderKey) {
-    return placeholderKey ? I18n.t(placeholderKey) : "";
+    return placeholderKey ? i18n(placeholderKey) : "";
   },
 
   @observes("usernames")
