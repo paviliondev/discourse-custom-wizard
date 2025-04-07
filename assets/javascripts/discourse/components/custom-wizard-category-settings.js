@@ -7,8 +7,7 @@ import CustomWizardAdmin from "../models/custom-wizard-admin";
 export default class CustomWizardCategorySettings extends Component {
   @tracked wizardList = [];
   @tracked
-  wizardListVal =
-    this.args?.category?.custom_fields?.create_topic_wizard;
+  wizardListVal = this.args?.category?.custom_fields?.create_topic_wizard;
 
   constructor() {
     super(...arguments);
