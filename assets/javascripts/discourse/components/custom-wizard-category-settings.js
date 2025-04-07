@@ -1,12 +1,13 @@
 import Component from "@glimmer/component";
-import { action } from "@ember/object";
 import { tracked } from "@glimmer/tracking";
-import CustomWizardAdmin from "../models/custom-wizard-admin";
+import { action } from "@ember/object";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import CustomWizardAdmin from "../models/custom-wizard-admin";
 
 export default class CustomWizardCategorySettings extends Component {
   @tracked wizardList = [];
-  @tracked wizardListVal =
+  @tracked
+  wizardListVal =
     this.args?.category?.custom_fields?.create_topic_wizard;
 
   constructor() {
