@@ -26,21 +26,21 @@ export default {
     withPluginApi("0.8.36", (api) => {
       api.modifyClass(
         "component:d-navigation",
-        (Superclass) => 
+        (Superclass) =>
           class extends Superclass {
             @action
-              clickCreateTopicButton() {
-                let createTopicWizard = this.get(
-                  "category.custom_fields.create_topic_wizard"
-                );
-                if (createTopicWizard) {
-                  window.location.href = getUrl(`/w/${createTopicWizard}`);
-                } else {
-                  super.clickCreateTopicButton();
-                }
+            clickCreateTopicButton() {
+              let createTopicWizard = this.get(
+                "category.custom_fields.create_topic_wizard"
+              );
+              if (createTopicWizard) {
+                window.location.href = getUrl(`/w/${createTopicWizard}`);
+              } else {
+                super.clickCreateTopicButton();
               }
+            }
           }
-        );
+      );
 
       api.modifyClass("component:d-editor", {
         pluginId: "custom-wizard",
