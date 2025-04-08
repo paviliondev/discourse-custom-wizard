@@ -1,3 +1,4 @@
+import { action } from "@ember/object";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import { withPluginApi } from "discourse/lib/plugin-api";
@@ -23,21 +24,23 @@ export default {
     };
 
     withPluginApi("0.8.36", (api) => {
-      api.modifyClass("component:d-navigation", {
-        pluginId: "custom-wizard",
-        actions: {
-          clickCreateTopicButton() {
-            let createTopicWizard = this.get(
-              "category.custom_fields.create_topic_wizard"
-            );
-            if (createTopicWizard) {
-              window.location.href = getUrl(`/w/${createTopicWizard}`);
-            } else {
-              this._super();
+      api.modifyClass(
+        "component:d-navigation",
+        (Superclass) =>
+          class extends Superclass {
+            @action
+            clickCreateTopicButton() {
+              let createTopicWizard = this.get(
+                "category.custom_fields.create_topic_wizard"
+              );
+              if (createTopicWizard) {
+                window.location.href = getUrl(`/w/${createTopicWizard}`);
+              } else {
+                super.clickCreateTopicButton();
+              }
             }
-          },
-        },
-      });
+          }
+      );
 
       api.modifyClass("component:d-editor", {
         pluginId: "custom-wizard",
