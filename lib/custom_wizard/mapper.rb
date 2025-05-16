@@ -238,6 +238,7 @@ class CustomWizard::Mapper
 
   def recurse(data, keys)
     return nil if data.nil?
+    data = data.first if data.is_a?(Array)
     k = keys.shift
     result = data[k]
 
