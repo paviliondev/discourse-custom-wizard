@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Forms for Discourse. Better onboarding, structured posting, data enrichment, automated actions and much more.
-# version: 2.11.5
+# version: 2.11.6
 # authors: Angus McLeod, Faizaan Gagan, Robert Barrow, Keegan George, Kaitlin Maddever, Marcos Gutierrez
 # url: https://github.com/paviliondev/discourse-custom-wizard
 # contact_emails: development@pavilion.tech
@@ -242,4 +242,10 @@ after_initialize do
             )
     end
   end
+
+  add_to_serializer(
+    :search_topic_list_item,
+    :featured_link,
+    include_condition: -> { SiteSetting.custom_wizard_enabled && object.featured_link.present? },
+  ) { object.featured_link }
 end

@@ -59,12 +59,16 @@ export default MultiSelectComponent.extend({
   actions: {
     onChange(value, items) {
       const content = items.map((t) => {
-        return {
+        let attrs = {
           id: t.id,
           title: t.title,
           fancy_title: t.fancy_title,
           url: t.url,
         };
+        if (t.featured_link) {
+          attrs.featured_link = t.featured_link;
+        }
+        return attrs;
       });
       this.setProperties({ value, content });
       this.onChange(value, content);
