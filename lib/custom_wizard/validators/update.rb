@@ -132,7 +132,7 @@ class ::CustomWizard::UpdateValidator
     return @ctx if @ctx
 
     @ctx = PrettyText.v8
-    @ctx.load("#{Rails.root}/vendor/assets/javascripts/moment.js")
+    @ctx.load("#{Rails.root}/app/assets/javascripts/discourse/node_modules/moment/moment.js")
     @ctx
   end
 end
