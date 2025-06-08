@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Forms for Discourse. Better onboarding, structured posting, data enrichment, automated actions and much more.
-# version: 2.11.8
+# version: 2.12.0
 # authors: Angus McLeod, Faizaan Gagan, Robert Barrow, Keegan George, Kaitlin Maddever, Marcos Gutierrez
 # url: https://github.com/paviliondev/discourse-custom-wizard
 # contact_emails: development@pavilion.tech
@@ -90,7 +90,6 @@ after_initialize do
   require_relative "app/serializers/custom_wizard/log_serializer.rb"
   require_relative "app/serializers/custom_wizard/submission_serializer.rb"
   require_relative "app/serializers/custom_wizard/realtime_validation/similar_topics_serializer.rb"
-  require_relative "lib/custom_wizard/extensions/extra_locales_controller.rb"
   require_relative "lib/custom_wizard/extensions/invites_controller.rb"
   require_relative "lib/custom_wizard/extensions/users_controller.rb"
   require_relative "lib/custom_wizard/extensions/guardian.rb"
@@ -189,7 +188,6 @@ after_initialize do
     redirect_to_wizard_if_required if current_user
   end
 
-  ::ExtraLocalesController.prepend ExtraLocalesControllerCustomWizard
   ::InvitesController.prepend InvitesControllerCustomWizard
   ::UsersController.prepend CustomWizardUsersController
   ::Guardian.prepend CustomWizardGuardian
