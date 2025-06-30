@@ -96,19 +96,7 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
     );
     const wizardLink = queryAll("div.wizard-url a");
     assert.equal(wizardLink.length, 1, "Wizard link was created");
-    assert.equal(
-      queryAll(".wizard-subscription-container a:contains('Subscribed')")
-        .length,
-      1,
-      "Wizard subscription features are accesible"
-    );
-    const subsFeature = queryAll(
-      ".wizard-subscription-container .subscription-settings .setting-value input"
-    );
-    await click(
-      ".wizard-subscription-container .subscription-settings .setting-value input"
-    );
-    assert.ok(subsFeature.is(":checked"), "subscription feature available");
+
     // ("Step 2: Creating a step section")
     await click(".step .link-list button");
     const stepOneText = "step_1 (step_1)";
@@ -122,12 +110,6 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
     assert.ok(
       stepButtonText.includes(stepTitle),
       "The step button changes according to title"
-    );
-    assert.equal(
-      queryAll(".wizard-subscription-container a:contains('Subscribed')")
-        .length,
-      2,
-      "Steps subscription features are accesible"
     );
     // step("Step 3: Creating a field section")
     await click(".field .link-list button");
@@ -169,12 +151,6 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
         "You're editing a field"
       ),
       "Text tipe for field correctly selected"
-    );
-    assert.equal(
-      queryAll(".wizard-subscription-container a:contains('Subscribed')")
-        .length,
-      3,
-      "Field subscription features are accesible"
     );
     // ("Step 4: Creating a action section")
     await click(".action .link-list button");

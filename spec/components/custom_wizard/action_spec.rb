@@ -264,11 +264,8 @@ describe CustomWizard::Action do
     end
   end
 
-  context "standard subscription actions" do
-    before do
-      enable_subscription("standard")
-      Jobs.run_immediately!
-    end
+  context "standard actions" do
+    before { Jobs.run_immediately! }
 
     it "watches tags" do
       watch_tags[:tags][0][:output] = tag.name
@@ -501,9 +498,7 @@ describe CustomWizard::Action do
     end
   end
 
-  context "business subscription actions" do
-    before { enable_subscription("business") }
-
+  context "business actions" do
     it "#create_category" do
       wizard_template["actions"] << create_category
       wizard_template["actions"] << create_group

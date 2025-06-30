@@ -89,66 +89,40 @@ describe CustomWizard::TemplateValidator do
     expect(CustomWizard::TemplateValidator.new(template).perform).to eq(false)
   end
 
-  context "without subscription" do
-    it "invalidates subscription wizard attributes" do
-      template[:permitted] = permitted_json["permitted"]
-      expect(CustomWizard::TemplateValidator.new(template).perform).to eq(false)
-    end
-
-    it "invalidates subscription step attributes" do
-      template[:steps][0][:condition] = user_condition["condition"]
-      expect(CustomWizard::TemplateValidator.new(template).perform).to eq(false)
-    end
-
-    it "invalidates subscription field attributes" do
-      template[:steps][0][:fields][0][:condition] = user_condition["condition"]
-      expect(CustomWizard::TemplateValidator.new(template).perform).to eq(false)
-    end
-
-    it "invalidates subscription actions" do
-      template[:actions] << create_category
-      expect(CustomWizard::TemplateValidator.new(template).perform).to eq(false)
-    end
+  it "validates wizard attributes" do
+    template[:permitted] = permitted_json["permitted"]
+    expect(CustomWizard::TemplateValidator.new(template).perform).to eq(true)
   end
 
-  context "with subscription" do
-    before { enable_subscription("business") }
+  it "validates user-only features" do
+    template[:permitted] = guests_permitted["permitted"]
+    template[:steps][0][:fields] << upload_field
+    validator = CustomWizard::TemplateValidator.new(template)
+    expect(validator.perform).to eq(false)
+    errors = validator.errors.to_a
+    expect(errors).to include(
+      I18n.t("wizard.validation.not_permitted_for_guests", object_id: "step_2_field_7"),
+    )
+  end
 
-    it "validates wizard attributes" do
-      template[:permitted] = permitted_json["permitted"]
-      expect(CustomWizard::TemplateValidator.new(template).perform).to eq(true)
-    end
+  it "validates step attributes" do
+    template[:steps][0][:condition] = user_condition["condition"]
+    expect(CustomWizard::TemplateValidator.new(template).perform).to eq(true)
+  end
 
-    it "validates user-only features" do
-      template[:permitted] = guests_permitted["permitted"]
-      template[:steps][0][:fields] << upload_field
-      validator = CustomWizard::TemplateValidator.new(template)
-      expect(validator.perform).to eq(false)
-      errors = validator.errors.to_a
-      expect(errors).to include(
-        I18n.t("wizard.validation.not_permitted_for_guests", object_id: "step_2_field_7"),
-      )
-    end
+  it "validates field attributes" do
+    template[:steps][0][:fields][0][:condition] = user_condition["condition"]
+    expect(CustomWizard::TemplateValidator.new(template).perform).to eq(true)
+  end
 
-    it "validates step attributes" do
-      template[:steps][0][:condition] = user_condition["condition"]
-      expect(CustomWizard::TemplateValidator.new(template).perform).to eq(true)
-    end
+  it "validates actions" do
+    template[:actions] << create_category
+    expect(CustomWizard::TemplateValidator.new(template).perform).to eq(true)
+  end
 
-    it "validates field attributes" do
-      template[:steps][0][:fields][0][:condition] = user_condition["condition"]
-      expect(CustomWizard::TemplateValidator.new(template).perform).to eq(true)
-    end
-
-    it "validates actions" do
-      template[:actions] << create_category
-      expect(CustomWizard::TemplateValidator.new(template).perform).to eq(true)
-    end
-
-    it "validates settings with validation conditions" do
-      template[:permitted] = validation_condition["condition"]
-      expect(CustomWizard::TemplateValidator.new(template).perform).to eq(true)
-    end
+  it "validates settings with validation conditions" do
+    template[:permitted] = validation_condition["condition"]
+    expect(CustomWizard::TemplateValidator.new(template).perform).to eq(true)
   end
 
   context "steps" do
@@ -206,7 +180,6 @@ describe CustomWizard::TemplateValidator do
         end
 
         it "validates preview templates" do
-          enable_subscription("standard")
           template[:steps][0][:fields] << composer_preview
           template[:steps][0][:fields][3][:preview_template] = invalid_liquid_template
           expect_validation_failure("step_1_field_5.preview_template", liquid_syntax_error)

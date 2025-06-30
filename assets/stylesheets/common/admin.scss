@@ -819,31 +819,6 @@ $error: #ef1700;
   vertical-align: middle;
 }
 
-.wizard-subscription-container {
-  width: 100%;
-  padding: 1em;
-  background-color: rgba($pavilion_primary, 0.1);
-
-  .subscription-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.5em;
-
-    h3 {
-      margin: 0;
-    }
-
-    a {
-      color: var(--primary);
-    }
-  }
-
-  &:not(.subscribed) .subscription-settings {
-    filter: blur(1px);
-    pointer-events: none;
-  }
-}
-
 .btn.wizard-subscription-badge {
   display: inline-flex;
   align-items: center;

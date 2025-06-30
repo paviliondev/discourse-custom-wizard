@@ -101,8 +101,6 @@ describe CustomWizard::Template do
 
   context "wizard template list" do
     before do
-      enable_subscription("standard")
-
       template_json_2 = template_json.dup
       template_json_2["id"] = "super_mega_fun_wizard_2"
       template_json_2["permitted"] = permitted_json["permitted"]

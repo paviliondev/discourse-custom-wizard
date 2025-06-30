@@ -264,51 +264,46 @@
   </div>
 {{/if}}
 
-{{#wizard-subscription-container}}
-  <div class="setting full field-mapper-setting">
+<div class="setting full field-mapper-setting">
+  <div class="setting-label">
+    <label>{{i18n "admin.wizard.condition"}}</label>
+  </div>
+
+  <div class="setting-value">
+    {{wizard-mapper
+      inputs=this.field.condition
+      options=this.fieldConditionOptions
+    }}
+  </div>
+</div>
+
+<div class="setting full field-mapper-setting">
+  <div class="setting-label">
+    <label>{{i18n "admin.wizard.index"}}</label>
+  </div>
+
+  <div class="setting-value">
+    {{wizard-mapper inputs=this.field.index options=this.fieldIndexOptions}}
+  </div>
+</div>
+
+{{#if this.isCategory}}
+  <div class="setting">
     <div class="setting-label">
-      <label>{{i18n "admin.wizard.condition"}}</label>
+      <label>{{i18n "admin.wizard.field.property"}}</label>
     </div>
 
     <div class="setting-value">
-      {{wizard-mapper
-        inputs=this.field.condition
-        options=this.fieldConditionOptions
+      {{combo-box
+        value=this.field.property
+        content=this.categoryPropertyTypes
+        onChange=(action (mut this.field.property))
+        options=(hash none="admin.wizard.selector.placeholder.property")
       }}
     </div>
   </div>
+{{/if}}
 
-  <div class="setting full field-mapper-setting">
-    <div class="setting-label">
-      <label>{{i18n "admin.wizard.index"}}</label>
-    </div>
-
-    <div class="setting-value">
-      {{wizard-mapper inputs=this.field.index options=this.fieldIndexOptions}}
-    </div>
-  </div>
-
-  {{#if this.isCategory}}
-    <div class="setting">
-      <div class="setting-label">
-        <label>{{i18n "admin.wizard.field.property"}}</label>
-      </div>
-
-      <div class="setting-value">
-        {{combo-box
-          value=this.field.property
-          content=this.categoryPropertyTypes
-          onChange=(action (mut this.field.property))
-          options=(hash none="admin.wizard.selector.placeholder.property")
-        }}
-      </div>
-    </div>
-  {{/if}}
-
-  {{#if this.validations}}
-    {{wizard-realtime-validations
-      field=this.field
-      validations=this.validations
-    }}
-  {{/if}}
-{{/wizard-subscription-container}}
+{{#if this.validations}}
+  {{wizard-realtime-validations field=this.field validations=this.validations}}
+{{/if}}

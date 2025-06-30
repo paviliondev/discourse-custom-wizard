@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require "discourse_subscription_client"
 
 class CustomWizard::Subscription
   PRODUCT_HIERARCHY = %w[community standard business]
@@ -117,58 +116,10 @@ class CustomWizard::Subscription
   attr_accessor :product_id, :product_slug
 
   def initialize(update = false)
-    ::DiscourseSubscriptionClient::Subscriptions.update if update
-
-    result = ::DiscourseSubscriptionClient.find_subscriptions("discourse-custom-wizard")
-
-    if result&.any?
-      ids_and_slugs =
-        result.subscriptions.map do |subscription|
-          { id: subscription.product_id, slug: result.products[subscription.product_id] }
-        end
-
-      id_and_slug =
-        ids_and_slugs
-          .sort { |a, b| PRODUCT_HIERARCHY.index(b[:slug]) - PRODUCT_HIERARCHY.index(a[:slug]) }
-          .first
-
-      @product_id = id_and_slug[:id]
-      @product_slug = id_and_slug[:slug]
-    end
-
-    @product_slug ||=
-      (
-        if ENV["CUSTOM_WIZARD_PRODUCT_SLUG"].present?
-          ENV["CUSTOM_WIZARD_PRODUCT_SLUG"]
-        else
-          SiteSetting.wizard_subscription_product_key
-        end
-      )
   end
 
   def includes?(feature, attribute, value = nil)
-    attributes = self.class.attributes[feature]
-
-    ## Attribute is not part of a subscription
-    return true unless attributes.present? && attributes.key?(attribute)
-
-    values = attributes[attribute][type]
-
-    ## Subscription type does not support the attribute.
-    return false if values.blank?
-
-    ## Value is an exception for the subscription type
-    if (exceptions = get_exceptions(values)).any?
-      value = mapped_output(value) if CustomWizard::Mapper.mapped_value?(value)
-      value = [*value].map(&:to_s)
-      return false if (exceptions & value).length > 0
-    end
-
-    ## Subscription type supports all values of the attribute.
-    return true if values.include?("*")
-
-    ## Subscription type supports some values of the attributes.
-    values.include?(value)
+    return true
   end
 
   def type
@@ -179,7 +130,7 @@ class CustomWizard::Subscription
   end
 
   def subscribed?
-    standard? || business? || community?
+    return true
   end
 
   def standard?
@@ -194,14 +145,8 @@ class CustomWizard::Subscription
     product_slug === "community"
   end
 
-  # TODO candidate for removal once code that depends on it externally is no longer used.
-  def self.client_installed?
-    defined?(DiscourseSubscriptionClient) == "constant" &&
-      DiscourseSubscriptionClient.class == Module
-  end
-
   def self.subscribed?
-    new.subscribed?
+    return true
   end
 
   def self.business?

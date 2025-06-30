@@ -108,9 +108,7 @@ describe CustomWizard::UpdateValidator do
     )
   end
 
-  context "subscription fields" do
-    before { enable_subscription("standard") }
-
+  context "advanced fields" do
     it "validates url fields" do
       updater = perform_validation("step_2", step_2_field_6: "https://discourse.com")
       expect(updater.errors.messages[:step_2_field_6].first).to eq(nil)

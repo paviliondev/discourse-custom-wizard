@@ -198,46 +198,20 @@ describe CustomWizard::CustomField do
       ).to eq(false)
     end
 
-    it "does not save subscription field types without a subscription" do
+    it "saves subscription field types" do
       subscription_field_json = custom_field_subscription_json["custom_fields"].first
       custom_field = CustomWizard::CustomField.new(nil, subscription_field_json)
 
-      expect(custom_field.save).to eq(false)
-      expect(custom_field.valid?).to eq(false)
-      expect(custom_field.errors.full_messages.first).to eq(
-        I18n.t("wizard.custom_field.error.subscription_type", type: "json"),
-      )
+      expect(custom_field.save).to eq(true)
+      expect(custom_field.valid?).to eq(true)
     end
 
-    it "does not save subscription field classes without a subscription" do
+    it "saves subscription field classes" do
       subscription_field_json = custom_field_subscription_json["custom_fields"].second
       custom_field = CustomWizard::CustomField.new(nil, subscription_field_json)
 
-      expect(custom_field.save).to eq(false)
-      expect(custom_field.valid?).to eq(false)
-      expect(custom_field.errors.full_messages.first).to eq(
-        I18n.t("wizard.custom_field.error.subscription_type", type: "category"),
-      )
-    end
-
-    context "with a subscription" do
-      before { enable_subscription("business") }
-
-      it "saves subscription field types" do
-        subscription_field_json = custom_field_subscription_json["custom_fields"].first
-        custom_field = CustomWizard::CustomField.new(nil, subscription_field_json)
-
-        expect(custom_field.save).to eq(true)
-        expect(custom_field.valid?).to eq(true)
-      end
-
-      it "saves subscription field classes" do
-        subscription_field_json = custom_field_subscription_json["custom_fields"].second
-        custom_field = CustomWizard::CustomField.new(nil, subscription_field_json)
-
-        expect(custom_field.save).to eq(true)
-        expect(custom_field.valid?).to eq(true)
-      end
+      expect(custom_field.save).to eq(true)
+      expect(custom_field.valid?).to eq(true)
     end
   end
 

@@ -51,9 +51,7 @@ export default SingleSelectComponent.extend({
           value
         );
 
-        let subscriptionRequired =
-          allowedSubscriptionTypes.length &&
-          !allowedSubscriptionTypes.includes("none");
+        let subscriptionRequired = false;
 
         let attrs = {
           id: value,

@@ -123,11 +123,7 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
       "Not Subscribed",
       "Show messsage and link of user not subscribed"
     );
-    assert.equal(
-      queryAll(".wizard-subscription-container").length,
-      1,
-      "Wizard subscription features are not accesible"
-    );
+
     await click(".step .link-list button");
     const stepOneText = "step_1 (step_1)";
     const stepOneBtn = queryAll(`.step button:contains(${stepOneText})`);
@@ -140,11 +136,6 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
     assert.ok(
       stepButtonText.includes(stepTitle),
       "The step button changes according to title"
-    );
-    assert.equal(
-      queryAll(".wizard-subscription-container").length,
-      2,
-      "Steps subscription features are not accesible"
     );
     await appendText(
       ".wizard-custom-step .wizard-text-editor textarea",
@@ -352,11 +343,6 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
         "You're editing a field"
       ),
       "Text tipe for field correctly selected"
-    );
-    assert.equal(
-      queryAll(".wizard-subscription-container").length,
-      3,
-      "Field subscription features are not accesible"
     );
     await click(".action .link-list button");
     const actionOneText = "action_1 (action_1)";

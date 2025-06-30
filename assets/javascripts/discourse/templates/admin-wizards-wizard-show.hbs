@@ -122,63 +122,61 @@
       </div>
     </div>
 
-    {{#wizard-subscription-container}}
-      <div class="setting">
-        <div class="setting-label">
-          <label>{{i18n "admin.wizard.required"}}</label>
-        </div>
-        <div class="setting-value">
-          <Input @type="checkbox" @checked={{this.wizard.required}} />
-          <span>{{i18n "admin.wizard.required_label"}}</span>
-        </div>
+    <div class="setting">
+      <div class="setting-label">
+        <label>{{i18n "admin.wizard.required"}}</label>
       </div>
+      <div class="setting-value">
+        <Input @type="checkbox" @checked={{this.wizard.required}} />
+        <span>{{i18n "admin.wizard.required_label"}}</span>
+      </div>
+    </div>
 
-      <div class="setting">
-        <div class="setting-label">
-          <label>{{i18n "admin.wizard.restart_on_revisit"}}</label>
-        </div>
-        <div class="setting-value">
-          <Input @type="checkbox" @checked={{this.wizard.restart_on_revisit}} />
-          <span>{{i18n "admin.wizard.restart_on_revisit_label"}}</span>
-        </div>
+    <div class="setting">
+      <div class="setting-label">
+        <label>{{i18n "admin.wizard.restart_on_revisit"}}</label>
       </div>
+      <div class="setting-value">
+        <Input @type="checkbox" @checked={{this.wizard.restart_on_revisit}} />
+        <span>{{i18n "admin.wizard.restart_on_revisit_label"}}</span>
+      </div>
+    </div>
 
-      <div class="setting full field-mapper-setting">
-        <div class="setting-label">
-          <label>{{i18n "admin.wizard.permitted"}}</label>
-        </div>
-        <div class="setting-value">
-          {{wizard-mapper
-            inputs=this.wizard.permitted
-            options=(hash
-              context="wizard"
-              inputTypes="assignment,validation"
-              groupSelection="output"
-              guestGroup=true
-              userFieldSelection="key"
-              textSelection="value"
-              inputConnector="and"
-            )
-          }}
-        </div>
+    <div class="setting full field-mapper-setting">
+      <div class="setting-label">
+        <label>{{i18n "admin.wizard.permitted"}}</label>
       </div>
+      <div class="setting-value">
+        {{wizard-mapper
+          inputs=this.wizard.permitted
+          options=(hash
+            context="wizard"
+            inputTypes="assignment,validation"
+            groupSelection="output"
+            guestGroup=true
+            userFieldSelection="key"
+            textSelection="value"
+            inputConnector="and"
+          )
+        }}
+      </div>
+    </div>
 
-      <div class="setting full">
-        <div class="setting-label">
-          <label>{{i18n "admin.wizard.after_time_groups.label"}}</label>
-        </div>
-        <div class="setting-value">
-          <GroupChooser
-            @content={{this.site.groups}}
-            @value={{this.afterTimeGroupIds}}
-            @onChange={{this.setAfterTimeGroups}}
-          />
-          <div class="setting-gutter">
-            {{i18n "admin.wizard.after_time_groups.description"}}
-          </div>
+    <div class="setting full">
+      <div class="setting-label">
+        <label>{{i18n "admin.wizard.after_time_groups.label"}}</label>
+      </div>
+      <div class="setting-value">
+        <GroupChooser
+          @content={{this.site.groups}}
+          @value={{this.afterTimeGroupIds}}
+          @onChange={{this.setAfterTimeGroups}}
+        />
+        <div class="setting-gutter">
+          {{i18n "admin.wizard.after_time_groups.description"}}
         </div>
       </div>
-    {{/wizard-subscription-container}}
+    </div>
   </div>
 
   {{wizard-links
