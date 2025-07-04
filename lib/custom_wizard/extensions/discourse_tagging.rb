@@ -13,6 +13,7 @@ module CustomWizardDiscourseTagging
 
       opts[:only_tag_names] ||= []
       opts[:only_tag_names].push(*filtered_tags)
+      opts.delete(:for_input)
     end
 
     super
