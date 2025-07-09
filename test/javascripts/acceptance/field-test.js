@@ -91,14 +91,14 @@ acceptance("Field | Fields", function (needs) {
       "This is a link to "
     );
     assert.ok(
-      !exists(".d-modal.insert-hyperlink-modal"),
+      !exists(".d-modal.upsert-hyperlink-modal"),
       "no hyperlink modal by default"
     );
     await click(
       ".wizard-field.composer-field .wizard-field-composer  .d-editor button.link"
     );
     assert.ok(
-      exists(".d-modal.insert-hyperlink-modal"),
+      exists(".d-modal.upsert-hyperlink-modal"),
       "hyperlink modal visible"
     );
 

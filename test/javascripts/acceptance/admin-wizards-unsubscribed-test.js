@@ -250,7 +250,7 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
       ".wizard-custom-step .wizard-text-editor .d-editor button.link"
     );
     assert.ok(
-      exists(".d-modal.insert-hyperlink-modal"),
+      exists(".d-modal.upsert-hyperlink-modal"),
       "hyperlink modal visible"
     );
 
