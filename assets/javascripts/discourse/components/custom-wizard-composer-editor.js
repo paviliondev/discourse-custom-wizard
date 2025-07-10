@@ -3,7 +3,7 @@ import { alias } from "@ember/object/computed";
 import { service } from "@ember/service";
 import { dasherize } from "@ember/string";
 import ComposerEditor from "discourse/components/composer-editor";
-import InsertHyperlink from "discourse/components/modal/insert-hyperlink";
+import UpsertHyperlink from "discourse/components/modal/upsert-hyperlink";
 import { uploadIcon } from "discourse/lib/uploads";
 import discourseComputed, { bind } from "discourse-common/utils/decorators";
 
@@ -96,7 +96,7 @@ export default class CustomWizardComposerEditor extends ComposerEditor {
     if (this._lastSel) {
       linkText = this._lastSel.value;
     }
-    this.modal.show(InsertHyperlink, {
+    this.modal.show(UpsertHyperlink, {
       model: { linkText, toolbarEvent },
     });
   }
