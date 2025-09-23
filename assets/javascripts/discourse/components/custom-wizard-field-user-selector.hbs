@@ -1,5 +1,11 @@
 {{custom-user-selector
   usernames=this.field.value
-  placeholderKey=this.field.placeholder
-  tabindex=this.field.tabindex
+  includeGroups=this._includeGroups
+  includeMentionableGroups=this._includeMentionableGroups
+  includeMessageableGroups=this._includeMessageableGroups
+  allowedUsers=this._allowedUsers
+  single=this._single
+  topicId=this._topicId
+  disabled=this._disabled
+  onChangeCallback=(action "updateFieldValue")
 }}
