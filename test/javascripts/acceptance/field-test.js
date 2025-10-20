@@ -227,16 +227,16 @@ acceptance("Field | Fields", function (needs) {
   test("User", async function (assert) {
     await visit("/w/wizard");
     await fillIn(
-      ".wizard-field.user-selector-field input.ember-text-field",
+      ".wizard-field.user-selector-field .d-multi-select-trigger input",
       "a"
     );
     await triggerKeyEvent(
-      ".wizard-field.user-selector-field input.ember-text-field",
+      ".wizard-field.user-selector-field .d-multi-select-trigger input",
       "keyup",
       "a".charCodeAt(0)
     );
 
-    assert.ok(visible(".wizard-field.user-selector-field .ac-wrap"));
+    assert.ok(visible(".wizard-field.user-selector-field .d-multi-select"));
     // TODO: add assertion for ac results. autocomplete does not appear in time.
   });
 });
