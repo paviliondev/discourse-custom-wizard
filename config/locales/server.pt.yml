@@ -9,31 +9,32 @@ pt:
       error:
         required_attribute: "'%{attr}' é um atributo obrigatório"
         unsupported_class: "'%{class}' não é uma classe suportada"
-        unsupported_serializers: "'%{serializers}' não é suportado serializadores para '%{class}'"
-        unsupported_type: "%{type} não é um tipo de campo personalizado suportado"
-        name_invalid: "'%{name}' não é um nome de campo personalizado válido"
-        name_too_short: "'%{name}' é muito curto para um nome de campo personalizado (comprimento mínimo é #{min_length})"
-        name_already_taken: "'%{name}' já está tomado como um nome de campo personalizado"
-        save_default: "Falha ao salvar o campo personalizado '%{name}'"
+        unsupported_serializers: "'%{serializers}' não são serializadores suportados por '%{class}'"
+        unsupported_type: "%{type} não é um tipo de campo customizado suportado"
+        name_invalid: "'%{name}' não é um nome de campo customizado válido"
+        name_too_short: "'%{name}' é muito curto para o nome de um campo customizado (o comprimento mínimo é #{min_length})"
+        name_already_taken: "'%{name}' já está em uso como nome de um campo customizado"
+        save_default: "Falha ao salvar o campo customizado '%{name}'"
+        subscription_type: "%{type} custom fields require a subscription"
     field:
-      too_short: "%{label} deve ter pelo menos %{min} caracteres"
-      too_long: "%{label} deve ter pelo menos %{max} caracteres"
+      too_short: "%{label} deve ter ao menos %{min} caracteres"
+      too_long: "%{label} deve ter no máximo %{max} caracteres"
       required: "%{label} é obrigatório."
       not_url: "%{label} deve ser uma url válida"
       invalid_file: "%{label} deve ser um %{types}"
       invalid_date: "Data inválida"
-      invalid_time: "Tempo inválido"
-    none: "Nós não conseguimos encontrar um assistente nesse endereço."
+      invalid_time: "Horário inválido"
+    none: "Não conseguimos encontrar um assistente neste endereço."
     no_skip: "Assistente não pode ser ignorado"
     export:
       error:
-        select_one: "Por favor, selecione pelo menos um assistente válido"
+        select_one: "Por favor, selecione ao menos um assistente válido"
         invalid_wizards: "Nenhum assistente válido selecionado"
     import:
       error:
         no_file: "Nenhum arquivo selecionado"
         file_large: "Arquivo muito grande"
-        invalid_json: "O arquivo não é um arquivo json válido"
+        invalid_json: "O arquivo não é um arquivo JSON válido"
     destroy:
       error:
         no_template: Nenhum modelo encontrado
@@ -41,12 +42,18 @@ pt:
     validation:
       required: "%{property} é obrigatório"
       conflict: "Assistente com id '%{wizard_id}' já existe"
-      after_signup: "Você só pode ter um assistente 'após a inscrição' por vez. %{wizard_id} tem 'após a inscrição' habilitado."
-      after_signup_after_time: "Você não pode usar 'após tempo' e 'após a inscrição' no mesmo assistente."
-      after_time: "Após a configuração do tempo é inválido."
-      liquid_syntax_error: "Erro de sintaxe Liquid em %{attribute}: %{message}"
+      after_signup: "Você só pode ter apenas um assiste com 'após cadastro' ativo. %{wizard_id} já possui essa propriedade ativa."
+      after_signup_after_time: "Você não pode usar 'após tempo' e 'após cadastro' em um mesmo assistente."
+      after_time: "A configuração do 'após tempo' é inválida."
+      after_time_group: "After time group does not exist: %{group_name}"
+      liquid_syntax_error: "Erro de sintaxe líquida em %{attribute}: %{message}"
+      subscription: "%{type} %{property} usage is not supported on your subscription"
+      not_permitted_for_guests: "%{object_id} is not permitted when guests can access the wizard"
+    error_messages:
+      wizard_replacing_composer: "Category not allowed for topic creation."
   site_settings:
-    custom_wizard_enabled: "Ativar assistentes personalizados."
+    custom_wizard_enabled: "Habilitar assistentes customizados."
     wizard_redirect_exclude_paths: "Rotas excluídas dos redirecionamentos do assistente."
     wizard_recognised_image_upload_formats: "Tipos de arquivo que resultarão no upload exibindo uma visualização da imagem"
-    wizard_apis_enabled: "Habilitar recursos API (experimental)."
+    wizard_apis_enabled: "Habilitar recursos da API (experimental)."
+    wizard_critical_notices_on_dashboard: "Show critical notices about the custom wizard plugin on the admin dashboard."

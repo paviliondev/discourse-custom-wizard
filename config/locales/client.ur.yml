@@ -5,7 +5,7 @@ ur:
       completed: "You have completed this wizard."
       not_permitted: "You are not permitted to access this wizard."
       none: "There is no wizard here."
-      return_to_site: "Return to {{siteName}}"
+      return_to_site: "Return to {{siteName}}."
       requires_login: "You need to be logged in to access this wizard."
       reset: "Reset this wizard."
       step_not_permitted: "You're not permitted to view this step."
@@ -94,6 +94,9 @@ ur:
           time: "Time"
           done: "Set Time"
           clear: "Clear"
+        after_time_groups:
+          label: Time Groups
+          description: Groups directed to wizard after start time.
         required: "Required"
         required_label: "Users cannot skip the wizard."
         prompt_completion: "Prompt"
@@ -111,8 +114,6 @@ ur:
         key: "Key"
         value: "Value"
         profile: "profile"
-        translation: "Translation"
-        translation_placeholder: "key"
         type: "Type"
         none: "Make a selection"
         submission_key: 'submission key'
@@ -125,6 +126,9 @@ ur:
         select_type: "Select a type"
         condition: "Condition"
         index: "Index"
+        edit_columns: "Edit Columns"
+        expand_text: "Read More"
+        collapse_text: "Show Less"
         category_settings:
           custom_wizard:
             title: "Custom Wizard"
@@ -156,11 +160,30 @@ ur:
             no_file: Please choose a file to import
             file_size_error: The file size must be 512kb or less
             file_format_error: The file must be a .json file
-            server_error: "Error: {{message}}"
             importing: Importing wizards...
             destroying: Destroying wizards...
             import_complete: Import complete
             destroy_complete: Destruction complete
+          subscription:
+            documentation: Check out the subscription documentation
+            authorize: "Connect this forum to use your Custom Wizard subscription plan on %{server}."
+            not_subscribed: "You've connected, but are not currently subscribed to a Custom Wizard plan on %{server}."
+            subscription_expiring: "Your subscription is active, but will expire in the next 48 hours."
+            subscription_active: "Your subscription is active."
+            subscription_inactive: "Your subscription is inactive on this forum. Read more in <a href='https://pavilion.tech/products/discourse-custom-wizard-plugin/documentation/'>the documentation</a>."
+            unauthorized: "You're not connected. If you have a subscription, it will become inactive in the next 48 hours."
+            unauthorize_failed: Failed to disconnect.
+          submissions:
+            select: "Select a wizard to see its submissions"
+            viewing: "You're viewing the submissions of the %{wizardName}"
+            documentation: "Check out the submissions documentation"
+          logs:
+            select: "Select a wizard to see its logs"
+            viewing: "View recent logs for wizards on the forum"
+            documentation: "Check out the logs documentation"
+          notices:
+            info: "Plugin status and subscription notices"
+            documentation: Check out the notices documentation
         editor:
           show: "Show"
           hide: "Hide"
@@ -185,11 +208,14 @@ ur:
             user_field_options: "user field options"
             user: "user"
             category: "category"
+            topic: "topic"
             tag: "tag"
             group: "group"
             list: "list"
             custom_field: "custom field"
             value: "value"
+            users: "users"
+            guests: "users and guests"
           placeholder:
             text: "Enter text"
             property: "Select property"
@@ -199,6 +225,7 @@ ur:
             user_field_options: "Select field"
             user: "Select user"
             category: "Select category"
+            topic: "Select a topic"
             tag: "Select tag"
             group: "Select group"
             list: "Enter item"
@@ -246,6 +273,10 @@ ur:
           prefill: "Prefill"
           content: "Content"
           tag_groups: "Tag Groups"
+          can_create_tag: "Can Create Tag"
+          category:
+            label: "Category"
+            none: "Limit to a category..."
           date_time_format:
             label: "Format"
             instructions: "<a href='https://momentjs.com/docs/#/displaying/format/' target='_blank'>Moment.js format</a>"
@@ -276,17 +307,20 @@ ur:
             dropdown: Dropdown
             tag: Tag
             category: Category
+            topic: Topic
             group: Group
             user_selector: User Selector
             date: Date
             time: Time
             date_time: Date & Time
+            event: Event (Events Plugin)
         connector:
           and: "and"
           or: "or"
           then: "then"
           set: "set"
           equal: '='
+          not_equal: '!='
           greater: '>'
           less: '<'
           greater_or_equal: '>='
@@ -299,6 +333,12 @@ ur:
           include: "Include Fields"
           title: "Title"
           post: "Post"
+          poster:
+            label: "Poster"
+            wizard_user: "Wizard user"
+          guest_email:
+            label: "Guest email"
+            placeholder: "Field for guest email"
           topic_attr: "Topic Attribute"
           interpolate_fields: "Insert wizard fields using the field_id in w{}. Insert user fields using field key in u{}."
           run_after:
@@ -321,6 +361,8 @@ ur:
             category: "Category"
             tags: "Tags"
             visible: "Visible"
+            add_event: "Add Event (Events Plugin)"
+            add_location: "Add Location (Locations Plugin)"
           open_composer:
             label: "Open Composer"
           update_profile:
@@ -331,6 +373,10 @@ ur:
             label: "Watch Categories"
             categories: "Categories"
             mute_remainder: "Mute Remainder"
+          watch_tags:
+            label: "Watch Tags"
+            tags: "Tags"
+          watch_x:
             notification_level:
               label: "Notification Level"
               regular: "Normal"
@@ -419,6 +465,10 @@ ur:
           nav_label: "Submissions"
           title: "{{name}} Submissions"
           download: "Download"
+          group_id: "Group ID"
+          category_id: "Category ID"
+          topic_id: "Topic ID"
+          composer_preview: "Composer Preview"
         api:
           label: "API"
           nav_label: 'APIs'
@@ -467,8 +517,14 @@ ur:
             success_codes: "Select success codes"
           log:
             label: "Logs"
+            clear: clear
         log:
           nav_label: "Logs"
+          title: "{{name}} Logs"
+          date: Date
+          action: Action
+          user: User
+          message: Message
         manager:
           nav_label: Manager
           title: Manage Wizards
@@ -478,6 +534,43 @@ ur:
           upload: Select wizards.json
           destroy: Destroy
           destroyed: destroyed
+        subscription:
+          title: Subscriber Features
+          authorize:
+            label: Connect
+            title: Connect your subscription to this site
+          deauthorize:
+            label: Disconnect
+            title: Disconnect your subscription from this site
+          update:
+            title: "Update subscription status"
+          subscribed:
+            label: Subscribed
+            title: You're subscribed and can use these features
+            selector: subscribed
+          not_subscribed:
+            label: Not Subscribed
+            title: Subscribe to use these features
+            selector: not subscribed
+          type:
+            none:
+              label: Subscribe
+              title: There is no Custom Wizard subscription active on this forum.
+            business:
+              label: Support
+              title: There is a Custom Wizard Business subscription active on this forum.
+            standard:
+              label: Support
+              title: There is a Custom Wizard Standard subscription active on this forum.
+            community:
+              label: Support
+              title: There is a Custom Wizard Community subscription active on this forum.
+        user:
+          label: Wizards
+          redirect:
+            label: Redirect
+            remove_label: Remove
+            remove_title: Remove wizard redirect
   wizard_js:
     group:
       select: "Select a group"

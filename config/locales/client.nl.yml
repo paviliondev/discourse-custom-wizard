@@ -1,61 +1,61 @@
 nl:
   js:
     wizard:
-      complete_custom: "Complete the {{name}}"
-      completed: "You have completed this wizard."
-      not_permitted: "You are not permitted to access this wizard."
-      none: "There is no wizard here."
-      return_to_site: "Return to {{siteName}}"
-      requires_login: "You need to be logged in to access this wizard."
-      reset: "Reset this wizard."
-      step_not_permitted: "You're not permitted to view this step."
+      complete_custom: "Voltooi de {{name}}"
+      completed: "U heeft deze wizard voltooid."
+      not_permitted: "U heeft geen toegang tot deze wizard."
+      none: "Er is hier geen wizard."
+      return_to_site: "Return to {{siteName}}."
+      requires_login: "U moet ingelogd zijn om toegang te krijgen tot deze wizard."
+      reset: "Reset deze wizard."
+      step_not_permitted: "U hebt geen toestemming om deze stap te bekijken."
       incomplete_submission:
-        title: "Continue editing your draft submission from %{date}?"
-        resume: "Continue"
-        restart: "Start over"
+        title: "Doorgaan met het bewerken van uw concept-inzending van %{date} ?"
+        resume: "Vervolg"
+        restart: "Opnieuw starten"
       x_characters:
         one: "%{count} Character"
-        other: "%{count} Characters"
+        other: "%{count} tekens"
       quit: "Maybe Later"
-      done_custom: "Done"
-      back: "Back"
-      next: "Next"
-      step: "%{current} of %{total}"
-      upload: "Upload"
-      uploading: "Uploading..."
-      upload_error: "Sorry, there was an error uploading that file. Please try again."
+      done_custom: "Voltooien"
+      back: "Terug"
+      next: "Volgende"
+      step: "%{current} van %{total}"
+      upload: "Uploaden"
+      uploading: "Uploaden..."
+      upload_error: "Sorry, er is een fout opgetreden bij het uploaden van het bestand. Probeer het opnieuw."
     wizard_composer:
-      show_preview: "Preview Post"
-      hide_preview: "Edit Post"
-      quote_post_title: "Quote whole post"
+      show_preview: "Post bekijken"
+      hide_preview: "Post bewerken"
+      quote_post_title: "Gehele post citeren"
       bold_label: "B"
-      bold_title: "Strong"
-      bold_text: "strong text"
+      bold_title: "Vet"
+      bold_text: "vetgedrukte tekst"
       italic_label: "I"
-      italic_title: "Emphasis"
-      italic_text: "emphasized text"
-      link_title: "Hyperlink"
-      link_description: "enter link description here"
-      link_dialog_title: "Insert Hyperlink"
-      link_optional_text: "optional title"
-      link_url_placeholder: "http://example.com"
-      quote_title: "Blockquote"
-      quote_text: "Blockquote"
-      blockquote_text: "Blockquote"
-      code_title: "Preformatted text"
-      code_text: "indent preformatted text by 4 spaces"
-      paste_code_text: "type or paste code here"
-      upload_title: "Upload"
-      upload_description: "enter upload description here"
-      olist_title: "Numbered List"
-      ulist_title: "Bulleted List"
-      list_item: "List item"
-      toggle_direction: "Toggle Direction"
-      help: "Markdown Editing Help"
-      collapse: "minimize the composer panel"
-      abandon: "close composer and discard draft"
-      modal_ok: "OK"
-      modal_cancel: "Cancel"
+      italic_title: "Benadrukt"
+      italic_text: "benadrukte tekst"
+      link_title: "Link"
+      link_description: "geef beschrijving van de link"
+      link_dialog_title: "Link invoegen"
+      link_optional_text: "optionele titel"
+      link_url_placeholder: "https://example.com"
+      quote_title: "Citaat"
+      quote_text: "Citaat"
+      blockquote_text: "Citaat"
+      code_title: "Geformatteerde tekst"
+      code_text: "met vier spaties inspringen"
+      paste_code_text: "type of plak code hier"
+      upload_title: "Uploaden"
+      upload_description: "geef beschrijving van het bestand"
+      olist_title: "Genummerde lijst"
+      ulist_title: "Lijst met opsomming"
+      list_item: "Item van lijst"
+      toggle_direction: "Richting omkeren"
+      help: "Hulp bij Markdown bewerken"
+      collapse: "minimaliseren van composer"
+      abandon: "composer sluiten en voorlopige versie weggooien"
+      modal_ok: "Ok"
+      modal_cancel: "Annuleren"
       cant_send_pm: "Sorry, you can't send a message to %{username}."
       yourself_confirm:
         title: "Did you forget to add recipients?"
@@ -94,6 +94,9 @@ nl:
           time: "Time"
           done: "Set Time"
           clear: "Clear"
+        after_time_groups:
+          label: Time Groups
+          description: Groups directed to wizard after start time.
         required: "Required"
         required_label: "Users cannot skip the wizard."
         prompt_completion: "Prompt"
@@ -111,34 +114,35 @@ nl:
         key: "Key"
         value: "Value"
         profile: "profile"
-        translation: "Translation"
-        translation_placeholder: "key"
         type: "Type"
         none: "Make a selection"
-        submission_key: 'submission key'
+        submission_key: 'sleutel voor inzending'
         param_key: 'param'
-        group: "Group"
-        permitted: "Permitted"
-        advanced: "Advanced"
-        undo: "Undo"
-        clear: "Clear"
-        select_type: "Select a type"
-        condition: "Condition"
+        group: "Groep"
+        permitted: "Toegestaan"
+        advanced: "Uitgebreid"
+        undo: "Herstellen"
+        clear: "Leegmaken"
+        select_type: "Selecteer een type"
+        condition: "Conditie"
         index: "Index"
+        edit_columns: "Kolommen bewerken"
+        expand_text: "Meer lezen"
+        collapse_text: "Minder weergeven"
         category_settings:
           custom_wizard:
             title: "Custom Wizard"
-            create_topic_wizard: "Select a wizard to replace the new topic composer in this category."
+            create_topic_wizard: "Selecteer een wizard om het \"nieuwe topic\" venster in deze categorie te vervangen."
         message:
           wizard:
-            select: "Select a wizard, or create a new one"
-            edit: "You're editing a wizard"
-            create: "You're creating a new wizard"
-            documentation: "Check out the wizard documentation"
-            contact: "Contact the developer"
+            select: "Selecteer een wizard of maak een nieuwe aan"
+            edit: "U bewerkt een wizard"
+            create: "U maakt een nieuwe wizard"
+            documentation: "Raadpleeg de documentatie voor de wizard"
+            contact: "Neem contact op met de ontwikkelaars"
           field:
-            type: "Select a field type"
-            edit: "You're editing a field"
+            type: "Selecteer een veldtype"
+            edit: "U bewerkt een veld"
             documentation: "Check out the field documentation"
           action:
             type: "Select an action type"
@@ -156,11 +160,30 @@ nl:
             no_file: Please choose a file to import
             file_size_error: The file size must be 512kb or less
             file_format_error: The file must be a .json file
-            server_error: "Error: {{message}}"
             importing: Importing wizards...
             destroying: Destroying wizards...
             import_complete: Import complete
             destroy_complete: Destruction complete
+          subscription:
+            documentation: Check out the subscription documentation
+            authorize: "Connect this forum to use your Custom Wizard subscription plan on %{server}."
+            not_subscribed: "You've connected, but are not currently subscribed to a Custom Wizard plan on %{server}."
+            subscription_expiring: "Your subscription is active, but will expire in the next 48 hours."
+            subscription_active: "Your subscription is active."
+            subscription_inactive: "Your subscription is inactive on this forum. Read more in <a href='https://pavilion.tech/products/discourse-custom-wizard-plugin/documentation/'>the documentation</a>."
+            unauthorized: "You're not connected. If you have a subscription, it will become inactive in the next 48 hours."
+            unauthorize_failed: Failed to disconnect.
+          submissions:
+            select: "Select a wizard to see its submissions"
+            viewing: "You're viewing the submissions of the %{wizardName}"
+            documentation: "Check out the submissions documentation"
+          logs:
+            select: "Select a wizard to see its logs"
+            viewing: "View recent logs for wizards on the forum"
+            documentation: "Check out the logs documentation"
+          notices:
+            info: "Plugin status and subscription notices"
+            documentation: Check out the notices documentation
         editor:
           show: "Show"
           hide: "Hide"
@@ -185,11 +208,14 @@ nl:
             user_field_options: "user field options"
             user: "user"
             category: "category"
+            topic: "topic"
             tag: "tag"
             group: "group"
             list: "list"
             custom_field: "custom field"
             value: "value"
+            users: "users"
+            guests: "users and guests"
           placeholder:
             text: "Enter text"
             property: "Select property"
@@ -199,6 +225,7 @@ nl:
             user_field_options: "Select field"
             user: "Select user"
             category: "Select category"
+            topic: "Select a topic"
             tag: "Select tag"
             group: "Select group"
             list: "Enter item"
@@ -246,6 +273,10 @@ nl:
           prefill: "Prefill"
           content: "Content"
           tag_groups: "Tag Groups"
+          can_create_tag: "Can Create Tag"
+          category:
+            label: "Category"
+            none: "Limit to a category..."
           date_time_format:
             label: "Format"
             instructions: "<a href='https://momentjs.com/docs/#/displaying/format/' target='_blank'>Moment.js format</a>"
@@ -276,17 +307,20 @@ nl:
             dropdown: Dropdown
             tag: Tag
             category: Category
+            topic: Topic
             group: Group
             user_selector: User Selector
             date: Date
             time: Time
             date_time: Date & Time
+            event: Event (Events Plugin)
         connector:
           and: "and"
           or: "or"
           then: "then"
           set: "set"
           equal: '='
+          not_equal: '!='
           greater: '>'
           less: '<'
           greater_or_equal: '>='
@@ -299,6 +333,12 @@ nl:
           include: "Include Fields"
           title: "Title"
           post: "Post"
+          poster:
+            label: "Poster"
+            wizard_user: "Wizard user"
+          guest_email:
+            label: "Guest email"
+            placeholder: "Field for guest email"
           topic_attr: "Topic Attribute"
           interpolate_fields: "Insert wizard fields using the field_id in w{}. Insert user fields using field key in u{}."
           run_after:
@@ -321,6 +361,8 @@ nl:
             category: "Category"
             tags: "Tags"
             visible: "Visible"
+            add_event: "Add Event (Events Plugin)"
+            add_location: "Add Location (Locations Plugin)"
           open_composer:
             label: "Open Composer"
           update_profile:
@@ -331,6 +373,10 @@ nl:
             label: "Watch Categories"
             categories: "Categories"
             mute_remainder: "Mute Remainder"
+          watch_tags:
+            label: "Watch Tags"
+            tags: "Tags"
+          watch_x:
             notification_level:
               label: "Notification Level"
               regular: "Normal"
@@ -419,6 +465,10 @@ nl:
           nav_label: "Submissions"
           title: "{{name}} Submissions"
           download: "Download"
+          group_id: "Group ID"
+          category_id: "Category ID"
+          topic_id: "Topic ID"
+          composer_preview: "Composer Preview"
         api:
           label: "API"
           nav_label: 'APIs'
@@ -467,8 +517,14 @@ nl:
             success_codes: "Select success codes"
           log:
             label: "Logs"
+            clear: clear
         log:
           nav_label: "Logs"
+          title: "{{name}} Logs"
+          date: Date
+          action: Action
+          user: User
+          message: Message
         manager:
           nav_label: Manager
           title: Manage Wizards
@@ -478,6 +534,43 @@ nl:
           upload: Select wizards.json
           destroy: Destroy
           destroyed: destroyed
+        subscription:
+          title: Subscriber Features
+          authorize:
+            label: Connect
+            title: Connect your subscription to this site
+          deauthorize:
+            label: Disconnect
+            title: Disconnect your subscription from this site
+          update:
+            title: "Update subscription status"
+          subscribed:
+            label: Subscribed
+            title: You're subscribed and can use these features
+            selector: subscribed
+          not_subscribed:
+            label: Not Subscribed
+            title: Subscribe to use these features
+            selector: not subscribed
+          type:
+            none:
+              label: Subscribe
+              title: There is no Custom Wizard subscription active on this forum.
+            business:
+              label: Support
+              title: There is a Custom Wizard Business subscription active on this forum.
+            standard:
+              label: Support
+              title: There is a Custom Wizard Standard subscription active on this forum.
+            community:
+              label: Support
+              title: There is a Custom Wizard Community subscription active on this forum.
+        user:
+          label: Wizards
+          redirect:
+            label: Redirect
+            remove_label: Remove
+            remove_title: Remove wizard redirect
   wizard_js:
     group:
       select: "Select a group"

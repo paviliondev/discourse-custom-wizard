@@ -15,6 +15,7 @@ de:
         name_too_short: "'%{name}' ist zu kurz für einen benutzerdefinierten Feldnamen (min. Länge ist #{min_length})"
         name_already_taken: "'%{name}' wird bereits als benutzerdefinierter Feldname benutzt"
         save_default: "Fehler beim Speichern des benutzerdefinierten Feldes '%{name}'"
+        subscription_type: "%{type} custom fields require a subscription"
     field:
       too_short: "%{label} muss mindestens %{min} Zeichen lang sein"
       too_long: "%{label} darf nicht mehr als %{max} Zeichen lang sein"
@@ -44,9 +45,15 @@ de:
       after_signup: "Du kannst nur einen \"Nach der Anmeldung\" Assistenten gleichzeitig haben. %{wizard_id} hat \"nach der Anmeldung\" aktiviert."
       after_signup_after_time: "Du kannst nicht 'nach Zeit und 'nach Anmeldung' bei dem gleichen Assistenten verwenden."
       after_time: "Nach Zeit Einstellung ist ungültig."
+      after_time_group: "After time group does not exist: %{group_name}"
       liquid_syntax_error: "Liquid-Syntax-Fehler in %{attribute}: %{message}"
+      subscription: "%{type} %{property} usage is not supported on your subscription"
+      not_permitted_for_guests: "%{object_id} is not permitted when guests can access the wizard"
+    error_messages:
+      wizard_replacing_composer: "Category not allowed for topic creation."
   site_settings:
     custom_wizard_enabled: "Benutzerdefinierte Assistenten aktivieren."
     wizard_redirect_exclude_paths: "Routen, die von Assistenten-Weiterleitungen ausgeschlossen sind."
     wizard_recognised_image_upload_formats: "Dateitypen, die dazu führen, dass der Upload eine Vorschau anzeigen wird"
     wizard_apis_enabled: "API-Funktionen aktivieren (experimentell)."
+    wizard_critical_notices_on_dashboard: "Show critical notices about the custom wizard plugin on the admin dashboard."
