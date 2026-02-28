@@ -96,7 +96,7 @@ class CustomWizard::Api::Authorization
 
     if type === "oauth_3"
       body["code"] = authorization.code
-      body["redirect_uri"] = Discourse.base_url + "/admin/wizards/apis/#{name}/redirect"
+      body["redirect_uri"] = Discourse.base_url + "/admin/wizards/api/#{name}/redirect"
     end
 
     connection =

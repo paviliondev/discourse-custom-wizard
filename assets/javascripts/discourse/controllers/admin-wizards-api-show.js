@@ -101,7 +101,7 @@ export default Controller.extend({
 
       if (authType === "oauth_2") {
         this.set("authorizing", true);
-        ajax(`/admin/wizards/apis/${underscore(name)}/authorize`)
+        ajax(`/admin/wizards/api/${underscore(name)}/authorize`)
           .catch(popupAjaxError)
           .then((result) => {
             if (result.success) {

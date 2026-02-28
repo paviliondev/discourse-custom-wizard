@@ -13,7 +13,7 @@ const CustomWizardApi = EmberObject.extend({
       "//" +
       location.hostname +
       (location.port ? ":" + location.port : "");
-    return baseUrl + `/admin/wizards/apis/${nameParam}/redirect`;
+    return baseUrl + `/admin/wizards/api/${nameParam}/redirect`;
   },
 });
 
