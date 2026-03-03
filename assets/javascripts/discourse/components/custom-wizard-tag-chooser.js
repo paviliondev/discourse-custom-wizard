@@ -1,7 +1,26 @@
 import { makeArray } from "discourse/lib/helpers";
-import TagChooser from "select-kit/components/tag-chooser";
+import TagChooser from "discourse/select-kit/components/tag-chooser";
 
 export default TagChooser.extend({
+  _selectedTagPayload(selectedTags, blockedTags) {
+    const selectedTagIds = [];
+    const selectedTagNames = [];
+
+    selectedTags
+      .concat(blockedTags)
+      .uniq()
+      .slice(0, 100)
+      .forEach((tag) => {
+        if (typeof tag === "string") {
+          selectedTagNames.push(tag);
+        } else if (tag?.id !== null && tag?.id !== undefined) {
+          selectedTagIds.push(tag.id);
+        }
+      });
+
+    return { selectedTagIds, selectedTagNames };
+  },
+
   search(query) {
     const selectedTags = makeArray(this.tags).filter(Boolean);
 
@@ -12,10 +31,18 @@ export default TagChooser.extend({
     };
 
     if (selectedTags.length || this.blockedTags.length) {
-      data.selected_tags = selectedTags
-        .concat(this.blockedTags)
-        .uniq()
-        .slice(0, 100);
+      const { selectedTagIds, selectedTagNames } = this._selectedTagPayload(
+        selectedTags,
+        this.blockedTags
+      );
+
+      if (selectedTagIds.length) {
+        data.selected_tag_ids = selectedTagIds;
+      }
+
+      if (selectedTagNames.length) {
+        data.selected_tags = selectedTagNames;
+      }
     }
 
     if (!this.everyTag) {

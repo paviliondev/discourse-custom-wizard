@@ -13,47 +13,60 @@ describe ::DiscourseTagging, type: :request do
 
   describe "#filter_allowed_tags" do
     let(:guardian) { Guardian.new(user) }
+    let(:all_tag_names) { Tag.all.pluck(:name) }
+    let(:filtered_tag_names) do
+      ->(filter_params) do
+        DiscourseTagging.filter_allowed_tags(guardian, filter_params).map(&:name)
+      end
+    end
+    let(:expect_filtered_tag_names) do
+      lambda do |filter_params, expected_tag_names|
+        expect(filtered_tag_names.call(filter_params)).to contain_exactly(*expected_tag_names)
+      end
+    end
+    let(:custom_wizard_for_input) do
+      ->(groups) { { name: "custom-wizard-tag-chooser", groups: groups } }
+    end
 
     context "for_input is a boolean" do
       it "works normally" do
-        filter_params = { q: "", for_input: true }
-        tags = DiscourseTagging.filter_allowed_tags(guardian, filter_params)
-        names = tags.map(&:name)
-        all_tag_names = Tag.all.pluck(:name)
-        expect(names).to contain_exactly(*all_tag_names)
+        expect_filtered_tag_names.call({ q: "", for_input: true }, all_tag_names)
       end
     end
 
     context "for_input is an object including a tag group" do
       it "returns tags only in the tag group" do
-        filter_params = {
-          q: "",
-          for_input: {
-            name: "custom-wizard-tag-chooser",
-            groups: tag_group_1.name,
-          },
-        }
-        tags = DiscourseTagging.filter_allowed_tags(guardian, filter_params)
-        names = tags.map(&:name)
-        expected_tag_names =
-          TagGroup
-            .includes(:tags)
-            .where(id: tag_group_1.id)
-            .map { |tag_group| tag_group.tags.pluck(:name) }
-            .flatten
-
-        expect(names).to contain_exactly(*expected_tag_names)
+        filter_params = { q: "", for_input: custom_wizard_for_input.call(tag_group_1.name) }
+        expect_filtered_tag_names.call(filter_params, tag_group_1.tags.pluck(:name))
       end
     end
 
     context "for_input is an object including an empty tag group string" do
       it "returns all tags" do
-        filter_params = { q: "", for_input: { name: "custom-wizard-tag-chooser", groups: "" } }
-        tags = DiscourseTagging.filter_allowed_tags(guardian, filter_params)
-        names = tags.map(&:name)
+        expect_filtered_tag_names.call(
+          { q: "", for_input: custom_wizard_for_input.call("") },
+          all_tag_names,
+        )
+      end
+    end
 
-        all_tag_names = Tag.all.pluck(:name)
-        expect(names).to contain_exactly(*all_tag_names)
+    context "when selected_tags are parameter objects" do
+      it "normalizes selected_tags and does not raise" do
+        filter_params = {
+          q: "",
+          for_input: custom_wizard_for_input.call(tag_group_1.name),
+          selected_tags:
+            ActionController::Parameters.new(
+              "0" => ActionController::Parameters.new(id: tag_1.id.to_s, name: tag_1.name),
+              "1" => ActionController::Parameters.new(id: tag_2.id.to_s, name: tag_2.name),
+            ),
+        }
+
+        tags = nil
+        expect {
+          tags = DiscourseTagging.filter_allowed_tags(guardian, filter_params)
+        }.not_to raise_error
+        expect(tags.map(&:name)).to be_empty
       end
     end
   end
