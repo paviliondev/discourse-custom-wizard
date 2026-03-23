@@ -288,15 +288,6 @@ export function filterValues(currentWizard, feature, attribute, values = null) {
   return values;
 }
 
-const siteSettings = getOwnerWithFallback(this).lookup("service:site-settings");
-if (siteSettings.wizard_apis_enabled) {
-  wizardSchema.action.types.send_to_api = {
-    api: null,
-    api_endpoint: null,
-    api_body: null,
-  };
-}
-
 export function setWizardDefaults(obj, itemType) {
   const objSchema = wizardSchema[itemType];
   const basicDefaults = objSchema.basic;
