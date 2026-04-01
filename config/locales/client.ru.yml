@@ -1,529 +1,647 @@
 ru:
   js:
     wizard:
-      complete_custom: "Complete the {{name}}"
-      completed: "You have completed this wizard."
-      not_permitted: "You are not permitted to access this wizard."
-      none: "There is no wizard here."
-      return_to_site: "Return to {{siteName}}"
-      requires_login: "You need to be logged in to access this wizard."
-      reset: "Reset this wizard."
-      step_not_permitted: "You're not permitted to view this step."
+      complete_custom: "Завершить {{name}}"
+      completed: "Вы завершили этот мастер."
+      not_permitted: "У вас нет доступа к этому мастеру."
+      none: "Здесь нет мастера."
+      return_to_site: "Вернуться на {{siteName}}."
+      requires_login: "Для доступа к этому мастеру необходимо войти."
+      reset: "Сбросить этот мастер."
+      step_not_permitted: "У вас нет прав на просмотр этого шага."
       incomplete_submission:
-        title: "Continue editing your draft submission from %{date}?"
-        resume: "Continue"
-        restart: "Start over"
+        title: "Продолжить редактирование черновика от %{date}?"
+        resume: "Продолжить"
+        restart: "Начать заново"
       x_characters:
-        one: "%{count} Character"
-        few: "%{count} Characters"
-        many: "%{count} Characters"
-        other: "%{count} Characters"
-      quit: "Maybe Later"
-      done_custom: "Done"
-      back: "Back"
-      next: "Next"
-      step: "%{current} of %{total}"
-      upload: "Upload"
-      uploading: "Uploading..."
-      upload_error: "Sorry, there was an error uploading that file. Please try again."
+        one: "%{count} символ"
+        other: "%{count} символов"
+      quit: "Выйти"
+      done_custom: "Готово"
+      back: "Назад"
+      next: "Далее"
+      step: "%{current} из %{total}"
+      upload: "Загрузить"
+      uploading: "Загрузка..."
+      upload_error: "Извините, при загрузке файла произошла ошибка. Попробуйте снова."
+
     wizard_composer:
-      show_preview: "Preview Post"
-      hide_preview: "Edit Post"
-      quote_post_title: "Quote whole post"
-      bold_label: "B"
-      bold_title: "Strong"
-      bold_text: "strong text"
-      italic_label: "I"
-      italic_title: "Emphasis"
-      italic_text: "emphasized text"
-      link_title: "Hyperlink"
-      link_description: "enter link description here"
-      link_dialog_title: "Insert Hyperlink"
-      link_optional_text: "optional title"
-      link_url_placeholder: "http://example.com"
-      quote_title: "Blockquote"
-      quote_text: "Blockquote"
-      blockquote_text: "Blockquote"
-      code_title: "Preformatted text"
-      code_text: "indent preformatted text by 4 spaces"
-      paste_code_text: "type or paste code here"
-      upload_title: "Upload"
-      upload_description: "enter upload description here"
-      olist_title: "Numbered List"
-      ulist_title: "Bulleted List"
-      list_item: "List item"
-      toggle_direction: "Toggle Direction"
-      help: "Markdown Editing Help"
-      collapse: "minimize the composer panel"
-      abandon: "close composer and discard draft"
+      show_preview: "Предпросмотр"
+      hide_preview: "Редактировать"
+      quote_post_title: "Цитировать всё сообщение"
+      bold_label: "Ж"
+      bold_title: "Жирный"
+      bold_text: "жирный текст"
+      italic_label: "К"
+      italic_title: "Курсив"
+      italic_text: "курсив"
+      link_title: "Ссылка"
+      link_description: "введите описание ссылки"
+      link_dialog_title: "Вставить ссылку"
+      link_optional_text: "необязательный заголовок"
+      link_url_placeholder: "https://example.com"
+      quote_title: "Цитата"
+      quote_text: "Цитата"
+      blockquote_text: "Цитата"
+      code_title: "Предварительно отформатированный текст"
+      code_text: "отступ в 4 пробела"
+      paste_code_text: "введите или вставьте код"
+      upload_title: "Загрузить"
+      upload_description: "введите описание"
+      olist_title: "Нумерованный список"
+      ulist_title: "Маркированный список"
+      list_item: "Элемент списка"
+      toggle_direction: "Сменить направление"
+      help: "Справка по Markdown"
+      collapse: "свернуть панель"
+      abandon: "закрыть и отменить черновик"
       modal_ok: "OK"
-      modal_cancel: "Cancel"
-      cant_send_pm: "Sorry, you can't send a message to %{username}."
+      modal_cancel: "Отмена"
+      cant_send_pm: "Извините, вы не можете отправить сообщение %{username}."
       yourself_confirm:
-        title: "Did you forget to add recipients?"
-        body: "Right now this message is only being sent to yourself!"
+        title: "Вы забыли добавить получателей?"
+        body: "Сейчас это сообщение отправлено только вам!"
+
     realtime_validations:
       similar_topics:
-        insufficient_characters: "Type a minimum 5 characters to start looking for similar topics"
-        insufficient_characters_categories: "Type a minimum 5 characters to start looking for similar topics in %{catLinks}"
-        results: "Your topic is similar to..."
-        no_results: "No similar topics."
-        loading: "Looking for similar topics..."
-        show: "show"
+        insufficient_characters: "Введите минимум 5 символов для поиска похожих тем"
+        insufficient_characters_categories: "Введите минимум 5 символов для поиска похожих тем в %{catLinks}"
+        results: "Ваша тема похожа на…"
+        no_results: "Похожих тем не найдено."
+        loading: "Поиск похожих тем…"
+        show: "показать"
+
   admin_js:
     admin:
       wizard:
-        label: "Wizard"
-        nav_label: "Wizards"
-        select: "Select a wizard"
-        create: "Create Wizard"
-        name: "Name"
-        name_placeholder: "wizard name"
-        background: "Background"
+        label: "Мастер"
+        nav_label: "Мастера"
+        select: "Выберите мастера"
+        create: "Создать мастера"
+        name: "Имя"
+        name_placeholder: "имя мастера"
+        background: "Фон"
         background_placeholder: "#hex"
-        save_submissions: "Save"
-        save_submissions_label: "Save wizard submissions."
-        multiple_submissions: "Multiple"
-        multiple_submissions_label: "Users can submit multiple times."
-        after_signup: "Signup"
-        after_signup_label: "Users directed to wizard after signup."
-        after_time: "Time"
-        after_time_label: "Users directed to wizard after start time:"
-        after_time_time_label: "Start Time"
+        save_submissions: "Сохранять"
+        save_submissions_label: "Сохранять отправки мастера."
+        multiple_submissions: "Множественные"
+        multiple_submissions_label: "Пользователи могут отправлять несколько раз."
+        after_signup: "После регистрации"
+        after_signup_label: "Пользователи направляются к мастеру после регистрации."
+        after_time: "По времени"
+        after_time_label: "Пользователи направляются к мастеру после времени начала:"
+        after_time_time_label: "Время начала"
         after_time_modal:
-          title: "Wizard Start Time"
-          date: "Date"
-          time: "Time"
-          done: "Set Time"
-          clear: "Clear"
-        required: "Required"
-        required_label: "Users cannot skip the wizard."
-        prompt_completion: "Prompt"
-        prompt_completion_label: "Prompt user to complete wizard."
-        restart_on_revisit: "Restart"
-        restart_on_revisit_label: "Clear submissions on each visit."
-        resume_on_revisit: "Resume"
-        resume_on_revisit_label: "Ask the user if they want to resume on each visit."
-        theme_id: "Theme"
-        no_theme: "Select a Theme (optional)"
-        save: "Save Changes"
-        remove: "Delete Wizard"
-        add: "Add"
-        url: "Url"
-        key: "Key"
-        value: "Value"
-        profile: "profile"
-        translation: "Translation"
-        translation_placeholder: "key"
-        type: "Type"
-        none: "Make a selection"
-        submission_key: 'submission key'
-        param_key: 'param'
-        group: "Group"
-        permitted: "Permitted"
-        advanced: "Advanced"
-        undo: "Undo"
-        clear: "Clear"
-        select_type: "Select a type"
-        condition: "Condition"
-        index: "Index"
+          title: "Время начала мастера"
+          date: "Дата"
+          time: "Время"
+          done: "Установить время"
+          clear: "Очистить"
+        after_time_groups:
+          label: "Группы по времени"
+          description: "Группы, направляемые к мастеру после времени начала."
+        required: "Обязательный"
+        required_label: "Пользователи не могут пропустить мастер."
+        prompt_completion: "Напоминание"
+        prompt_completion_label: "Напоминать пользователю о завершении мастера."
+        restart_on_revisit: "Сброс"
+        restart_on_revisit_label: "Очищать отправки при каждом посещении."
+        resume_on_revisit: "Продолжить"
+        resume_on_revisit_label: "Спрашивать пользователя, хочет ли он продолжить при каждом посещении."
+        theme_id: "Тема оформления"
+        no_theme: "Выберите тему (необязательно)"
+        save: "Сохранить изменения"
+        remove: "Удалить мастера"
+        add: "Добавить"
+        url: "URL"
+        key: "Ключ"
+        value: "Значение"
+        profile: "профиль"
+        type: "Тип"
+        none: "Выберите"
+        submission_key: 'ключ отправки'
+        param_key: 'параметр'
+        group: "Группа"
+        permitted: "Разрешено"
+        advanced: "Расширенные"
+        undo: "Отменить"
+        clear: "Очистить"
+        select_type: "Выберите тип"
+        condition: "Условие"
+        index: "Индекс"
+        edit_columns: "Редактировать колонки"
+        expand_text: "Подробнее"
+        collapse_text: "Свернуть"
         category_settings:
           custom_wizard:
-            title: "Custom Wizard"
-            create_topic_wizard: "Select a wizard to replace the new topic composer in this category."
+            title: "Пользовательский мастер"
+            create_topic_wizard: "Выберите мастера, который заменит компоновщик новых тем в этой категории."
+
         message:
           wizard:
-            select: "Select a wizard, or create a new one"
-            edit: "You're editing a wizard"
-            create: "You're creating a new wizard"
-            documentation: "Check out the wizard documentation"
-            contact: "Contact the developer"
+            select: "Выберите мастера или создайте нового"
+            edit: "Вы редактируете мастера"
+            create: "Вы создаёте нового мастера"
+            documentation: "Посмотрите документацию по мастеру"
+            contact: "Свяжитесь с разработчиком"
           field:
-            type: "Select a field type"
-            edit: "You're editing a field"
-            documentation: "Check out the field documentation"
+            type: "Выберите тип поля"
+            edit: "Вы редактируете поле"
+            documentation: "Посмотрите документацию по полям"
           action:
-            type: "Select an action type"
-            edit: "You're editing an action"
-            documentation: "Check out the action documentation"
+            type: "Выберите тип действия"
+            edit: "Вы редактируете действие"
+            documentation: "Посмотрите документацию по действиям"
           custom_fields:
-            create: "View, create, edit and destroy custom fields"
-            saved: "Saved custom field"
-            error: "Failed to save: {{messages}}"
-            documentation: Check out the custom field documentation
+            create: "Просмотр, создание, редактирование и удаление пользовательских полей"
+            saved: "Пользовательское поле сохранено"
+            error: "Не удалось сохранить: {{messages}}"
+            documentation: "Посмотрите документацию по пользовательским полям"
           manager:
-            info: "Export, import or destroy wizards"
-            documentation: Check out the manager documentation
-            none_selected: Please select atleast one wizard
-            no_file: Please choose a file to import
-            file_size_error: The file size must be 512kb or less
-            file_format_error: The file must be a .json file
-            server_error: "Error: {{message}}"
-            importing: Importing wizards...
-            destroying: Destroying wizards...
-            import_complete: Import complete
-            destroy_complete: Destruction complete
+            info: "Экспорт, импорт или удаление мастеров"
+            documentation: "Посмотрите документацию по управлению"
+            none_selected: "Выберите хотя бы одного мастера"
+            no_file: "Выберите файл для импорта"
+            file_size_error: "Размер файла не должен превышать 512 КБ"
+            file_format_error: "Файл должен быть в формате .json"
+            importing: "Импорт мастеров…"
+            destroying: "Удаление мастеров…"
+            import_complete: "Импорт завершён"
+            destroy_complete: "Удаление завершено"
+          subscription:
+            documentation: "Посмотрите документацию по подписке"
+            authorize: "Подключите этот форум, чтобы использовать вашу подписку Custom Wizard на %{server}."
+            not_subscribed: "Вы подключены, но в настоящее время у вас нет активной подписки на Custom Wizard на %{server}."
+            subscription_expiring: "Ваша подписка активна, но истекает в ближайшие 48 часов."
+            subscription_active: "Ваша подписка активна."
+            subscription_inactive: "Ваша подписка неактивна на этом форуме. Подробнее в <a href='https://pavilion.tech/products/discourse-custom-wizard-plugin/documentation/'>документации</a>."
+            unauthorized: "Вы не подключены. Если у вас есть подписка, она станет неактивной в ближайшие 48 часов."
+            unauthorize_failed: "Не удалось отключиться."
+          submissions:
+            select: "Выберите мастера, чтобы увидеть его отправки"
+            viewing: "Вы просматриваете отправки мастера %{wizardName}"
+            documentation: "Посмотрите документацию по отправкам"
+          logs:
+            select: "Выберите мастера, чтобы увидеть его журналы"
+            viewing: "Просмотр недавних журналов мастеров на форуме"
+            documentation: "Посмотрите документацию по журналам"
+          notices:
+            info: "Статус плагина и уведомления о подписке"
+            documentation: "Посмотрите документацию по уведомлениям"
+
         editor:
-          show: "Show"
-          hide: "Hide"
-          preview: "{{action}} Preview"
-          popover: "{{action}} Fields"
+          show: "Показать"
+          hide: "Скрыть"
+          preview: "{{action}} предпросмотр"
+          popover: "{{action}} поля"
+
         input:
           conditional:
-            name: 'if'
-            output: 'then'
+            name: 'если'
+            output: 'то'
           assignment:
-            name: 'set'
+            name: 'установить'
           association:
-            name: 'map'
+            name: 'сопоставить'
           validation:
-            name: 'ensure'
+            name: 'проверить'
+
         selector:
           label:
-            text: "text"
-            wizard_field: "wizard field"
-            wizard_action: "wizard action"
-            user_field: "user field"
-            user_field_options: "user field options"
-            user: "user"
-            category: "category"
-            tag: "tag"
-            group: "group"
-            list: "list"
-            custom_field: "custom field"
-            value: "value"
+            text: "текст"
+            wizard_field: "поле мастера"
+            wizard_action: "действие мастера"
+            user_field: "поле пользователя"
+            user_field_options: "параметры поля пользователя"
+            user: "пользователь"
+            category: "категория"
+            topic: "тема"
+            tag: "тег"
+            group: "группа"
+            list: "список"
+            custom_field: "пользовательское поле"
+            value: "значение"
+            users: "пользователи"
+            guests: "пользователи и гости"
+
           placeholder:
-            text: "Enter text"
-            property: "Select property"
-            wizard_field: "Select field"
-            wizard_action: "Select action"
-            user_field: "Select field"
-            user_field_options: "Select field"
-            user: "Select user"
-            category: "Select category"
-            tag: "Select tag"
-            group: "Select group"
-            list: "Enter item"
-            custom_field: "Select field"
-            value: "Select value"
+            text: "Введите текст"
+            property: "Выберите свойство"
+            wizard_field: "Выберите поле"
+            wizard_action: "Выберите действие"
+            user_field: "Выберите поле"
+            user_field_options: "Выберите поле"
+            user: "Выберите пользователя"
+            category: "Выберите категорию"
+            topic: "Выберите тему"
+            tag: "Выберите тег"
+            group: "Выберите группу"
+            list: "Введите элемент"
+            custom_field: "Выберите поле"
+            value: "Выберите значение"
+
         error:
-          failed: "failed to save wizard"
-          required: "{{type}} requires {{property}}"
-          invalid: "{{property}} is invalid"
-          dependent: "{{property}} is dependent on {{dependent}}"
-          conflict: "{{type}} with {{property}} '{{value}}' already exists"
-          after_time: "After time invalid"
+          failed: "не удалось сохранить мастера"
+          required: "Для {{type}} требуется {{property}}"
+          invalid: "{{property}} недействителен"
+          dependent: "{{property}} зависит от {{dependent}}"
+          conflict: "{{type}} с {{property}} '{{value}}' уже существует"
+          after_time: "Неверное время начала"
+
         step:
-          header: "Steps"
-          title: "Title"
-          banner: "Banner"
-          description: "Description"
+          header: "Шаги"
+          title: "Заголовок"
+          banner: "Баннер"
+          description: "Описание"
           required_data:
-            label: "Required"
-            not_permitted_message: "Message shown when required data not present"
+            label: "Обязательные данные"
+            not_permitted_message: "Сообщение при отсутствии обязательных данных"
           permitted_params:
-            label: "Params"
+            label: "Разрешённые параметры"
           force_final:
-            label: "Conditional Final Step"
-            description: "Display this step as the final step if conditions on later steps have not passed when the user reaches this step."
+            label: "Условный финальный шаг"
+            description: "Показывать этот шаг как финальный, если условия на последующих шагах не выполнены, когда пользователь достигает этого шага."
+
         field:
-          header: "Fields"
-          label: "Label"
-          description: "Description"
-          image: "Image"
-          image_placeholder: "Image url"
-          required: "Required"
-          required_label: "Field is Required"
-          min_length: "Min Length"
-          min_length_placeholder: "Minimum length in characters"
-          max_length: "Max Length"
-          max_length_placeholder: "Maximum length in characters"
-          char_counter: "Character Counter"
-          char_counter_placeholder: "Display Character Counter"
-          field_placeholder: "Field Placeholder"
-          file_types: "File Types"
-          preview_template: "Template"
-          limit: "Limit"
-          property: "Property"
-          prefill: "Prefill"
-          content: "Content"
-          tag_groups: "Tag Groups"
+          header: "Поля"
+          label: "Метка"
+          description: "Описание"
+          image: "Изображение"
+          image_placeholder: "URL изображения"
+          required: "Обязательное"
+          required_label: "Поле обязательно для заполнения"
+          min_length: "Мин. длина"
+          min_length_placeholder: "Минимальное количество символов"
+          max_length: "Макс. длина"
+          max_length_placeholder: "Максимальное количество символов"
+          char_counter: "Счётчик"
+          char_counter_placeholder: "Показывать счётчик символов"
+          field_placeholder: "Подсказка"
+          file_types: "Типы файлов"
+          preview_template: "Шаблон"
+          limit: "Лимит"
+          property: "Свойство"
+          prefill: "Предзаполнить"
+          content: "Содержимое"
+          tag_groups: "Группы тегов"
+          can_create_tag: "Можно создавать тег"
+          category:
+            label: "Категория"
+            none: "Ограничить категорией…"
           date_time_format:
-            label: "Format"
-            instructions: "<a href='https://momentjs.com/docs/#/displaying/format/' target='_blank'>Moment.js format</a>"
+            label: "Формат"
+            instructions: "<a href='https://momentjs.com/docs/#/displaying/format/' target='_blank'>Формат Moment.js</a>"
           validations:
-            header: "Realtime Validations"
-            enabled: "Enabled"
-            similar_topics: "Similar Topics"
-            position: "Position"
-            above: "Above"
-            below: "Below"
-            categories: "Categories"
-            max_topic_age: "Max Topic Age"
+            header: "Проверки"
+            enabled: "Включено"
+            similar_topics: "Похожие темы"
+            position: "Позиция"
+            above: "Выше"
+            below: "Ниже"
+            categories: "Категории"
+            max_topic_age: "Макс. возраст темы"
             time_units:
-              days: "Days"
-              weeks: "Weeks"
-              months: "Months"
-              years: "Years"
+              days: "Дней"
+              weeks: "Недель"
+              months: "Месяцев"
+              years: "Лет"
+
           type:
-            text: "Text"
-            textarea: Textarea
-            composer: Composer
-            composer_preview: Composer Preview
-            text_only: Text Only
-            number: Number
-            checkbox: Checkbox
-            url: Url
-            upload: Upload
-            dropdown: Dropdown
-            tag: Tag
-            category: Category
-            group: Group
-            user_selector: User Selector
-            date: Date
-            time: Time
-            date_time: Date & Time
+            text: "Текст"
+            textarea: "Текстовая область"
+            composer: "Компоновщик"
+            composer_preview: "Предпросмотр компоновщика"
+            text_only: "Только текст"
+            number: "Число"
+            checkbox: "Флажок"
+            url: "URL"
+            upload: "Загрузка"
+            dropdown: "Выпадающий список"
+            tag: "Тег"
+            category: "Категория"
+            topic: "Тема"
+            group: "Группа"
+            user_selector: "Выбор пользователя"
+            date: "Дата"
+            time: "Время"
+            date_time: "Дата и время"
+            event: "Событие (плагин Events)"
+
         connector:
-          and: "and"
-          or: "or"
-          then: "then"
-          set: "set"
+          and: "и"
+          or: "или"
+          then: "затем"
+          set: "установить"
           equal: '='
+          not_equal: '!='
           greater: '>'
           less: '<'
           greater_or_equal: '>='
           less_or_equal: '<='
           regex: '=~'
           association: '→'
-          is: 'is'
+          is: 'это'
+
         action:
-          header: "Actions"
-          include: "Include Fields"
-          title: "Title"
-          post: "Post"
-          topic_attr: "Topic Attribute"
-          interpolate_fields: "Insert wizard fields using the field_id in w{}. Insert user fields using field key in u{}."
+          header: "Действия"
+          include: "Включить поля"
+          title: "Заголовок"
+          post: "Сообщение"
+          poster:
+            label: "Автор"
+            wizard_user: "Пользователь мастера"
+          guest_email:
+            label: "Email гостя"
+            placeholder: "Поле для email гостя"
+          topic_attr: "Атрибут темы"
+          interpolate_fields: "Вставляйте поля мастера, используя field_id в w{}. Вставляйте поля пользователя, используя ключ поля в u{}."
+
           run_after:
-            label: "Run After"
-            wizard_completion: "Wizard Completion"
+            label: "Выполнить после"
+            wizard_completion: "Завершения мастера"
           custom_fields:
-            label: "Custom"
-            key: "field"
+            label: "Пользовательские"
+            key: "поле"
           skip_redirect:
-            label: "Redirect"
-            description: "Don't redirect the user to this {{type}} after the wizard completes"
+            label: "Перенаправление"
+            description: "Не перенаправлять пользователя на этот {{type}} после завершения мастера"
           suppress_notifications:
-            label: "Suppress Notifications"
-            description: "Suppress normal notifications triggered by post creation"
+            label: "Подавить уведомления"
+            description: "Подавить обычные уведомления, вызванные созданием сообщения"
           send_message:
-            label: "Send Message"
-            recipient: "Recipient"
+            label: "Отправить сообщение"
+            recipient: "Получатель"
           create_topic:
-            label: "Create Topic"
-            category: "Category"
-            tags: "Tags"
-            visible: "Visible"
+            label: "Создать тему"
+            category: "Категория"
+            tags: "Теги"
+            visible: "Видимость"
+            add_event: "Добавить событие (плагин Events)"
+            add_location: "Добавить местоположение (плагин Locations)"
           open_composer:
-            label: "Open Composer"
+            label: "Открыть компоновщик"
           update_profile:
-            label: "Update Profile"
-            setting: "Fields"
-            key: "field"
+            label: "Обновить профиль"
+            setting: "Поля"
+            key: "поле"
           watch_categories:
-            label: "Watch Categories"
-            categories: "Categories"
-            mute_remainder: "Mute Remainder"
+            label: "Отслеживать категории"
+            categories: "Категории"
+            mute_remainder: "Остальные без звука"
+          watch_tags:
+            label: "Отслеживать теги"
+            tags: "Теги"
+          watch_x:
             notification_level:
-              label: "Notification Level"
-              regular: "Normal"
-              watching: "Watching"
-              tracking: "Tracking"
-              watching_first_post: "Watching First Post"
-              muted: "Muted"
-            select_a_notification_level: "Select level"
-            wizard_user: "Wizard User"
-            usernames: "Users"
+              label: "Уровень уведомлений"
+              regular: "Обычный"
+              watching: "Отслеживание"
+              tracking: "Отслеживание"
+              watching_first_post: "Отслеживание первого сообщения"
+              muted: "Без звука"
+            select_a_notification_level: "Выберите уровень"
+            wizard_user: "Пользователь мастера"
+            usernames: "Пользователи"
           post_builder:
-            checkbox: "Post Builder"
-            label: "Builder"
-            user_properties: "User Properties"
-            wizard_fields: "Wizard Fields"
-            wizard_actions: "Wizard Actions"
-            placeholder: "Insert wizard fields using the field_id in w{}. Insert user properties using property in u{}."
+            checkbox: "Конструктор сообщений"
+            label: "Конструктор"
+            user_properties: "Свойства пользователя"
+            wizard_fields: "Поля мастера"
+            wizard_actions: "Действия мастера"
+            placeholder: "Вставляйте поля мастера, используя field_id в w{}. Вставляйте свойства пользователя, используя property в u{}."
           add_to_group:
-            label: "Add to Group"
+            label: "Добавить в группу"
           route_to:
-            label: "Route To"
-            url: "Url"
-            code: "Code"
+            label: "Перенаправить на"
+            url: "URL"
+            code: "Код"
           send_to_api:
-            label: "Send to API"
+            label: "Отправить в API"
             api: "API"
             endpoint: "Endpoint"
-            select_an_api: "Select an API"
-            select_an_endpoint: "Select an endpoint"
-            body: "Body"
+            select_an_api: "Выберите API"
+            select_an_endpoint: "Выберите endpoint"
+            body: "Тело"
             body_placeholder: "JSON"
           create_category:
-            label: "Create Category"
-            name: Name
-            slug: Slug
-            color: Color
-            text_color: Text color
-            parent_category: Parent Category
-            permissions: Permissions
+            label: "Создать категорию"
+            name: "Название"
+            slug: "Слаг"
+            color: "Цвет"
+            text_color: "Цвет текста"
+            parent_category: "Родительская категория"
+            permissions: "Права"
           create_group:
-            label: Create Group
-            name: Name
-            full_name: Full Name
-            title: Title
-            bio_raw: About
-            owner_usernames: Owners
-            usernames: Members
-            grant_trust_level: Automatic Trust Level
-            mentionable_level: Mentionable Level
-            messageable_level: Messageable Level
-            visibility_level: Visibility Level
-            members_visibility_level: Members Visibility Level
+            label: "Создать группу"
+            name: "Название"
+            full_name: "Полное название"
+            title: "Название"
+            bio_raw: "О группе"
+            owner_usernames: "Владельцы"
+            usernames: "Участники"
+            grant_trust_level: "Автоматический уровень доверия"
+            mentionable_level: "Уровень упоминаемости"
+            messageable_level: "Уровень доступности для сообщений"
+            visibility_level: "Уровень видимости"
+            members_visibility_level: "Уровень видимости участников"
+
         custom_field:
-          nav_label: "Custom Fields"
-          add: "Add"
+          nav_label: "Пользовательские поля"
+          add: "Добавить"
           external:
-            label: "from another plugin"
-            title: "This custom field has been added by another plugin. You can use it in your wizards but you can't edit the field here."
+            label: "из другого плагина"
+            title: "Это пользовательское поле добавлено другим плагином. Вы можете использовать его в своих мастерах, но не можете редактировать его здесь."
           name:
-            label: "Name"
+            label: "Имя"
             select: "underscored_name"
           type:
-            label: "Type"
-            select: "Select a type"
-            string: "String"
-            integer: "Integer"
-            boolean: "Boolean"
+            label: "Тип"
+            select: "Выберите тип"
+            string: "Строка"
+            integer: "Целое число"
+            boolean: "Логическое"
             json: "JSON"
           klass:
-            label: "Class"
-            select: "Select a class"
-            post: "Post"
-            category: "Category"
-            topic: "Topic"
-            group: "Group"
-            user: "User"
+            label: "Класс"
+            select: "Выберите класс"
+            post: "Сообщение"
+            category: "Категория"
+            topic: "Тема"
+            group: "Группа"
+            user: "Пользователь"
           serializers:
-            label: "Serializers"
-            select: "Select serializers"
-            topic_view: "Topic View"
-            topic_list_item: "Topic List Item"
-            basic_category: "Category"
-            basic_group: "Group"
-            post: "Post"
+            label: "Сериализаторы"
+            select: "Выберите сериализаторы"
+            topic_view: "Просмотр темы"
+            topic_list_item: "Элемент списка тем"
+            basic_category: "Категория"
+            basic_group: "Группа"
+            post: "Сообщение"
+
         submissions:
-          nav_label: "Submissions"
-          title: "{{name}} Submissions"
-          download: "Download"
+          nav_label: "Отправки"
+          title: "Отправки мастера {{name}}"
+          download: "Скачать"
+          group_id: "ID группы"
+          category_id: "ID категории"
+          topic_id: "ID темы"
+          composer_preview: "Предпросмотр компоновщика"
+
         api:
           label: "API"
-          nav_label: 'APIs'
-          select: "Select API"
-          create: "Create API"
-          new: 'New API'
-          name: "Name (can't be changed)"
-          name_placeholder: 'Underscored'
-          title: 'Title'
-          title_placeholder: 'Display name'
-          remove: 'Delete'
-          save: "Save"
+          nav_label: 'API'
+          select: "Выберите API"
+          create: "Создать API"
+          new: 'Новый API'
+          name: "Имя (не может быть изменено)"
+          name_placeholder: 'underscored'
+          title: 'Заголовок'
+          title_placeholder: 'Отображаемое имя'
+          remove: 'Удалить'
+          save: "Сохранить"
+
           auth:
-            label: "Authorization"
-            btn: 'Authorize'
-            settings: "Settings"
-            status: "Status"
-            redirect_uri: "Redirect url"
-            type: 'Type'
-            type_none: 'Select a type'
-            url: "Authorization url"
-            token_url: "Token url"
-            client_id: 'Client id'
-            client_secret: 'Client secret'
-            username: 'username'
-            password: 'password'
+            label: "Авторизация"
+            btn: 'Авторизовать'
+            settings: "Настройки"
+            status: "Статус"
+            redirect_uri: "URL перенаправления"
+            type: 'Тип'
+            type_none: 'Выберите тип'
+            url: "URL авторизации"
+            token_url: "URL токена"
+            client_id: 'ID клиента'
+            client_secret: 'Секрет клиента'
+            username: 'имя пользователя'
+            password: 'пароль'
             params:
-              label: 'Params'
-              new: 'New param'
+              label: 'Параметры'
+              new: 'Новый параметр'
+
           status:
-            label: "Status"
-            authorized: 'Authorized'
-            not_authorized: "Not authorized"
-            code: "Code"
-            access_token: "Access token"
-            refresh_token: "Refresh token"
-            expires_at: "Expires at"
-            refresh_at: "Refresh at"
+            label: "Статус"
+            authorized: 'Авторизован'
+            not_authorized: "Не авторизован"
+            code: "Код"
+            access_token: "Токен доступа"
+            refresh_token: "Токен обновления"
+            expires_at: "Истекает"
+            refresh_at: "Обновляется"
+
           endpoint:
             label: "Endpoints"
-            add: "Add endpoint"
-            name: "Endpoint name"
-            method: "Select a method"
-            url: "Enter a url"
-            content_type: "Select a content type"
-            success_codes: "Select success codes"
+            add: "Добавить endpoint"
+            name: "Название endpoint"
+            method: "Выберите метод"
+            url: "Введите URL"
+            content_type: "Выберите тип содержимого"
+            success_codes: "Выберите коды успеха"
+
           log:
-            label: "Logs"
+            label: "Журналы"
+            clear: "очистить"
+
         log:
-          nav_label: "Logs"
+          nav_label: "Журналы"
+          title: "Журналы мастера {{name}}"
+          date: "Дата"
+          action: "Действие"
+          user: "Пользователь"
+          message: "Сообщение"
+
         manager:
-          nav_label: Manager
-          title: Manage Wizards
-          export: Export
-          import: Import
-          imported: imported
-          upload: Select wizards.json
-          destroy: Destroy
-          destroyed: destroyed
+          nav_label: "Управление"
+          title: "Управление мастерами"
+          export: "Экспорт"
+          import: "Импорт"
+          imported: "импортировано"
+          upload: "Выберите wizards.json"
+          destroy: "Удалить"
+          destroyed: "удалено"
+
+        subscription:
+          title: "Функции подписки"
+          authorize:
+            label: "Подключить"
+            title: "Подключить подписку к этому сайту"
+          deauthorize:
+            label: "Отключить"
+            title: "Отключить подписку от этого сайта"
+          update:
+            title: "Обновить статус подписки"
+          subscribed:
+            label: "Подписаны"
+            title: "Вы подписаны и можете использовать эти функции"
+            selector: "подписаны"
+          not_subscribed:
+            label: "Не подписаны"
+            title: "Подпишитесь, чтобы использовать эти функции"
+            selector: "не подписаны"
+          type:
+            none:
+              label: "Подписаться"
+              title: "На этом форуме нет активной подписки Custom Wizard."
+            business:
+              label: "Поддержка"
+              title: "Активна подписка Custom Wizard Business на этом форуме."
+            standard:
+              label: "Поддержка"
+              title: "Активна подписка Custom Wizard Standard на этом форуме."
+            community:
+              label: "Поддержка"
+              title: "Активна подписка Custom Wizard Community на этом форуме."
+        user:
+          label: "Мастера"
+          redirect:
+            label: "Перенаправление"
+            remove_label: "Удалить"
+            remove_title: "Удалить перенаправление мастера"
+
   wizard_js:
     group:
-      select: "Select a group"
+      select: "Выберите группу"
+
     location:
       name:
-        title: "Name (optional)"
-        desc: "e.g. P. Sherman Dentist"
+        title: "Название (необязательно)"
+        desc: "например, Бишкек Парк"
       street:
-        title: "Number and Street"
-        desc: "e.g. 42 Wallaby Way"
+        title: "Улица и дом"
+        desc: "например, пр. Достык, 85"
       postalcode:
-        title: "Postal Code (Zip)"
-        desc: "e.g. 2090"
+        title: "Почтовый индекс"
+        desc: "например, 050000"
       neighbourhood:
-        title: "Neighbourhood"
-        desc: "e.g. Cremorne Point"
+        title: "Микрорайон"
+        desc: "например, Медеу"
       city:
-        title: "City, Town or Village"
-        desc: "e.g. Sydney"
-      coordinates: "Coordinates"
+        title: "Город/Населённый пункт"
+        desc: "например, Алматы"
+      coordinates: "Координаты"
       lat:
-        title: "Latitude"
-        desc: "e.g. -31.9456702"
+        title: "Широта"
+        desc: "например, 43.2220"
       lon:
-        title: "Longitude"
-        desc: "e.g. 115.8626477"
+        title: "Долгота"
+        desc: "например, 76.8512"
       country_code:
-        title: "Country"
-        placeholder: "Select a Country"
+        title: "Страна"
+        placeholder: "Выберите страну"
       query:
-        title: "Address"
-        desc: "e.g. 42 Wallaby Way, Sydney."
+        title: "Адрес"
+        desc: "например, пр. Достык, 85, Алматы."
       geo:
-        desc: "Locations provided by {{provider}}"
+        desc: "Местоположения предоставлены {{provider}}"
         btn:
-          label: "Find Location"
-        results: "Locations"
-        no_results: "No results. Please double check the spelling."
-        show_map: "Show Map"
+          label: "Найти"
+        results: "Местоположения"
+        no_results: "Ничего не найдено. Проверьте правильность написания."
+        show_map: "Показать карту"
       validation:
-        neighbourhood: "Please enter a neighbourhood."
-        city: "Please enter a city, town or village."
-        street: "Please enter a Number and Street."
-        postalcode: "Please enter a Postal Code (Zip)."
-        countrycode: "Please select a country."
-        coordinates: "Please complete the set of coordinates."
-        geo_location: "Search and select a result."
+        neighbourhood: "Введите микрорайон."
+        city: "Введите город, посёлок или село."
+        street: "Введите улицу и номер дома."
+        postalcode: "Введите почтовый индекс."
+        countrycode: "Выберите страну."
+        coordinates: "Заполните все координаты."
+        geo_location: "Найдите и выберите местоположение."
