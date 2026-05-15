@@ -22,6 +22,10 @@ export default class CustomWizardCategorySettings extends Component {
   @action
   changeWizard(wizard) {
     this.wizardListVal = wizard;
+    this.args.category.custom_fields ||= {};
     this.args.category.custom_fields.create_topic_wizard = wizard;
+    if (this.args.transientData?.custom_fields) {
+      this.args.form?.set("custom_fields.create_topic_wizard", wizard);
+    }
   }
 }
