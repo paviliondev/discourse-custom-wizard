@@ -21,6 +21,7 @@ de:
       too_long: "%{label} darf nicht mehr als %{max} Zeichen lang sein"
       required: "%{label} ist erforderlich."
       not_url: "%{label} muss eine gültige URL sein"
+      answer_incorrect: "%{label} is not correct. Please try again."
       invalid_file: "%{label} muss ein %{types} sein"
       invalid_date: "Ungültiges Datum"
       invalid_time: "Ungültige Uhrzeit"
