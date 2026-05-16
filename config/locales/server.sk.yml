@@ -21,6 +21,7 @@ sk:
       too_long: "%{label} must not be more than %{max} characters"
       required: "%{label} is required."
       not_url: "%{label} must be a valid url"
+      answer_incorrect: "%{label} is not correct. Please try again."
       invalid_file: "%{label} must be a %{types}"
       invalid_date: "Invalid date"
       invalid_time: "Invalid time"
