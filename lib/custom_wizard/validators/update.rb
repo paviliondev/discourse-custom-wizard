@@ -67,6 +67,8 @@ class ::CustomWizard::UpdateValidator
       @updater.errors.add(field_id, I18n.t("wizard.field.invalid_time"))
     end
 
+    validate_answer(field, field_id, value, label)
+
     self.class.field_validators.each do |validator|
       validator[:block].call(field, value, @updater) if type === validator[:type]
     end
@@ -86,6 +88,33 @@ class ::CustomWizard::UpdateValidator
   end
 
   private
+
+  def validate_answer(field, field_id, value, label)
+    return if %w[text dropdown].exclude?(field.type)
+    return unless field.validations.is_a?(Hash)
+
+    config = field.validations.with_indifferent_access[:answer]
+    return if config.blank?
+    return unless standardise_boolean(config[:status])
+    return if value.blank?
+
+    expected = config[:expected].to_s.strip
+    return if expected.empty?
+
+    actual = value.to_s.strip
+    matched =
+      if config[:match] == "insensitive"
+        actual.casecmp?(expected)
+      else
+        actual == expected
+      end
+    return if matched
+
+    @updater.errors.add(
+      field_id,
+      config[:message].presence || I18n.t("wizard.field.answer_incorrect", label: label),
+    )
+  end
 
   def validate_file_type(value, file_types)
     file_types

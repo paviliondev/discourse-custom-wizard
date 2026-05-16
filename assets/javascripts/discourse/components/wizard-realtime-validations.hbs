@@ -3,72 +3,144 @@
 </div>
 <div class="setting-value full">
   <ul>
-    {{#each-in this.field.validations as |type props|}}
+    {{#each this.validationRows as |row|}}
       <li>
         <span class="setting-title">
-          <h4>{{i18n (concat "admin.wizard.field.validations." type)}}</h4>
-          <Input @type="checkbox" @checked={{props.status}} />
+          <h4>{{i18n
+              (concat "admin.wizard.field.validations." row.type)
+            }}</h4>
+          <Input @type="checkbox" @checked={{row.props.status}} />
           {{i18n "admin.wizard.field.validations.enabled"}}
         </span>
         <div class="validation-container">
-          <div class="validation-section">
-            <div class="setting-label">
-              <label>{{i18n
-                  "admin.wizard.field.validations.categories"
-                }}</label>
+          {{#if row.isSimilarTopics}}
+            <div class="validation-section">
+              <div class="setting-label">
+                <label>{{i18n
+                    "admin.wizard.field.validations.categories"
+                  }}</label>
+              </div>
+              <div class="setting-value">
+                <CategorySelector
+                  @categories={{get
+                    this
+                    (concat "validationBuffer." row.type ".categories")
+                  }}
+                  @onChange={{action
+                    "updateValidationCategories"
+                    row.type
+                    row.props
+                  }}
+                  class="wizard"
+                />
+              </div>
             </div>
-            <div class="setting-value">
-              <CategorySelector
-                @categories={{get
-                  this
-                  (concat "validationBuffer." type ".categories")
+            <div class="validation-section">
+              <div class="setting-label">
+                <label>{{i18n
+                    "admin.wizard.field.validations.max_topic_age"
+                  }}</label>
+              </div>
+              <div class="setting-value">
+                <Input
+                  @type="number"
+                  @value={{row.props.time_n_value}}
+                  class="time-n-value"
+                />
+                {{combo-box
+                  value=(readonly row.props.time_unit)
+                  content=this.timeUnits
+                  class="time-unit-selector"
+                  onChange=(action (mut row.props.time_unit))
                 }}
-                @onChange={{action "updateValidationCategories" type props}}
-                class="wizard"
-              />
+              </div>
             </div>
-          </div>
-          <div class="validation-section">
-            <div class="setting-label">
-              <label>{{i18n
-                  "admin.wizard.field.validations.max_topic_age"
-                }}</label>
+            <div class="validation-section">
+              <div class="setting-label">
+                <label>{{i18n
+                    "admin.wizard.field.validations.position"
+                  }}</label>
+              </div>
+              <div class="setting-value">
+                {{radio-button
+                  name=(concat row.type this.field.id)
+                  value="above"
+                  selection=row.props.position
+                }}
+                <span>{{i18n "admin.wizard.field.validations.above"}}</span>
+                {{radio-button
+                  name=(concat row.type this.field.id)
+                  value="below"
+                  selection=row.props.position
+                }}
+                <span>{{i18n "admin.wizard.field.validations.below"}}</span>
+              </div>
             </div>
-            <div class="setting-value">
-              <Input
-                @type="number"
-                @value={{props.time_n_value}}
-                class="time-n-value"
-              />
-              {{combo-box
-                value=(readonly props.time_unit)
-                content=this.timeUnits
-                class="time-unit-selector"
-                onChange=(action (mut props.time_unit))
-              }}
+          {{/if}}
+
+          {{#if row.isAnswer}}
+            <div class="validation-section">
+              <div class="setting-label">
+                <label>{{i18n
+                    "admin.wizard.field.validations.expected"
+                  }}</label>
+              </div>
+              <div class="setting-value">
+                <Input
+                  @type="text"
+                  @value={{row.props.expected}}
+                  class="answer-expected"
+                />
+                <div class="instructions">
+                  {{i18n "admin.wizard.field.validations.expected_instructions"}}
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="validation-section">
-            <div class="setting-label">
-              <label>{{i18n "admin.wizard.field.validations.position"}}</label>
+            <div class="validation-section">
+              <div class="setting-label">
+                <label>{{i18n
+                    "admin.wizard.field.validations.match"
+                  }}</label>
+              </div>
+              <div class="setting-value">
+                {{radio-button
+                  name=(concat "match" row.type this.field.id)
+                  value="exact"
+                  selection=row.props.match
+                }}
+                <span>{{i18n
+                    "admin.wizard.field.validations.match_exact"
+                  }}</span>
+                {{radio-button
+                  name=(concat "match" row.type this.field.id)
+                  value="insensitive"
+                  selection=row.props.match
+                }}
+                <span>{{i18n
+                    "admin.wizard.field.validations.match_insensitive"
+                  }}</span>
+              </div>
             </div>
-            <div class="setting-value">
-              {{radio-button
-                name=(concat type this.field.id)
-                value="above"
-                selection=props.position
-              }}
-              <span>{{i18n "admin.wizard.field.validations.above"}}</span>
-              {{radio-button
-                name=(concat type this.field.id)
-                value="below"
-                selection=props.position
-              }}
-              <span>{{i18n "admin.wizard.field.validations.below"}}</span>
+            <div class="validation-section">
+              <div class="setting-label">
+                <label>{{i18n
+                    "admin.wizard.field.validations.message"
+                  }}</label>
+              </div>
+              <div class="setting-value">
+                <Input
+                  @type="text"
+                  @value={{row.props.message}}
+                  class="answer-message"
+                  placeholder={{i18n
+                    "admin.wizard.field.validations.message_placeholder"
+                  }}
+                />
+              </div>
             </div>
-          </div>
+          {{/if}}
         </div>
       </li>
-    {{/each-in}}
+    {{/each}}
   </ul>
 </div>

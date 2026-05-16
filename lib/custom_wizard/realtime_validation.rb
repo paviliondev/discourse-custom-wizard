@@ -10,5 +10,11 @@ class CustomWizard::RealtimeValidation
       backend: true,
       required_params: [],
     },
+    answer: {
+      types: %i[text dropdown],
+      client: false,
+      backend: false,
+      required_params: [],
+    },
   }
 end

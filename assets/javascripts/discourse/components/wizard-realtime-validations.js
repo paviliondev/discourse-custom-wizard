@@ -18,6 +18,20 @@ export default Component.extend({
     });
   },
 
+  @discourseComputed("field.validations")
+  validationRows(validations) {
+    if (!validations) {
+      return [];
+    }
+
+    return Object.keys(validations).map((type) => ({
+      type,
+      props: validations[type],
+      isSimilarTopics: type === "similar_topics",
+      isAnswer: type === "answer",
+    }));
+  },
+
   init() {
     this._super(...arguments);
     if (!this.validations) {
@@ -35,12 +49,11 @@ export default Component.extend({
     }
 
     const validationBuffer = cloneJSON(this.get("field.validations"));
-    let bufferCategories = validationBuffer.similar_topics?.categories || [];
-    if (bufferCategories) {
+    if (validationBuffer.similar_topics) {
+      const bufferCategories =
+        validationBuffer.similar_topics.categories || [];
       validationBuffer.similar_topics.categories =
         Category.findByIds(bufferCategories);
-    } else {
-      validationBuffer.similar_topics.categories = [];
     }
     this.set("validationBuffer", validationBuffer);
   },
