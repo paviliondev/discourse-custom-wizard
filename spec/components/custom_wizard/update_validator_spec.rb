@@ -129,6 +129,75 @@ describe CustomWizard::UpdateValidator do
     end
   end
 
+  context "answer validation" do
+    def set_answer_validation(opts)
+      @template[:steps][0][:fields][0][:validations] = { answer: { status: true }.merge(opts) }
+      CustomWizard::Template.save(@template)
+    end
+
+    it "blocks submission when the value does not match" do
+      set_answer_validation(expected: "Paris")
+      updater = perform_validation("step_1", step_1_field_1: "London")
+      expect(updater.errors.messages[:step_1_field_1].first).to eq(
+        I18n.t("wizard.field.answer_incorrect", label: "Text"),
+      )
+    end
+
+    it "allows submission when the value matches" do
+      set_answer_validation(expected: "Paris")
+      updater = perform_validation("step_1", step_1_field_1: " Paris ")
+      expect(updater.errors.messages[:step_1_field_1].first).to eq(nil)
+    end
+
+    it "is case sensitive by default" do
+      set_answer_validation(expected: "Paris")
+      updater = perform_validation("step_1", step_1_field_1: "paris")
+      expect(updater.errors.messages[:step_1_field_1].first).to be_present
+    end
+
+    it "matches case insensitively when configured" do
+      set_answer_validation(expected: "Paris", match: "insensitive")
+      updater = perform_validation("step_1", step_1_field_1: "PARIS")
+      expect(updater.errors.messages[:step_1_field_1].first).to eq(nil)
+    end
+
+    it "uses a custom message when configured" do
+      set_answer_validation(expected: "Paris", message: "Nope, guess again")
+      updater = perform_validation("step_1", step_1_field_1: "London")
+      expect(updater.errors.messages[:step_1_field_1].first).to eq("Nope, guess again")
+    end
+
+    it "is skipped when disabled" do
+      @template[:steps][0][:fields][0][:validations] = {
+        answer: {
+          status: false,
+          expected: "Paris",
+        },
+      }
+      CustomWizard::Template.save(@template)
+      updater = perform_validation("step_1", step_1_field_1: "London")
+      expect(updater.errors.messages[:step_1_field_1].first).to eq(nil)
+    end
+
+    it "defers empty values to the required check" do
+      set_answer_validation(expected: "Paris")
+      updater = perform_validation("step_1", step_1_field_1: "")
+      expect(updater.errors.messages[:step_1_field_1].first).to eq(nil)
+    end
+
+    it "is ignored on unsupported field types" do
+      @template[:steps][1][:fields][0][:validations] = {
+        answer: {
+          status: true,
+          expected: "2021-11-13",
+        },
+      }
+      CustomWizard::Template.save(@template)
+      updater = perform_validation("step_2", step_2_field_1: "2021-11-14")
+      expect(updater.errors.messages[:step_2_field_1].first).to eq(nil)
+    end
+  end
+
   it "validates date fields" do
     @template[:steps][1][:fields][0][:format] = "DD-MM-YYYY"
     CustomWizard::Template.save(@template)
