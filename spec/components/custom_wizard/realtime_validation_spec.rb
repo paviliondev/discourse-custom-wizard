@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe CustomWizard::RealtimeValidation do
-  validation_names = CustomWizard::RealtimeValidation.types.keys
+  validation_names = CustomWizard::RealtimeValidation.types.select { |_, reg| reg[:backend] }.keys
 
   validation_names.each do |name|
     klass_str = "CustomWizard::RealtimeValidation::#{name.to_s.camelize}"

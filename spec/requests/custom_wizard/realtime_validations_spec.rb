@@ -10,6 +10,9 @@ describe CustomWizard::RealtimeValidationsController do
   before do
     sign_in(user)
 
+    @original_validation_types = CustomWizard::RealtimeValidation.types
+    CustomWizard::RealtimeValidation.types = { test_stub: validation_type_stub }
+
     class CustomWizard::RealtimeValidation::TestStub
       attr_accessor :user
 
@@ -33,8 +36,9 @@ describe CustomWizard::RealtimeValidationsController do
     end
   end
 
+  after { CustomWizard::RealtimeValidation.types = @original_validation_types }
+
   it "gives the correct response for a given type" do
-    CustomWizard::RealtimeValidation.types = { test_stub: validation_type_stub }
     get "/realtime-validations.json", params: { type: validation_type }
     expect(response.status).to eq(200)
     expected_response = [{ "item" => "hello" }, { "item" => "world" }]
@@ -42,22 +46,17 @@ describe CustomWizard::RealtimeValidationsController do
   end
 
   it "gives 400 error when no type is passed" do
-    CustomWizard::RealtimeValidation.types = { test_stub: validation_type_stub }
     get "/realtime-validations.json"
     expect(response.status).to eq(400)
   end
 
   it "gives 400 error when a required additional param is missing" do
-    CustomWizard::RealtimeValidation.types = { test_stub: validation_type_stub }
     CustomWizard::RealtimeValidation.types[:test_stub][:required_params] = [:test1]
     get "/realtime-validations.json", params: { type: validation_type }
     expect(response.status).to eq(400)
-    # the addition is only relevant to this test, so getting rid of it
-    CustomWizard::RealtimeValidation.types[:test_stub][:required_params] = []
   end
 
   it "gives 500 response code when a non existant type is passed" do
-    CustomWizard::RealtimeValidation.types = { test_stub: validation_type_stub }
     get "/realtime-validations.json", params: { type: "random_type" }
     expect(response.status).to eq(500)
   end

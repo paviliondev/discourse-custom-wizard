@@ -108,7 +108,7 @@ class CustomWizard::FieldSerializer < ::ApplicationSerializer
     object.validations&.each do |type, props|
       next unless props["status"]
       reg = CustomWizard::RealtimeValidation.types[type.to_sym]
-      next if reg && reg[:client] == false
+      next if reg.nil? || reg[:client] == false
       validations[props["position"]] ||= {}
       validations[props["position"]][type] = props.merge(reg)
     end
