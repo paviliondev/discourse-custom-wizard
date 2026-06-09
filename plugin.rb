@@ -7,7 +7,6 @@
 # contact_emails: development@pavilion.tech
 # meta_topic_id: 73345
 
-gem "liquid", "5.5.0", require: true
 gem "discourse_plugin_statistics", "0.1.0.pre7", require: true
 register_asset "stylesheets/common/admin.scss"
 register_asset "stylesheets/common/wizard.scss"
