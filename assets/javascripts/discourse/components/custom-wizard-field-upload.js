@@ -19,7 +19,6 @@ export default class CustomWizardFieldUpload extends Component {
           "field.value": upload,
           isImage: this.imageUploadFormats.includes(upload.extension),
         });
-        this.done();
       },
     });
     this.uppyUpload.setup(document.getElementById(this.inputId));
