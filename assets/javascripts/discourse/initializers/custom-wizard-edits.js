@@ -109,10 +109,10 @@ export default {
       });
 
       if (api.getCurrentUser()?.admin) {
-        api.modifyClass("model:admin-user", {
-          pluginId: "custom-wizard",
-
-          clearWizardRedirect(user) {
+        api.addModelMethod(
+          "admin-user",
+          "clearWizardRedirect",
+          function (user) {
             return ajax(`/admin/users/${user.id}/wizards/clear_redirect`, {
               type: "PUT",
             })
@@ -122,8 +122,8 @@ export default {
                 });
               })
               .catch(popupAjaxError);
-          },
-        });
+          }
+        );
       }
     });
   },
