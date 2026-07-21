@@ -6,9 +6,7 @@
     {{#each this.validationRows as |row|}}
       <li>
         <span class="setting-title">
-          <h4>{{i18n
-              (concat "admin.wizard.field.validations." row.type)
-            }}</h4>
+          <h4>{{i18n (concat "admin.wizard.field.validations." row.type)}}</h4>
           <Input @type="checkbox" @checked={{row.props.status}} />
           {{i18n "admin.wizard.field.validations.enabled"}}
         </span>
@@ -92,15 +90,15 @@
                   class="answer-expected"
                 />
                 <div class="instructions">
-                  {{i18n "admin.wizard.field.validations.expected_instructions"}}
+                  {{i18n
+                    "admin.wizard.field.validations.expected_instructions"
+                  }}
                 </div>
               </div>
             </div>
             <div class="validation-section">
               <div class="setting-label">
-                <label>{{i18n
-                    "admin.wizard.field.validations.match"
-                  }}</label>
+                <label>{{i18n "admin.wizard.field.validations.match"}}</label>
               </div>
               <div class="setting-value">
                 {{radio-button
@@ -123,9 +121,7 @@
             </div>
             <div class="validation-section">
               <div class="setting-label">
-                <label>{{i18n
-                    "admin.wizard.field.validations.message"
-                  }}</label>
+                <label>{{i18n "admin.wizard.field.validations.message"}}</label>
               </div>
               <div class="setting-value">
                 <Input

@@ -36,7 +36,7 @@ class CustomWizard::Wizard
   attr_reader :all_step_ids
   attr_writer :submissions
 
-  GUEST_ID_PREFIX ||= "guest"
+  GUEST_ID_PREFIX = "guest"
   GUEST_GROUP_ID = -1
 
   def initialize(attrs = {}, user = nil, guest_id = nil)
@@ -321,7 +321,7 @@ class CustomWizard::Wizard
   def cleanup_on_skip!
     remove_user_redirect
 
-    current_submission.remove if current_submission.present?
+    (current_submission.presence&.remove)
 
     reset
   end

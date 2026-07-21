@@ -50,8 +50,7 @@ export default Component.extend({
 
     const validationBuffer = cloneJSON(this.get("field.validations"));
     if (validationBuffer.similar_topics) {
-      const bufferCategories =
-        validationBuffer.similar_topics.categories || [];
+      const bufferCategories = validationBuffer.similar_topics.categories || [];
       validationBuffer.similar_topics.categories =
         Category.findByIds(bufferCategories);
     }

@@ -5,7 +5,7 @@ class CustomWizard::WizardController < ::CustomWizard::WizardClientController
   def show
     if wizard.present?
       render json: CustomWizard::WizardSerializer.new(wizard, scope: guardian, root: false).as_json,
-             status: 200
+             status: :ok
     else
       render json: { error: I18n.t("wizard.none") }
     end

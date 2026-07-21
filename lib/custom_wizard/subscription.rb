@@ -119,7 +119,7 @@ class CustomWizard::Subscription
   end
 
   def includes?(feature, attribute, value = nil)
-    return true
+    true
   end
 
   def type
@@ -130,7 +130,7 @@ class CustomWizard::Subscription
   end
 
   def subscribed?
-    return true
+    true
   end
 
   def standard?
@@ -146,7 +146,7 @@ class CustomWizard::Subscription
   end
 
   def self.subscribed?
-    return true
+    true
   end
 
   def self.business?

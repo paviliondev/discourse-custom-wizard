@@ -144,7 +144,7 @@ class ::CustomWizard::UpdateValidator
     ["url"].include? field.type
   end
 
-  SCHEMES ||= %w[http https]
+  SCHEMES = %w[http https]
 
   def check_if_url(url)
     parsed = Addressable::URI.parse(url) or return false

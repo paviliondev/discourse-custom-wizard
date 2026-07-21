@@ -116,11 +116,11 @@ class CustomWizard::TemplateValidator
     end
 
     wizard = CustomWizard::Wizard.create(@data[:id]) if !@opts[:create]
-    current_time = wizard.present? ? wizard.after_time_scheduled : nil
+    current_time = (wizard.presence&.after_time_scheduled)
     new_time = @data[:after_time_scheduled]
 
     begin
-      active_time = Time.parse(new_time.present? ? new_time : current_time).utc
+      active_time = Time.parse((new_time.presence || current_time)).utc
     rescue ArgumentError
       invalid_time = true
     end

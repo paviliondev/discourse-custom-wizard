@@ -3,8 +3,8 @@
 require_relative "../../plugin_helper"
 
 describe CustomWizard::SubmissionSerializer do
-  fab!(:user1) { Fabricate(:user) }
-  fab!(:user2) { Fabricate(:user) }
+  fab!(:user1, :user)
+  fab!(:user2, :user)
 
   let(:template_json) do
     JSON.parse(

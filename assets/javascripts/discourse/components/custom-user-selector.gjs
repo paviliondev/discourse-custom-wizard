@@ -66,7 +66,7 @@ export default class CustomUserSelector extends Component {
         username: trimmedUsername,
         name: trimmedUsername,
         id: trimmedUsername,
-        isUser: true
+        isUser: true,
       };
     });
   }
@@ -89,7 +89,7 @@ export default class CustomUserSelector extends Component {
         includeGroups: this.includeGroups,
         allowedUsers: this.allowedUsers,
         includeMentionableGroups: this.includeMentionableGroups,
-        includeMessageableGroups: this.includeMessageableGroups
+        includeMessageableGroups: this.includeMessageableGroups,
       });
 
       // Transform results to include both users and groups
@@ -100,7 +100,7 @@ export default class CustomUserSelector extends Component {
           ...results.users.map((user) => ({
             ...user,
             isUser: true,
-            id: user.username // Use username as ID for comparison
+            id: user.username, // Use username as ID for comparison
           }))
         );
       }
@@ -111,7 +111,7 @@ export default class CustomUserSelector extends Component {
             ...group,
             isGroup: true,
             name: group.name, // Groups use name as username
-            id: group.name // Use name as ID for comparison
+            id: group.name, // Use name as ID for comparison
           }))
         );
       }

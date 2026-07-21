@@ -1,5 +1,4 @@
 import { get, set } from "@ember/object";
-import { getOwnerWithFallback } from "discourse-common/lib/get-owner";
 
 const wizard = {
   basic: {

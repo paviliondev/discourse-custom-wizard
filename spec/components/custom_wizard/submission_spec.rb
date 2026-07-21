@@ -2,7 +2,7 @@
 
 describe CustomWizard::Submission do
   fab!(:user)
-  fab!(:user2) { Fabricate(:user) }
+  fab!(:user2, :user)
   let(:template_json) { get_wizard_fixture("wizard") }
   let(:guest_id) { CustomWizard::Wizard.generate_guest_id }
 

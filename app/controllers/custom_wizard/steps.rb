@@ -75,7 +75,7 @@ class CustomWizard::StepsController < ::CustomWizard::WizardClientController
       updater.errors.messages.each do |field, msg|
         errors << { field: field, description: msg.join(",") }
       end
-      render json: { errors: errors }, status: 422
+      render json: { errors: errors }, status: :unprocessable_entity
     end
   end
 

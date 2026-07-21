@@ -3,8 +3,8 @@ class CustomWizard::Submission
   include ActiveModel::SerializerSupport
 
   PAGE_LIMIT = 50
-  KEY ||= "submissions"
-  META ||= %w[updated_at submitted_at route_to redirect_on_complete redirect_to]
+  KEY = "submissions"
+  META = %w[updated_at submitted_at route_to redirect_on_complete redirect_to]
 
   attr_reader :id, :wizard
 

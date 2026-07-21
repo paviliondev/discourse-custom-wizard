@@ -3,8 +3,8 @@
 class CustomWizard::Template
   include HasErrors
 
-  AFTER_SIGNUP_CACHE_KEY ||= "after_signup_wizard_ids"
-  AFTER_TIME_CACHE_KEY ||= "after_time_wizard_ids"
+  AFTER_SIGNUP_CACHE_KEY = "after_signup_wizard_ids"
+  AFTER_TIME_CACHE_KEY = "after_time_wizard_ids"
 
   attr_reader :data, :opts, :steps, :actions
 

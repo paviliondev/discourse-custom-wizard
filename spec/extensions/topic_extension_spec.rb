@@ -4,7 +4,7 @@ describe Topic, type: :model do
   fab!(:category_with_wizard) do
     Fabricate(:category, custom_fields: { create_topic_wizard: "true" })
   end
-  fab!(:category_without_wizard) { Fabricate(:category) }
+  fab!(:category_without_wizard, :category)
   fab!(:user) { Fabricate(:user, refresh_auto_groups: true) }
   let(:valid_attrs) { Fabricate.attributes_for(:topic) }
 

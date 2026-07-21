@@ -23,7 +23,7 @@ class CustomWizard::StepSerializer < ::ApplicationSerializer
   end
 
   def next
-    object.next.id if object.next.present?
+    (object.next.presence&.id)
   end
 
   def include_next?
@@ -31,7 +31,7 @@ class CustomWizard::StepSerializer < ::ApplicationSerializer
   end
 
   def previous
-    object.previous.id if object.previous.present?
+    (object.previous.presence&.id)
   end
 
   def include_previous?

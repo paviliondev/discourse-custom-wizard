@@ -6,20 +6,20 @@ class ::CustomWizard::CustomField
 
   attr_reader :id
 
-  ATTRS ||= %w[name klass type serializers]
-  REQUIRED ||= %w[name klass type]
-  NAMESPACE ||= "custom_wizard_custom_fields"
-  NAME_MIN_LENGTH ||= 3
+  ATTRS = %w[name klass type serializers]
+  REQUIRED = %w[name klass type]
+  NAMESPACE = "custom_wizard_custom_fields"
+  NAME_MIN_LENGTH = 3
 
-  CLASSES ||= {
+  CLASSES = {
     topic: %w[topic_view topic_list_item],
     group: ["basic_group"],
     category: ["basic_category"],
     post: ["post"],
   }
 
-  TYPES ||= %w[string boolean integer json]
-  LIST_CACHE_KEY ||= "custom_field_list"
+  TYPES = %w[string boolean integer json]
+  LIST_CACHE_KEY = "custom_field_list"
 
   def self.serializers
     CLASSES.values.flatten.uniq

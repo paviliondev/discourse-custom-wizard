@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe Jobs::SetAfterTimeWizard do
-  fab!(:user1) { Fabricate(:user) }
+  fab!(:user1, :user)
   fab!(:user2) { Fabricate(:user, trust_level: TrustLevel[3]) }
   fab!(:user3) { Fabricate(:user, admin: true) }
 
@@ -48,7 +48,7 @@ describe Jobs::SetAfterTimeWizard do
   end
 
   context "when after_time_groups is set" do
-    fab!(:group1) { Fabricate(:group) }
+    fab!(:group1, :group)
     fab!(:group_user) { Fabricate(:group_user, group: group1, user: user2) }
 
     before do

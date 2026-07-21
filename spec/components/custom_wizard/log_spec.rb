@@ -21,7 +21,7 @@ describe CustomWizard::Log do
       "perform_third_action",
       "third_test_user",
       "Third log message",
-      1.minutes.ago,
+      1.minute.ago,
     )
   end
 
