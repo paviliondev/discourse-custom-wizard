@@ -23,17 +23,17 @@ export default TagChooser.extend({
 
   search(query) {
     const selectedTags = makeArray(this.tags).filter(Boolean);
+    const blockedTags = this._normalizedBlockedTags;
 
     const data = {
       q: query,
       limit: this.siteSettings.max_tag_search_results,
-      categoryId: this.categoryId,
     };
 
-    if (selectedTags.length || this.blockedTags.length) {
+    if (selectedTags.length || blockedTags.length) {
       const { selectedTagIds, selectedTagNames } = this._selectedTagPayload(
         selectedTags,
-        this.blockedTags
+        blockedTags
       );
 
       if (selectedTagIds.length) {
@@ -45,24 +45,19 @@ export default TagChooser.extend({
       }
     }
 
-    if (!this.everyTag) {
-      data.filterForInput = true;
+    if (this.tagGroups?.length) {
+      data.tag_groups = this.tagGroups.join(",");
     }
-    if (this.excludeSynonyms) {
-      data.excludeSynonyms = true;
+
+    const contentTags = makeArray(this.whitelist)
+      .map((tag) => (typeof tag === "string" ? tag : tag?.name))
+      .filter(Boolean);
+    if (contentTags.length) {
+      data.content = contentTags;
     }
-    if (this.excludeHasSynonyms) {
-      data.excludeHasSynonyms = true;
-    }
-    if (this.tagGroups) {
-      let tagGroupsString = this.tagGroups.join(",");
-      data.filterForInput = {
-        name: "custom-wizard-tag-chooser",
-        groups: tagGroupsString,
-      };
-    }
+
     return this.tagUtils.searchTags(
-      "/tags/filter/search",
+      "/custom-wizard/tags/search",
       data,
       this._transformJson
     );

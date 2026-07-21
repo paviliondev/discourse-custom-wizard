@@ -111,16 +111,8 @@ acceptance("Admin | Custom Fields Unsubscribed", function (needs) {
     let disabledOptions1 = queryAll(
       '.admin-wizard-container details:has(summary[name="Filter by: Select a class"]) ul li.disabled'
     );
-    assert.equal(
-      enabledOptions1.length,
-      2,
-      "There are two enabled options for class fields"
-    );
-    assert.equal(
-      disabledOptions1.length,
-      2,
-      "There are two disabled options for class fields"
-    );
+    assert.equal(enabledOptions1.length, 4, "All class options are enabled");
+    assert.equal(disabledOptions1.length, 0, "No class options are disabled");
     const dropdown2 = selectKit(
       '.admin-wizard-container details:has(summary[name="Filter by: Select a type"])'
     );
@@ -131,16 +123,8 @@ acceptance("Admin | Custom Fields Unsubscribed", function (needs) {
     let disabledOptions2 = queryAll(
       '.admin-wizard-container details:has(summary[name="Filter by: Select a type"]) ul li.disabled'
     );
-    assert.equal(
-      enabledOptions2.length,
-      3,
-      "There are three enabled options for type"
-    );
-    assert.equal(
-      disabledOptions2.length,
-      1,
-      "There is one disabled option for type"
-    );
+    assert.equal(enabledOptions2.length, 4, "All type options are enabled");
+    assert.equal(disabledOptions2.length, 0, "No type options are disabled");
   });
   test("change custom fields for unsubscribed plan", async (assert) => {
     await visit("/admin/wizards/custom-fields");

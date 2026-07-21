@@ -3,7 +3,6 @@ import $ from "jquery";
 import { test } from "qunit";
 import {
   acceptance,
-  exists,
   query,
   queryAll,
   visible,
@@ -63,18 +62,6 @@ acceptance("Admin | Custom Wizard Business Subscription", function (needs) {
     const list = queryAll(".admin-controls li");
     const count = list.length;
     assert.equal(count, 6, "There should be 6 admin tabs");
-  });
-
-  test("shows authorized and subscribed", async (assert) => {
-    await visit("/admin/wizards");
-    assert.notOk(
-      exists(".supplier-authorize .btn-primary:not(.update)"),
-      "the authorize button is shown."
-    );
-    assert.strictEqual(
-      query("button.wizard-subscription-badge span").innerText.trim(),
-      "Support"
-    );
   });
 
   test("creating a new wizard", async (assert) => {

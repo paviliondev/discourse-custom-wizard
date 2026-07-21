@@ -11,6 +11,7 @@ Discourse::Application.routes.append do
   mount ::CustomWizard::Engine, at: "w"
   post "wizard/authorization/callback" => "custom_wizard/authorization#callback"
   get "realtime-validations" => "custom_wizard/realtime_validations#validate"
+  get "custom-wizard/tags/search" => "custom_wizard/tags#search"
 
   scope module: "custom_wizard", constraints: AdminConstraint.new do
     get "admin/wizards" => "admin#index"

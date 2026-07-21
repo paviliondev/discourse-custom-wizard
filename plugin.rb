@@ -44,6 +44,7 @@ after_initialize do
   require_relative "app/controllers/custom_wizard/wizard.rb"
   require_relative "app/controllers/custom_wizard/steps.rb"
   require_relative "app/controllers/custom_wizard/realtime_validations.rb"
+  require_relative "app/controllers/custom_wizard/tags.rb"
   require_relative "app/jobs/regular/refresh_api_access_token.rb"
   require_relative "app/jobs/regular/set_after_time_wizard.rb"
   require_relative "lib/custom_wizard/validators/template.rb"
@@ -57,6 +58,7 @@ after_initialize do
   require_relative "lib/custom_wizard/realtime_validation.rb"
   require_relative "lib/custom_wizard/realtime_validations/result.rb"
   require_relative "lib/custom_wizard/realtime_validations/similar_topics.rb"
+  require_relative "lib/custom_wizard/tag_search.rb"
   require_relative "lib/custom_wizard/mapper.rb"
   require_relative "lib/custom_wizard/log.rb"
   require_relative "lib/custom_wizard/step_updater.rb"
@@ -93,7 +95,6 @@ after_initialize do
   require_relative "lib/custom_wizard/extensions/custom_field/preloader.rb"
   require_relative "lib/custom_wizard/extensions/custom_field/serializer.rb"
   require_relative "lib/custom_wizard/extensions/custom_field/extension.rb"
-  require_relative "lib/custom_wizard/extensions/discourse_tagging.rb"
 
   Liquid::Template.error_mode = :strict
 
@@ -122,13 +123,7 @@ after_initialize do
     !!custom_redirect
   end
 
-  add_to_class(:user, :redirect_to_wizard) do
-    if custom_fields["redirect_to_wizard"].present?
-      custom_fields["redirect_to_wizard"]
-    else
-      nil
-    end
-  end
+  add_to_class(:user, :redirect_to_wizard) { custom_fields["redirect_to_wizard"].presence }
 
   add_to_class(:users_controller, :wizard_path) do
     if custom_wizard_redirect = current_user.redirect_to_wizard
@@ -220,10 +215,6 @@ after_initialize do
 
   CustomWizard::CustomField.serializers.each do |serializer_klass|
     "#{serializer_klass}_serializer".classify.constantize.prepend CustomWizardCustomFieldSerializer
-  end
-
-  reloadable_patch do |plugin|
-    ::DiscourseTagging.singleton_class.prepend CustomWizardDiscourseTagging
   end
 
   DiscourseEvent.trigger(:custom_wizard_ready)

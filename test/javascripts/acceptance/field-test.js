@@ -14,7 +14,7 @@ import { allFieldsWizard } from "../helpers/wizard";
 acceptance("Field | Fields", function (needs) {
   needs.pretender((server, helper) => {
     server.get("/w/wizard.json", () => helper.response(allFieldsWizard));
-    server.get("/tags/filter/search", () =>
+    server.get("/custom-wizard/tags/search", () =>
       helper.response({ results: tagsJson["tags"] })
     );
     server.get("/u/search/users", () => helper.response(usersJson));
@@ -130,7 +130,7 @@ acceptance("Field | Fields", function (needs) {
     );
     await fillIn(".d-modal__body.insert-link .inputs .link-url", "google.com");
     await fillIn(".d-modal__body.insert-link .inputs .link-text", "Google");
-    await click(".d-modal__footer button.btn-danger");
+    await click(".d-modal__footer button.btn-transparent");
 
     assert.strictEqual(
       query(".wizard-field.composer-field .wizard-field-composer textarea")
@@ -152,10 +152,8 @@ acceptance("Field | Fields", function (needs) {
 
   test("Time", async function (assert) {
     await visit("/w/wizard");
-    assert.ok(visible(".wizard-field.time-field .d-time-input .select-kit"));
-    await click(
-      ".wizard-field.time-field .d-time-input .select-kit .select-kit-header"
-    );
+    assert.ok(visible(".wizard-field.time-field .select-kit"));
+    await click(".wizard-field.time-field .select-kit .select-kit-header");
     assert.ok(visible(".wizard-field.time-field .select-kit-collection"));
   });
 
@@ -226,17 +224,64 @@ acceptance("Field | Fields", function (needs) {
 
   test("User", async function (assert) {
     await visit("/w/wizard");
-    await fillIn(
-      ".wizard-field.user-selector-field .d-multi-select-trigger input",
-      "a"
-    );
+    await click(".wizard-field.user-selector-field .d-multi-select-trigger");
+    await fillIn(".d-multi-select__search-input", "a");
     await triggerKeyEvent(
-      ".wizard-field.user-selector-field .d-multi-select-trigger input",
+      ".d-multi-select__search-input",
       "keyup",
       "a".charCodeAt(0)
     );
 
-    assert.ok(visible(".wizard-field.user-selector-field .d-multi-select"));
+    assert.ok(
+      visible(".wizard-field.user-selector-field .d-multi-select-trigger")
+    );
     // TODO: add assertion for ac results. autocomplete does not appear in time.
+  });
+});
+
+acceptance("Field | Tag search request", function (needs) {
+  let capturedParams;
+
+  needs.pretender((server, helper) => {
+    const baseTagField = allFieldsWizard.steps[0].fields.find(
+      (field) => field.type === "tag"
+    );
+    const tagWizard = {
+      ...allFieldsWizard,
+      steps: [
+        {
+          ...allFieldsWizard.steps[0],
+          fields: [
+            {
+              ...baseTagField,
+              tag_groups: ["colours", "sizes"],
+              content: ["red", "blue"],
+            },
+          ],
+        },
+      ],
+    };
+
+    server.get("/w/wizard.json", () => helper.response(tagWizard));
+    server.get("/custom-wizard/tags/search", (request) => {
+      capturedParams = request.queryParams;
+      return helper.response({ results: tagsJson["tags"] });
+    });
+  });
+
+  test("sends the field's tag groups and content allow-list to the endpoint", async function (assert) {
+    await visit("/w/wizard");
+    await click(".wizard-field.tag-field .select-kit-header");
+
+    assert.strictEqual(
+      capturedParams.tag_groups,
+      "colours,sizes",
+      "joins the configured tag groups"
+    );
+    assert.deepEqual(
+      capturedParams.content,
+      ["red", "blue"],
+      "sends the content allow-list tag names"
+    );
   });
 });

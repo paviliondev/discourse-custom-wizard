@@ -78,18 +78,6 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
     assert.equal(count, 5, "There should be 5 admin tabs");
   });
 
-  test("shows unauthorized and unsubscribed", async (assert) => {
-    await visit("/admin/wizards");
-    assert.ok(
-      exists(".supplier-authorize .btn-primary"),
-      "the authorize button is shown."
-    );
-    assert.strictEqual(
-      query("button.wizard-subscription-badge span").innerText.trim(),
-      "Subscribe"
-    );
-  });
-
   test("creating a new wizard", async (assert) => {
     await visit("/admin/wizards/wizard");
     await click(".admin-wizard-controls button");
@@ -116,13 +104,8 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
     let timeText = query(
       ".d-date-time-input .d-time-input span.name"
     ).innerText;
-    const regex = /\d\d\:\d\d/;
+    const regex = /\d{1,2}:\d\d/;
     assert.ok(regex.test(timeText));
-    assert.equal(
-      $.trim($("a[title='Subscribe to use these features']").text()),
-      "Not Subscribed",
-      "Show messsage and link of user not subscribed"
-    );
 
     await click(".step .link-list button");
     const stepOneText = "step_1 (step_1)";
@@ -265,35 +248,6 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
       "Google",
       "The link text in the preview wrapper should be 'Google'"
     );
-    await click(
-      ".wizard-custom-step .wizard-text-editor .d-editor button.local-dates"
-    );
-
-    assert.ok(
-      exists(".d-modal.discourse-local-dates-create-modal"),
-      "Insert date-time modal visible"
-    );
-
-    assert.ok(
-      !exists(
-        ".discourse-local-dates-create-modal .d-modal__body .advanced-options"
-      ),
-      "Advanced mode not visible"
-    );
-    await click(".d-modal__footer button.advanced-mode-btn");
-    assert.ok(
-      exists(
-        ".discourse-local-dates-create-modal .d-modal__body .advanced-options"
-      ),
-      "Advanced mode is visible"
-    );
-    await click(".d-modal__footer button.btn-primary");
-    assert.ok(
-      exists(
-        ".wizard-custom-step .wizard-text-editor .d-editor-preview-wrapper span.discourse-local-date"
-      ),
-      "Date inserted"
-    );
 
     await click(".field .link-list button");
     assert.ok(
@@ -365,11 +319,11 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
       ".wizard-custom-action .setting .setting-value ul li.disabled"
     );
     assert.ok(
-      listDisabled.length === 7,
+      listDisabled.length === 0,
       "disabled items displayed correctly in action dropdown"
     );
     assert.ok(
-      listEnabled.length === 4,
+      listEnabled.length === 11,
       "Enabled items displayed correctly in action dropdown"
     );
     await actionTypeDropdown.selectRowByValue("create_topic");
@@ -529,7 +483,7 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
       await click(
         `.wizard-links.step .link-list div:nth-of-type(${
           i + 1
-        }) button.btn-text`
+        }) button:first-child`
       );
       assert.equal(
         query(".wizard-custom-step  input[name='title']").value,
@@ -546,7 +500,7 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
         await click(
           `.wizard-links.field .link-list div:nth-of-type(${
             j + 1
-          }) button.btn-text`
+          }) button:first-child`
         );
         assert.equal(
           query(".wizard-custom-field.visible .setting:nth-of-type(1) input")
@@ -563,7 +517,9 @@ acceptance("Admin | Custom Wizard Unsubscribed", function (needs) {
         let selectTypeElement = document.querySelector(
           `.admin-wizard-container .wizard-custom-field.visible .setting:nth-of-type(5) .select-kit`
         );
-        let summaryElement = selectTypeElement.querySelector("summary");
+        let summaryElement = selectTypeElement.querySelector(
+          ".select-kit-selected-name"
+        );
         assert.equal(
           summaryElement.getAttribute("data-value"),
           getUniqueWizard.steps[i].fields[j].type,

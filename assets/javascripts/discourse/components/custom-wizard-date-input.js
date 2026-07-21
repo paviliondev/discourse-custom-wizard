@@ -3,7 +3,6 @@ import discourseComputed from "discourse-common/utils/decorators";
 
 export default DateInput.extend({
   useNativePicker: false,
-  classNameBindings: ["fieldClass"],
 
   @discourseComputed()
   placeholder() {

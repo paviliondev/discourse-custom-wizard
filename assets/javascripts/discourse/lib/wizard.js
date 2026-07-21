@@ -3,7 +3,7 @@ import I18n from "I18n";
 import wizardSchema from "./wizard-schema";
 
 function selectKitContent(content) {
-  return content.map((i) => ({ id: i, name: i }));
+  return content.map((i) => ({ id: i, name: `${i}` }));
 }
 
 function generateName(id) {

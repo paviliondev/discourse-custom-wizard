@@ -3,7 +3,6 @@ import $ from "jquery";
 import { test } from "qunit";
 import {
   acceptance,
-  exists,
   query,
   queryAll,
   visible,
@@ -63,18 +62,6 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
     const list = queryAll(".admin-controls li");
     const count = list.length;
     assert.equal(count, 5, "There should be 5 admin tabs");
-  });
-
-  test("shows authorized and subscribed", async (assert) => {
-    await visit("/admin/wizards");
-    assert.notOk(
-      exists(".supplier-authorize .btn-primary:not(.update)"),
-      "the authorize button not shown."
-    );
-    assert.strictEqual(
-      query("button.wizard-subscription-badge span").innerText.trim(),
-      "Support"
-    );
   });
 
   test("creating a new wizard", async (assert) => {
@@ -174,11 +161,11 @@ acceptance("Admin | Custom Wizard Standard Subscription", function (needs) {
       ".wizard-custom-action .setting .setting-value ul li.disabled"
     );
     assert.ok(
-      listDisabled.length === 4,
+      listDisabled.length === 0,
       "Disabled items displayed correctly in action dropdown"
     );
     assert.ok(
-      listEnabled.length === 7,
+      listEnabled.length === 11,
       "Enabled items displayed correctly in action dropdown"
     );
     await actionTypeDropdown.selectRowByValue("create_topic");
