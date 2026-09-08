@@ -1,4 +1,4 @@
-import { click, visit } from "@ember/test-helpers";
+import { click, fillIn, findAll, visit } from "@ember/test-helpers";
 import { test } from "qunit";
 import { acceptance } from "discourse/tests/helpers/qunit-helpers";
 import selectKit from "discourse/tests/helpers/select-kit-helper";
@@ -10,7 +10,26 @@ import {
 
 const VISIBLE_ACTION = ".wizard-custom-action.visible";
 const USERNAMES_SETTING = `${VISIBLE_ACTION} .field-mapper-setting:last-child`;
+const STEP_SETTINGS = ".wizard-custom-step > .field-mapper-setting";
+const CONDITION = 0;
+const REQUIRED_DATA = 1;
 const [firstTag, secondTag] = tagsJson.tags;
+
+function validation(value) {
+  return {
+    type: "validation",
+    pairs: [
+      {
+        index: 0,
+        key: "user_field_1",
+        key_type: "user_field",
+        value,
+        value_type: "text",
+        connector: "equal",
+      },
+    ],
+  };
+}
 
 function assignment(output, outputType) {
   return [
@@ -32,6 +51,7 @@ const mappedWizard = {
     {
       id: "step_1",
       title: "step 1",
+      condition: [validation("one"), { ...validation("two"), connector: "or" }],
       fields: [{ id: "step_1_field_1", label: "label field", type: "text" }],
     },
   ],
@@ -119,6 +139,10 @@ acceptance("Admin | Custom Wizard | Mapped settings", function (needs) {
 
   async function selectAction(id) {
     await click(`.wizard-links.action .link-list [data-id="${id}"] button`);
+  }
+
+  function stepSetting(index) {
+    return findAll(STEP_SETTINGS)[index];
   }
 
   test("keeps mapped settings when a wizard is saved without changes", async function (assert) {
@@ -222,5 +246,58 @@ acceptance("Admin | Custom Wizard | Mapped settings", function (needs) {
     assert
       .dom(`${USERNAMES_SETTING} .mapper-input`)
       .exists({ count: 1 }, "the added input renders");
+  });
+
+  test("keeps every input of a step mapper when a wizard is saved", async function (assert) {
+    await visit("/admin/wizards/wizard/mapped_wizard");
+
+    assert
+      .dom(".mapper-input", stepSetting(CONDITION))
+      .exists({ count: 2 }, "both saved step conditions render");
+
+    await click(".admin-wizard-buttons button");
+
+    assert.deepEqual(
+      savedWizard.steps[0].condition,
+      mappedWizard.steps[0].condition,
+      "the step conditions are unchanged"
+    );
+  });
+
+  test("saves an input added to a step mapper", async function (assert) {
+    await visit("/admin/wizards/wizard/mapped_wizard");
+
+    await click(
+      stepSetting(REQUIRED_DATA).querySelector(".add-mapper-input button")
+    );
+    await fillIn(
+      stepSetting(REQUIRED_DATA).querySelector(".key .input input"),
+      "submission_key"
+    );
+    await fillIn(
+      stepSetting(REQUIRED_DATA).querySelector(".value .input input"),
+      "field_key"
+    );
+    await click(".admin-wizard-buttons button");
+
+    assert.deepEqual(
+      savedWizard.steps[0].required_data,
+      [
+        {
+          type: "validation",
+          pairs: [
+            {
+              index: 0,
+              key: "submission_key",
+              key_type: "text",
+              value: "field_key",
+              value_type: "text",
+              connector: "equal",
+            },
+          ],
+        },
+      ],
+      "the added required data is saved"
+    );
   });
 });

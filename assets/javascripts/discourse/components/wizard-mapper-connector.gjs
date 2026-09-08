@@ -11,7 +11,7 @@ import { defaultConnector } from "../lib/wizard-mapper";
 export default class WizardMapperConnector extends Component {
   @computed("connectors.length")
   get hasMultiple() {
-    return this.connectors.length > 1;
+    return this.connectors?.length > 1;
   }
 
   @computed("connector", "inputTypes")
