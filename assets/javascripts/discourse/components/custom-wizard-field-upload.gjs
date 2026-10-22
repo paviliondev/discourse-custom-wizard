@@ -1,7 +1,6 @@
 /* eslint-disable ember/no-classic-components, ember/require-tagless-components */
 import Component from "@ember/component";
 import { action, computed } from "@ember/object";
-import { getOwner } from "@ember/owner";
 import didInsert from "@ember/render-modifiers/modifiers/did-insert";
 import { service } from "@ember/service";
 import UppyUpload from "discourse/lib/uppy/uppy-upload";
@@ -13,7 +12,7 @@ export default class CustomWizardFieldUpload extends Component {
 
   @action
   setup() {
-    this.uppyUpload = new UppyUpload(getOwner(this), {
+    this.uppyUpload = new UppyUpload(this, {
       id: this.inputId,
       type: `wizard_${this.field.id}`,
       uploadDone: (upload) => {
