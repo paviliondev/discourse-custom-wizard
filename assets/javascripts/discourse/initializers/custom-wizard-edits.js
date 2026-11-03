@@ -1,4 +1,5 @@
 import { action } from "@ember/object";
+import TextareaEditor from "discourse/components/composer/textarea-editor";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import getUrl from "discourse/lib/get-url";
@@ -42,29 +43,41 @@ export default {
           }
       );
 
+      // Core treats any editor other than its own TextareaEditor as the rich
+      // editor, so the wizard textarea made the MD/rich toggle start in the
+      // wrong state and need two clicks to reach the rich editor.
+      api.modifyClass(
+        "component:d-editor",
+        (Superclass) =>
+          class extends Superclass {
+            get isRichEditorEnabled() {
+              if (this.editorComponent === CustomWizardTextareaEditor) {
+                return false;
+              }
+              return super.isRichEditorEnabled;
+            }
+
+            @action
+            async toggleRichEditor() {
+              await super.toggleRichEditor(...arguments);
+
+              if (
+                this.wizardComposer &&
+                this.editorComponent === TextareaEditor
+              ) {
+                this.editorComponent = CustomWizardTextareaEditor;
+              }
+            }
+          }
+      );
+
       api.modifyClass("component:d-editor", {
         pluginId: "custom-wizard",
 
         setupEditorMode() {
           if (this.wizardComposer) {
-            // Without an explicit initial value the MD/rich toggle starts in
-            // an undefined state and needs two clicks to reach the rich editor.
-            if (
-              this.isRichEditorEnabled === undefined ||
-              this.isRichEditorEnabled === null
-            ) {
-              this.isRichEditorEnabled = !!this.siteSettings?.rich_editor;
-            }
-
-            const result = this._super(...arguments);
-
-            // Keep the wizard textarea editor in markdown mode so the
-            // wizard insert/replace text bindings keep working.
-            if (!this.isRichEditorEnabled) {
-              this.editorComponent = CustomWizardTextareaEditor;
-            }
-
-            return result;
+            this.editorComponent = CustomWizardTextareaEditor;
+            return;
           }
           return this._super(...arguments);
         },
