@@ -454,7 +454,10 @@ class CustomWizard::Action
 
   def tag_names(value)
     tags = Array.wrap(value).flatten
-    tags.filter_map { |tag| tag_object?(tag) ? tag["name"] : tag }
+    tags = tags.filter_map { |tag| tag_object?(tag) ? tag["name"] : tag }
+    # Text inputs can hold several comma separated tags.
+    tags = tags.flat_map { |tag| tag.is_a?(String) ? tag.split(",").map(&:strip) : tag }
+    tags.reject(&:blank?).uniq
   end
 
   def tag_object?(value)
