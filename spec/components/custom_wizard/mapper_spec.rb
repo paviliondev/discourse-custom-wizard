@@ -287,6 +287,18 @@ describe CustomWizard::Mapper do
         CustomWizard::Mapper.new(inputs: avatar_inputs, data: data, user: user1).perform,
       ).to eq("Avatar: ![avatar](#{user1.avatar_template_url.gsub("{size}", "144")})")
     end
+
+    it "placeholders with url-encoded braces" do
+      mapper = create_template_mapper(template_params, user1)
+      result =
+        mapper.interpolate(
+          "/new?name=u%7Bname%7D&field=w%7bstep_1_field_1%7d&date=v%7Btime%7D".dup,
+          user: true,
+          wizard: true,
+          value: true,
+        )
+      expect(result).to eq("/new?name=Angus&field=Hello&date=#{Time.now.strftime("%B %-d, %Y")}")
+    end
   end
 
   it "handles not equal pairs" do
