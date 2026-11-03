@@ -47,8 +47,24 @@ export default {
 
         setupEditorMode() {
           if (this.wizardComposer) {
-            this.editorComponent = CustomWizardTextareaEditor;
-            return;
+            // Without an explicit initial value the MD/rich toggle starts in
+            // an undefined state and needs two clicks to reach the rich editor.
+            if (
+              this.isRichEditorEnabled === undefined ||
+              this.isRichEditorEnabled === null
+            ) {
+              this.isRichEditorEnabled = !!this.siteSettings?.rich_editor;
+            }
+
+            const result = this._super(...arguments);
+
+            // Keep the wizard textarea editor in markdown mode so the
+            // wizard insert/replace text bindings keep working.
+            if (!this.isRichEditorEnabled) {
+              this.editorComponent = CustomWizardTextareaEditor;
+            }
+
+            return result;
           }
           return this._super(...arguments);
         },
