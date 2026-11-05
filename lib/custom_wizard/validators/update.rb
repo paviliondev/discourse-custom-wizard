@@ -68,6 +68,7 @@ class ::CustomWizard::UpdateValidator
     end
 
     validate_answer(field, field_id, value, label)
+    validate_selection(field, field_id, value, label)
 
     self.class.field_validators.each do |validator|
       validator[:block].call(field, value, @updater) if type === validator[:type]
@@ -88,6 +89,57 @@ class ::CustomWizard::UpdateValidator
   end
 
   private
+
+  # The browser only shows the options a field offers the user, so check them here too.
+  def validate_selection(field, field_id, value, label)
+    return if value.blank? || offered?(field, Array.wrap(value).flatten)
+
+    @updater.errors.add(field_id, I18n.t("wizard.field.invalid_option", label: label))
+  end
+
+  def offered?(field, values)
+    case field.type
+    when "category"
+      limit = field.limit.to_i
+      key = field.property == "slug" ? :slug : :id
+      (limit <= 0 || values.size <= limit) &&
+        offered_records?(field, values, Category.secured(guardian), key)
+    when "group"
+      values.size == 1 && offered_records?(field, values, Site.new(guardian).groups, :id)
+    when "dropdown"
+      values.size == 1 && all_in?(values, content_ids(field))
+    when "tag"
+      CustomWizard::TagSearch.new(
+        guardian,
+        tag_groups: field.tag_groups,
+        content: field.content,
+      ).allows?(values, create: field.can_create_tag, limit: field.limit)
+    else
+      true
+    end
+  end
+
+  # Values must match records in scope exactly, and be in the field's content if it has any.
+  def offered_records?(field, values, scope, key)
+    ids = content_ids(field)
+    scope = scope.where(id: ids) if ids.any?
+    all_in?(values, scope.where(key => values.map(&:to_s)).pluck(key))
+  end
+
+  def all_in?(values, allowed)
+    (values.map(&:to_s) - allowed.map(&:to_s)).empty?
+  end
+
+  def content_ids(field)
+    Array
+      .wrap(field.content)
+      .flatten
+      .map { |item| (item.is_a?(Hash) ? item.with_indifferent_access[:id] : item).to_s }
+  end
+
+  def guardian
+    @guardian ||= Guardian.new(@updater.step.wizard.user)
+  end
 
   def validate_answer(field, field_id, value, label)
     return if %w[text dropdown].exclude?(field.type)

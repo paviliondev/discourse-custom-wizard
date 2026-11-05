@@ -26,6 +26,7 @@ en:
       not_url: "%{label} must be a valid url"
       answer_incorrect: "%{label} is not correct. Please try again."
       invalid_file: "%{label} must be a %{types}"
+      invalid_option: "%{label} includes an option that isn't available"
       invalid_date: "Invalid date"
       invalid_time: "Invalid time"
 

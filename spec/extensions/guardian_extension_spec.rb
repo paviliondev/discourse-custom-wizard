@@ -1,7 +1,15 @@
 # frozen_string_literal: true
 
 describe ::Guardian do
-  fab!(:user) { Fabricate(:user, name: "Angus", username: "angus", email: "angus@email.com") }
+  fab!(:user) do
+    Fabricate(
+      :user,
+      name: "Angus",
+      username: "angus",
+      email: "angus@email.com",
+      refresh_auto_groups: true,
+    )
+  end
   fab!(:category) { Fabricate(:category, name: "cat1", slug: "cat-slug") }
   let(:wizard_template) do
     JSON.parse(

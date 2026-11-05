@@ -11,6 +11,36 @@ class CustomWizard::TagSearch
     ::TagsController.tag_counts_json(Tag.with_localizations(tags), @guardian)
   end
 
+  # Tag names from field values, which can be names, tag objects or comma separated text.
+  def self.tag_names(value)
+    Array
+      .wrap(value)
+      .flatten
+      .map do |tag|
+        tag.is_a?(Hash) || tag.is_a?(ActionController::Parameters) ? tag[:name] || tag["name"] : tag
+      end
+      .flat_map { |tag| tag.to_s.split(",").map(&:strip) }
+      .reject(&:blank?)
+      .uniq
+  end
+
+  # Whether the tag chooser would let the user pick these values.
+  def allows?(values, create: false, limit: nil)
+    # Compare names as core will save them, e.g. " secret" becomes "secret".
+    names = self.class.tag_names(values).map { |name| DiscourseTagging.clean_tag(name).downcase }
+    names = names.reject(&:blank?).uniq
+    return false if limit.to_i.positive? && names.size > limit.to_i
+
+    existing = Tag.where_name(names).pluck(:name).map(&:downcase)
+    return false if !create && (names - existing).any?
+    return false if restricted_to_tags? && (existing - allowed_tag_names.map(&:downcase)).any?
+    return true if existing.empty?
+
+    # No limit, as tags in several groups can return duplicate rows.
+    visible = DiscourseTagging.filter_allowed_tags(@guardian, only_tag_names: existing)
+    (existing - visible.map { |tag| tag.name.downcase }).empty?
+  end
+
   private
 
   def filter_options
@@ -37,7 +67,11 @@ class CustomWizard::TagSearch
   end
 
   def tag_group_names
-    @tag_group_names ||= @params[:tag_groups].to_s.split(",").map(&:strip).reject(&:blank?)
+    @tag_group_names ||=
+      Array(@params[:tag_groups])
+        .flat_map { |names| names.to_s.split(",") }
+        .map(&:strip)
+        .reject(&:blank?)
   end
 
   def tag_group_tag_names
@@ -50,7 +84,7 @@ class CustomWizard::TagSearch
   end
 
   def content_tag_names
-    @content_tag_names ||= Array(@params[:content]).map { |name| name.to_s.strip }.reject(&:blank?)
+    @content_tag_names ||= self.class.tag_names(@params[:content])
   end
 
   def selected_tag_ids

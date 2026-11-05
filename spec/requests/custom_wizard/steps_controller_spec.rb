@@ -140,6 +140,19 @@ describe CustomWizard::StepsController do
       expect(wizard.current_submission.fields["step_1_field_1"]).to eq("Text input")
     end
 
+    it "ignores fields from other steps" do
+      put "/w/super-mega-fun-wizard/steps/step_2.json",
+          params: {
+            fields: {
+              step_1_field_1: "Sneaky",
+            },
+          }
+      expect(response.status).to eq(200)
+
+      wizard = CustomWizard::Wizard.create(response.parsed_body["wizard"]["id"], user)
+      expect(wizard.current_submission.fields["step_1_field_1"]).to be_nil
+    end
+
     context "raises an error" do
       it "when the wizard doesnt exist" do
         put "/w/not-super-mega-fun-wizard/steps/step_1.json"

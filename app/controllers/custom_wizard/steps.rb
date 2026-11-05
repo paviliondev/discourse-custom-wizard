@@ -6,13 +6,14 @@ class CustomWizard::StepsController < ::CustomWizard::WizardClientController
   def update
     update = update_params.to_h
 
+    @builder.build
+
     update[:fields] = {}
     if params[:fields]
-      field_ids = @builder.wizard.field_ids
+      # Only the step being updated is validated, so only accept its fields.
+      field_ids = Array(@builder.wizard.find_step(update[:step_id])&.fields).map(&:id)
       params[:fields].each { |k, v| update[:fields][k] = v if field_ids.include? k }
     end
-
-    @builder.build
 
     updater = @builder.wizard.create_updater(update[:step_id], update[:fields])
     updater.update

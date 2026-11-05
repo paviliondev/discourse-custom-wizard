@@ -25,7 +25,7 @@ class CustomWizard::Action
 
     ActiveRecord::Base.transaction { self.send(action["type"].to_sym) }
 
-    @result.handler.enqueue_jobs if creates_post? && @result.success?
+    @result.handler&.enqueue_jobs if creates_post? && @result.success?
 
     @submission.fields[action["id"]] = @result.output if @result.success? && @result.output.present?
 
@@ -55,21 +55,7 @@ class CustomWizard::Action
     end
 
     if params[:title].present? && params[:raw].present?
-      creator = PostCreator.new(topic_poster, params)
-      post = creator.create
-
-      if creator.errors.present?
-        messages = creator.errors.full_messages.join(" ")
-        log_error("failed to create", messages)
-      elsif action["skip_redirect"].blank?
-        @submission.redirect_on_complete = post.topic.url
-      end
-
-      if creator.errors.blank?
-        log_success("created topic", "id: #{post.topic.id}")
-        result.handler = creator
-        result.output = post.topic.id
-      end
+      create_post(params, "topic", redirect: action["skip_redirect"].blank?)
     else
       log_error("invalid topic params", "title: #{params[:title]}; post: #{params[:raw]}")
     end
@@ -120,22 +106,7 @@ class CustomWizard::Action
              params[:target_emails].present?
          )
       params[:archetype] = Archetype.private_message
-
-      creator = PostCreator.new(topic_poster, params)
-      post = creator.create
-
-      if creator.errors.present?
-        messages = creator.errors.full_messages.join(" ")
-        log_error("failed to create message", messages)
-      elsif user && action["skip_redirect"].blank?
-        @submission.redirect_on_complete = post.topic.url
-      end
-
-      if creator.errors.blank?
-        log_success("created message", "id: #{post.topic.id}")
-        result.handler = creator
-        result.output = post.topic.id
-      end
+      create_post(params, "message", redirect: user && action["skip_redirect"].blank?)
     else
       log_error(
         "invalid message params",
@@ -182,8 +153,7 @@ class CustomWizard::Action
   end
 
   def watch_tags
-    tags = CustomWizard::Mapper.new(inputs: action["tags"], data: mapper_data, user: user).perform
-    tags = tag_names(tags)
+    tags = action_tags || []
     level = action["notification_level"].to_sym
 
     if level.blank?
@@ -334,7 +304,8 @@ class CustomWizard::Action
     if groups.present?
       groups.each do |group_id|
         group = Group.find_by(id: group_id) if group_id
-        result = group.add(user) if group
+        # Core manages automatic groups (e.g. trust levels and staff).
+        result = group.add(user) if group && !group.automatic
       end
     end
 
@@ -449,19 +420,7 @@ class CustomWizard::Action
 
     return false if output.blank?
 
-    tag_names(output).presence || false
-  end
-
-  def tag_names(value)
-    tags = Array.wrap(value).flatten
-    tags = tags.filter_map { |tag| tag_object?(tag) ? tag["name"] : tag }
-    # Text inputs can hold several comma separated tags.
-    tags = tags.flat_map { |tag| tag.is_a?(String) ? tag.split(",").map(&:strip) : tag }
-    tags.reject(&:blank?).uniq
-  end
-
-  def tag_object?(value)
-    value.is_a?(Hash) || value.is_a?(ActionController::Parameters)
+    CustomWizard::TagSearch.tag_names(output).presence || false
   end
 
   def action_users
@@ -575,7 +534,8 @@ class CustomWizard::Action
   def public_topic_params
     params = {}
 
-    if category = action_category
+    # Like TopicCreator, ignore a category that doesn't exist.
+    if (category = action_category) && Category.exists?(id: category)
       params[:category] = category
     end
 
@@ -598,6 +558,64 @@ class CustomWizard::Action
     params
   end
 
+  # Mirrors NewPostManager#perform, which wizard posts bypass.
+  def create_post(params, type, redirect:)
+    return log_error("guest email belongs to a registered account") if !topic_poster
+
+    if !NewPostManager.exempt_user?(topic_poster) &&
+         (words = WordWatcher.new("#{params[:title]} #{params[:raw]}").should_block?.presence)
+      return log_error("contains blocked words", words.join(", "))
+    end
+
+    # Messages are never queued.
+    if type == "topic"
+      reason = NewPostManager.post_needs_approval?(NewPostManager.new(topic_poster, params))
+      return queue_topic(params, reason) if reason != :skip
+    end
+
+    creator = PostCreator.new(topic_poster, params)
+    post = creator.create
+    if creator.errors.present?
+      return log_error("failed to create #{type}", creator.errors.full_messages.join(" "))
+    end
+
+    @submission.redirect_on_complete = post.topic.url if redirect
+    log_success("created #{type}", "id: #{post.topic.id}")
+    result.handler = creator
+    result.output = post.topic.id
+  end
+
+  # Like NewPostManager#enqueue, which can't be used as it validates the title.
+  def queue_topic(params, reason)
+    reviewable =
+      ReviewableQueuedPost.new(
+        created_by: Discourse.system_user,
+        target_created_by: topic_poster,
+        reviewable_by_moderator: true,
+        category_id: params[:category],
+        # Approval drops custom fields, so plugin.rb restores them from wizard_custom_fields.
+        payload:
+          params.except(:topic_opts, :custom_fields).merge(
+            wizard_custom_fields: {
+              topic: params.dig(:topic_opts, :custom_fields),
+              post: params[:custom_fields],
+            },
+          ),
+      )
+
+    if reviewable.save
+      reviewable.add_score(
+        Discourse.system_user,
+        ReviewableScore.types[:needs_approval],
+        reason: reason,
+        force_review: true,
+      )
+      log_success("queued topic for approval", "reason: #{reason}")
+    else
+      log_error("failed to queue topic", reviewable.errors.full_messages.join(" "))
+    end
+  end
+
   def topic_poster
     @topic_poster ||=
       begin
@@ -607,6 +625,8 @@ class CustomWizard::Action
 
         if poster_id.blank? || poster_id === WIZARD_USER
           poster = user || guest_user
+          # Guests can't prove they own an email, so only reuse staged accounts.
+          return if poster && !user && !poster.staged?
         else
           poster = User.find_by_username(poster_id)
         end

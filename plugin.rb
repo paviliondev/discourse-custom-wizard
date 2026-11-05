@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Forms for Discourse. Better onboarding, structured posting, data enrichment, automated actions and much more.
-# version: 2.18.7
+# version: 2.18.8
 # authors: Angus McLeod, Faizaan Gagan, Robert Barrow, Keegan George, Kaitlin Maddever, Marcos Gutierrez
 # url: https://github.com/paviliondev/discourse-custom-wizard
 # contact_emails: development@pavilion.tech
@@ -219,13 +219,27 @@ after_initialize do
 
   DiscourseEvent.trigger(:custom_wizard_ready)
 
-  on(:before_create_topic) do |topic_params, user|
-    category = topic_params.category
-    wizard_submission_id = topic_params.custom_fields&.[]("wizard_submission_id")
+  on(:before_create_topic) do |topic, creator|
+    # Restore the custom fields of an approved wizard topic (see CustomWizard::Action#queue_topic)
+    # before checking for wizard_submission_id.
+    if queued_fields = creator.opts.dig(:wizard_custom_fields, "topic")
+      topic.custom_fields.merge!(queued_fields)
+    end
+
+    category = topic.category
+    wizard_submission_id = topic.custom_fields&.[]("wizard_submission_id")
     if category&.custom_fields&.[]("create_topic_wizard").present? && wizard_submission_id.blank?
       raise Discourse::InvalidParameters.new(
               I18n.t("wizard.error_messages.wizard_replacing_composer"),
             )
+    end
+  end
+
+  # Restore the custom fields of an approved wizard post.
+  on(:approved_post) do |reviewable, post|
+    if queued_fields = reviewable.payload.dig("wizard_custom_fields", "post").presence
+      post.custom_fields.merge!(queued_fields)
+      post.save_custom_fields
     end
   end
 

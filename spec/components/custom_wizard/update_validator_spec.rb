@@ -233,4 +233,117 @@ describe CustomWizard::UpdateValidator do
       I18n.t("wizard.field.invalid_date"),
     )
   end
+
+  describe "selection fields" do
+    fab!(:category)
+    fab!(:other_category, :category)
+    fab!(:hidden_category) { Fabricate(:private_category, group: Fabricate(:group)) }
+    fab!(:tag)
+    fab!(:other_tag, :tag)
+    fab!(:group) { Fabricate(:group, visibility_level: Group.visibility_levels[:public]) }
+    fab!(:hidden_group) { Fabricate(:group, visibility_level: Group.visibility_levels[:owners]) }
+
+    let(:invalid) { invalid_option("Choice") }
+
+    before { enable_subscription("standard") }
+
+    def set_field(attrs)
+      fields = @template[:steps][0][:fields]
+      fields.reject! { |field| field["id"] == "step_1_field_5" }
+      fields << { id: "step_1_field_5", label: "Choice" }.merge(attrs).as_json
+      expect(CustomWizard::Template.save(@template)).to be_present
+    end
+
+    def invalid_option(label)
+      [I18n.t("wizard.field.invalid_option", label: label)]
+    end
+
+    def errors_for(value, step: "step_1", field: :step_1_field_5)
+      perform_validation(step, field => value).errors.messages[field]
+    end
+
+    def content(output_type, output)
+      [{ type: "assignment", output_type: output_type, output_connector: "set", output: output }]
+    end
+
+    it "only accepts categories the field offers" do
+      set_field(type: "category", limit: 1, content: content("category", [category.id]))
+
+      expect(errors_for([category.id])).to be_blank
+      expect(errors_for([other_category.id])).to eq(invalid)
+      expect(errors_for([category.id, category.id])).to eq(invalid)
+    end
+
+    it "only accepts categories the user can see" do
+      set_field(type: "category")
+
+      expect(errors_for([other_category.id])).to be_blank
+      expect(errors_for([hidden_category.id])).to eq(invalid)
+
+      set_field(type: "category", property: "slug")
+
+      expect(errors_for([other_category.slug])).to be_blank
+      expect(errors_for([hidden_category.slug])).to eq(invalid)
+    end
+
+    it "only accepts tags the field offers" do
+      SiteSetting.tagging_enabled = true
+      Fabricate(:tag_group, permissions: { "staff" => 1 }, tag_names: ["staff-only"])
+      set_field(type: "tag", limit: 1, content: content("tag", [tag.name, other_tag.name]))
+
+      expect(errors_for([tag.name])).to be_blank
+      expect(errors_for([Fabricate(:tag).name])).to eq(invalid)
+      expect(errors_for(["brand-new"])).to eq(invalid)
+      expect(errors_for([tag.name, other_tag.name])).to eq(invalid)
+      expect(errors_for(["#{tag.name},#{other_tag.name}"])).to eq(invalid)
+      expect(errors_for([{ "name" => 5 }])).to eq(invalid)
+
+      set_field(type: "tag", can_create_tag: true)
+
+      expect(errors_for([other_tag.name, "brand-new"])).to be_blank
+      expect(errors_for(["staff-only"])).to eq(invalid)
+      expect(errors_for(["staff-only "])).to eq(invalid)
+    end
+
+    it "only accepts tags in the field's association content" do
+      SiteSetting.tagging_enabled = true
+      pair = { index: 0, key: tag.name, value: tag.name, connector: "association" }
+      set_field(type: "tag", content: [{ type: "association", pairs: [pair] }])
+
+      expect(errors_for([tag.name])).to be_blank
+      expect(errors_for([other_tag.name])).to eq(invalid)
+    end
+
+    it "accepts tags in several tag groups" do
+      SiteSetting.tagging_enabled = true
+      Fabricate(:tag_group, name: "group-a", tag_names: [tag.name])
+      Fabricate(:tag_group, name: "group-b", tag_names: [tag.name, other_tag.name])
+      set_field(type: "tag", tag_groups: ["group-b"])
+
+      expect(errors_for([tag.name, other_tag.name])).to be_blank
+      expect(errors_for([Fabricate(:tag).name])).to eq(invalid)
+    end
+
+    it "only accepts groups the field offers" do
+      set_field(type: "group")
+
+      expect(errors_for(group.id)).to be_blank
+      expect(errors_for(Group::AUTO_GROUPS[:logged_in_users])).to be_blank
+      expect(errors_for(hidden_group.id)).to eq(invalid)
+      expect(errors_for("0#{group.id}")).to eq(invalid)
+      expect(errors_for([group.id, group.id])).to eq(invalid)
+
+      set_field(type: "group", content: content("group", [hidden_group.id]))
+
+      expect(errors_for(group.id)).to eq(invalid)
+    end
+
+    it "only accepts dropdown options the field offers" do
+      dropdown = { step: "step_3", field: :step_3_field_1 }
+
+      expect(errors_for("choice1", **dropdown)).to be_blank
+      expect(errors_for("choice4", **dropdown)).to eq(invalid_option("Custom Dropdown"))
+      expect(errors_for(%w[choice1 choice2], **dropdown)).to eq(invalid_option("Custom Dropdown"))
+    end
+  end
 end

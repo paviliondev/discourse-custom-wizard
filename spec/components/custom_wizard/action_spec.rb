@@ -66,19 +66,47 @@ describe CustomWizard::Action do
   end
 
   describe "#create_topic" do
-    it "works" do
+    def complete_wizard(body: "topic body", **last_step_fields)
       wizard = CustomWizard::Builder.new(@template[:id], user).build
       wizard.create_updater(
         wizard.steps.first.id,
         step_1_field_1: "Topic Title",
-        step_1_field_2: "topic body",
+        step_1_field_2: body,
       ).update
       wizard.create_updater(wizard.steps.second.id, {}).update
-      wizard.create_updater(wizard.steps.last.id, step_3_field_3: category.id).update
+      wizard.create_updater(
+        wizard.steps.last.id,
+        step_3_field_3: category.id,
+        **last_step_fields,
+      ).update
+    end
 
-      topic = Topic.where(title: "Topic Title", category_id: category.id)
-      expect(topic.exists?).to eq(true)
-      expect(Post.where(topic_id: topic.pluck(:id), raw: "topic body").exists?).to eq(true)
+    it "works" do
+      complete_wizard
+
+      topic = Topic.find_by(title: "Topic Title", category_id: category.id)
+      expect(topic.first_post.raw).to eq("topic body")
+    end
+
+    it "redirects to the topic" do
+      wizard_template[:actions][0]["skip_redirect"] = false
+      update_template(wizard_template)
+      complete_wizard
+
+      submission = CustomWizard::Wizard.create(@template[:id], user).current_submission
+      expect(submission.redirect_on_complete).to eq(Topic.find_by(title: "Topic Title").url)
+    end
+
+    it "ignores a category that doesn't exist" do
+      wizard_template[:actions][0]["category"] = [
+        { type: "assignment", output_type: "text", output_connector: "set", output: "missing" },
+      ]
+      update_template(wizard_template)
+
+      complete_wizard
+
+      topic = Topic.find_by(title: "Topic Title")
+      expect(topic.category_id).to eq(SiteSetting.uncategorized_category_id)
     end
 
     it "adds tags mapped to tag objects" do
@@ -93,18 +121,7 @@ describe CustomWizard::Action do
       wizard_template[:steps][2]["fields"] << { "id" => "step_3_field_2", "type" => "tag" }
       update_template(wizard_template)
 
-      wizard = CustomWizard::Builder.new(@template[:id], user).build
-      wizard.create_updater(
-        wizard.steps.first.id,
-        step_1_field_1: "Topic Title",
-        step_1_field_2: "topic body",
-      ).update
-      wizard.create_updater(wizard.steps.second.id, {}).update
-      wizard.create_updater(
-        wizard.steps.last.id,
-        step_3_field_3: category.id,
-        step_3_field_2: [{ id: tag.id, name: tag.name }],
-      ).update
+      complete_wizard(step_3_field_2: [{ id: tag.id, name: tag.name }])
 
       topic = Topic.find_by(title: "Topic Title")
       expect(topic.tags.pluck(:name)).to eq([tag.name])
@@ -122,17 +139,36 @@ describe CustomWizard::Action do
       ]
       update_template(wizard_template)
 
-      wizard = CustomWizard::Builder.new(@template[:id], user).build
-      wizard.create_updater(
-        wizard.steps.first.id,
-        step_1_field_1: "Topic Title",
-        step_1_field_2: "topic body",
-      ).update
-      wizard.create_updater(wizard.steps.second.id, {}).update
-      wizard.create_updater(wizard.steps.last.id, step_3_field_3: category.id).update
+      complete_wizard
 
       topic = Topic.find_by(title: "Topic Title")
       expect(topic.tags.pluck(:name)).to contain_exactly(tag.name, tag2.name)
+    end
+
+    it "queues the topic when it needs approval and keeps wizard data on approval" do
+      category.update!(topic_posting_review_mode: :everyone)
+      wizard_template["actions"][0]["visible"][0]["output"] = "false"
+      update_template(wizard_template)
+
+      complete_wizard
+      expect(Topic.exists?(title: "Topic Title")).to eq(false)
+
+      reviewable = ReviewableQueuedPost.find_by(target_created_by: user)
+      reviewable.perform(Fabricate(:admin), :approve_post)
+
+      topic = Topic.find_by(title: "Topic Title", category_id: category.id)
+      expect(topic.visible).to eq(false)
+      expect(topic.custom_fields["wizard_submission_id"]).to be_present
+      expect(topic.custom_fields["topic_field"]).to eq("Topic custom field value")
+      expect(topic.first_post.custom_fields["post_field"]).to eq("Post custom field value")
+    end
+
+    it "doesn't create a topic containing blocked words" do
+      Fabricate(:watched_word, word: "forbidden", action: WatchedWord.actions[:block])
+
+      complete_wizard(body: "forbidden body")
+
+      expect(Topic.exists?(title: "Topic Title")).to eq(false)
     end
 
     it "fails silently without basic topic inputs" do
@@ -154,14 +190,7 @@ describe CustomWizard::Action do
     end
 
     it "adds custom fields" do
-      wizard = CustomWizard::Builder.new(@template[:id], user).build
-      wizard.create_updater(
-        wizard.steps.first.id,
-        step_1_field_1: "Topic Title",
-        step_1_field_2: "topic body",
-      ).update
-      wizard.create_updater(wizard.steps.second.id, {}).update
-      wizard.create_updater(wizard.steps.last.id, step_3_field_3: category.id).update
+      complete_wizard
 
       topic = Topic.where(title: "Topic Title", category_id: category.id).first
       topic_custom_field =
@@ -432,6 +461,18 @@ describe CustomWizard::Action do
       expect(target_user.reload.notifications.count).to eq(1)
     end
 
+    it "#send_message doesn't send messages containing blocked words" do
+      Fabricate(:watched_word, word: "interpolate", action: WatchedWord.actions[:block])
+      wizard_template["actions"] << send_message
+      update_template(wizard_template)
+
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      wizard.create_updater(wizard.steps[0].id, {}).update
+      wizard.create_updater(wizard.steps[1].id, {}).update
+
+      expect(Topic.exists?(title: "Message title")).to eq(false)
+    end
+
     it "#send_message allows using multiple targets" do
       Jobs.run_immediately!
 
@@ -504,40 +545,37 @@ describe CustomWizard::Action do
           update_template(wizard_template)
         end
 
-        it "creates a staged guest poster if guest_email is set" do
+        def complete_as_guest(email)
           wizard =
             CustomWizard::Builder.new(
               @template[:id],
               nil,
               CustomWizard::Wizard.generate_guest_id,
             ).build
-          wizard.create_updater(wizard.steps.first.id, step_1_field_5: "guest@email.com").update
+          wizard.create_updater(wizard.steps.first.id, step_1_field_5: email).update
           wizard.create_updater(wizard.steps.second.id, {}).update
           wizard.create_updater(wizard.steps.last.id, step_3_field_3: category.id).update
-
-          topic = Topic.where(category_id: category.id).first
-          expect(topic.present?).to eq(true)
-          expect(topic.posts.first.user.staged).to eq(true)
-          expect(topic.posts.first.user.primary_email.email).to eq("guest@email.com")
+          Topic.find_by(category_id: category.id)
         end
 
-        it "returns an existing user with the same email" do
-          existing = Fabricate(:user, email: "guest@email.com")
+        it "creates a staged guest poster if guest_email is set" do
+          poster = complete_as_guest("guest@email.com").user
+          expect(poster.staged).to eq(true)
+          expect(poster.primary_email.email).to eq("guest@email.com")
+        end
 
-          wizard =
-            CustomWizard::Builder.new(
-              @template[:id],
-              nil,
-              CustomWizard::Wizard.generate_guest_id,
-            ).build
-          wizard.create_updater(wizard.steps.first.id, step_1_field_5: "guest@email.com").update
-          wizard.create_updater(wizard.steps.second.id, {}).update
-          wizard.create_updater(wizard.steps.last.id, step_3_field_3: category.id).update
+        it "reuses a staged user with the same email" do
+          staged = Fabricate(:staged, email: "guest@email.com")
+          expect(complete_as_guest("guest@email.com").user).to eq(staged)
+        end
 
-          topic = Topic.where(category_id: category.id).first
-          expect(topic.present?).to eq(true)
-          expect(topic.posts.first.user.staged).to eq(false)
-          expect(topic.posts.first.user.primary_email.email).to eq("guest@email.com")
+        it "does not post as a registered user with the same email" do
+          Fabricate(:admin, email: "guest@email.com")
+          expect(complete_as_guest("guest@email.com")).to be_nil
+        end
+
+        it "posts as the system user when the guest email is invalid" do
+          expect(complete_as_guest("not-an-email").user).to eq(Discourse.system_user)
         end
       end
 
@@ -671,6 +709,24 @@ describe CustomWizard::Action do
       group = Group.find_by(name: wizard.current_submission.fields["action_9"])
 
       expect(group.users.first.username).to eq("angus")
+    end
+
+    it "#add_to_group doesn't add users to automatic groups" do
+      add_to_group["group"] = [
+        {
+          type: "assignment",
+          output: "trust_level_4",
+          output_type: "text",
+          output_connector: "set",
+        },
+      ]
+      wizard_template["actions"] << add_to_group
+      update_template(wizard_template)
+
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
+
+      expect(Group[:trust_level_4].users).not_to include(user)
     end
 
     it "#send_to_api successful" do
