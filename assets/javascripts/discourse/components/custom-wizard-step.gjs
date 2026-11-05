@@ -45,7 +45,6 @@ export default class CustomWizardStep extends Component {
       if (this._stepId !== this.step.id) {
         this.set("saving", false);
         this.autoFocus();
-        this.scrollToTop();
       }
     }
 
@@ -165,33 +164,6 @@ export default class CustomWizardStep extends Component {
         }
       });
     });
-  }
-
-  // Start a new step at the top of the page. Focusing the first field (e.g.
-  // the composer textarea) and async layout changes (cooked title and
-  // description) scroll the page back down after the route transition, so
-  // focus-driven scrolls are cancelled for a short window and the scroll is
-  // repeated a few times while the step renders.
-  scrollToTop() {
-    const doScroll = () => {
-      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-      const main = document.querySelector("#main-outlet, .wizard-column");
-      if (main) {
-        main.scrollTop = 0;
-      }
-    };
-    const onFocusIn = () => window.requestAnimationFrame(doScroll);
-
-    window.addEventListener("scroll", doScroll, { passive: true });
-    document.addEventListener("focusin", onFocusIn, true);
-
-    schedule("afterRender", doScroll);
-    [0, 50, 150, 350, 700].forEach((delay) => discourseLater(doScroll, delay));
-
-    discourseLater(() => {
-      window.removeEventListener("scroll", doScroll);
-      document.removeEventListener("focusin", onFocusIn, true);
-    }, 800);
   }
 
   animateInvalidFields() {
