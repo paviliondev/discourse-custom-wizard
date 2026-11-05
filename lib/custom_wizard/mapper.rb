@@ -208,12 +208,20 @@ class CustomWizard::Mapper
   def interpolate(string, opts = { user: true, wizard: true, value: true, template: false })
     return string if string.blank? || string.frozen?
 
-    string.gsub!(/u\{(.*?)\}/) { |match| map_user_field($1) || "" } if opts[:user] && @user.present?
+    # Braces may arrive URL-encoded (%7B / %7D), e.g. when a placeholder is
+    # used inside a URL, so both forms are accepted.
+    if opts[:user] && @user.present?
+      string.gsub!(/u(?:\{|%7[Bb])(.*?)(?:\}|%7[Dd])/) { |match| map_user_field($1) || "" }
+    end
 
-    string.gsub!(/w\{(.*?)\}/) { |match| recurse(data, [*$1.split(".")]) || "" } if opts[:wizard]
+    if opts[:wizard]
+      string.gsub!(/w(?:\{|%7[Bb])(.*?)(?:\}|%7[Dd])/) do |match|
+        recurse(data, [*$1.split(".")]) || ""
+      end
+    end
 
     if opts[:value]
-      string.gsub!(/v\{(.*?)\}/) do |match|
+      string.gsub!(/v(?:\{|%7[Bb])(.*?)(?:\}|%7[Dd])/) do |match|
         attrs = $1.split(":")
         key = attrs.first
         format = attrs.last if attrs.length > 1
