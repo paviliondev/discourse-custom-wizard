@@ -289,6 +289,7 @@ describe CustomWizard::Mapper do
     end
 
     it "placeholders with url-encoded braces" do
+      freeze_time
       mapper = create_template_mapper(template_params, user1)
       result =
         mapper.interpolate(
