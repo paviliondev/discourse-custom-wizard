@@ -336,3 +336,24 @@ acceptance("Field | Tag submission", function (needs) {
     );
   });
 });
+
+acceptance("Field | Composer editor mode", function (needs) {
+  needs.user();
+  needs.pretender((server, helper) => {
+    server.get("/w/wizard.json", () => helper.response(allFieldsWizard));
+  });
+
+  test("toggles to the rich editor in one click", async function (assert) {
+    const toggle = ".wizard-field.composer-field .composer-toggle-switch";
+    await visit("/w/wizard");
+    assert.dom(toggle).hasAria("checked", "false", "starts in markdown");
+
+    await click(toggle);
+    assert.dom(toggle).hasAria("checked", "true");
+    assert.dom(".wizard-field.composer-field .ProseMirror").exists();
+
+    await click(toggle);
+    assert.dom(toggle).hasAria("checked", "false");
+    assert.dom(".wizard-field.composer-field textarea.d-editor-input").exists();
+  });
+});

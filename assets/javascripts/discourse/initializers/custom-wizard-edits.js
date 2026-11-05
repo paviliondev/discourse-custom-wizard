@@ -1,4 +1,5 @@
 import { action } from "@ember/object";
+import TextareaEditor from "discourse/components/composer/textarea-editor";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import getUrl from "discourse/lib/get-url";
@@ -37,6 +38,34 @@ export default {
                 window.location.href = getUrl(`/w/${createTopicWizard}`);
               } else {
                 super.clickCreateTopicButton();
+              }
+            }
+          }
+      );
+
+      // Core treats any editor other than its own TextareaEditor as the rich
+      // editor, so the wizard textarea made the MD/rich toggle start in the
+      // wrong state and need two clicks to reach the rich editor.
+      api.modifyClass(
+        "component:d-editor",
+        (Superclass) =>
+          class extends Superclass {
+            get isRichEditorEnabled() {
+              if (this.editorComponent === CustomWizardTextareaEditor) {
+                return false;
+              }
+              return super.isRichEditorEnabled;
+            }
+
+            @action
+            async toggleRichEditor() {
+              await super.toggleRichEditor(...arguments);
+
+              if (
+                this.wizardComposer &&
+                this.editorComponent === TextareaEditor
+              ) {
+                this.editorComponent = CustomWizardTextareaEditor;
               }
             }
           }
