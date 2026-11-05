@@ -110,6 +110,31 @@ describe CustomWizard::Action do
       expect(topic.tags.pluck(:name)).to eq([tag.name])
     end
 
+    it "adds comma separated tags from a text input" do
+      tag2 = Fabricate(:tag, name: "tag2")
+      wizard_template[:actions][0]["tags"] = [
+        {
+          type: "assignment",
+          output_type: "text",
+          output_connector: "set",
+          output: "#{tag.name}, #{tag2.name},#{tag.name}",
+        },
+      ]
+      update_template(wizard_template)
+
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      wizard.create_updater(
+        wizard.steps.first.id,
+        step_1_field_1: "Topic Title",
+        step_1_field_2: "topic body",
+      ).update
+      wizard.create_updater(wizard.steps.second.id, {}).update
+      wizard.create_updater(wizard.steps.last.id, step_3_field_3: category.id).update
+
+      topic = Topic.find_by(title: "Topic Title")
+      expect(topic.tags.pluck(:name)).to contain_exactly(tag.name, tag2.name)
+    end
+
     it "fails silently without basic topic inputs" do
       wizard = CustomWizard::Builder.new(@template[:id], user).build
       wizard.create_updater(wizard.steps.first.id, step_1_field_2: "topic body").update
