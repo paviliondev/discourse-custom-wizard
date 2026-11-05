@@ -49,6 +49,15 @@ export default class CustomWizardComposerEditor extends ComposerEditor {
   @bind
   setupEditor(textManipulation) {
     textManipulation.placeholder.composer = this.composer;
+
+    // Core focuses the editor on setup, which would scroll the page past the
+    // step's title and description.
+    const textarea = textManipulation.textarea;
+    if (textarea) {
+      const focus = textarea.focus.bind(textarea);
+      textarea.focus = (options) => focus({ ...options, preventScroll: true });
+    }
+
     super.setupEditor(textManipulation);
   }
 
