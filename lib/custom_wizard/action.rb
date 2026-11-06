@@ -416,7 +416,16 @@ class CustomWizard::Action
   end
 
   def action_tags
-    output = CustomWizard::Mapper.new(inputs: action["tags"], data: mapper_data, user: user).perform
+    # Each tag input adds tags, e.g. a tag field plus a fixed tag.
+    output =
+      CustomWizard::Mapper.new(
+        inputs: action["tags"],
+        data: mapper_data,
+        user: user,
+        opts: {
+          multiple: true,
+        },
+      ).perform
 
     return false if output.blank?
 

@@ -145,6 +145,26 @@ describe CustomWizard::Action do
       expect(topic.tags.pluck(:name)).to contain_exactly(tag.name, tag2.name)
     end
 
+    it "adds the tags of every tag input" do
+      tag2 = Fabricate(:tag, name: "tag2")
+      wizard_template[:actions][0]["tags"] = [
+        {
+          type: "assignment",
+          output_type: "wizard_field",
+          output_connector: "set",
+          output: "step_3_field_2",
+        },
+        { type: "assignment", output_type: "text", output_connector: "set", output: tag2.name },
+      ]
+      wizard_template[:steps][2]["fields"] << { "id" => "step_3_field_2", "type" => "tag" }
+      update_template(wizard_template)
+
+      complete_wizard(step_3_field_2: [tag.name])
+
+      topic = Topic.find_by(title: "Topic Title")
+      expect(topic.tags.pluck(:name)).to contain_exactly(tag.name, tag2.name)
+    end
+
     it "queues the topic when it needs approval and keeps wizard data on approval" do
       category.update!(topic_posting_review_mode: :everyone)
       wizard_template["actions"][0]["visible"][0]["output"] = "false"
