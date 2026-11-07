@@ -843,6 +843,33 @@ describe CustomWizard::Action do
       expect(GroupUser.where(group_id: group_id).count).to eq(1)
     end
 
+    it "#create_group adds the users of every username input" do
+      user2 = Fabricate(:user)
+      create_group["usernames"] = [
+        {
+          type: "assignment",
+          output_type: "text",
+          output_connector: "set",
+          output: user2.username.upcase,
+        },
+        {
+          type: "assignment",
+          output_type: "user",
+          output_connector: "set",
+          output: [user1.username],
+        },
+      ]
+      wizard_template["actions"] << create_group
+      update_template(wizard_template)
+
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
+
+      group = Group.find_by!(name: wizard.current_submission.fields["action_9"])
+      expect(group.users).to contain_exactly(user, user1, user2)
+      expect(group.group_users.where(owner: true).pluck(:user_id)).to eq([user.id])
+    end
+
     it "#add_to_group" do
       wizard_template["actions"] << create_group
       wizard_template["actions"] << add_to_group
