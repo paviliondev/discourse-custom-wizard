@@ -416,18 +416,16 @@ class CustomWizard::Action
   end
 
   def action_tags
-    # Each tag input adds tags, e.g. a tag field plus a fixed tag.
+    inputs = action["tags"]
     output =
       CustomWizard::Mapper.new(
-        inputs: action["tags"],
+        inputs: inputs,
         data: mapper_data,
         user: user,
         opts: {
-          multiple: true,
+          multiple: inputs&.all? { |input| input["type"] == "assignment" },
         },
       ).perform
-
-    return false if output.blank?
 
     CustomWizard::TagSearch.tag_names(output).presence || false
   end

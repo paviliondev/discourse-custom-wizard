@@ -16,7 +16,7 @@ class CustomWizard::TagSearch
     Array
       .wrap(value)
       .flatten
-      .map do |tag|
+      .filter_map do |tag|
         tag.is_a?(Hash) || tag.is_a?(ActionController::Parameters) ? tag[:name] || tag["name"] : tag
       end
       .flat_map { |tag| tag.to_s.split(",").map(&:strip) }
