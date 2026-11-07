@@ -416,9 +416,16 @@ class CustomWizard::Action
   end
 
   def action_tags
-    output = CustomWizard::Mapper.new(inputs: action["tags"], data: mapper_data, user: user).perform
-
-    return false if output.blank?
+    inputs = action["tags"]
+    output =
+      CustomWizard::Mapper.new(
+        inputs: inputs,
+        data: mapper_data,
+        user: user,
+        opts: {
+          multiple: inputs&.all? { |input| input["type"] == "assignment" },
+        },
+      ).perform
 
     CustomWizard::TagSearch.tag_names(output).presence || false
   end

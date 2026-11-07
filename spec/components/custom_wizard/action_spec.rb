@@ -109,40 +109,87 @@ describe CustomWizard::Action do
       expect(topic.category_id).to eq(SiteSetting.uncategorized_category_id)
     end
 
-    it "adds tags mapped to tag objects" do
-      wizard_template[:actions][0]["tags"] = [
+    context "with tags" do
+      fab!(:tag2) { Fabricate(:tag, name: "tag2") }
+
+      let(:tag_field_input) do
         {
           type: "assignment",
           output_type: "wizard_field",
           output_connector: "set",
           output: "step_3_field_2",
-        },
-      ]
-      wizard_template[:steps][2]["fields"] << { "id" => "step_3_field_2", "type" => "tag" }
-      update_template(wizard_template)
+        }
+      end
 
-      complete_wizard(step_3_field_2: [{ id: tag.id, name: tag.name }])
+      def text_input(output)
+        { type: "assignment", output_type: "text", output_connector: "set", output: output }
+      end
 
-      topic = Topic.find_by(title: "Topic Title")
-      expect(topic.tags.pluck(:name)).to eq([tag.name])
-    end
+      def set_tag_inputs(*inputs)
+        wizard_template[:actions][0]["tags"] = inputs
+        wizard_template[:steps][2]["fields"] << { "id" => "step_3_field_2", "type" => "tag" }
+        update_template(wizard_template)
+      end
 
-    it "adds comma separated tags from a text input" do
-      tag2 = Fabricate(:tag, name: "tag2")
-      wizard_template[:actions][0]["tags"] = [
-        {
-          type: "assignment",
-          output_type: "text",
-          output_connector: "set",
-          output: "#{tag.name}, #{tag2.name},#{tag.name}",
-        },
-      ]
-      update_template(wizard_template)
+      def topic_tags
+        Topic.find_by(title: "Topic Title").tags.pluck(:name)
+      end
 
-      complete_wizard
+      it "adds tags mapped to tag objects" do
+        set_tag_inputs(tag_field_input)
 
-      topic = Topic.find_by(title: "Topic Title")
-      expect(topic.tags.pluck(:name)).to contain_exactly(tag.name, tag2.name)
+        complete_wizard(step_3_field_2: [{ id: tag.id, name: tag.name }])
+
+        expect(topic_tags).to eq([tag.name])
+      end
+
+      it "adds comma separated tags from a text input" do
+        set_tag_inputs(text_input("#{tag.name}, #{tag2.name},#{tag.name}"))
+
+        complete_wizard
+
+        expect(topic_tags).to contain_exactly(tag.name, tag2.name)
+      end
+
+      it "adds the tags of every input" do
+        set_tag_inputs(tag_field_input, text_input(tag2.name))
+
+        complete_wizard(step_3_field_2: [tag.name])
+
+        expect(topic_tags).to contain_exactly(tag.name, tag2.name)
+      end
+
+      it "adds the fixed tag when the tag field is empty" do
+        set_tag_inputs(tag_field_input, text_input(tag2.name))
+
+        complete_wizard
+
+        expect(topic_tags).to eq([tag2.name])
+      end
+
+      it "uses only the first matching input when an input is conditional" do
+        set_tag_inputs(
+          text_input(tag.name).merge(
+            type: "conditional",
+            output_connector: "then",
+            pairs: [
+              {
+                index: 0,
+                key: "name",
+                key_type: "user_field",
+                value: "Angus",
+                value_type: "text",
+                connector: "equal",
+              },
+            ],
+          ),
+          text_input(tag2.name),
+        )
+
+        complete_wizard
+
+        expect(topic_tags).to eq([tag.name])
+      end
     end
 
     it "queues the topic when it needs approval and keeps wizard data on approval" do
