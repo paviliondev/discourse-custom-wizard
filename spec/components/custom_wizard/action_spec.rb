@@ -447,30 +447,34 @@ describe CustomWizard::Action do
       }
     end
 
-    it "watches tags" do
-      watch_tags[:tags][0][:output] = tag.name
-      wizard_template[:actions] << watch_tags
+    def run_action(action, step_1_field_1: "Text input")
+      wizard_template[:actions] << action
       update_template(wizard_template)
 
       wizard = CustomWizard::Builder.new(@template[:id], user).build
-      wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
+      wizard.create_updater(wizard.steps[0].id, step_1_field_1: step_1_field_1).update
+    end
 
-      expect(TagUser.where(tag_id: tag.id, user_id: user.id).first.notification_level).to eq(2)
+    def tag_level(tag)
+      TagUser.find_by(tag: tag, user: user)&.notification_level
+    end
+
+    def category_level(category)
+      CategoryUser.find_by(category: category, user: user)&.notification_level
+    end
+
+    it "watches tags" do
+      watch_tags[:tags][0][:output] = tag.name
+      run_action(watch_tags)
+
+      expect(tag_level(tag)).to eq(TagUser.notification_levels[:tracking])
     end
 
     it "watches tags mapped to tag objects" do
-      watch_tags[:tags][0][:output] = "step_1_field_1"
-      watch_tags[:tags][0][:output_type] = "wizard_field"
-      wizard_template[:actions] << watch_tags
-      update_template(wizard_template)
+      watch_tags[:tags] = [step_1_field_1_input]
+      run_action(watch_tags, step_1_field_1: [{ id: tag.id, name: tag.name }])
 
-      wizard = CustomWizard::Builder.new(@template[:id], user).build
-      wizard.create_updater(
-        wizard.steps[0].id,
-        step_1_field_1: [{ id: tag.id, name: tag.name }],
-      ).update
-
-      expect(TagUser.where(tag_id: tag.id, user_id: user.id).first.notification_level).to eq(2)
+      expect(tag_level(tag)).to eq(TagUser.notification_levels[:tracking])
     end
 
     it "watches tags for the users in the action" do
@@ -486,52 +490,55 @@ describe CustomWizard::Action do
           output: [user1.username, user2.username],
         },
       ]
-      wizard_template[:actions] << watch_tags
-      update_template(wizard_template)
-
-      wizard = CustomWizard::Builder.new(@template[:id], user).build
-      wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
+      run_action(watch_tags)
 
       expect(TagUser.where(tag_id: tag.id, notification_level: 2).pluck(:user_id)).to match_array(
         [user1.id, user2.id],
       )
     end
 
-    def run_watch_categories
-      wizard_template[:actions] << watch_categories
-      update_template(wizard_template)
+    it "doesn't watch tags when no notification level is set" do
+      watch_tags[:tags][0][:output] = tag.name
+      watch_tags[:notification_level] = nil
+      run_action(watch_tags)
 
-      wizard = CustomWizard::Builder.new(@template[:id], user).build
-      wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
+      expect(tag_level(tag)).to be_nil
     end
 
-    def category_level(category)
-      CategoryUser.find_by(category: category, user: user)&.notification_level
+    { "blank" => "", "not found" => "missing" }.each do |description, value|
+      it "keeps watched tags when the tags are #{description}" do
+        TagUser.change(user, tag.id, TagUser.notification_levels[:tracking])
+        watch_tags[:tags] = [step_1_field_1_input]
+        run_action(watch_tags, step_1_field_1: value)
+
+        expect(tag_level(tag)).to eq(TagUser.notification_levels[:tracking])
+        expect(CustomWizard::Log.list.logs.first.message).to include("tags not found")
+      end
     end
 
     it "watches categories" do
       watch_categories[:categories][0][:output] = category.id
-      run_watch_categories
+      run_action(watch_categories)
 
       expect(category_level(category)).to eq(CategoryUser.notification_levels[:tracking])
     end
 
     it "watches categories given by slug" do
       watch_categories[:categories][0][:output] = category.slug
-      run_watch_categories
+      run_action(watch_categories)
 
       expect(category_level(category)).to eq(CategoryUser.notification_levels[:tracking])
     end
 
     it "mutes the other categories when no category is given" do
-      run_watch_categories
+      run_action(watch_categories)
 
       expect(category_level(category)).to eq(CategoryUser.notification_levels[:muted])
     end
 
     it "doesn't mute categories when no category is found" do
       watch_categories[:categories][0][:output] = "missing"
-      run_watch_categories
+      run_action(watch_categories)
 
       expect(CategoryUser.where(user: user)).to be_empty
     end
@@ -549,7 +556,7 @@ describe CustomWizard::Action do
           output: [user1.username, user2.username],
         },
       ]
-      run_watch_categories
+      run_action(watch_categories)
 
       expect(
         CategoryUser.where(category_id: category.id, notification_level: 2).pluck(:user_id),
@@ -567,7 +574,7 @@ describe CustomWizard::Action do
       watch_categories[:usernames] = [user1, user2].map do |u|
         { type: "assignment", output_type: "user", output_connector: "set", output: [u.username] }
       end
-      run_watch_categories
+      run_action(watch_categories)
 
       expect(
         CategoryUser.where(notification_level: 2).pluck(:user_id, :category_id),
