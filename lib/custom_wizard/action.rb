@@ -74,7 +74,7 @@ class CustomWizard::Action
 
     params = basic_topic_params
 
-    targets = map_list(action["recipient"]).uniq(&:downcase)
+    targets = map_list(action["recipient"]).uniq { |target| target.to_s.downcase }
 
     if targets.blank?
       log_error("no recipients", "send_message has no recipients")
@@ -85,11 +85,11 @@ class CustomWizard::Action
     params[:target_usernames] = []
     params[:target_emails] = []
     targets.each do |target|
-      if Group.find_by(name: target)
-        params[:target_group_names] << target
-      elsif User.find_by_username(target)
-        params[:target_usernames] << target
-      elsif target.match(/@/) # Compare discourse/discourse/app/controllers/posts_controller.rb#L922-L923
+      if group = target.is_a?(Integer) ? Group.find_by(id: target) : Group.find_by(name: target)
+        params[:target_group_names] << group.name
+      elsif recipient = User.find_by_username(target)
+        params[:target_usernames] << recipient.username
+      elsif target.to_s.match(/@/) # Compare discourse/discourse/app/controllers/posts_controller.rb#L922-L923
         params[:target_emails] << target
       end
     end
@@ -169,7 +169,13 @@ class CustomWizard::Action
   end
 
   def watch_categories
-    watched_categories = map_list(action["categories"]).map(&:to_i)
+    values = map_list(action["categories"])
+    watched_categories = find_category_ids(values)
+
+    if values.present? && watched_categories.empty?
+      log_error("categories not found", "categories: #{values.join(",")}")
+      return
+    end
 
     notification_level = action["notification_level"]
 
@@ -390,13 +396,20 @@ class CustomWizard::Action
 
     return false if output.blank?
 
-    if output.is_a?(Array)
-      output.first
-    elsif output.is_a?(Integer)
-      output
-    elsif output.is_a?(String)
-      output.to_i
-    end
+    find_category_id(output) || false
+  end
+
+  def find_category_id(value)
+    find_category_ids(Array.wrap(value).first).first
+  end
+
+  def find_category_ids(values)
+    values = Array.wrap(values).map { |value| value.to_s.strip }.compact_blank
+    Category
+      .where(id: values.grep(/\A\d+\z/))
+      .or(Category.where(slug: values))
+      .order(:id)
+      .pluck(:id)
   end
 
   def action_tags
@@ -528,8 +541,7 @@ class CustomWizard::Action
   def public_topic_params
     params = {}
 
-    # Like TopicCreator, ignore a category that doesn't exist.
-    if (category = action_category) && Category.exists?(id: category)
+    if category = action_category
       params[:category] = category
     end
 
@@ -695,7 +707,9 @@ class CustomWizard::Action
           CustomWizard::Mapper.new(inputs: action[attr], data: mapper_data, user: user).perform
 
         if value
-          value = value[0] if attr === "parent_category_id" && value.is_a?(Array)
+          if attr === "parent_category_id"
+            value = find_category_id(value) || Array.wrap(value).first
+          end
 
           if attr === "permissions" && value.is_a?(Array)
             permissions = value

@@ -97,16 +97,29 @@ describe CustomWizard::Action do
       expect(submission.redirect_on_complete).to eq(Topic.find_by(title: "Topic Title").url)
     end
 
-    it "ignores a category that doesn't exist" do
+    def assign_category(output)
       wizard_template[:actions][0]["category"] = [
-        { type: "assignment", output_type: "text", output_connector: "set", output: "missing" },
+        { type: "assignment", output_type: "text", output_connector: "set", output: output },
       ]
       update_template(wizard_template)
+    end
+
+    it "ignores a category that doesn't exist" do
+      assign_category("missing")
 
       complete_wizard
 
       topic = Topic.find_by(title: "Topic Title")
       expect(topic.category_id).to eq(SiteSetting.uncategorized_category_id)
+    end
+
+    it "uses a category given by slug" do
+      assign_category(category.slug)
+
+      complete_wizard
+
+      topic = Topic.find_by(title: "Topic Title")
+      expect(topic.category_id).to eq(category.id)
     end
 
     context "with tags" do
@@ -484,17 +497,43 @@ describe CustomWizard::Action do
       )
     end
 
-    it "watches categories" do
-      watch_categories[:categories][0][:output] = category.id
+    def run_watch_categories
       wizard_template[:actions] << watch_categories
       update_template(wizard_template)
 
       wizard = CustomWizard::Builder.new(@template[:id], user).build
       wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
+    end
 
-      expect(
-        CategoryUser.where(category_id: category.id, user_id: user.id).first.notification_level,
-      ).to eq(2)
+    def category_level(category)
+      CategoryUser.find_by(category: category, user: user)&.notification_level
+    end
+
+    it "watches categories" do
+      watch_categories[:categories][0][:output] = category.id
+      run_watch_categories
+
+      expect(category_level(category)).to eq(CategoryUser.notification_levels[:tracking])
+    end
+
+    it "watches categories given by slug" do
+      watch_categories[:categories][0][:output] = category.slug
+      run_watch_categories
+
+      expect(category_level(category)).to eq(CategoryUser.notification_levels[:tracking])
+    end
+
+    it "mutes the other categories when no category is given" do
+      run_watch_categories
+
+      expect(category_level(category)).to eq(CategoryUser.notification_levels[:muted])
+    end
+
+    it "doesn't mute categories when no category is found" do
+      watch_categories[:categories][0][:output] = "missing"
+      run_watch_categories
+
+      expect(CategoryUser.where(user: user)).to be_empty
     end
 
     it "watches categories for the users in the action" do
@@ -510,11 +549,7 @@ describe CustomWizard::Action do
           output: [user1.username, user2.username],
         },
       ]
-      wizard_template[:actions] << watch_categories
-      update_template(wizard_template)
-
-      wizard = CustomWizard::Builder.new(@template[:id], user).build
-      wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
+      run_watch_categories
 
       expect(
         CategoryUser.where(category_id: category.id, notification_level: 2).pluck(:user_id),
@@ -532,11 +567,7 @@ describe CustomWizard::Action do
       watch_categories[:usernames] = [user1, user2].map do |u|
         { type: "assignment", output_type: "user", output_connector: "set", output: [u.username] }
       end
-      wizard_template[:actions] << watch_categories
-      update_template(wizard_template)
-
-      wizard = CustomWizard::Builder.new(@template[:id], user).build
-      wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
+      run_watch_categories
 
       expect(
         CategoryUser.where(notification_level: 2).pluck(:user_id, :category_id),
@@ -642,6 +673,21 @@ describe CustomWizard::Action do
       topic =
         Topic.find_by!(archetype: Archetype.private_message, title: "Multiple Recipients title")
       expect(topic.allowed_users).to include(user1)
+      expect(topic.allowed_groups).to contain_exactly(group)
+    end
+
+    it "#send_message sends to the group in a group field" do
+      wizard_template[:steps][0][:fields] << { id: "step_1_field_5", type: "group" }.as_json
+      send_message["recipient"] = [step_1_field_1_input.merge(output: "step_1_field_5")]
+      wizard_template["actions"] << send_message
+      update_template(wizard_template)
+
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      wizard.create_updater(wizard.steps[0].id, step_1_field_5: group.id).update
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      wizard.create_updater(wizard.steps[1].id, {}).update
+
+      topic = Topic.find_by!(archetype: Archetype.private_message, title: "Message title")
       expect(topic.allowed_groups).to contain_exactly(group)
     end
 
@@ -816,7 +862,7 @@ describe CustomWizard::Action do
   end
 
   context "business actions" do
-    it "#create_category" do
+    def run_create_category
       wizard_template["actions"] << create_category
       wizard_template["actions"] << create_group
       update_template(wizard_template)
@@ -825,7 +871,19 @@ describe CustomWizard::Action do
       wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
       wizard.create_updater(wizard.steps[1].id, {}).update
 
-      expect(Category.where(id: wizard.current_submission.fields["action_8"]).exists?).to eq(true)
+      Category.find_by(id: wizard.current_submission.fields["action_8"])
+    end
+
+    it "#create_category" do
+      expect(run_create_category).to be_present
+    end
+
+    it "#create_category uses a parent category given by slug" do
+      create_category["parent_category_id"] = [
+        { type: "assignment", output_type: "text", output_connector: "set", output: category.slug },
+      ]
+
+      expect(run_create_category.parent_category_id).to eq(category.id)
     end
 
     it "#create_group" do
