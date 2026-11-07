@@ -2,7 +2,7 @@
 class CustomWizard::Action
   attr_accessor :submission, :action, :user, :guardian, :result
 
-  REQUIRES_USER = %w[update_profile open_composer watch_categories add_to_group]
+  REQUIRES_USER = %w[update_profile open_composer watch_categories watch_tags add_to_group]
 
   WIZARD_USER = "wizard-user"
 
@@ -17,17 +17,17 @@ class CustomWizard::Action
   end
 
   def perform
-    if REQUIRES_USER.include?(action["id"]) && !@user
+    if REQUIRES_USER.include?(action["type"]) && !@user
       log_error("action requires user", "id: #{action["id"]};")
-      @result.success = false
-      return @result
+    else
+      ActiveRecord::Base.transaction { self.send(action["type"].to_sym) }
+
+      @result.handler&.enqueue_jobs if creates_post? && @result.success?
+
+      if @result.success? && @result.output.present?
+        @submission.fields[action["id"]] = @result.output
+      end
     end
-
-    ActiveRecord::Base.transaction { self.send(action["type"].to_sym) }
-
-    @result.handler&.enqueue_jobs if creates_post? && @result.success?
-
-    @submission.fields[action["id"]] = @result.output if @result.success? && @result.output.present?
 
     save_log
 

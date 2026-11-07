@@ -9,6 +9,7 @@ describe CustomWizard::TemplateValidator do
   let(:composer_preview) { get_wizard_fixture("field/composer_preview") }
   let(:guests_permitted) { get_wizard_fixture("wizard/guests_permitted") }
   let(:upload_field) { get_wizard_fixture("field/upload") }
+  let(:watch_tags) { get_wizard_fixture("actions/watch_tags") }
   let(:validation_condition) { get_wizard_fixture("condition/validation_condition") }
 
   let(:valid_liquid_template) { <<-LIQUID.strip }
@@ -102,6 +103,16 @@ describe CustomWizard::TemplateValidator do
     errors = validator.errors.to_a
     expect(errors).to include(
       I18n.t("wizard.validation.not_permitted_for_guests", object_id: "step_2_field_7"),
+    )
+  end
+
+  it "validates user-only actions" do
+    template[:permitted] = guests_permitted["permitted"]
+    template[:actions] << watch_tags.merge(id: "watch_tags_action")
+    validator = CustomWizard::TemplateValidator.new(template)
+    expect(validator.perform).to eq(false)
+    expect(validator.errors.to_a).to include(
+      I18n.t("wizard.validation.not_permitted_for_guests", object_id: "watch_tags_action"),
     )
   end
 
