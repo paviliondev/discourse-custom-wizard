@@ -151,6 +151,14 @@ describe CustomWizard::Action do
         expect(topic_tags).to contain_exactly(tag.name, tag2.name)
       end
 
+      it "adds each tag of a list input" do
+        set_tag_inputs(text_input("#{tag.name}\n#{tag2.name}").merge(output_type: "list"))
+
+        complete_wizard
+
+        expect(topic_tags).to contain_exactly(tag.name, tag2.name)
+      end
+
       it "adds the tags of every input" do
         set_tag_inputs(tag_field_input, text_input(tag2.name))
 
@@ -417,6 +425,15 @@ describe CustomWizard::Action do
   context "standard actions" do
     before { Jobs.run_immediately! }
 
+    let(:step_1_field_1_input) do
+      {
+        type: "assignment",
+        output_type: "wizard_field",
+        output_connector: "set",
+        output: "step_1_field_1",
+      }
+    end
+
     it "watches tags" do
       watch_tags[:tags][0][:output] = tag.name
       wizard_template[:actions] << watch_tags
@@ -504,6 +521,28 @@ describe CustomWizard::Action do
       ).to match_array([user1.id, user2.id])
     end
 
+    it "watches the categories of every category input for the users of every user input" do
+      category2 = Fabricate(:category)
+      user2 = Fabricate(:user)
+
+      watch_categories[:categories] = [category, category2].map do |c|
+        { type: "assignment", output_type: "category", output_connector: "set", output: [c.id] }
+      end
+      watch_categories[:wizard_user] = false
+      watch_categories[:usernames] = [user1, user2].map do |u|
+        { type: "assignment", output_type: "user", output_connector: "set", output: [u.username] }
+      end
+      wizard_template[:actions] << watch_categories
+      update_template(wizard_template)
+
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      wizard.create_updater(wizard.steps[0].id, step_1_field_1: "Text input").update
+
+      expect(
+        CategoryUser.where(notification_level: 2).pluck(:user_id, :category_id),
+      ).to match_array([user1, user2].product([category, category2]).map { |u, c| [u.id, c.id] })
+    end
+
     it "#send_message" do
       Jobs.run_immediately!
 
@@ -578,12 +617,7 @@ describe CustomWizard::Action do
 
     it "#send_message sends to the recipients of every recipient input" do
       send_message_multi["recipient"] = [
-        {
-          type: "assignment",
-          output_type: "wizard_field",
-          output_connector: "set",
-          output: "step_1_field_1",
-        },
+        step_1_field_1_input,
         {
           type: "assignment",
           output_type: "user",
@@ -606,7 +640,24 @@ describe CustomWizard::Action do
       wizard.create_updater(wizard.steps[1].id, {}).update
 
       topic =
-        Topic.find_by(archetype: Archetype.private_message, title: "Multiple Recipients title")
+        Topic.find_by!(archetype: Archetype.private_message, title: "Multiple Recipients title")
+      expect(topic.allowed_users).to include(user1)
+      expect(topic.allowed_groups).to contain_exactly(group)
+    end
+
+    it "#send_message sends to each recipient in a comma separated value" do
+      send_message["recipient"] = [step_1_field_1_input]
+      wizard_template["actions"] << send_message
+      update_template(wizard_template)
+
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      wizard.create_updater(
+        wizard.steps[0].id,
+        step_1_field_1: "#{user1.username},#{group.name}",
+      ).update
+      wizard.create_updater(wizard.steps[1].id, {}).update
+
+      topic = Topic.find_by!(archetype: Archetype.private_message, title: "Message title")
       expect(topic.allowed_users).to include(user1)
       expect(topic.allowed_groups).to contain_exactly(group)
     end
@@ -714,14 +765,7 @@ describe CustomWizard::Action do
           wizard_template["permitted"] = guests_permitted["permitted"]
           wizard_template.delete("actions")
 
-          send_message["recipient"] = [
-            {
-              type: "assignment",
-              output: "step_1_field_1",
-              output_type: "wizard_field",
-              output_connector: "set",
-            },
-          ]
+          send_message["recipient"] = [step_1_field_1_input]
 
           wizard_template["actions"] = [send_message]
           update_template(wizard_template)

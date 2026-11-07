@@ -169,10 +169,7 @@ class CustomWizard::Action
   end
 
   def watch_categories
-    watched_categories =
-      CustomWizard::Mapper.new(inputs: action["categories"], data: mapper_data, user: user).perform
-
-    watched_categories = [*watched_categories].map(&:to_i)
+    watched_categories = map_list(action["categories"]).map(&:to_i)
 
     notification_level = action["notification_level"]
 
@@ -424,18 +421,18 @@ class CustomWizard::Action
         },
       ).perform
 
-    Array.wrap(output).flatten.compact_blank
+    Array
+      .wrap(output)
+      .flatten
+      .flat_map { |value| value.is_a?(String) ? value.split(/[,\n]/).map(&:strip) : value }
+      .compact_blank
   end
 
   def action_users
     users = []
 
     if action["usernames"].present?
-      output =
-        CustomWizard::Mapper.new(inputs: action["usernames"], data: mapper_data, user: user).perform
-      values = Array.wrap(output).flatten.flat_map { |value| value.to_s.split(",") }
-      usernames = values.filter_map { |value| User.normalize_username(value.strip) }
-
+      usernames = map_list(action["usernames"]).map { |value| User.normalize_username(value) }
       users.push(*User.where(username_lower: usernames))
     end
 
