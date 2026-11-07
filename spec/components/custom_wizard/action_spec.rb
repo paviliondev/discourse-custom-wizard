@@ -796,6 +796,22 @@ describe CustomWizard::Action do
           expect(post.exists?).to eq(true)
         end
       end
+
+      it "skips an action that needs a user" do
+        wizard = CustomWizard::Wizard.new(@template, nil, CustomWizard::Wizard.generate_guest_id)
+        action =
+          CustomWizard::Action.new(
+            wizard: wizard,
+            action: watch_tags,
+            submission: wizard.current_submission,
+          )
+
+        expect(action.perform.success?).to eq(false)
+
+        log = CustomWizard::Log.list.logs.first
+        expect(log.message).to include("action requires user")
+        expect(log.username).to eq(wizard.guest_id)
+      end
     end
   end
 
