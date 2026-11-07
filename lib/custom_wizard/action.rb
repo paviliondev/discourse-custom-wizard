@@ -147,8 +147,15 @@ class CustomWizard::Action
   end
 
   def watch_tags
-    tags = action_tags || []
-    level = action["notification_level"].to_sym
+    names = action_tags || []
+    tags = Tag.where_name(names).pluck(:name)
+
+    if tags.empty?
+      log_error("tags not found", "tags: #{names.join(",")}")
+      return
+    end
+
+    level = action["notification_level"]
 
     if level.blank?
       log_error("Notifcation Level was not set. Exiting watch tags action")
@@ -158,7 +165,7 @@ class CustomWizard::Action
     users = action_users
 
     users.each do |user|
-      result = TagUser.batch_set(user, level, tags)
+      result = TagUser.batch_set(user, level.to_sym, tags)
 
       if result
         log_success("#{user.username} notifications for #{tags} set to #{level}")
