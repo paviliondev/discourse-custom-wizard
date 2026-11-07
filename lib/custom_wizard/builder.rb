@@ -123,9 +123,7 @@ class CustomWizard::Builder
       ]
     end
 
-    if field_template["type"] === "group" && params[:value].present?
-      params[:value] = params[:value].first
-    end
+    params[:value] = Array.wrap(params[:value]).first if field_template["type"] === "group"
 
     params[:value] = standardise_boolean(params[:value]) if field_template["type"] === "checkbox"
 
