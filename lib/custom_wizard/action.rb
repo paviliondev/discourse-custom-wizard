@@ -331,29 +331,22 @@ class CustomWizard::Action
   def create_group
     group =
       begin
-        Group.new(new_group_params.except(:usernames, :owner_usernames))
+        Group.new(new_group_params)
       rescue ArgumentError => e
         raise Discourse::InvalidParameters, "Invalid group params"
       end
 
     if group.save
-      def get_user_ids(username_string)
-        User.where(username: username_string.split(",")).pluck(:id)
+      owner_ids = User.where(username_lower: map_usernames(action["owner_usernames"])).pluck(:id)
+      usernames = map_usernames(action["usernames"])
+      user_ids = User.where(username_lower: usernames).pluck(:id)
+
+      if user_ids.size < usernames.size
+        log_error("Warning, group creation: some users were not found!")
       end
 
-      if new_group_params[:owner_usernames].present?
-        owner_ids = get_user_ids(new_group_params[:owner_usernames])
-        owner_ids.each { |user_id| group.group_users.build(user_id: user_id, owner: true) }
-      end
-
-      if new_group_params[:usernames].present?
-        user_ids = get_user_ids(new_group_params[:usernames])
-        if user_ids.count < new_group_params[:usernames].count
-          log_error("Warning, group creation: some users were not found!")
-        end
-        user_ids -= owner_ids if owner_ids
-        user_ids.each { |user_id| group.group_users.build(user_id: user_id) }
-      end
+      owner_ids.each { |user_id| group.group_users.build(user_id: user_id, owner: true) }
+      (user_ids - owner_ids).each { |user_id| group.group_users.build(user_id: user_id) }
 
       log_success("Group created", group.name) if group.save
 
@@ -411,13 +404,15 @@ class CustomWizard::Action
   end
 
   def map_list(inputs)
+    return [] if inputs.blank?
+
     output =
       CustomWizard::Mapper.new(
         inputs: inputs,
         data: mapper_data,
         user: user,
         opts: {
-          multiple: inputs&.all? { |input| input["type"] == "assignment" },
+          multiple: inputs.all? { |input| input["type"] == "assignment" },
         },
       ).perform
 
@@ -428,14 +423,12 @@ class CustomWizard::Action
       .compact_blank
   end
 
+  def map_usernames(inputs)
+    map_list(inputs).map { |value| User.normalize_username(value) }.uniq
+  end
+
   def action_users
-    users = []
-
-    if action["usernames"].present?
-      usernames = map_list(action["usernames"]).map { |value| User.normalize_username(value) }
-      users.push(*User.where(username_lower: usernames))
-    end
-
+    users = User.where(username_lower: map_usernames(action["usernames"])).to_a
     users.push(user) if ActiveRecord::Type::Boolean.new.cast(action["wizard_user"])
 
     users.uniq
@@ -666,8 +659,6 @@ class CustomWizard::Action
       full_name
       title
       bio_raw
-      owner_usernames
-      usernames
       mentionable_level
       messageable_level
       visibility_level
