@@ -74,13 +74,7 @@ class CustomWizard::Action
 
     params = basic_topic_params
 
-    targets =
-      CustomWizard::Mapper.new(
-        inputs: action["recipient"],
-        data: mapper_data,
-        user: user,
-        multiple: true,
-      ).perform
+    targets = map_list(action["recipient"]).uniq(&:downcase)
 
     if targets.blank?
       log_error("no recipients", "send_message has no recipients")
@@ -90,7 +84,7 @@ class CustomWizard::Action
     params[:target_group_names] = []
     params[:target_usernames] = []
     params[:target_emails] = []
-    [*targets].each do |target|
+    targets.each do |target|
       if Group.find_by(name: target)
         params[:target_group_names] << target
       elsif User.find_by_username(target)
@@ -257,7 +251,7 @@ class CustomWizard::Action
       end
 
       if tags = action_tags
-        url += "&tags=#{tags.join(",")}"
+        url += "&tags=#{encode_query_param(tags.join(","))}"
       end
 
       route_to = Discourse.base_uri + url
@@ -416,7 +410,10 @@ class CustomWizard::Action
   end
 
   def action_tags
-    inputs = action["tags"]
+    CustomWizard::TagSearch.tag_names(map_list(action["tags"])).presence || false
+  end
+
+  def map_list(inputs)
     output =
       CustomWizard::Mapper.new(
         inputs: inputs,
@@ -427,7 +424,7 @@ class CustomWizard::Action
         },
       ).perform
 
-    CustomWizard::TagSearch.tag_names(output).presence || false
+    Array.wrap(output).flatten.compact_blank
   end
 
   def action_users

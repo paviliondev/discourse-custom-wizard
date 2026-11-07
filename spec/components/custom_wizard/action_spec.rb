@@ -354,10 +354,7 @@ describe CustomWizard::Action do
       )
     end
 
-    it "encodes special characters in the title and body" do
-      open_composer["title"][0]["output"] = "Title that's special $".dup
-      open_composer["post_template"] = "Body & more body & more body".dup
-
+    def composer_query
       wizard = CustomWizard::Wizard.new(@template, user)
       action =
         CustomWizard::Action.new(
@@ -369,10 +366,32 @@ describe CustomWizard::Action do
 
       expect(action.result.success?).to eq(true)
 
-      decoded_output = CGI.parse(URI.parse(action.result.output).query)
+      CGI.parse(URI.parse(action.result.output).query)
+    end
 
-      expect(decoded_output["title"][0]).to eq("Title that's special $")
-      expect(decoded_output["body"][0]).to eq("Body & more body & more body")
+    it "encodes special characters in the title and body" do
+      open_composer["title"][0]["output"] = "Title that's special $".dup
+      open_composer["post_template"] = "Body & more body & more body".dup
+
+      query = composer_query
+
+      expect(query["title"]).to eq(["Title that's special $"])
+      expect(query["body"]).to eq(["Body & more body & more body"])
+    end
+
+    it "encodes special characters in tags" do
+      open_composer["tags"] = [
+        {
+          type: "assignment",
+          output_type: "text",
+          output_connector: "set",
+          output: "#{tag.name},x&category_id=99",
+        },
+      ]
+
+      query = composer_query
+
+      expect(query["tags"]).to eq(["#{tag.name},x&category_id=99"])
     end
   end
 
@@ -555,6 +574,41 @@ describe CustomWizard::Action do
       expect(post.exists?).to eq(true)
       expect(user1.reload.notifications.count).to eq(1)
       expect(user2.reload.notifications.count).to eq(1)
+    end
+
+    it "#send_message sends to the recipients of every recipient input" do
+      send_message_multi["recipient"] = [
+        {
+          type: "assignment",
+          output_type: "wizard_field",
+          output_connector: "set",
+          output: "step_1_field_1",
+        },
+        {
+          type: "assignment",
+          output_type: "user",
+          output_connector: "set",
+          output: [user1.username],
+        },
+        { type: "assignment", output_type: "text", output_connector: "set", output: group.name },
+        {
+          type: "assignment",
+          output_type: "text",
+          output_connector: "set",
+          output: user1.username.upcase,
+        },
+      ]
+      wizard_template["actions"] << send_message_multi
+      update_template(wizard_template)
+
+      wizard = CustomWizard::Builder.new(@template[:id], user).build
+      wizard.create_updater(wizard.steps[0].id, {}).update
+      wizard.create_updater(wizard.steps[1].id, {}).update
+
+      topic =
+        Topic.find_by(archetype: Archetype.private_message, title: "Multiple Recipients title")
+      expect(topic.allowed_users).to include(user1)
+      expect(topic.allowed_groups).to contain_exactly(group)
     end
 
     context "with a guest" do
