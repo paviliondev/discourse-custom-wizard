@@ -169,10 +169,10 @@ class ::CustomWizard::UpdateValidator
   end
 
   def validate_file_type(value, file_types)
-    file_types
-      .split(",")
-      .map { |t| t.gsub(".", "") }
-      .include?(File.extname(value["original_filename"])[1..-1])
+    extension = File.extname(value["original_filename"].to_s).delete_prefix(".").downcase
+    return false if extension.blank?
+
+    file_types.split(",").map { |t| t.strip.delete_prefix(".").downcase }.include?(extension)
   end
 
   def validate_date(value, format)
