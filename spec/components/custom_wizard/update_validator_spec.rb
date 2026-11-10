@@ -129,6 +129,49 @@ describe CustomWizard::UpdateValidator do
     end
   end
 
+  context "upload fields" do
+    let(:upload_field) { get_wizard_fixture("field/upload") }
+
+    def add_upload_field(file_types)
+      template[:steps][1][:fields] << upload_field.merge(file_types: file_types)
+      CustomWizard::Template.save(template)
+    end
+
+    def upload_errors(filename)
+      updater = perform_validation("step_2", step_2_field_7: { "original_filename" => filename })
+      updater.errors.messages[:step_2_field_7]
+    end
+
+    it "accepts files with an allowed extension" do
+      add_upload_field(".jpg,.jpeg,.png")
+      expect(upload_errors("photo.jpg")).to be_blank
+    end
+
+    it "rejects files with an extension that isn't allowed" do
+      add_upload_field(".jpg,.jpeg,.png")
+      expect(upload_errors("document.pdf").first).to eq(
+        I18n.t("wizard.field.invalid_file", label: "Upload", types: ".jpg,.jpeg,.png"),
+      )
+      expect(upload_errors("photo")).to be_present
+    end
+
+    it "ignores the case of the extension" do
+      add_upload_field(".jpg,.jpeg,.png")
+      expect(upload_errors("PHOTO.JPG")).to be_blank
+    end
+
+    it "ignores the case of the allowed file types" do
+      add_upload_field(".JPG,.PNG")
+      expect(upload_errors("photo.Png")).to be_blank
+    end
+
+    it "accepts file types written without a dot or with spaces" do
+      add_upload_field(".jpg, .png,webp")
+      expect(upload_errors("image.webp")).to be_blank
+      expect(upload_errors("photo.png")).to be_blank
+    end
+  end
+
   context "answer validation" do
     def set_answer_validation(opts)
       @template[:steps][0][:fields][0][:validations] = { answer: { status: true }.merge(opts) }
