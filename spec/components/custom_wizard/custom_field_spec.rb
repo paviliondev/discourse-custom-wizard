@@ -154,7 +154,11 @@ describe CustomWizard::CustomField do
       expect(custom_field.save).to eq(false)
       expect(custom_field.valid?).to eq(false)
       expect(custom_field.errors.full_messages.first).to eq(
-        I18n.t("wizard.custom_field.error.name_too_short", name: "cf"),
+        I18n.t(
+          "wizard.custom_field.error.name_too_short",
+          name: "cf",
+          min_length: CustomWizard::CustomField::NAME_MIN_LENGTH,
+        ),
       )
       expect(
         PluginStoreRow.where(
