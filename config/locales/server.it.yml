@@ -2,51 +2,68 @@ it:
   admin:
     wizard:
       submission:
-        no_user: "deleted (user_id: %{user_id})"
+        no_user: "eliminato (user_id: %{user_id})"
+
   wizard:
     custom_title: "Wizard"
+
     custom_field:
       error:
-        required_attribute: "'%{attr}' is a required attribute"
-        unsupported_class: "'%{class}' is not a supported class"
-        unsupported_serializers: "'%{serializers}' are not supported serializers for '%{class}'"
-        unsupported_type: "%{type} is not a supported custom field type"
-        name_invalid: "'%{name}' is not a valid custom field name"
-        name_too_short: "'%{name}' is too short for a custom field name (min length is #{min_length})"
-        name_already_taken: "'%{name}' is already taken as a custom field name"
-        save_default: "Failed to save custom field '%{name}'"
+        required_attribute: "'%{attr}' è un attributo obbligatorio"
+        unsupported_class: "'%{class}' non è una classe supportata"
+        unsupported_serializers: "'%{serializers}' non sono serializer supportati per '%{class}'"
+        unsupported_type: "%{type} non è un tipo di campo personalizzato supportato"
+        name_invalid: "'%{name}' non è un nome valido per un campo personalizzato"
+        name_too_short: "'%{name}' è troppo corto come nome di un campo personalizzato (lunghezza minima: %{min_length})"
+        name_already_taken: "'%{name}' è già usato come nome di un campo personalizzato"
+        save_default: "Impossibile salvare il campo personalizzato '%{name}'"
+        subscription_type: "I campi personalizzati di tipo %{type} richiedono un abbonamento"
+
     field:
-      too_short: "%{label} must be at least %{min} characters"
-      too_long: "%{label} must not be more than %{max} characters"
-      required: "%{label} is required."
-      not_url: "%{label} must be a valid url"
-      invalid_file: "%{label} must be a %{types}"
-      invalid_date: "Invalid date"
-      invalid_time: "Invalid time"
-    none: "We couldn't find a wizard at that address."
-    no_skip: "Wizard can't be skipped"
+      too_short: "%{label} deve contenere almeno %{min} caratteri"
+      too_long: "%{label} non deve superare i %{max} caratteri"
+      required: "%{label} è obbligatorio."
+      not_url: "%{label} deve essere un URL valido"
+      answer_incorrect: "%{label} non è corretto. Riprova."
+      invalid_file: "%{label} deve essere un file di tipo %{types}"
+      invalid_option: "%{label} contiene un'opzione non disponibile"
+      invalid_date: "Data non valida"
+      invalid_time: "Orario non valido"
+
+    none: "Non abbiamo trovato nessun wizard a questo indirizzo."
+    no_skip: "Questo wizard non può essere saltato"
     export:
       error:
-        select_one: "Please select at least one valid wizard"
-        invalid_wizards: "No valid wizards selected"
+        select_one: "Seleziona almeno un wizard valido"
+        invalid_wizards: "Nessun wizard valido selezionato"
+
     import:
       error:
-        no_file: "No file selected"
-        file_large: "File too large"
-        invalid_json: "File is not a valid json file"
+        no_file: "Nessun file selezionato"
+        file_large: "File troppo grande"
+        invalid_json: "Il file non è un file JSON valido"
+
     destroy:
       error:
-        no_template: No template found
-        default: Error destroying wizard
+        no_template: Nessun template trovato
+        default: Errore durante l'eliminazione del wizard
+
     validation:
-      required: "%{property} is required"
-      conflict: "Wizard with id '%{wizard_id}' already exists"
-      after_signup: "You can only have one 'after signup' wizard at a time. %{wizard_id} has 'after signup' enabled."
-      after_signup_after_time: "You can't use 'after time' and 'after signup' on the same wizard."
-      after_time: "After time setting is invalid."
-      liquid_syntax_error: "Liquid syntax error in %{attribute}: %{message}"
+      required: "%{property} è obbligatorio"
+      conflict: "Esiste già un wizard con id '%{wizard_id}'"
+      after_signup: "Può esserci un solo wizard 'Registrazione' alla volta. %{wizard_id} ha già 'Registrazione' attivo."
+      after_signup_after_time: "Non puoi usare 'Ora' e 'Registrazione' nello stesso wizard."
+      after_time: "L'impostazione 'Ora' non è valida."
+      after_time_group: "Il gruppo indicato in 'Ora' non esiste: %{group_name}"
+      liquid_syntax_error: "Errore di sintassi Liquid in %{attribute}: %{message}"
+      subscription: "L'uso di %{type} %{property} non è incluso nel tuo abbonamento"
+      not_permitted_for_guests: "%{object_id} non è consentito quando gli ospiti possono accedere al wizard"
+    error_messages:
+      wizard_replacing_composer: "Categoria non consentita per la creazione di argomenti."
+
   site_settings:
-    custom_wizard_enabled: "Enable custom wizards."
-    wizard_redirect_exclude_paths: "Routes excluded from wizard redirects."
-    wizard_recognised_image_upload_formats: "File types which will result in upload displaying an image preview"
-    wizard_apis_enabled: "Enable API features (experimental)."
+    custom_wizard_enabled: "Abilita i wizard personalizzati."
+    wizard_redirect_exclude_paths: "Percorsi esclusi dai reindirizzamenti dei wizard."
+    wizard_recognised_image_upload_formats: "Tipi di file per cui il caricamento mostra l'anteprima dell'immagine"
+    wizard_apis_enabled: "Abilita le funzioni API (sperimentale)."
+    wizard_critical_notices_on_dashboard: "Mostra nella dashboard di amministrazione gli avvisi critici sul plugin Custom Wizard."
