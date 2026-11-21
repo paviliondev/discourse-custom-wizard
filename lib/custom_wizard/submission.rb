@@ -92,6 +92,36 @@ class CustomWizard::Submission
     end
   end
 
+  # Copies the answers of a submitted wizard into a new draft, so the wizard opens prefilled
+  # and the user can correct and resubmit it. Replaces the user's other draft of the wizard,
+  # if any. Returns the draft, or nil if the wizard can't be reopened for the user.
+  def self.reopen(user, submission_id, wizard_id: nil)
+    wizard_id ||= find_wizard_id(user, submission_id)
+    return if wizard_id.blank?
+
+    wizard = CustomWizard::Wizard.create(wizard_id, user)
+    return if !wizard || !wizard.save_submissions || !wizard.can_access?
+
+    submissions = list(wizard).submissions
+    original = submissions.find { |submission| submission.id == submission_id }
+    return if original.blank?
+
+    submissions.reject(&:submitted?).each(&:remove)
+
+    draft = new(wizard, original.fields.slice(*wizard.field_ids))
+    draft.save
+    draft
+  end
+
+  def self.find_wizard_id(user, submission_id)
+    PluginStoreRow
+      .where("plugin_name LIKE ?", "%\\_#{KEY}")
+      .where(key: user.id.to_s)
+      .find { |row| ::JSON.parse(row.value).any? { |data| data["id"] == submission_id } }
+      &.plugin_name
+      &.delete_suffix("_#{KEY}")
+  end
+
   def self.cleanup_incomplete_submissions(wizard)
     all_submissions = list(wizard)
     sorted_submissions =

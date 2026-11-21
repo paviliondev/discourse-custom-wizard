@@ -61,6 +61,24 @@ it:
     error_messages:
       wizard_replacing_composer: "Categoria non consentita per la creazione di argomenti."
 
+  system_messages:
+    custom_wizard_revise_queued_topic:
+      title: "Feedback sul tuo argomento"
+      subject_template: 'Feedback sul nuovo argomento intitolato "%{topic_title}"'
+      text_body_template: |
+        Ciao %{username},
+
+        Abbiamo esaminato il tuo nuovo argomento intitolato "%{topic_title}" e abbiamo un feedback per te.
+
+        Motivo: %{reason}
+
+        Feedback: %{feedback}
+
+        Le tue risposte sono state salvate: [apri il wizard "%{wizard_name}"](%{wizard_url}), apporta le modifiche suggerite e invialo di nuovo. Non devi compilarlo da capo.
+
+        Grazie,
+        I moderatori di %{site_name}
+
   site_settings:
     custom_wizard_enabled: "Abilita i wizard personalizzati."
     wizard_redirect_exclude_paths: "Percorsi esclusi dai reindirizzamenti dei wizard."

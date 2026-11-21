@@ -61,6 +61,24 @@ en:
     error_messages:
       wizard_replacing_composer: "Category not allowed for topic creation."
 
+  system_messages:
+    custom_wizard_revise_queued_topic:
+      title: "Feedback on your topic"
+      subject_template: 'Feedback on new topic titled "%{topic_title}"'
+      text_body_template: |
+        Hi %{username},
+
+        We've reviewed your new topic titled "%{topic_title}" and have some feedback for you.
+
+        Reason: %{reason}
+
+        Feedback: %{feedback}
+
+        Your answers have been saved: [open the "%{wizard_name}" wizard](%{wizard_url}), make the suggested changes and submit it again. You don't need to fill it in from scratch.
+
+        Thanks,
+        %{site_name} Moderators
+
   site_settings:
     custom_wizard_enabled: "Enable custom wizards."
     wizard_redirect_exclude_paths: "Routes excluded from wizard redirects."
