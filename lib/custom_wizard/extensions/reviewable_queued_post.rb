@@ -2,20 +2,18 @@
 
 # When a moderator asks the author to revise a queued wizard topic, core sends the raw post
 # and asks the author to post it again with the composer, which loses the wizard's structure.
-# Instead, reopen the wizard prefilled with the author's answers and link to it.
+# If enabled, reopen the wizard prefilled with the author's answers and link to it instead.
 module CustomWizardReviewableQueuedPost
   def perform_revise_and_reject_post(performed_by, args)
     draft = custom_wizard_revision_draft
     return super if draft.blank?
 
     wizard = draft.wizard
-    message_options =
-      defined?(Dsa::AppealInstructions) ? Dsa::AppealInstructions.message_options : {}
 
     SystemMessage.create(
       target_created_by,
       :custom_wizard_revise_queued_topic,
-      **message_options,
+      **Dsa::AppealInstructions.message_options,
       topic_title: payload["title"],
       reason: args[:revise_custom_reason].presence || args[:revise_reason],
       feedback: args[:revise_feedback],
@@ -30,18 +28,19 @@ module CustomWizardReviewableQueuedPost
   private
 
   def custom_wizard_revision_draft
-    return if !SiteSetting.custom_wizard_enabled || topic.present? || target_created_by.blank?
+    return if !SiteSetting.custom_wizard_enabled || !SiteSetting.custom_wizard_reopen_on_revise
+    return if topic.present? || target_created_by.blank?
 
-    submission_id = payload&.dig("wizard_custom_fields", "topic", "wizard_submission_id")
-    return if submission_id.blank?
+    wizard_id = payload["wizard_id"]
+    submission_id = payload.dig("wizard_custom_fields", "topic", "wizard_submission_id")
+    return if wizard_id.blank? || submission_id.blank?
 
-    CustomWizard::Submission.reopen(
-      target_created_by,
-      submission_id,
-      wizard_id: payload["wizard_id"],
-    )
+    CustomWizard::Submission.reopen(target_created_by, wizard_id, submission_id)
   rescue StandardError => e
-    Rails.logger.warn("Custom Wizard: failed to reopen wizard for review #{id}: #{e.message}")
+    Discourse.warn_exception(
+      e,
+      message: "Custom Wizard: failed to reopen wizard for reviewable #{id}",
+    )
     nil
   end
 end

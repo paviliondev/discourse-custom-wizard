@@ -85,3 +85,4 @@ en:
     wizard_recognised_image_upload_formats: "File types which will result in upload displaying an image preview"
     wizard_apis_enabled: "Enable API features (experimental)."
     wizard_critical_notices_on_dashboard: "Show critical notices about the custom wizard plugin on the admin dashboard."
+    custom_wizard_reopen_on_revise: 'When a moderator chooses "Revise" on a queued wizard topic, reopen the wizard prefilled with the author''s answers instead of sending them the raw post. The wizard must save submissions and allow multiple submissions.'

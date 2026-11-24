@@ -85,3 +85,4 @@ it:
     wizard_recognised_image_upload_formats: "Tipi di file per cui il caricamento mostra l'anteprima dell'immagine"
     wizard_apis_enabled: "Abilita le funzioni API (sperimentale)."
     wizard_critical_notices_on_dashboard: "Mostra nella dashboard di amministrazione gli avvisi critici sul plugin Custom Wizard."
+    custom_wizard_reopen_on_revise: 'Quando un moderatore sceglie "Revisione" su un argomento del wizard in coda, riapri il wizard precompilato con le risposte dell''autore invece di inviargli il post grezzo. Il wizard deve salvare gli invii e consentire invii multipli.'
