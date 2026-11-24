@@ -83,7 +83,7 @@ describe "Revising a queued wizard topic" do
     revise_modal.fill_reason("Wrong date")
     revise_modal.fill_feedback("Please correct the date.")
     revise_modal.click_primary_button
-    expect(review_page).to have_reviewable_with_rejected_status(reviewable)
+    expect(review_page).to have_reviewable_with_problem_confirmed_status(reviewable)
     expect(reviewable.reload).to be_rejected
 
     sign_in(user)
