@@ -18,6 +18,8 @@ plugins:
   wizard_important_notices_on_dashboard:
     client: true
     default: true
+  custom_wizard_reopen_on_revise:
+    default: false
   wizard_subscription_product_key:
     hidden: true
     default: ''

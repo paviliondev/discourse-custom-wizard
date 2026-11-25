@@ -613,6 +613,8 @@ class CustomWizard::Action
               topic: params.dig(:topic_opts, :custom_fields),
               post: params[:custom_fields],
             },
+            # Lets a moderator's "revise" reopen this wizard (see CustomWizardReviewableQueuedPost).
+            wizard_id: @wizard.id,
           ),
       )
 

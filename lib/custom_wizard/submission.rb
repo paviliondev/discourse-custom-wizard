@@ -92,6 +92,28 @@ class CustomWizard::Submission
     end
   end
 
+  # Copies the answers of a submitted wizard into a new draft, so the wizard opens prefilled
+  # and the user can correct and resubmit it. Returns the draft, or nil if the wizard can't be
+  # reopened for the user, or if the user already has a draft with answers, which is never
+  # overwritten.
+  def self.reopen(user, wizard_id, submission_id)
+    wizard = CustomWizard::Wizard.create(wizard_id, user)
+    return if !wizard&.save_submissions || !wizard.can_access?
+
+    submissions = list(wizard).submissions
+    drafts = submissions.reject(&:submitted?)
+    return if drafts.any? { |draft| draft.fields.present? }
+
+    original = submissions.find { |submission| submission.id == submission_id }
+    return if original.blank?
+
+    drafts.each(&:remove)
+
+    draft = new(wizard, original.fields.slice(*wizard.field_ids))
+    draft.save
+    draft
+  end
+
   def self.cleanup_incomplete_submissions(wizard)
     all_submissions = list(wizard)
     sorted_submissions =

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # name: discourse-custom-wizard
 # about: Forms for Discourse. Better onboarding, structured posting, data enrichment, automated actions and much more.
-# version: 2.18.18
+# version: 2.18.19
 # authors: Angus McLeod, Faizaan Gagan, Robert Barrow, Keegan George, Kaitlin Maddever, Marcos Gutierrez
 # url: https://github.com/paviliondev/discourse-custom-wizard
 # contact_emails: development@pavilion.tech
@@ -92,6 +92,7 @@ after_initialize do
   require_relative "lib/custom_wizard/extensions/invites_controller.rb"
   require_relative "lib/custom_wizard/extensions/users_controller.rb"
   require_relative "lib/custom_wizard/extensions/guardian.rb"
+  require_relative "lib/custom_wizard/extensions/reviewable_queued_post.rb"
   require_relative "lib/custom_wizard/extensions/custom_field/preloader.rb"
   require_relative "lib/custom_wizard/extensions/custom_field/serializer.rb"
   require_relative "lib/custom_wizard/extensions/custom_field/extension.rb"
@@ -183,6 +184,7 @@ after_initialize do
   ::InvitesController.prepend InvitesControllerCustomWizard
   ::UsersController.prepend CustomWizardUsersController
   ::Guardian.prepend CustomWizardGuardian
+  ::ReviewableQueuedPost.prepend CustomWizardReviewableQueuedPost
 
   full_path =
     "#{Rails.root}/plugins/discourse-custom-wizard/assets/stylesheets/wizard/wizard_custom.scss"
