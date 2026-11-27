@@ -7,7 +7,7 @@ export default class CustomWizardTimeInput extends DTimeInput {
     <ComboBox
       @value={{this.time}}
       @content={{this.timeOptions}}
-      @tabindex={{this.tabindex}}
+      @tabindex={{@tabindex}}
       @onChange={{this.onChangeTime}}
       @options={{hash
         translatedNone="--:--"
