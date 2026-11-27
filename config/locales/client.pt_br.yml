@@ -2,6 +2,74 @@ pt_br:
   js:
     wizard:
       complete_custom: "Complete o {{name}}"
+      completed: "Você completou esse assistente."
+      not_permitted: "Você não está autorizado a acessar esse assistente."
+      none: "Não existe nehnum assistente aqui."
+      return_to_site: "Voltar para {{siteName}}"
+      requires_login: "Você precisa estar logado para acessar este assistente."
+      reset: "Reiniciar esse assistente."
+      step_not_permitted: "Você não está autorizado a vizualizar esse passo."
+      incomplete_submission:
+        title: "Continuar editando o rascunho de envio criado em %{date}?"
+        resume: "Continuar"
+        restart: "Recomeçar"
+      x_characters:
+        one: "%{count} Caractere"
+        other: "%{count} Characteres"
+      quit: "Talvez Depois"
+      done_custom: "Completo"
+      back: "Voltar"
+      next: "Avançar"
+      step: "%{current} de %{total}"
+      upload: "Enviar"
+      uploading: "Enviando..."
+      upload_error: "Desculpe, ocorreu um erro ao enviar seu arquivo. Por favor, tente novamente."
+
+    wizard_composer:
+      show_preview: "Pré-vizualizar post"
+      hide_preview: "Editar Post"
+      quote_post_title: "Citar todo o post"
+      bold_label: "B"
+      bold_title: "Negrito"
+      bold_text: "texto em negrito"
+      italic_label: "I"
+      italic_title: "Ênfase"
+      italic_text: "texto ênfasado"
+      link_title: "Hiperlink"
+      link_description: "insira a descrição do link aqui"
+      link_dialog_title: "Inserir Hiperlink"
+      link_optional_text: "título opcional"
+      link_url_placeholder: "http://example.com.br"
+      quote_title: "Bloquear citação"
+      quote_text: "Bloquear citação"
+      blockquote_text: "Bloquear citação"
+      code_title: "Texto pré-formatado"
+      code_text: "identar o texto pré-formatado em 4 espaços"
+      paste_code_text: "digite ou cole o código aqui"
+      upload_title: "Upload"
+      upload_description: "Insira a descrição do upload aqui"
+      olist_title: "Lista enumerada"
+      ulist_title: "Lista com marcadores"
+      list_item: "Item da lista"
+      toggle_direction: "Alternar direção"
+      help: "Marcar ajuda na edição"
+      collapse: "minimizar o painel compositor"
+      abandon: "fechar o compositor e descartar o rasucnho"
+      modal_ok: "OK"
+      modal_cancel: "Cancelar"
+      cant_send_pm: "Desculpe, você não pode enviar uma mensagem para %{username}."
+      yourself_confirm:
+        title: "Será que você esqueceu de adicionar os destinatátios?"
+        body: "Agora essa mensagem será enviada apenas para você mesmo!"
+
+    realtime_validations:
+      similar_topics:
+        insufficient_characters: "Digite ao menos 5 caracteres para começar a procurar por tópicos similares"
+        insufficient_characters_categories: "Digite ao menos 5 caracteres para começar a procurar por tópicos similares em %{catLinks}"
+        results: "Seu tópico é similar com..."
+        no_results: "Sem tópicos similares."
+        loading: "Procurando por tópicos similares..."
+        show: "exibir"
 
   admin_js:
     admin:
@@ -18,10 +86,10 @@ pt_br:
         save_submissions_label: "Salvar submissões do assistente."
         multiple_submissions: "Múltiplas"
         multiple_submissions_label: "Usuários podem submeter múltiplas vezes."
-        after_signup: "Cadastro"
-        after_signup_label: "Usuários encaminhados ao assistente após o cadastro."
-        after_time: "Tempo"
-        after_time_label: "Usuários encaminhados ao assistente após a data de início:"
+        after_signup: "Após Cadastro"
+        after_signup_label: "Os usuários serão encaminhados ao assistente após o cadastro."
+        after_time: "Após Tempo"
+        after_time_label: "Os usuários serão encaminhados ao assistente após a data de início:"
         after_time_time_label: "Data de início"
         after_time_modal:
           title: "Hora de início do assistente"
@@ -35,6 +103,8 @@ pt_br:
         prompt_completion_label: "Usuário pronto para completar o assistente."
         restart_on_revisit: "Recomeçar"
         restart_on_revisit_label: "Apagar as submissões a cada visita."
+        resume_on_revisit: "Continuar"
+        resume_on_revisit_label: "Perguntar se o usuário deseje continuar a cada visita."
         theme_id: "Tema"
         no_theme: "Selecione um Tema (opcional)"
         save: "Salvar Mudanças"
@@ -56,7 +126,13 @@ pt_br:
         undo: "Refazer"
         clear: "Apagar"
         select_type: "Selecione um Tipo"
-        
+        condition: "Condição"
+        index: "Posição"
+        category_settings:
+          custom_wizard:
+            title: "Assistente Customizado"
+            create_topic_wizard: "Selecione um assistente para substituir o novo compositor de tópicos nesta categoria."
+
         message:
           wizard:
             select: "Selecione um assistente, ou crie um novo"
@@ -72,13 +148,30 @@ pt_br:
             type: "Selecione um tipo de ação"
             edit: "Você está editando uma ação"
             documentation: "Verifique a documentação da ação"
-        
+          custom_fields:
+            create: "Veja, crie, edite e destrua campos customizados"
+            saved: "Campo customizado salvo"
+            error: "Erro ao salvar: {{messages}}"
+            documentation: "Verifique a documentação dos campos customizados"
+          manager:
+            info: "Exportar, importar ou destruir assistentes"
+            documentation: "Verifique a documentação do gerenciador"
+            none_selected: "Por favor, selecione ao menos um assistente"
+            no_file: "Por favor selecione um arquivo para importar"
+            file_size_error: "O arquivo deve ter um tamanho igual ou inferior a 512kb"
+            file_format_error: "O arquivo deve ser do tipo .json"
+            server_error: "Erro: {{message}}"
+            importing: "Importando assistentes..."
+            destroying: "Destruindo assistentes..."
+            import_complete: "Inportação completa"
+            destroy_complete: "Destruição completa"
+
         editor:
           show: "Mostrar"
           hide: "Esconder"
           preview: "{{action}} Pré-vizualizar"
           popover: "{{action}} Campos"
-        
+
         input:
           conditional: 
             name: 'se'
@@ -89,11 +182,12 @@ pt_br:
             name: 'map'
           validation:
             name: 'certifique'
-  
+
         selector:
           label:
             text: "texto"
             wizard_field: "campo do assistente"
+            wizard_action: "ação do assistente"
             user_field: "campo de usuário"
             user_field_options: "opção do campo de usuário"
             user: "usuário"
@@ -101,11 +195,14 @@ pt_br:
             tag: "tag"
             group: "grupo"
             list: "lista"
+            custom_field: "campo customizado"
+            value: "valor"
 
           placeholder:
             text: "Insira o texto"
             property: "Selecione a propriedade"
             wizard_field: "Selecione o campo"
+            wizard_action: "Selecione a ação"
             user_field: "Selecione o campo"
             user_field_options: "Selecione o campo"
             user: "Selecione o usuário"
@@ -113,7 +210,9 @@ pt_br:
             tag: "Selecione a tag"
             group: "Selecione o grupo"
             list: "Insira o item"
-            
+            custom_field: "Selecione o campo"
+            value: "Selecinoe o valor"
+
         error:
           failed: "falha no salvamento do assistente"
           required: "{{type}} requer {{property}}"
@@ -121,7 +220,7 @@ pt_br:
           dependent: "{{property}} depende do {{dependent}}"
           conflict: "{{type}} com {{property}} '{{value}}' já existe"
           after_time: "Após data inválida"
-        
+
         step:
           header: "Passos"
           title: "Título"
@@ -131,8 +230,11 @@ pt_br:
             label: "Obrigatório"
             not_permitted_message: "Mensagem apresentada quando o campo obrigatório não estiver completo"
           permitted_params:
-            label: "Params"
-        
+            label: "Parâmetros"
+          force_final:
+            label: "Etapa final condicional"
+            description: "Exibe esta etapa como sendo a final se as condições das etapas anteriores não forem atendidas quando o usuário chegar nesta etapa."
+
         field:
           header: "Campos"
           label: "Etiqueta"
@@ -143,16 +245,41 @@ pt_br:
           required_label: "Campo Obrigatório"
           min_length: "Comprimento mínimo"
           min_length_placeholder: "Comprimento mínimo em caracteres"
+          max_length: "Comprimento máximo"
+          max_length_placeholder: "Comprimento máximo em caracteres"
+          char_counter: "Contador de Caracteres"
+          char_counter_placeholder: "Exibir contador de caracteres"
+          field_placeholder: "Placeholder do Campo"
           file_types: "Tipos de arquivo"
+          preview_template: "Template"
           limit: "Limite"
           property: "Propriedade"
           prefill: "Preencher"
           content: "Conteúdo"
-          
+          tag_groups: "Tag Groups"
+          date_time_format:
+            label: "Formato"
+            instructions: "<a href='https://momentjs.com/docs/#/displaying/format/' target='_blank'>Moment.js format</a>"
+          validations:
+            header: "Validações em Tempo Real"
+            enabled: "Ativado"
+            similar_topics: "Tópicos Similares"
+            position: "Posição"
+            above: "Acima"
+            below: "Abaixo"
+            categories: "Categorias"
+            max_topic_age: "Idade Máxima do Tópico"
+            time_units:
+              days: "Dias"
+              weeks: "Semanas"
+              months: "Meses"
+              years: "Anos"
+
           type:
             text: "Texto"
             textarea: Área do texto
             composer: Compositor
+            composer_preview: Preview do Compositor
             text_only: Apenas texto
             number: Número
             checkbox: Caixa de seleção
@@ -162,9 +289,11 @@ pt_br:
             tag: Tag
             category: Categoria
             group: Grupo
-            user_selector: Selecionador de usuário
+            user_selector: Seletor de usuário
             date: Data
-        
+            time: Hora
+            date_time: Data & Hora
+
         connector:
           and: "e"
           or: "ou"
@@ -178,7 +307,7 @@ pt_br:
           regex: '=~'
           association: '→'
           is: 'é'
-        
+
         action:
           header: "Ações"
           include: "Campos Inclusos"
@@ -186,16 +315,19 @@ pt_br:
           post: "Post"
           topic_attr: "Atribuição ao Tópico"
           interpolate_fields: "Insira os campos do assistente usando o field_id em w{}. Insira os campos de usuário usando o campo chave em u{}."
-          
+
           run_after: 
             label: "Executar Após"
             wizard_completion: "Finalizar o Assistente"
           custom_fields:
-            label: "Personalizado"
+            label: "Customizado"
             key: "campo"
           skip_redirect:
             label: "Redirecionar"
             description: "Não redirecionar o usuáriodo tipo {{type}} após finalizar o assistente"
+          suppress_notifications:
+            label: "Suprimir Notificações"
+            description: "Suprimir notificações normais acionadas pela criação de um post"
           send_message:
             label: "Enviar Mensagem"
             recipient: "Destinatário"
@@ -203,6 +335,7 @@ pt_br:
             label: "Criar um Tópico"
             category: "Categoria"
             tags: "Tags"
+            visible: "Visível"
           open_composer:
             label: "Abrir Compositor"
           update_profile:
@@ -221,11 +354,14 @@ pt_br:
               watching_first_post: "Observando Primeiro Post"
               muted: "Silenciado"
             select_a_notification_level: "Selecionar Nível"
+            wizard_user: "Usuário do Assistente"
+            usernames: "Usuários"
           post_builder:
             checkbox: "Criador de Post"
             label: "Criador"
             user_properties: "Propriedades do usuário"
             wizard_fields: "Campos do Assistente"
+            wizard_actions: "Ações do Assistente"
             placeholder: "Insira os campos do assistente usando o field_id em w{}. Insira os campos de usuário usando o campo chave em u{}."
           add_to_group:
             label: "Adicionar ao Grupo"
@@ -241,11 +377,65 @@ pt_br:
             select_an_endpoint: "Selecionar um ponto de destino"
             body: "Corpo"
             body_placeholder: "JSON"
-        
+          create_category:
+            label: "Criar Categoria"
+            name: Nome
+            slug: Slug
+            color: Cor
+            text_color: Cor do Texto
+            parent_category: Categoria Pai
+            permissions: Permissões
+          create_group:
+            label: Criar Grupo
+            name: Nome
+            full_name: Nome Completo
+            title: Título
+            bio_raw: Sobre
+            owner_usernames: Donos
+            usernames: Membros
+            grant_trust_level: Nível Automático de Confiança
+            mentionable_level: Nível de Menções
+            messageable_level: Nível de Mensagens
+            visibility_level: Nível de Visibilidade
+            members_visibility_level: Nível de Visibilidade dos Membros
+
+        custom_field:
+          nav_label: "Campos Customizados"
+          add: "Adicionar"
+          external:
+            label: "de outro plugin"
+            title: "Esse campo foi adicionado por outro plugin. Você pode usá-lo em seus assistens mas não pode editar o campo aqui."
+          name:
+            label: "Nome"
+            select: "underscored_name"
+          type:
+            label: "Tipo"
+            select: "Selecione o tipo"
+            string: "Texto"
+            integer: "Inteiro"
+            boolean: "Boleano"
+            json: "JSON"
+          klass:
+            label: "Classe"
+            select: "Selecione a classe"
+            post: "Post"
+            category: "Categoria"
+            topic: "Tópico"
+            group: "Grupo"
+            user: "Usuário"
+          serializers:
+            label: "Serializadores"
+            select: "Selecione os serializadores"
+            topic_view: "Visão do Tópico"
+            topic_list_item: "Item da lista de tópicos"
+            basic_category: "Categoria"
+            basic_group: "Grupo"
+            post: "Post"
+
         submissions:
           nav_label: "Submissões"
           title: "{{name}} Submissões"
-          download: "Download"
+          download: "Baixar"
 
         api:
           label: "API"
@@ -299,22 +489,19 @@ pt_br:
 
           log:
             label: "Logs"
-            
+
         log:
           nav_label: "Logs"
 
         manager:
           nav_label: "Transferir"
-          export:
-            label: "Exportar"
-            none_selected: "Por favor selecione pelo menos um assistente"
-          import:
-            label: "Importar"
-            logs: "Importar logs de {{fileName}}"
-            success: 'Assistente "{{id}}" salvo com sucesso'
-            failure: 'Assistente "{{id}}" não pode ser salvo'
-            no_file: "Por favor selecione um arquivo para importar"
-            file_size_error: "O arquivo deve ser JSON com 512kb ou menos"
+          title: Gerenciador de Assistentes
+          export: Exportar
+          import: Importar
+          imported: importado
+          upload: Selecionar o wizards.json
+          destroy: Destruir
+          destroyed: destruído
 
   wizard_js:
     group:
@@ -364,62 +551,3 @@ pt_br:
         countrycode: "Por favor insira um País."
         coordinates: "Por favor complete as coordenadas."
         geo_location: "Procurar e selecionar um resultado."
-
-    select_kit:
-      default_header_text: Selecione...
-      no_content: Sem resultados
-      filter_placeholder: Procurar...
-      filter_placeholder_with_any: Procurar ou criar...
-      create: "Criar: '{{content}}'"
-      max_content_reached:
-        one: "Você pode selecionar apenas {{count}} item."
-        other: "Você pode selecionar apenas {{count}} items."
-      min_content_not_reached:
-        one: "Selecione no mínimo {{count}} item."
-        other: "Selecione no mínimo {{count}} items."
-
-    wizard:
-      completed: "Você completou esse assistente."
-      not_permitted: "Você não está permitido para acessar esse assistente."
-      none: "Não existe nehnum assistente aqui."
-      return_to_site: "Voltar para {{siteName}}"
-      requires_login: "Você precisa estar logado para acessar esee assistente."
-      reset: "Reiniciar esse assistente."
-      step_not_permitted: "Você não está permitido para vizualizar esse passo."
-
-    wizard_composer:
-      show_preview: "Pré-vizualizar post"
-      hide_preview: "Editar Post"
-      quote_post_title: "Citar todo o post"
-      bold_label: "B"
-      bold_title: "Negrito"
-      bold_text: "texto em negrito"
-      italic_label: "I"
-      italic_title: "Ênfase"
-      italic_text: "texto ênfasado"
-      link_title: "Hiperlink"
-      link_description: "insira a descrição do link aqui"
-      link_dialog_title: "Inserir Hiperlink"
-      link_optional_text: "título opcional"
-      link_url_placeholder: "http://example.com.br"
-      quote_title: "Bloquear citação"
-      quote_text: "Bloquear citação"
-      blockquote_text: "Bloquear citação"
-      code_title: "Texto pré-formatado"
-      code_text: "identar o texto pré-formatado em 4 espaços"
-      paste_code_text: "digite ou cole o código aqui"
-      upload_title: "Upload"
-      upload_description: "Insira a descrição do upload aqui"
-      olist_title: "Lista enumerada"
-      ulist_title: "Lista com marcadores"
-      list_item: "Item da lista"
-      toggle_direction: "Alternar direção"
-      help: "Marcar ajuda na edição"
-      collapse: "minimizar o painel compositor"
-      abandon: "fechar o compositor e descartar o rasucnho"
-      modal_ok: "OK"
-      modal_cancel: "Cancelar"
-      cant_send_pm: "Desculpe, você não pode enviar uma mensagem para %{username}."
-      yourself_confirm:
-        title: "Será que você esqueceu de adicionar os destinatátios?"
-        body: "Agora essa mensagem será enviada apenas para você mesmo!"
